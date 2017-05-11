@@ -1,0 +1,29 @@
+{
+  "name": "forest-watcher-desktop",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "react": "^15.5.4",
+    "react-dom": "^15.5.4"
+  },
+  "devDependencies": {
+    "eslint-config-vizzuality": "^1.0.3",
+    "node-sass": "^4.5.0",
+    "npm-run-all": "^4.0.2",
+    "react-scripts": "0.9.5"
+  },
+  "scripts": {
+    "start": "npm-run-all -p start:css start:js",
+    "start:js": "react-scripts start",
+    "start:css": "npm run build:css && node-sass src/ -o src/ --watch --recursive",
+    "build": "npm run build:css && react-scripts build",
+    "build:css": "node-sass src/ -o src/",
+    "deploy": "npm run build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject"
+  },
+  "main": "index.js",
+  "eslintConfig": {
+    "extends": "vizzuality"
+  }
+}
