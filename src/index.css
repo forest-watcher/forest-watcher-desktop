@@ -21,11 +21,13 @@ input {
 
 input[type="search"] {
   -webkit-appearance: textfield; }
-  input[type="search"]::-webkit-search-decoration {
-    -webkit-appearance: none; }
+
+input[type="search"]::-webkit-search-decoration {
+  -webkit-appearance: none; }
 
 /* Components */
 .c-nav {
   width: 100%;
   background-color: black;
   height: 60px; }
+ }
