@@ -5,6 +5,8 @@ import { Provider } from 'react-redux';
 import { browserHistory } from 'react-router';
 import thunk from 'redux-thunk';
 import { syncHistoryWithStore, routerReducer, routerMiddleware } from 'react-router-redux';
+import { persistStore, autoRehydrate } from 'redux-persist';
+import authRedirectMiddleware from './middlewares/auth-redirect';
 
 import * as reducers from './modules';
 import Routes from './routes';
@@ -32,7 +34,8 @@ const store = createStore(
   compose(
     /* The router middleware MUST be before thunk otherwise the URL changes
     * inside a thunk function won't work properly */
-    // applyMiddleware(middlewareRouter, authRedirectMiddleware, thunk),
+    applyMiddleware(middlewareRouter, thunk),
+    autoRehydrate(),
     /* Redux dev tool, install chrome extension in
      * https://chrome.google.com/webstore/detail/redux-devtools/lmhkpmbekcpmknklioeibfkpmmfibljd?hl=en */
     typeof window === 'object' &&
@@ -45,6 +48,10 @@ function dispatch(action) {
   store.dispatch(action);
 }
 
+const persistConfig = {
+  whitelist: ['user']
+};
+
 /**
  * HTML5 History API managed by React Router module
  * @info(https://github.com/reactjs/react-router/tree/master/docs)
@@ -52,15 +59,22 @@ function dispatch(action) {
  */
 const history = syncHistoryWithStore(browserHistory, store);
 
+function startApp() {
+  render(
+    <Provider store={store}>
+      {/* Tell the Router to use our enhanced history */}
+      <Routes history={history} />
+    </Provider>,
+    document.getElementById('app')
+  );
+}
+
+persistStore(store, persistConfig, () => {
+  startApp();
+})
+
+
 export { store, history, dispatch };
 
 // Google Analytics
 // process.env.NODE_ENV === 'production' && ReactGA.initialize(process.env.GA);
-
-render(
-  <Provider store={store}>
-    {/* Tell the Router to use our enhanced history */}
-    <Routes history={history} />
-  </Provider>,
-  document.getElementById('app')
-);

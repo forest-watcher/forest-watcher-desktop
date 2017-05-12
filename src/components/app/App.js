@@ -1,11 +1,30 @@
 import React from 'react';
 
-import Header from '../header/Header';
+import TopBar from '../topbar/TopBar';
 
 class App extends React.Component {
+  constructor() {
+    super();
+  }
+
+  componentWillMount() {
+    this.props.checkLogged(this.props.location.query.token);
+  }
+
   render() {
+    if (!this.props.userChecked) return null;
+    
     return (
-      <Header/>
+      <div>
+        <TopBar />
+        <main role="main" className="l-main">
+          <div className="main-content l-app-wrapper">
+            <div className="content-content">
+              {this.props.main}
+            </div>
+          </div>
+        </main>
+      </div>
     );
   }
 }

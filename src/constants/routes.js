@@ -1,0 +1,5 @@
+const publicRoutes = [
+  '/',
+];
+
+export { publicRoutes };

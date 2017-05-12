@@ -1,0 +1,31 @@
+/* Settings */
+body {
+  font-family: font(primary);
+  font-size: 12px;
+  color: black;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale; }
+
+a {
+  text-decoration: none; }
+
+*, *:after, *:before {
+  box-sizing: border-box !important; }
+
+button {
+  outline: none;
+  cursor: pointer; }
+
+input {
+  outline: none; }
+
+input[type="search"] {
+  -webkit-appearance: textfield; }
+  input[type="search"]::-webkit-search-decoration {
+    -webkit-appearance: none; }
+
+/* Components */
+.c-nav {
+  width: 100%;
+  background-color: black;
+  height: 60px; }
