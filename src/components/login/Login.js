@@ -1,12 +1,13 @@
-import React from 'react';
+import React, { Component } from 'react';
+import LoginButton from './LoginButton'
 
-class Login extends React.Component {
+class Login extends Component {
   render() {
     return (
       <div>
-        <div>Twitter</div>
-        <div>Google</div>
-        <div>Facebook</div>
+        <LoginButton socialNetwork="facebook" />
+        <LoginButton socialNetwork="twitter" />
+        <LoginButton socialNetwork="google" />
       </div>
     );
   }

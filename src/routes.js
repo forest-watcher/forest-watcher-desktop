@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { IndexRoute, Router, Route } from 'react-router';
 
 // App
-import App from './components/app/App';
+import App from './components/app/AppContainer';
 
 // Pages
 import LoginPage from './components/pages/LoginPage';

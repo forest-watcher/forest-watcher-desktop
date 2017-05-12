@@ -5,6 +5,8 @@ import { Provider } from 'react-redux';
 import { browserHistory } from 'react-router';
 import thunk from 'redux-thunk';
 import { syncHistoryWithStore, routerReducer, routerMiddleware } from 'react-router-redux';
+import { persistStore, autoRehydrate } from 'redux-persist';
+import authRedirectMiddleware from './middlewares/auth-redirect';
 
 import * as reducers from './modules';
 import Routes from './routes';
@@ -29,10 +31,12 @@ const reducer = combineReducers({
 const middlewareRouter = routerMiddleware(browserHistory);
 const store = createStore(
   reducer,
+  undefined,
   compose(
     /* The router middleware MUST be before thunk otherwise the URL changes
     * inside a thunk function won't work properly */
-    // applyMiddleware(middlewareRouter, authRedirectMiddleware, thunk),
+    applyMiddleware(middlewareRouter, authRedirectMiddleware, thunk),
+    autoRehydrate(),
     /* Redux dev tool, install chrome extension in
      * https://chrome.google.com/webstore/detail/redux-devtools/lmhkpmbekcpmknklioeibfkpmmfibljd?hl=en */
     typeof window === 'object' &&
@@ -44,6 +48,11 @@ const store = createStore(
 function dispatch(action) {
   store.dispatch(action);
 }
+
+//
+const persistConfig = {
+  whitelist: ['user']
+};
 
 /**
  * HTML5 History API managed by React Router module
