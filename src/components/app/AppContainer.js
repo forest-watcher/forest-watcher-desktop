@@ -1,9 +1,10 @@
 import { connect } from 'react-redux';
-import { setLoginStatus, getUser, checkedLogged } from '../../modules/user';
+import { setLoginStatus, getUser, checkLogged } from '../../modules/user';
 import App from './App';
 
-const mapStateToProps = ({ user }) => ({
-  user
+const mapStateToProps = ({ app, user }) => ({
+  user,
+  userChecked: app.userChecked
 });
 
 function mapDispatchToProps(dispatch) {
@@ -14,8 +15,8 @@ function mapDispatchToProps(dispatch) {
     getUser: (action) => {
       dispatch(getUser(action));
     },
-    checkedLogged: (action) => {
-      dispatch(checkedLogged(action));
+    checkLogged: (token) => {
+      dispatch(checkLogged(token));
     }
   };
 }

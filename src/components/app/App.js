@@ -3,30 +3,17 @@ import React from 'react';
 import TopBar from '../topbar/TopBar';
 
 class App extends React.Component {
-
-  constructor(props) {
-    super(props);
-    // this.setLoginStatus = this.setLoginStatus.bind(this);
-  }
-
-  storeUserTokenFromUrl() {
-
+  constructor() {
+    super();
   }
 
   componentWillMount() {
-
-    if (this.props.params.token) {
-      this.checkedLogged();
-      this.props.setLoginStatus({loggedIn: true, token: true});
-    }
-
-    // this.props.setLoginStatus(true);
-    if (this.props.user.loggedIn && !this.props.user.data) {
-      this.props.getUser();
-    }
+    this.props.checkLogged(this.props.location.query.token);
   }
 
   render() {
+    if (!this.props.userChecked) return null;
+    
     return (
       <div>
         <TopBar />

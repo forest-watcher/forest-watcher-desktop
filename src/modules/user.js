@@ -1,11 +1,12 @@
 import { replace } from 'react-router-redux';
+import { setUserChecked } from './app';
 
 // Actions
-const GET_USER = 'GET_USER';
-const SET_LOGIN_MODAL = 'SET_LOGIN_MODAL';
-const SET_LOGIN_STATUS = 'SET_LOGIN_STATUS';
-const CHECK_USER_LOGGED = 'CHECK_USER_LOGGED';
-export const LOGOUT = 'LOGOUT';
+const GET_USER = 'user/GET_USER';
+const SET_LOGIN_MODAL = 'user/SET_LOGIN_MODAL';
+const SET_LOGIN_STATUS = 'user/SET_LOGIN_STATUS';
+const CHECK_USER_LOGGED = 'user/CHECK_USER_LOGGED';
+export const LOGOUT = 'user/LOGOUT';
 
 // Reducer
 const initialState = {
@@ -17,7 +18,7 @@ const initialState = {
 export default function reducer(state = initialState, action) {
   switch (action.type) {
     case CHECK_USER_LOGGED:
-      return Object.assign({}, state, { data: action.payload });
+      return Object.assign({}, state, { ...action.payload });
     case GET_USER: {
       if (action.payload.data) {
         const user = action.payload.data.attributes;
@@ -26,11 +27,12 @@ export default function reducer(state = initialState, action) {
       }
       return state;
     }
-    case SET_LOGIN_STATUS:
+    case SET_LOGIN_STATUS: {
       return Object.assign({}, state, {
         loggedIn: action.payload.loggedIn,
         token: action.payload.token
       });
+    }
     case LOGOUT:
       return initialState;
     default:
@@ -39,12 +41,16 @@ export default function reducer(state = initialState, action) {
 }
 
 // Action Creators
-export function checkLogged() {
+export function checkLogged(tokenParam) {
   const url = `${process.env.REACT_APP_API_AUTH}/auth/check-logged`;
   return (dispatch, state) => {
+    const user = state().user;
+    const token = tokenParam || user.token;
+    const auth = `Bearer ${token}`;
+    const route = state().routing.locationBeforeTransitions.pathname || '/';
     fetch(url, {
       headers: {
-        Authorization: `Bearer ${state().user.token}`
+        Authorization: auth
       }
     })
       .then(response => {
@@ -54,12 +60,26 @@ export function checkLogged() {
       .then((data) => {
         dispatch({
           type: CHECK_USER_LOGGED,
-          payload: data
+          payload: { data, token, loggedIn: true }
         });
+
+        if (tokenParam) {
+          const params = state().routing.locationBeforeTransitions.query;
+          const query = { ...params, token: undefined };
+          dispatch(replace({ pathname: route, query }));
+        } else if (route === '/') {
+          dispatch(replace('/dashboard'));
+        }
+        dispatch(setUserChecked());
       })
       .catch((error) => {
-        console.info(error);
-        // To-do
+        if (user.loggedIn) {
+          dispatch({
+            type: LOGOUT
+          });
+        }
+        dispatch(replace('/'));
+        dispatch(setUserChecked());
       });
   };
 }
@@ -90,18 +110,14 @@ export function getUser() {
 }
 
 export function setLoginStatus(status) {
-  return (dispatch) => {
-    dispatch({
-      type: SET_LOGIN_STATUS,
-      payload: status
-    });
+  return {
+    type: SET_LOGIN_STATUS,
+    payload: status
   };
 }
 
 export function logout() {
-  return (dispatch) => {
-    dispatch({
-      type: LOGOUT
-    });
+  return {
+    type: LOGOUT
   };
 }

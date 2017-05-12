@@ -4,7 +4,7 @@ class DashboardPage extends React.Component {
   render() {
     return (
       <div>
-        Wow, you are very logged in. Well done.
+        Welcome to Forest Watcher 2.0. You are logged in.
       </div>
     )
   }

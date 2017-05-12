@@ -31,11 +31,10 @@ const reducer = combineReducers({
 const middlewareRouter = routerMiddleware(browserHistory);
 const store = createStore(
   reducer,
-  undefined,
   compose(
     /* The router middleware MUST be before thunk otherwise the URL changes
     * inside a thunk function won't work properly */
-    applyMiddleware(middlewareRouter, authRedirectMiddleware, thunk),
+    applyMiddleware(middlewareRouter, thunk),
     autoRehydrate(),
     /* Redux dev tool, install chrome extension in
      * https://chrome.google.com/webstore/detail/redux-devtools/lmhkpmbekcpmknklioeibfkpmmfibljd?hl=en */
@@ -49,7 +48,6 @@ function dispatch(action) {
   store.dispatch(action);
 }
 
-//
 const persistConfig = {
   whitelist: ['user']
 };
@@ -61,15 +59,22 @@ const persistConfig = {
  */
 const history = syncHistoryWithStore(browserHistory, store);
 
+function startApp() {
+  render(
+    <Provider store={store}>
+      {/* Tell the Router to use our enhanced history */}
+      <Routes history={history} />
+    </Provider>,
+    document.getElementById('app')
+  );
+}
+
+persistStore(store, persistConfig, () => {
+  startApp();
+})
+
+
 export { store, history, dispatch };
 
 // Google Analytics
 // process.env.NODE_ENV === 'production' && ReactGA.initialize(process.env.GA);
-
-render(
-  <Provider store={store}>
-    {/* Tell the Router to use our enhanced history */}
-    <Routes history={history} />
-  </Provider>,
-  document.getElementById('app')
-);
