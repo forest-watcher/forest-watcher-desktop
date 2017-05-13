@@ -109,5 +109,8 @@ a, li {
   padding: 20px 0;
   border-bottom: grey solid 1px; }
 
+.c-dashboard-menu li {
+  padding-right: 30px; }
+
 .c-area-tile .area-image img {
   width: 300px; }

@@ -10,6 +10,7 @@ import LoginPage from './components/pages/LoginPage';
 import DashboardPage from './components/pages/dashboard/DashboardPageContainer';
 import AreasPage from './components/pages/areas/AreasPageContainer';
 import ReportsPage from './components/pages/reports/ReportsPageContainer';
+import QuestionairesPage from './components/pages/questionaires/QuestionairesPageContainer';
 
 
 const Routes = ({ history }) => (
@@ -20,7 +21,7 @@ const Routes = ({ history }) => (
         <IndexRoute components={{ main: DashboardPage }} />
         <Route path="areas" components={{ main: AreasPage }} />
         <Route path="reports" components={{ main: ReportsPage }} />
-        <Route path="questionaires" components={{ main: AreasPage }} />
+        <Route path="questionaires" components={{ main: QuestionairesPage }} />
       </Route>
     </Route>
   </Router>
