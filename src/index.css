@@ -102,14 +102,14 @@ a, li {
   align-content: center;
   flex-direction: column; }
 
-.c-dashboard .content-section {
-  padding: 40px 0; }
-
 .c-dashboard li {
   padding: 20px 0;
   border-bottom: grey solid 1px; }
 
-.c-dashboard-menu li {
+.c-dashboard-menu {
+  margin-bottom: 20px; }
+
+.c-dashboard-menu a {
   padding-right: 30px; }
 
 .c-area-tile .area-image img {

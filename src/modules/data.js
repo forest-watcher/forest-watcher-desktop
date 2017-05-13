@@ -37,7 +37,7 @@ export function getUserAreas() {
   return (dispatch, state) => {
     fetch(url, {
       headers: {
-        Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjU4NDgzZmM5NmViMDMxMGMwMDQ2MTUzNSIsInJvbGUiOiJVU0VSIiwicHJvdmlkZXIiOiJnb29nbGUiLCJjcmVhdGVkQXQiOjE0OTQ2OTI0MTQ4NjEsImlhdCI6MTQ5NDY5MjQxNH0.2M5LgRWiexBHA2MvV1V2qODu8rvInpsZcr5lef39HDg`
+        Authorization: `Bearer ${state().user.token}`
       }
     })
       .then(response => {
@@ -62,7 +62,7 @@ export function getUserReports() {
   return (dispatch, state) => {
     fetch(url, {
       headers: {
-        Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjU4NDgzZmM5NmViMDMxMGMwMDQ2MTUzNSIsInJvbGUiOiJVU0VSIiwicHJvdmlkZXIiOiJnb29nbGUiLCJjcmVhdGVkQXQiOjE0OTQ2OTI0MTQ4NjEsImlhdCI6MTQ5NDY5MjQxNH0.2M5LgRWiexBHA2MvV1V2qODu8rvInpsZcr5lef39HDg`
+        Authorization: `Bearer ${state().user.token}`
       }
     })
       .then(response => {
@@ -87,7 +87,7 @@ export function getUserQuestionaires() {
   return (dispatch, state) => {
     fetch(url, {
       headers: {
-        Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjU4NDgzZmM5NmViMDMxMGMwMDQ2MTUzNSIsInJvbGUiOiJVU0VSIiwicHJvdmlkZXIiOiJnb29nbGUiLCJjcmVhdGVkQXQiOjE0OTQ2OTI0MTQ4NjEsImlhdCI6MTQ5NDY5MjQxNH0.2M5LgRWiexBHA2MvV1V2qODu8rvInpsZcr5lef39HDg`
+        Authorization: `Bearer ${state().user.token}`
       }
     })
       .then(response => {
