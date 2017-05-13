@@ -2,7 +2,7 @@ import React from 'react';
 import { render } from 'react-dom';
 import { createStore, combineReducers, applyMiddleware, compose } from 'redux';
 import { Provider } from 'react-redux';
-import { hashHistory } from 'react-router';
+import { browserHistory } from 'react-router';
 import thunk from 'redux-thunk';
 import { syncHistoryWithStore, routerReducer, routerMiddleware } from 'react-router-redux';
 import { persistStore, autoRehydrate } from 'redux-persist';
@@ -28,7 +28,7 @@ const reducer = combineReducers({
  * @info(http://redux.js.org/docs/basics/Store.html)
  * @type {Object}
  */
-const middlewareRouter = routerMiddleware(hashHistory);
+const middlewareRouter = routerMiddleware(browserHistory);
 const store = createStore(
   reducer,
   compose(
@@ -57,7 +57,7 @@ const persistConfig = {
  * @info(https://github.com/reactjs/react-router/tree/master/docs)
  * @type {Object}
  */
-const history = syncHistoryWithStore(hashHistory, store);
+const history = syncHistoryWithStore(browserHistory, store);
 
 function startApp() {
   render(
