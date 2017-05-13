@@ -2,26 +2,26 @@ import React from 'react';
 import AreaTile from '../../areas/AreaTile.js';
 import DashboardMenu from '../../DashboardMenu.js';
 
-class ReportsPage extends React.Component {
+class AreasPage extends React.Component {
 
   componentWillMount() {
-    this.props.getUserReports();
+    this.props.getUserAreas();
   }
 
   render() {
-    let reports = [];
-    for (let i = 0; i < this.props.data.reports.length; i++) {
-      reports.push(<li><AreaTile data={this.props.data.reports[i]} key={i} /></li>);
+    let areas = [];
+    for (let i = 0; i < this.props.data.areas.length; i++) {
+      areas.push(<li><AreaTile data={this.props.data.areas[i]} key={i} /></li>);
     }
 
     return (
       <div>
         <DashboardMenu />
         <div className="c-dashboard">
-          <div className="content-section reports">
-            <h4>Reports</h4>
+          <div className="content-section areas">
+            <h4>Areas</h4>
             <ul>
-              {reports}
+              {areas}
             </ul>
           </div>
         </div>
@@ -30,4 +30,4 @@ class ReportsPage extends React.Component {
   }
 }
 
-export default ReportsPage;
+export default AreasPage;
