@@ -13,15 +13,13 @@ class App extends React.Component {
 
   render() {
     if (!this.props.userChecked) return null;
-    
+
     return (
       <div>
-        <TopBar />
         <main role="main" className="l-main">
-          <div className="main-content l-app-wrapper">
-            <div className="content-content">
-              {this.props.main}
-            </div>
+          <TopBar />
+          <div className="l-content">
+            {this.props.main}
           </div>
         </main>
       </div>

@@ -1,0 +1,28 @@
+.c-login-button {
+  background: black;
+  color: white;
+  padding: 15px;
+  width: 250px;
+  margin: 5px 0;
+  border-radius: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  a {
+    color: white;
+    font-weight: bold;
+  }
+
+  &.-facebook {
+    background-color: #3b5998;
+  }
+
+  &.-twitter {
+    background-color: #00aced;
+  }
+
+  &.-google {
+    background-color: #d62d20;
+  }
+}
