@@ -1,5 +1,3 @@
-import { replace } from 'react-router-redux';
-
 // Actions
 export const USER_CHECKED = 'app/USER_CHECKED';
 

@@ -1,31 +1,49 @@
-body {
-  font-family: font(primary);
-  font-size: $font-size-default;
-  color: black;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+* {
+  box-sizing: border-box;
 }
 
-a {
+/**
+ * Reset some basic elements
+ */
+body, h1, h2, h3, h4, h5, h6,
+p, blockquote, pre, hr,
+dl, dd, ol, ul, figure {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -webkit-overflow-scrolling: touch;
+  font-family: 'Open Sans', sans-serif;
+}
+
+html {
+  overflow-x: hidden;
+}
+
+body, html {
+  &.-fixed {
+    overflow: hidden;
+  }
+  height: 100%;
+  width: 100%;
+}
+li {
+  list-style: none;
+}
+
+
+a, li {
+  /* Avoid important here because we do want underline styles for some links */
   text-decoration: none;
 }
 
-*, *:after, *:before {
-  box-sizing: border-box !important;
+.-no-scroll {
+  overflow: hidden;
 }
 
-button {
-  outline: none;
-  cursor: pointer;
-}
-
-input {
-  outline: none;
-}
-
-input[type="search"] {
-  -webkit-appearance: textfield;
-  &::-webkit-search-decoration {
-      -webkit-appearance: none;
-  }
+.is-hidden {
+  display: none !important;
 }

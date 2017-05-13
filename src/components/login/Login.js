@@ -4,7 +4,7 @@ import LoginButton from './LoginButton'
 class Login extends Component {
   render() {
     return (
-      <div>
+      <div className="c-login">
         <LoginButton socialNetwork="facebook" />
         <LoginButton socialNetwork="twitter" />
         <LoginButton socialNetwork="google" />
