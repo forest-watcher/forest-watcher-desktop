@@ -117,7 +117,10 @@ export function setLoginStatus(status) {
 }
 
 export function logout() {
-  return {
-    type: LOGOUT
+  return (dispatch) => {
+    dispatch({
+      type: LOGOUT
+    });
+    dispatch(replace('/'));
   };
 }

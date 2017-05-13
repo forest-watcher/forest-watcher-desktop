@@ -1,4 +1,12 @@
 .c-nav {
   color: white;
+  width: 100%;
   font-weight: bold;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  li {
+    cursor: pointer;
+  }
 }

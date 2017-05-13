@@ -1,6 +1,6 @@
 import React from 'react';
 
-import TopBar from '../topbar/TopBar';
+import TopBar from '../topbar/TopBarContainer';
 
 class App extends React.Component {
   constructor() {

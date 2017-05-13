@@ -41,6 +41,9 @@ a, li {
   display: none !important; }
 
 /* Layouts */
+.l-content {
+  padding: 25px; }
+
 .l-top-bar {
   width: 100%;
   background-color: black;
@@ -52,7 +55,14 @@ a, li {
 /* Components */
 .c-nav {
   color: white;
-  font-weight: bold; }
+  width: 100%;
+  font-weight: bold;
+  display: flex;
+  justify-content: space-between;
+  align-items: center; }
+
+.c-nav li {
+  cursor: pointer; }
 
 .c-login {
   display: flex;
@@ -70,7 +80,8 @@ a, li {
   border-radius: 50px;
   display: flex;
   align-items: center;
-  justify-content: center; }
+  justify-content: center;
+  cursor: pointer; }
 
 .c-login-button a {
   color: white;
