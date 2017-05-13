@@ -13,11 +13,10 @@
     "redux-persist": "4.6.0"
   },
   "devDependencies": {
-    "eslint-config-vizzuality": "^1.0.3",
+    "react-scripts": "0.9.5",
     "gh-pages": "^1.0.0",
     "node-sass": "^4.5.0",
-    "npm-run-all": "^4.0.2",
-    "react-scripts": "0.9.5"
+    "npm-run-all": "^4.0.2"
   },
   "scripts": {
     "start": "npm-run-all -p start:css start:js",
@@ -28,10 +27,5 @@
     "deploy": "npm run build&&gh-pages -d build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
-  },
-  "main": "index.js",
-  "eslintConfig": {
-    "extends": "vizzuality"
-  },
-  "homepage": "https://vizzuality.github.io/forest-watcher-desktop"
+  }
 }
