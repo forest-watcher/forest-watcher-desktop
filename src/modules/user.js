@@ -65,7 +65,7 @@ export function checkLogged(tokenParam) {
         if (tokenParam) {
           const params = state().routing.locationBeforeTransitions.query;
           const query = { ...params, token: undefined };
-          dispatch(replace({ pathname: route, query }));
+          dispatch(replace({ pathname: route === '/' ? '/dashboard' : route, query }));
         } else if (route === '/') {
           dispatch(replace('/dashboard'));
         }
