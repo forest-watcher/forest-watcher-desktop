@@ -19,7 +19,7 @@
     "npm-run-all": "^4.0.2"
   },
   "scripts": {
-    "start": "npm-run-all -p start:css start:js",
+    "start": "npm run build",
     "start:js": "react-scripts start",
     "start:css": "npm run build:css && node-sass src/ -o src/ --watch --recursive",
     "build": "npm run build:css && react-scripts build",
