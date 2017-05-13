@@ -95,3 +95,19 @@ a, li {
 
 .c-login-button.-google {
   background-color: #d62d20; }
+
+.c-dashboard {
+  display: flex;
+  justify-content: flex-start;
+  align-content: center;
+  flex-direction: column; }
+
+.c-dashboard .content-section {
+  padding: 40px 0; }
+
+.c-dashboard li {
+  padding: 20px 0;
+  border-bottom: grey solid 1px; }
+
+.c-area-tile .area-image img {
+  width: 300px; }

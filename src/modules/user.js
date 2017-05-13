@@ -3,7 +3,6 @@ import { setUserChecked } from './app';
 
 // Actions
 const GET_USER = 'user/GET_USER';
-const SET_LOGIN_MODAL = 'user/SET_LOGIN_MODAL';
 const SET_LOGIN_STATUS = 'user/SET_LOGIN_STATUS';
 const CHECK_USER_LOGGED = 'user/CHECK_USER_LOGGED';
 export const LOGOUT = 'user/LOGOUT';
@@ -80,31 +79,6 @@ export function checkLogged(tokenParam) {
         }
         dispatch(replace('/'));
         dispatch(setUserChecked());
-      });
-  };
-}
-
-export function getUser() {
-  const url = `${process.env.REACT_APP_API_AUTH}/user`;
-  return (dispatch, state) => {
-    fetch(url, {
-      headers: {
-        Authorization: `Bearer ${state().user.token}`
-      }
-    })
-      .then(response => {
-        if (response.ok) return response.json();
-        throw Error(response.statusText);
-      })
-      .then((data) => {
-        dispatch({
-          type: GET_USER,
-          payload: data
-        });
-      })
-      .catch((error) => {
-        console.info(error);
-        // To-do
       });
   };
 }

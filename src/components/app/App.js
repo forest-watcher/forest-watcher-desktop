@@ -3,9 +3,6 @@ import React from 'react';
 import TopBar from '../topbar/TopBarContainer';
 
 class App extends React.Component {
-  constructor() {
-    super();
-  }
 
   componentWillMount() {
     this.props.checkLogged(this.props.location.query.token);

@@ -7,7 +7,9 @@ import App from './components/app/AppContainer';
 
 // Pages
 import LoginPage from './components/pages/LoginPage';
-import DashboardPage from './components/pages/dashboard/DashboardPage';
+import DashboardPage from './components/pages/dashboard/DashboardPageContainer';
+import AreasPage from './components/pages/areas/AreasPageContainer';
+import ReportsPage from './components/pages/reports/ReportsPageContainer';
 
 
 const Routes = ({ history }) => (
@@ -16,6 +18,9 @@ const Routes = ({ history }) => (
       <IndexRoute components={{ main: LoginPage }} />
       <Route path="dashboard">
         <IndexRoute components={{ main: DashboardPage }} />
+        <Route path="areas" components={{ main: AreasPage }} />
+        <Route path="reports" components={{ main: ReportsPage }} />
+        <Route path="questionaires" components={{ main: AreasPage }} />
       </Route>
     </Route>
   </Router>
