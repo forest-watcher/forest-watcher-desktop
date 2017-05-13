@@ -6,7 +6,9 @@ class LoginButton extends Component {
     const url = `${process.env.REACT_APP_API_AUTH}/auth/${this.props.socialNetwork}?token=true&callbackUrl=${process.env.REACT_APP_API_AUTH_CALLBACK_URL}`
     return (
       <div className={`c-login-button -${this.props.socialNetwork}`}>
-        <a href={url}>{this.props.socialNetwork}</a>
+        <a href={url}>
+          <span>{this.props.socialNetwork}</span>
+        </a>
       </div>
     );
   }

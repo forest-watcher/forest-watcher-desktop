@@ -74,18 +74,18 @@ a, li {
 .c-login-button {
   background: black;
   color: white;
-  padding: 15px;
-  width: 250px;
   margin: 5px 0;
   border-radius: 50px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   cursor: pointer; }
 
 .c-login-button a {
   color: white;
-  font-weight: bold; }
+  font-weight: bold;
+  padding: 15px;
+  width: 250px;
+  display: flex;
+  align-items: center;
+  justify-content: center; }
 
 .c-login-button.-facebook {
   background-color: #3b5998; }
