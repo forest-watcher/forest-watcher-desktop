@@ -1,5 +1,12 @@
 .c-nav {
+  color: white;
   width: 100%;
-  background-color: black;
-  height: 60px;
+  font-weight: bold;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  li {
+    cursor: pointer;
+  }
 }

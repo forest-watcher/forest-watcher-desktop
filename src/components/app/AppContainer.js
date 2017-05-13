@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { setLoginStatus, getUser, checkLogged } from '../../modules/user';
+import { checkLogged } from '../../modules/user';
 import App from './App';
 
 const mapStateToProps = ({ app, user }) => ({
@@ -9,12 +9,6 @@ const mapStateToProps = ({ app, user }) => ({
 
 function mapDispatchToProps(dispatch) {
   return {
-    setLoginStatus: (action) => {
-      dispatch(setLoginStatus(action));
-    },
-    getUser: (action) => {
-      dispatch(getUser(action));
-    },
     checkLogged: (token) => {
       dispatch(checkLogged(token));
     }
