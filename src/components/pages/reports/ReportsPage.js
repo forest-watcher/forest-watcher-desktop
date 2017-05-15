@@ -11,7 +11,7 @@ class ReportsPage extends React.Component {
   render() {
     let reports = [];
     for (let i = 0; i < this.props.data.reports.length; i++) {
-      reports.push(<li><AreaTile data={this.props.data.reports[i]} key={i} /></li>);
+      reports.push(<li key={i}><AreaTile data={this.props.data.reports[i]} /></li>);
     }
 
     return (

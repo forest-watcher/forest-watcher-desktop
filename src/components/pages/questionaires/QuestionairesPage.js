@@ -1,5 +1,5 @@
 import React from 'react';
-import AreaTile from '../../areas/AreaTile.js';
+import ReportLink from '../../reports/ReportLink.js';
 import DashboardMenu from '../../DashboardMenu.js';
 
 class QuestionairesPage extends React.Component {
@@ -10,8 +10,8 @@ class QuestionairesPage extends React.Component {
 
   render() {
     let reports = [];
-    for (let i = 0; i < this.props.data.reports.length; i++) {
-      reports.push(<li><AreaTile data={this.props.data.reports[i]} key={i} /></li>);
+    for (let i = 0, dLength = this.props.data.reports.length || 0; i < dLength; i++) {
+      reports.push(<li key={i}><ReportLink data={this.props.data.reports[i]}/></li>);
     }
 
     return (
