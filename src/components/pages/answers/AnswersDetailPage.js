@@ -1,6 +1,6 @@
 import React from 'react';
-import Response from './Response.js';
-import DashboardMenu from '../../DashboardMenu.js';
+import Response from '../../answers/Response';
+import DashboardMenu from '../../DashboardMenu';
 
 class AnswersPage extends React.Component {
 

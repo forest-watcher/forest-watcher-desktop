@@ -1,5 +1,5 @@
 import React from 'react';
-import AnswerLink from './AnswerLink.js';
+import AnswerLink from '../../answers/AnswerLink.js';
 import DashboardMenu from '../../DashboardMenu.js';
 
 class AnswersPage extends React.Component {
