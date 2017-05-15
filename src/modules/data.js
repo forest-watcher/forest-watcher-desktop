@@ -2,12 +2,14 @@
 const GET_USER_AREAS = 'areas/GET_AREAS';
 const GET_USER_REPORTS = 'areas/GET_REPORTS';
 const GET_USER_QUESTIONAIRES = 'areas/GET_USER_QUESTIONAIRES';
+const GET_USER_ANSWERS = 'areas/GET_USER_ANSWERS';
 
 // Reducer
 const initialState = {
   areas: {},
   reports: {},
-  questionaires: {}
+  questionaires: {},
+  answers: {}
 };
 
 export default function reducer(state = initialState, action) {
@@ -23,10 +25,18 @@ export default function reducer(state = initialState, action) {
       }
       return state;
     case GET_USER_QUESTIONAIRES:
-    if (action.payload) {
-      return Object.assign({}, state, { questionaires: action.payload });
+      if (action.payload) {
+        return Object.assign({}, state, { questionaires: action.payload });
+      }
+      return state;
+    case GET_USER_ANSWERS: {
+      if (action.payload.id) {
+        const answers = {...state.answers};
+        answers[action.payload.id] = action.payload.data;
+        return Object.assign({}, state, { answers });
+      }
+      return state;
     }
-    return state;
     default:
       return state;
   }
@@ -98,6 +108,34 @@ export function getUserQuestionaires() {
         dispatch({
           type: GET_USER_QUESTIONAIRES,
           payload: data
+        });
+      })
+      .catch((error) => {
+        console.info(error);
+        // To-do
+      });
+  };
+}
+
+export function getReportAnswers(reportId) {
+  const url = `${process.env.REACT_APP_API_AUTH}/questionnaire/${reportId}/answer`;
+  return (dispatch, state) => {
+    fetch(url, {
+      headers: {
+        Authorization: `Bearer ${state().user.token}`
+      }
+    })
+      .then(response => {
+        if (response.ok) return response.json();
+        throw Error(response.statusText);
+      })
+      .then((data) => {
+        dispatch({
+          type: GET_USER_ANSWERS,
+          payload: {
+            id: reportId,
+            data: data.data
+          }
         });
       })
       .catch((error) => {

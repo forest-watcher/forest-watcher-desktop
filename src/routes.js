@@ -11,6 +11,8 @@ import DashboardPage from './components/pages/dashboard/DashboardPageContainer';
 import AreasPage from './components/pages/areas/AreasPageContainer';
 import ReportsPage from './components/pages/reports/ReportsPageContainer';
 import QuestionairesPage from './components/pages/questionaires/QuestionairesPageContainer';
+import AnswersPage from './components/pages/answers/AnswersPageContainer';
+import AnswersDetailPage from './components/pages/answers/AnswersDetailPageContainer';
 
 
 const Routes = ({ history }) => (
@@ -21,7 +23,11 @@ const Routes = ({ history }) => (
         <IndexRoute components={{ main: DashboardPage }} />
         <Route path="areas" components={{ main: AreasPage }} />
         <Route path="reports" components={{ main: ReportsPage }} />
-        <Route path="questionaires" components={{ main: QuestionairesPage }} />
+        <Route path="questionaires">
+          <IndexRoute components={{ main: QuestionairesPage }} />
+          <Route path=":reportId" components={{ main: AnswersPage }} />
+          <Route path=":reportId/:answerId" components={{ main: AnswersDetailPage }} />
+        </Route>
       </Route>
     </Route>
   </Router>
