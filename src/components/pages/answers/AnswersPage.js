@@ -8,6 +8,10 @@ class AnswersPage extends React.Component {
     this.props.getReportAnswers(this.props.reportId);
   }
 
+  onDownloadClick = () => {
+    this.props.downloadAnswers(this.props.reportId);
+  }
+
   render() {
     let answers = [];
     const { data } = this.props;
@@ -23,6 +27,7 @@ class AnswersPage extends React.Component {
         <div className="c-dashboard">
           <div className="content-section answers">
             <h4>Answers for the questionnaire</h4>
+            <button onClick={this.onDownloadClick}> Download responses </button>
             <ul>
               {answers}
             </ul>
