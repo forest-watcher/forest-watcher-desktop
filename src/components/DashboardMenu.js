@@ -8,7 +8,7 @@ class DashboardMenu extends Component {
         <Link to={`/dashboard`}>Dashboard</Link>
         <Link to={`/dashboard/areas`}>Areas</Link>
         <Link to={`/dashboard/reports`}>Reports</Link>
-        <Link to={`/dashboard/questionaires`}>Questionaires</Link>
+        <Link to={`/dashboard/questionaires`}>Templates</Link>
       </div>
     );
   }
