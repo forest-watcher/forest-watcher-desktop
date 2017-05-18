@@ -27,7 +27,7 @@ class AnswersPage extends React.Component {
         <div className="c-dashboard">
           <div className="content-section answers">
             <h4>Answers for the questionnaire</h4>
-            <button onClick={this.onDownloadClick}> Download responses </button>
+            <button onClick={this.onDownloadClick}> Download answers </button>
             <ul>
               {answers}
             </ul>
