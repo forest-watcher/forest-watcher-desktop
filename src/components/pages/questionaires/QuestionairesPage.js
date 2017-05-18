@@ -19,7 +19,7 @@ class QuestionairesPage extends React.Component {
         <DashboardMenu />
         <div className="c-dashboard">
           <div className="content-section reports">
-            <h4>Questionaires</h4>
+            <h4>Report Templates</h4>
             <ul>
               {reports}
             </ul>

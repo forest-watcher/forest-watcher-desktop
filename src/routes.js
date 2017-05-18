@@ -23,7 +23,7 @@ const Routes = ({ history }) => (
         <IndexRoute components={{ main: DashboardPage }} />
         <Route path="areas" components={{ main: AreasPage }} />
         <Route path="reports" components={{ main: ReportsPage }} />
-        <Route path="questionaires">
+        <Route path="templates">
           <IndexRoute components={{ main: QuestionairesPage }} />
           <Route path=":reportId" components={{ main: AnswersPage }} />
           <Route path=":reportId/:answerId" components={{ main: AnswersDetailPage }} />

@@ -26,7 +26,7 @@ class AnswersPage extends React.Component {
         <DashboardMenu />
         <div className="c-dashboard">
           <div className="content-section answers">
-            <h4>Responses for the questionnaire {data.attributes.questionnaire} in {data.id}</h4>
+            <h4>Responses for the template {data.attributes.questionnaire} in {data.id}</h4>
             <ul>
               {responses}
             </ul>

@@ -17,7 +17,7 @@ function AnswerLink(props) {
   return (
     <div>
       <p><strong>Date: </strong>{dateString}</p>
-      <Link to={`/dashboard/questionaires/${props.data.attributes.questionnaire}/${props.data.id}/`}>Go to detail</Link>
+      <Link to={`/dashboard/templates/${props.data.attributes.questionnaire}/${props.data.id}/`}>Go to detail</Link>
     </div>
   );
 }
