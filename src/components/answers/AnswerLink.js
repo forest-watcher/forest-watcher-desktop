@@ -8,10 +8,10 @@ function AnswerLink(props) {
   let userString = 'No user';
   const date = props.data.attributes.responses.filter((response) => response.question === 'date');
   const user = props.data.attributes.responses.filter((response) => response.question === 'name');
-  if (date) {
+  if (date && date[0]) {
     dateString = new Date(date[0].value).toDateString();
   }
-  if (user) {
+  if (user && user[0]) {
     userString = user[0].value;
   }
   return (

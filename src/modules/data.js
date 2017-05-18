@@ -1,3 +1,5 @@
+import FileSaver from 'file-saver';
+
 // Actions
 const GET_USER_AREAS = 'areas/GET_AREAS';
 const GET_USER_REPORTS = 'areas/GET_REPORTS';
@@ -126,21 +128,50 @@ export function getReportAnswers(reportId) {
       }
     })
       .then(response => {
-        if (response.ok) return response.json();
-        throw Error(response.statusText);
+            if (response.ok) return response.json();
+            throw Error(response.statusText);
       })
-      .then((data) => {
-        dispatch({
-          type: GET_USER_ANSWERS,
-          payload: {
-            id: reportId,
-            data: data.data
-          }
-        });
-      })
+        .then((data) => {
+          dispatch({
+            type: GET_USER_ANSWERS,
+            payload: {
+              id: reportId,
+              data: data.data
+            }
+          });
+        })
       .catch((error) => {
         console.info(error);
         // To-do
       });
   };
+}
+
+export function downloadAnswers(reportId) {
+  const url = `${process.env.REACT_APP_API_AUTH}/questionnaire/${reportId}/download-answers`;
+  try {
+    const isFileSaverSupported = !!new Blob;
+    if (isFileSaverSupported) {
+      return (dispatch, state) => {
+        fetch(url, {
+          headers: {
+            Authorization: `Bearer ${state().user.token}`
+          }
+        })
+          .then(response => {
+            if (response.ok) return response.blob();
+            throw Error(response.statusText);
+          })
+          .then((data) => {
+            FileSaver.saveAs(data, `${reportId}-answers.csv`);
+          })
+          .catch((error) => {
+            console.info(error);
+            // To-do
+          });
+      };
+    }
+  } catch(e) {
+    console.warn('File download not supported');
+  }
 }
