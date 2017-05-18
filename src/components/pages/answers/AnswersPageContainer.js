@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { getReportAnswers } from '../../../modules/data';
+import { getReportAnswers, downloadAnswers } from '../../../modules/data';
 
 import AnswersPage from './AnswersPage';
 
@@ -12,6 +12,9 @@ function mapDispatchToProps(dispatch) {
   return {
     getReportAnswers: (reportId) => {
       dispatch(getReportAnswers(reportId));
+    },
+    downloadAnswers: (reportId) => {
+      dispatch(downloadAnswers(reportId));
     }
   };
 }
