@@ -1,5 +1,6 @@
 import { replace } from 'react-router-redux';
 import { setUserChecked } from './app';
+import queryString from 'query-string';
 
 // Actions
 const GET_USER = 'user/GET_USER';
@@ -44,9 +45,10 @@ export function checkLogged(tokenParam) {
   const url = `${process.env.REACT_APP_API_AUTH}/auth/check-logged`;
   return (dispatch, state) => {
     const user = state().user;
-    const token = tokenParam || user.token;
+    const queryParams = queryString.parse(tokenParam);
+    const token = queryParams.token || user.token;
     const auth = `Bearer ${token}`;
-    const route = state().routing.locationBeforeTransitions.pathname || '/';
+    const route = state().router.location.pathname || '/';
     fetch(url, {
       headers: {
         Authorization: auth
@@ -63,9 +65,8 @@ export function checkLogged(tokenParam) {
         });
 
         if (tokenParam) {
-          const params = state().routing.locationBeforeTransitions.query;
-          const query = { ...params, token: undefined };
-          dispatch(replace({ pathname: route === '/' ? '/dashboard' : route, query }));
+          const search = queryString.stringify({ ...queryParams, token: undefined });
+          dispatch(replace({ pathname: route === '/' ? '/dashboard' : route, search }));
         } else if (route === '/') {
           dispatch(replace('/dashboard'));
         }
