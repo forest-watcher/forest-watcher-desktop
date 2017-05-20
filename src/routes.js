@@ -10,12 +10,8 @@ import App from './components/app/AppContainer';
 
 const Routes = () => (
   <Router>
-    <Route path="/" component={App} />
+    <App />
   </Router>
 );
-
-Routes.propTypes = {
-  history: React.PropTypes.object
-};
 
 export default Routes;

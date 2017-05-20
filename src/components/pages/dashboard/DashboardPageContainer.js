@@ -1,5 +1,4 @@
 import { connect } from 'react-redux';
-import { withRouter } from 'react-router-dom'
 import { getUserAreas, getUserReports, getUserQuestionares } from '../../../modules/data';
 
 import DashboardPage from './DashboardPage';
@@ -22,4 +21,4 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(DashboardPage));
+export default connect(mapStateToProps, mapDispatchToProps)(DashboardPage);

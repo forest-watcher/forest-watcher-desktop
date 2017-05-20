@@ -1,4 +1,3 @@
-import { replace } from 'react-router-redux';
 import { setUserChecked } from './app';
 import queryString from 'query-string';
 
@@ -48,7 +47,6 @@ export function checkLogged(tokenParam) {
     const queryParams = queryString.parse(tokenParam);
     const token = queryParams.token || user.token;
     const auth = `Bearer ${token}`;
-    const route = state().router.location.pathname || '/';
     fetch(url, {
       headers: {
         Authorization: auth
@@ -63,13 +61,6 @@ export function checkLogged(tokenParam) {
           type: CHECK_USER_LOGGED,
           payload: { data, token, loggedIn: true }
         });
-
-        if (tokenParam) {
-          const search = queryString.stringify({ ...queryParams, token: undefined });
-          dispatch(replace({ pathname: route === '/' ? '/dashboard' : route, search }));
-        } else if (route === '/') {
-          dispatch(replace('/dashboard'));
-        }
         dispatch(setUserChecked());
       })
       .catch((error) => {
@@ -78,7 +69,6 @@ export function checkLogged(tokenParam) {
             type: LOGOUT
           });
         }
-        dispatch(replace('/'));
         dispatch(setUserChecked());
       });
   };
@@ -96,6 +86,5 @@ export function logout() {
     dispatch({
       type: LOGOUT
     });
-    dispatch(replace('/'));
   };
 }

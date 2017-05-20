@@ -1,5 +1,6 @@
 import React from 'react';
-import { Route, Switch } from 'react-router-dom'
+import { Route, Switch, Redirect } from 'react-router-dom'
+import queryString from 'query-string';
 
 // Pages
 import LoginPage from '../pages/LoginPage';
@@ -34,6 +35,14 @@ class App extends React.Component {
     this.props.checkLogged(this.props.location.search);
   }
 
+  getRootComponent = () => {
+    const { user, location } = this.props;
+    const search = location.search || '';
+    const queryParams = queryString.parse(search);
+    if (!user.loggedIn && !queryParams.token) return <LoginPage />;
+    return <Redirect to="/dashboard" />;
+  }
+
   render() {
     const { match, user, userChecked } = this.props;
 
@@ -43,16 +52,16 @@ class App extends React.Component {
       <main role="main" className="l-main">
         <TopBar />
         <div className="l-content">
-          {!user.loggedIn ?
-            <Route component={LoginPage} />
-          :
-            <Switch>
+          <Route exact path="/" render={this.getRootComponent}/>
+          {user.loggedIn &&
+            <div>
               <Route path={`${match.url}dashboard`} component={DashboardPage}/>
               <Route path={`${match.url}areas`} component={AreasPage}/>
               <Route path={`${match.url}reports`} component={ReportsPage}/>
               <Route path={`${match.url}templates`} component={QuestionairesPage}/>
-            </Switch>
+            </div>
           }
+          {!user.loggedIn && <Redirect to="/" />}
         </div>
       </main>
     );
