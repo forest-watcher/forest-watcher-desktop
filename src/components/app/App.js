@@ -8,26 +8,10 @@ import DashboardPage from '../pages/dashboard/DashboardPageContainer';
 import AreasPage from '../pages/areas/AreasPageContainer';
 import ReportsPage from '../pages/reports/ReportsPageContainer';
 import QuestionairesPage from '../pages/questionaires/QuestionairesPageContainer';
-import AnswersPage from '../pages/answers/AnswersPage';
+import AnswersPage from '../pages/answers/AnswersPageContainer';
 import AnswersDetailPage from '../pages/answers-detail/AnswersDetailPageContainer';
 
 import TopBar from '../topbar/TopBarContainer';
-
-// const Routess = ({ history }) => (
-//   <Router history={history}>
-//     <IndexRoute components={{ main: LoginPage }} />
-//     <Route path="dashboard">
-//       <IndexRoute components={{ main: DashboardPage }} />
-//       <Route path="areas" components={{ main: AreasPage }} />
-//       <Route path="reports" components={{ main: ReportsPage }} />
-//       <Route path="templates">
-//         <IndexRoute components={{ main: QuestionairesPage }} />
-//         <Route path=":reportId" components={{ main: AnswersPage }} />
-//         <Route path=":reportId/:answerId" components={{ main: AnswersDetailPage }} />
-//       </Route>
-//     </Route>
-//   </Router>
-// );
 
 class App extends React.Component {
 
@@ -45,7 +29,6 @@ class App extends React.Component {
 
   render() {
     const { match, user, userChecked } = this.props;
-
     if (!userChecked) return null;
 
     return (
@@ -58,7 +41,11 @@ class App extends React.Component {
               <Route path={`${match.url}dashboard`} component={DashboardPage}/>
               <Route path={`${match.url}areas`} component={AreasPage}/>
               <Route path={`${match.url}reports`} component={ReportsPage}/>
-              <Route path={`${match.url}templates`} component={QuestionairesPage}/>
+              <Switch>
+                <Route exact path={`${match.url}templates`} component={QuestionairesPage}/>
+                <Route exact path={`${match.url}templates/:reportId`} component={AnswersPage} />
+                <Route path={`${match.url}templates/:reportId/:answerId`} component={AnswersDetailPage} />
+              </Switch>
             </div>
           }
           {!user.loggedIn && <Redirect to="/" />}

@@ -1,9 +1,9 @@
 import React from 'react';
-import { Link } from 'react-router';
+import { Link } from 'react-router-dom';
 
 function ReportLink(props) {
   return (
-    <Link to={`/dashboard/templates/${props.data.id}`}>{props.data.attributes.name}</Link>
+    <Link to={`/templates/${props.data.id}`}>{props.data.attributes.name}</Link>
   );
 }
 

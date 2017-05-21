@@ -3,15 +3,15 @@ import { getReportAnswers } from '../../../modules/data';
 
 import AnswersPage from './AnswersDetailPage';
 
-const mapStateToProps = ({ data }, { params }) => {
-  const { reportId, answerId } = params;
+const mapStateToProps = ({ data }, ownProps) => {
+  const { params } = ownProps.match || {};
   let answer = false;
-  if (data.answers[reportId]) {
-    answer = data.answers[reportId].filter((answer) => answer.id === answerId)[0];
+  if (data.answers[params.reportId]) {
+    answer = data.answers[params.reportId].filter((answer) => answer.id === params.answerId)[0];
   }
   return {
     data: answer,
-    reportId
+    reportId: params.reportId
   }
 };
 

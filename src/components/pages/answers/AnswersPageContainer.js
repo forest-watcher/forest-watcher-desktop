@@ -3,10 +3,13 @@ import { getReportAnswers, downloadAnswers } from '../../../modules/data';
 
 import AnswersPage from './AnswersPage';
 
-const mapStateToProps = ({ data }, { params }) => ({
-  data: data.answers[params.reportId],
-  reportId: params.reportId
-});
+const mapStateToProps = ({ data }, ownProps) => {
+  const { params } = ownProps.match || {};
+  return ({
+    data: data.answers[params.reportId],
+    reportId: params.reportId
+  });
+};
 
 function mapDispatchToProps(dispatch) {
   return {

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router';
+import { Link } from 'react-router-dom';
 
 function AnswerLink(props) {
   if (!props.data) return null;
@@ -17,7 +17,7 @@ function AnswerLink(props) {
   return (
     <div>
       <p><strong>Date: </strong>{dateString}</p>
-      <Link to={`/dashboard/templates/${props.data.attributes.questionnaire}/${props.data.id}/`}>Go to detail</Link>
+      <Link to={`/templates/${props.data.attributes.questionnaire}/${props.data.id}/`}>Go to detail</Link>
     </div>
   );
 }
