@@ -3,15 +3,14 @@ import { Route, Switch, Redirect } from 'react-router-dom'
 import queryString from 'query-string';
 
 // Pages
-import LoginPage from '../pages/LoginPage';
-import DashboardPage from '../pages/dashboard/DashboardPageContainer';
-import AreasPage from '../pages/areas/AreasPageContainer';
-import ReportsPage from '../pages/reports/ReportsPageContainer';
-import QuestionairesPage from '../pages/questionaires/QuestionairesPageContainer';
-import AnswersPage from '../pages/answers/AnswersPageContainer';
-import AnswersDetailPage from '../pages/answers-detail/AnswersDetailPageContainer';
+import Login from '../pages/login/Login';
+import Dashboard from '../pages/dashboard/DashboardContainer';
+import Areas from '../pages/areas/AreasContainer';
+import Reports from '../pages/reports/ReportsContainer';
+import Answers from '../pages/answers/AnswersContainer';
+import AnswersDetail from '../pages/answers-detail/AnswersDetailContainer';
 
-import TopBar from '../topbar/TopBarContainer';
+import Nav from '../semantic/nav/NavContainer';
 
 class App extends React.Component {
 
@@ -23,7 +22,7 @@ class App extends React.Component {
     const { user, location } = this.props;
     const search = location.search || '';
     const queryParams = queryString.parse(search);
-    if (!user.loggedIn && !queryParams.token) return <LoginPage />;
+    if (!user.loggedIn && !queryParams.token) return <Login />;
     return <Redirect to="/dashboard" />;
   }
 
@@ -33,18 +32,17 @@ class App extends React.Component {
 
     return (
       <main role="main" className="l-main">
-        <TopBar />
+        <Nav />
         <div className="l-content">
           <Route exact path="/" render={this.getRootComponent}/>
           {user.loggedIn &&
             <div>
-              <Route path={`${match.url}dashboard`} component={DashboardPage}/>
-              <Route path={`${match.url}areas`} component={AreasPage}/>
-              <Route path={`${match.url}reports`} component={ReportsPage}/>
+              <Route path={`${match.url}dashboard`} component={Dashboard}/>
+              <Route path={`${match.url}areas`} component={Areas}/>
               <Switch>
-                <Route exact path={`${match.url}templates`} component={QuestionairesPage}/>
-                <Route exact path={`${match.url}templates/:reportId`} component={AnswersPage} />
-                <Route path={`${match.url}templates/:reportId/:answerId`} component={AnswersDetailPage} />
+                <Route exact path={`${match.url}reports`} component={Reports}/>
+                <Route exact path={`${match.url}reports/:reportId`} component={Answers} />
+                <Route path={`${match.url}reports/:reportId/:answerId`} component={AnswersDetail} />
               </Switch>
             </div>
           }

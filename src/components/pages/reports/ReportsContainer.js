@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import { getUserReports } from '../../../modules/data';
 
-import ReportsPage from './ReportsPage';
+import Reports from './Reports';
 
 const mapStateToProps = ({ data }) => ({
   data
@@ -15,4 +15,4 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(ReportsPage);
+export default connect(mapStateToProps, mapDispatchToProps)(Reports);

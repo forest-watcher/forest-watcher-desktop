@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
-import { logout } from '../../modules/user';
+import { logout } from '../../../modules/user';
 
-import TopBar from './TopBar';
+import Nav from './Nav';
 
 const mapStateToProps = ({ user }) => ({
   user
@@ -15,4 +15,4 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(TopBar);
+export default connect(mapStateToProps, mapDispatchToProps)(Nav);

@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import { getUserAreas, getUserReports, getUserQuestionares } from '../../../modules/data';
 
-import DashboardPage from './DashboardPage';
+import Dashboard from './Dashboard';
 
 const mapStateToProps = ({ data }) => ({
   data
@@ -21,4 +21,4 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(DashboardPage);
+export default connect(mapStateToProps, mapDispatchToProps)(Dashboard);

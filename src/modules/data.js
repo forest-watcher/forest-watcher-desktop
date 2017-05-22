@@ -8,10 +8,10 @@ const GET_USER_ANSWERS = 'areas/GET_USER_ANSWERS';
 
 // Reducer
 const initialState = {
-  areas: {},
-  reports: {},
-  questionaires: {},
-  answers: {}
+  areas: [],
+  reports: [],
+  questionaires: [],
+  answers: []
 };
 
 export default function reducer(state = initialState, action) {
@@ -150,7 +150,7 @@ export function getReportAnswers(reportId) {
 export function downloadAnswers(reportId) {
   const url = `${process.env.REACT_APP_API_AUTH}/questionnaire/${reportId}/download-answers`;
   try {
-    const isFileSaverSupported = !!new Blob;
+    const isFileSaverSupported = !!new Blob();
     if (isFileSaverSupported) {
       return (dispatch, state) => {
         fetch(url, {

@@ -1,8 +1,20 @@
 import React from 'react';
-import Response from '../../answers/Response';
-import DashboardMenu from '../../DashboardMenu';
+import Menu from '../../semantic/menu/Menu';
 
-class AnswersPage extends React.Component {
+function Response(props) {
+  if (!props.data) return null;
+  return (
+    <div>
+      <span className="label"><strong>{props.data.question}: </strong> </span>
+      {props.data.question === 'deforestation-image'
+        ? <img src={props.data.value} alt="deforestation" />
+        : <span className="value">{props.data.value}</span>
+      }
+    </div>
+  );
+}
+
+class AnswersDetail extends React.Component {
 
   componentWillMount() {
     if (!this.props.answer) {
@@ -23,7 +35,7 @@ class AnswersPage extends React.Component {
 
     return (
       <div>
-        <DashboardMenu />
+        <Menu />
         <div className="c-dashboard">
           <div className="content-section answers">
             <h4>Responses for the template {data.attributes.questionnaire} in {data.id}</h4>
@@ -37,4 +49,4 @@ class AnswersPage extends React.Component {
   }
 }
 
-export default AnswersPage;
+export default AnswersDetail;

@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import { getUserAreas } from '../../../modules/data';
 
-import AreasPage from './AreasPage';
+import Areas from './Areas';
 
 const mapStateToProps = ({ data }) => ({
   data
@@ -15,4 +15,4 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(AreasPage);
+export default connect(mapStateToProps, mapDispatchToProps)(Areas);

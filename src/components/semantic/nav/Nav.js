@@ -1,6 +1,6 @@
 import React from 'react';
 
-class TopBar extends React.Component {
+class Nav extends React.Component {
   render() {
     if (this.props.user.loggedIn) return (
       <header className="l-top-bar" role="banner">
@@ -21,4 +21,4 @@ class TopBar extends React.Component {
   }
 }
 
-export default TopBar;
+export default Nav;

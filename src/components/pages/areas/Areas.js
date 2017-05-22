@@ -1,8 +1,8 @@
 import React from 'react';
-import AreaTile from '../../areas/AreaTile.js';
-import DashboardMenu from '../../DashboardMenu.js';
+import AreaTile from '../../ui/AreaTile.js';
+import Menu from '../../semantic/menu/Menu.js';
 
-class AreasPage extends React.Component {
+class Areas extends React.Component {
 
   componentWillMount() {
     this.props.getUserAreas();
@@ -16,7 +16,7 @@ class AreasPage extends React.Component {
 
     return (
       <div>
-        <DashboardMenu />
+        <Menu />
         <div className="c-dashboard">
           <div className="content-section areas">
             <h4>Areas</h4>
@@ -30,4 +30,4 @@ class AreasPage extends React.Component {
   }
 }
 
-export default AreasPage;
+export default Areas;

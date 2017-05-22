@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import { getReportAnswers } from '../../../modules/data';
 
-import AnswersPage from './AnswersDetailPage';
+import AnswersDetail from './AnswersDetail';
 
 const mapStateToProps = ({ data }, ownProps) => {
   const { params } = ownProps.match || {};
@@ -23,4 +23,4 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(AnswersPage);
+export default connect(mapStateToProps, mapDispatchToProps)(AnswersDetail);

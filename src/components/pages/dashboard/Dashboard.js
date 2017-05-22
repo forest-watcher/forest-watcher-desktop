@@ -1,14 +1,11 @@
 import React from 'react';
-import AreaTile from '../../areas/AreaTile.js'
-import DashboardMenu from '../../DashboardMenu.js'
+import AreaTile from '../../ui/AreaTile.js'
+import Menu from '../../semantic/menu/Menu.js'
 
-class DashboardPage extends React.Component {
+class Dashboard extends React.Component {
 
   componentWillMount() {
-    // console.log(this.props);
     this.props.getUserAreas();
-    // this.props.getUserReports();
-    // this.props.getUserQuestionares();
   }
 
   render() {
@@ -19,11 +16,11 @@ class DashboardPage extends React.Component {
 
     return (
       <div>
-        <DashboardMenu />
+        <Menu />
         Welcome to Forest Watcher 2.0. You are logged in.
       </div>
     );
   }
 }
 
-export default DashboardPage;
+export default Dashboard;
