@@ -1,8 +1,13 @@
+$login-offset: 60px;
+
 .c-login {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 100%;
-  border: solid $light-gray 1px;
+  margin: 0 auto;
+  margin-top: $login-offset;
+  max-width: 880px;
+  height: calc(100% - #{$login-offset});
+  border: solid $medium-gray 1px;
 }

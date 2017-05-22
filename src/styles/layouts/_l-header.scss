@@ -1,8 +1,10 @@
 .l-header {
-  width: 100%;
-  background-color: black;
-  height: 60px;
   display: flex;
   align-items: center;
-  padding: 0 25px;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 50px;
+  background-color: $theme-secondary;
 }
