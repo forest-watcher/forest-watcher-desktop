@@ -1,6 +1,7 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-import Menu from '../../semantic/menu/Menu.js';
+import Menu from '../../layouts/menu/Menu';
 
 class Reports extends React.Component {
 
@@ -9,7 +10,7 @@ class Reports extends React.Component {
   }
 
   render() {
-    const { reports  } = this.props.data || [];
+    const { reports } = this.props.data || [];
     return (
       <div>
         <Menu />
@@ -18,13 +19,11 @@ class Reports extends React.Component {
             <h4>Report Templates</h4>
             <ul>
               {
-                reports.map((report, i) => {
-                  return (
-                    <li key={i}>
-                      <Link to={`/reports/${report.id}`}>{report.attributes.name}</Link>
-                    </li>
-                  );
-                })
+                reports.map(report => (
+                  <li key={report.id}>
+                    <Link to={`/reports/${report.id}`}>{report.attributes.name}</Link>
+                  </li>
+                ))
               }
             </ul>
           </div>
@@ -33,5 +32,10 @@ class Reports extends React.Component {
     );
   }
 }
+
+Reports.propTypes = {
+  getUserReports: PropTypes.func.isRequired,
+  data: PropTypes.object.isRequired
+};
 
 export default Reports;

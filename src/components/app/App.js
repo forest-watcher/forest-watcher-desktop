@@ -11,7 +11,7 @@ import Reports from '../pages/reports/ReportsContainer';
 import Answers from '../pages/answers/AnswersContainer';
 import AnswersDetail from '../pages/answers-detail/AnswersDetailContainer';
 
-import Nav from '../semantic/nav/NavContainer';
+import Nav from '../layouts/nav/NavContainer';
 
 class App extends React.Component {
 
@@ -27,29 +27,18 @@ class App extends React.Component {
     return <Redirect to="/dashboard" />;
   }
 
-  getDashboardPage = () => {
-    const { location, history } = this.props;
-    const search = location.search || '';
-    const queryParams = querystring.parse(search);
-    if (queryParams.token) {
-      const newSearch = querystring.stringify({ ...queryParams, token: undefined });
-      history.replace('/dashboard', { search: newSearch });
-    }
-    return <Dashboard />;
-  }
-
   render() {
     const { match, user, userChecked } = this.props;
     if (!userChecked) return null;
 
     return (
-      <main role="main" className="l-main">
+      <div>
         <Nav />
-        <div className="l-content">
+        <main role="main" className="l-main">
           <Route exact path="/" render={this.getRootComponent} />
           {user.loggedIn &&
             <div>
-              <Route path={`${match.url}dashboard`} render={this.getDashboardPage} />
+              <Route path={`${match.url}dashboard`} component={Dashboard} />
               <Route path={`${match.url}areas`} component={Areas} />
               <Switch>
                 <Route exact path={`${match.url}reports`} component={Reports} />
@@ -59,8 +48,8 @@ class App extends React.Component {
             </div>
           }
           {!user.loggedIn && <Redirect to="/" />}
-        </div>
-      </main>
+        </main>
+      </div>
     );
   }
 }
@@ -68,7 +57,6 @@ class App extends React.Component {
 App.propTypes = {
   match: PropTypes.object.isRequired,
   location: PropTypes.object.isRequired,
-  history: PropTypes.object.isRequired,
   userChecked: PropTypes.bool.isRequired,
   user: PropTypes.object.isRequired,
   checkLogged: PropTypes.func.isRequired

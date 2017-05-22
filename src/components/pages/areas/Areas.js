@@ -1,6 +1,8 @@
 import React from 'react';
-import AreaTile from '../../ui/AreaTile.js';
-import Menu from '../../semantic/menu/Menu.js';
+import PropTypes from 'prop-types';
+
+import AreaTile from '../../ui/AreaTile';
+import Menu from '../../layouts/menu/Menu';
 
 class Areas extends React.Component {
 
@@ -9,11 +11,7 @@ class Areas extends React.Component {
   }
 
   render() {
-    let areas = [];
-    for (let i = 0; i < this.props.data.areas.length; i++) {
-      areas.push(<li><AreaTile data={this.props.data.areas[i]} key={i} /></li>);
-    }
-
+    const { areas } = this.props.data || {};
     return (
       <div>
         <Menu />
@@ -21,7 +19,7 @@ class Areas extends React.Component {
           <div className="content-section areas">
             <h4>Areas</h4>
             <ul>
-              {areas}
+              {areas.map(area => (<li><AreaTile data={area} key={area.id} /></li>))}
             </ul>
           </div>
         </div>
@@ -29,5 +27,10 @@ class Areas extends React.Component {
     );
   }
 }
+
+Areas.propTypes = {
+  data: PropTypes.object.isRequired,
+  getUserAreas: PropTypes.func.isRequired
+};
 
 export default Areas;

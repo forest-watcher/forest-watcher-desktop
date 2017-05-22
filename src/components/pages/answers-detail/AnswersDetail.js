@@ -1,18 +1,7 @@
 import React from 'react';
-import Menu from '../../semantic/menu/Menu';
+import PropTypes from 'prop-types';
 
-function Response(props) {
-  if (!props.data) return null;
-  return (
-    <div>
-      <span className="label"><strong>{props.data.question}: </strong> </span>
-      {props.data.question === 'deforestation-image'
-        ? <img src={props.data.value} alt="deforestation" />
-        : <span className="value">{props.data.value}</span>
-      }
-    </div>
-  );
-}
+import Menu from '../../layouts/menu/Menu';
 
 class AnswersDetail extends React.Component {
 
@@ -22,17 +11,23 @@ class AnswersDetail extends React.Component {
     }
   }
 
+  getResponse = ({ data }) => {
+    if (!data) return null;
+    return (
+      <div>
+        <span className="label"><strong>{data.question}: </strong> </span>
+        {data.question === 'deforestation-image'
+          ? <img src={data.value} alt="deforestation" />
+          : <span className="value">{data.value}</span>
+        }
+      </div>
+    );
+  }
+
   render() {
     const { data } = this.props;
     if (!data) return null; // TODO: loading state
-    const responseData = data.attributes.responses;
-    let responses = [];
-    if (responseData && responseData.length > 0) {
-      for (let i = 0, dLength = responseData.length || 0; i < dLength; i++) {
-        responses.push(<li key={i}><Response data={responseData[i]} /></li>);
-      }
-    }
-
+    const responses = data.attributes && data.attributes.responses;
     return (
       <div>
         <Menu />
@@ -40,7 +35,7 @@ class AnswersDetail extends React.Component {
           <div className="content-section answers">
             <h4>Responses for the template {data.attributes.questionnaire} in {data.id}</h4>
             <ul>
-              {responses}
+              {responses.map(response => (<li key={response.id}>{this.getResponse(response)}</li>))}
             </ul>
           </div>
         </div>
@@ -48,5 +43,12 @@ class AnswersDetail extends React.Component {
     );
   }
 }
+
+AnswersDetail.propTypes = {
+  data: PropTypes.object,
+  getReportAnswers: PropTypes.func.isRequired,
+  answer: PropTypes.object,
+  reportId: PropTypes.string
+};
 
 export default AnswersDetail;
