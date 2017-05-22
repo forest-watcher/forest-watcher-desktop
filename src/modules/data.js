@@ -1,4 +1,5 @@
 import FileSaver from 'file-saver';
+import { API_BASE_URL } from '../constants';
 
 // Actions
 const GET_USER_AREAS = 'areas/GET_AREAS';
@@ -45,7 +46,7 @@ export default function reducer(state = initialState, action) {
 }
 
 export function getUserAreas() {
-  const url = `${process.env.REACT_APP_API_AUTH}/area`;
+  const url = `${API_BASE_URL}/area`;
   return (dispatch, state) => {
     fetch(url, {
       headers: {
@@ -70,7 +71,7 @@ export function getUserAreas() {
 }
 
 export function getUserReports() {
-  const url = `${process.env.REACT_APP_API_AUTH}/questionnaire`;
+  const url = `${API_BASE_URL}/questionnaire`;
   return (dispatch, state) => {
     fetch(url, {
       headers: {
@@ -95,7 +96,7 @@ export function getUserReports() {
 }
 
 export function getUserQuestionaires() {
-  const url = `${process.env.REACT_APP_API_AUTH}/questionnaire`;
+  const url = `${API_BASE_URL}/questionnaire`;
   return (dispatch, state) => {
     fetch(url, {
       headers: {
@@ -120,7 +121,7 @@ export function getUserQuestionaires() {
 }
 
 export function getReportAnswers(reportId) {
-  const url = `${process.env.REACT_APP_API_AUTH}/questionnaire/${reportId}/answer`;
+  const url = `${API_BASE_URL}/questionnaire/${reportId}/answer`;
   return (dispatch, state) => {
     fetch(url, {
       headers: {
@@ -148,7 +149,7 @@ export function getReportAnswers(reportId) {
 }
 
 export function downloadAnswers(reportId) {
-  const url = `${process.env.REACT_APP_API_AUTH}/questionnaire/${reportId}/download-answers`;
+  const url = `${API_BASE_URL}/questionnaire/${reportId}/download-answers`;
   try {
     const isFileSaverSupported = !!new Blob();
     if (isFileSaverSupported) {

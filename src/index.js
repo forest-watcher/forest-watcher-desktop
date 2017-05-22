@@ -68,6 +68,3 @@ persistStore(store, persistConfig, () => {
 
 
 export { store, history, dispatch };
-
-// Google Analytics
-// process.env.NODE_ENV === 'production' && ReactGA.initialize(process.env.GA);

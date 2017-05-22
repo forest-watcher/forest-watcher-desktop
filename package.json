@@ -16,10 +16,12 @@
     "redux-thunk": "^2.1.0"
   },
   "devDependencies": {
-    "react-scripts": "0.9.5",
     "gh-pages": "^1.0.0",
+    "husky": "^0.13.3",
+    "lint-staged": "^3.4.2",
     "node-sass": "^4.5.0",
-    "npm-run-all": "^4.0.2"
+    "npm-run-all": "^4.0.2",
+    "react-scripts": "0.9.5"
   },
   "scripts": {
     "start": "npm-run-all -p start:css start:js",
@@ -29,7 +31,12 @@
     "build:css": "node-sass src/ -o src/",
     "deploy": "npm run build&&gh-pages -d build",
     "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "lint-staged": "lint-staged",
+    "precommit": "npm run lint-staged"
   },
-  "homepage": "."
+  "homepage": ".",
+  "lint-staged": {
+    "src/**/*.js": "eslint"
+  }
 }

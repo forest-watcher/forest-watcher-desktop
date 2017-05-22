@@ -1,4 +1,5 @@
 import { setUserChecked } from './app';
+import { API_BASE_URL } from '../constants';
 import queryString from 'query-string';
 
 // Actions
@@ -41,7 +42,7 @@ export default function reducer(state = initialState, action) {
 
 // Action Creators
 export function checkLogged(tokenParam) {
-  const url = `${process.env.REACT_APP_API_AUTH}/auth/check-logged`;
+  const url = `${API_BASE_URL}/auth/check-logged`;
   return (dispatch, state) => {
     const user = state().user;
     const queryParams = queryString.parse(tokenParam);

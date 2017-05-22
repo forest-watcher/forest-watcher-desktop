@@ -1,7 +1,8 @@
 import React from 'react';
+import { API_BASE_URL, API_CALLBACK_URL } from '../../../constants';
 
 function LoginButton({ socialNetwork }) {
-  const url = `${process.env.REACT_APP_API_AUTH}/auth/${socialNetwork}?token=true&callbackUrl=${process.env.REACT_APP_API_AUTH_CALLBACK_URL}`
+  const url = `${API_BASE_URL}/auth/${socialNetwork}?token=true&callbackUrl=${API_CALLBACK_URL}`
   return (
     <div className={`c-login-button -${socialNetwork}`}>
       <a href={url}>
