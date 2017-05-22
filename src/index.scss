@@ -1,3 +1,9 @@
+/* Fonts (go 1st) */
+@import "./styles/fonts";
+
+/* Reset */
+@import "./styles/reset";
+
 /* Settings */
 @import "./styles/settings";
 @import "./styles/base";
@@ -5,7 +11,6 @@
 /* Layouts */
 @import "./styles/layouts/l-main";
 @import "./styles/layouts/l-header";
-@import "./styles/layouts/l-login";
 
 /* Components */
 @import "./styles/components/c-nav";

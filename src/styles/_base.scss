@@ -2,21 +2,12 @@
   box-sizing: border-box;
 }
 
-/**
- * Reset some basic elements
- */
-body, h1, h2, h3, h4, h5, h6,
-p, blockquote, pre, hr,
-dl, dd, ol, ul, figure {
-    margin: 0;
-    padding: 0;
-}
-
 body {
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
   -webkit-overflow-scrolling: touch;
-  font-family: 'Open Sans', sans-serif;
+  font-family: $base-font-family;
+  font-size: $base-font-size;
 }
 
 html {
@@ -24,12 +15,10 @@ html {
 }
 
 body, html {
-  &.-fixed {
-    overflow: hidden;
-  }
   height: 100%;
   width: 100%;
 }
+
 li {
   list-style: none;
 }
