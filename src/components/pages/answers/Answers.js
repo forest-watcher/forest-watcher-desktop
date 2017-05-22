@@ -14,13 +14,11 @@ class Answers extends React.Component {
     this.props.downloadAnswers(this.props.reportId);
   }
 
-  getAnswerLink = ({ data }) => {
-    if (!data) return null;
-
+  getAnswerLink = ({ attributes, id }) => {
     let dateString = 'No date';
     let userString = 'No user';
-    const date = data.attributes.responses.filter(response => response.question === 'date');
-    const user = data.attributes.responses.filter(response => response.question === 'name');
+    const date = attributes.responses.filter(response => response.question === 'date');
+    const user = attributes.responses.filter(response => response.question === 'name');
     if (date && date[0]) {
       dateString = new Date(date[0].value).toDateString();
     }
@@ -31,13 +29,13 @@ class Answers extends React.Component {
       <div>
         <p><strong>Date: </strong>{dateString}</p>
         <p><strong>User: </strong>{userString}</p>
-        <Link to={`/reports/${data.attributes.questionnaire}/${data.id}/`}>Go to detail</Link>
+        <Link to={`/reports/${attributes.questionnaire}/${id}/`}>Go to detail</Link>
       </div>
     );
   }
 
   render() {
-    const { answers } = this.props.data || {};
+    const { answers = [] } = this.props;
     return (
       <div>
         <Menu />
@@ -56,8 +54,8 @@ class Answers extends React.Component {
 }
 
 Answers.propTypes = {
-  data: PropTypes.object.isRequired,
-  getReportAnswers: PropTypes.object.isRequired,
+  answers: PropTypes.array,
+  getReportAnswers: PropTypes.func.isRequired,
   downloadAnswers: PropTypes.func.isRequired,
   reportId: PropTypes.string.isRequired
 };

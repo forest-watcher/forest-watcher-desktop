@@ -7,12 +7,12 @@ const mapStateToProps = ({ data }, ownProps) => {
   const { params } = ownProps.match || {};
   let answer = false;
   if (data.answers[params.reportId]) {
-    answer = data.answers[params.reportId].filter((answer) => answer.id === params.answerId)[0];
+    answer = data.answers[params.reportId].filter(ans => ans.id === params.answerId)[0];
   }
   return {
-    data: answer,
+    data: answer || null,
     reportId: params.reportId
-  }
+  };
 };
 
 function mapDispatchToProps(dispatch) {

@@ -11,7 +11,7 @@ class AnswersDetail extends React.Component {
     }
   }
 
-  getResponse = ({ data }) => {
+  getResponse = (data) => {
     if (!data) return null;
     return (
       <div>
@@ -25,17 +25,19 @@ class AnswersDetail extends React.Component {
   }
 
   render() {
-    const { data } = this.props;
-    if (!data) return null; // TODO: loading state
-    const responses = data.attributes && data.attributes.responses;
+    const { attributes, id } = this.props.data || {};
+    if (!attributes || !id) return null; // TODO: loading state
+    const responses = attributes.responses;
     return (
       <div>
         <Menu />
         <div className="c-dashboard">
           <div className="content-section answers">
-            <h4>Responses for the template {data.attributes.questionnaire} in {data.id}</h4>
+            <h4>Responses for the template {attributes.questionnaire} in {id}</h4>
             <ul>
-              {responses.map(response => (<li key={response.id}>{this.getResponse(response)}</li>))}
+              {responses.map(response => (
+                <li key={response._id}>{this.getResponse(response)}</li>
+              ))}
             </ul>
           </div>
         </div>

@@ -6,7 +6,7 @@ import Answers from './Answers';
 const mapStateToProps = ({ data }, ownProps) => {
   const { params } = ownProps.match || {};
   return ({
-    data: data.answers[params.reportId],
+    answers: data.answers[params.reportId],
     reportId: params.reportId
   });
 };
