@@ -12,4 +12,9 @@
   li {
     cursor: pointer;
   }
+
+  .nav-home {
+    color: $theme-accent;
+    font-weight: $font-weight-bold;
+  }
 }

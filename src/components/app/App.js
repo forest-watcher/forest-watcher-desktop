@@ -33,7 +33,9 @@ class App extends React.Component {
 
     return (
       <div>
-        <Nav />
+        <header className="l-header" role="banner">
+          <Nav />
+        </header>
         <main role="main" className="l-main">
           <Route exact path="/" render={this.getRootComponent} />
           {user.loggedIn &&
