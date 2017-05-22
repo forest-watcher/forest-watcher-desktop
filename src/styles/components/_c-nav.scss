@@ -6,15 +6,60 @@
   width: 100%;
   max-width: $max-width;
   margin: 0 auto;
-  color: $white;
-  font-weight: bold;
 
   li {
     cursor: pointer;
   }
 
-  .nav-home {
-    color: $theme-accent;
-    font-weight: $font-weight-bold;
+  .nav-links {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    height: 100%;
+
+    &:first-child {
+      flex: 0.2;
+    }
+
+    &:nth-child(2) {
+      flex: 0.6;
+      border-right: solid 1px $white;
+    }
+
+    &:last-child {
+      flex: 0.2;
+    }
+  }
+
+  .nav-link {
+    padding: 0 60px;
+
+    > a {
+      font-weight: $font-weight-bold;
+      color: $white;
+    }
+
+    &.-secondary {
+      padding: 0;
+
+      > a {
+        color: $theme-accent;
+
+        &:hover {
+          color: darken($theme-accent, 10%);
+        }
+      }
+    }
+
+    &.active {
+      &::after {
+        content: '';
+        background-color: 2px solid $white;
+      }
+    }
+  }
+
+  .nav-link {
+
   }
 }
