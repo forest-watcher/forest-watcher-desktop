@@ -1,6 +1,6 @@
+import querystring from 'query-string';
 import { setUserChecked } from './app';
 import { API_BASE_URL } from '../constants';
-import queryString from 'query-string';
 
 // Actions
 const GET_USER = 'user/GET_USER';
@@ -45,7 +45,7 @@ export function checkLogged(tokenParam) {
   const url = `${API_BASE_URL}/auth/check-logged`;
   return (dispatch, state) => {
     const user = state().user;
-    const queryParams = queryString.parse(tokenParam);
+    const queryParams = querystring.parse(tokenParam);
     const token = queryParams.token || user.token;
     const auth = `Bearer ${token}`;
     fetch(url, {
@@ -53,7 +53,7 @@ export function checkLogged(tokenParam) {
         Authorization: auth
       }
     })
-      .then(response => {
+      .then((response) => {
         if (response.ok) return response.json();
         throw Error(response.statusText);
       })
@@ -71,6 +71,7 @@ export function checkLogged(tokenParam) {
           });
         }
         dispatch(setUserChecked());
+        console.warn(error);
       });
   };
 }
