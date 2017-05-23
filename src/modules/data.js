@@ -4,14 +4,12 @@ import { API_BASE_URL } from '../constants';
 // Actions
 const GET_USER_AREAS = 'areas/GET_AREAS';
 const GET_USER_REPORTS = 'areas/GET_REPORTS';
-const GET_USER_QUESTIONAIRES = 'areas/GET_USER_QUESTIONAIRES';
 const GET_USER_ANSWERS = 'areas/GET_USER_ANSWERS';
 
 // Reducer
 const initialState = {
   areas: [],
   reports: [],
-  questionaires: [],
   answers: []
 };
 
@@ -27,14 +25,9 @@ export default function reducer(state = initialState, action) {
         return Object.assign({}, state, { reports: action.payload.data });
       }
       return state;
-    case GET_USER_QUESTIONAIRES:
-      if (action.payload) {
-        return Object.assign({}, state, { questionaires: action.payload });
-      }
-      return state;
     case GET_USER_ANSWERS: {
       if (action.payload.id) {
-        const answers = {...state.answers};
+        const answers = { ...state.answers };
         answers[action.payload.id] = action.payload.data;
         return Object.assign({}, state, { answers });
       }
@@ -53,7 +46,7 @@ export function getUserAreas() {
         Authorization: `Bearer ${state().user.token}`
       }
     })
-      .then(response => {
+      .then((response) => {
         if (response.ok) return response.json();
         throw Error(response.statusText);
       })
@@ -78,38 +71,13 @@ export function getUserReports() {
         Authorization: `Bearer ${state().user.token}`
       }
     })
-      .then(response => {
+      .then((response) => {
         if (response.ok) return response.json();
         throw Error(response.statusText);
       })
       .then((data) => {
         dispatch({
           type: GET_USER_REPORTS,
-          payload: data
-        });
-      })
-      .catch((error) => {
-        console.info(error);
-        // To-do
-      });
-  };
-}
-
-export function getUserQuestionaires() {
-  const url = `${API_BASE_URL}/questionnaire`;
-  return (dispatch, state) => {
-    fetch(url, {
-      headers: {
-        Authorization: `Bearer ${state().user.token}`
-      }
-    })
-      .then(response => {
-        if (response.ok) return response.json();
-        throw Error(response.statusText);
-      })
-      .then((data) => {
-        dispatch({
-          type: GET_USER_QUESTIONAIRES,
           payload: data
         });
       })
@@ -128,19 +96,19 @@ export function getReportAnswers(reportId) {
         Authorization: `Bearer ${state().user.token}`
       }
     })
-      .then(response => {
-            if (response.ok) return response.json();
-            throw Error(response.statusText);
+      .then((response) => {
+        if (response.ok) return response.json();
+        throw Error(response.statusText);
       })
-        .then((data) => {
-          dispatch({
-            type: GET_USER_ANSWERS,
-            payload: {
-              id: reportId,
-              data: data.data
-            }
-          });
-        })
+      .then((data) => {
+        dispatch({
+          type: GET_USER_ANSWERS,
+          payload: {
+            id: reportId,
+            data: data.data
+          }
+        });
+      })
       .catch((error) => {
         console.info(error);
         // To-do
@@ -159,7 +127,7 @@ export function downloadAnswers(reportId) {
             Authorization: `Bearer ${state().user.token}`
           }
         })
-          .then(response => {
+          .then((response) => {
             if (response.ok) return response.blob();
             throw Error(response.statusText);
           })
@@ -172,7 +140,9 @@ export function downloadAnswers(reportId) {
           });
       };
     }
-  } catch(e) {
+    return null;
+  } catch (e) {
     console.warn('File download not supported');
+    return null;
   }
 }

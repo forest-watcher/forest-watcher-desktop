@@ -4,7 +4,6 @@ import { API_BASE_URL } from '../constants';
 
 // Actions
 const GET_USER = 'user/GET_USER';
-const SET_LOGIN_STATUS = 'user/SET_LOGIN_STATUS';
 const CHECK_USER_LOGGED = 'user/CHECK_USER_LOGGED';
 export const LOGOUT = 'user/LOGOUT';
 
@@ -26,12 +25,6 @@ export default function reducer(state = initialState, action) {
         return Object.assign({}, state, { data: user });
       }
       return state;
-    }
-    case SET_LOGIN_STATUS: {
-      return Object.assign({}, state, {
-        loggedIn: action.payload.loggedIn,
-        token: action.payload.token
-      });
     }
     case LOGOUT:
       return initialState;
@@ -73,13 +66,6 @@ export function checkLogged(tokenParam) {
         dispatch(setUserChecked());
         console.warn(error);
       });
-  };
-}
-
-export function setLoginStatus(status) {
-  return {
-    type: SET_LOGIN_STATUS,
-    payload: status
   };
 }
 
