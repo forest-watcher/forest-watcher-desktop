@@ -40,3 +40,9 @@ a, li {
 .is-hidden {
   display: none !important;
 }
+
+.wrapper {
+  width: 100%;
+  max-width: $max-width;
+  margin: 0 auto;
+}

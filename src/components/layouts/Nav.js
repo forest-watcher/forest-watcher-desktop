@@ -4,7 +4,7 @@ import { NavLink } from 'react-router-dom';
 
 function Nav({ loggedIn, logout }) {
   return (
-    <nav className="c-nav">
+    <nav className="c-nav wrapper">
       <div className="nav-section">
         <h1 className="nav-logo">
           <NavLink exact to="/" activeClassName="-active">Forest Watcher 2.0</NavLink>

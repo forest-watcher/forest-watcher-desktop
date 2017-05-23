@@ -21,9 +21,9 @@ class Areas extends React.Component {
             callback: () => console.info('download all')
           }}
         />
-        <div className="c-dashboard">
-          <div className="content-section areas">
-            <h4>Areas</h4>
+        <div className="c-areas">
+          <div className="wrapper">
+
             <ul>
               {areas.map(area => (<li><AreaTile data={area} key={area.id} /></li>))}
             </ul>

@@ -4,11 +4,9 @@
   height: 150px;
   background-color: $dark-gray;
 
-  .wrapper {
+  .hero-content {
     display: flex;
     justify-content: space-between;
-    width: $max-width;
-    margin: 0 auto;
 
     h1 {
       color: $white;
