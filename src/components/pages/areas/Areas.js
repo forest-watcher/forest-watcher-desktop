@@ -24,7 +24,7 @@ class Areas extends React.Component {
         <div className="c-areas">
           <div className="row">
             <ul>
-              {areas.map(area => (<li><AreaTile data={area} key={area.id} /></li>))}
+              {areas.map(area => (<li key={area.id} ><AreaTile data={area} /></li>))}
             </ul>
           </div>
         </div>
