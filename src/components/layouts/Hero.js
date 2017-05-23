@@ -5,9 +5,13 @@ import Button from '../ui/Button';
 function Hero({ title, action }) {
   return (
     <aside className="c-hero">
-      <div className="hero-content wrapper">
-        <h1>{title}</h1>
-        {action && <Button onClick={action.callback}>{action.name}</Button>}
+      <div className="hero-content row align-middle">
+        <div className="hero-section column medium-5">
+          <h1>{title}</h1>
+        </div>
+        <div className="hero-section column medium-7">
+          {action && <Button onClick={action.callback}>{action.name}</Button>}
+        </div>
       </div>
     </aside>
   );

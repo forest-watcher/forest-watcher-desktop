@@ -16,7 +16,8 @@ $theme-secondary: $dark-gray;
 $theme-accent: $parrot-green;
 
 // fonts
-$font-size-small: 14px;
+$font-size-small: 13px;
+$font-size-regular: 14px;
 $font-size-large: 35px;
 $font-size-x-large: 47px;
 
@@ -26,7 +27,7 @@ $font-weight-bold: 700;
 
 // base settings
 $base-font-family: 'Fira Sans', 'Open Sans', sans-serif;
-$base-font-size: $font-size-small;
+$base-font-size: $font-size-regular;
 
 // eases
 $ease-out-cubic: cubic-bezier(0.215, 0.610, 0.355, 1.000);

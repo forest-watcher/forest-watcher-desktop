@@ -1,16 +1,20 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { NavLink } from 'react-router-dom';
+import Icon from '../ui/Icon';
 
 function Nav({ loggedIn, logout }) {
   return (
-    <nav className="c-nav wrapper">
-      <div className="nav-section">
+    <nav className="c-nav row">
+      <div className="nav-section column medium-3">
         <h1 className="nav-logo">
-          <NavLink exact to="/" activeClassName="-active">Forest Watcher 2.0</NavLink>
+          <NavLink exact to="/" activeClassName="-active">
+            <Icon className="-small" name="icon-forest-watcher-small"/>
+            Forest Watcher 2.0
+          </NavLink>
         </h1>
       </div>
-      <div className="nav-section">
+      <div className="nav-section column medium-offset-4 medium-5">
         {loggedIn &&
           <ul className="nav-subsection">
             <li className="nav-link">

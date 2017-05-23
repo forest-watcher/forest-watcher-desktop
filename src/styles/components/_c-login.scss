@@ -1,13 +1,73 @@
 $login-offset: 60px;
 
 .c-login {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  margin: 0 auto;
   margin-top: $login-offset;
-  max-width: 880px;
+  width: 100%;
   height: calc(100% - #{$login-offset});
   border: solid $medium-gray 1px;
+  border-bottom: 0;
+  border-radius: 4px;
+
+  .login-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+
+    .login-heading {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+
+      > svg {
+        margin-bottom: 10px;
+      }
+
+      .login-title {
+        color: $theme-accent;
+        text-transform: uppercase;
+        font-weight: $font-weight-bold;
+        margin-bottom: 10px;
+      }
+    }
+
+    .login-button-group {
+      margin-top: 46px;
+
+      .login-button {
+        background: black;
+        color: white;
+        border-radius: 50px;
+        cursor: pointer;
+        margin-bottom: 20px;
+
+        a {
+          color: white;
+          font-weight: bold;
+          padding: 15px;
+          width: 250px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+
+        &.-facebook {
+          background-color: #3b5998;
+        }
+
+        &.-twitter {
+          background-color: #00aced;
+        }
+
+        &.-google {
+          background-color: #d62d20;
+        }
+
+        &:last-child {
+          margin-bottom: 0;
+        }
+      }
+    }
+  }
 }

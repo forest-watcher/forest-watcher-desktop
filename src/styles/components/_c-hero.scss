@@ -1,17 +1,24 @@
 .c-hero {
-  display: flex;
-  align-items: center;
   height: 150px;
-  background-color: $dark-gray;
+  background-color: $theme-secondary;
 
   .hero-content {
+    height: 100%;
+  }
+
+  .hero-section {
+    height: 100%;
     display: flex;
-    justify-content: space-between;
+    align-items: center;
 
     h1 {
       color: $white;
       font-size: $font-size-x-large;
       font-weight: $font-weight-light;
+    }
+
+    &:last-child {
+      justify-content: flex-end;
     }
   }
 }

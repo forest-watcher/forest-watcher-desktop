@@ -1,11 +1,5 @@
 .l-header {
-  display: flex;
-  align-items: center;
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 0;
-  height: 50px;
+  height: $nav-height;
   background-color: $theme-secondary;
   border-bottom: $border-gray 1px solid;
 }
