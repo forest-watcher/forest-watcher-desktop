@@ -1,65 +1,93 @@
 .c-nav {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
   height: 100%;
-  width: 100%;
-  max-width: $max-width;
+  width: $max-width;
   margin: 0 auto;
 
-  li {
-    cursor: pointer;
-  }
-
-  .nav-links {
+  .nav-section {
     display: flex;
     align-items: center;
-    justify-content: flex-start;
-    height: 100%;
+
 
     &:first-child {
-      flex: 0.2;
-    }
-
-    &:nth-child(2) {
-      flex: 0.6;
-      border-right: solid 1px $white;
+      flex: 0.4;
+      justify-content: flex-start;
     }
 
     &:last-child {
-      flex: 0.2;
+      flex: 0.6;
+      justify-content: flex-end;
     }
   }
 
+  .nav-subsection {
+    display: flex;
+    align-items: center;
+    border-right: 1px solid $border-gray;
+  }
+
+
   .nav-link {
-    padding: 0 60px;
+    padding-right: 60px;
 
     > a {
+      display: block;
+      position: relative;
+      padding: 18px 10px;
       font-weight: $font-weight-bold;
-      color: $white;
-    }
+      color: rgba($white, 0.5);
+      cursor: pointer;
 
-    &.-secondary {
-      padding: 0;
+      &::after {
+        display: block;
+        position: absolute;
+        content: '';
+        height: 2px;
+        width: 0;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        background-color: white;
+        transition: width .15s $ease-out-cubic;
+      }
 
-      > a {
-        color: $theme-accent;
+      &:hover {
+        &::after {
+          width: 100%;
+        }
+      }
 
-        &:hover {
-          color: darken($theme-accent, 10%);
+      &.-active {
+        color: $white;
+        pointer-events: none;
+
+        &::after {
+          width: 100%;
         }
       }
     }
 
-    &.active {
-      &::after {
-        content: '';
-        background-color: 2px solid $white;
+    &.-left {
+      padding-right: 0;
+    }
+
+    &.-right {
+      padding-right: 0;
+      padding-left: 60px;
+    }
+
+    &.-accent {
+      > a {
+        color: $theme-accent;
+
+        &::after {
+          content: none;
+        }
+
+        &:hover {
+          color: lighten($theme-accent, 10%);
+        }
       }
     }
-  }
-
-  .nav-link {
-
   }
 }

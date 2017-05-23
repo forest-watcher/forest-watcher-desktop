@@ -6,6 +6,7 @@ $max-width: 1080px;
 $white: #ffffff;
 $light-gray: #f2f2f2;
 $medium-gray: #d1cfcf;
+$border-gray: #404040;
 $dark-gray: #333333;
 $parrot-green: #97be32;
 
@@ -26,3 +27,6 @@ $font-weight-bold: 700;
 // base settings
 $base-font-family: 'Fira Sans', 'Open Sans', sans-serif;
 $base-font-size: $font-size-small;
+
+// eases
+$ease-out-cubic: cubic-bezier(0.215, 0.610, 0.355, 1.000);
