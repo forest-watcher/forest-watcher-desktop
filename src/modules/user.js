@@ -1,9 +1,9 @@
-import { replace } from 'react-router-redux';
+import querystring from 'query-string';
 import { setUserChecked } from './app';
+import { API_BASE_URL } from '../constants';
 
 // Actions
 const GET_USER = 'user/GET_USER';
-const SET_LOGIN_STATUS = 'user/SET_LOGIN_STATUS';
 const CHECK_USER_LOGGED = 'user/CHECK_USER_LOGGED';
 export const LOGOUT = 'user/LOGOUT';
 
@@ -26,12 +26,6 @@ export default function reducer(state = initialState, action) {
       }
       return state;
     }
-    case SET_LOGIN_STATUS: {
-      return Object.assign({}, state, {
-        loggedIn: action.payload.loggedIn,
-        token: action.payload.token
-      });
-    }
     case LOGOUT:
       return initialState;
     default:
@@ -41,18 +35,18 @@ export default function reducer(state = initialState, action) {
 
 // Action Creators
 export function checkLogged(tokenParam) {
-  const url = `${process.env.REACT_APP_API_AUTH}/auth/check-logged`;
+  const url = `${API_BASE_URL}/auth/check-logged`;
   return (dispatch, state) => {
     const user = state().user;
-    const token = tokenParam || user.token;
+    const queryParams = querystring.parse(tokenParam);
+    const token = queryParams.token || user.token;
     const auth = `Bearer ${token}`;
-    const route = state().routing.locationBeforeTransitions.pathname || '/';
     fetch(url, {
       headers: {
         Authorization: auth
       }
     })
-      .then(response => {
+      .then((response) => {
         if (response.ok) return response.json();
         throw Error(response.statusText);
       })
@@ -61,14 +55,6 @@ export function checkLogged(tokenParam) {
           type: CHECK_USER_LOGGED,
           payload: { data, token, loggedIn: true }
         });
-
-        if (tokenParam) {
-          const params = state().routing.locationBeforeTransitions.query;
-          const query = { ...params, token: undefined };
-          dispatch(replace({ pathname: route === '/' ? '/dashboard' : route, query }));
-        } else if (route === '/') {
-          dispatch(replace('/dashboard'));
-        }
         dispatch(setUserChecked());
       })
       .catch((error) => {
@@ -77,16 +63,9 @@ export function checkLogged(tokenParam) {
             type: LOGOUT
           });
         }
-        dispatch(replace('/'));
         dispatch(setUserChecked());
+        console.warn(error);
       });
-  };
-}
-
-export function setLoginStatus(status) {
-  return {
-    type: SET_LOGIN_STATUS,
-    payload: status
   };
 }
 
@@ -95,6 +74,5 @@ export function logout() {
     dispatch({
       type: LOGOUT
     });
-    dispatch(replace('/'));
   };
 }

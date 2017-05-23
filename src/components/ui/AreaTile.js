@@ -7,7 +7,7 @@ class AreaTile extends React.Component {
         <h5>{this.props.data.attributes.name}</h5>
         {this.props.data.id}
         <div className="area-image">
-          <img src={this.props.data.attributes.image} />
+          <img src={this.props.data.attributes.image} alt="area-tile" />
         </div>
       </div>
     );

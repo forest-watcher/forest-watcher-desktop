@@ -1,5 +1,0 @@
-const publicRoutes = [
-  '/',
-];
-
-export { publicRoutes };
