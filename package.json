@@ -17,16 +17,17 @@
   },
   "devDependencies": {
     "eslint": "^3.19.0",
-    "eslint-config-vizzuality": "^1.0.3",
     "eslint-plugin-babel": "^4.1.1",
     "eslint-plugin-import": "^2.2.0",
     "eslint-plugin-react": "^6.10.3",
     "gh-pages": "^1.0.0",
     "husky": "^0.13.3",
+    "i": "^0.3.5",
     "lint-staged": "^3.4.2",
     "node-sass": "^4.5.0",
     "npm-run-all": "^4.0.2",
-    "react-scripts": "0.9.5"
+    "react-scripts": "0.9.5",
+    "webpack": "^1.15.0"
   },
   "scripts": {
     "start": "npm-run-all -p start:css start:js",

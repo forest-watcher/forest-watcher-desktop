@@ -26,7 +26,6 @@
     border-right: 1px solid $border-gray;
   }
 
-
   .nav-link {
     padding-right: 60px;
 
@@ -66,28 +65,26 @@
         }
       }
     }
+  }
 
-    &.-left {
-      padding-right: 0;
-    }
+  .nav-menu,
+  .nav-logo {
+    > a {
+      color: $theme-accent;
+      font-weight: $font-weight-bold;
+      cursor: pointer;
+      display: block;
+      position: relative;
+      padding: 18px 0;
 
-    &.-right {
-      padding-right: 0;
-      padding-left: 60px;
-    }
-
-    &.-accent {
-      > a {
-        color: $theme-accent;
-
-        &::after {
-          content: none;
-        }
-
-        &:hover {
-          color: lighten($theme-accent, 10%);
-        }
+      &:hover {
+        color: lighten($theme-accent, 10%);
       }
     }
   }
+
+  .nav-menu {
+    padding-left: 60px;
+  }
+
 }

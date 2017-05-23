@@ -1,0 +1,19 @@
+.c-hero {
+  display: flex;
+  align-items: center;
+  height: 150px;
+  background-color: $dark-gray;
+
+  .wrapper {
+    display: flex;
+    justify-content: space-between;
+    width: $max-width;
+    margin: 0 auto;
+
+    h1 {
+      color: $white;
+      font-size: $font-size-x-large;
+      font-weight: $font-weight-light;
+    }
+  }
+}

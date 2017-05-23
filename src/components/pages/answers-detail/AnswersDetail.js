@@ -1,8 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import Menu from '../../layouts/menu/Menu';
-
 class AnswersDetail extends React.Component {
 
   componentWillMount() {
@@ -30,7 +28,6 @@ class AnswersDetail extends React.Component {
     const responses = attributes.responses;
     return (
       <div>
-        <Menu />
         <div className="c-dashboard">
           <div className="content-section answers">
             <h4>Responses for the template {attributes.questionnaire} in {id}</h4>

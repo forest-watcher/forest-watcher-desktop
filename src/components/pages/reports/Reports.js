@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-import Menu from '../../layouts/menu/Menu';
+
+import Hero from '../../layouts/Hero';
 
 class Reports extends React.Component {
 
@@ -10,10 +11,12 @@ class Reports extends React.Component {
   }
 
   render() {
-    const { reports } = this.props.data || [];
+    const { reports } = this.props.data || {};
     return (
       <div>
-        <Menu />
+        <Hero
+          title="Reports"
+        />
         <div className="c-dashboard">
           <div className="content-section reports">
             <h4>Report Templates</h4>

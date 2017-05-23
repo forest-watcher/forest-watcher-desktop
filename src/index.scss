@@ -1,6 +1,9 @@
 /* Fonts (go 1st) */
 @import "./styles/fonts";
 
+/* Lib */
+@import "./styles/lib/foundation";
+
 /* Reset */
 @import "./styles/reset";
 
@@ -19,3 +22,5 @@
 @import "./styles/components/c-dashboard";
 @import "./styles/components/c-dashboard-menu";
 @import "./styles/components/c-area-tile";
+@import "./styles/components/c-hero";
+@import "./styles/components/c-button";

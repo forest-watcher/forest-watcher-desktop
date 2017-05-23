@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import Hero from '../../layouts/Hero';
 import AreaTile from '../../ui/AreaTile';
-import Menu from '../../layouts/menu/Menu';
 
 class Areas extends React.Component {
 
@@ -14,7 +14,13 @@ class Areas extends React.Component {
     const { areas } = this.props.data || {};
     return (
       <div>
-        <Menu />
+        <Hero
+          title="Areas of Interest"
+          action={{
+            name: 'Download All',
+            callback: () => console.info('download all')
+          }}
+        />
         <div className="c-dashboard">
           <div className="content-section areas">
             <h4>Areas</h4>
