@@ -2,6 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import Hero from '../../layouts/Hero';
+import Article from '../../layouts/Article';
+import Grid from '../../layouts/Grid';
 import AreaTile from '../../ui/AreaTile';
 
 class Areas extends React.Component {
@@ -22,11 +24,9 @@ class Areas extends React.Component {
           }}
         />
         <div className="c-areas">
-          <div className="row">
-            <ul>
-              {areas.map(area => (<li key={area.id} ><AreaTile data={area} /></li>))}
-            </ul>
-          </div>
+          <Article title="Your Areas">
+            <Grid collection={areas} columns={4} Item={AreaTile} />
+          </Article>
         </div>
       </div>
     );
