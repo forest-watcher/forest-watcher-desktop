@@ -1,6 +1,10 @@
 .c-area-tile {
-
-  .area-image img {
-    width: 300px;
+  .area-image {
+    width: 250px;
+    height: 155px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    border-radius: 4px;
   }
 }

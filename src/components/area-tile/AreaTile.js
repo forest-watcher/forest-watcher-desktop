@@ -1,14 +1,14 @@
 import React from 'react';
 
 class AreaTile extends React.Component {
+
   render() {
+    const { area } = this.props;
     return (
       <div className="c-area-tile">
-        <h5>{this.props.data.attributes.name}</h5>
-        {this.props.data.id}
-        <div className="area-image">
-          <img src={this.props.data.attributes.image} alt="area-tile" />
-        </div>
+        <div className="area-image" style={{ backgroundImage: `url(${area.image})`}}></div>
+        <h5>{area.name}</h5>
+        {area.id}
       </div>
     );
   }
