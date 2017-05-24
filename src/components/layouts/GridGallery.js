@@ -10,8 +10,8 @@ function GridGallery(props) {
         <div
           className={classnames(['column', {
             [`small-${columns.small}`]: columns.small,
-            [`small-${columns.medium}`]: columns.medium,
-            [`small-${columns.large}`]: columns.large
+            [`medium-${columns.medium}`]: columns.medium,
+            [`large-${columns.large}`]: columns.large
           }])}
           key={item}
         >
