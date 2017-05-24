@@ -1,4 +1,5 @@
 .c-area-tile {
+
   .area-image {
     width: 250px;
     height: 155px;
@@ -6,5 +7,10 @@
     background-repeat: no-repeat;
     background-position: center;
     border-radius: 4px;
+  }
+
+  .area-title {
+    font-size: 17px;
+    text-transform: capitalize;
   }
 }

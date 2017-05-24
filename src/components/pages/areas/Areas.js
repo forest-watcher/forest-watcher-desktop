@@ -34,6 +34,7 @@ class Areas extends React.Component {
           <Article title="Your Areas">
             <GridGallery
               collection={areasList}
+              className="area-tile-item"
               columns={{ small: 12, medium: 3 }}
               Component={AreaTile}
               after={this.getAddArea()}

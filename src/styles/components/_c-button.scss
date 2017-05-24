@@ -27,7 +27,7 @@
     }
 
     &:active {
-      background-color: darken(currentColor, 10%);
+      background-color: darken($theme-base, 10%);
     }
   }
 }

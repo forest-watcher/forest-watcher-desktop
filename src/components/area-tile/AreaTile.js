@@ -7,8 +7,9 @@ class AreaTile extends React.Component {
     return (
       <div className="c-area-tile">
         <div className="area-image" style={{ backgroundImage: `url(${area.image})`}}></div>
-        <h5>{area.name}</h5>
-        {area.id}
+        <p className="area-title">{area.name}</p>
+        <div className="area-tile-actions">
+        </div>
       </div>
     );
   }
