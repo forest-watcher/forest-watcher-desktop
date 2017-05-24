@@ -2,24 +2,17 @@ import FileSaver from 'file-saver';
 import { API_BASE_URL } from '../constants';
 
 // Actions
-const GET_USER_AREAS = 'areas/GET_AREAS';
 const GET_USER_REPORTS = 'areas/GET_REPORTS';
 const GET_USER_ANSWERS = 'areas/GET_USER_ANSWERS';
 
 // Reducer
 const initialState = {
-  areas: [],
   reports: [],
   answers: []
 };
 
 export default function reducer(state = initialState, action) {
   switch (action.type) {
-    case GET_USER_AREAS:
-      if (action.payload) {
-        return Object.assign({}, state, { areas: action.payload });
-      }
-      return state;
     case GET_USER_REPORTS:
       if (action.payload.data) {
         return Object.assign({}, state, { reports: action.payload.data });
@@ -36,31 +29,6 @@ export default function reducer(state = initialState, action) {
     default:
       return state;
   }
-}
-
-export function getUserAreas() {
-  const url = `${API_BASE_URL}/area`;
-  return (dispatch, state) => {
-    fetch(url, {
-      headers: {
-        Authorization: `Bearer ${state().user.token}`
-      }
-    })
-      .then((response) => {
-        if (response.ok) return response.json();
-        throw Error(response.statusText);
-      })
-      .then((data) => {
-        dispatch({
-          type: GET_USER_AREAS,
-          payload: data.data
-        });
-      })
-      .catch((error) => {
-        console.info(error);
-        // To-do
-      });
-  };
 }
 
 export function getUserReports() {
