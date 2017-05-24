@@ -57,7 +57,7 @@
     }
 
     &:active {
-      background-color: darken($theme-base, 7%);
+      background-color: $medium-gray;
     }
   }
 }

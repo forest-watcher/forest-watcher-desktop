@@ -14,6 +14,7 @@ class Areas extends React.Component {
   }
 
   getAddArea = () => {
+    if (this.props.loading) return null;
     return (
       <button className="c-button -add-card">
         <Icon name="icon-plus" className="-medium" />
@@ -47,7 +48,8 @@ class Areas extends React.Component {
 
 Areas.propTypes = {
   areasList: PropTypes.array.isRequired,
-  getUserAreas: PropTypes.func.isRequired
+  getUserAreas: PropTypes.func.isRequired,
+  loading: PropTypes.bool.isRequired
 };
 
 export default Areas;
