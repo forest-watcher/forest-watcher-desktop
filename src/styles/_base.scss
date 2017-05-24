@@ -9,6 +9,7 @@ body {
   -webkit-overflow-scrolling: touch;
   font-family: $base-font-family;
   font-size: $base-font-size;
+  color: $base-font-color;
 }
 
 html {
@@ -18,6 +19,11 @@ html {
 body, html {
   height: 100%;
   width: 100%;
+}
+
+h2 {
+  font-size: $font-size-large;
+  font-weight: $font-weight-light;
 }
 
 li {
