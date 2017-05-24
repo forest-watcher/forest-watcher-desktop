@@ -6,6 +6,8 @@
   align-items: center;
 
   .nav-link, .nav-menu, .nav-logo {
+    height: $nav-height;
+
     a {
       display: flex;
       align-items: center;
