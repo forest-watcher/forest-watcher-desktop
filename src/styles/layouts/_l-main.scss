@@ -1,4 +1,4 @@
 .l-main {
-  height: calc(100% - #{$nav-height});
+  min-height: calc(100% - #{$nav-height});
   background-color: $theme-base;
 }

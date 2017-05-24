@@ -6,6 +6,12 @@ a {
 .text {
   color: $grey;
 
+  &.-logo-title {
+    color: $theme-accent;
+    text-transform: uppercase;
+    font-weight: $font-weight-bold;
+  }
+
   &.-large-title {
     font-size: $font-size-x-large;
     font-weight: $font-weight-light;

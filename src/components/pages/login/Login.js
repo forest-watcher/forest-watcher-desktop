@@ -23,8 +23,8 @@ function Login() {
         <div className="login-content">
           <div className="login-heading">
             <Icon className="-huge" name="icon-forest-watcher-big" />
-            <h1 className="login-title">Forest Watcher 2.0</h1>
-            <p className="login-subtitle">Sign in with a MyGFQ account</p>
+            <h1 className="text -logo-title">Forest Watcher 2.0</h1>
+            <p className="text -logo-subtitle">Sign in with a MyGFQ account</p>
           </div>
           <LoginButton socialNetwork="facebook" />
           <LoginButton socialNetwork="twitter" />
