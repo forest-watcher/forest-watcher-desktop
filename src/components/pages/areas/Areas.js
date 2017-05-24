@@ -13,19 +13,15 @@ class Areas extends React.Component {
   }
 
   render() {
-    const { areas } = this.props.data || {};
+    const { areasList } = this.props;
     return (
       <div>
         <Hero
           title="Areas of Interest"
-          action={{
-            name: 'Download All',
-            callback: () => console.info('download all')
-          }}
         />
         <div className="c-areas">
           <Article title="Your Areas">
-            <GridGallery collection={areas} columns={4} Component={AreaTile} />
+            <GridGallery collection={areasList} columns={4} Component={AreaTile} />
           </Article>
         </div>
       </div>
@@ -34,7 +30,7 @@ class Areas extends React.Component {
 }
 
 Areas.propTypes = {
-  data: PropTypes.object.isRequired,
+  areasList: PropTypes.array.isRequired,
   getUserAreas: PropTypes.func.isRequired
 };
 

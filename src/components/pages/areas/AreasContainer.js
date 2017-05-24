@@ -1,10 +1,10 @@
 import { connect } from 'react-redux';
-import { getUserAreas } from '../../../modules/data';
+import { getUserAreas } from '../../../modules/areas';
 
 import Areas from './Areas';
 
-const mapStateToProps = ({ data }) => ({
-  data
+const mapStateToProps = ({ areas }) => ({
+  areasList: areas.ids
 });
 
 function mapDispatchToProps(dispatch) {

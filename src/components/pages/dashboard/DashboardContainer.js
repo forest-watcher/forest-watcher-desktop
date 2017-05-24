@@ -1,5 +1,6 @@
 import { connect } from 'react-redux';
-import { getUserAreas, getUserReports, getUserQuestionares } from '../../../modules/data';
+import { getUserReports, getUserQuestionares } from '../../../modules/data';
+import { getUserAreas } from '../../../modules/areas';
 
 import Dashboard from './Dashboard';
 

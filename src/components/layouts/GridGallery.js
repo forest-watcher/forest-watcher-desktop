@@ -5,7 +5,7 @@ function GridGallery(props) {
   const { Component, collection, columns } = props;
   return (
     <div className="row">
-      {collection.map(item => (<div className={`column medium-${columns}`} key={item.id} ><Component data={item} /></div>))}
+      {collection.map(item => (<div className={`column medium-${columns}`} key={item} ><Component id={item} /></div>))}
     </div>
   );
 }
