@@ -5,11 +5,22 @@ import Hero from '../../layouts/Hero';
 import Article from '../../layouts/Article';
 import GridGallery from '../../layouts/GridGallery';
 import AreaTile from '../../area-tile/AreaTileContainer';
+import Button from '../../ui/Button';
+import Icon from '../../ui/Icon';
 
 class Areas extends React.Component {
 
   componentWillMount() {
     if (!this.props.areasList.length) this.props.getUserAreas();
+  }
+
+  getAddArea = () => {
+    return (
+      <Button className="c-button -add-card">
+        <Icon name="icon-plus" className="-medium" />
+          Add Area
+      </Button>
+    );
   }
 
   render() {
@@ -21,7 +32,12 @@ class Areas extends React.Component {
         />
         <div className="c-areas">
           <Article title="Your Areas">
-            <GridGallery collection={areasList} columns={{ medium: 3 }} Component={AreaTile} />
+            <GridGallery
+              collection={areasList}
+              columns={{ small: 12, medium: 3 }}
+              Component={AreaTile}
+              after={this.getAddArea()}
+            />
           </Article>
         </div>
       </div>
