@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import Hero from '../../layouts/Hero';
 import Article from '../../layouts/Article';
-import Grid from '../../layouts/Grid';
+import GridGallery from '../../layouts/GridGallery';
 import AreaTile from '../../ui/AreaTile';
 
 class Areas extends React.Component {
@@ -25,7 +25,7 @@ class Areas extends React.Component {
         />
         <div className="c-areas">
           <Article title="Your Areas">
-            <Grid collection={areas} columns={4} Item={AreaTile} />
+            <GridGallery collection={areas} columns={4} Component={AreaTile} />
           </Article>
         </div>
       </div>
