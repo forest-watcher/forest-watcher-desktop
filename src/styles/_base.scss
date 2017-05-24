@@ -20,6 +20,10 @@ body, html {
   width: 100%;
 }
 
+#app, [data-reactroot]{
+  height:100%
+}
+
 li {
   list-style: none;
 }

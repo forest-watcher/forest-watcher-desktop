@@ -4,6 +4,7 @@ $max-width: 1080px;
 
 // colors
 $white: #ffffff;
+$grey: #555555;
 $light-gray: #f2f2f2;
 $medium-gray: #d1cfcf;
 $border-gray: #404040;
@@ -14,6 +15,7 @@ $parrot-green: #97be32;
 $theme-base: $light-gray;
 $theme-secondary: $dark-gray;
 $theme-accent: $parrot-green;
+$theme-text: $grey;
 
 // fonts
 $font-size-small: 13px;

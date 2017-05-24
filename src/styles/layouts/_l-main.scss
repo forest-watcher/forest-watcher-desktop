@@ -1,8 +1,4 @@
 .l-main {
-  position: absolute;
   height: calc(100% - #{$nav-height});
-  top: $nav-height;
-  left: 0;
-  right: 0;
   background-color: $theme-base;
 }
