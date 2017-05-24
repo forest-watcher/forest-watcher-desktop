@@ -1,0 +1,10 @@
+.c-hero {
+  background-color: $theme-secondary;
+
+  .hero-content {
+    height: 150px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+}

@@ -1,3 +1,4 @@
 .l-main {
-  padding: 25px;
+  min-height: calc(100% - #{$nav-height});
+  background-color: $theme-base;
 }

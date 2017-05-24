@@ -11,7 +11,7 @@ import Reports from '../pages/reports/ReportsContainer';
 import Answers from '../pages/answers/AnswersContainer';
 import AnswersDetail from '../pages/answers-detail/AnswersDetailContainer';
 
-import Nav from '../layouts/nav/NavContainer';
+import Nav from '../layouts/Nav';
 
 class App extends React.Component {
 
@@ -28,12 +28,14 @@ class App extends React.Component {
   }
 
   render() {
-    const { match, user, userChecked } = this.props;
+    const { match, user, userChecked, logout } = this.props;
     if (!userChecked) return null;
 
     return (
       <div>
-        <Nav />
+        <header className="l-header" role="banner">
+          <Nav loggedIn={user.loggedIn} logout={logout} />
+        </header>
         <main role="main" className="l-main">
           <Route exact path="/" render={this.getRootComponent} />
           {user.loggedIn &&
@@ -59,7 +61,8 @@ App.propTypes = {
   location: PropTypes.object.isRequired,
   userChecked: PropTypes.bool.isRequired,
   user: PropTypes.object.isRequired,
-  checkLogged: PropTypes.func.isRequired
+  checkLogged: PropTypes.func.isRequired,
+  logout: PropTypes.func.isRequired
 };
 
 export default App;

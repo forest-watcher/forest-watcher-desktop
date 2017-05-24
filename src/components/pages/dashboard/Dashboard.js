@@ -2,8 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import querystring from 'query-string';
 
-import Menu from '../../layouts/menu/Menu';
-
 class Dashboard extends React.Component {
 
   componentWillMount() {
@@ -23,8 +21,7 @@ class Dashboard extends React.Component {
 
   render() {
     return (
-      <div>
-        <Menu />
+      <div className="c-dashboard row">
         Welcome to Forest Watcher 2.0. You are logged in.
       </div>
     );

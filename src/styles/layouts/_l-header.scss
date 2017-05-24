@@ -1,8 +1,5 @@
 .l-header {
-  width: 100%;
-  background-color: black;
-  height: 60px;
-  display: flex;
-  align-items: center;
-  padding: 0 25px;
+  height: $nav-height;
+  background-color: $theme-secondary;
+  border-bottom: $border-gray 1px solid;
 }

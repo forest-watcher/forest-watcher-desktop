@@ -2,8 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 
-import Menu from '../../layouts/menu/Menu';
-
 class Answers extends React.Component {
 
   componentWillMount() {
@@ -38,7 +36,6 @@ class Answers extends React.Component {
     const { answers = [] } = this.props;
     return (
       <div>
-        <Menu />
         <div className="c-dashboard">
           <div className="content-section answers">
             <h4>Answers for the report template</h4>

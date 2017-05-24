@@ -1,16 +1,28 @@
+/* Fonts (go 1st) */
+@import "./styles/fonts";
+
+/* Lib */
+@import "./styles/lib/foundation";
+
+/* Reset */
+@import "./styles/reset";
+
 /* Settings */
 @import "./styles/settings";
 @import "./styles/base";
+@import "./styles/texts";
 
 /* Layouts */
 @import "./styles/layouts/l-main";
 @import "./styles/layouts/l-header";
-@import "./styles/layouts/l-login";
 
 /* Components */
 @import "./styles/components/c-nav";
 @import "./styles/components/c-login";
-@import "./styles/components/c-login-button";
 @import "./styles/components/c-dashboard";
 @import "./styles/components/c-dashboard-menu";
 @import "./styles/components/c-area-tile";
+@import "./styles/components/c-hero";
+@import "./styles/components/c-button";
+@import "./styles/components/c-areas";
+@import "./styles/components/c-icon";

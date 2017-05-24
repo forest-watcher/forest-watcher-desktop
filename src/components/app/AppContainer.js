@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom'
-import { checkLogged } from '../../modules/user';
+import { checkLogged, logout } from '../../modules/user';
 import App from './App';
 
 const mapStateToProps = ({ app, user }) => ({
@@ -12,6 +12,9 @@ function mapDispatchToProps(dispatch) {
   return {
     checkLogged: (token) => {
       dispatch(checkLogged(token));
+    },
+    logout: () => {
+      dispatch(logout());
     }
   };
 }

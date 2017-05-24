@@ -1,0 +1,12 @@
+.c-button {
+  padding: 10px 25px;
+  border: 1px solid;
+  border-radius: 20px;
+  border-color: $theme-accent;
+  background: $theme-accent;
+  color: $white;
+  font-family: $base-font-family;
+  font-size: $base-font-size;
+  font-weight: $font-weight-bold;
+  cursor: pointer;
+}
