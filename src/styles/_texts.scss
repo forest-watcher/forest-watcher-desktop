@@ -1,0 +1,36 @@
+// defaults
+a {
+  cursor: pointer;
+}
+
+.text {
+  color: $gray;
+
+  &.-logo-title {
+    color: $theme-accent;
+    text-transform: uppercase;
+    font-weight: $font-weight-bold;
+  }
+
+  &.-large-title {
+    font-size: $font-size-x-large;
+    font-weight: $font-weight-light;
+  }
+
+  // color overrides
+  &.-white {
+    color: $white;
+
+    a {
+      color: $white;
+    }
+  }
+
+  &.-green {
+    color: $theme-accent;
+
+    a {
+      color: $theme-accent;
+    }
+  }
+}

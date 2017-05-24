@@ -18,14 +18,14 @@ function LoginButton({ socialNetwork }) {
 
 function Login() {
   return (
-    <div className="c-login row align-middle">
-      <div className="login-content">
-        <div className="login-heading">
-          <Icon className="-huge" name="icon-forest-watcher-big" />
-          <h1 className="login-title">Forest Watcher 2.0</h1>
-          <p className="login-subtitle">Sign in with a MyGFQ account</p>
-        </div>
-        <div className="login-button-group">
+    <div className="c-login row">
+      <div className="column small-12">
+        <div className="login-content">
+          <div className="login-heading">
+            <Icon className="-huge" name="icon-forest-watcher-big" />
+            <h1 className="text -logo-title">Forest Watcher 2.0</h1>
+            <p className="text -logo-subtitle">Sign in with a MyGFQ account</p>
+          </div>
           <LoginButton socialNetwork="facebook" />
           <LoginButton socialNetwork="twitter" />
           <LoginButton socialNetwork="google" />

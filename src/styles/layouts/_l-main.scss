@@ -1,9 +1,5 @@
 .l-main {
-  position: absolute;
-  height: calc(100% - #{$nav-height});
-  top: $nav-height;
-  left: 0;
-  right: 0;
+  min-height: calc(100% - #{$nav-height});
   background-color: $theme-base;
   overflow: auto;
 }

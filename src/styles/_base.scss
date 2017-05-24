@@ -21,9 +21,8 @@ body, html {
   width: 100%;
 }
 
-h2 {
-  font-size: $font-size-large;
-  font-weight: $font-weight-light;
+#app, [data-reactroot]{
+  height:100%
 }
 
 li {
