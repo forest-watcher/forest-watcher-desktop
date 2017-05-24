@@ -15,7 +15,7 @@ class AreaTile extends React.Component {
           <li className="area-action">
             <button className="c-button -light -small">Reports</button>
           </li>
-          <li className="area-action">
+          <li className="area-action -edit-area">
             <button className="c-button -round -white">
               <Icon className="-small" name="icon-edit"/>
             </button>
