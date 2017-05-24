@@ -10,6 +10,36 @@
   cursor: pointer;
   outline: 0;
 
+  &.-light {
+    border-color: $theme-accent;
+    background: $light-green;
+    color: $gray;
+
+    &:active {
+      background-color: darken($light-green, 7%);
+    }
+  }
+
+  &.-small {
+    padding: 10px 15px;
+    font-size: 12px;
+    font-weight: $font-weight-regular;
+  }
+
+  &.-round {
+    border-radius: 100%;
+    padding: 12px;
+  }
+
+  &.-white {
+    background-color: $white;
+    border: 0;
+
+    &:active {
+      background-color: darken($white, 7%);
+    }
+  }
+
   &.-add-card {
     display: flex;
     align-items: center;
@@ -27,7 +57,7 @@
     }
 
     &:active {
-      background-color: darken($theme-base, 10%);
+      background-color: darken($theme-base, 7%);
     }
   }
 }

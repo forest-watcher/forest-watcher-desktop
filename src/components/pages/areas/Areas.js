@@ -5,7 +5,6 @@ import Hero from '../../layouts/Hero';
 import Article from '../../layouts/Article';
 import GridGallery from '../../layouts/GridGallery';
 import AreaTile from '../../area-tile/AreaTileContainer';
-import Button from '../../ui/Button';
 import Icon from '../../ui/Icon';
 
 class Areas extends React.Component {
@@ -16,10 +15,10 @@ class Areas extends React.Component {
 
   getAddArea = () => {
     return (
-      <Button className="c-button -add-card">
+      <button className="c-button -add-card">
         <Icon name="icon-plus" className="-medium" />
           Add Area
-      </Button>
+      </button>
     );
   }
 
