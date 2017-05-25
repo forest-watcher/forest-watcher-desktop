@@ -42,12 +42,22 @@ $login-offset: 60px;
 
     a {
       color: white;
-      font-weight: bold;
+      font-weight: $font-weight-bold;
       padding: 15px;
       width: 250px;
       display: flex;
       align-items: center;
-      justify-content: center;
+      justify-content: space-between;
+      text-transform: capitalize;
+    }
+
+    .network-container {
+      display: flex;
+      align-items: center;
+
+      svg {
+        margin-right: 15px;
+      }
     }
 
     &.-facebook {

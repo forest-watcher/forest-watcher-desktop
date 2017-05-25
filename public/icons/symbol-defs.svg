@@ -52,5 +52,9 @@
 <title>facebook</title>
 <path d="M12.624 5.392c-0.634 0-1.268 0.76-1.268 1.796v3.526h6.276v5.116h-6.276v15.274h-5.996v-15.274h-5.36v-5.116h5.36v-2.974c0-4.284 3.104-7.74 7.264-7.74h5.008v5.392h-5.008z"></path>
 </symbol>
+<symbol id="icon-arrow-down" viewBox="0 0 32 32">
+<title>arrow-down</title>
+<path d="M16 25.2l-15.4-15.4 2.8-3 12.6 12.6 12.6-12.6 2.8 3z"></path>
+</symbol>
 </defs>
 </svg>

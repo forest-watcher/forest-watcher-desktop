@@ -10,8 +10,11 @@ function LoginButton({ socialNetwork }) {
   return (
     <div className={`login-button -${socialNetwork}`}>
       <a href={url}>
-        <Icon className="-white" name={`icon-${socialNetwork}`}/>
-        <span>{socialNetwork}</span>
+        <div className="network-container">
+          <Icon className="-white" name={`icon-${socialNetwork}`}/>
+          <span>{socialNetwork}</span>
+        </div>
+        <Icon className="-white -small -rotate-right" name={`icon-arrow-down`}/>
       </a>
     </div>
   );

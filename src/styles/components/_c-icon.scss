@@ -31,4 +31,9 @@
   &.-white {
     fill: $white;
   }
+
+  //transformations
+  &.-rotate-right {
+    transform: rotate(-90deg);
+  }
 }
