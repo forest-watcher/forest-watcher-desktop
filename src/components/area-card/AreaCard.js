@@ -6,7 +6,7 @@ class AreaCard extends React.Component {
   render() {
     const { area } = this.props;
     return (
-      <div className="c-area-tile">
+      <div className="c-area-card">
         <div className="area-content">
           <div className="area-image" style={{ backgroundImage: `url(${area.image})`}}></div>
           <p className="area-title">{area.name}</p>
