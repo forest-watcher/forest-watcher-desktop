@@ -1,7 +1,7 @@
 import React from 'react';
 import Icon from '../ui/Icon';
 
-class AreaTile extends React.Component {
+class AreaCard extends React.Component {
 
   render() {
     const { area } = this.props;
@@ -26,4 +26,4 @@ class AreaTile extends React.Component {
   }
 }
 
-export default AreaTile;
+export default AreaCard;

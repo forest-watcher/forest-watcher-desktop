@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import Hero from '../../layouts/Hero';
 import Article from '../../layouts/Article';
 import GridGallery from '../../layouts/GridGallery';
-import AreaTile from '../../area-tile/AreaTileContainer';
+import AreaTile from '../../area-card/AreaCardContainer';
 import Icon from '../../ui/Icon';
 
 class Areas extends React.Component {
