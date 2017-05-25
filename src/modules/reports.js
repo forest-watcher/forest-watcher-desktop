@@ -17,8 +17,8 @@ const initialState = {
 export default function reducer(state = initialState, action) {
   switch (action.type) {
     case GET_USER_REPORTS: {
-      const { report } = action.payload;
-      if (report) return Object.assign({}, state, { ids: Object.keys(report), report });
+      const { questionnaire } = action.payload;
+      if (questionnaire) return Object.assign({}, state, { ids: Object.keys(questionnaire), report: questionnaire });
       return state;
     }
     case SET_LOADING_REPORTS:
