@@ -8,6 +8,12 @@
   background-color: $white;
   border: 1px solid $border-light-gray;
 
+  .card-field {
+    font-size: 17px;
+    color: $pale-gray;
+    line-height: 1.41;
+  }
+
   .card-actions {
     display: flex;
     flex-direction: column;
