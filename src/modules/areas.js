@@ -4,7 +4,7 @@ import { API_BASE_URL } from '../constants';
 // Actions
 const GET_USER_AREAS = 'areas/GET_AREAS';
 const SET_LOADING_AREAS = 'areas/SET_LOADING_AREAS';
-const SET_LOADING_ERROR = 'areas/SET_LOADING_ERROR';
+const SET_LOADING_AREAS_ERROR = 'areas/SET_LOADING_AREAS_ERROR';
 
 // Reducer
 const initialState = {
@@ -23,7 +23,7 @@ export default function reducer(state = initialState, action) {
     }
     case SET_LOADING_AREAS:
       return Object.assign({}, state, { loading: action.payload });
-    case SET_LOADING_ERROR:
+    case SET_LOADING_AREAS_ERROR:
       return Object.assign({}, state, { error: action.payload });
     default:
       return state;
@@ -60,7 +60,7 @@ export function getUserAreas() {
       })
       .catch((error) => {
         dispatch({
-          type: SET_LOADING_ERROR,
+          type: SET_LOADING_AREAS_ERROR,
           payload: error
         });
         dispatch({
