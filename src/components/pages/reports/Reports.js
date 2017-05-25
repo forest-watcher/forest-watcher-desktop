@@ -10,7 +10,8 @@ import ReportCard from '../../report-card/ReportCardContainer';
 class Reports extends React.Component {
 
   componentWillMount() {
-    this.props.getUserReports();
+    const { getUserReports, reportsList } = this.props;
+    if(!reportsList.length) getUserReports();
   }
 
   render() {
