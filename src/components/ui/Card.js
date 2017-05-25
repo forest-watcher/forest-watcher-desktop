@@ -7,7 +7,7 @@ function Card({ className, children, title, fields, actions }) {
   return (
     <div className={classnames(['c-card', className])}>
       <div className="card-content">
-        <h3>{title}</h3>
+        <h3 className="text -x-small-title">{title}</h3>
         {
           fields.map(field => (<p className="card-field" key={btoa(field)}>{field}</p>))
         }
@@ -17,7 +17,7 @@ function Card({ className, children, title, fields, actions }) {
         {
           actions.map((action, index) => (
           <button key={btoa(index + action.iconName)} className="card-action" onClick={action.callback}>
-            <Icon className="-small -white" name={action.iconName}/>
+            <Icon className={classnames(['-small', action.color])} name={action.iconName}/>
           </button>
         ))
         }
@@ -38,7 +38,8 @@ Card.propTypes = {
   fields: PropTypes.arrayOf(PropTypes.string),
   actions: PropTypes.arrayOf(PropTypes.shape({
     iconName: PropTypes.string.isRequired,
-    callback: PropTypes.func.isRequired
+    callback: PropTypes.func.isRequired,
+    color: PropTypes.string
   }))
 };
 

@@ -9,7 +9,7 @@ class ReportCard extends React.Component {
     return (
       <Card
         title={report.name}
-        actions={[{ iconName: 'icon-edit', callback: () => console.info('edit report') }]}
+        actions={[{ iconName: 'icon-info', color: '-green', callback: () => console.info('info report') }]}
       />
     );
   }

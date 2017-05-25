@@ -22,6 +22,12 @@ a {
     font-weight: $font-weight-light;
   }
 
+  &.-x-small-title {
+    font-size: $font-size-small;
+    font-weight: $font-weight-bold;
+    line-height: 1.62;
+  }
+
   // color overrides
   &.-white {
     color: $white;
