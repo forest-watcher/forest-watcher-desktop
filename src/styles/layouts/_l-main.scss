@@ -1,4 +1,5 @@
 .l-main {
   min-height: calc(100% - #{$nav-height});
   background-color: $theme-base;
+  overflow: auto;
 }

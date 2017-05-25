@@ -4,7 +4,7 @@ a {
 }
 
 .text {
-  color: $grey;
+  color: $gray;
 
   &.-logo-title {
     color: $theme-accent;
@@ -14,6 +14,11 @@ a {
 
   &.-large-title {
     font-size: $font-size-x-large;
+    font-weight: $font-weight-light;
+  }
+
+  &.-small-title {
+    font-size: $font-size-large;
     font-weight: $font-weight-light;
   }
 

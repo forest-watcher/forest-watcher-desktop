@@ -4,18 +4,19 @@ $max-width: 1080px;
 
 // colors
 $white: #ffffff;
-$grey: #555555;
+$gray: #555555;
 $light-gray: #f2f2f2;
 $medium-gray: #d1cfcf;
 $border-gray: #404040;
 $dark-gray: #333333;
 $parrot-green: #97be32;
+$light-green: #f4f8ea;
 
 // app palette (prefer using palette over colors when possible)
 $theme-base: $light-gray;
 $theme-secondary: $dark-gray;
 $theme-accent: $parrot-green;
-$theme-text: $grey;
+$theme-text: $gray;
 
 // fonts
 $font-size-small: 13px;
@@ -30,6 +31,7 @@ $font-weight-bold: 700;
 // base settings
 $base-font-family: 'Fira Sans', 'Open Sans', sans-serif;
 $base-font-size: $font-size-regular;
+$base-font-color: $gray;
 
 // eases
 $ease-out-cubic: cubic-bezier(0.215, 0.610, 0.355, 1.000);

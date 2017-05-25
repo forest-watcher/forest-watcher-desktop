@@ -1,0 +1,56 @@
+.c-area-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  .area-image {
+    width: 250px;
+    height: 155px;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    border-radius: 4px;
+    background-color: $medium-gray;
+  }
+
+  .area-title {
+    font-size: 17px;
+    text-transform: capitalize;
+    margin-top: 25px;
+  }
+
+  .area-actions {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    margin-top: 25px;
+
+    .area-action {
+
+      &:first-child {
+        position: relative;
+        margin-right: 24px;
+        padding-right: 24px;
+        &::after {
+          position: absolute;
+          content: '';
+          height: 25px;
+          width: 1px;
+          background-color: darken($theme-base, 10%);
+          right: 0;
+          top: 50%;
+          transform: translateY(-50%);
+        }
+      }
+
+      &.-edit-area {
+        > button {
+          width: 45px;
+          height: 45px;
+          padding: 0;
+          border-radius: 100%;
+        }
+      }
+    }
+  }
+}

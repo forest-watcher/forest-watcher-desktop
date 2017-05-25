@@ -1,0 +1,18 @@
+.c-add-card {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  height: 155px;
+  width: 250px;
+  border-radius: 4px;
+  border: dotted $theme-accent 2px;
+  color: $theme-accent;
+  background-color: transparent;
+  cursor: pointer;
+  outline: 0;
+
+  &:active {
+    background-color: $medium-gray;
+  }
+}

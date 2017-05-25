@@ -491,7 +491,7 @@ pre {
   display: none !important; }
 
 .row {
-  max-width: 62.5rem;
+  max-width: 67.5rem;
   margin-right: auto;
   margin-left: auto;
   display: -ms-flexbox;
@@ -499,16 +499,16 @@ pre {
   -ms-flex-flow: row wrap;
   flex-flow: row wrap; }
 .row .row {
-  margin-right: -0.9375rem;
-  margin-left: -0.9375rem; }
+  margin-right: -0.625rem;
+  margin-left: -0.625rem; }
 @media print, screen and (min-width: 40em) {
   .row .row {
-    margin-right: -0.9375rem;
-    margin-left: -0.9375rem; } }
+    margin-right: -0.625rem;
+    margin-left: -0.625rem; } }
 @media print, screen and (min-width: 64em) {
   .row .row {
-    margin-right: -0.9375rem;
-    margin-left: -0.9375rem; } }
+    margin-right: -0.625rem;
+    margin-left: -0.625rem; } }
 .row .row.collapse {
   margin-right: 0;
   margin-left: 0; }
@@ -528,8 +528,8 @@ pre {
 .column, .columns {
   -ms-flex: 1 1 0px;
   flex: 1 1 0px;
-  padding-right: 0.9375rem;
-  padding-left: 0.9375rem;
+  padding-right: 0.625rem;
+  padding-left: 0.625rem;
   min-width: initial; }
 
 .column.row.row, .row.row.columns {
@@ -763,8 +763,8 @@ pre {
   padding-left: 0; }
 
 .small-uncollapse > .column, .small-uncollapse > .columns {
-  padding-right: 0.9375rem;
-  padding-left: 0.9375rem; }
+  padding-right: 0.625rem;
+  padding-left: 0.625rem; }
 
 @media print, screen and (min-width: 40em) {
   .medium-1 {
@@ -955,8 +955,8 @@ pre {
     padding-right: 0;
     padding-left: 0; }
   .medium-uncollapse > .column, .medium-uncollapse > .columns {
-    padding-right: 0.9375rem;
-    padding-left: 0.9375rem; } }
+    padding-right: 0.625rem;
+    padding-left: 0.625rem; } }
 
 @media print, screen and (min-width: 64em) {
   .large-1 {
@@ -1147,8 +1147,8 @@ pre {
     padding-right: 0;
     padding-left: 0; }
   .large-uncollapse > .column, .large-uncollapse > .columns {
-    padding-right: 0.9375rem;
-    padding-left: 0.9375rem; } }
+    padding-right: 0.625rem;
+    padding-left: 0.625rem; } }
 
 .shrink {
   -ms-flex: 0 0 auto;
@@ -1156,7 +1156,7 @@ pre {
   max-width: 100%; }
 
 .column-block {
-  margin-bottom: 1.875rem; }
+  margin-bottom: 1.25rem; }
 .column-block > :last-child {
   margin-bottom: 0; }
 

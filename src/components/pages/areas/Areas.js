@@ -2,31 +2,44 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import Hero from '../../layouts/Hero';
-import AreaTile from '../../ui/AreaTile';
+import Article from '../../layouts/Article';
+import GridGallery from '../../layouts/GridGallery';
+import AreaTile from '../../area-card/AreaCardContainer';
+import Icon from '../../ui/Icon';
 
 class Areas extends React.Component {
 
   componentWillMount() {
-    this.props.getUserAreas();
+    if (!this.props.areasList.length) this.props.getUserAreas();
+  }
+
+  getAddArea = () => {
+    if (this.props.loading) return null;
+    return (
+      <button className="c-add-card">
+        <Icon name="icon-plus" className="-medium -green" />
+          Add Area
+      </button>
+    );
   }
 
   render() {
-    const { areas } = this.props.data || {};
+    const { areasList } = this.props;
     return (
       <div>
         <Hero
           title="Areas of Interest"
-          action={{
-            name: 'Download All',
-            callback: () => console.info('download all')
-          }}
         />
         <div className="c-areas">
-          <div className="row">
-            <ul>
-              {areas.map(area => (<li><AreaTile data={area} key={area.id} /></li>))}
-            </ul>
-          </div>
+          <Article title="Your Areas">
+            <GridGallery
+              collection={areasList}
+              className="area-tile-item"
+              columns={{ small: 12, medium: 3 }}
+              Component={AreaTile}
+              after={this.getAddArea()}
+            />
+          </Article>
         </div>
       </div>
     );
@@ -34,8 +47,9 @@ class Areas extends React.Component {
 }
 
 Areas.propTypes = {
-  data: PropTypes.object.isRequired,
-  getUserAreas: PropTypes.func.isRequired
+  areasList: PropTypes.array.isRequired,
+  getUserAreas: PropTypes.func.isRequired,
+  loading: PropTypes.bool.isRequired
 };
 
 export default Areas;

@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Button from '../ui/Button';
 
 function Hero({ title, action }) {
   return (
@@ -9,7 +8,7 @@ function Hero({ title, action }) {
         <div className="column small-12">
           <div className="hero-content">
             <h1 className="text -large-title -white">{title}</h1>
-            {action && <Button onClick={action.callback}>{action.name}</Button>}
+            {action && <button onClick={action.callback}>{action.name}</button>}
           </div>
         </div>
       </div>
