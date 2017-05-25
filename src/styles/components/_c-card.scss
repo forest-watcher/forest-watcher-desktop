@@ -1,4 +1,6 @@
 .c-card {
+  display: flex;
+  justify-content: space-between;
   padding: 15px;
   width: 250px;
   height: 100px;
@@ -15,7 +17,16 @@
     width: 20px;
 
     .card-action {
+      outline: 0;
+      cursor: pointer;
 
+      &:hover {
+        opacity: 0.8;
+      }
+
+      &:active {
+        opacity: 1;
+      }
     }
   }
 }

@@ -24,6 +24,7 @@ class Reports extends React.Component {
           <Article title="Uploaded">
             <GridGallery
               Component={ReportCard}
+              className="report-card-item"
               collection={reportsList}
               columns={{ small: 12, medium: 3 }}
             />
