@@ -17,7 +17,7 @@ class Areas extends React.Component {
     if (this.props.loading) return null;
     return (
       <button className="c-add-card">
-        <Icon name="icon-plus" className="-medium" />
+        <Icon name="icon-plus" className="-medium -green" />
           Add Area
       </button>
     );

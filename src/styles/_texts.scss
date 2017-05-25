@@ -17,6 +17,11 @@ a {
     font-weight: $font-weight-light;
   }
 
+  &.-small-title {
+    font-size: $font-size-large;
+    font-weight: $font-weight-light;
+  }
+
   // color overrides
   &.-white {
     color: $white;

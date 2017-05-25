@@ -6,15 +6,18 @@ import Icon from '../../ui/Icon';
 import { API_BASE_URL, API_CALLBACK_URL } from '../../../constants';
 
 function LoginButton({ socialNetwork }) {
-  const url = `${API_BASE_URL}/auth/${socialNetwork}?token=true&callbackUrl=${API_CALLBACK_URL}`;
+  const url =`${API_BASE_URL}/auth/${socialNetwork}?token=true&callbackUrl=${API_CALLBACK_URL}`;
   return (
     <div className={`login-button -${socialNetwork}`}>
       <a href={url}>
+        <Icon className="-white" name={`icon-${socialNetwork}`}/>
         <span>{socialNetwork}</span>
       </a>
     </div>
   );
 }
+
+
 
 function Login() {
   return (

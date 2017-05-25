@@ -12,10 +12,6 @@
   cursor: pointer;
   outline: 0;
 
-  svg {
-    fill: $theme-accent;
-  }
-
   &:active {
     background-color: $medium-gray;
   }
