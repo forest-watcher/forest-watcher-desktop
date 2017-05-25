@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import Hero from '../../layouts/Hero';
 import Article from '../../layouts/Article';
 import GridGallery from '../../layouts/GridGallery';
-import AreaTile from '../../area-card/AreaCardContainer';
+import AreaCard from '../../area-card/AreaCardContainer';
 import Icon from '../../ui/Icon';
 
 class Areas extends React.Component {
@@ -36,7 +36,7 @@ class Areas extends React.Component {
               collection={areasList}
               className="area-tile-item"
               columns={{ small: 12, medium: 3 }}
-              Component={AreaTile}
+              Component={AreaCard}
               after={this.getAddArea()}
             />
           </Article>
