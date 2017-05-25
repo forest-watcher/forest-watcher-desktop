@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 
 import Hero from '../../layouts/Hero';
+import Article from '../../layouts/Article';
+import GridGallery from '../../layouts/GridGallery';
 
 class Reports extends React.Component {
 
@@ -18,8 +20,8 @@ class Reports extends React.Component {
           title="Reports"
         />
         <div className="c-dashboard">
-          <div className="content-section reports">
-            <h4>Report Templates</h4>
+          <Article title="Uploaded">
+            <GridGallery Component="" columns=""/>
             <ul>
               {
                 reports.map(report => (
@@ -29,7 +31,7 @@ class Reports extends React.Component {
                 ))
               }
             </ul>
-          </div>
+          </Article>
         </div>
       </div>
     );

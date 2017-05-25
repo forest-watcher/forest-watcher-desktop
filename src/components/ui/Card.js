@@ -1,0 +1,40 @@
+import React from 'react';
+import PropTypes from 'prop-types';
+import classnames from 'classnames';
+import Icon from './Icon';
+
+function Card({ className, children, title, fields, actions }) {
+  return (
+    <div className={classnames(['c-card', className])}>
+      <div className="card-content">
+        <h3>{title}</h3>
+        {
+          fields.map(field => (<p className="card-field">{field}</p>))
+        }
+        {children}
+      </div>
+      <div className="card-actions">
+        {
+          actions.map(action => (
+          <button className="card-action" onClick={action.callback}>
+            <Icon className="-small -white" name={action.iconName}/>
+          </button>
+        ))
+        }
+      </div>
+    </div>
+  );
+}
+
+Card.propTypes = {
+  children: PropTypes.node,
+  className: PropTypes.string,
+  title: PropTypes.string,
+  fields: PropTypes.arrayOf(PropTypes.string),
+  actions: PropTypes.arrayOf(PropTypes.shape({
+    iconName: PropTypes.string.isRequired,
+    callback: PropTypes.func.isRequired
+  }))
+};
+
+export default Card;
