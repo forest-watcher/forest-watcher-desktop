@@ -1,10 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
 
 import Hero from '../../layouts/Hero';
 import Article from '../../layouts/Article';
 import GridGallery from '../../layouts/GridGallery';
+
+import ReportCard from '../../report-card/ReportCardContainer';
 
 class Reports extends React.Component {
 
@@ -13,7 +14,7 @@ class Reports extends React.Component {
   }
 
   render() {
-    const { reports } = this.props.data || {};
+    const { reportsList } = this.props;
     return (
       <div>
         <Hero
@@ -21,16 +22,11 @@ class Reports extends React.Component {
         />
         <div className="c-dashboard">
           <Article title="Uploaded">
-            <GridGallery Component="" columns=""/>
-            <ul>
-              {
-                reports.map(report => (
-                  <li key={report.id}>
-                    <Link to={`/reports/${report.id}`}>{report.attributes.name}</Link>
-                  </li>
-                ))
-              }
-            </ul>
+            <GridGallery
+              Component={ReportCard}
+              collection={reportsList}
+              columns={{ small: 12, medium: 3 }}
+            />
           </Article>
         </div>
       </div>
@@ -40,7 +36,7 @@ class Reports extends React.Component {
 
 Reports.propTypes = {
   getUserReports: PropTypes.func.isRequired,
-  data: PropTypes.object.isRequired
+  reportsList: PropTypes.array.isRequired
 };
 
 export default Reports;

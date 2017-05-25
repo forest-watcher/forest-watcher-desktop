@@ -11,11 +11,6 @@ const initialState = {
 
 export default function reducer(state = initialState, action) {
   switch (action.type) {
-    case GET_USER_REPORTS:
-      if (action.payload.data) {
-        return Object.assign({}, state, { reports: action.payload.data });
-      }
-      return state;
     case GET_USER_ANSWERS: {
       if (action.payload.id) {
         const answers = { ...state.answers };

@@ -1,10 +1,11 @@
 import { connect } from 'react-redux';
-import { getUserReports } from '../../../modules/data';
+import { getUserReports } from '../../../modules/reports';
 
 import Reports from './Reports';
 
-const mapStateToProps = ({ data }) => ({
-  data
+const mapStateToProps = ({ reports }) => ({
+  reportsList: reports.ids,
+  loading: reports.loading
 });
 
 function mapDispatchToProps(dispatch) {
