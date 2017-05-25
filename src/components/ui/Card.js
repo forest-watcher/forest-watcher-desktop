@@ -9,14 +9,14 @@ function Card({ className, children, title, fields, actions }) {
       <div className="card-content">
         <h3>{title}</h3>
         {
-          fields.map(field => (<p className="card-field">{field}</p>))
+          fields.map(field => (<p className="card-field" key={btoa(field)}>{field}</p>))
         }
         {children}
       </div>
       <div className="card-actions">
         {
-          actions.map(action => (
-          <button className="card-action" onClick={action.callback}>
+          actions.map((action, index) => (
+          <button key={btoa(index + action.iconName)} className="card-action" onClick={action.callback}>
             <Icon className="-small -white" name={action.iconName}/>
           </button>
         ))
@@ -25,6 +25,11 @@ function Card({ className, children, title, fields, actions }) {
     </div>
   );
 }
+
+Card.defaultProps = {
+  fields: [],
+  actions: []
+};
 
 Card.propTypes = {
   children: PropTypes.node,

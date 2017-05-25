@@ -20,7 +20,7 @@ class Reports extends React.Component {
         <Hero
           title="Reports"
         />
-        <div className="c-dashboard">
+        <div className="c-reports">
           <Article title="Uploaded">
             <GridGallery
               Component={ReportCard}
