@@ -27,7 +27,7 @@ class AnswersDetail extends React.Component {
     if (!attributes || !id) return null; // TODO: loading state
     const responses = attributes.responses;
     return (
-      <div>
+      <div className="row columns">
         <div className="c-dashboard">
           <div className="content-section answers">
             <h4>Responses for the template {attributes.questionnaire} in {id}</h4>
