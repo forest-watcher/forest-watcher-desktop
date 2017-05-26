@@ -1,4 +1,5 @@
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
 import ReportCard from './ReportCard';
 
 const mapStateToProps = ({ reports }, { id }) => {
@@ -6,4 +7,4 @@ const mapStateToProps = ({ reports }, { id }) => {
   return { report: { ...report, id } };
 };
 
-export default connect(mapStateToProps, null)(ReportCard);
+export default withRouter(connect(mapStateToProps, null)(ReportCard));

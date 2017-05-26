@@ -12,7 +12,7 @@ class ReportCard extends React.Component {
   }
 
   render() {
-    const { report } = this.props;
+    const { report, history } = this.props;
     return (
       <Card
         title={report.name}
@@ -20,7 +20,7 @@ class ReportCard extends React.Component {
         actions={[{
           iconName: 'icon-info',
           color: '-green',
-          callback: () => console.info('info report')
+          callback: () => history.push(`/reports/${report.id}`)
         }]}
       />
     );
@@ -28,7 +28,8 @@ class ReportCard extends React.Component {
 }
 
 ReportCard.propTypes = {
-  report: PropTypes.object.isRequired
+  report: PropTypes.object.isRequired,
+  history: PropTypes.object
 };
 
 export default ReportCard;
