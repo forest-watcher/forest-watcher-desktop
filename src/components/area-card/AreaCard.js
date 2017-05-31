@@ -14,12 +14,12 @@ class AreaCard extends React.Component {
         </div>
         <ul className="area-actions">
           <li className="area-action">
-            // <button className="c-button -light -small">Reports</button>
+            <button className="c-button -light -small">Reports</button>
           </li>
           <li className="area-action -edit-area">
-            // <button className="c-button -round -white">
-            //   <Icon className="-small -green" name="icon-edit"/>
-            // </button>
+            <button className="c-button -round -white">
+              <Icon className="-small -green" name="icon-edit"/>
+            </button>
           </li>
         </ul>
       </div>
