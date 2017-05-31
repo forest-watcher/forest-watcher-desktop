@@ -35,7 +35,7 @@ class Answers extends React.Component {
   render() {
     const { answers = [] } = this.props;
     return (
-      <div>
+      <div className="row columns">
         <div className="c-dashboard">
           <div className="content-section answers">
             <h4>Answers for the report template</h4>
