@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import Icon from '../ui/Icon';
 
 class AreaCard extends React.Component {
@@ -8,8 +9,8 @@ class AreaCard extends React.Component {
     return (
       <div className="c-area-card">
         <div className="area-content">
-          <div className="area-image" style={{ backgroundImage: `url(${area.image})`}}></div>
-          <p className="area-title">{area.name}</p>
+          <figure className="area-image" style={{ backgroundImage: `url(${area.image})`}}></figure>
+          <figcaption className="area-title">{area.name}</figcaption>
         </div>
         <ul className="area-actions">
           <li className="area-action">
@@ -25,5 +26,9 @@ class AreaCard extends React.Component {
     );
   }
 }
+
+AreaCard.propTypes = {
+  area: PropTypes.object.isRequired
+};
 
 export default AreaCard;

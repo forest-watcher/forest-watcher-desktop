@@ -1,0 +1,38 @@
+.c-card {
+  display: flex;
+  justify-content: space-between;
+  padding: 15px;
+  height: 100px;
+  border-radius: 4px;
+  background-color: $white;
+  border: 1px solid $border-light-gray;
+
+  .card-field {
+    font-size: 17px;
+    color: $pale-gray;
+    line-height: 1.41;
+    font-style: italic;
+  }
+
+  .card-actions {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    height: 100%;
+    width: 20px;
+
+    .card-action {
+      outline: 0;
+      cursor: pointer;
+
+      &:hover {
+        opacity: 0.8;
+      }
+
+      &:active {
+        opacity: 1;
+      }
+    }
+  }
+}

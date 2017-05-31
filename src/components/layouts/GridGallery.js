@@ -33,7 +33,7 @@ GridGallery.propTypes = {
     PropTypes.func,
     PropTypes.instanceOf(React.Component)
   ]).isRequired,
-  collection: PropTypes.array,
+  collection: PropTypes.array.isRequired,
   columns: PropTypes.shape({
     small: PropTypes.number,
     medium: PropTypes.number,

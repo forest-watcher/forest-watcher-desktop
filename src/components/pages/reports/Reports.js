@@ -1,37 +1,35 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
 
 import Hero from '../../layouts/Hero';
+import Article from '../../layouts/Article';
+import GridGallery from '../../layouts/GridGallery';
+
+import ReportCard from '../../report-card/ReportCardContainer';
 
 class Reports extends React.Component {
 
   componentWillMount() {
-    this.props.getUserReports();
+    const { getUserReports, reportsList } = this.props;
+    if(!reportsList.length) getUserReports();
   }
 
   render() {
-    const { reports } = this.props.data || {};
+    const { reportsList } = this.props;
     return (
       <div>
         <Hero
           title="Reports"
         />
-        <div className="row columns">
-          <div className="c-dashboard">
-            <div className="content-section reports">
-              <h4>Report Templates</h4>
-              <ul>
-                {
-                  reports.map(report => (
-                    <li key={report.id}>
-                      <Link to={`/reports/${report.id}`}>{report.attributes.name}</Link>
-                    </li>
-                  ))
-                }
-              </ul>
-            </div>
-          </div>
+        <div className="c-reports">
+          <Article title="Uploaded">
+            <GridGallery
+              Component={ReportCard}
+              className="report-card-item"
+              collection={reportsList}
+              columns={{ small: 12, medium: 4, large: 3 }}
+            />
+          </Article>
         </div>
       </div>
     );
@@ -40,7 +38,7 @@ class Reports extends React.Component {
 
 Reports.propTypes = {
   getUserReports: PropTypes.func.isRequired,
-  data: PropTypes.object.isRequired
+  reportsList: PropTypes.array.isRequired
 };
 
 export default Reports;

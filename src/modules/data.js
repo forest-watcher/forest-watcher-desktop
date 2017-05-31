@@ -2,22 +2,15 @@ import FileSaver from 'file-saver';
 import { API_BASE_URL } from '../constants';
 
 // Actions
-const GET_USER_REPORTS = 'areas/GET_REPORTS';
 const GET_USER_ANSWERS = 'areas/GET_USER_ANSWERS';
 
 // Reducer
 const initialState = {
-  reports: [],
   answers: []
 };
 
 export default function reducer(state = initialState, action) {
   switch (action.type) {
-    case GET_USER_REPORTS:
-      if (action.payload.data) {
-        return Object.assign({}, state, { reports: action.payload.data });
-      }
-      return state;
     case GET_USER_ANSWERS: {
       if (action.payload.id) {
         const answers = { ...state.answers };
@@ -29,31 +22,6 @@ export default function reducer(state = initialState, action) {
     default:
       return state;
   }
-}
-
-export function getUserReports() {
-  const url = `${API_BASE_URL}/questionnaire`;
-  return (dispatch, state) => {
-    fetch(url, {
-      headers: {
-        Authorization: `Bearer ${state().user.token}`
-      }
-    })
-      .then((response) => {
-        if (response.ok) return response.json();
-        throw Error(response.statusText);
-      })
-      .then((data) => {
-        dispatch({
-          type: GET_USER_REPORTS,
-          payload: data
-        });
-      })
-      .catch((error) => {
-        console.info(error);
-        // To-do
-      });
-  };
 }
 
 export function getReportAnswers(reportId) {
