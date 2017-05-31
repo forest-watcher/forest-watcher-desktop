@@ -28,7 +28,7 @@ class AreaCard extends React.Component {
 }
 
 AreaCard.propTypes = {
-area: PropTypes.object.isRequired
+  area: PropTypes.object.isRequired
 };
 
 export default AreaCard;

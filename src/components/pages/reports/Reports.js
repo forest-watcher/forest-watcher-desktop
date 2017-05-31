@@ -27,7 +27,7 @@ class Reports extends React.Component {
               Component={ReportCard}
               className="report-card-item"
               collection={reportsList}
-              columns={{ small: 12, medium: 3 }}
+              columns={{ small: 12, medium: 4, large: 3 }}
             />
           </Article>
         </div>
