@@ -17,18 +17,20 @@ class Reports extends React.Component {
         <Hero
           title="Reports"
         />
-        <div className="c-dashboard">
-          <div className="content-section reports">
-            <h4>Report Templates</h4>
-            <ul>
-              {
-                reports.map(report => (
-                  <li key={report.id}>
-                    <Link to={`/reports/${report.id}`}>{report.attributes.name}</Link>
-                  </li>
-                ))
-              }
-            </ul>
+        <div className="row columns">
+          <div className="c-dashboard">
+            <div className="content-section reports">
+              <h4>Report Templates</h4>
+              <ul>
+                {
+                  reports.map(report => (
+                    <li key={report.id}>
+                      <Link to={`/reports/${report.id}`}>{report.attributes.name}</Link>
+                    </li>
+                  ))
+                }
+              </ul>
+            </div>
           </div>
         </div>
       </div>

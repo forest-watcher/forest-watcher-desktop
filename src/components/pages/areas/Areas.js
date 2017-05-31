@@ -37,7 +37,6 @@ class Areas extends React.Component {
               className="area-tile-item"
               columns={{ small: 12, medium: 3 }}
               Component={AreaTile}
-              after={this.getAddArea()}
             />
           </Article>
         </div>
