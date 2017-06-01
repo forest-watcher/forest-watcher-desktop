@@ -1,6 +1,7 @@
 import React from 'react';
 
 import Hero from '../../layouts/Hero';
+import Map from '../../map/Map';
 
 class AreasCreate extends React.Component {
   render() {
@@ -9,6 +10,7 @@ class AreasCreate extends React.Component {
         <Hero
           title="Create an Area"
         />
+      <Map />
       </div>
     );
   }
