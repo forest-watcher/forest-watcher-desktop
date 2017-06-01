@@ -3,7 +3,7 @@ import React from 'react';
 import Hero from '../../layouts/Hero';
 import Map from '../../map/Map';
 
-class AreasCreate extends React.Component {
+class AreasManage extends React.Component {
   render() {
     return (
       <div>
@@ -16,4 +16,4 @@ class AreasCreate extends React.Component {
   }
 }
 
-export default AreasCreate;
+export default AreasManage;
