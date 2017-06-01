@@ -69,8 +69,7 @@ class Map extends React.Component {
   onDrawEventComplete(e) {
     const layer = e.layer;
     activeLayers.addLayer(layer);
-
-    if (Object.keys(activeLayers._activeLayers).length > 0) {
+    if (Object.keys(activeLayers._layers).length) {
       this.drawControlFull.remove(this.map);
       this.drawControlEdit.addTo(this.map);
     }
@@ -80,7 +79,7 @@ class Map extends React.Component {
     const layer = e.layer;
     activeLayers.removeLayer(layer);
 
-    if (Object.keys(activeLayers._activeLayers).length < 1) {
+    if (!Object.keys(activeLayers._layers).length) {
       this.drawControlEdit.remove(this.map);
       this.drawControlFull.addTo(this.map);
     }
