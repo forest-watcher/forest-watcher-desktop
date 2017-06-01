@@ -12,6 +12,9 @@
 @import "./styles/base";
 @import "./styles/texts";
 
+/* Overides */
+@import "./styles/leaflet";
+
 /* Layouts */
 @import "./styles/layouts/l-main";
 @import "./styles/layouts/l-header";
