@@ -1,4 +1,3 @@
 .c-map {
-  height: 600px;
-  // width: 100%;
+  height: calc(100vh - #{$nav-height} - #{$hero-height} - #{$footer-height});
 }

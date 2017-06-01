@@ -3,7 +3,7 @@ import L from 'leaflet';
 import { Draw, Control } from 'leaflet-draw';
 
 const MAP_MIN_ZOOM = 2;
-const MAP_INITIAL_ZOOM = 1;
+const MAP_INITIAL_ZOOM = 3;
 const BASEMAP_TILE = 'http://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}';
 const MAP_CENTER = [51.505, -0.09];
 const BASEMAP_ATTRIBUTION = 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community';
@@ -56,7 +56,10 @@ class Map extends React.Component {
   componentDidMount() {
     this.initMap();
     this.initLayers();
-    this.initDrawing();
+
+    if (this.props.editable) {
+      this.initDrawing();
+    }
   }
 
   componentWillUnmount() {
@@ -65,7 +68,6 @@ class Map extends React.Component {
 
   onDrawEventComplete(e) {
     const layer = e.layer;
-
     editableLayers.addLayer(layer);
 
     if (Object.keys(editableLayers._layers).length > 0) {
@@ -76,7 +78,6 @@ class Map extends React.Component {
 
   onDrawEventDelete(e) {
     const layer = e.layer;
-
     editableLayers.removeLayer(layer);
 
     if (Object.keys(editableLayers._layers).length < 1) {

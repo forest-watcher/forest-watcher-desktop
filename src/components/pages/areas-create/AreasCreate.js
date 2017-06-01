@@ -8,9 +8,9 @@ class AreasCreate extends React.Component {
     return (
       <div>
         <Hero
-          title="Create an Area"
+          title="Create an Area of Interest"
         />
-      <Map />
+      <Map editable={true}/>
       </div>
     );
   }
