@@ -31,7 +31,7 @@ class Map extends React.Component {
   onDrawEventDelete(e) {
     const layer = e.layer;
     this.featureGroup.removeLayer(layer);
-
+    this.props.onDrawComplete && this.props.onDrawComplete();
     if (this.featureGroup.getLayers().length === 0) {
       this.drawControlEdit.remove(this.map);
       this.drawControlFull.addTo(this.map);

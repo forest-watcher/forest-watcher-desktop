@@ -4,6 +4,7 @@ import { Input, Button, Form } from '../../form/Form';
 import Map from '../../map/Map';
 import { Link } from 'react-router-dom';
 import { validation } from '../../../helpers/validation'; // eslint-disable-line no-unused-vars
+import { toastr } from 'react-redux-toastr';
 
 class AreasManage extends React.Component {
 
@@ -18,9 +19,9 @@ class AreasManage extends React.Component {
   onSubmit(e) {
     e.preventDefault();
     if (this.form.area) {
-      // send to API
+      toastr.success('Area saved', 'Note: in dev mode, area not saved to API');
     } else {
-      // complain about no shape
+      toastr.error('Area needed', 'You cannot save without drawing an area');
     }
   }
 

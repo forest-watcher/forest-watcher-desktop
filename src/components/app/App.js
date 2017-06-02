@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Route, Switch, Redirect } from 'react-router-dom';
 import querystring from 'query-string';
+import ReduxToastr from 'react-redux-toastr'
 
 // Pages
 import Login from '../pages/login/Login';
@@ -55,6 +56,7 @@ class App extends React.Component {
           }
           {!user.loggedIn && <Redirect to="/" />}
         </main>
+        <ReduxToastr />
       </div>
     );
   }
