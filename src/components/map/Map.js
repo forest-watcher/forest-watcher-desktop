@@ -1,6 +1,6 @@
 import React from 'react';
 import L from 'leaflet';
-import { Draw, Control } from 'leaflet-draw';
+import { Draw, Control } from 'leaflet-draw'; // eslint-disable-line no-unused-vars
 import 'leaflet/dist/leaflet.css';
 import 'leaflet-draw/dist/leaflet.draw.css';
 import { MAP_MIN_ZOOM, MAP_INITIAL_ZOOM, MAP_CENTER, BASEMAP_ATTRIBUTION, BASEMAP_TILE, DRAW_CONTROL_FULL, DRAW_CONTROL_EDIT } from '../../constants/map';
