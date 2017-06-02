@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 
 import Hero from '../../layouts/Hero';
 import Article from '../../layouts/Article';
+import { Link } from 'react-router-dom';
 import GridGallery from '../../layouts/GridGallery';
 import AreaCard from '../../area-card/AreaCardContainer';
 import Icon from '../../ui/Icon';
@@ -16,10 +17,12 @@ class Areas extends React.Component {
   getAddArea = () => {
     if (this.props.loading) return null;
     return (
-      <button className="c-add-card">
-        <Icon name="icon-plus" className="-medium -green" />
-          Add Area
-      </button>
+      <Link to="/areas/create">
+        <button className="c-add-card">
+          <Icon name="icon-plus" className="-medium -green" />
+            Add Area
+        </button>
+      </Link>
     );
   }
 

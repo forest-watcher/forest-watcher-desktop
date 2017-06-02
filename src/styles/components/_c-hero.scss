@@ -2,7 +2,7 @@
   background-color: $theme-secondary;
 
   .hero-content {
-    height: 150px;
+    height: $hero-height;
     display: flex;
     justify-content: space-between;
     align-items: center;

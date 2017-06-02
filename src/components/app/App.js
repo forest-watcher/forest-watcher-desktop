@@ -7,6 +7,7 @@ import querystring from 'query-string';
 import Login from '../pages/login/Login';
 import Dashboard from '../pages/dashboard/DashboardContainer';
 import Areas from '../pages/areas/AreasContainer';
+import AreasManage from '../pages/areas-manage/AreasManage';
 import Reports from '../pages/reports/ReportsContainer';
 import Answers from '../pages/answers/AnswersContainer';
 import AnswersDetail from '../pages/answers-detail/AnswersDetailContainer';
@@ -41,7 +42,10 @@ class App extends React.Component {
           {user.loggedIn &&
             <div>
               <Route path={`${match.url}dashboard`} component={Dashboard} />
-              <Route path={`${match.url}areas`} component={Areas} />
+              <Switch>
+                <Route exact path={`${match.url}areas`} component={Areas} />
+                <Route exact path={`${match.url}areas/create`} component={AreasManage} />
+              </Switch>
               <Switch>
                 <Route exact path={`${match.url}reports`} component={Reports} />
                 <Route exact path={`${match.url}reports/:reportId`} component={Answers} />
