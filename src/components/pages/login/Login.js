@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import Icon from '../../ui/Icon';
 
-import { API_BASE_URL, API_CALLBACK_URL } from '../../../constants';
+import { API_BASE_URL, API_CALLBACK_URL } from '../../../constants/global';
 
 function LoginButton({ socialNetwork }) {
   const url =`${API_BASE_URL}/auth/${socialNetwork}?token=true&callbackUrl=${API_CALLBACK_URL}`;

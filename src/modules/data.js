@@ -1,5 +1,5 @@
 import FileSaver from 'file-saver';
-import { API_BASE_URL } from '../constants';
+import { API_BASE_URL } from '../constants/global';
 
 // Actions
 const GET_USER_ANSWERS = 'areas/GET_USER_ANSWERS';

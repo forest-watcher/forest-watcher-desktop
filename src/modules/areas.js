@@ -1,5 +1,5 @@
 import normalize from 'json-api-normalizer';
-import { API_BASE_URL } from '../constants';
+import { API_BASE_URL } from '../constants/global';
 
 // Actions
 const GET_USER_AREAS = 'areas/GET_AREAS';

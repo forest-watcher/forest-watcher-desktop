@@ -13,6 +13,7 @@ class AreasManage extends React.Component {
         />
         <Map
           editable={true}
+          onPolygonComplete={(featureGroup) => {}}
         />
         <div className="row columns">
           <div className="c-form">

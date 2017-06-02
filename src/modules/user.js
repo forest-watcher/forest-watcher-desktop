@@ -1,6 +1,6 @@
 import querystring from 'query-string';
 import { setUserChecked } from './app';
-import { API_BASE_URL } from '../constants';
+import { API_BASE_URL } from '../constants/global';
 
 // Actions
 const GET_USER = 'user/GET_USER';
