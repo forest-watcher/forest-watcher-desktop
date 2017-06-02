@@ -1,62 +1,15 @@
 import React from 'react';
 import L from 'leaflet';
 import { Draw, Control } from 'leaflet-draw';
-
-const MAP_MIN_ZOOM = 2;
-const MAP_INITIAL_ZOOM = 3;
-const BASEMAP_TILE = 'http://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}';
-const MAP_CENTER = [51.505, -0.09];
-const BASEMAP_ATTRIBUTION = 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community';
-
-const activeLayers = new L.FeatureGroup();
-const drawControlFull = {
-  position: 'topright',
-  draw: {
-      polyline: false,
-      polygon: {
-          allowIntersection: false, // Restricts shapes to simple polygons
-          drawError: {
-              color: '#e1e100', // Color the shape will turn when intersects
-              message: '<strong>Oh snap!<strong> you can\'t draw that!' // Message that will show when intersect
-          },
-          shapeOptions: {
-              color: '#bada55'
-          }
-      },
-      circle: false,
-      rectangle: {
-          shapeOptions: {
-              clickable: false
-          }
-      },
-      marker: false
-  },
-  edit: {
-      featureGroup: activeLayers, //REQUIRED
-      remove: true
-  }
-};
-const drawControlEdit = {
-  position: 'topright',
-  draw: {
-      polyline: false,
-      polygon: false,
-      circle: false,
-      rectangle: false,
-      marker: false
-  },
-  edit: {
-      featureGroup: activeLayers, //REQUIRED
-      remove: true
-  }
-};
+import 'leaflet/dist/leaflet.css';
+import 'leaflet-draw/dist/leaflet.draw.css';
+import { MAP_MIN_ZOOM, MAP_INITIAL_ZOOM, MAP_CENTER, BASEMAP_ATTRIBUTION, BASEMAP_TILE, DRAW_CONTROL_FULL, DRAW_CONTROL_EDIT } from '../../constants';
 
 class Map extends React.Component {
 
   componentDidMount() {
     this.initMap();
     this.initLayers();
-
     if (this.props.editable) {
       this.initDrawing();
     }
@@ -68,18 +21,16 @@ class Map extends React.Component {
 
   onDrawEventComplete(e) {
     const layer = e.layer;
-    activeLayers.addLayer(layer);
-    if (Object.keys(activeLayers._layers).length) {
-      this.drawControlFull.remove(this.map);
-      this.drawControlEdit.addTo(this.map);
-    }
+    this.featureGroup.addLayer(layer);
+    this.drawControlFull.remove(this.map);
+    this.drawControlEdit.addTo(this.map);
   }
 
   onDrawEventDelete(e) {
     const layer = e.layer;
-    activeLayers.removeLayer(layer);
+    this.featureGroup.removeLayer(layer);
 
-    if (!Object.keys(activeLayers._layers).length) {
+    if (this.featureGroup.getLayers().length === 0) {
       this.drawControlEdit.remove(this.map);
       this.drawControlFull.addTo(this.map);
     }
@@ -97,13 +48,27 @@ class Map extends React.Component {
     this.map.zoomControl.setPosition('topright');
     this.map.scrollWheelZoom.disable();
     this.tileLayer = L.tileLayer(BASEMAP_TILE).addTo(this.map).setZIndex(0);
+
+    this.featureGroup = new L.FeatureGroup();
   }
 
   initLayers() {
-    this.map.addLayer(activeLayers);
+    this.map.addLayer(this.featureGroup);
   }
 
   initDrawing() {
+    const drawControlFull = Object.assign(DRAW_CONTROL_FULL, {
+      edit: {
+        featureGroup: this.featureGroup,
+        remove: true
+      }
+    });
+    const drawControlEdit = Object.assign(DRAW_CONTROL_EDIT,{
+      edit: {
+        featureGroup: this.featureGroup,
+        remove: true
+      }
+    });
     this.drawControlFull = new L.Control.Draw(drawControlFull);
     this.drawControlEdit = new L.Control.Draw(drawControlEdit);
 
