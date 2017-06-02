@@ -22,4 +22,11 @@
 	  border: solid 1px #e6e6e6;
     padding: 0 15px;
   }
+
+  .horizontal-field {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+  }
 }

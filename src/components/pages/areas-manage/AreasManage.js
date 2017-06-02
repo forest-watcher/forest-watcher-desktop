@@ -3,7 +3,7 @@ import Hero from '../../layouts/Hero';
 import { Input, Button, Form } from '../../form/Form';
 import Map from '../../map/Map';
 import { Link } from 'react-router-dom';
-import { validation } from '../../../helpers/validation';
+import { validation } from '../../../helpers/validation'; // eslint-disable-line no-unused-vars
 
 class AreasManage extends React.Component {
 
@@ -18,9 +18,9 @@ class AreasManage extends React.Component {
   onSubmit(e) {
     e.preventDefault();
     if (this.form.area) {
-      console.log(this.form);
+      // send to API
     } else {
-      console.log('Draw an area');
+      // complain about no shape
     }
   }
 
@@ -44,15 +44,17 @@ class AreasManage extends React.Component {
               <Link to="/areas">
                 <button className="c-button -light">Cancel</button>
               </Link>
-              <Input
-                type="text"
-                label="Name the area"
-                onChange={this.onInputChange}
-                name="name"
-                value=""
-                placeholder=""
-                validations={['required']}
-              />
+              <div className="horizontal-field">
+                <label className="text -x-small-title">Name the Area: </label>
+                <Input
+                  type="text"
+                  onChange={this.onInputChange}
+                  name="name"
+                  value=""
+                  placeholder=""
+                  validations={['required']}
+                  />
+              </div>
               <Button className="c-button">Save</Button>
             </div>
           </div>
