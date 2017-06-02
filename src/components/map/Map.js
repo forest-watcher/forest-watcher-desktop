@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import L from 'leaflet';
 import { Draw, Control } from 'leaflet-draw'; // eslint-disable-line no-unused-vars
 import 'leaflet/dist/leaflet.css';
@@ -24,7 +25,7 @@ class Map extends React.Component {
     this.featureGroup.addLayer(layer);
     this.drawControlFull.remove(this.map);
     this.drawControlEdit.addTo(this.map);
-    this.props.onPolygonComplete && this.props.onPolygonComplete(this.featureGroup);
+    this.props.onDrawComplete && this.props.onDrawComplete(this.featureGroup.getLayers()[0].toGeoJSON());
   }
 
   onDrawEventDelete(e) {
@@ -94,5 +95,9 @@ class Map extends React.Component {
     );
   }
 }
+
+Map.propTypes = {
+  onDrawComplete: PropTypes.func
+};
 
 export default Map;
