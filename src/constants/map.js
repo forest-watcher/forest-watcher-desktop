@@ -6,34 +6,7 @@ export const MAP_CENTER = [51.505, -0.09];
 export const BASEMAP_ATTRIBUTION = 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community';
 
 // Leaflet Draw
-export const DRAW_CONTROL_FULL = {
-  position: 'topright',
-  draw: {
-      polyline: false,
-      polygon: {
-          allowIntersection: false, // Restricts shapes to simple polygons
-          drawError: {
-              color: '#e1e100', // Color the shape will turn when intersects
-              message: '<strong>Oh snap!<strong> you can\'t draw that!' // Message that will show when intersect
-          },
-          shapeOptions: {
-              color: '#bada55'
-          }
-      },
-      circle: false,
-      rectangle: {
-          shapeOptions: {
-              clickable: false
-          }
-      },
-      marker: false
-  },
-  edit: {
-      featureGroup: {}, //REQUIRED
-      remove: true
-  }
-};
-export const DRAW_CONTROL_EDIT = {
+export const DRAW_CONTROL = {
   position: 'topright',
   draw: {
       polyline: false,
@@ -48,4 +21,4 @@ export const DRAW_CONTROL_EDIT = {
   }
 };
 
-export default { MAP_MIN_ZOOM, MAP_INITIAL_ZOOM, BASEMAP_TILE, MAP_CENTER, BASEMAP_ATTRIBUTION, DRAW_CONTROL_FULL, DRAW_CONTROL_EDIT };
+export default { MAP_MIN_ZOOM, MAP_INITIAL_ZOOM, BASEMAP_TILE, MAP_CENTER, BASEMAP_ATTRIBUTION, DRAW_CONTROL };
