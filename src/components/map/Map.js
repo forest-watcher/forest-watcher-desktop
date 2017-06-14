@@ -2,8 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import L from 'leaflet';
 import { Draw, Control } from 'leaflet-draw'; // eslint-disable-line no-unused-vars
+import { leafletSearch } from 'leaflet-search'; // eslint-disable-line no-unused-vars
 import 'leaflet/dist/leaflet.css';
 import 'leaflet-draw/dist/leaflet.draw.css';
+import 'leaflet-search/dist/leaflet-search.min.css';
 import { MAP_MIN_ZOOM, MAP_INITIAL_ZOOM, MAP_CENTER, BASEMAP_ATTRIBUTION, BASEMAP_TILE, DRAW_CONTROL } from '../../constants/map';
 
 class Map extends React.Component {
@@ -49,6 +51,12 @@ class Map extends React.Component {
     this.tileLayer = L.tileLayer(BASEMAP_TILE).addTo(this.map).setZIndex(0);
 
     this.featureGroup = new L.FeatureGroup();
+
+    const searchLayer = L.layerGroup().addTo(this.map);
+    this.map.addControl(new L.Control.Search({
+      layer: searchLayer,
+      position: 'topright'
+    }));
   }
 
   initLayers() {

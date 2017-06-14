@@ -47,7 +47,7 @@ class AreasManage extends React.Component {
                 <button className="c-button -light">Cancel</button>
               </Link>
               <div className="upload-field">
-                <Icon name="icon-download" className="-medium" />
+                <Icon name="icon-download" className="-medium -transparent -stroke-green" />
                 <span className="text">Upload an Area</span>
               </div>
               <span className="separator -vertical"></span>
