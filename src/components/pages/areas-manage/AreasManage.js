@@ -5,11 +5,12 @@ import Map from '../../map/Map';
 import { Link } from 'react-router-dom';
 import { validation } from '../../../helpers/validation'; // eslint-disable-line no-unused-vars
 import { toastr } from 'react-redux-toastr';
+import Icon from '../../ui/Icon';
 
 class AreasManage extends React.Component {
 
-  constructor(props) {
-    super(props);
+  constructor() {
+    super();
     this.form = {};
 
     this.onSubmit = this.onSubmit.bind(this);
@@ -45,6 +46,11 @@ class AreasManage extends React.Component {
               <Link to="/areas">
                 <button className="c-button -light">Cancel</button>
               </Link>
+              <div className="upload-field">
+                <Icon name="icon-download" className="-medium" />
+                <span className="text">Upload an Area</span>
+              </div>
+              <span className="separator -vertical"></span>
               <div className="horizontal-field">
                 <label className="text -x-small-title">Name the Area: </label>
                 <Input

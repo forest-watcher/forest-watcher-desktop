@@ -3,3 +3,7 @@
 .sr-only {
   display: none;
 }
+
+.leaflet-touch .leaflet-draw-toolbar .leaflet-draw-draw-polygon {
+  display: none;
+}

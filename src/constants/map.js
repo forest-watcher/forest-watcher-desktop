@@ -10,14 +10,24 @@ export const DRAW_CONTROL = {
   position: 'topright',
   draw: {
       polyline: false,
-      polygon: false,
+      polygon: {
+        allowIntersection: false,
+        drawError: {
+          color: '#f15656',
+          message: '<strong>Oh snap!<strong> you can\'t draw that!'
+        },
+        shapeOptions: {
+          color: '#97be32'
+        }
+      },
       circle: false,
       rectangle: false,
       marker: false
   },
   edit: {
-      featureGroup: {}, //REQUIRED
-      remove: true
+      featureGroup: {},
+      remove: true,
+      allowIntersection: false
   }
 };
 

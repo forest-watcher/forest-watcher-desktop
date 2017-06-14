@@ -56,7 +56,7 @@ class Map extends React.Component {
   }
 
   enablePolygonDraw() {
-    new L.Draw.Polygon(this.map, this.drawControl.options.polygon).enable();
+    new L.Draw.Polygon(this.map, this.drawControl.options.draw.polygon).enable();
   }
 
   initDrawing() {
@@ -69,7 +69,6 @@ class Map extends React.Component {
     this.drawControl = new L.Control.Draw(drawControl);
 
     this.map.addControl(this.drawControl);
-
     this.enablePolygonDraw();
 
     this.map.on(L.Draw.Event.CREATED, (e) => {
