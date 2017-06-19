@@ -10,15 +10,20 @@
     "json-api-normalizer": "^0.4.0",
     "leaflet": "^1.0.3",
     "leaflet-draw": "^0.4.9",
+    "leaflet-search": "^2.7.2",
     "prop-types": "^15.5.10",
     "query-string": "^4.3.4",
     "react": "^15.5.4",
     "react-dom": "^15.5.4",
     "react-redux": "^4.4.5",
+    "react-redux-toastr": "^6.2.7",
     "react-router-dom": "^4.1.1",
+    "react-select": "^1.0.0-rc.5",
+    "react-validation": "^2.10.9",
     "redux": "^3.5.2",
     "redux-persist": "4.6.0",
-    "redux-thunk": "^2.1.0"
+    "redux-thunk": "^2.1.0",
+    "validator": "^7.0.0"
   },
   "devDependencies": {
     "eslint": "^3.19.0",

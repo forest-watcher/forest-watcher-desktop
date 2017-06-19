@@ -21,7 +21,7 @@ class Reports extends React.Component {
         <Hero
           title="Reports"
         />
-        <div className="c-reports">
+      <div className="l-content">
           <Article title="Uploaded">
             <GridGallery
               Component={ReportCard}

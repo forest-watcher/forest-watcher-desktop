@@ -21,7 +21,7 @@ class Dashboard extends React.Component {
 
   render() {
     return (
-      <div className="c-dashboard row">
+      <div className="l-content row column">
         Welcome to Forest Watcher 2.0. You are logged in.
       </div>
     );

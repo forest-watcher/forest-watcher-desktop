@@ -1,9 +1,12 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import L from 'leaflet';
-import { Draw, Control } from 'leaflet-draw';
+import { Draw, Control } from 'leaflet-draw'; // eslint-disable-line no-unused-vars
+import { leafletSearch } from 'leaflet-search'; // eslint-disable-line no-unused-vars
 import 'leaflet/dist/leaflet.css';
 import 'leaflet-draw/dist/leaflet.draw.css';
-import { MAP_MIN_ZOOM, MAP_INITIAL_ZOOM, MAP_CENTER, BASEMAP_ATTRIBUTION, BASEMAP_TILE, DRAW_CONTROL_FULL, DRAW_CONTROL_EDIT } from '../../constants';
+import 'leaflet-search/dist/leaflet-search.min.css';
+import { MAP_MIN_ZOOM, MAP_INITIAL_ZOOM, MAP_CENTER, BASEMAP_ATTRIBUTION, BASEMAP_TILE, DRAW_CONTROL } from '../../constants/map';
 
 class Map extends React.Component {
 
@@ -22,17 +25,15 @@ class Map extends React.Component {
   onDrawEventComplete(e) {
     const layer = e.layer;
     this.featureGroup.addLayer(layer);
-    this.drawControlFull.remove(this.map);
-    this.drawControlEdit.addTo(this.map);
+    this.props.onDrawComplete && this.props.onDrawComplete(this.featureGroup.getLayers()[0].toGeoJSON());
   }
 
   onDrawEventDelete(e) {
     const layer = e.layer;
     this.featureGroup.removeLayer(layer);
-
+    this.props.onDrawComplete && this.props.onDrawComplete();
     if (this.featureGroup.getLayers().length === 0) {
-      this.drawControlEdit.remove(this.map);
-      this.drawControlFull.addTo(this.map);
+      this.enablePolygonDraw();
     }
   }
 
@@ -45,34 +46,38 @@ class Map extends React.Component {
     });
 
     this.map.attributionControl.addAttribution(BASEMAP_ATTRIBUTION);
-    this.map.zoomControl.setPosition('topright');
     this.map.scrollWheelZoom.disable();
     this.tileLayer = L.tileLayer(BASEMAP_TILE).addTo(this.map).setZIndex(0);
 
     this.featureGroup = new L.FeatureGroup();
+
+    this.searchLayer = L.layerGroup().addTo(this.map);
+    this.map.addControl(new L.Control.Search({
+      layer: this.searchLayer,
+      position: 'topright'
+    }));
+    this.map.zoomControl.setPosition('topright');
   }
 
   initLayers() {
     this.map.addLayer(this.featureGroup);
   }
 
-  initDrawing() {
-    const drawControlFull = Object.assign(DRAW_CONTROL_FULL, {
-      edit: {
-        featureGroup: this.featureGroup,
-        remove: true
-      }
-    });
-    const drawControlEdit = Object.assign(DRAW_CONTROL_EDIT,{
-      edit: {
-        featureGroup: this.featureGroup,
-        remove: true
-      }
-    });
-    this.drawControlFull = new L.Control.Draw(drawControlFull);
-    this.drawControlEdit = new L.Control.Draw(drawControlEdit);
+  enablePolygonDraw() {
+    new L.Draw.Polygon(this.map, this.drawControl.options.draw.polygon).enable();
+  }
 
-    this.map.addControl(this.drawControlFull);
+  initDrawing() {
+    const drawControl = Object.assign(DRAW_CONTROL, {
+      edit: {
+        featureGroup: this.featureGroup,
+        remove: true
+      }
+    });
+    this.drawControl = new L.Control.Draw(drawControl);
+
+    this.map.addControl(this.drawControl);
+    this.enablePolygonDraw();
 
     this.map.on(L.Draw.Event.CREATED, (e) => {
       this.onDrawEventComplete(e);
@@ -93,5 +98,9 @@ class Map extends React.Component {
     );
   }
 }
+
+Map.propTypes = {
+  onDrawComplete: PropTypes.func
+};
 
 export default Map;

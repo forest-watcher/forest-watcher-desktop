@@ -3,6 +3,7 @@
 
 /* Lib */
 @import "./styles/lib/foundation";
+@import "./node_modules/react-redux-toastr/src/styles/index";
 
 /* Reset */
 @import "./styles/reset";
@@ -18,16 +19,15 @@
 /* Layouts */
 @import "./styles/layouts/l-main";
 @import "./styles/layouts/l-header";
+@import "./styles/layouts/l-content";
 
 /* Components */
 @import "./styles/components/c-nav";
 @import "./styles/components/c-login";
-@import "./styles/components/c-reports";
 @import "./styles/components/c-dashboard-menu";
 @import "./styles/components/c-area-card";
 @import "./styles/components/c-hero";
 @import "./styles/components/c-button";
-@import "./styles/components/c-areas";
 @import "./styles/components/c-icon";
 @import "./styles/components/c-article";
 @import "./styles/components/c-add-card";
