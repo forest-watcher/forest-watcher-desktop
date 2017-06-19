@@ -33,7 +33,7 @@ class Areas extends React.Component {
         <Hero
           title="Areas of Interest"
         />
-        <div className="c-areas">
+        <div className="l-content">
           <Article title="Your Areas">
             <GridGallery
               collection={areasList}
