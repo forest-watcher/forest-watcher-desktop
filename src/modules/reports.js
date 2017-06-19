@@ -17,8 +17,8 @@ const initialState = {
 export default function reducer(state = initialState, action) {
   switch (action.type) {
     case GET_USER_REPORTS: {
-      const { questionnaire } = action.payload;
-      if (questionnaire) return Object.assign({}, state, { ids: Object.keys(questionnaire), report: questionnaire });
+      const { reports } = action.payload;
+      if (reports) return Object.assign({}, state, { ids: Object.keys(reports), report: reports });
       return state;
     }
     case SET_LOADING_REPORTS:
@@ -32,7 +32,7 @@ export default function reducer(state = initialState, action) {
 
 // Action Creators
 export function getUserReports() {
-  const url = `${API_BASE_URL}/questionnaire`;
+  const url = `${API_BASE_URL}/reports`;
   return (dispatch, state) => {
     dispatch({
       type: SET_LOADING_REPORTS,
