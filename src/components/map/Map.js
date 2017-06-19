@@ -6,22 +6,98 @@ import { leafletSearch } from 'leaflet-search'; // eslint-disable-line no-unused
 import 'leaflet/dist/leaflet.css';
 import 'leaflet-draw/dist/leaflet.draw.css';
 import 'leaflet-search/dist/leaflet-search.min.css';
-import { MAP_MIN_ZOOM, MAP_INITIAL_ZOOM, MAP_CENTER, BASEMAP_ATTRIBUTION, BASEMAP_TILE, DRAW_CONTROL } from '../../constants/map';
+import { MAP_CONFIG, DRAW_CONTROL } from '../../constants/map';
 
 class Map extends React.Component {
 
   componentDidMount() {
     this.initMap();
-    this.initLayers();
-    if (this.props.editable) {
-      this.initDrawing();
-    }
   }
 
   componentWillUnmount() {
     this.remove();
   }
 
+  componentWillReceiveProps(nextProps) {
+    // Zoom
+    this.map.setZoom(nextProps.mapConfig.zoom);
+  }
+
+  initMap() {
+    this.map = L.map('map', {
+      minZoom: MAP_CONFIG.minZoom,
+      zoom: this.props.mapConfig.zoom,
+      center: MAP_CONFIG.center,
+      detectRetina: true,
+      zoomControl: isNaN(this.props.mapConfig.zoomControl) ? MAP_CONFIG.zoomControl : this.props.mapConfig.zoomControl,
+      scrollWheelZoom: !!this.props.mapConfig.scrollWheelZoom
+    });
+
+    // SETTERS
+    this.setAttribution();
+    this.setZoomControl();
+    this.setBasemap();
+    this.setLayers();
+    if (this.props.editable) {
+      this.setDrawing();
+      this.setDrawPolygon();
+    }
+
+    this.searchLayer = L.layerGroup().addTo(this.map);
+    this.map.addControl(new L.Control.Search({
+      layer: this.searchLayer,
+      position: 'topright'
+    }));
+  }
+
+
+  //SETTERS
+  setAttribution() {
+    this.map.attributionControl.addAttribution(MAP_CONFIG.attribution);
+  }
+
+  setZoomControl() {
+    this.map.zoomControl && this.map.zoomControl.setPosition('topright');
+  }
+
+  setBasemap() {
+    this.tileLayer = L.tileLayer(MAP_CONFIG.basemap, {})
+                      .addTo(this.map)
+                      .setZIndex(0);
+  }
+
+  setLayers() {
+    this.featureGroup = new L.FeatureGroup();
+    this.map.addLayer(this.featureGroup);
+  }
+
+  setDrawing() {
+    const drawControl = Object.assign(DRAW_CONTROL, {
+      edit: {
+        featureGroup: this.featureGroup,
+        remove: true
+      }
+    });
+    this.drawControl = new L.Control.Draw(drawControl);
+
+    this.map.addControl(this.drawControl);
+
+    // DRAW LISTENERS
+    this.map.on(L.Draw.Event.CREATED, (e) => {
+      this.onDrawEventComplete(e);
+    });
+
+    this.map.on(L.Draw.Event.DELETED, (e) => {
+      this.onDrawEventDelete(e);
+    });
+  }
+
+  setDrawPolygon() {
+    new L.Draw.Polygon(this.map, this.drawControl.options.draw.polygon).enable();
+  }
+
+
+  // MAP LISTENERS
   onDrawEventComplete(e) {
     const layer = e.layer;
     this.featureGroup.addLayer(layer);
@@ -33,65 +109,18 @@ class Map extends React.Component {
     this.featureGroup.removeLayer(layer);
     this.props.onDrawComplete && this.props.onDrawComplete();
     if (this.featureGroup.getLayers().length === 0) {
-      this.enablePolygonDraw();
+      this.setDrawPolygon();
     }
   }
 
-  initMap() {
-    this.map = L.map('map', {
-      minZoom: MAP_MIN_ZOOM,
-      zoom: MAP_INITIAL_ZOOM,
-      center: MAP_CENTER,
-      detectRetina: true
-    });
 
-    this.map.attributionControl.addAttribution(BASEMAP_ATTRIBUTION);
-    this.map.scrollWheelZoom.disable();
-    this.tileLayer = L.tileLayer(BASEMAP_TILE).addTo(this.map).setZIndex(0);
-
-    this.featureGroup = new L.FeatureGroup();
-
-    this.searchLayer = L.layerGroup().addTo(this.map);
-    this.map.addControl(new L.Control.Search({
-      layer: this.searchLayer,
-      position: 'topright'
-    }));
-    this.map.zoomControl.setPosition('topright');
-  }
-
-  initLayers() {
-    this.map.addLayer(this.featureGroup);
-  }
-
-  enablePolygonDraw() {
-    new L.Draw.Polygon(this.map, this.drawControl.options.draw.polygon).enable();
-  }
-
-  initDrawing() {
-    const drawControl = Object.assign(DRAW_CONTROL, {
-      edit: {
-        featureGroup: this.featureGroup,
-        remove: true
-      }
-    });
-    this.drawControl = new L.Control.Draw(drawControl);
-
-    this.map.addControl(this.drawControl);
-    this.enablePolygonDraw();
-
-    this.map.on(L.Draw.Event.CREATED, (e) => {
-      this.onDrawEventComplete(e);
-    });
-
-    this.map.on(L.Draw.Event.DELETED, (e) => {
-      this.onDrawEventDelete(e);
-    });
-  }
-
+  // MAP FUNCTONS
   remove() {
     this.map.remove();
   }
 
+
+  // RENDER
   render() {
     return (
       <div id="map" className="c-map"></div>

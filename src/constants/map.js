@@ -1,9 +1,12 @@
 // Map
-export const MAP_MIN_ZOOM = 2;
-export const MAP_INITIAL_ZOOM = 3;
-export const BASEMAP_TILE = 'http://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}';
-export const MAP_CENTER = [51.505, -0.09];
-export const BASEMAP_ATTRIBUTION = 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community';
+export const MAP_CONFIG = {
+  minZoom: 2,
+  initialZoom: 3,
+  basemap: 'http://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+  center: [51.505, -0.09],
+  attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community',
+  zoomControl: false
+}
 
 // Leaflet Draw
 export const DRAW_CONTROL = {
@@ -31,4 +34,4 @@ export const DRAW_CONTROL = {
   }
 };
 
-export default { MAP_MIN_ZOOM, MAP_INITIAL_ZOOM, BASEMAP_TILE, MAP_CENTER, BASEMAP_ATTRIBUTION, DRAW_CONTROL };
+export default { MAP_CONFIG, DRAW_CONTROL };

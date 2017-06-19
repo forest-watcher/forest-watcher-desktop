@@ -6,12 +6,22 @@ import { Link } from 'react-router-dom';
 import { validation } from '../../../helpers/validation'; // eslint-disable-line no-unused-vars
 import { toastr } from 'react-redux-toastr';
 import Icon from '../../ui/Icon';
+import ZoomControl from '../../ui/ZoomControl';
 
 class AreasManage extends React.Component {
 
   constructor() {
     super();
     this.form = {};
+    this.state = {
+      mapConfig: {
+        zoom: 2,
+        lat: 0,
+        lng: 0,
+        zoomControl: false,
+        scrollWheelZoom: false
+      }
+    }
 
     this.onSubmit = this.onSubmit.bind(this);
     this.onInputChange = this.onInputChange.bind(this);
@@ -37,10 +47,24 @@ class AreasManage extends React.Component {
           title="Create an Area of Interest"
         />
         <Form onSubmit={this.onSubmit}>
-          <Map
-            editable={true}
-            onDrawComplete={(areaGeoJSON) => { this.form.area = areaGeoJSON }}
-          />
+          <div className="c-map-container">
+            <Map
+              editable={true}
+              mapConfig={this.state.mapConfig}
+              onDrawComplete={(areaGeoJSON) => { this.form.area = areaGeoJSON }}
+            />
+            <ZoomControl
+              zoom={this.state.mapConfig.zoom}
+              minZoom={1}
+              maxZoom={12}
+              onZoomChange={ (zoom) => {
+                this.setState((previousState) => {
+                  previousState.mapConfig.zoom = zoom;
+                  return previousState;
+                });
+              }}
+            />
+          </div>
           <div className="row columns">
             <div className="c-form">
               <Link to="/areas">
