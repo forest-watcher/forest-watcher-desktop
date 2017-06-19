@@ -12,6 +12,7 @@ import AreasManage from '../pages/areas-manage/AreasManage';
 import Reports from '../pages/reports/ReportsContainer';
 import Answers from '../pages/answers/AnswersContainer';
 import AnswersDetail from '../pages/answers-detail/AnswersDetailContainer';
+import 'react-redux-toastr/lib/css/react-redux-toastr.min.css';
 
 import Nav from '../layouts/Nav';
 
@@ -55,8 +56,8 @@ class App extends React.Component {
             </div>
           }
           {!user.loggedIn && <Redirect to="/" />}
+          <ReduxToastr />
         </main>
-        <ReduxToastr />
       </div>
     );
   }
