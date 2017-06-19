@@ -3,7 +3,7 @@ import Validation from 'react-validation';
 import ReactSelect from 'react-select';
 
 function withWrapper(Component) {
-  return class extends React.Component {
+  return class FormWrapper extends React.Component {
     render() {
       const { label, ...props } = this.props;
       return (
