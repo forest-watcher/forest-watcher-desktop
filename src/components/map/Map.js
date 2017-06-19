@@ -46,17 +46,17 @@ class Map extends React.Component {
     });
 
     this.map.attributionControl.addAttribution(BASEMAP_ATTRIBUTION);
-    this.map.zoomControl.setPosition('topright');
     this.map.scrollWheelZoom.disable();
     this.tileLayer = L.tileLayer(BASEMAP_TILE).addTo(this.map).setZIndex(0);
 
     this.featureGroup = new L.FeatureGroup();
 
-    const searchLayer = L.layerGroup().addTo(this.map);
+    this.searchLayer = L.layerGroup().addTo(this.map);
     this.map.addControl(new L.Control.Search({
-      layer: searchLayer,
+      layer: this.searchLayer,
       position: 'topright'
     }));
+    this.map.zoomControl.setPosition('topright');
   }
 
   initLayers() {
