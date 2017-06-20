@@ -7,6 +7,7 @@ import { validation } from '../../../helpers/validation'; // eslint-disable-line
 import { toastr } from 'react-redux-toastr';
 import Icon from '../../ui/Icon';
 import ZoomControl from '../../ui/ZoomControl';
+import DrawControl from '../../ui/DrawControl';
 
 class AreasManage extends React.Component {
 
@@ -20,7 +21,8 @@ class AreasManage extends React.Component {
         lng: 0,
         zoomControl: false,
         scrollWheelZoom: false
-      }
+      },
+      map: {}
     }
 
     this.onSubmit = this.onSubmit.bind(this);
@@ -51,7 +53,9 @@ class AreasManage extends React.Component {
             <Map
               editable={true}
               mapConfig={this.state.mapConfig}
-              onDrawComplete={(areaGeoJSON) => { this.form.area = areaGeoJSON }}
+              map={(map) => {
+                this.setState({map});
+              }}
             />
             <ZoomControl
               zoom={this.state.mapConfig.zoom}
@@ -66,6 +70,10 @@ class AreasManage extends React.Component {
                 });
               }}
             />
+          <DrawControl
+            map={this.state.map}
+            onDrawComplete={(areaGeoJSON) => { this.form.area = areaGeoJSON }}
+          />
           </div>
           <div className="row columns">
             <div className="c-form">

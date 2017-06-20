@@ -65,5 +65,5 @@ ZoomControl.propTypes = {
 ZoomControl.defaultProps = {
   zoom: 3,
   maxZoom: 20,
-  minZoom: 2
+  minZoom: 3
 };
