@@ -27,7 +27,8 @@ export default class ZoomControl extends React.Component {
     this.setZoom(this.props.zoom + 1);
   }
 
-  decreaseZoom() {
+  decreaseZoom(evt) {
+    evt.preventDefault();
     if (this.props.zoom === this.props.minZoom) return;
     this.setZoom(this.props.zoom - 1);
   }
@@ -44,10 +45,10 @@ export default class ZoomControl extends React.Component {
     return (
       <div className="c-zoom-control">
         <button className={zoomInClass} type="button" onClick={this.increaseZoom}>
-          <Icon name="icon-plus" />
+          <Icon name="icon-more" className="-small" />
         </button>
         <button className={zoomOutClass} type="button" onClick={this.decreaseZoom}>
-          <Icon name="icon-minus" />
+          <Icon name="icon-less" className="-small" />
         </button>
       </div>
     );

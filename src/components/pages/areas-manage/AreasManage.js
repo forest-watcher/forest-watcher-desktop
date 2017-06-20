@@ -15,7 +15,7 @@ class AreasManage extends React.Component {
     this.form = {};
     this.state = {
       mapConfig: {
-        zoom: 2,
+        zoom: 3,
         lat: 0,
         lng: 0,
         zoomControl: false,
@@ -47,7 +47,7 @@ class AreasManage extends React.Component {
           title="Create an Area of Interest"
         />
         <Form onSubmit={this.onSubmit}>
-          <div className="c-map-container">
+          <div className="l-map">
             <Map
               editable={true}
               mapConfig={this.state.mapConfig}
@@ -55,12 +55,14 @@ class AreasManage extends React.Component {
             />
             <ZoomControl
               zoom={this.state.mapConfig.zoom}
-              minZoom={1}
-              maxZoom={12}
+              minZoom={3}
+              maxZoom={13}
               onZoomChange={ (zoom) => {
-                this.setState((previousState) => {
-                  previousState.mapConfig.zoom = zoom;
-                  return previousState;
+                this.setState({
+                  mapConfig: {
+                    ...this.state.mapConfig,
+                    zoom
+                  }
                 });
               }}
             />

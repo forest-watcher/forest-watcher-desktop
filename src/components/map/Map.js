@@ -19,8 +19,9 @@ class Map extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    // Zoom
-    this.map.setZoom(nextProps.mapConfig.zoom);
+    if (this.props.mapConfig.zoom !== nextProps.mapConfig.zoom) {
+      this.map.setZoom(nextProps.mapConfig.zoom);
+    }
   }
 
   initMap() {
