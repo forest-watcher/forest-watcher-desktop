@@ -1,44 +1,62 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import Hero from '../../layouts/Hero';
 import Article from '../../layouts/Article';
-import GridGallery from '../../layouts/GridGallery';
-
-import ReportCard from '../../report-card/ReportCardContainer';
-
+import Hero from '../../layouts/Hero'; 
+import ReactTable from 'react-table'
+ 
 class Reports extends React.Component {
 
   componentWillMount() {
-    const { getUserReports, reportsList } = this.props;
-    if(!reportsList.length) getUserReports();
+    const reportIds = this.props.reports.ids;
+    
+    if(reportIds.length === 0){ this.props.getUserReports(); }
+    if(reportIds.length){ reportIds.forEach((id) => this.props.getReportAnswers(id)); } 
   }
 
   render() {
-    const { reportsList } = this.props;
+    const { answers } = this.props;
+    const columns = [{
+      Header: 'Lat/Long',
+      accessor: 'latLong'
+    },{
+      Header: 'Template',
+      accessor: 'template'
+    },{
+      Header: 'Area of interest',
+      accessor: 'aoi'
+    },{  
+      Header: 'Date',
+      accessor: 'date'
+    },{
+      Header: 'Member',
+      accessor: 'member'
+    }
+    ]
     return (
       <div>
         <Hero
           title="Reports"
         />
-      <div className="l-content">
-          <Article title="Uploaded">
-            <GridGallery
-              Component={ReportCard}
-              className="report-card-item"
-              collection={reportsList}
-              columns={{ small: 12, medium: 4, large: 3 }}
+        <div className="l-content">
+          <Article>
+            <ReactTable
+              className="c-table" 
+              data={answers || []}
+              columns={columns}
+              showPageSizeOptions={false}
+              minRows={5}
+              filterable={false}
             />
           </Article>
-        </div>
+        </div>  
       </div>
     );
   }
 }
 
 Reports.propTypes = {
-  getUserReports: PropTypes.func.isRequired,
-  reportsList: PropTypes.array.isRequired
+  answers: PropTypes.array.isRequired
 };
 
 export default Reports;
