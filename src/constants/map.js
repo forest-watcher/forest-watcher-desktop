@@ -22,7 +22,8 @@ export const DRAW_CONTROL = {
         shapeOptions: {
           color: '#97be32'
         },
-        showArea: true
+        showArea: true,
+        metric: true
       },
       circle: false,
       rectangle: false,

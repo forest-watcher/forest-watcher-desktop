@@ -101,25 +101,27 @@ class AreasManage extends React.Component {
             </div>
           </div>
           <div className="row columns">
-            <div className="c-form">
+            <div className="c-form -nav">
               <Link to="/areas">
                 <button className="c-button -light">Cancel</button>
               </Link>
-              <div className="upload-field">
-                <Icon name="icon-download" className="-medium -transparent -stroke-green" />
-                <span className="text">Upload an Area</span>
-              </div>
-              <span className="separator -vertical"></span>
-              <div className="horizontal-field">
-                <label className="text -x-small-title">Name the Area: </label>
-                <Input
-                  type="text"
-                  onChange={this.onInputChange}
-                  name="name"
-                  value=""
-                  placeholder=""
-                  validations={['required']}
-                  />
+              <div className="areas-inputs">
+                <div className="upload-field">
+                  <span className="text -x-small-title">Upload an Area</span>
+                  <Icon name="icon-download" className="-big -transparent -stroke-green" />
+                </div>
+                <span className="separator -vertical"></span>
+                <div className="horizontal-field">
+                  <label className="text -x-small-title">Name the Area: </label>
+                  <Input
+                    type="text"
+                    onChange={this.onInputChange}
+                    name="name"
+                    value=""
+                    placeholder="type your title"
+                    validations={['required']}
+                    />
+                </div>
               </div>
               <Button className="c-button">Save</Button>
             </div>
