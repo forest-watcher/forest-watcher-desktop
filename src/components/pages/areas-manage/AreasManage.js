@@ -8,6 +8,9 @@ import { toastr } from 'react-redux-toastr';
 import Icon from '../../ui/Icon';
 import ZoomControl from '../../ui/ZoomControl';
 import DrawControl from '../../ui/DrawControl';
+import { AREAS } from '../../../constants/map';
+
+const geojsonArea = require('@mapbox/geojson-area');
 
 class AreasManage extends React.Component {
 
@@ -27,6 +30,8 @@ class AreasManage extends React.Component {
 
     this.onSubmit = this.onSubmit.bind(this);
     this.onInputChange = this.onInputChange.bind(this);
+    this.onDrawComplete = this.onDrawComplete.bind(this);
+    this.onDrawDelete = this.onDrawDelete.bind(this);
   }
 
   onSubmit(e) {
@@ -40,6 +45,23 @@ class AreasManage extends React.Component {
 
   onInputChange(e) {
     this.form[e.target.name] = e.target.value;
+  }
+
+  onDrawComplete(areaGeoJson) {
+    if (areaGeoJson) {
+      const area = geojsonArea.geometry(areaGeoJson.geometry);
+      if (area <= AREAS.maxSize) {
+        this.form.area = areaGeoJson;
+      } else {
+        toastr.error('Area too large', 'Please draw a smaller area');
+      }
+    }
+  }
+
+  onDrawDelete() {
+    if (this.form.area) {
+      delete this.form.area;
+    }
   }
 
   render() {
@@ -57,7 +79,7 @@ class AreasManage extends React.Component {
                 this.setState({map});
               }}
             />
-          <div className="c-map-controls">
+            <div className="c-map-controls">
               <ZoomControl
                 zoom={this.state.mapConfig.zoom}
                 minZoom={3}
@@ -73,7 +95,8 @@ class AreasManage extends React.Component {
                 />
               <DrawControl
                 map={this.state.map}
-                onDrawComplete={(areaGeoJSON) => { this.form.area = areaGeoJSON }}
+                onDrawComplete={this.onDrawComplete}
+                onDrawDelete={this.onDrawDelete}
                 />
             </div>
           </div>

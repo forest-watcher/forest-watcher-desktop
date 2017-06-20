@@ -21,7 +21,8 @@ export const DRAW_CONTROL = {
         },
         shapeOptions: {
           color: '#97be32'
-        }
+        },
+        showArea: true
       },
       circle: false,
       rectangle: false,
@@ -34,4 +35,8 @@ export const DRAW_CONTROL = {
   }
 };
 
-export default { MAP_CONFIG, DRAW_CONTROL };
+export const AREAS = {
+  maxSize: 1500000000 // square meters
+}
+
+export default { MAP_CONFIG, DRAW_CONTROL, AREAS };

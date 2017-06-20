@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import L from 'leaflet';
 import { Draw, Control } from 'leaflet-draw'; // eslint-disable-line no-unused-vars
 import { DRAW_CONTROL } from '../../constants/map';
@@ -47,6 +48,10 @@ class DrawControl extends React.Component {
       this.onDrawEventComplete(e);
     });
 
+    this.map.on(L.Draw.Event.EDITED, (e) => {
+      this.onDrawEventEdit(e);
+    });
+
     this.map.on(L.Draw.Event.DELETED, (e) => {
       this.onDrawEventDelete(e);
     });
@@ -60,14 +65,24 @@ class DrawControl extends React.Component {
   // EVENT LISTENERS
   onDrawEventComplete(e) {
     const layer = e.layer;
+    const geoJsonLayer = layer.toGeoJSON();
     this.featureGroup.addLayer(layer);
-    this.props.onDrawComplete && this.props.onDrawComplete(this.featureGroup.getLayers()[0].toGeoJSON());
+    this.props.onDrawComplete && this.props.onDrawComplete(geoJsonLayer);
+  }
+
+  onDrawEventEdit(e) {
+    const layers = e.layers;
+    layers.eachLayer(layer => {
+      const geoJsonLayer = layer.toGeoJSON();
+      this.featureGroup.addLayer(layer);
+      this.props.onDrawComplete && this.props.onDrawComplete(geoJsonLayer);
+    });
   }
 
   onDrawEventDelete(e) {
     const layer = e.layer;
     this.featureGroup.removeLayer(layer);
-    this.props.onDrawComplete && this.props.onDrawComplete();
+    this.props.onDrawComplete && this.props.onDrawDelete();
     if (this.featureGroup.getLayers().length === 0) {
       this.setDrawPolygon();
     }
@@ -79,7 +94,7 @@ class DrawControl extends React.Component {
 }
 
 DrawControl.propTypes = {
-  map: React.PropTypes.object
+  map: PropTypes.object
 };
 
 export default DrawControl;
