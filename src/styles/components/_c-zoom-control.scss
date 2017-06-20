@@ -1,7 +1,5 @@
 .c-zoom-control {
-  position: absolute;
-  top: 20px;
-  right: 20px;
+  position: relative;
   display: flex;
   flex-direction: column;
   z-index: 1000;

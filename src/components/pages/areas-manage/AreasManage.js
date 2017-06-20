@@ -57,23 +57,25 @@ class AreasManage extends React.Component {
                 this.setState({map});
               }}
             />
-            <ZoomControl
-              zoom={this.state.mapConfig.zoom}
-              minZoom={3}
-              maxZoom={13}
-              onZoomChange={ (zoom) => {
-                this.setState({
-                  mapConfig: {
-                    ...this.state.mapConfig,
-                    zoom
-                  }
-                });
-              }}
-            />
-          <DrawControl
-            map={this.state.map}
-            onDrawComplete={(areaGeoJSON) => { this.form.area = areaGeoJSON }}
-          />
+          <div className="c-map-controls">
+              <ZoomControl
+                zoom={this.state.mapConfig.zoom}
+                minZoom={3}
+                maxZoom={13}
+                onZoomChange={ (zoom) => {
+                  this.setState({
+                    mapConfig: {
+                      ...this.state.mapConfig,
+                      zoom
+                    }
+                  });
+                }}
+                />
+              <DrawControl
+                map={this.state.map}
+                onDrawComplete={(areaGeoJSON) => { this.form.area = areaGeoJSON }}
+                />
+            </div>
           </div>
           <div className="row columns">
             <div className="c-form">
