@@ -56,7 +56,7 @@ class App extends React.Component {
             </div>
           }
           {!user.loggedIn && <Redirect to="/" />}
-          <ReduxToastr />
+          <ReduxToastr position="bottom-right" />
         </main>
       </div>
     );
