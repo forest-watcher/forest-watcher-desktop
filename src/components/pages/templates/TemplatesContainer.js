@@ -1,17 +1,17 @@
 import { connect } from 'react-redux';
-import { getUserReports } from '../../../modules/reports';
+import { getUserTemplates } from '../../../modules/templates';
 
 import Templates from './Templates';
 
-const mapStateToProps = ({ reports }) => ({
-  reportsList: reports.ids,
-  loading: reports.loading
+const mapStateToProps = ({ templates }) => ({
+  templateIds: templates.ids,
+  loading: templates.loading
 });
 
 function mapDispatchToProps(dispatch) {
   return {
-    getUserReports: () => {
-      dispatch(getUserReports());
+    getUserTemplates: () => {
+      dispatch(getUserTemplates());
     }
   };
 }

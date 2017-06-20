@@ -13,15 +13,15 @@ class ReportCard extends React.Component {
   }
 
   render() {
-    const { report, history } = this.props;
+    const { template, history } = this.props;
     return (
       <Card
-        title={report.name[DEFAULT_LANGUAGE]} // TODO: Set browser language
-        fields={[this.getFormatedDate(report.createdAt)]}
+        title={template.name[DEFAULT_LANGUAGE]} // TODO: Set browser language
+        fields={[this.getFormatedDate(template.createdAt)]}
         actions={[{
           iconName: 'icon-info',
           color: '-green',
-          callback: () => history.push(`/templates/${report.id}`)
+          callback: () => history.push(`/reports/${template.id}`)
         }]}
       />
     );
@@ -29,7 +29,7 @@ class ReportCard extends React.Component {
 }
 
 ReportCard.propTypes = {
-  report: PropTypes.object.isRequired,
+  template: PropTypes.object.isRequired,
   history: PropTypes.object
 };
 

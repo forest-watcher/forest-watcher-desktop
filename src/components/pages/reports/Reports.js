@@ -8,9 +8,9 @@ import ReactTable from 'react-table'
 class Reports extends React.Component {
 
   componentWillMount() {
-    const reportIds = this.props.reports.ids;
+    const reportIds = this.props.templates.ids;
     
-    if(reportIds.length === 0){ this.props.getUserReports(); }
+    if(reportIds.length === 0){ this.props.getUserTemplates(); }
     if(reportIds.length){ reportIds.forEach((id) => this.props.getReportAnswers(id)); } 
   }
 
@@ -56,7 +56,8 @@ class Reports extends React.Component {
 }
 
 Reports.propTypes = {
-  answers: PropTypes.array.isRequired
+  answers: PropTypes.array.isRequired,
+  templates: PropTypes.object.isRequired
 };
 
 export default Reports;

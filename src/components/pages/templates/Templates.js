@@ -10,13 +10,12 @@ import ReportCard from '../../report-card/ReportCardContainer';
 class Templates extends React.Component {
 
   componentWillMount() {
-
-    const { getUserReports, reportsList } = this.props;
-    if(!reportsList.length) getUserReports();
+    const { getUserTemplates, templateIds } = this.props;
+    if(!templateIds.length) getUserTemplates();
   }
 
   render() {
-    const { reportsList } = this.props;
+    const { templateIds } = this.props;
     return (
       <div>
         <Hero
@@ -27,7 +26,7 @@ class Templates extends React.Component {
             <GridGallery
               Component={ReportCard}
               className="report-card-item"
-              collection={reportsList}
+              collection={templateIds}
               columns={{ small: 12, medium: 4, large: 3 }}
             />
           </Article>
@@ -38,8 +37,8 @@ class Templates extends React.Component {
 }
 
 Templates.propTypes = {
-  getUserReports: PropTypes.func.isRequired,
-  reportsList: PropTypes.array.isRequired
+  getUserTemplates: PropTypes.func.isRequired,
+  templateIds: PropTypes.array.isRequired
 };
 
 export default Templates;
