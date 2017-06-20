@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { DEFAULT_LANGUAGE } from '../../constants/global';
 
 import fecha from 'fecha';
 
@@ -15,12 +16,12 @@ class ReportCard extends React.Component {
     const { report, history } = this.props;
     return (
       <Card
-        title={report.name}
+        title={report.name[DEFAULT_LANGUAGE]} // TODO: Set browser language
         fields={[this.getFormatedDate(report.createdAt)]}
         actions={[{
           iconName: 'icon-info',
           color: '-green',
-          callback: () => history.push(`/reports/${report.id}`)
+          callback: () => history.push(`/templates/${report.id}`)
         }]}
       />
     );
