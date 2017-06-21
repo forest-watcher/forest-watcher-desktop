@@ -8,7 +8,7 @@ import ReduxToastr from 'react-redux-toastr'
 import Login from '../pages/login/Login';
 import Dashboard from '../pages/dashboard/DashboardContainer';
 import Areas from '../pages/areas/AreasContainer';
-import AreasManage from '../pages/areas-manage/AreasManage';
+import AreasManage from '../pages/areas-manage/AreasManageContainer';
 import Reports from '../pages/reports/ReportsContainer';
 import Answers from '../pages/answers/AnswersContainer';
 import AnswersDetail from '../pages/answers-detail/AnswersDetailContainer';

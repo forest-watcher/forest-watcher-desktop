@@ -3,13 +3,10 @@ import { API_BASE_URL } from '../constants/global';
 import { getGeostore } from './geostores';
 
 // Actions
-const GET_AREA = 'areas/GET_AREA';
-const GET_AREAS = 'areas/GET_AREAS';
 const SET_AREA = 'areas/SET_AREA';
+const SET_AREAS = 'areas/SET_AREAS';
 const SET_LOADING_AREAS = 'areas/SET_LOADING_AREAS';
-const SET_SAVING_AREA = 'areas/SET_SAVING_AREA';
 const SET_LOADING_AREAS_ERROR = 'areas/SET_LOADING_AREAS_ERROR';
-const SET_SAVING_AREA_ERROR = 'areas/SET_SAVING_AREA_ERROR';
 
 // Reducer
 const initialState = {
@@ -22,7 +19,7 @@ const initialState = {
 
 export default function reducer(state = initialState, action) {
   switch (action.type) {
-    case GET_AREA: {
+    case SET_AREA: {
       const area = action.payload;
       if (area) return {
         ...state,
@@ -31,22 +28,14 @@ export default function reducer(state = initialState, action) {
       };
       return state;
     }
-    case GET_AREAS: {
+    case SET_AREAS: {
       const { area: areas } = action.payload;
       if (areas) return Object.assign({}, state, { ids: Object.keys(areas), areas });
       return state;
     }
-    case SET_AREA: {
-      const area = action.payload;
-      return Object.assign({}, state, { ids: Object.keys(area), area });
-    }
     case SET_LOADING_AREAS:
       return Object.assign({}, state, { loading: action.payload });
-    case SET_SAVING_AREA:
-      return Object.assign({}, state, { saving: action.payload });
     case SET_LOADING_AREAS_ERROR:
-      return Object.assign({}, state, { error: action.payload });
-    case SET_SAVING_AREA_ERROR:
       return Object.assign({}, state, { error: action.payload });
     default:
       return state;
@@ -74,7 +63,7 @@ export function getArea(id) {
       .then((data) => {
       const normalized = normalize(data);
         dispatch({
-          type: GET_AREA,
+          type: SET_AREA,
           payload: normalized
         });
         dispatch({
@@ -115,7 +104,7 @@ export function getAreas() {
       .then((data) => {
       const normalized = normalize(data);
         dispatch({
-          type: GET_AREAS,
+          type: SET_AREAS,
           payload: normalized
         });
         dispatch({

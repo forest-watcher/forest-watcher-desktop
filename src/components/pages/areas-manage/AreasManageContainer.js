@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { postArea } from '../../../modules/areas';
+import { saveGeostore } from '../../../modules/geostores';
 
 import AreasManage from './AreasManage';
 
@@ -10,8 +10,8 @@ const mapStateToProps = ({ areas }) => ({
 
 function mapDispatchToProps(dispatch) {
   return {
-    postArea: (area) => {
-      dispatch(postArea(area));
+    saveGeostore: (geojson) => {
+      dispatch(saveGeostore(geojson));
     }
   };
 }

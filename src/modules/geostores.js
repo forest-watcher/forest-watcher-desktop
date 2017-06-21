@@ -2,7 +2,7 @@ import normalize from 'json-api-normalizer';
 import { API_BASE_URL } from '../constants/global';
 
 // Actions
-const GET_GEOSTORE = 'geostores/GET_GEOSTORE';
+const SET_GEOSTORE = 'geostores/SET_GEOSTORE';
 const SET_LOADING_GEOSTORE = 'geostores/SET_LOADING_GEOSTORE';
 const SET_LOADING_GEOSTORE_ERROR = 'geostores/SET_LOADING_GEOSTORE_ERROR';
 
@@ -16,7 +16,7 @@ const initialState = {
 
 export default function reducer(state = initialState, action) {
   switch (action.type) {
-    case GET_GEOSTORE: {
+    case SET_GEOSTORE: {
       const geostore = action.payload;
       if (geostore) return {
         ...state,
@@ -54,7 +54,53 @@ export function getGeostore(id) {
       .then((data) => {
       const normalized = normalize(data);
         dispatch({
-          type: GET_GEOSTORE,
+          type: SET_GEOSTORE,
+          payload: normalized
+        });
+        dispatch({
+          type: SET_LOADING_GEOSTORE,
+          payload: false
+        });
+      })
+      .catch((error) => {
+        dispatch({
+          type: SET_LOADING_GEOSTORE_ERROR,
+          payload: error
+        });
+        dispatch({
+          type: SET_LOADING_GEOSTORE,
+          payload: false
+        });
+      });
+  };
+}
+
+export function saveGeostore(geojson) {
+  const url = `${API_BASE_URL}/geostore`;
+  const body = {
+    geojson: geojson
+  }
+  return (dispatch, state) => {
+    dispatch({
+      type: SET_LOADING_GEOSTORE,
+      payload: true
+    });
+    fetch(url, {
+      headers: {
+        Authorization: `Bearer ${state().user.token}`,
+        'Content-Type': 'application/json'
+      },
+      method: 'POST',
+      body: JSON.stringify(body)
+    })
+      .then((response) => {
+        if (response.ok) return response.json();
+        throw Error(response.statusText);
+      })
+      .then((data) => {
+      const normalized = normalize(data);
+        dispatch({
+          type: SET_GEOSTORE,
           payload: normalized
         });
         dispatch({

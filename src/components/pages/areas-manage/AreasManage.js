@@ -38,7 +38,7 @@ class AreasManage extends React.Component {
     e.preventDefault();
     if (this.form.area) {
       toastr.success('Area saved', 'Note: in dev mode, area not saved to API');
-      this.props.postArea(this.form);
+      this.props.saveGeostore(this.form.area);
     } else {
       toastr.error('Area needed', 'You cannot save without drawing an area');
     }
