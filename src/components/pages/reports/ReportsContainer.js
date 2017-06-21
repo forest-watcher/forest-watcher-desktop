@@ -2,7 +2,6 @@
  import moment from 'moment'
  import { getUserTemplates, setSelectedTemplateIndex } from '../../../modules/templates';
  import { getReportAnswers } from '../../../modules/reports';
- import { DEFAULT_LANGUAGE } from '../../../constants/global';
  
  import Reports from './Reports';
 

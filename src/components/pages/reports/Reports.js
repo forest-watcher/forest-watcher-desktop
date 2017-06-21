@@ -9,13 +9,11 @@ import 'react-select/dist/react-select.css';
 import { DEFAULT_LANGUAGE } from '../../../constants/global';
 
 class Reports extends React.Component {
-
-  constructor(){
-    super();
-    this.state = {
-      templateIndex: 0
+  componentWillMount() {
+    this.templateId = this.props.match.params.templateIndex;
+    if (this.templateId) {
+      this.props.setSelectedTemplateIndex(this.templateId);
     }
-    this.handleTemplateChange = this.handleTemplateChange.bind(this);
   }
   componentDidMount() {
     const reportIds = this.props.templates.ids;
@@ -27,24 +25,29 @@ class Reports extends React.Component {
   }
   componentWillReceiveProps(nextProps){
     if (this.props.templates.ids.length !== nextProps.templates.ids.length){
-      this.props.getReportAnswers(nextProps.templates.ids[this.state.templateIndex]);
+      this.props.getReportAnswers(nextProps.templates.ids[this.templateId || 0]);
+    }
+    if (this.props.match.params.templateIndex !== nextProps.match.params.templateIndex){
+      this.props.setSelectedTemplateIndex(nextProps.match.params.templateIndex);
     }
   }
 
   shouldComponentUpdate(nextProps, nextState){
     return this.props.templates.ids.length !== nextProps.templates.ids.length || 
-           this.props.answers !== nextProps.answers;
+           this.props.answers !== nextProps.answers || 
+           this.props.match.params.templateIndex !== nextProps.match.params.templateIndex;
   }
 
-  handleTemplateChange(selected){
-    this.props.setSelectedTemplateIndex(selected.value);
+  handleTemplateChange = (selected) => {
+    this.props.history.push(`/reports/template/${selected.value}`)
   }
 
   render() {
     const { answers, templates } = this.props;
     const columns = [{
       Header: 'Lat/Long',
-      accessor: 'latLong'
+      accessor: 'latLong',
+      filterable: false
     },{
       Header: 'Area of interest',
       accessor: 'aoi'
@@ -68,24 +71,25 @@ class Reports extends React.Component {
     return (
       <div>
         <Hero
-          title="Reports"
+          title="Your reports"
         />
         {(templates.ids.length > 0) ? 
           <div className="l-content">
             <Article>
               <Select
                 name="template-select"
-                value={options[this.state.templateIndex]}
+                value={options[this.templateIndex || 0]}
                 options={options}
                 onChange={this.handleTemplateChange}
+                clearable={false}
               />    
               <ReactTable
-                className="c-table" 
+                className="c-table"
                 data={answers || []}
                 columns={columns}
                 showPageSizeOptions={false}
                 minRows={5}
-                filterable={false}
+                filterable={true}
               />
             </Article>
           </div> : null}
