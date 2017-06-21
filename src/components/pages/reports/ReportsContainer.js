@@ -1,29 +1,26 @@
  import { connect } from 'react-redux';
  import moment from 'moment'
- import { getUserTemplates } from '../../../modules/templates';
+ import { getUserTemplates, setSelectedTemplateIndex } from '../../../modules/templates';
  import { getReportAnswers } from '../../../modules/reports';
  import { DEFAULT_LANGUAGE } from '../../../constants/global';
  
  import Reports from './Reports';
 
   const mapStateToProps = ({ reports, templates }) => {
+    const templateId = templates.ids[templates.selectedIndex];
     let answers = []
-    Object.keys(reports.answers).forEach((key) => {
-      if (reports.answers[key].length > 0){
-        reports.answers[key].forEach((answer) => {
-          answers.push(
-            {
-              id: answer.id,
-              date: moment(answer.attributes.createdAt).format('DD/MM/YYYY'),
-              latLong: answer.attributes.userPosition.toString(),
-              template: templates.data[key].attributes.name[DEFAULT_LANGUAGE] || 'Unknown',
-              member: answer.attributes.user,
-              aoi: 'aoi'
-            }
-          ); 
-        });
+    if (templateId !== undefined){
+      const selectedAnswers = reports.answers[templateId];
+      if (selectedAnswers !== undefined){
+        answers = selectedAnswers.map((answer) => ({
+          id: answer.id,
+          date: moment(answer.attributes.createdAt).format('DD/MM/YYYY'),
+          latLong: answer.attributes.userPosition.toString(),
+          member: answer.attributes.user,
+          aoi: 'aoi'
+        }))
       }
-    })
+    }
     return {
       templates,
       answers,
@@ -38,6 +35,9 @@
     },
     getReportAnswers: (id) => {
       dispatch(getReportAnswers(id));
+     },
+    setSelectedTemplateIndex: (index) => {
+      dispatch(setSelectedTemplateIndex(index));
      }
    };
  }

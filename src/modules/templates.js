@@ -2,16 +2,18 @@ import normalize from 'json-api-normalizer';
 import { API_BASE_URL } from '../constants/global';
 
 // Actions
-const GET_USER_TEMPLATES = 'reports/GET_REPORTS';
-const SET_LOADING_TEMPLATES = 'reports/SET_LOADING_TEMPLATES';
-const SET_LOADING_TEMPLATES_ERROR = 'reports/SET_LOADING_TEMPLATES_ERROR';
+const GET_USER_TEMPLATES = 'templates/GET_USER_TEMPLATES';
+const SET_LOADING_TEMPLATES = 'templates/SET_LOADING_TEMPLATES';
+const SET_LOADING_TEMPLATES_ERROR = 'templates/SET_LOADING_TEMPLATES_ERROR';
+const SET_SELECTED_TEMPLATE_INDEX = 'templates/SET_SELECTED_TEMPLATE_INDEX';
 
 // Reducer
 const initialState = {
   ids: [],
   data: {},
   loading: false,
-  error: null
+  error: null,
+  selectedIndex: 0
 };
 
 export default function reducer(state = initialState, action) {
@@ -25,6 +27,8 @@ export default function reducer(state = initialState, action) {
       return Object.assign({}, state, { loading: action.payload });
     case SET_LOADING_TEMPLATES_ERROR:
       return Object.assign({}, state, { error: action.payload });
+    case SET_SELECTED_TEMPLATE_INDEX:
+      return Object.assign({}, state, { selectedIndex: action.payload });
     default:
       return state;
   }
@@ -68,5 +72,12 @@ export function getUserTemplates() {
           payload: false
         });
       });
+  };
+}
+
+export function setSelectedTemplateIndex(index) {
+  return {
+    type: SET_SELECTED_TEMPLATE_INDEX,
+    payload: index
   };
 }

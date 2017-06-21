@@ -1,5 +1,6 @@
 import FileSaver from 'file-saver';
 import { API_BASE_URL } from '../constants/global';
+import { getUserTemplates } from './templates';
 
 // Actions
 const GET_USER_ANSWERS = 'areas/GET_USER_ANSWERS';
