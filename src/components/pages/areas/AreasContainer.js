@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { getUserAreas } from '../../../modules/areas';
+import { getGeoStoresWithAreas } from '../../../modules/areas';
 
 import Areas from './Areas';
 
@@ -10,8 +10,8 @@ const mapStateToProps = ({ areas }) => ({
 
 function mapDispatchToProps(dispatch) {
   return {
-    getUserAreas: () => {
-      dispatch(getUserAreas());
+    getGeoStoresWithAreas: () => {
+      dispatch(getGeoStoresWithAreas());
     }
   };
 }
