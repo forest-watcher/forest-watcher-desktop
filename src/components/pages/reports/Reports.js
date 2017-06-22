@@ -36,12 +36,17 @@ class Reports extends React.Component {
     if (this.props.match.params.templateIndex !== nextProps.match.params.templateIndex){
       this.props.setSelectedTemplateIndex(nextProps.match.params.templateIndex);
     }
+    if (this.props.location.search !== nextProps.location.search){
+      this.searchParams = nextProps.location.search && qs.parse(nextProps.location.search);
+      this.props.setTemplateSearchParams(this.searchParams);
+    }
   }
 
   shouldComponentUpdate(nextProps, nextState){
     return this.props.templates.ids.length !== nextProps.templates.ids.length || 
            this.props.answers !== nextProps.answers || 
-           this.props.match.params.templateIndex !== nextProps.match.params.templateIndex;
+           this.props.match.params.templateIndex !== nextProps.match.params.templateIndex ||
+           this.props.location.search !== nextProps.location.search;
   }
 
   handleTemplateChange = (selected) => {
@@ -52,9 +57,13 @@ class Reports extends React.Component {
   }
 
   handleAreaChange = (selected) => {
+    const searchParams = Object.assign(this.searchParams, { aoi: selected.value }) 
+    if (selected.value === ''){
+      delete searchParams.aoi
+    }
     this.props.history.push({
       pathname: `/reports/template/${this.templateId || 0}`,
-      search: qs.stringify(Object.assign(this.searchParams,  { aoi: selected.value }))
+      search: qs.stringify(searchParams)
     })
   }
   
@@ -62,8 +71,7 @@ class Reports extends React.Component {
     const { answers, templates } = this.props;
     const columns = [{
       Header: 'Lat/Long',
-      accessor: 'latLong',
-      filterable: false
+      accessor: 'latLong'
     },{
       Header: 'Area of interest',
       accessor: 'aoi'
@@ -104,11 +112,12 @@ class Reports extends React.Component {
                 clearable={false}
               />
               <Select
-                name="template-select"
-                value={areasOptions[0] || null}
+                name="area-filter"
+                value={this.searchParams ? { label: this.searchParams.aoi, value: this.searchParams.aoi } : null}
                 options={areasOptions}
                 onChange={this.handleAreaChange}
-                clearable={false}
+                resetValue={{value: '', label: ''}}
+                placeholder={'Filter by Area'}
               />   
               <ReactTable
                 className="c-table"
@@ -116,7 +125,6 @@ class Reports extends React.Component {
                 columns={columns}
                 showPageSizeOptions={false}
                 minRows={5}
-                filterable={true}
               />
             </Article>
           </div> : null}
