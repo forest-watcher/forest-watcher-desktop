@@ -116,29 +116,35 @@ class Reports extends React.Component {
         {(templates.ids.length > 0) ? 
           <div className="l-content">
             <Article>
-              <div className="c-search-bar">
-                <input
-                  type="text"
-                  onChange={this.handleSearchChange}
-                  name="name"
-                  placeholder="Search"
-                />       
-              </div>     
-              <Select
-                name="template-select"
-                value={options[this.templateIndex || 0]}
-                options={options}
-                onChange={this.handleTemplateChange}
-                clearable={false}
-              />
-              <Select
-                name="area-filter"
-                value={this.searchParams ? { label: this.searchParams.aoi, value: this.searchParams.aoi } : null}
-                options={areasOptions}
-                onChange={this.handleAreaChange}
-                resetValue={{value: '', label: ''}}
-                placeholder={'Filter by Area'}
-              />   
+              <div className="row">
+                <div className="column">
+                  <Select
+                    name="template-select"
+                    value={options[this.templateIndex || 0]}
+                    options={options}
+                    onChange={this.handleTemplateChange}
+                    clearable={false}
+                  />
+                </div>
+                <div className="column">
+                  <Select
+                    name="area-filter"
+                    value={this.searchParams ? { label: this.searchParams.aoi, value: this.searchParams.aoi } : null}
+                    options={areasOptions}
+                    onChange={this.handleAreaChange}
+                    resetValue={{value: '', label: ''}}
+                    placeholder={'Filter by Area'}
+                  />
+                </div>
+                <div className="c-search-bar">
+                  <input
+                    type="text"
+                    onChange={this.handleSearchChange}
+                    name="name"
+                    placeholder="Search"
+                  />       
+                </div>     
+              </div>
               <ReactTable
                 className="c-table"
                 data={answers || []}
