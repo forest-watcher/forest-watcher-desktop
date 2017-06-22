@@ -3,10 +3,10 @@ import PropTypes from 'prop-types';
 
 import Article from '../../layouts/Article';
 import Hero from '../../layouts/Hero'; 
-import Select from 'react-select';
 import ReactTable from 'react-table'
 import 'react-select/dist/react-select.css';
-import { DEFAULT_LANGUAGE } from '../../../constants/global';
+
+import Filters from './Filters';
 
 const qs = require('querystringify');
 
@@ -49,36 +49,6 @@ class Reports extends React.Component {
            this.props.location.search !== nextProps.location.search;
   }
 
-  handleTemplateChange = (selected) => {
-    this.props.history.push({
-      pathname: `/reports/template/${selected.value}`,
-      search: qs.stringify(this.searchParams)
-    })
-  }
-
-  redirectWith(searchParams){
-    this.props.history.push({
-      pathname: `/reports/template/${this.templateId || 0}`,
-      search: qs.stringify(searchParams)
-    })
-  }
-
-  handleSearchChange = (event) => {
-    const searchParams = Object.assign(this.searchParams, { searchValues: event.target.value }) 
-    if (event.target.value === ''){
-      delete searchParams.searchValues
-    }
-    this.redirectWith(searchParams)
-  }
-
-  handleAreaChange = (selected) => {
-    const searchParams = Object.assign(this.searchParams, { aoi: selected.value }) 
-    if (selected.value === ''){
-      delete searchParams.aoi
-    }
-    this.redirectWith(searchParams)
-  }
-  
   render() {
     const { answers, templates } = this.props;
     const columns = [{
@@ -93,21 +63,8 @@ class Reports extends React.Component {
     },{
       Header: 'Member',
       accessor: 'member'
-    }
-    ]
+    }]
 
-    let options = []
-    let areasOptions = []
-    if (templates.data) {
-      options = Object.keys(templates.data).map((key, i) => (
-        { label: templates.data[key].attributes.name[DEFAULT_LANGUAGE], 
-          value: i
-        }
-      ));
-    }
-    if (answers.length > 0) {
-      areasOptions = answers.map((answer, index) => ({ label:answer.aoi, value: answer.aoi }))
-    }
     return (
       <div>
         <Hero
@@ -116,35 +73,13 @@ class Reports extends React.Component {
         {(templates.ids.length > 0) ? 
           <div className="l-content">
             <Article>
-              <div className="row">
-                <div className="column">
-                  <Select
-                    name="template-select"
-                    value={options[this.templateIndex || 0]}
-                    options={options}
-                    onChange={this.handleTemplateChange}
-                    clearable={false}
-                  />
-                </div>
-                <div className="column">
-                  <Select
-                    name="area-filter"
-                    value={this.searchParams ? { label: this.searchParams.aoi, value: this.searchParams.aoi } : null}
-                    options={areasOptions}
-                    onChange={this.handleAreaChange}
-                    resetValue={{value: '', label: ''}}
-                    placeholder={'Filter by Area'}
-                  />
-                </div>
-                <div className="c-search-bar">
-                  <input
-                    type="text"
-                    onChange={this.handleSearchChange}
-                    name="name"
-                    placeholder="Search"
-                  />       
-                </div>     
-              </div>
+              <Filters 
+                templates={templates} 
+                answers={answers}
+                templateIndex={this.templateIndex}
+                searchParams={this.searchParams}
+                history={this.props.history}
+              />
               <ReactTable
                 className="c-table"
                 data={answers || []}
