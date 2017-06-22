@@ -75,6 +75,7 @@ export function getGeostore(id) {
   };
 }
 
+// POST geojson object
 export function saveGeostore(geojson) {
   const url = `${API_BASE_URL}/geostore`;
   const body = {

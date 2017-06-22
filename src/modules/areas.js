@@ -126,6 +126,7 @@ export function getAreas() {
   };
 }
 
+// POST name, geostore ID
 export function saveArea(area) {
   const url = `${API_BASE_URL}/area`;
   const body = new FormData();
