@@ -93,6 +93,7 @@ class DrawControl extends React.Component {
     this.featureGroup.addLayer(layer);
     this.props.onDrawComplete && this.props.onDrawComplete(geoJsonLayer);
     this.disableDrawing();
+    this.map.fitBounds(layer.getBounds());
   }
 
   onDrawEventEdit(e) {

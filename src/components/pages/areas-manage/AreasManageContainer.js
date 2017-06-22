@@ -26,8 +26,8 @@ const mapStateToProps = (state, { match }) => ({
 
 function mapDispatchToProps(dispatch) {
   return {
-    saveAreaWithGeostore: (area) => {
-      dispatch(saveAreaWithGeostore(area));
+    saveAreaWithGeostore: (area, node) => {
+      dispatch(saveAreaWithGeostore(area, node));
     }
   };
 }

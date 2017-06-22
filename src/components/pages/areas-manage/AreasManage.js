@@ -17,7 +17,7 @@ class AreasManage extends React.Component {
   constructor(props) {
     super(props);
     this.form = {
-      name: props.area.attributes.name,
+      name: props.area ? props.area.attributes.name : '',
       geojson: props.geojson || null
     };
     this.state = {
@@ -27,8 +27,7 @@ class AreasManage extends React.Component {
         lng: 0,
         zoomControl: false,
         scrollWheelZoom: false
-      },
-      map: {}
+      }
     }
 
     this.onSubmit = this.onSubmit.bind(this);
@@ -41,7 +40,7 @@ class AreasManage extends React.Component {
     e.preventDefault();
     if (this.form.geojson) {
       toastr.success('Area saved', 'Note: in dev mode, geojson not saved to API');
-      this.props.saveAreaWithGeostore(this.form);
+      this.props.saveAreaWithGeostore(this.form, this.map._container);
     } else {
       toastr.error('Area needed', 'You cannot save without drawing an geojson');
     }
@@ -79,9 +78,7 @@ class AreasManage extends React.Component {
             <Map
               editable={true}
               mapConfig={this.state.mapConfig}
-              map={(map) => {
-                this.setState({map});
-              }}
+              ref={(component) => {this.map = component && component.map;}}
             />
             <div className="c-map-controls">
               <ZoomControl
@@ -98,7 +95,7 @@ class AreasManage extends React.Component {
                 }}
                 />
               <DrawControl
-                map={this.state.map}
+                map={this.map}
                 onDrawComplete={this.onDrawComplete}
                 onDrawDelete={this.onDrawDelete}
                 geojson={this.form.geojson}

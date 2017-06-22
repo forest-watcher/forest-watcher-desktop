@@ -20,7 +20,7 @@ class Map extends React.Component {
     }
   }
 
-  initMap() {
+  initMap = () => {
     this.map = L.map('map', {
       minZoom: MAP_CONFIG.minZoom,
       zoom: this.props.mapConfig.zoom,
@@ -34,8 +34,6 @@ class Map extends React.Component {
     this.setAttribution();
     this.setZoomControl();
     this.setBasemap();
-
-    this.props.map(this.map);
   }
 
 
