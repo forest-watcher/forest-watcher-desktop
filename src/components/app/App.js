@@ -20,6 +20,7 @@ class App extends React.Component {
 
   componentWillMount() {
     this.props.checkLogged(this.props.location.search);
+    this.props.getGeoStoresWithAreas();
   }
 
   getRootComponent = () => {
@@ -69,7 +70,8 @@ App.propTypes = {
   userChecked: PropTypes.bool.isRequired,
   user: PropTypes.object.isRequired,
   checkLogged: PropTypes.func.isRequired,
-  logout: PropTypes.func.isRequired
+  logout: PropTypes.func.isRequired,
+  getGeoStoresWithAreas: PropTypes.func.isRequired
 };
 
 export default App;

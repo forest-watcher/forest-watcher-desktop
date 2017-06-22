@@ -24,7 +24,7 @@ export default function reducer(state = initialState, action) {
       if (area) return {
         ...state,
         ids: [...state.ids, ...Object.keys(area)],
-        areas: { ...state.area, ...area }
+        areas: { ...state.areas, ...area }
       };
       return state;
     }
@@ -138,8 +138,7 @@ export function saveArea(area) {
     });
     fetch(url, {
       headers: {
-        Authorization: `Bearer ${state().user.token}`,
-        'Content-Type': 'multipart/form-data'
+        Authorization: `Bearer ${state().user.token}`
       },
       method: 'POST',
       body
