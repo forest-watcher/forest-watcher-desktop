@@ -14,6 +14,7 @@
     "moment": "^2.18.1",
     "prop-types": "^15.5.10",
     "query-string": "^4.3.4",
+    "querystringify": "^1.0.0",
     "react": "^15.5.4",
     "react-dom": "^15.5.4",
     "react-redux": "^4.4.5",

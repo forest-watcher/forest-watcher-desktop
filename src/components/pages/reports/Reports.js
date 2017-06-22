@@ -8,9 +8,15 @@ import ReactTable from 'react-table'
 import 'react-select/dist/react-select.css';
 import { DEFAULT_LANGUAGE } from '../../../constants/global';
 
+const qs = require('querystringify');
+
 class Reports extends React.Component {
   componentWillMount() {
     this.templateId = this.props.match.params.templateIndex;
+    this.searchParams = this.props.location.search && qs.parse(this.props.location.search);
+    if (this.searchParams !== undefined){
+      this.props.setTemplateSearchParams(this.searchParams);
+    }
     if (this.templateId) {
       this.props.setSelectedTemplateIndex(this.templateId);
     }
@@ -39,9 +45,19 @@ class Reports extends React.Component {
   }
 
   handleTemplateChange = (selected) => {
-    this.props.history.push(`/reports/template/${selected.value}`)
+    this.props.history.push({
+      pathname: `/reports/template/${selected.value}`,
+      search: qs.stringify(this.searchParams)
+    })
   }
 
+  handleAreaChange = (selected) => {
+    this.props.history.push({
+      pathname: `/reports/template/${this.templateId || 0}`,
+      search: qs.stringify(Object.assign(this.searchParams,  { aoi: selected.value }))
+    })
+  }
+  
   render() {
     const { answers, templates } = this.props;
     const columns = [{
@@ -61,12 +77,16 @@ class Reports extends React.Component {
     ]
 
     let options = []
-    if (this.props.templates.data) {
-      options = Object.keys(this.props.templates.data).map((key, i) => (
-        { label: this.props.templates.data[key].attributes.name[DEFAULT_LANGUAGE], 
+    let areasOptions = []
+    if (templates.data) {
+      options = Object.keys(templates.data).map((key, i) => (
+        { label: templates.data[key].attributes.name[DEFAULT_LANGUAGE], 
           value: i
         }
       ));
+    }
+    if (answers.length > 0) {
+      areasOptions = answers.map((answer, index) => ({ label:answer.aoi, value: answer.aoi }))
     }
     return (
       <div>
@@ -82,7 +102,14 @@ class Reports extends React.Component {
                 options={options}
                 onChange={this.handleTemplateChange}
                 clearable={false}
-              />    
+              />
+              <Select
+                name="template-select"
+                value={areasOptions[0] || null}
+                options={areasOptions}
+                onChange={this.handleAreaChange}
+                clearable={false}
+              />   
               <ReactTable
                 className="c-table"
                 data={answers || []}

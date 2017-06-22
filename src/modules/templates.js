@@ -6,6 +6,7 @@ const GET_USER_TEMPLATES = 'templates/GET_USER_TEMPLATES';
 const SET_LOADING_TEMPLATES = 'templates/SET_LOADING_TEMPLATES';
 const SET_LOADING_TEMPLATES_ERROR = 'templates/SET_LOADING_TEMPLATES_ERROR';
 const SET_SELECTED_TEMPLATE_INDEX = 'templates/SET_SELECTED_TEMPLATE_INDEX';
+const SET_TEMPLATE_SEARCH_PARAMS = 'templates/SET_TEMPLATE_SEARCH_PARAMSsetTemplateSearchParams';
 
 // Reducer
 const initialState = {
@@ -13,7 +14,8 @@ const initialState = {
   data: {},
   loading: false,
   error: null,
-  selectedIndex: 0
+  selectedIndex: 0,
+  searchParams: {}
 };
 
 export default function reducer(state = initialState, action) {
@@ -29,6 +31,8 @@ export default function reducer(state = initialState, action) {
       return Object.assign({}, state, { error: action.payload });
     case SET_SELECTED_TEMPLATE_INDEX:
       return Object.assign({}, state, { selectedIndex: action.payload });
+    case SET_TEMPLATE_SEARCH_PARAMS:
+      return Object.assign({}, state, { searchParams: action.payload });
     default:
       return state;
   }
@@ -79,5 +83,12 @@ export function setSelectedTemplateIndex(index) {
   return {
     type: SET_SELECTED_TEMPLATE_INDEX,
     payload: index
+  };
+}
+
+export function setTemplateSearchParams(params) {
+  return {
+    type: SET_TEMPLATE_SEARCH_PARAMS,
+    payload: params
   };
 }
