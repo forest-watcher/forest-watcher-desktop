@@ -89,7 +89,8 @@ class Filters extends React.Component {
           <input
             type="text"
             onChange={this.handleSearchChange}
-            name="name"
+            value={this.props.searchParams.searchValues}
+            name="search-bar"
             placeholder="Search"
           />   
           <DatePicker
