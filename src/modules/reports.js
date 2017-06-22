@@ -53,7 +53,7 @@ export function getReportAnswers(reportId) {
 }
 
 export function downloadAnswers(reportId) {
-  const url = `${API_BASE_URL}/questionnaire/${reportId}/download-answers`;
+  const url = `${API_BASE_URL}/v1/reports/${reportId}/download-answers`;
   try {
     const isFileSaverSupported = !!new Blob();
     if (isFileSaverSupported) {

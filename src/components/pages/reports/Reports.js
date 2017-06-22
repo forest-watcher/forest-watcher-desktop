@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 
 import Article from '../../layouts/Article';
 import Hero from '../../layouts/Hero'; 
+import { downloadAnswers } from '../../../modules/reports'; 
 import ReactTable from 'react-table'
 import 'react-select/dist/react-select.css';
 
@@ -49,6 +50,11 @@ class Reports extends React.Component {
            this.props.location.search !== nextProps.location.search;
   }
 
+  downloadReports = () => {
+    const index = this.props.match.params.templateIndex || 0
+    downloadAnswers(this.props.templates.ids[index]);
+  }
+
   render() {
     const { answers, templates } = this.props;
     const columns = [{
@@ -69,6 +75,7 @@ class Reports extends React.Component {
       <div>
         <Hero
           title="Your reports"
+          action={{name:'Download Reports', callback: this.downloadReports}}
         />
         {(templates.ids.length > 0) ? 
           <div className="l-content">
