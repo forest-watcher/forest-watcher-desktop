@@ -56,15 +56,27 @@ class Reports extends React.Component {
     })
   }
 
+  redirectWith(searchParams){
+    this.props.history.push({
+      pathname: `/reports/template/${this.templateId || 0}`,
+      search: qs.stringify(searchParams)
+    })
+  }
+
+  handleSearchChange = (event) => {
+    const searchParams = Object.assign(this.searchParams, { searchValues: event.target.value }) 
+    if (event.target.value === ''){
+      delete searchParams.searchValues
+    }
+    this.redirectWith(searchParams)
+  }
+
   handleAreaChange = (selected) => {
     const searchParams = Object.assign(this.searchParams, { aoi: selected.value }) 
     if (selected.value === ''){
       delete searchParams.aoi
     }
-    this.props.history.push({
-      pathname: `/reports/template/${this.templateId || 0}`,
-      search: qs.stringify(searchParams)
-    })
+    this.redirectWith(searchParams)
   }
   
   render() {
@@ -104,6 +116,14 @@ class Reports extends React.Component {
         {(templates.ids.length > 0) ? 
           <div className="l-content">
             <Article>
+              <div className="c-search-bar">
+                <input
+                  type="text"
+                  onChange={this.handleSearchChange}
+                  name="name"
+                  placeholder="Search"
+                />       
+              </div>     
               <Select
                 name="template-select"
                 value={options[this.templateIndex || 0]}

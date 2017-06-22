@@ -1,0 +1,16 @@
+.c-search-bar {
+  input:focus,
+  select:focus,
+  textarea:focus,
+  button:focus {
+    outline: none;
+  }
+
+  input {
+    height: 40px;
+	  border-radius: 4px;
+	  background-color: #ffffff;
+	  border: solid 1px #e6e6e6;
+    padding: 0 15px;
+  }
+}

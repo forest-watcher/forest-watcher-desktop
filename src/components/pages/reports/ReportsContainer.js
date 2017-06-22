@@ -5,10 +5,22 @@
  
  import Reports from './Reports';
 
+  const filterByArea = (answers, value) => {
+    return answers.filter((answer) => answer.aoi === value);
+  }
+
+  const filterBySearch = (answers, value) => {
+    return answers.filter((answer) => {
+      return Object.keys(answer).some((key) => {
+        if(answer[key].toLowerCase().includes(value.toLowerCase())) return true;
+        return false;
+      })
+    })
+  }
+
   const mapStateToProps = ({ reports, templates }) => {
     const templateId = templates.ids[templates.selectedIndex];
-    const search = templates.searchParams
-
+    const { aoi, searchValues } = templates.searchParams;
     let answers = [];
     if (templateId !== undefined){
       const selectedAnswers = reports.answers[templateId];
@@ -20,8 +32,11 @@
           member: answer.attributes.user,
           aoi: answer.attributes.layer // TODO: Change to AOI instead of layer
         }))
-        if (search.aoi !== undefined){ 
-          answers = answers.filter((answer) => answer.aoi === search.aoi)
+        if (aoi !== undefined){ 
+          answers = filterByArea(answers, aoi);
+        }
+        if (searchValues !== undefined){ 
+          answers = filterBySearch(answers, searchValues);
         }
       }
     }
