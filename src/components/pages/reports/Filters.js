@@ -2,7 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import Select from 'react-select';
-import { DEFAULT_LANGUAGE } from '../../../constants/global';
+import { DEFAULT_LANGUAGE, DEFAULT_FORMAT } from '../../../constants/global';
+import DatePicker from 'react-datepicker';
+import moment from 'moment';
+
+import 'react-datepicker/dist/react-datepicker.css';
 
 const qs = require('querystringify');
 
@@ -26,7 +30,16 @@ class Filters extends React.Component {
     if (event.target.value === ''){
       delete searchParams.searchValues
     }
-    this.redirectWith(searchParams)
+    this.redirectWith(searchParams);
+  }
+
+  handleDateChange = (date) => {
+    const parsedDate = date && moment(date).format(DEFAULT_FORMAT)
+    const searchParams = Object.assign(this.props.searchParams, { date: parsedDate }) 
+    if (!parsedDate){
+      delete searchParams.date
+    }
+    this.redirectWith(searchParams);
   }
 
   handleAreaChange = (selected) => {
@@ -34,7 +47,7 @@ class Filters extends React.Component {
     if (selected.value === ''){
       delete searchParams.aoi
     }
-    this.redirectWith(searchParams)
+    this.redirectWith(searchParams);
   }
   
   render() {
@@ -65,7 +78,7 @@ class Filters extends React.Component {
         <div className="column">
           <Select
             name="area-filter"
-            value={this.props.searchParams ? { label: this.props.searchParams.aoi, value: this.props.searchParams.aoi } : null}
+            value={this.props.searchParams.aoi ? { label: this.props.searchParams.aoi, value: this.props.searchParams.aoi } : null}
             options={areasOptions}
             onChange={this.handleAreaChange}
             resetValue={{value: '', label: ''}}
@@ -78,8 +91,16 @@ class Filters extends React.Component {
             onChange={this.handleSearchChange}
             name="name"
             placeholder="Search"
-          />       
-        </div>     
+          />   
+          <DatePicker
+            className="datepicker"
+            dateFormat={DEFAULT_FORMAT}
+            selected={this.props.searchParams.date && moment(this.props.searchParams.date, DEFAULT_FORMAT)}
+            onChange={this.handleDateChange}
+            isClearable={true}
+            placeholderText={"Filter by date"}
+          />
+        </div>  
       </div>
     );
   }

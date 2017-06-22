@@ -16,6 +16,7 @@
     "query-string": "^4.3.4",
     "querystringify": "^1.0.0",
     "react": "^15.5.4",
+    "react-datepicker": "^0.48.0",
     "react-dom": "^15.5.4",
     "react-redux": "^4.4.5",
     "react-redux-toastr": "^6.2.7",

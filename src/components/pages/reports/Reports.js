@@ -73,12 +73,13 @@ class Reports extends React.Component {
         {(templates.ids.length > 0) ? 
           <div className="l-content">
             <Article>
-              <Filters 
+              <Filters
                 templates={templates} 
                 answers={answers}
                 templateIndex={this.templateIndex}
                 searchParams={this.searchParams}
                 history={this.props.history}
+                searchDate={this.searchDate}
               />
               <ReactTable
                 className="c-table"

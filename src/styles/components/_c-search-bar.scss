@@ -1,4 +1,9 @@
 .c-search-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-right: 10px;
+  
   input:focus,
   select:focus,
   textarea:focus,
@@ -8,10 +13,21 @@
 
   input {
     height: 36px;
-    width: 95%;
+    margin-right: 10px;
 	  border-radius: 4px;
 	  background-color: #ffffff;
 	  border: solid 1px #ccc;
     padding: 0 15px;
+  }
+  .datepicker{
+    width: 100%;
+  }
+  .react-datepicker__close-icon {
+    display: block;
+    &::after{
+      background-color: #fff;
+      color:#666;
+      font-size: 20px;
+    }
   }
 }
