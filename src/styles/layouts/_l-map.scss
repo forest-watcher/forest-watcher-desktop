@@ -3,7 +3,7 @@
 
   .leaflet-draw {
     position: absolute;
-    top: 100px;
+    top: 110px;
     right: 20px;
     margin-top: 0;
     margin-right: 0;
@@ -17,7 +17,29 @@
         height: 35px;
         line-height: 35px;
         background-color: $theme-base;
+        border-radius: 2px;
+      }
+
+      .leaflet-draw-draw-polygon {
+        background-position: -28px 0px;
       }
     }
+
+    .leaflet-draw-actions {
+      right: 36px;
+    }
+  }
+
+  .leaflet-right .leaflet-draw-actions li:first-child a {
+    border-radius: 2px 0 0 2px;
+  }
+
+  .leaflet-right .leaflet-draw-actions li:last-child a {
+    border-radius: 0 2px 2px;
+  }
+
+  .leaflet-touch .leaflet-draw-actions a {
+    line-height: 34px;
+    height: 34px;
   }
 }

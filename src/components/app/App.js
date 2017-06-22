@@ -20,7 +20,6 @@ class App extends React.Component {
 
   componentWillMount() {
     this.props.checkLogged(this.props.location.search);
-    this.props.getGeoStoresWithAreas();
   }
 
   getRootComponent = () => {
@@ -48,6 +47,7 @@ class App extends React.Component {
               <Switch>
                 <Route exact path={`${match.url}areas`} component={Areas} />
                 <Route exact path={`${match.url}areas/create`} component={AreasManage} />
+                <Route exact path={`${match.url}areas/:areaId`} component={AreasManage} />
               </Switch>
               <Switch>
                 <Route exact path={`${match.url}reports`} component={Reports} />
@@ -70,8 +70,7 @@ App.propTypes = {
   userChecked: PropTypes.bool.isRequired,
   user: PropTypes.object.isRequired,
   checkLogged: PropTypes.func.isRequired,
-  logout: PropTypes.func.isRequired,
-  getGeoStoresWithAreas: PropTypes.func.isRequired
+  logout: PropTypes.func.isRequired
 };
 
 export default App;

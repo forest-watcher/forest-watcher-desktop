@@ -14,9 +14,12 @@ const geojsonArea = require('@mapbox/geojson-area');
 
 class AreasManage extends React.Component {
 
-  constructor() {
-    super();
-    this.form = {};
+  constructor(props) {
+    super(props);
+    this.form = {
+      name: props.area.attributes.name,
+      geojson: props.geojson || null
+    };
     this.state = {
       mapConfig: {
         zoom: 10,
@@ -61,7 +64,7 @@ class AreasManage extends React.Component {
 
   onDrawDelete() {
     if (this.form.geojson) {
-      delete this.form.geojson;
+      this.form.geojson = null;
     }
   }
 
@@ -98,6 +101,7 @@ class AreasManage extends React.Component {
                 map={this.state.map}
                 onDrawComplete={this.onDrawComplete}
                 onDrawDelete={this.onDrawDelete}
+                geojson={this.form.geojson}
                 />
             </div>
           </div>
@@ -118,7 +122,7 @@ class AreasManage extends React.Component {
                     type="text"
                     onChange={this.onInputChange}
                     name="name"
-                    value=""
+                    value={this.form.name}
                     placeholder="type your title"
                     validations={['required']}
                     />

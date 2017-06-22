@@ -36,8 +36,24 @@ export const DRAW_CONTROL = {
   }
 };
 
+export const DRAW_CONTROL_DISABLED = {
+  position: 'topright',
+  draw: {
+      polyline: false,
+      polygon: false,
+      circle: false,
+      rectangle: false,
+      marker: false
+  },
+  edit: {
+      featureGroup: {},
+      remove: true,
+      allowIntersection: false
+  }
+};
+
 export const AREAS = {
   maxSize: 1500000000 // square meters
 }
 
-export default { MAP_CONFIG, DRAW_CONTROL, AREAS };
+export default { MAP_CONFIG, DRAW_CONTROL, DRAW_CONTROL_DISABLED, AREAS };
