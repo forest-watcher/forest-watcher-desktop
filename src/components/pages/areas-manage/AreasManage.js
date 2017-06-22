@@ -19,7 +19,7 @@ class AreasManage extends React.Component {
     this.form = {};
     this.state = {
       mapConfig: {
-        zoom: 3,
+        zoom: 10,
         lat: 0,
         lng: 0,
         zoomControl: false,
@@ -36,11 +36,11 @@ class AreasManage extends React.Component {
 
   onSubmit(e) {
     e.preventDefault();
-    if (this.form.area) {
-      toastr.success('Area saved', 'Note: in dev mode, area not saved to API');
-      this.props.saveGeostore(this.form.area);
+    if (this.form.geojson) {
+      toastr.success('Area saved', 'Note: in dev mode, geojson not saved to API');
+      this.props.saveAreaWithGeostore(this.form);
     } else {
-      toastr.error('Area needed', 'You cannot save without drawing an area');
+      toastr.error('Area needed', 'You cannot save without drawing an geojson');
     }
   }
 
@@ -52,7 +52,7 @@ class AreasManage extends React.Component {
     if (areaGeoJson) {
       const area = geojsonArea.geometry(areaGeoJson.geometry);
       if (area <= AREAS.maxSize) {
-        this.form.area = areaGeoJson;
+        this.form.geojson = areaGeoJson;
       } else {
         toastr.error('Area too large', 'Please draw a smaller area');
       }
@@ -60,8 +60,8 @@ class AreasManage extends React.Component {
   }
 
   onDrawDelete() {
-    if (this.form.area) {
-      delete this.form.area;
+    if (this.form.geojson) {
+      delete this.form.geojson;
     }
   }
 

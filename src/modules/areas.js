@@ -1,6 +1,6 @@
 import normalize from 'json-api-normalizer';
 import { API_BASE_URL } from '../constants/global';
-import { getGeostore } from './geostores';
+import { getGeostore, saveGeostore } from './geostores';
 
 // Actions
 const SET_AREA = 'areas/SET_AREA';
@@ -20,7 +20,7 @@ const initialState = {
 export default function reducer(state = initialState, action) {
   switch (action.type) {
     case SET_AREA: {
-      const area = action.payload;
+      const area = action.payload.area;
       if (area) return {
         ...state,
         ids: [...state.ids, ...Object.keys(area)],
@@ -126,6 +126,52 @@ export function getAreas() {
   };
 }
 
+export function saveArea(area) {
+  const url = `${API_BASE_URL}/area`;
+  const body = new FormData();
+  body.append('name', area.name);
+  body.append('geostore', area.geostore);
+  return (dispatch, state) => {
+    dispatch({
+      type: SET_LOADING_AREAS,
+      payload: true
+    });
+    fetch(url, {
+      headers: {
+        Authorization: `Bearer ${state().user.token}`,
+        'Content-Type': 'multipart/form-data'
+      },
+      method: 'POST',
+      body
+    })
+      .then((response) => {
+        if (response.ok) return response.json();
+        throw Error(response.statusText);
+      })
+      .then((data) => {
+      const normalized = normalize(data);
+        dispatch({
+          type: SET_AREA,
+          payload: normalized
+        });
+        dispatch({
+          type: SET_LOADING_AREAS,
+          payload: false
+        });
+      })
+      .catch((error) => {
+        dispatch({
+          type: SET_LOADING_AREAS_ERROR,
+          payload: error
+        });
+        dispatch({
+          type: SET_LOADING_AREAS,
+          payload: false
+        });
+      });
+  };
+}
+
 // async get Areas and their Geostores
 export function getGeoStoresWithAreas() {
   return async (dispatch, state) => {
@@ -137,5 +183,15 @@ export function getGeoStoresWithAreas() {
       promises.push(dispatch(getGeostore(areas[id].attributes.geostore)));
     })
     await Promise.all(promises);
+  };
+}
+
+// async save geostore then area
+export function saveAreaWithGeostore(area) {
+  return async (dispatch, state) => {
+    const geostore = await dispatch(saveGeostore(area.geojson));
+    const geostoreId = Object.keys(geostore)[0];
+    const areaWithGeostore = {...area, geostore: geostoreId};
+    await dispatch(saveArea(areaWithGeostore));
   };
 }

@@ -11,7 +11,7 @@ import Icon from '../../ui/Icon';
 class Areas extends React.Component {
 
   componentWillMount() {
-    this.props.getGeoStoresWithAreas();
+    if (!this.props.areasList.length) this.props.getGeoStoresWithAreas();
   }
 
   getAddArea = () => {

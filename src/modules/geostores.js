@@ -17,7 +17,7 @@ const initialState = {
 export default function reducer(state = initialState, action) {
   switch (action.type) {
     case SET_GEOSTORE: {
-      const geostore = action.payload;
+      const geostore = action.payload.geoStore;
       if (geostore) return {
         ...state,
         ids: [...state.ids, ...Object.keys(geostore)],
@@ -85,7 +85,7 @@ export function saveGeostore(geojson) {
       type: SET_LOADING_GEOSTORE,
       payload: true
     });
-    fetch(url, {
+    return fetch(url, {
       headers: {
         Authorization: `Bearer ${state().user.token}`,
         'Content-Type': 'application/json'
@@ -107,6 +107,7 @@ export function saveGeostore(geojson) {
           type: SET_LOADING_GEOSTORE,
           payload: false
         });
+        return normalized.geoStore;
       })
       .catch((error) => {
         dispatch({
