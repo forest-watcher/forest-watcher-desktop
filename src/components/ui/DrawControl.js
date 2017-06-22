@@ -14,11 +14,13 @@ class DrawControl extends React.Component {
     this.setLayers = this.setLayers.bind(this);
     this.setDrawing = this.setDrawing.bind(this);
     this.enableDrawing = this.enableDrawing.bind(this);
+    this.disableDrawing = this.disableDrawing.bind(this);
   }
 
   /* Component lifecycle */
+
   componentWillReceiveProps(nextProps) {
-    if (this.map !== nextProps.map) {
+    if (this.props.map !== nextProps.map) {
       this.map = nextProps.map;
       this.setLayers();
       this.setDrawing();
