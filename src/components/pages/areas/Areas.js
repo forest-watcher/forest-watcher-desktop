@@ -16,7 +16,7 @@ class Areas extends React.Component {
       <Link to="/areas/create">
         <button className="c-add-card">
           <Icon name="icon-plus" className="-medium -green" />
-            Add Area
+            <span className="text -x-small-title -green">Add Area</span>
         </button>
       </Link>
     );

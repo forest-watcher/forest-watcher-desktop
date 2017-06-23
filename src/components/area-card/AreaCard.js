@@ -15,7 +15,7 @@ class AreaCard extends React.Component {
         </div>
         <ul className="area-actions">
           <li className="area-action">
-            <button className="c-button -light -small">Reports</button>
+            <Link className="c-button -light -small" to={'/reports'}>Reports</Link>
           </li>
           <li className="area-action -edit-area">
             <Link className="c-button -circle -transparent" to={`/areas/${area.id}`}>
