@@ -3,10 +3,13 @@ import { API_BASE_URL } from '../constants/global';
 
 // Actions
 const GET_USER_ANSWERS = 'areas/GET_USER_ANSWERS';
-
+const SET_SELECTED_TEMPLATE_INDEX = 'templates/SET_SELECTED_TEMPLATE_INDEX';
+const SET_TEMPLATE_SEARCH_PARAMS = 'templates/SET_TEMPLATE_SEARCH_PARAMS';
 // Reducer
 const initialState = {
-  answers: []
+  answers: [],
+  selectedIndex: 0,
+  searchParams: {}
 };
 
 export default function reducer(state = initialState, action) {
@@ -19,6 +22,10 @@ export default function reducer(state = initialState, action) {
       }
       return state;
     }
+    case SET_SELECTED_TEMPLATE_INDEX:
+      return Object.assign({}, state, { selectedIndex: action.payload });
+    case SET_TEMPLATE_SEARCH_PARAMS:
+      return Object.assign({}, state, { searchParams: action.payload });
     default:
       return state;
   }
@@ -81,4 +88,18 @@ export function downloadAnswers(reportId) {
     console.warn('File download not supported');
     return null;
   }
+}
+
+export function setSelectedTemplateIndex(index) {
+  return {
+    type: SET_SELECTED_TEMPLATE_INDEX,
+    payload: index
+  };
+}
+
+export function setTemplateSearchParams(params) {
+  return {
+    type: SET_TEMPLATE_SEARCH_PARAMS,
+    payload: params
+  };
 }

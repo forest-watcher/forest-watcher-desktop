@@ -1,9 +1,11 @@
  import { connect } from 'react-redux';
  import moment from 'moment'
- import { getUserTemplates, setSelectedTemplateIndex, setTemplateSearchParams } from '../../../modules/templates';
+ import { getUserTemplates } from '../../../modules/templates';
+ import { setSelectedTemplateIndex, setTemplateSearchParams } from '../../../modules/reports';
  import { getReportAnswers } from '../../../modules/reports';
  import { DEFAULT_FORMAT } from '../../../constants/global';
- 
+ import { downloadAnswers } from '../../../modules/reports'; 
+
  import Reports from './Reports';
 
   const filterBy = (field, answers, value) => {
