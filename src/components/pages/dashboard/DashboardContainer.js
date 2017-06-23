@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import { getUserTemplates, getUserQuestionares } from '../../../modules/reports';
-import { getUserAreas } from '../../../modules/areas';
+import { getAreas } from '../../../modules/areas';
 
 import Dashboard from './Dashboard';
 
@@ -10,8 +10,8 @@ const mapStateToProps = ({ data }) => ({
 
 function mapDispatchToProps(dispatch) {
   return {
-    getUserAreas: () => {
-      dispatch(getUserAreas());
+    getAreas: () => {
+      dispatch(getAreas());
     },
     getUserTemplates: () => {
       dispatch(getUserTemplates());

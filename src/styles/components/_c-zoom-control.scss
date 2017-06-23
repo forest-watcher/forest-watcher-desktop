@@ -1,0 +1,15 @@
+.c-zoom-control {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  display: flex;
+  flex-direction: column;
+  z-index: 1000;
+
+  .zoom-control-btn {
+    background-color: $theme-base;
+    padding: 10px 5px;
+    margin-bottom: 2px;
+    cursor: pointer;
+  }
+}

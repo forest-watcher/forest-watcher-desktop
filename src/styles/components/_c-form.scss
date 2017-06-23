@@ -1,9 +1,4 @@
 .c-form {
-  height: $footer-height;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-
   input:focus,
   select:focus,
   textarea:focus,
@@ -21,6 +16,10 @@
 	  background-color: #ffffff;
 	  border: solid 1px #e6e6e6;
     padding: 0 15px;
+
+    &::placeholder {
+      color: rgba($theme-text, 0.3);
+    }
   }
 
   .horizontal-field {
@@ -30,16 +29,40 @@
     align-items: center;
   }
 
-  .upload-field {
-    height: 100%;
-  }
+  &.-nav {
+    height: $footer-height;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 
-  .separator {
-    width: 1px;
-    
-    &.-vertical {
-      border-left: solid 1px rgba($pale-gray, 0.5);
+    .areas-inputs {
       height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: row;
+    }
+
+    .upload-field {
+      height: 100%;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: center;
+
+      .text {
+        margin-right: 5px;
+      }
+    }
+
+    .separator {
+      width: 1px;
+      margin: 0 30px;
+
+      &.-vertical {
+        border-left: solid 1px rgba($pale-gray, 0.2);
+        height: 100%;
+      }
     }
   }
 }

@@ -4,7 +4,6 @@
  import { setSelectedTemplateIndex, setTemplateSearchParams } from '../../../modules/reports';
  import { getReportAnswers } from '../../../modules/reports';
  import { DEFAULT_FORMAT } from '../../../constants/global';
- import { downloadAnswers } from '../../../modules/reports'; 
 
  import Reports from './Reports';
 
@@ -28,8 +27,8 @@
   }
 
   const mapStateToProps = ({ reports, templates }) => {
-    const templateId = templates.ids[templates.selectedIndex];
-    const { aoi, searchValues, date } = templates.searchParams;
+    const templateId = templates.ids[reports.selectedIndex];
+    const { aoi, searchValues, date } = reports.searchParams;
     let answers = [];
     if (templateId !== undefined){
       const selectedAnswers = reports.answers[templateId];
