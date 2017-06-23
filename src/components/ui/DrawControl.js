@@ -18,13 +18,20 @@ class DrawControl extends React.Component {
     this.disableDrawing = this.disableDrawing.bind(this);
   }
 
-  componentDidUpdate(prevProps) {
-    if (this.props.map !== prevProps.map) {
-      this.map = this.props.map;
+  /* Component lifecycle */
+  componentWillReceiveProps(nextProps) {
+    if (this.props.map !== nextProps.map) {
+      this.map = nextProps.map;
       this.setLayers();
       this.setDrawing();
+      if (this.props.geojson) {
+        this.setFeatures();
+      }
     }
-    if (this.props.geojson || (this.props.geojson !== prevProps.geojson)) {
+  }
+
+  componentDidUpdate(prevProps) {
+    if (this.props.geojson !== prevProps.geojson) {
       this.setFeatures();
       this.disableDrawing();
     }
