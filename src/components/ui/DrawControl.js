@@ -33,6 +33,10 @@ class DrawControl extends React.Component {
     if (this.props.geojson) {
       L.geoJson(this.props.geojson, {
         onEachFeature: (feature, layer) => {
+          layer.setStyle({
+            fillColor: '#97be32',
+            stroke: '#f2f2f2'
+          });
           this.featureGroup.addLayer(layer);
           this.map.fitBounds(layer.getBounds());
         }

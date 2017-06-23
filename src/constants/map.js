@@ -20,7 +20,9 @@ export const DRAW_CONTROL = {
           message: '<strong>Oh snap!<strong> you can\'t draw that!'
         },
         shapeOptions: {
-          color: '#97be32'
+          color: '#97be32',
+          fillColor: '#97be32',
+          stroke: '#f2f2f2'
         },
         showArea: true,
         metric: true
