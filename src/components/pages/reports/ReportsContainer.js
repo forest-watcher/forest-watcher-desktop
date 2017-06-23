@@ -1,5 +1,5 @@
  import { connect } from 'react-redux';
- import moment from 'moment'
+ import fecha from 'fecha'
  import { getUserTemplates } from '../../../modules/templates';
  import { setSelectedTemplateIndex, setTemplateSearchParams, downloadAnswers } from '../../../modules/reports';
  import { getReportAnswers } from '../../../modules/reports';
@@ -35,7 +35,7 @@
       if (selectedAnswers !== undefined) {
         answers = selectedAnswers.map((answer) => ({
           id: answer.id,
-          date: moment(answer.attributes.createdAt).format(DEFAULT_FORMAT),
+          date: fecha.format(answer.attributes.createdAt, DEFAULT_FORMAT),
           latLong: answer.attributes.userPosition.toString(),
           member: answer.attributes.user,
           aoi: answer.attributes.layer // TODO: Change to AOI instead of layer

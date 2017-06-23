@@ -8,7 +8,7 @@ import 'react-select/dist/react-select.css';
 
 import Filters from './Filters';
 
-const qs = require('querystringify');
+import qs from 'query-string';
 
 class Reports extends React.Component {
   componentWillMount() {

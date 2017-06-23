@@ -4,11 +4,11 @@ import PropTypes from 'prop-types';
 import Select from 'react-select';
 import { DEFAULT_LANGUAGE, DEFAULT_FORMAT } from '../../../constants/global';
 import DatePicker from 'react-datepicker';
-import moment from 'moment';
+import fecha from 'fecha';
 
 import 'react-datepicker/dist/react-datepicker.css';
 
-const qs = require('querystringify');
+import qs from 'query-string';
 
 class Filters extends React.Component {
   handleTemplateChange = (selected) => {
@@ -26,7 +26,7 @@ class Filters extends React.Component {
   }
 
   handleSearchChange = (event) => {
-    const searchParams = Object.assign(this.props.searchParams, { searchValues: event.target.value }) 
+    const searchParams = Object.assign(this.props.searchParams, { searchValues: event.target.value });
     if (event.target.value === ''){
       delete searchParams.searchValues
     }
@@ -34,8 +34,8 @@ class Filters extends React.Component {
   }
 
   handleDateChange = (date) => {
-    const parsedDate = date && moment(date).format(DEFAULT_FORMAT)
-    const searchParams = Object.assign(this.props.searchParams, { date: parsedDate }) 
+    const parsedDate = date && fecha.format(date, DEFAULT_FORMAT);
+    const searchParams = Object.assign(this.props.searchParams, { date: parsedDate });
     if (!parsedDate){
       delete searchParams.date
     }
@@ -43,7 +43,7 @@ class Filters extends React.Component {
   }
 
   handleAreaChange = (selected) => {
-    const searchParams = Object.assign(this.props.searchParams, { aoi: selected.value }) 
+    const searchParams = Object.assign(this.props.searchParams, { aoi: selected.value });
     if (selected.value === ''){
       delete searchParams.aoi
     }
@@ -96,7 +96,7 @@ class Filters extends React.Component {
           <DatePicker
             className="datepicker"
             dateFormat={DEFAULT_FORMAT}
-            selected={this.props.searchParams.date && moment(this.props.searchParams.date, DEFAULT_FORMAT)}
+            selected={this.props.searchParams.date && fecha.parse(this.props.searchParams.date, DEFAULT_FORMAT)}
             onChange={this.handleDateChange}
             isClearable={true}
             placeholderText={"Filter by date"}
