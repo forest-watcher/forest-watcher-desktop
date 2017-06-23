@@ -18,7 +18,8 @@ class AreasManage extends React.Component {
     super(props);
     this.form = {
       name: props.area ? props.area.attributes.name : '',
-      geojson: props.geojson || null
+      geojson: props.geojson || null,
+      geostore: props.geostore || null
     };
     this.state = {
       map: {},
@@ -45,8 +46,12 @@ class AreasManage extends React.Component {
   onSubmit(e) {
     e.preventDefault();
     if (this.form.geojson) {
-      toastr.success('Area saved', 'Note: in dev mode, geojson not saved to API');
-      this.props.saveAreaWithGeostore(this.form, this.state.map._container);
+      if (this.props.editing) {
+        debugger
+        this.props.updateAreaWithGeostore(this.form, this.state.map._container);
+      } else {
+        this.props.saveAreaWithGeostore(this.form, this.state.map._container);
+      }
     } else {
       toastr.error('Area needed', 'You cannot save without drawing an geojson');
     }
@@ -77,7 +82,7 @@ class AreasManage extends React.Component {
     return (
       <div>
         <Hero
-          title="Create an Area of Interest"
+          title={this.props.editing ? "Manage Area of Interest" : "Create an Area of Interest"}
         />
         <Form onSubmit={this.onSubmit}>
           <div className="l-map">

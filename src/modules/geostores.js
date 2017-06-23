@@ -122,3 +122,51 @@ export function saveGeostore(geojson) {
       });
   };
 }
+
+// PATCH geojson object
+export function updateGeostore(geostoreId, geojson) {
+  const url = `${API_BASE_URL}/geostore/${geostoreId}`;
+  const body = {
+    geojson: geojson
+  }
+  return (dispatch, state) => {
+    dispatch({
+      type: SET_LOADING_GEOSTORE,
+      payload: true
+    });
+    return fetch(url, {
+      headers: {
+        Authorization: `Bearer ${state().user.token}`,
+        'Content-Type': 'application/json'
+      },
+      method: 'PATCH',
+      body: JSON.stringify(body)
+    })
+      .then((response) => {
+        if (response.ok) return response.json();
+        throw Error(response.statusText);
+      })
+      .then((data) => {
+      const normalized = normalize(data);
+        dispatch({
+          type: SET_GEOSTORE,
+          payload: normalized
+        });
+        dispatch({
+          type: SET_LOADING_GEOSTORE,
+          payload: false
+        });
+        return normalized.geoStore;
+      })
+      .catch((error) => {
+        dispatch({
+          type: SET_LOADING_GEOSTORE_ERROR,
+          payload: error
+        });
+        dispatch({
+          type: SET_LOADING_GEOSTORE,
+          payload: false
+        });
+      });
+  };
+}

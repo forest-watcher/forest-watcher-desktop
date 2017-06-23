@@ -1,7 +1,8 @@
 import normalize from 'json-api-normalizer';
 import { API_BASE_URL } from '../constants/global';
-import { getGeostore, saveGeostore } from './geostores';
+import { getGeostore, saveGeostore, updateGeostore } from './geostores';
 import domtoimage from 'dom-to-image';
+import { toastr } from 'react-redux-toastr';
 
 // Actions
 const SET_AREA = 'areas/SET_AREA';
@@ -14,8 +15,7 @@ const initialState = {
   ids: [],
   areas: {},
   loading: false,
-  error: null,
-  saving: false
+  error: null
 };
 
 export default function reducer(state = initialState, action) {
@@ -162,6 +162,8 @@ export function saveArea(area, node) {
           type: SET_LOADING_AREAS,
           payload: false
         });
+        toastr.success('Area saved');
+        // history.push('/areas');
       })
       .catch((error) => {
         dispatch({
@@ -172,6 +174,58 @@ export function saveArea(area, node) {
           type: SET_LOADING_AREAS,
           payload: false
         });
+        toastr.error(error);
+      });
+  };
+}
+
+// POST name, geostore ID
+export function updateArea(area, node) {
+  return async (dispatch, state) => {
+    const url = `${API_BASE_URL}/area/${area.id}`;
+    const body = new FormData();
+    const blob = await domtoimage.toBlob(node);
+    body.append('name', area.name);
+    body.append('geostore', area.geostore);
+    const image = new File([blob], 'png', {type: 'image/png', name: encodeURIComponent(area.name)})
+    body.append('image', image);
+    dispatch({
+      type: SET_LOADING_AREAS,
+      payload: true
+    });
+    fetch(url, {
+      headers: {
+        Authorization: `Bearer ${state().user.token}`
+      },
+      method: 'PATCH',
+      body
+    })
+      .then((response) => {
+        if (response.ok) return response.json();
+        throw Error(response.statusText);
+      })
+      .then((data) => {
+      const normalized = normalize(data);
+        dispatch({
+          type: SET_AREA,
+          payload: normalized
+        });
+        dispatch({
+          type: SET_LOADING_AREAS,
+          payload: false
+        });
+        toastr.success('Area saved');
+      })
+      .catch((error) => {
+        dispatch({
+          type: SET_LOADING_AREAS_ERROR,
+          payload: error
+        });
+        dispatch({
+          type: SET_LOADING_AREAS,
+          payload: false
+        });
+        toastr.error(error);
       });
   };
 }
@@ -197,5 +251,14 @@ export function saveAreaWithGeostore(area, node) {
     const geostoreId = Object.keys(geostore)[0];
     const areaWithGeostore = {...area, geostore: geostoreId};
     await dispatch(saveArea(areaWithGeostore, node));
+  };
+}
+
+// async update geostore then area
+export function updateAreaWithGeostore(area, node) {
+  return async (dispatch, state) => {
+    const geostore = await dispatch(updateGeostore(area.geostore.id, area.geojson));
+    const areaWithGeostore = {...area, geostore: geostore.id};
+    await dispatch(updateArea(areaWithGeostore, node));
   };
 }

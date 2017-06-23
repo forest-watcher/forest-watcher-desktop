@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { saveAreaWithGeostore } from '../../../modules/areas';
+import { saveAreaWithGeostore, updateAreaWithGeostore } from '../../../modules/areas';
 
 import AreasManage from './AreasManage';
 
@@ -12,6 +12,14 @@ const readGeojson = (state, match) => {
   return geojson;
 }
 
+const readGeostore = (state, match) => {
+  const areaId = match.params.areaId;
+  const area = state.areas.areas[areaId] || null;
+  const geostoreId = area ? area.attributes.geostore : null;
+  const geostore = state.geostores.geostores[geostoreId] || null;
+  return geostore;
+}
+
 const readArea = (state, match) => {
   const areaId = match.params.areaId;
   const area = state.areas.areas[areaId] || null;
@@ -19,7 +27,9 @@ const readArea = (state, match) => {
 }
 
 const mapStateToProps = (state, { match }) => ({
+  editing: match.params.areaId ? true : false,
   loading: state.areas.loading,
+  geostore: readGeostore(state, match),
   geojson: readGeojson(state, match),
   area: readArea(state, match)
 });
@@ -28,6 +38,9 @@ function mapDispatchToProps(dispatch) {
   return {
     saveAreaWithGeostore: (area, node) => {
       dispatch(saveAreaWithGeostore(area, node));
+    },
+    updateAreaWithGeostore: (area, node) => {
+      dispatch(updateAreaWithGeostore(area, node));
     }
   };
 }
