@@ -6,7 +6,7 @@ class Dashboard extends React.Component {
 
   componentWillMount() {
     this.trimQueryParams();
-    this.props.getUserAreas();
+    this.props.getAreas();
   }
 
   trimQueryParams() {
@@ -31,7 +31,7 @@ class Dashboard extends React.Component {
 Dashboard.propTypes = {
   location: PropTypes.object.isRequired,
   history: PropTypes.object.isRequired,
-  getUserAreas: PropTypes.func.isRequired
+  getAreas: PropTypes.func.isRequired
 };
 
 export default Dashboard;

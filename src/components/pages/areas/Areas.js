@@ -10,10 +10,6 @@ import Icon from '../../ui/Icon';
 
 class Areas extends React.Component {
 
-  componentWillMount() {
-    if (!this.props.areasList.length) this.props.getUserAreas();
-  }
-
   getAddArea = () => {
     if (this.props.loading) return null;
     return (
@@ -51,7 +47,6 @@ class Areas extends React.Component {
 
 Areas.propTypes = {
   areasList: PropTypes.array.isRequired,
-  getUserAreas: PropTypes.func.isRequired,
   loading: PropTypes.bool.isRequired
 };
 

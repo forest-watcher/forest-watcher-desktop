@@ -8,7 +8,7 @@ import ReduxToastr from 'react-redux-toastr'
 import Login from '../pages/login/Login';
 import Dashboard from '../pages/dashboard/DashboardContainer';
 import Areas from '../pages/areas/AreasContainer';
-import AreasManage from '../pages/areas-manage/AreasManage';
+import AreasManage from '../pages/areas-manage/AreasManageContainer';
 import Reports from '../pages/reports/ReportsContainer';
 import Answers from '../pages/answers/AnswersContainer';
 import AnswersDetail from '../pages/answers-detail/AnswersDetailContainer';
@@ -20,6 +20,7 @@ class App extends React.Component {
 
   componentWillMount() {
     this.props.checkLogged(this.props.location.search);
+    this.props.getGeoStoresWithAreas();
   }
 
   getRootComponent = () => {
@@ -56,7 +57,7 @@ class App extends React.Component {
             </div>
           }
           {!user.loggedIn && <Redirect to="/" />}
-          <ReduxToastr />
+          <ReduxToastr position="bottom-right" />
         </main>
       </div>
     );
@@ -69,7 +70,8 @@ App.propTypes = {
   userChecked: PropTypes.bool.isRequired,
   user: PropTypes.object.isRequired,
   checkLogged: PropTypes.func.isRequired,
-  logout: PropTypes.func.isRequired
+  logout: PropTypes.func.isRequired,
+  getGeoStoresWithAreas: PropTypes.func.isRequired
 };
 
 export default App;
