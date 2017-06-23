@@ -1,7 +1,7 @@
  import { connect } from 'react-redux';
  import moment from 'moment'
  import { getUserTemplates } from '../../../modules/templates';
- import { setSelectedTemplateIndex, setTemplateSearchParams } from '../../../modules/reports';
+ import { setSelectedTemplateIndex, setTemplateSearchParams, downloadAnswers } from '../../../modules/reports';
  import { getReportAnswers } from '../../../modules/reports';
  import { DEFAULT_FORMAT } from '../../../constants/global';
 
@@ -71,8 +71,11 @@
      },
     setTemplateSearchParams: (queryParams) => {
       dispatch(setTemplateSearchParams(queryParams));
-     }
-   };
+     },
+    downloadAnswers: (templateId) => {
+      dispatch(downloadAnswers(templateId));
+    }
+  }
  }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Reports);

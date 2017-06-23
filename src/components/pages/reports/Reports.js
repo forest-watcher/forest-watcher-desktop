@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 
 import Article from '../../layouts/Article';
 import Hero from '../../layouts/Hero'; 
-import { downloadAnswers } from '../../../modules/reports'; 
 import ReactTable from 'react-table'
 import 'react-select/dist/react-select.css';
 
@@ -52,7 +51,7 @@ class Reports extends React.Component {
 
   downloadReports = () => {
     const index = this.props.match.params.templateIndex || 0
-    downloadAnswers(this.props.templates.ids[index]);
+    this.props.downloadAnswers(this.props.templates.ids[index]);
   }
 
   render() {
