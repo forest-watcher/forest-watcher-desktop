@@ -65,7 +65,7 @@ class Filters extends React.Component {
       areasOptions = answers.map((answer, index) => ({ label:answer.aoi, value: answer.aoi }))
     }
     return (
-      <div className="row">
+      <div className="row filter-bar">
         <div className="column">
           <Select
             name="template-select"
