@@ -26,8 +26,8 @@ class Map extends React.Component {
       zoom: this.props.mapConfig.zoom,
       center: MAP_CONFIG.center,
       detectRetina: true,
-      zoomControl: isNaN(this.props.mapConfig.zoomControl) ? MAP_CONFIG.zoomControl : this.props.mapConfig.zoomControl,
-      scrollWheelZoom: !!this.props.mapConfig.scrollWheelZoom
+      zoomControl: this.props.mapConfig.zoomControl || false,
+      scrollWheelZoom: this.props.mapConfig.scrollWheelZoom || false
     });
 
     // SETTERS

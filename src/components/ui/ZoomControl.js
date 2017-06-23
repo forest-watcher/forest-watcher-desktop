@@ -5,14 +5,6 @@ import Icon from './Icon';
 
 export default class ZoomControl extends React.Component {
 
-  constructor(props) {
-    super(props);
-
-    // Bindings
-    this.increaseZoom = this.increaseZoom.bind(this);
-    this.decreaseZoom = this.decreaseZoom.bind(this);
-  }
-
   /* Component lifecycle */
   shouldComponentUpdate(newProps) {
     return this.props.zoom !== newProps.zoom;
@@ -22,13 +14,13 @@ export default class ZoomControl extends React.Component {
     this.props.onZoomChange && this.props.onZoomChange(zoom);
   }
 
-  increaseZoom(evt) {
+  increaseZoom = (evt) => {
     evt.preventDefault();
     if (this.props.zoom === this.props.maxZoom) return;
     this.setZoom(this.props.zoom + 1);
   }
 
-  decreaseZoom(evt) {
+  decreaseZoom = (evt) => {
     evt.preventDefault();
     if (this.props.zoom === this.props.minZoom) return;
     this.setZoom(this.props.zoom - 1);
