@@ -77,7 +77,6 @@ class Reports extends React.Component {
           title="Your reports"
           action={{name:'Download Reports', callback: this.downloadReports}}
         />
-        {(templates.ids.length > 0) ? 
           <div className="l-content">
             <Article>
               <Filters
@@ -96,7 +95,7 @@ class Reports extends React.Component {
                 minRows={5}
               />
             </Article>
-          </div> : null}
+          </div>
       </div>
     );
   }
