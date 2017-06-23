@@ -3,3 +3,9 @@
 .sr-only {
   display: none;
 }
+
+.leaflet-div-icon {
+  background: $theme-accent;
+  border: 2px solid $white;
+  border-radius: 50%;
+}

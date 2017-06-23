@@ -1,3 +1,5 @@
+import L from 'leaflet';
+
 // Map
 export const MAP_CONFIG = {
   minZoom: 2,
@@ -10,6 +12,7 @@ export const MAP_CONFIG = {
 
 export const POLYGON_STYLES = {
   color: '#ffffff',
+  opacity: 1,
   fillColor: '#97be32',
   fillOpacity: 0.5,
   weight: 2
@@ -28,7 +31,11 @@ export const DRAW_CONTROL = {
         },
         shapeOptions: POLYGON_STYLES,
         showArea: true,
-        metric: true
+        metric: true,
+        icon: new L.DivIcon({
+    			iconSize: new L.Point(12, 12),
+    			className: 'leaflet-div-icon leaflet-editing-icon'
+    		})
       },
       circle: false,
       rectangle: false,
