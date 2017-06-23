@@ -18,8 +18,8 @@ class AreaCard extends React.Component {
             <button className="c-button -light -small">Reports</button>
           </li>
           <li className="area-action -edit-area">
-            <Link className="c-button -round -white" to={`/areas/${area.id}`}>
-              <Icon className="-small -green" name="icon-edit"/>
+            <Link className="c-button -circle -transparent" to={`/areas/${area.id}`}>
+              <Icon className="-small -gray" name="icon-edit"/>
             </Link>
           </li>
         </ul>
