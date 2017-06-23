@@ -11,17 +11,22 @@ import Filters from './Filters';
 const qs = require('querystringify');
 
 class Reports extends React.Component {
-  componentWillMount() {
+  updateFilters = () => {
     this.templateId = this.props.match.params.templateIndex;
     this.searchParams = this.props.location.search && qs.parse(this.props.location.search);
     if (this.searchParams !== undefined){
       this.props.setTemplateSearchParams(this.searchParams);
     }
-    if (this.templateId) {
+    if (this.templateId !== undefined) {
       this.props.setSelectedTemplateIndex(this.templateId);
     }
   }
-  componentDidMount() {
+
+  componentWillMount() {
+    this.updateFilters();
+  }
+
+  updateAnswers = () => {
     const reportIds = this.props.templates.ids;
     if (reportIds.length === 0) { 
       this.props.getUserTemplates(); 
@@ -29,6 +34,11 @@ class Reports extends React.Component {
       this.props.getReportAnswers(reportIds[0]);
     }
   }
+
+  componentDidMount() {
+    this.updateAnswers();
+  }
+
   componentWillReceiveProps(nextProps){
     if (this.props.templates.ids.length !== nextProps.templates.ids.length){
       this.props.getReportAnswers(nextProps.templates.ids[this.templateId || 0]);
