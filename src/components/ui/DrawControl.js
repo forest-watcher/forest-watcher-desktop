@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import L from 'leaflet';
 import { Draw, Control } from 'leaflet-draw'; // eslint-disable-line no-unused-vars
-import { DRAW_CONTROL, DRAW_CONTROL_DISABLED } from '../../constants/map';
+import { DRAW_CONTROL, DRAW_CONTROL_DISABLED, POLYGON_STYLES } from '../../constants/map';
 import 'leaflet-draw/dist/leaflet.draw.css';
 
 class DrawControl extends React.Component {
@@ -12,37 +12,38 @@ class DrawControl extends React.Component {
 
     // Bindings
     this.setLayers = this.setLayers.bind(this);
+    this.setFeatures = this.setFeatures.bind(this);
     this.setDrawing = this.setDrawing.bind(this);
     this.enableDrawing = this.enableDrawing.bind(this);
     this.disableDrawing = this.disableDrawing.bind(this);
   }
 
-  /* Component lifecycle */
-
-  componentWillReceiveProps(nextProps) {
-    if (this.props.map !== nextProps.map) {
-      this.map = nextProps.map;
+  componentDidUpdate(prevProps) {
+    if (this.props.map !== prevProps.map) {
+      this.map = this.props.map;
       this.setLayers();
       this.setDrawing();
+    }
+    if (this.props.geojson || (this.props.geojson !== prevProps.geojson)) {
+      this.setFeatures();
+      this.disableDrawing();
     }
   }
 
   // SETTERS
   setLayers() {
     this.featureGroup = new L.FeatureGroup();
-    if (this.props.geojson) {
-      L.geoJson(this.props.geojson, {
-        onEachFeature: (feature, layer) => {
-          layer.setStyle({
-            fillColor: '#97be32',
-            stroke: '#f2f2f2'
-          });
-          this.featureGroup.addLayer(layer);
-          this.map.fitBounds(layer.getBounds());
-        }
-      });
-    }
     this.map.addLayer(this.featureGroup);
+  }
+
+  setFeatures() {
+    L.geoJson(this.props.geojson, {
+      onEachFeature: (feature, layer) => {
+        layer.setStyle(POLYGON_STYLES);
+        this.featureGroup.addLayer(layer);
+        this.map.fitBounds(layer.getBounds());
+      }
+    });
   }
 
   setDrawing() {

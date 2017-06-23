@@ -8,6 +8,13 @@ export const MAP_CONFIG = {
   zoomControl: false
 }
 
+export const POLYGON_STYLES = {
+  color: '#ffffff',
+  fillColor: '#97be32',
+  fillOpacity: 0.5,
+  weight: 2
+};
+
 // Leaflet Draw
 export const DRAW_CONTROL = {
   position: 'topright',
@@ -19,11 +26,7 @@ export const DRAW_CONTROL = {
           color: '#f15656',
           message: '<strong>Oh snap!<strong> you can\'t draw that!'
         },
-        shapeOptions: {
-          color: '#97be32',
-          fillColor: '#97be32',
-          stroke: '#f2f2f2'
-        },
+        shapeOptions: POLYGON_STYLES,
         showArea: true,
         metric: true
       },

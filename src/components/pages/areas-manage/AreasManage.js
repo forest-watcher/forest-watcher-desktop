@@ -37,6 +37,11 @@ class AreasManage extends React.Component {
     this.onDrawDelete = this.onDrawDelete.bind(this);
   }
 
+  componentWillReceiveProps(nextProps) {
+    this.form.name = nextProps.area ? nextProps.area.attributes.name : '';
+    this.form.geojson = nextProps.geojson;
+  }
+
   onSubmit(e) {
     e.preventDefault();
     if (this.form.geojson) {
