@@ -52,9 +52,8 @@ class AreasManage extends React.Component {
     }
   }
 
-  onInputChange(e) {
-    debugger;
-    this.form.name = e.target.value;
+  onInputChange = (e) => {
+    this.form[e.target.name] = e.target.value;
   }
 
   onDrawComplete = (areaGeoJson) => {
@@ -126,7 +125,7 @@ class AreasManage extends React.Component {
                   <label className="text -x-small-title">Name the Area: </label>
                   <Input
                     type="text"
-                    onChange={ (e) => { this.form.name = e.target.value } }
+                    onChange={this.onInputChange}
                     name="name"
                     value={this.form.name}
                     placeholder="type your title"
