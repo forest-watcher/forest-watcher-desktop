@@ -26,27 +26,18 @@ class Filters extends React.Component {
   }
 
   handleSearchChange = (event) => {
-    const searchParams = Object.assign(this.props.searchParams, { searchValues: event.target.value });
-    if (event.target.value === ''){
-      delete searchParams.searchValues
-    }
+    const searchParams = Object.assign(this.props.searchParams, { searchValues: event.target.value || undefined });
     this.redirectWith(searchParams);
   }
 
   handleDateChange = (date) => {
     const parsedDate = date && moment(date).format(DEFAULT_FORMAT);
-    const searchParams = Object.assign(this.props.searchParams, { date: parsedDate });
-    if (!parsedDate){
-      delete searchParams.date
-    }
+    const searchParams = Object.assign(this.props.searchParams, { date: parsedDate || undefined });
     this.redirectWith(searchParams);
   }
 
   handleAreaChange = (selected) => {
-    const searchParams = Object.assign(this.props.searchParams, { aoi: selected.value });
-    if (selected.value === ''){
-      delete searchParams.aoi
-    }
+    const searchParams = Object.assign(this.props.searchParams, { aoi: selected.value || undefined });
     this.redirectWith(searchParams);
   }
   
