@@ -17,6 +17,7 @@ class AreasManage extends React.Component {
   constructor(props) {
     super(props);
     this.form = {
+      id: props.area.id || null,
       name: props.area ? props.area.attributes.name : '',
       geojson: props.geojson || null,
       geostore: props.geostore || null
@@ -31,23 +32,20 @@ class AreasManage extends React.Component {
         scrollWheelZoom: false
       }
     }
-
-    this.onSubmit = this.onSubmit.bind(this);
-    this.onInputChange = this.onInputChange.bind(this);
-    this.onDrawComplete = this.onDrawComplete.bind(this);
-    this.onDrawDelete = this.onDrawDelete.bind(this);
   }
 
   componentWillReceiveProps(nextProps) {
-    this.form.name = nextProps.area ? nextProps.area.attributes.name : '';
-    this.form.geojson = nextProps.geojson;
+    this.form = {
+      ...this.form,
+      area: nextProps.area ? nextProps.area.attributes.name : '',
+      geojson: nextProps.geojson ? nextProps.geojson : ''
+    };
   }
 
-  onSubmit(e) {
+  onSubmit = (e) => {
     e.preventDefault();
     if (this.form.geojson) {
       if (this.props.editing) {
-        debugger
         this.props.updateAreaWithGeostore(this.form, this.state.map._container);
       } else {
         this.props.saveAreaWithGeostore(this.form, this.state.map._container);
@@ -58,10 +56,11 @@ class AreasManage extends React.Component {
   }
 
   onInputChange(e) {
-    this.form[e.target.name] = e.target.value;
+    debugger;
+    this.form.name = e.target.value;
   }
 
-  onDrawComplete(areaGeoJson) {
+  onDrawComplete = (areaGeoJson) => {
     if (areaGeoJson) {
       const area = geojsonArea.geometry(areaGeoJson.geometry);
       if (area <= AREAS.maxSize) {
@@ -72,7 +71,7 @@ class AreasManage extends React.Component {
     }
   }
 
-  onDrawDelete() {
+  onDrawDelete = () => {
     if (this.form.geojson) {
       this.form.geojson = null;
     }
@@ -108,12 +107,11 @@ class AreasManage extends React.Component {
                 }}
               />
             <DrawControl
-                map={this.state.map}
-                onDrawComplete={this.onDrawComplete}
-                onDrawDelete={this.onDrawDelete}
-                geojson={this.form.geojson}
-                />
-
+              map={this.state.map}
+              onDrawComplete={this.onDrawComplete}
+              onDrawDelete={this.onDrawDelete}
+              geojson={this.form.geojson}
+            />
             </div>
           </div>
           <div className="row columns">
@@ -131,7 +129,7 @@ class AreasManage extends React.Component {
                   <label className="text -x-small-title">Name the Area: </label>
                   <Input
                     type="text"
-                    onChange={this.onInputChange}
+                    onChange={ (e) => { this.form.name = e.target.value } }
                     name="name"
                     value={this.form.name}
                     placeholder="type your title"

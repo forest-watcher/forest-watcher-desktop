@@ -7,17 +7,6 @@ import 'leaflet-draw/dist/leaflet.draw.css';
 
 class DrawControl extends React.Component {
 
-  constructor(props) {
-    super(props);
-
-    // Bindings
-    this.setLayers = this.setLayers.bind(this);
-    this.setFeatures = this.setFeatures.bind(this);
-    this.setDrawing = this.setDrawing.bind(this);
-    this.enableDrawing = this.enableDrawing.bind(this);
-    this.disableDrawing = this.disableDrawing.bind(this);
-  }
-
   /* Component lifecycle */
   componentWillReceiveProps(nextProps) {
     if (this.props.map !== nextProps.map) {
@@ -38,22 +27,23 @@ class DrawControl extends React.Component {
   }
 
   // SETTERS
-  setLayers() {
+  setLayers = () => {
     this.featureGroup = new L.FeatureGroup();
     this.map.addLayer(this.featureGroup);
   }
 
-  setFeatures() {
+  setFeatures = () => {
     L.geoJson(this.props.geojson, {
       onEachFeature: (feature, layer) => {
         layer.setStyle(POLYGON_STYLES);
+        this.featureGroup.removeLayer(this.featureGroup.getLayers()[0]);
         this.featureGroup.addLayer(layer);
         this.map.fitBounds(layer.getBounds());
       }
     });
   }
 
-  setDrawing() {
+  setDrawing = () => {
     const drawControl = Object.assign(DRAW_CONTROL, {
       edit: {
         featureGroup: this.featureGroup,
@@ -89,19 +79,19 @@ class DrawControl extends React.Component {
     });
   }
 
-  enableDrawing() {
+  enableDrawing = () => {
     this.map.removeControl(this.drawControlDisabled);
     this.map.addControl(this.drawControl);
   }
 
-  disableDrawing() {
+  disableDrawing = () => {
     this.map.removeControl(this.drawControl);
     this.map.addControl(this.drawControlDisabled);
   }
 
 
   // EVENT LISTENERS
-  onDrawEventComplete(e) {
+  onDrawEventComplete = (e) => {
     const layer = e.layer;
     const geoJsonLayer = layer.toGeoJSON();
     this.featureGroup.addLayer(layer);
@@ -110,7 +100,7 @@ class DrawControl extends React.Component {
     this.map.fitBounds(layer.getBounds());
   }
 
-  onDrawEventEdit(e) {
+  onDrawEventEdit = (e) => {
     const layers = e.layers;
     layers.eachLayer(layer => {
       const geoJsonLayer = layer.toGeoJSON();
@@ -120,7 +110,7 @@ class DrawControl extends React.Component {
     this.disableDrawing();
   }
 
-  onDrawEventDelete(e) {
+  onDrawEventDelete = (e) => {
     const layer = e.layer;
     this.featureGroup.removeLayer(layer);
     this.props.onDrawComplete && this.props.onDrawDelete();

@@ -18,12 +18,18 @@ export default function reducer(state = initialState, action) {
   switch (action.type) {
     case SET_GEOSTORE: {
       const geostore = action.payload.geoStore;
-      if (geostore) return {
-        ...state,
-        ids: [...state.ids, ...Object.keys(geostore)],
-        geostores: { ...state.geostores, ...geostore }
-      };
-      return state;
+      if (state.ids.indexOf( ...Object.keys(geostore) ) > -1) {
+        return {
+          ...state,
+          geostores: { ...state.geostores, ...geostore }
+        };
+      } else {
+        return {
+          ...state,
+          ids: [...state.ids, ...Object.keys(geostore)],
+          geostores: { ...state.geostores, ...geostore }
+        };
+      }
     }
     case SET_LOADING_GEOSTORE:
       return Object.assign({}, state, { loading: action.payload });
@@ -92,54 +98,6 @@ export function saveGeostore(geojson) {
         'Content-Type': 'application/json'
       },
       method: 'POST',
-      body: JSON.stringify(body)
-    })
-      .then((response) => {
-        if (response.ok) return response.json();
-        throw Error(response.statusText);
-      })
-      .then((data) => {
-      const normalized = normalize(data);
-        dispatch({
-          type: SET_GEOSTORE,
-          payload: normalized
-        });
-        dispatch({
-          type: SET_LOADING_GEOSTORE,
-          payload: false
-        });
-        return normalized.geoStore;
-      })
-      .catch((error) => {
-        dispatch({
-          type: SET_LOADING_GEOSTORE_ERROR,
-          payload: error
-        });
-        dispatch({
-          type: SET_LOADING_GEOSTORE,
-          payload: false
-        });
-      });
-  };
-}
-
-// PATCH geojson object
-export function updateGeostore(geostoreId, geojson) {
-  const url = `${API_BASE_URL}/geostore/${geostoreId}`;
-  const body = {
-    geojson: geojson
-  }
-  return (dispatch, state) => {
-    dispatch({
-      type: SET_LOADING_GEOSTORE,
-      payload: true
-    });
-    return fetch(url, {
-      headers: {
-        Authorization: `Bearer ${state().user.token}`,
-        'Content-Type': 'application/json'
-      },
-      method: 'PATCH',
       body: JSON.stringify(body)
     })
       .then((response) => {

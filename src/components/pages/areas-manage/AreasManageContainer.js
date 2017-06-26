@@ -8,16 +8,9 @@ const readGeojson = (state, match) => {
   const area = state.areas.areas[areaId] || null;
   const geostoreId = area ? area.attributes.geostore : null;
   const geostore = state.geostores.geostores[geostoreId] || null;
-  const geojson = geostore ? geostore.attributes.geojson : null;
+  const geojson = geostore ? geostore.attributes.geojson.features[0] : null;
+  geojson.properties = {};
   return geojson;
-}
-
-const readGeostore = (state, match) => {
-  const areaId = match.params.areaId;
-  const area = state.areas.areas[areaId] || null;
-  const geostoreId = area ? area.attributes.geostore : null;
-  const geostore = state.geostores.geostores[geostoreId] || null;
-  return geostore;
 }
 
 const readArea = (state, match) => {
@@ -29,7 +22,6 @@ const readArea = (state, match) => {
 const mapStateToProps = (state, { match }) => ({
   editing: match.params.areaId ? true : false,
   loading: state.areas.loading,
-  geostore: readGeostore(state, match),
   geojson: readGeojson(state, match),
   area: readArea(state, match)
 });

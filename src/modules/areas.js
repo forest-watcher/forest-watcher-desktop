@@ -1,6 +1,6 @@
 import normalize from 'json-api-normalizer';
 import { API_BASE_URL } from '../constants/global';
-import { getGeostore, saveGeostore, updateGeostore } from './geostores';
+import { getGeostore, saveGeostore } from './geostores';
 import domtoimage from 'dom-to-image';
 import { toastr } from 'react-redux-toastr';
 
@@ -22,12 +22,18 @@ export default function reducer(state = initialState, action) {
   switch (action.type) {
     case SET_AREA: {
       const area = action.payload.area;
-      if (area) return {
-        ...state,
-        ids: [...state.ids, ...Object.keys(area)],
-        areas: { ...state.areas, ...area }
-      };
-      return state;
+      if (state.ids.indexOf( ...Object.keys(area) ) > -1) {
+        return {
+          ...state,
+          areas: { ...state.areas, ...area }
+        };
+      } else {
+        return {
+          ...state,
+          ids: [...state.ids, ...Object.keys(area)],
+          areas: { ...state.areas, ...area }
+        };
+      }
     }
     case SET_AREAS: {
       const { area: areas } = action.payload;
@@ -214,7 +220,7 @@ export function updateArea(area, node) {
           type: SET_LOADING_AREAS,
           payload: false
         });
-        toastr.success('Area saved');
+        toastr.success('Area updated');
       })
       .catch((error) => {
         dispatch({
@@ -257,8 +263,9 @@ export function saveAreaWithGeostore(area, node) {
 // async update geostore then area
 export function updateAreaWithGeostore(area, node) {
   return async (dispatch, state) => {
-    const geostore = await dispatch(updateGeostore(area.geostore.id, area.geojson));
-    const areaWithGeostore = {...area, geostore: geostore.id};
+    const geostore = await dispatch(saveGeostore(area.geojson));
+    const geostoreId = Object.keys(geostore)[0];
+    const areaWithGeostore = {...area, geostore: geostoreId};
     await dispatch(updateArea(areaWithGeostore, node));
   };
 }
