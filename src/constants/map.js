@@ -18,6 +18,15 @@ export const POLYGON_STYLES = {
   weight: 2
 };
 
+export const BLOB_CONFIG = {
+  style: {
+    width: '100%',
+    height: '100%',
+    position: 'relative',
+    overflow: 'hidden'
+  }
+}
+
 // Leaflet Draw
 export const DRAW_CONTROL = {
   position: 'topright',
@@ -68,4 +77,4 @@ export const AREAS = {
   maxSize: 1500000000 // square meters
 }
 
-export default { MAP_CONFIG, DRAW_CONTROL, DRAW_CONTROL_DISABLED, AREAS };
+export default { MAP_CONFIG, BLOB_CONFIG, DRAW_CONTROL, DRAW_CONTROL_DISABLED, AREAS };

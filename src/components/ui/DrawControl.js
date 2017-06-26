@@ -106,6 +106,7 @@ class DrawControl extends React.Component {
       const geoJsonLayer = layer.toGeoJSON();
       this.featureGroup.addLayer(layer);
       this.props.onDrawComplete && this.props.onDrawComplete(geoJsonLayer);
+      this.map.fitBounds(layer.getBounds());
     });
     this.disableDrawing();
   }

@@ -17,10 +17,9 @@ class AreasManage extends React.Component {
   constructor(props) {
     super(props);
     this.form = {
-      id: props.area.id || null,
+      id: props.area ? props.area.id : null,
       name: props.area ? props.area.attributes.name : '',
-      geojson: props.geojson || null,
-      geostore: props.geostore || null
+      geojson: props.geojson || null
     };
     this.state = {
       map: {},
@@ -37,19 +36,17 @@ class AreasManage extends React.Component {
   componentWillReceiveProps(nextProps) {
     this.form = {
       ...this.form,
-      area: nextProps.area ? nextProps.area.attributes.name : '',
-      geojson: nextProps.geojson ? nextProps.geojson : ''
+      id: nextProps.area ? nextProps.area.id : null,
+      name: nextProps.area ? nextProps.area.attributes.name : '',
+      geojson: nextProps.geojson ? nextProps.geojson : null
     };
   }
 
   onSubmit = (e) => {
     e.preventDefault();
     if (this.form.geojson) {
-      if (this.props.editing) {
-        this.props.updateAreaWithGeostore(this.form, this.state.map._container);
-      } else {
-        this.props.saveAreaWithGeostore(this.form, this.state.map._container);
-      }
+      const method = this.props.editing ? 'PATCH' : 'POST';
+      this.props.saveAreaWithGeostore(this.form, this.state.map._container, method);
     } else {
       toastr.error('Area needed', 'You cannot save without drawing an geojson');
     }

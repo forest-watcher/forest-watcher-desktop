@@ -9,7 +9,7 @@ const readGeojson = (state, match) => {
   const geostoreId = area ? area.attributes.geostore : null;
   const geostore = state.geostores.geostores[geostoreId] || null;
   const geojson = geostore ? geostore.attributes.geojson.features[0] : null;
-  geojson.properties = {};
+  if (geojson) geojson.properties = {};
   return geojson;
 }
 
@@ -28,11 +28,8 @@ const mapStateToProps = (state, { match }) => ({
 
 function mapDispatchToProps(dispatch) {
   return {
-    saveAreaWithGeostore: (area, node) => {
-      dispatch(saveAreaWithGeostore(area, node));
-    },
-    updateAreaWithGeostore: (area, node) => {
-      dispatch(updateAreaWithGeostore(area, node));
+    saveAreaWithGeostore: (area, node, method) => {
+      dispatch(saveAreaWithGeostore(area, node, method));
     }
   };
 }

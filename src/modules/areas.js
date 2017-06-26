@@ -1,5 +1,6 @@
 import normalize from 'json-api-normalizer';
 import { API_BASE_URL } from '../constants/global';
+import { BLOB_CONFIG } from '../constants/map';
 import { getGeostore, saveGeostore } from './geostores';
 import domtoimage from 'dom-to-image';
 import { toastr } from 'react-redux-toastr';
@@ -134,11 +135,11 @@ export function getAreas() {
 }
 
 // POST name, geostore ID
-export function saveArea(area, node) {
+export function saveArea(area, node, method) {
   return async (dispatch, state) => {
-    const url = `${API_BASE_URL}/area`;
+    const url = method === 'PATCH' ? `${API_BASE_URL}/area/${area.id}` : `${API_BASE_URL}/area`;
     const body = new FormData();
-    const blob = await domtoimage.toBlob(node);
+    const blob = await domtoimage.toBlob(node, { BLOB_CONFIG });
     body.append('name', area.name);
     body.append('geostore', area.geostore);
     const image = new File([blob], 'png', {type: 'image/png', name: encodeURIComponent(area.name)})
@@ -151,7 +152,7 @@ export function saveArea(area, node) {
       headers: {
         Authorization: `Bearer ${state().user.token}`
       },
-      method: 'POST',
+      method: method,
       body
     })
       .then((response) => {
@@ -169,58 +170,6 @@ export function saveArea(area, node) {
           payload: false
         });
         toastr.success('Area saved');
-        // history.push('/areas');
-      })
-      .catch((error) => {
-        dispatch({
-          type: SET_LOADING_AREAS_ERROR,
-          payload: error
-        });
-        dispatch({
-          type: SET_LOADING_AREAS,
-          payload: false
-        });
-        toastr.error(error);
-      });
-  };
-}
-
-// POST name, geostore ID
-export function updateArea(area, node) {
-  return async (dispatch, state) => {
-    const url = `${API_BASE_URL}/area/${area.id}`;
-    const body = new FormData();
-    const blob = await domtoimage.toBlob(node);
-    body.append('name', area.name);
-    body.append('geostore', area.geostore);
-    const image = new File([blob], 'png', {type: 'image/png', name: encodeURIComponent(area.name)})
-    body.append('image', image);
-    dispatch({
-      type: SET_LOADING_AREAS,
-      payload: true
-    });
-    fetch(url, {
-      headers: {
-        Authorization: `Bearer ${state().user.token}`
-      },
-      method: 'PATCH',
-      body
-    })
-      .then((response) => {
-        if (response.ok) return response.json();
-        throw Error(response.statusText);
-      })
-      .then((data) => {
-      const normalized = normalize(data);
-        dispatch({
-          type: SET_AREA,
-          payload: normalized
-        });
-        dispatch({
-          type: SET_LOADING_AREAS,
-          payload: false
-        });
-        toastr.success('Area updated');
       })
       .catch((error) => {
         dispatch({
@@ -251,21 +200,11 @@ export function getGeoStoresWithAreas() {
 }
 
 // async save geostore then area
-export function saveAreaWithGeostore(area, node) {
+export function saveAreaWithGeostore(area, node, method) {
   return async (dispatch, state) => {
     const geostore = await dispatch(saveGeostore(area.geojson));
     const geostoreId = Object.keys(geostore)[0];
     const areaWithGeostore = {...area, geostore: geostoreId};
-    await dispatch(saveArea(areaWithGeostore, node));
-  };
-}
-
-// async update geostore then area
-export function updateAreaWithGeostore(area, node) {
-  return async (dispatch, state) => {
-    const geostore = await dispatch(saveGeostore(area.geojson));
-    const geostoreId = Object.keys(geostore)[0];
-    const areaWithGeostore = {...area, geostore: geostoreId};
-    await dispatch(updateArea(areaWithGeostore, node));
+    await dispatch(saveArea(areaWithGeostore, node, method));
   };
 }
