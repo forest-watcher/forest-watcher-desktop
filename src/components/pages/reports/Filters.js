@@ -89,7 +89,7 @@ class Filters extends React.Component {
           <input
             type="text"
             onChange={this.handleSearchChange}
-            value={this.props.searchParams.searchValues}
+            value={this.props.searchParams.searchValues || ''}
             name="search-bar"
             placeholder="Search"
           />   
@@ -110,7 +110,8 @@ class Filters extends React.Component {
 Filters.propTypes = {
   answers: PropTypes.array.isRequired,
   templates: PropTypes.object.isRequired,
-  templateIndex: PropTypes.number
+  templateIndex: PropTypes.string,
+  searchParams: PropTypes.object
 };
 
 export default Filters;

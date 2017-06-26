@@ -5,15 +5,13 @@ import { API_BASE_URL } from '../constants/global';
 const GET_USER_TEMPLATES = 'templates/GET_USER_TEMPLATES';
 const SET_LOADING_TEMPLATES = 'templates/SET_LOADING_TEMPLATES';
 const SET_LOADING_TEMPLATES_ERROR = 'templates/SET_LOADING_TEMPLATES_ERROR';
-const SET_TEMPLATE_SEARCH_PARAMS = 'templates/SET_TEMPLATE_SEARCH_PARAMS';
 
 // Reducer
 const initialState = {
   ids: [],
   data: {},
   loading: false,
-  error: null,
-  searchParams: {}
+  error: null
 };
 
 export default function reducer(state = initialState, action) {
@@ -27,8 +25,6 @@ export default function reducer(state = initialState, action) {
       return Object.assign({}, state, { loading: action.payload });
     case SET_LOADING_TEMPLATES_ERROR:
       return Object.assign({}, state, { error: action.payload });
-    case SET_TEMPLATE_SEARCH_PARAMS:
-      return Object.assign({}, state, { searchParams: action.payload });
     default:
       return state;
   }
@@ -72,12 +68,5 @@ export function getUserTemplates() {
           payload: false
         });
       });
-  };
-}
-
-export function setTemplateSearchParams(params) {
-  return {
-    type: SET_TEMPLATE_SEARCH_PARAMS,
-    payload: params
   };
 }

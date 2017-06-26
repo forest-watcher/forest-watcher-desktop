@@ -4,7 +4,8 @@
  import { setSelectedTemplateIndex, setTemplateSearchParams, downloadAnswers } from '../../../modules/reports';
  import { getReportAnswers } from '../../../modules/reports';
  import { DEFAULT_FORMAT } from '../../../constants/global';
-
+ 
+ const qs = require('querystringify');
  import Reports from './Reports';
 
   const filterBy = (field, answers, value) => {
@@ -26,9 +27,10 @@
     return answers.filter((answer) => answer.aoi === value);
   }
 
-  const mapStateToProps = ({ reports, templates }) => {
-    const templateId = templates.ids[reports.selectedIndex];
-    const { aoi, searchValues, date } = reports.searchParams;
+  const mapStateToProps = ({ reports, templates }, { match, location }) => {    
+    const templateId = templates.ids[match.params.templateIndex];
+    const searchParams = qs.parse(location.search);
+    const { aoi, date, searchValues } = searchParams;
     let answers = [];
     if (templateId !== undefined){
       const selectedAnswers = reports.answers[templateId];

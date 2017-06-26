@@ -6,25 +6,9 @@ import Hero from '../../layouts/Hero';
 import ReactTable from 'react-table'
 import 'react-select/dist/react-select.css';
 
-import Filters from './Filters';
-
-const qs = require('querystringify');
+import Filters from './FiltersContainer';
 
 class Reports extends React.Component {
-  updateFilters = () => {
-    this.templateId = this.props.match.params.templateIndex;
-    this.searchParams = this.props.location.search && qs.parse(this.props.location.search);
-    if (this.searchParams !== undefined){
-      this.props.setTemplateSearchParams(this.searchParams);
-    }
-    if (this.templateId !== undefined) {
-      this.props.setSelectedTemplateIndex(this.templateId);
-    }
-  }
-
-  componentWillMount() {
-    this.updateFilters();
-  }
 
   updateAnswers = () => {
     const reportIds = this.props.templates.ids;
@@ -43,13 +27,6 @@ class Reports extends React.Component {
     if (this.props.templates.ids.length !== nextProps.templates.ids.length){
       this.props.getReportAnswers(nextProps.templates.ids[this.templateId || 0]);
     }
-    if (this.props.match.params.templateIndex !== nextProps.match.params.templateIndex){
-      this.props.setSelectedTemplateIndex(nextProps.match.params.templateIndex);
-    }
-    if (this.props.location.search !== nextProps.location.search){
-      this.searchParams = nextProps.location.search && qs.parse(nextProps.location.search);
-      this.props.setTemplateSearchParams(this.searchParams);
-    }
   }
 
   shouldComponentUpdate(nextProps, nextState){
@@ -65,7 +42,7 @@ class Reports extends React.Component {
   }
 
   render() {
-    const { answers, templates } = this.props;
+    const { answers } = this.props;
     const columns = [{
       Header: 'Lat/Long',
       accessor: 'latLong'
@@ -89,12 +66,7 @@ class Reports extends React.Component {
           <div className="l-content">
             <Article>
               <Filters
-                templates={templates} 
                 answers={answers}
-                templateIndex={this.templateIndex}
-                searchParams={this.searchParams}
-                history={this.props.history}
-                searchDate={this.searchDate}
               />
               <ReactTable
                 className="c-table"
