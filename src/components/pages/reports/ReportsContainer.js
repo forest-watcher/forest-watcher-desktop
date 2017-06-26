@@ -5,7 +5,7 @@
  import { getReportAnswers } from '../../../modules/reports';
  import { DEFAULT_FORMAT } from '../../../constants/global';
  
- const qs = require('querystringify');
+ import qs from 'query-string';
  import Reports from './Reports';
 
   const filterBy = (field, answers, value) => {

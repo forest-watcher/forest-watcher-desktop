@@ -1,7 +1,8 @@
 import { connect } from 'react-redux'; 
 import { withRouter } from 'react-router'
 import Filters from './Filters';
-const qs = require('querystringify');
+import qs from 'query-string';
+
 
 const mapStateToProps = ({ reports, templates }, { match, location }) => {    
   const templateIndex = match.params.templateIndex;
