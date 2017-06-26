@@ -14,6 +14,21 @@
   outline: 0;
   text-transform: uppercase;
 
+  &.-hero {
+    border-color: $theme-accent;
+    background: $theme-secondary;
+    color: $white;
+    text-transform: uppercase;
+    margin-top: 14px;
+
+    &:hover {
+      background-color: lighten($theme-secondary, 7%);
+    }
+    &:active {
+      background-color: lighten($theme-secondary, 14%);
+    }
+  }
+
   &.-light {
     border-color: $theme-accent;
     background: $light-green;

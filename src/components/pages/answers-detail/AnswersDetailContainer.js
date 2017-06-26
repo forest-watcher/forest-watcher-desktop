@@ -1,13 +1,13 @@
 import { connect } from 'react-redux';
-import { getReportAnswers } from '../../../modules/data';
+import { getReportAnswers } from '../../../modules/reports';
 
 import AnswersDetail from './AnswersDetail';
 
-const mapStateToProps = ({ data }, ownProps) => {
+const mapStateToProps = ({ reports }, ownProps) => {
   const { params } = ownProps.match || {};
   let answer = false;
-  if (data.answers[params.reportId]) {
-    answer = data.answers[params.reportId].filter(ans => ans.id === params.answerId)[0];
+  if (reports.answers[params.reportId]) {
+    answer = reports.answers[params.reportId].filter(ans => ans.id === params.answerId)[0];
   }
   return {
     data: answer || null,
