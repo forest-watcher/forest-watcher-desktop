@@ -20,6 +20,9 @@ function Nav({ loggedIn, logout }) {
                 <NavLink to="/areas" activeClassName="-active">Areas</NavLink>
               </li>
               <li className="nav-link">
+                <NavLink to="/templates" activeClassName="-active">Templates</NavLink>
+              </li>
+              <li className="nav-link">
                 <NavLink to="/reports" activeClassName="-active">Reports</NavLink>
               </li>
             </ul>

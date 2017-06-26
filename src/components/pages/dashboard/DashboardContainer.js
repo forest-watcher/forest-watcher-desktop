@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { getUserReports, getUserQuestionares } from '../../../modules/data';
+import { getUserTemplates, getUserQuestionares } from '../../../modules/reports';
 import { getAreas } from '../../../modules/areas';
 
 import Dashboard from './Dashboard';
@@ -13,8 +13,8 @@ function mapDispatchToProps(dispatch) {
     getAreas: () => {
       dispatch(getAreas());
     },
-    getUserReports: () => {
-      dispatch(getUserReports());
+    getUserTemplates: () => {
+      dispatch(getUserTemplates());
     },
     getUserQuestionares: () => {
       dispatch(getUserQuestionares());

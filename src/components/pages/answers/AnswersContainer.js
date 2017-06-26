@@ -1,12 +1,12 @@
 import { connect } from 'react-redux';
-import { getReportAnswers, downloadAnswers } from '../../../modules/data';
+import { getReportAnswers, downloadAnswers } from '../../../modules/reports';
 
 import Answers from './Answers';
 
-const mapStateToProps = ({ data }, ownProps) => {
+const mapStateToProps = ({ reports }, ownProps) => {
   const { params } = ownProps.match || {};
   return ({
-    answers: data.answers[params.reportId],
+    answers: reports.answers[params.reportId],
     reportId: params.reportId
   });
 };
