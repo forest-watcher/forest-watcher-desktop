@@ -53,7 +53,6 @@ class AreasManage extends React.Component {
   }
 
   onInputChange(e) {
-    debugger;
     this.form.name = e.target.value;
   }
 
