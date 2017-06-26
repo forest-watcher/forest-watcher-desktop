@@ -1,5 +1,8 @@
 .c-button {
-  padding: 10px 25px;
+  display: flex;
+  align-items: center;
+  height: 40px;
+  padding: 0 30px;
   border: 1px solid $theme-accent;
   border-radius: 20px;
   background: $theme-accent;
@@ -9,6 +12,7 @@
   font-weight: $font-weight-bold;
   cursor: pointer;
   outline: 0;
+  text-transform: uppercase;
 
   &.-light {
     border-color: $theme-accent;
@@ -21,9 +25,8 @@
   }
 
   &.-small {
-    padding: 10px 15px;
+    padding: 0 20px;
     font-size: 12px;
-    font-weight: $font-weight-regular;
   }
 
   &.-white {
@@ -33,5 +36,22 @@
     &:active {
       background-color: darken($white, 7%);
     }
+  }
+
+  &.-transparent {
+    border-color: rgba($theme-secondary, 0.3);
+    background: $theme-base;
+    color: $gray;
+
+    &:active {
+      background-color: darken($light-green, 7%);
+    }
+  }
+
+  &.-circle {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 12.5px;
   }
 }

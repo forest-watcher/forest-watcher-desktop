@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Icon from '../ui/Icon';
+import { Link } from 'react-router-dom';
 
 class AreaCard extends React.Component {
 
@@ -14,12 +15,12 @@ class AreaCard extends React.Component {
         </div>
         <ul className="area-actions">
           <li className="area-action">
-            <button className="c-button -light -small">Reports</button>
+            <Link className="c-button -light -small" to={'/reports'}>Reports</Link>
           </li>
           <li className="area-action -edit-area">
-            <button className="c-button -round -white">
-              <Icon className="-small -green" name="icon-edit"/>
-            </button>
+            <Link className="c-button -circle -transparent" to={`/areas/${area.id}`}>
+              <Icon className="-small -gray" name="icon-edit"/>
+            </Link>
           </li>
         </ul>
       </div>

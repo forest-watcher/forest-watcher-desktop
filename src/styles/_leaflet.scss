@@ -4,6 +4,8 @@
   display: none;
 }
 
-.leaflet-touch .leaflet-draw-toolbar .leaflet-draw-draw-polygon {
-  display: none;
+.leaflet-div-icon {
+  background: $theme-accent;
+  border: 2px solid $white;
+  border-radius: 50%;
 }

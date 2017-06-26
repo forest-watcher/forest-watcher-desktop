@@ -16,7 +16,7 @@ class Areas extends React.Component {
       <Link to="/areas/create">
         <button className="c-add-card">
           <Icon name="icon-plus" className="-medium -green" />
-            Add Area
+            <span className="text -x-small-title -green">Add Area</span>
         </button>
       </Link>
     );
@@ -34,7 +34,7 @@ class Areas extends React.Component {
             <GridGallery
               collection={areasList}
               className="area-card-item"
-              columns={{ small: 12, medium: 3 }}
+              columns={{ small: 12, medium: 4, large: 3 }}
               Component={AreaCard}
               after={this.getAddArea()}
             />

@@ -14,18 +14,21 @@ const geojsonArea = require('@mapbox/geojson-area');
 
 class AreasManage extends React.Component {
 
-  constructor() {
-    super();
-    this.form = {};
+  constructor(props) {
+    super(props);
+    this.form = {
+      name: props.area ? props.area.attributes.name : '',
+      geojson: props.geojson || null
+    };
     this.state = {
+      map: {},
       mapConfig: {
         zoom: 10,
         lat: 0,
         lng: 0,
         zoomControl: false,
         scrollWheelZoom: false
-      },
-      map: {}
+      }
     }
 
     this.onSubmit = this.onSubmit.bind(this);
@@ -34,11 +37,16 @@ class AreasManage extends React.Component {
     this.onDrawDelete = this.onDrawDelete.bind(this);
   }
 
+  componentWillReceiveProps(nextProps) {
+    this.form.name = nextProps.area ? nextProps.area.attributes.name : '';
+    this.form.geojson = nextProps.geojson;
+  }
+
   onSubmit(e) {
     e.preventDefault();
     if (this.form.geojson) {
       toastr.success('Area saved', 'Note: in dev mode, geojson not saved to API');
-      this.props.saveAreaWithGeostore(this.form);
+      this.props.saveAreaWithGeostore(this.form, this.state.map._container);
     } else {
       toastr.error('Area needed', 'You cannot save without drawing an geojson');
     }
@@ -61,7 +69,7 @@ class AreasManage extends React.Component {
 
   onDrawDelete() {
     if (this.form.geojson) {
-      delete this.form.geojson;
+      this.form.geojson = null;
     }
   }
 
@@ -93,12 +101,14 @@ class AreasManage extends React.Component {
                     }
                   });
                 }}
-                />
-              <DrawControl
+              />
+            <DrawControl
                 map={this.state.map}
                 onDrawComplete={this.onDrawComplete}
                 onDrawDelete={this.onDrawDelete}
+                geojson={this.form.geojson}
                 />
+
             </div>
           </div>
           <div className="row columns">
@@ -118,7 +128,7 @@ class AreasManage extends React.Component {
                     type="text"
                     onChange={this.onInputChange}
                     name="name"
-                    value=""
+                    value={this.form.name}
                     placeholder="type your title"
                     validations={['required']}
                     />

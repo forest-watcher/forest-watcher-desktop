@@ -1,6 +1,7 @@
 import normalize from 'json-api-normalizer';
 import { API_BASE_URL } from '../constants/global';
 import { getGeostore, saveGeostore } from './geostores';
+import domtoimage from 'dom-to-image';
 
 // Actions
 const SET_AREA = 'areas/SET_AREA';
@@ -127,12 +128,15 @@ export function getAreas() {
 }
 
 // POST name, geostore ID
-export function saveArea(area) {
-  const url = `${API_BASE_URL}/area`;
-  const body = new FormData();
-  body.append('name', area.name);
-  body.append('geostore', area.geostore);
-  return (dispatch, state) => {
+export function saveArea(area, node) {
+  return async (dispatch, state) => {
+    const url = `${API_BASE_URL}/area`;
+    const body = new FormData();
+    const blob = await domtoimage.toBlob(node);
+    body.append('name', area.name);
+    body.append('geostore', area.geostore);
+    const image = new File([blob], 'png', {type: 'image/png', name: encodeURIComponent(area.name)})
+    body.append('image', image);
     dispatch({
       type: SET_LOADING_AREAS,
       payload: true
@@ -187,11 +191,11 @@ export function getGeoStoresWithAreas() {
 }
 
 // async save geostore then area
-export function saveAreaWithGeostore(area) {
+export function saveAreaWithGeostore(area, node) {
   return async (dispatch, state) => {
     const geostore = await dispatch(saveGeostore(area.geojson));
     const geostoreId = Object.keys(geostore)[0];
     const areaWithGeostore = {...area, geostore: geostoreId};
-    await dispatch(saveArea(areaWithGeostore));
+    await dispatch(saveArea(areaWithGeostore, node));
   };
 }
