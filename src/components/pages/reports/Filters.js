@@ -8,7 +8,7 @@ import moment from 'moment';
 
 import 'react-datepicker/dist/react-datepicker.css';
 
-const qs = require('querystringify');
+import qs from 'query-string';
 
 class Filters extends React.Component {
   handleTemplateChange = (selected) => {
@@ -26,7 +26,7 @@ class Filters extends React.Component {
   }
 
   handleSearchChange = (event) => {
-    const searchParams = Object.assign(this.props.searchParams, { searchValues: event.target.value }) 
+    const searchParams = Object.assign(this.props.searchParams, { searchValues: event.target.value });
     if (event.target.value === ''){
       delete searchParams.searchValues
     }
@@ -34,8 +34,8 @@ class Filters extends React.Component {
   }
 
   handleDateChange = (date) => {
-    const parsedDate = date && moment(date).format(DEFAULT_FORMAT)
-    const searchParams = Object.assign(this.props.searchParams, { date: parsedDate }) 
+    const parsedDate = date && moment(date).format(DEFAULT_FORMAT);
+    const searchParams = Object.assign(this.props.searchParams, { date: parsedDate });
     if (!parsedDate){
       delete searchParams.date
     }
@@ -43,7 +43,7 @@ class Filters extends React.Component {
   }
 
   handleAreaChange = (selected) => {
-    const searchParams = Object.assign(this.props.searchParams, { aoi: selected.value }) 
+    const searchParams = Object.assign(this.props.searchParams, { aoi: selected.value });
     if (selected.value === ''){
       delete searchParams.aoi
     }
