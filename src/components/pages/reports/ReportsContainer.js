@@ -27,8 +27,7 @@
     return answers.filter((answer) => answer.aoi === value);
   }
 
-  const mapStateToProps = ({ reports, templates }, { match, location }) => {    
-    const templateId = templates.ids[match.params.templateIndex];
+    const templateId = templates.ids[match.params.templateIndex || 0];
     const searchParams = qs.parse(location.search);
     const { aoi, date, searchValues } = searchParams;
     let answers = [];
