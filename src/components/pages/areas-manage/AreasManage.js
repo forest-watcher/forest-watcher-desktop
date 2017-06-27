@@ -116,6 +116,9 @@ class AreasManage extends React.Component {
               />
               <Attribution />
             </div>
+            { this.props.saving &&
+              <Loader />
+            }
           </div>
           <div className="row columns">
             <div className="c-form -nav">
@@ -144,9 +147,6 @@ class AreasManage extends React.Component {
             </div>
           </div>
         </Form>
-        { this.props.saving &&
-            <Loader />
-        }
       </div>
     );
   }
