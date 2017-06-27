@@ -56,6 +56,7 @@ class DrawControl extends React.Component {
         remove: true
       }
     });
+    
     this.drawControl = new L.Control.Draw(drawControl);
     this.drawControlDisabled = new L.Control.Draw(drawControlDisabled);
 
@@ -70,27 +71,21 @@ class DrawControl extends React.Component {
       this.onDrawEventComplete(e);
     });
 
-    this.map.on(L.Draw.Event.EDITED, (e) => {
-      this.onDrawEventEdit(e);
-    });
-
     this.map.on(L.Draw.Event.EDITSTART, (e) => {
       this.props.setEditing(true);
     });
 
-    this.map.on(L.Draw.Event.EDITSTOP, (e) => {
+    this.map.on(L.Draw.Event.EDITED, (e) => {
       this.props.setEditing(false);
+      this.onDrawEventEdit(e);
     });
 
     this.map.on(L.Draw.Event.DELETESTART, (e) => {
       this.props.setEditing(true);
     });
 
-    this.map.on(L.Draw.Event.DELETESTOP, (e) => {
-      this.props.setEditing(false);
-    });
-
     this.map.on(L.Draw.Event.DELETED, (e) => {
+      this.props.setEditing(false);
       this.onDrawEventDelete(e);
     });
   }

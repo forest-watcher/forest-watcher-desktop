@@ -33,28 +33,24 @@ class AreasManage extends React.Component {
         scrollWheelZoom: false
       }
     }
-
-    this.onDrawComplete = this.onDrawComplete.bind(this);
-    this.onDrawDelete = this.onDrawDelete.bind(this);
-    this.onSubmit = this.onSubmit.bind(this);
-    this.onInputChange = this.onInputChange.bind(this);
   }
 
   componentWillReceiveProps(nextProps) {
     const { history } = this.props;
-    this.form = {
-      ...this.form,
-      id: nextProps.area ? nextProps.area.id : null,
-      name: nextProps.area ? nextProps.area.attributes.name : '',
-      geojson: nextProps.geojson ? nextProps.geojson : null
-    };
+    if (!this.props.saving) {
+      this.form = {
+        ...this.form,
+        id: nextProps.area ? nextProps.area.id : null,
+        name: nextProps.area ? nextProps.area.attributes.name : '',
+        geojson: nextProps.geojson ? nextProps.geojson : null
+      };
+    }
     if (this.props.saving === true && nextProps.saving === false) {
-      toastr.success('Area saved');
-      // history.push('/areas');
+      history.push('/areas');
     }
   }
 
-  onSubmit(e) {
+  onSubmit = (e) => {
     e.preventDefault();
     if (this.form.geojson && this.form.name !== '') {
       const method = this.props.mode === 'manage' ? 'PATCH' : 'POST';
@@ -65,14 +61,14 @@ class AreasManage extends React.Component {
     }
   }
 
-  onInputChange(e) {
+  onInputChange = (e) => {
     this.form = {
       ...this.form,
       name: e.target.value
     };
   }
 
-  onDrawComplete(areaGeoJson) {
+  onDrawComplete = (areaGeoJson) => {
     if (areaGeoJson) {
       const area = geojsonArea.geometry(areaGeoJson.geometry);
       if (area <= AREAS.maxSize) {
@@ -83,11 +79,10 @@ class AreasManage extends React.Component {
       } else {
         toastr.error('Area too large', 'Please draw a smaller area');
       }
-      debugger
     }
   }
 
-  onDrawDelete(e) {
+  onDrawDelete = () => {
     if (this.form.geojson) {
       this.form = {
         ...this.form,
