@@ -7,7 +7,7 @@ import { validation } from '../../../helpers/validation'; // eslint-disable-line
 import { toastr } from 'react-redux-toastr';
 import Icon from '../../ui/Icon';
 import ZoomControl from '../../ui/ZoomControl';
-import DrawControl from '../../ui/DrawControl';
+import DrawControl from '../../draw-control/DrawControlContainer';
 import Attribution from '../../ui/Attribution';
 import Loader from '../../ui/Loader';
 import { AREAS } from '../../../constants/map';
@@ -50,11 +50,11 @@ class AreasManage extends React.Component {
 
   onSubmit = (e) => {
     e.preventDefault();
-    if (this.form.geojson) {
-      const method = this.props.editing ? 'PATCH' : 'POST';
+    if (this.form.geojson && this.form.name !== '') {
+      const method = this.props.mode === 'manage' ? 'PATCH' : 'POST';
       this.props.saveAreaWithGeostore(this.form, this.state.map._container, method);
     } else {
-      toastr.error('Area needed', 'You cannot save without drawing an geojson');
+      toastr.error('Missing fields', 'You cannot save without drawing an geojson or giving a name');
     }
   }
 
@@ -83,7 +83,7 @@ class AreasManage extends React.Component {
     return (
       <div>
         <Hero
-          title={this.props.editing ? "Manage Area of Interest" : "Create an Area of Interest"}
+          title={this.props.mode === 'manage' ? "Manage Area of Interest" : "Create an Area of Interest"}
         />
         <Form onSubmit={this.onSubmit}>
           <div className="l-map">
@@ -143,7 +143,7 @@ class AreasManage extends React.Component {
                     />
                 </div>
               </div>
-              <Button className="c-button" disabled={this.props.saving}>Save</Button>
+              <Button className="c-button" disabled={this.props.saving || this.props.editing ? true : false}>Save</Button>
             </div>
           </div>
         </Form>

@@ -11,12 +11,14 @@ const SET_AREAS = 'areas/SET_AREAS';
 const SET_LOADING_AREAS = 'areas/SET_LOADING_AREAS';
 const SET_LOADING_AREAS_ERROR = 'areas/SET_LOADING_AREAS_ERROR';
 const SET_SAVING_AREA = 'areas/SET_SAVING_AREA';
+const SET_EDITING_AREA = 'areas/SET_EDITING_AREA';
 
 // Reducer
 const initialState = {
   ids: [],
   areas: {},
   loading: false,
+  editing: false,
   saving: false,
   error: null
 };
@@ -47,6 +49,8 @@ export default function reducer(state = initialState, action) {
       return Object.assign({}, state, { saving: action.payload });
     case SET_SAVING_AREA:
       return Object.assign({}, state, { saving: action.payload });
+    case SET_EDITING_AREA:
+      return Object.assign({}, state, { editing: action.payload });
     case SET_LOADING_AREAS_ERROR:
       return Object.assign({}, state, { error: action.payload });
     default:
@@ -210,5 +214,14 @@ export function saveAreaWithGeostore(area, node, method) {
     const geostoreId = Object.keys(geostore)[0];
     const areaWithGeostore = {...area, geostore: geostoreId};
     await dispatch(saveArea(areaWithGeostore, node, method));
+  };
+}
+
+export function setEditing(bool) {
+  return (dispatch) => {
+    dispatch({
+      type: SET_EDITING_AREA,
+      payload: bool
+    });
   };
 }
