@@ -87,7 +87,7 @@ export function saveGeostore(geojson) {
   }
   return (dispatch, state) => {
     dispatch({
-      type: SET_LOADING_GEOSTORE,
+      type: SET_SAVING_GEOSTORE,
       payload: true
     });
     return fetch(url, {

@@ -33,6 +33,11 @@ class AreasManage extends React.Component {
         scrollWheelZoom: false
       }
     }
+
+    this.onDrawComplete = this.onDrawComplete.bind(this);
+    this.onDrawDelete = this.onDrawDelete.bind(this);
+    this.onSubmit = this.onSubmit.bind(this);
+    this.onInputChange = this.onInputChange.bind(this);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -44,28 +49,30 @@ class AreasManage extends React.Component {
       geojson: nextProps.geojson ? nextProps.geojson : null
     };
     if (this.props.saving === true && nextProps.saving === false) {
-      history.push('/areas');
+      toastr.success('Area saved');
+      // history.push('/areas');
     }
   }
 
-  onSubmit = (e) => {
+  onSubmit(e) {
     e.preventDefault();
     if (this.form.geojson && this.form.name !== '') {
       const method = this.props.mode === 'manage' ? 'PATCH' : 'POST';
+      this.props.setSaving(true);
       this.props.saveAreaWithGeostore(this.form, this.state.map._container, method);
     } else {
       toastr.error('Missing values', 'Please provide an area and a name');
     }
   }
 
-  onInputChange = (e) => {
+  onInputChange(e) {
     this.form = {
       ...this.form,
       name: e.target.value
     };
   }
 
-  onDrawComplete = (areaGeoJson) => {
+  onDrawComplete(areaGeoJson) {
     if (areaGeoJson) {
       const area = geojsonArea.geometry(areaGeoJson.geometry);
       if (area <= AREAS.maxSize) {
@@ -76,10 +83,11 @@ class AreasManage extends React.Component {
       } else {
         toastr.error('Area too large', 'Please draw a smaller area');
       }
+      debugger
     }
   }
 
-  onDrawDelete = () => {
+  onDrawDelete(e) {
     if (this.form.geojson) {
       this.form = {
         ...this.form,
@@ -122,6 +130,7 @@ class AreasManage extends React.Component {
                 onDrawComplete={this.onDrawComplete}
                 onDrawDelete={this.onDrawDelete}
                 geojson={this.form.geojson}
+                saving={this.props.saving}
               />
               <Attribution />
             </div>

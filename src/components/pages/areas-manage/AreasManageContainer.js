@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { saveAreaWithGeostore } from '../../../modules/areas';
+import { saveAreaWithGeostore, setSaving } from '../../../modules/areas';
 
 import AreasManage from './AreasManage';
 
@@ -32,6 +32,9 @@ function mapDispatchToProps(dispatch) {
   return {
     saveAreaWithGeostore: (area, node, method) => {
       dispatch(saveAreaWithGeostore(area, node, method));
+    },
+    setSaving: (bool) => {
+      dispatch(setSaving(bool));
     }
   };
 }

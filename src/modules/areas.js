@@ -164,7 +164,6 @@ export function saveArea(area, node, method) {
           type: SET_SAVING_AREA,
           payload: false
         });
-        toastr.success('Area saved');
       })
       .catch((error) => {
         toastr.error('Unable to save area', error);
@@ -193,10 +192,6 @@ export function getGeoStoresWithAreas() {
 // async save geostore then area
 export function saveAreaWithGeostore(area, node, method) {
   return async (dispatch, state) => {
-    dispatch({
-      type: SET_SAVING_AREA,
-      payload: true
-    });
     const geostore = await dispatch(saveGeostore(area.geojson));
     const geostoreId = Object.keys(geostore)[0];
     const areaWithGeostore = {...area, geostore: geostoreId};
@@ -208,6 +203,15 @@ export function setEditing(bool) {
   return (dispatch) => {
     dispatch({
       type: SET_EDITING_AREA,
+      payload: bool
+    });
+  };
+}
+
+export function setSaving(bool) {
+  return (dispatch) => {
+    dispatch({
+      type: SET_SAVING_AREA,
       payload: bool
     });
   };
