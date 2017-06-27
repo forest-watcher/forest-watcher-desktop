@@ -164,6 +164,7 @@ export function saveArea(area, node, method) {
           type: SET_SAVING_AREA,
           payload: false
         });
+        toastr.success('Area saved');
       })
       .catch((error) => {
         toastr.error('Unable to save area', error);

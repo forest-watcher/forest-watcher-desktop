@@ -44,7 +44,6 @@ class AreasManage extends React.Component {
       geojson: nextProps.geojson ? nextProps.geojson : null
     };
     if (this.props.saving === true && nextProps.saving === false) {
-      toastr.success('Area saved', 'You can now manage below');
       history.push('/areas');
     }
   }
@@ -55,19 +54,25 @@ class AreasManage extends React.Component {
       const method = this.props.mode === 'manage' ? 'PATCH' : 'POST';
       this.props.saveAreaWithGeostore(this.form, this.state.map._container, method);
     } else {
-      toastr.error('Missing fields', 'You cannot save without drawing an geojson or giving a name');
+      toastr.error('Missing fields', 'You cannot save without drawing an area or providing a name');
     }
   }
 
   onInputChange = (e) => {
-    this.form[e.target.name] = e.target.value;
+    this.form = {
+      ...this.form,
+      name: e.target.value
+    };
   }
 
   onDrawComplete = (areaGeoJson) => {
     if (areaGeoJson) {
       const area = geojsonArea.geometry(areaGeoJson.geometry);
       if (area <= AREAS.maxSize) {
-        this.form.geojson = areaGeoJson;
+        this.form = {
+          ...this.form,
+          geojson: areaGeoJson
+        };
       } else {
         toastr.error('Area too large', 'Please draw a smaller area');
       }
@@ -76,7 +81,10 @@ class AreasManage extends React.Component {
 
   onDrawDelete = () => {
     if (this.form.geojson) {
-      this.form.geojson = null;
+      this.form = {
+        ...this.form,
+        geojson: null
+      };
     }
   }
 
