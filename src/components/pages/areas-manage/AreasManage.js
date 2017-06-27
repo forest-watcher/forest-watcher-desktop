@@ -54,7 +54,7 @@ class AreasManage extends React.Component {
       const method = this.props.mode === 'manage' ? 'PATCH' : 'POST';
       this.props.saveAreaWithGeostore(this.form, this.state.map._container, method);
     } else {
-      toastr.error('Missing fields', 'You cannot save without drawing an area or providing a name');
+      toastr.error('Missing values', 'Please provide an area and a name');
     }
   }
 

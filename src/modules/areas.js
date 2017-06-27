@@ -45,7 +45,7 @@ export default function reducer(state = initialState, action) {
       return state;
     }
     case SET_LOADING_AREAS:
-      return Object.assign({}, state, { saving: action.payload });
+      return Object.assign({}, state, { loading: action.payload });
     case SET_SAVING_AREA:
       return Object.assign({}, state, { saving: action.payload });
     case SET_EDITING_AREA:
