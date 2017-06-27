@@ -139,7 +139,7 @@ export function saveArea(area, node, method) {
   return async (dispatch, state) => {
     const url = method === 'PATCH' ? `${API_BASE_URL}/area/${area.id}` : `${API_BASE_URL}/area`;
     const body = new FormData();
-    const blob = await domtoimage.toBlob(node, { BLOB_CONFIG });
+    const blob = await domtoimage.toBlob(node, BLOB_CONFIG);
     body.append('name', area.name);
     body.append('geostore', area.geostore);
     const image = new File([blob], 'png', {type: 'image/png', name: encodeURIComponent(area.name)})

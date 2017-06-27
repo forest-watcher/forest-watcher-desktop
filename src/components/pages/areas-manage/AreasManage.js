@@ -8,6 +8,7 @@ import { toastr } from 'react-redux-toastr';
 import Icon from '../../ui/Icon';
 import ZoomControl from '../../ui/ZoomControl';
 import DrawControl from '../../ui/DrawControl';
+import Attribution from '../../ui/Attribution';
 import { AREAS } from '../../../constants/map';
 
 const geojsonArea = require('@mapbox/geojson-area');
@@ -102,12 +103,13 @@ class AreasManage extends React.Component {
                   });
                 }}
               />
-            <DrawControl
-              map={this.state.map}
-              onDrawComplete={this.onDrawComplete}
-              onDrawDelete={this.onDrawDelete}
-              geojson={this.form.geojson}
-            />
+              <DrawControl
+                map={this.state.map}
+                onDrawComplete={this.onDrawComplete}
+                onDrawDelete={this.onDrawDelete}
+                geojson={this.form.geojson}
+              />
+              <Attribution />
             </div>
           </div>
           <div className="row columns">

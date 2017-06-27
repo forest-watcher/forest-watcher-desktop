@@ -31,7 +31,6 @@ class Map extends React.Component {
     });
 
     // SETTERS
-    this.setAttribution();
     this.setZoomControl();
     this.setBasemap();
 
