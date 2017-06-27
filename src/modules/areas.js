@@ -10,12 +10,14 @@ const SET_AREA = 'areas/SET_AREA';
 const SET_AREAS = 'areas/SET_AREAS';
 const SET_LOADING_AREAS = 'areas/SET_LOADING_AREAS';
 const SET_LOADING_AREAS_ERROR = 'areas/SET_LOADING_AREAS_ERROR';
+const SET_SAVING_AREA = 'areas/SET_SAVING_AREA';
 
 // Reducer
 const initialState = {
   ids: [],
   areas: {},
   loading: false,
+  saving: false,
   error: null
 };
 
@@ -42,7 +44,9 @@ export default function reducer(state = initialState, action) {
       return state;
     }
     case SET_LOADING_AREAS:
-      return Object.assign({}, state, { loading: action.payload });
+      return Object.assign({}, state, { saving: action.payload });
+    case SET_SAVING_AREA:
+      return Object.assign({}, state, { saving: action.payload });
     case SET_LOADING_AREAS_ERROR:
       return Object.assign({}, state, { error: action.payload });
     default:
@@ -144,10 +148,6 @@ export function saveArea(area, node, method) {
     body.append('geostore', area.geostore);
     const image = new File([blob], 'png', {type: 'image/png', name: encodeURIComponent(area.name)})
     body.append('image', image);
-    dispatch({
-      type: SET_LOADING_AREAS,
-      payload: true
-    });
     fetch(url, {
       headers: {
         Authorization: `Bearer ${state().user.token}`
@@ -166,7 +166,7 @@ export function saveArea(area, node, method) {
           payload: normalized
         });
         dispatch({
-          type: SET_LOADING_AREAS,
+          type: SET_SAVING_AREA,
           payload: false
         });
         toastr.success('Area saved');
@@ -177,7 +177,7 @@ export function saveArea(area, node, method) {
           payload: error
         });
         dispatch({
-          type: SET_LOADING_AREAS,
+          type: SET_SAVING_AREA,
           payload: false
         });
         toastr.error(error);
@@ -202,6 +202,10 @@ export function getGeoStoresWithAreas() {
 // async save geostore then area
 export function saveAreaWithGeostore(area, node, method) {
   return async (dispatch, state) => {
+    dispatch({
+      type: SET_SAVING_AREA,
+      payload: true
+    });
     const geostore = await dispatch(saveGeostore(area.geojson));
     const geostoreId = Object.keys(geostore)[0];
     const areaWithGeostore = {...area, geostore: geostoreId};

@@ -135,7 +135,7 @@ class AreasManage extends React.Component {
                     />
                 </div>
               </div>
-              <Button className="c-button">Save</Button>
+              <Button className="c-button" disabled={this.props.saving}>Save</Button>
             </div>
           </div>
         </Form>
