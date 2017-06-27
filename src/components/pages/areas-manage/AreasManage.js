@@ -17,6 +17,7 @@ class AreasManage extends React.Component {
   constructor(props) {
     super(props);
     this.form = {
+      id: props.area ? props.area.id : null,
       name: props.area ? props.area.attributes.name : '',
       geojson: props.geojson || null
     };
@@ -30,33 +31,32 @@ class AreasManage extends React.Component {
         scrollWheelZoom: false
       }
     }
-
-    this.onSubmit = this.onSubmit.bind(this);
-    this.onInputChange = this.onInputChange.bind(this);
-    this.onDrawComplete = this.onDrawComplete.bind(this);
-    this.onDrawDelete = this.onDrawDelete.bind(this);
   }
 
   componentWillReceiveProps(nextProps) {
-    this.form.name = nextProps.area ? nextProps.area.attributes.name : '';
-    this.form.geojson = nextProps.geojson;
+    this.form = {
+      ...this.form,
+      id: nextProps.area ? nextProps.area.id : null,
+      name: nextProps.area ? nextProps.area.attributes.name : '',
+      geojson: nextProps.geojson ? nextProps.geojson : null
+    };
   }
 
-  onSubmit(e) {
+  onSubmit = (e) => {
     e.preventDefault();
     if (this.form.geojson) {
-      toastr.success('Area saved', 'Note: in dev mode, geojson not saved to API');
-      this.props.saveAreaWithGeostore(this.form, this.state.map._container);
+      const method = this.props.editing ? 'PATCH' : 'POST';
+      this.props.saveAreaWithGeostore(this.form, this.state.map._container, method);
     } else {
       toastr.error('Area needed', 'You cannot save without drawing an geojson');
     }
   }
 
   onInputChange(e) {
-    this.form[e.target.name] = e.target.value;
+    this.form.name = e.target.value;
   }
 
-  onDrawComplete(areaGeoJson) {
+  onDrawComplete = (areaGeoJson) => {
     if (areaGeoJson) {
       const area = geojsonArea.geometry(areaGeoJson.geometry);
       if (area <= AREAS.maxSize) {
@@ -67,7 +67,7 @@ class AreasManage extends React.Component {
     }
   }
 
-  onDrawDelete() {
+  onDrawDelete = () => {
     if (this.form.geojson) {
       this.form.geojson = null;
     }
@@ -77,7 +77,7 @@ class AreasManage extends React.Component {
     return (
       <div>
         <Hero
-          title="Create an Area of Interest"
+          title={this.props.editing ? "Manage Area of Interest" : "Create an Area of Interest"}
         />
         <Form onSubmit={this.onSubmit}>
           <div className="l-map">
@@ -103,12 +103,11 @@ class AreasManage extends React.Component {
                 }}
               />
             <DrawControl
-                map={this.state.map}
-                onDrawComplete={this.onDrawComplete}
-                onDrawDelete={this.onDrawDelete}
-                geojson={this.form.geojson}
-                />
-
+              map={this.state.map}
+              onDrawComplete={this.onDrawComplete}
+              onDrawDelete={this.onDrawDelete}
+              geojson={this.form.geojson}
+            />
             </div>
           </div>
           <div className="row columns">
@@ -126,7 +125,7 @@ class AreasManage extends React.Component {
                   <label className="text -x-small-title">Name the Area: </label>
                   <Input
                     type="text"
-                    onChange={this.onInputChange}
+                    onChange={ (e) => { this.form.name = e.target.value } }
                     name="name"
                     value={this.form.name}
                     placeholder="type your title"

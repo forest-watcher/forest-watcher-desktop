@@ -1,7 +1,9 @@
 import normalize from 'json-api-normalizer';
 import { API_BASE_URL } from '../constants/global';
+import { BLOB_CONFIG } from '../constants/map';
 import { getGeostore, saveGeostore } from './geostores';
 import domtoimage from 'dom-to-image';
+import { toastr } from 'react-redux-toastr';
 
 // Actions
 const SET_AREA = 'areas/SET_AREA';
@@ -14,20 +16,25 @@ const initialState = {
   ids: [],
   areas: {},
   loading: false,
-  error: null,
-  saving: false
+  error: null
 };
 
 export default function reducer(state = initialState, action) {
   switch (action.type) {
     case SET_AREA: {
       const area = action.payload.area;
-      if (area) return {
-        ...state,
-        ids: [...state.ids, ...Object.keys(area)],
-        areas: { ...state.areas, ...area }
-      };
-      return state;
+      if (state.ids.indexOf( ...Object.keys(area) ) > -1) {
+        return {
+          ...state,
+          areas: { ...state.areas, ...area }
+        };
+      } else {
+        return {
+          ...state,
+          ids: [...state.ids, ...Object.keys(area)],
+          areas: { ...state.areas, ...area }
+        };
+      }
     }
     case SET_AREAS: {
       const { area: areas } = action.payload;
@@ -128,11 +135,11 @@ export function getAreas() {
 }
 
 // POST name, geostore ID
-export function saveArea(area, node) {
+export function saveArea(area, node, method) {
   return async (dispatch, state) => {
-    const url = `${API_BASE_URL}/area`;
+    const url = method === 'PATCH' ? `${API_BASE_URL}/area/${area.id}` : `${API_BASE_URL}/area`;
     const body = new FormData();
-    const blob = await domtoimage.toBlob(node);
+    const blob = await domtoimage.toBlob(node, { BLOB_CONFIG });
     body.append('name', area.name);
     body.append('geostore', area.geostore);
     const image = new File([blob], 'png', {type: 'image/png', name: encodeURIComponent(area.name)})
@@ -145,7 +152,7 @@ export function saveArea(area, node) {
       headers: {
         Authorization: `Bearer ${state().user.token}`
       },
-      method: 'POST',
+      method: method,
       body
     })
       .then((response) => {
@@ -162,6 +169,7 @@ export function saveArea(area, node) {
           type: SET_LOADING_AREAS,
           payload: false
         });
+        toastr.success('Area saved');
       })
       .catch((error) => {
         dispatch({
@@ -172,6 +180,7 @@ export function saveArea(area, node) {
           type: SET_LOADING_AREAS,
           payload: false
         });
+        toastr.error(error);
       });
   };
 }
@@ -191,11 +200,11 @@ export function getGeoStoresWithAreas() {
 }
 
 // async save geostore then area
-export function saveAreaWithGeostore(area, node) {
+export function saveAreaWithGeostore(area, node, method) {
   return async (dispatch, state) => {
     const geostore = await dispatch(saveGeostore(area.geojson));
     const geostoreId = Object.keys(geostore)[0];
     const areaWithGeostore = {...area, geostore: geostoreId};
-    await dispatch(saveArea(areaWithGeostore, node));
+    await dispatch(saveArea(areaWithGeostore, node, method));
   };
 }

@@ -18,12 +18,18 @@ export default function reducer(state = initialState, action) {
   switch (action.type) {
     case SET_GEOSTORE: {
       const geostore = action.payload.geoStore;
-      if (geostore) return {
-        ...state,
-        ids: [...state.ids, ...Object.keys(geostore)],
-        geostores: { ...state.geostores, ...geostore }
-      };
-      return state;
+      if (state.ids.indexOf( ...Object.keys(geostore) ) > -1) {
+        return {
+          ...state,
+          geostores: { ...state.geostores, ...geostore }
+        };
+      } else {
+        return {
+          ...state,
+          ids: [...state.ids, ...Object.keys(geostore)],
+          geostores: { ...state.geostores, ...geostore }
+        };
+      }
     }
     case SET_LOADING_GEOSTORE:
       return Object.assign({}, state, { loading: action.payload });
