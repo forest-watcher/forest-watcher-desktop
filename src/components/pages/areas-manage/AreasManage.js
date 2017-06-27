@@ -9,6 +9,7 @@ import Icon from '../../ui/Icon';
 import ZoomControl from '../../ui/ZoomControl';
 import DrawControl from '../../ui/DrawControl';
 import Attribution from '../../ui/Attribution';
+import Loader from '../../ui/Loader';
 import { AREAS } from '../../../constants/map';
 
 const geojsonArea = require('@mapbox/geojson-area');
@@ -139,6 +140,9 @@ class AreasManage extends React.Component {
             </div>
           </div>
         </Form>
+        { this.props.saving &&
+            <Loader />
+        }
       </div>
     );
   }
