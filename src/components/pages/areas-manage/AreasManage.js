@@ -36,12 +36,16 @@ class AreasManage extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
+    const { history } = this.props;
     this.form = {
       ...this.form,
       id: nextProps.area ? nextProps.area.id : null,
       name: nextProps.area ? nextProps.area.attributes.name : '',
       geojson: nextProps.geojson ? nextProps.geojson : null
     };
+    if (this.props.saving === true && nextProps.saving === false) {
+      history.push('/areas');
+    }
   }
 
   onSubmit = (e) => {
