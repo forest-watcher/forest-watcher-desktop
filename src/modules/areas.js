@@ -9,7 +9,6 @@ import { toastr } from 'react-redux-toastr';
 const SET_AREA = 'areas/SET_AREA';
 const SET_AREAS = 'areas/SET_AREAS';
 const SET_LOADING_AREAS = 'areas/SET_LOADING_AREAS';
-const SET_LOADING_AREAS_ERROR = 'areas/SET_LOADING_AREAS_ERROR';
 const SET_SAVING_AREA = 'areas/SET_SAVING_AREA';
 
 // Reducer
@@ -17,8 +16,7 @@ const initialState = {
   ids: [],
   areas: {},
   loading: false,
-  saving: false,
-  error: null
+  saving: false
 };
 
 export default function reducer(state = initialState, action) {
@@ -47,8 +45,6 @@ export default function reducer(state = initialState, action) {
       return Object.assign({}, state, { saving: action.payload });
     case SET_SAVING_AREA:
       return Object.assign({}, state, { saving: action.payload });
-    case SET_LOADING_AREAS_ERROR:
-      return Object.assign({}, state, { error: action.payload });
     default:
       return state;
   }
@@ -85,10 +81,7 @@ export function getArea(id) {
         return normalized;
       })
       .catch((error) => {
-        dispatch({
-          type: SET_LOADING_AREAS_ERROR,
-          payload: error
-        });
+        toastr.error('Unable to load area', error);
         dispatch({
           type: SET_LOADING_AREAS,
           payload: false
@@ -126,10 +119,7 @@ export function getAreas() {
         return normalized;
       })
       .catch((error) => {
-        dispatch({
-          type: SET_LOADING_AREAS_ERROR,
-          payload: error
-        });
+        toastr.error('Unable to load areas', error);
         dispatch({
           type: SET_LOADING_AREAS,
           payload: false
@@ -169,18 +159,13 @@ export function saveArea(area, node, method) {
           type: SET_SAVING_AREA,
           payload: false
         });
-        toastr.success('Area saved');
       })
       .catch((error) => {
-        dispatch({
-          type: SET_LOADING_AREAS_ERROR,
-          payload: error
-        });
+        toastr.error('Unable to save area', error);
         dispatch({
           type: SET_SAVING_AREA,
           payload: false
         });
-        toastr.error(error);
       });
   };
 }
