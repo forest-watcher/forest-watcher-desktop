@@ -25,6 +25,9 @@ function Nav({ loggedIn, logout }) {
               <li className="nav-link">
                 <NavLink to="/reports" activeClassName="-active">Reports</NavLink>
               </li>
+              <li className="nav-link">
+                <NavLink to="/teams" activeClassName="-active">My Team</NavLink>
+              </li>
             </ul>
           }
           {loggedIn &&
