@@ -37,7 +37,7 @@ class AreasManage extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     const { history } = this.props;
-    if (!this.props.saving) {
+    if (!nextProps.editing && !this.props.editing && !nextProps.saving && !this.props.saving) {
       this.form = {
         ...this.form,
         id: nextProps.area ? nextProps.area.id : null,
@@ -45,7 +45,7 @@ class AreasManage extends React.Component {
         geojson: nextProps.geojson ? nextProps.geojson : null
       };
     }
-    if (this.props.saving === true && nextProps.saving === false) {
+    if (this.props.saving && !nextProps.saving) {
       history.push('/areas');
     }
   }
@@ -72,10 +72,7 @@ class AreasManage extends React.Component {
     if (areaGeoJson) {
       const area = geojsonArea.geometry(areaGeoJson.geometry);
       if (area <= AREAS.maxSize) {
-        this.form = {
-          ...this.form,
-          geojson: areaGeoJson
-        };
+        this.form.geojson = areaGeoJson;
       } else {
         toastr.error('Area too large', 'Please draw a smaller area');
       }

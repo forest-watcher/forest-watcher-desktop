@@ -201,8 +201,8 @@ export function saveAreaWithGeostore(area, node, method) {
 }
 
 export function setEditing(bool) {
-  return (dispatch) => {
-    dispatch({
+  return async (dispatch) => {
+    await dispatch({
       type: SET_EDITING_AREA,
       payload: bool
     });

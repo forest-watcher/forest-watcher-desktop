@@ -8,8 +8,13 @@ const readGeojson = (state, match) => {
   const area = state.areas.areas[areaId] || null;
   const geostoreId = area ? area.attributes.geostore : null;
   const geostore = state.geostores.geostores[geostoreId] || null;
-  const geojson = geostore ? geostore.attributes.geojson.features[0] : null;
-  if (geojson) geojson.properties = {};
+  let geojson = geostore ? geostore.attributes.geojson.features[0] : null;
+  if (geojson) {
+    geojson = {
+      ...geojson,
+      properties: {}
+    };
+  }
   return geojson;
 }
 
