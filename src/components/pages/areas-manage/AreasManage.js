@@ -26,7 +26,7 @@ class AreasManage extends React.Component {
     this.state = {
       map: {},
       mapConfig: {
-        zoom: 10,
+        zoom: 3,
         lat: 0,
         lng: 0,
         zoomControl: false,
@@ -107,7 +107,7 @@ class AreasManage extends React.Component {
               <ZoomControl
                 zoom={this.state.mapConfig.zoom}
                 minZoom={3}
-                maxZoom={13}
+                maxZoom={20}
                 onZoomChange={ (zoom) => {
                   this.setState({
                     mapConfig: {
