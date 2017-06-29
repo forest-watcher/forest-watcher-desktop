@@ -9,3 +9,50 @@
   border: 2px solid $white;
   border-radius: 50%;
 }
+
+.leaflet-draw {
+  position: absolute;
+  top: 110px;
+  right: 20px;
+  margin-top: 0 !important;
+  margin-right: 0 !important;
+
+  .leaflet-draw-toolbar {
+    border: 0;
+
+    a {
+      background-size: 273px 35px;
+      width: 35px;
+      height: 35px;
+      line-height: 35px;
+      background-color: $theme-base;
+      border-radius: 2px;
+      margin-bottom: 2px;
+    }
+
+    .leaflet-draw-draw-polygon {
+      background-position: -28px 0px;
+    }
+  }
+
+  .leaflet-draw-actions {
+    right: 36px !important;
+  }
+}
+
+.leaflet-right .leaflet-draw-actions li:first-child a {
+  border-radius: 2px 0 0 2px;
+}
+
+.leaflet-right .leaflet-draw-actions li:last-child a {
+  border-radius: 0 2px 2px;
+}
+
+.leaflet-touch .leaflet-draw-actions a {
+  line-height: 34px;
+  height: 34px;
+}
+
+.leaflet-control-attribution {
+  display: none;
+}

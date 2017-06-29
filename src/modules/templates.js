@@ -1,17 +1,16 @@
 import normalize from 'json-api-normalizer';
 import { API_BASE_URL } from '../constants/global';
+import { toastr } from 'react-redux-toastr';
 
 // Actions
 const GET_USER_TEMPLATES = 'templates/GET_USER_TEMPLATES';
 const SET_LOADING_TEMPLATES = 'templates/SET_LOADING_TEMPLATES';
-const SET_LOADING_TEMPLATES_ERROR = 'templates/SET_LOADING_TEMPLATES_ERROR';
 
 // Reducer
 const initialState = {
   ids: [],
   data: {},
-  loading: false,
-  error: null
+  loading: false
 };
 
 export default function reducer(state = initialState, action) {
@@ -23,8 +22,6 @@ export default function reducer(state = initialState, action) {
     }
     case SET_LOADING_TEMPLATES:
       return Object.assign({}, state, { loading: action.payload });
-    case SET_LOADING_TEMPLATES_ERROR:
-      return Object.assign({}, state, { error: action.payload });
     default:
       return state;
   }
@@ -60,13 +57,10 @@ export function getUserTemplates() {
       })
       .catch((error) => {
         dispatch({
-          type: SET_LOADING_TEMPLATES_ERROR,
-          payload: error
-        });
-        dispatch({
           type: SET_LOADING_TEMPLATES,
           payload: false
         });
+        toastr.error('Unable to load templates', error);
       });
   };
 }

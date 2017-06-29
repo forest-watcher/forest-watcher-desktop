@@ -6,7 +6,7 @@ export const MAP_CONFIG = {
   initialZoom: 3,
   basemap: 'http://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
   center: [51.505, -0.09],
-  attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community',
+  attribution: ' | Tiles © Esri — Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community',
   zoomControl: false
 }
 
@@ -17,6 +17,14 @@ export const POLYGON_STYLES = {
   fillOpacity: 0.5,
   weight: 2
 };
+
+export const BLOB_CONFIG = {
+  style: {
+    width: '100%',
+    height: '100%',
+    position: 'relative'
+  }
+}
 
 // Leaflet Draw
 export const DRAW_CONTROL = {
@@ -68,4 +76,4 @@ export const AREAS = {
   maxSize: 1500000000 // square meters
 }
 
-export default { MAP_CONFIG, DRAW_CONTROL, DRAW_CONTROL_DISABLED, AREAS };
+export default { MAP_CONFIG, BLOB_CONFIG, DRAW_CONTROL, DRAW_CONTROL_DISABLED, AREAS };

@@ -1,34 +1,41 @@
 import normalize from 'json-api-normalizer';
 import { API_BASE_URL } from '../constants/global';
+import { toastr } from 'react-redux-toastr';
 
 // Actions
 const SET_GEOSTORE = 'geostores/SET_GEOSTORE';
 const SET_LOADING_GEOSTORE = 'geostores/SET_LOADING_GEOSTORE';
-const SET_LOADING_GEOSTORE_ERROR = 'geostores/SET_LOADING_GEOSTORE_ERROR';
+const SET_SAVING_GEOSTORE = 'areas/SET_SAVING_GEOSTORE';
 
 // Reducer
 const initialState = {
   ids: [],
   geostores: {},
   loading: false,
-  error: null
+  saving: false
 };
 
 export default function reducer(state = initialState, action) {
   switch (action.type) {
     case SET_GEOSTORE: {
       const geostore = action.payload.geoStore;
-      if (geostore) return {
-        ...state,
-        ids: [...state.ids, ...Object.keys(geostore)],
-        geostores: { ...state.geostores, ...geostore }
-      };
-      return state;
+      if (state.ids.indexOf( ...Object.keys(geostore) ) > -1) {
+        return {
+          ...state,
+          geostores: { ...state.geostores, ...geostore }
+        };
+      } else {
+        return {
+          ...state,
+          ids: [...state.ids, ...Object.keys(geostore)],
+          geostores: { ...state.geostores, ...geostore }
+        };
+      }
     }
     case SET_LOADING_GEOSTORE:
       return Object.assign({}, state, { loading: action.payload });
-    case SET_LOADING_GEOSTORE_ERROR:
-      return Object.assign({}, state, { error: action.payload });
+    case SET_SAVING_GEOSTORE:
+      return Object.assign({}, state, { saving: action.payload });
     default:
       return state;
   }
@@ -63,10 +70,7 @@ export function getGeostore(id) {
         });
       })
       .catch((error) => {
-        dispatch({
-          type: SET_LOADING_GEOSTORE_ERROR,
-          payload: error
-        });
+        toastr.error('Unable to load geostore', error);
         dispatch({
           type: SET_LOADING_GEOSTORE,
           payload: false
@@ -83,7 +87,7 @@ export function saveGeostore(geojson) {
   }
   return (dispatch, state) => {
     dispatch({
-      type: SET_LOADING_GEOSTORE,
+      type: SET_SAVING_GEOSTORE,
       payload: true
     });
     return fetch(url, {
@@ -105,18 +109,14 @@ export function saveGeostore(geojson) {
           payload: normalized
         });
         dispatch({
-          type: SET_LOADING_GEOSTORE,
+          type: SET_SAVING_GEOSTORE,
           payload: false
         });
         return normalized.geoStore;
       })
       .catch((error) => {
         dispatch({
-          type: SET_LOADING_GEOSTORE_ERROR,
-          payload: error
-        });
-        dispatch({
-          type: SET_LOADING_GEOSTORE,
+          type: SET_SAVING_GEOSTORE,
           payload: false
         });
       });
