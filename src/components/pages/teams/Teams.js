@@ -5,13 +5,14 @@ import { Input, Form } from '../../form/Form';
 import Hero from '../../layouts/Hero';
 import Article from '../../layouts/Article';
 import Select from 'react-select';
-
+import Icon from '../../ui/Icon';
 
 class Teams extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      areas: ''
+      selectedAreas: '',
+      selectedUsers: []
     }
     this.updateForm(props.team);
   }
@@ -31,11 +32,17 @@ class Teams extends React.Component {
   componentWillReceiveProps(nextProps){
     if (this.props.team !== nextProps.team){
       this.updateForm(nextProps.team);
-      if ( nextProps.team ){
-        this.setState({ areas: nextProps.team.attributes.areas.join() })
-      }
+      if ( nextProps.team ) this.resetSelection(nextProps.team);
     }
   }
+
+  resetSelection(team) {
+    this.setState({ 
+      selectedAreas: team.attributes.areas.join(),
+      selectedUsers: team.attributes.users 
+    })
+  }
+
   handleSubmit = (e) => {
     e.preventDefault();
     this.props.team ? this.props.updateTeam(this.form, this.props.team.id) : this.props.createTeam(this.form);
@@ -49,12 +56,22 @@ class Teams extends React.Component {
     e.preventDefault();
   }
 
+  handleDeleteUser = (deletedUser) => {
+    this.form.users = this.form.users.filter(user => user !== deletedUser);
+    this.setState({ selectedUsers: this.form.users });
+  }
+
+  handleCancel = () => {
+    this.resetSelection(this.props.team);
+    this.setEditing(false) 
+ }
+
   onInputChange = (e) => {
     this.form[e.target.name] = e.target.value;
   }
 
   onAreaChange = (selected) => {
-    this.setState({areas: selected});
+    this.setState({selectedAreas: selected});
     this.form.areas = selected.split(',');
   }
 
@@ -118,7 +135,7 @@ class Teams extends React.Component {
                     simpleValue
                     name="areas-select"
                     options={areaValues}
-                    value={this.state.areas}
+                    value={this.state.selectedAreas}
                     onChange={this.onAreaChange}
                   />
                 </div>
@@ -134,15 +151,21 @@ class Teams extends React.Component {
                     <div key={i}> 
                       <div>
                         { manager }     
-                        Admin <input type="checkbox" defaultChecked onChange={this.handleChangeAdmin}/>
+                        <input type="checkbox" id="admin" onChange={this.handleChangeAdmin}/>
+                        <label htmlFor="admin">Admin</label>
                       </div>
                     </div>
                   ))}
-                  {this.form.users && this.form.users.map((users, i) => (
+                  {this.state.selectedUsers.map((user, i) => (
                     <div key={i}> 
                       <div>
-                        { users }
-                        Admin <input type="checkbox" onChange={this.handleChangeAdmin}/>
+                        { user }
+                        <input type="checkbox" id="admin" onChange={this.handleChangeAdmin}/>
+                        <label htmlFor="admin">Admin</label>
+                        
+                        <button type="button" onClick={() => this.handleDeleteUser(user)}>
+                          <Icon name="icon-delete" className="-medium" />
+                        </button>
                       </div>
                     </div>
                   ))}
@@ -150,7 +173,7 @@ class Teams extends React.Component {
                 </div>
                 <div className="row small-12 columns">
                   <div className="c-form -nav">
-                    <button onClick={() => this.setEditing(false)} className="c-button -light">Cancel</button>
+                    <button type="button" onClick={this.handleCancel} className="c-button -light">Cancel</button>
                     <button type="submit" className="c-button">Save</button>
                   </div>
                 </div>
