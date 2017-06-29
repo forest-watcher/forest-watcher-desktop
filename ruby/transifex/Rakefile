@@ -9,7 +9,7 @@ namespace :transifex do
 
   PROJECT_SLUG = 'forest-watch'
   RESOURCE_SLUG = 'desktop'
-  PATH_TO_LOCALE_FILES = './../../src/locales/'
+  PATH_TO_LOCALE_FILES = '../../src/locales/'
 
   task :configure do
     Transifex.configure do |c|
@@ -20,7 +20,7 @@ namespace :transifex do
 
   desc 'Push source files to transifex'
   task push: :configure do
-    resource_file = PATH_TO_LOCALE_FILES + 'en.yml'
+    resource_file = PATH_TO_LOCALE_FILES + 'en.json'
     project = Transifex::Project.new(PROJECT_SLUG)
     resource = project.resource(RESOURCE_SLUG)
     # checking if resource exists
@@ -56,7 +56,7 @@ namespace :transifex do
     resource = project.resource(RESOURCE_SLUG)
     ['es', 'fr', 'es', 'pt', 'id'].each do |language|
       translation = resource.translation(language).fetch
-      translation_file = PATH_TO_LOCALE_FILES + language + '.yml'
+      translation_file = PATH_TO_LOCALE_FILES + language + '.json'
       puts "Updating translations in #{translation_file}"
       File.write(
         translation_file,

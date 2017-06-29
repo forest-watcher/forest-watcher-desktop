@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { FormattedMessage } from 'react-intl';
 
 import Icon from '../../ui/Icon';
 
@@ -29,8 +30,8 @@ function Login() {
         <div className="login-content">
           <div className="login-heading">
             <Icon className="-huge" name="icon-forest-watcher-big" />
-            <h1 className="text -logo-title">Forest Watcher 2.0</h1>
-            <p className="text -logo-subtitle">Sign in with a MyGFW account</p>
+            <h1 className="text -logo-title"><FormattedMessage id="app.name" /></h1>
+            <p className="text -logo-subtitle"><FormattedMessage id="login.welcome" /></p>
           </div>
           <LoginButton socialNetwork="facebook" />
           <LoginButton socialNetwork="twitter" />
