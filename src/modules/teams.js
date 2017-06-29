@@ -96,6 +96,7 @@ export function createTeam(team) {
           type: SAVE_TEAM,
           payload: normalized
         });
+        dispatch(getTeams());
         dispatch({
           type: SET_EDITING,
           payload: false
@@ -107,14 +108,22 @@ export function createTeam(team) {
       });
   };
 }
-
-export function updateTeam() {
-  const url = `http://mymachine:3005/api/v1/teams/`;
+export function updateTeam(team, id) {
+  const body = JSON.stringify({
+    name: team.name,
+    managers: team.managers,
+    users: team.users,
+    areas: team.areas,
+    editing: false
+  })
+  const url = `http://mymachine:3005/api/v1/teams/${id}`;
   return (dispatch, state) => {
     return fetch(url, {
       headers: {
         Authorization: `Bearer ${state().user.token}`
-      }
+      },
+      method: 'PATCH',
+      body
     })
       .then((response) => {
         if (response.ok) return response.json();
@@ -123,9 +132,10 @@ export function updateTeam() {
       .then((data) => {
       const normalized = normalize(data);
         dispatch({
-          type: GET_TEAMS,
+          type: SAVE_TEAM,
           payload: normalized
         });
+        dispatch(getTeams());
         dispatch({
           type: SET_EDITING,
           payload: false

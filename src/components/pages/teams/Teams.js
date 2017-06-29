@@ -2,27 +2,43 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import { Input, Form } from '../../form/Form';
+import Hero from '../../layouts/Hero';
 import Article from '../../layouts/Article';
-import Hero from '../../layouts/Hero'; 
+import Select from 'react-select';
+
 
 class Teams extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {
+      areas: ''
+    }
+    this.updateForm(props.team);
+  }
+
+  updateForm(team){
     this.form = {
-      id: props.team && props.team.id,
-      name: props.team && props.team.attributes.name,
-      areas: props.team && props.team.attributes.areas,
-      managers: props.team && props.team.attributes.managers || [this.props.userId],
-      users: props.team && props.team.attributes.users || []
+      name: team && team.attributes.name,
+      areas: (team && team.attributes.areas) || [],
+      managers: (team && team.attributes.managers) || [this.props.userId],
+      users: (team && team.attributes.users) || []
     }
   }
+
   componentWillMount() {
     this.props.getTeams();
   }
-
+  componentWillReceiveProps(nextProps){
+    if (this.props.team !== nextProps.team){
+      this.updateForm(nextProps.team);
+      if ( nextProps.team ){
+        this.setState({ areas: nextProps.team.attributes.areas.join() })
+      }
+    }
+  }
   handleSubmit = (e) => {
     e.preventDefault();
-    this.props.team ? this.props.updateTeam(this.form) : this.props.createTeam(this.form);
+    this.props.team ? this.props.updateTeam(this.form, this.props.team.id) : this.props.createTeam(this.form);
   }
 
   setEditing = (value) => {
@@ -37,13 +53,18 @@ class Teams extends React.Component {
     this.form[e.target.name] = e.target.value;
   }
 
+  onAreaChange = (selected) => {
+    this.setState({areas: selected});
+    this.form.areas = selected.split(',');
+  }
+
   render() {
-    const { team } = this.props;
+    const { team, areaValues, editing, isManager } = this.props;
     const actionName = this.props.team ? 'Edit' : 'Create'
     return (
-      (this.props.team && !this.props.editing) ? 
+      (team && !editing) ? 
         <div>
-          {this.props.isManager ? 
+          {isManager ? 
             <Hero
               title="My Team"
               action={{name: actionName, callback: () => this.setEditing(true)}}
@@ -56,13 +77,13 @@ class Teams extends React.Component {
                   Team Name
                 </div>
                 <div>
-                  {team && team.id}
+                  {team && team.attributes.name}
                 </div>
                 <div>
                   Associated areas of interest
                 </div>
                 <div>
-                  {team && team.attributes.areas && team.attributes.areas.map((area, i) =>  (<div key={i}>{ area }</div>))}
+                  {team && team.attributes.areas && team.attributes.areas.map((area, i) => (<div key={i}>{ area }</div>))}
                 </div>
                 <div>
                   Members
@@ -92,13 +113,13 @@ class Teams extends React.Component {
                     validations={['required']}
                   />
                   <label className="text -x-small-title">Associated Areas of Interest </label>
-                  <Input
-                    type="text"
-                    onChange={this.onInputChange}
-                    name="areas"
-                    value={this.form.areas || ''}
-                    placeholder={"Areas of Interest"}
-                    validations={['required']}
+                  <Select
+                    multi
+                    simpleValue
+                    name="areas-select"
+                    options={areaValues}
+                    value={this.state.areas}
+                    onChange={this.onAreaChange}
                   />
                 </div>
                 <div className="small-6 columns">
@@ -120,7 +141,7 @@ class Teams extends React.Component {
                   {this.form.users && this.form.users.map((users, i) => (
                     <div key={i}> 
                       <div>
-                        { users }     
+                        { users }
                         Admin <input type="checkbox" onChange={this.handleChangeAdmin}/>
                       </div>
                     </div>
