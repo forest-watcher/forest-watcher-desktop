@@ -1,11 +1,13 @@
 import { connect } from 'react-redux';
-import { withRouter } from 'react-router-dom'
+import { withRouter } from 'react-router-dom';
+import { setLocale } from '../../modules/app';
 import { checkLogged, logout } from '../../modules/user';
 import App from './App';
 
 const mapStateToProps = ({ app, user }) => ({
   user,
-  userChecked: app.userChecked
+  userChecked: app.userChecked,
+  locale: app.locale
 });
 
 function mapDispatchToProps(dispatch) {
@@ -15,6 +17,9 @@ function mapDispatchToProps(dispatch) {
     },
     logout: () => {
       dispatch(logout());
+    },
+    setLocale: (language) => {
+      dispatch(setLocale(language));
     }
   };
 }

@@ -2,7 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Route, Switch, Redirect } from 'react-router-dom';
 import querystring from 'query-string';
-import ReduxToastr from 'react-redux-toastr'
+import ReduxToastr from 'react-redux-toastr';
+import { IntlProvider } from 'react-intl'
 
 // Pages
 import Login from '../pages/login/Login';
@@ -35,36 +36,43 @@ class App extends React.Component {
     if (!userChecked) return null;
 
     return (
-      <div>
-        <header className="l-header" role="banner">
-          <Nav loggedIn={user.loggedIn} logout={logout} />
-        </header>
-        <main role="main" className="l-main">
-          <Route exact path="/" render={this.getRootComponent} />
-          {user.loggedIn &&
-            <div>
-              <Switch>
-                <Route exact path={`${match.url}areas`} component={Areas} />
-                <Route exact path={`${match.url}areas/create`} component={AreasManage} />
-                <Route exact path={`${match.url}areas/:areaId`} component={AreasManage} />
-              </Switch>
-              <Switch>
-                <Route exact path={`${match.url}templates`} component={Templates} />
-                <Route exact path={`${match.url}templates/:reportId`} component={Answers} />
-                <Route path={`${match.url}templates/:reportId/:answerId`} component={AnswersDetail} />
-                <Route exact path={`${match.url}reports`} component={Reports} />
-                <Route path={`${match.url}reports/template/:templateIndex`} component={Reports} />
-              </Switch>
-            </div>
-          }
-          {!user.loggedIn && <Redirect to="/" />}
-          <ReduxToastr
-            position="bottom-right"
-            transitionIn="fadeIn"
-            transitionOut="fadeOut"
-          />
-        </main>
-      </div>
+      <IntlProvider locale={this.props.locale}>
+        <div>
+          <header className="l-header" role="banner">
+            <Nav 
+              loggedIn={user.loggedIn} 
+              logout={logout} 
+              locale={this.props.locale}
+              setLocale={this.props.setLocale}
+            />
+          </header>
+          <main role="main" className="l-main">
+            <Route exact path="/" render={this.getRootComponent} />
+            {user.loggedIn &&
+              <div>
+                <Switch>
+                  <Route exact path={`${match.url}areas`} component={Areas} />
+                  <Route exact path={`${match.url}areas/create`} component={AreasManage} />
+                  <Route exact path={`${match.url}areas/:areaId`} component={AreasManage} />
+                </Switch>
+                <Switch>
+                  <Route exact path={`${match.url}templates`} component={Templates} />
+                  <Route exact path={`${match.url}templates/:reportId`} component={Answers} />
+                  <Route path={`${match.url}templates/:reportId/:answerId`} component={AnswersDetail} />
+                  <Route exact path={`${match.url}reports`} component={Reports} />
+                  <Route path={`${match.url}reports/template/:templateIndex`} component={Reports} />
+                </Switch>
+              </div>
+            }
+            {!user.loggedIn && <Redirect to="/" />}
+            <ReduxToastr
+              position="bottom-right"
+              transitionIn="fadeIn"
+              transitionOut="fadeOut"
+            />
+          </main>
+        </div>
+      </IntlProvider>
     );
   }
 }
@@ -75,7 +83,9 @@ App.propTypes = {
   userChecked: PropTypes.bool.isRequired,
   user: PropTypes.object.isRequired,
   checkLogged: PropTypes.func.isRequired,
-  logout: PropTypes.func.isRequired
+  logout: PropTypes.func.isRequired,
+  locale: PropTypes.string,
+  setLocale: PropTypes.func
 };
 
 export default App;
