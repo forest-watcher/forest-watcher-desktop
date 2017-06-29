@@ -38,11 +38,15 @@
     .nav-subsection {
       display: flex;
       align-items: center;
-      border-right: 1px solid $border-gray;
+
+      &:first-child {
+        border-right: 1px solid $border-gray;
+      }
     }
 
     .Select {
       width: 60px;
+      margin-left: 30px;
     }
   }
 
