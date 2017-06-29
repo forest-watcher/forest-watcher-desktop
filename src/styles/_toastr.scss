@@ -1,6 +1,39 @@
 .redux-toastr {
-  .bottom-right {
-    bottom: 80px;
-    right: 10px;
+
+  .toastr {
+    border-radius: 3px;
+	  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.1);
+
+    .toastr-middle-container {
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: flex-start;
+      min-height: 70px;
+      margin-left: 75px;
+    }
+
+    .toastr-right-container {
+
+      button {
+        font-size: 8px;
+        font-weight: 600;
+        color: white;
+        background-color: #444444;
+	      box-shadow: inset 0 1px 2px 0 rgba(0, 0, 0, 0.4);
+        padding: 4px;
+        border-radius: 50%;
+        width: 16px;
+        height: 16px;
+        margin-top: 5px;
+        margin-right: 5px;
+        opacity: 1;
+      }
+    }
+
+    &.success {
+      background-color: $theme-accent;
+    }
   }
 }

@@ -1,5 +1,6 @@
 import FileSaver from 'file-saver';
 import { API_BASE_URL } from '../constants/global';
+import { toastr } from 'react-redux-toastr';
 
 // Actions
 const GET_USER_ANSWERS = 'areas/GET_USER_ANSWERS';
@@ -45,8 +46,7 @@ export function getReportAnswers(reportId) {
         });
       })
       .catch((error) => {
-        console.info(error);
-        // To-do
+        toastr.error('Unable to load reports', error);
       });
   };
 }
@@ -70,8 +70,7 @@ export function downloadAnswers(reportId) {
             FileSaver.saveAs(data, `${reportId}-answers.csv`);
           })
           .catch((error) => {
-            console.info(error);
-            // To-do
+            toastr.error('Unable to download reports', error);
           });
       };
     }

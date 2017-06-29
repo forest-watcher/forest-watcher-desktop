@@ -27,7 +27,7 @@ class Answers extends React.Component {
       <div>
         <p><strong>Date: </strong>{dateString}</p>
         <p><strong>User: </strong>{userString}</p>
-        <Link to={`/reports/${attributes.questionnaire}/${id}/`}>Go to detail</Link>
+        <Link to={`/reports/${id}`}>Go to detail</Link>
       </div>
     );
   }

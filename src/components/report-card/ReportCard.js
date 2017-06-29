@@ -21,7 +21,7 @@ class ReportCard extends React.Component {
         actions={[{
           iconName: 'icon-info',
           color: '-green',
-          callback: () => history.push(`/reports/${template.id}`)
+          callback: () => history.push(`/templates/${template.id}`)
         }]}
       />
     );

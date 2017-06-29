@@ -26,7 +26,7 @@ class AreasManage extends React.Component {
     this.state = {
       map: {},
       mapConfig: {
-        zoom: 10,
+        zoom: 3,
         lat: 0,
         lng: 0,
         zoomControl: false,
@@ -37,13 +37,15 @@ class AreasManage extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     const { history } = this.props;
-    this.form = {
-      ...this.form,
-      id: nextProps.area ? nextProps.area.id : null,
-      name: nextProps.area ? nextProps.area.attributes.name : '',
-      geojson: nextProps.geojson ? nextProps.geojson : null
-    };
-    if (this.props.saving === true && nextProps.saving === false) {
+    if (!nextProps.editing && !this.props.editing && !nextProps.saving && !this.props.saving) {
+      this.form = {
+        ...this.form,
+        id: nextProps.area ? nextProps.area.id : null,
+        name: nextProps.area ? nextProps.area.attributes.name : '',
+        geojson: nextProps.geojson ? nextProps.geojson : null
+      };
+    }
+    if (this.props.saving && !nextProps.saving) {
       history.push('/areas');
     }
   }
@@ -52,14 +54,18 @@ class AreasManage extends React.Component {
     e.preventDefault();
     if (this.form.geojson && this.form.name !== '') {
       const method = this.props.mode === 'manage' ? 'PATCH' : 'POST';
+      this.props.setSaving(true);
       this.props.saveAreaWithGeostore(this.form, this.state.map._container, method);
     } else {
-      toastr.error('Missing fields', 'You cannot save without drawing an geojson or giving a name');
+      toastr.error('Missing values', 'Please provide an area and a name');
     }
   }
 
   onInputChange = (e) => {
-    this.form[e.target.name] = e.target.value;
+    this.form = {
+      ...this.form,
+      name: e.target.value
+    };
   }
 
   onDrawComplete = (areaGeoJson) => {
@@ -75,7 +81,10 @@ class AreasManage extends React.Component {
 
   onDrawDelete = () => {
     if (this.form.geojson) {
-      this.form.geojson = null;
+      this.form = {
+        ...this.form,
+        geojson: null
+      };
     }
   }
 
@@ -98,7 +107,7 @@ class AreasManage extends React.Component {
               <ZoomControl
                 zoom={this.state.mapConfig.zoom}
                 minZoom={3}
-                maxZoom={13}
+                maxZoom={20}
                 onZoomChange={ (zoom) => {
                   this.setState({
                     mapConfig: {
@@ -113,17 +122,16 @@ class AreasManage extends React.Component {
                 onDrawComplete={this.onDrawComplete}
                 onDrawDelete={this.onDrawDelete}
                 geojson={this.form.geojson}
+                saving={this.props.saving}
               />
               <Attribution />
             </div>
-            { this.props.saving &&
-              <Loader />
-            }
+            <Loader isLoading={this.props.saving} />
           </div>
           <div className="row columns">
             <div className="c-form -nav">
               <Link to="/areas">
-                <button className="c-button -light">Cancel</button>
+                <button className="c-button -light" disabled={this.props.saving}>Cancel</button>
               </Link>
               <div className="areas-inputs">
                 <div className="upload-field">
@@ -140,6 +148,7 @@ class AreasManage extends React.Component {
                     value={this.form.name}
                     placeholder="type your title"
                     validations={['required']}
+                    disabled={this.props.saving}
                     />
                 </div>
               </div>
