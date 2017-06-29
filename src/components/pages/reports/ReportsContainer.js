@@ -4,6 +4,7 @@
  import { setSelectedTemplateIndex, setTemplateSearchParams, downloadAnswers } from '../../../modules/reports';
  import { getReportAnswers } from '../../../modules/reports';
  import { DEFAULT_FORMAT } from '../../../constants/global';
+ import { includes } from '../../../helpers/utils';
  
  import qs from 'query-string';
  import Reports from './Reports';
@@ -17,7 +18,7 @@
       case 'search':
         return answers.filter((answer) => {
           return Object.keys(answer).some((key) => {
-            if(answer[key].toLowerCase().includes(value.toLowerCase())) return true;
+            if( includes(answer[key].toLowerCase(), value.toLowerCase())) return true;
             return false;
           })
         })
