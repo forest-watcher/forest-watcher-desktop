@@ -12,8 +12,8 @@ class Nav extends React.Component {
 
   render() {
     const options = [
-      { value: 'en', label: 'English' },
-      { value: 'es', label: 'Spanish' }
+      { value: 'en', label: 'EN' },
+      { value: 'es', label: 'ES' }
     ];
     return (
       <div className="row column">
@@ -39,10 +39,7 @@ class Nav extends React.Component {
               </ul>
             }
             {this.props.loggedIn &&
-              <ul>
-                <li className="nav-menu">
-                  <a onClick={this.props.logout}>Log out</a>
-                </li>
+              <ul className="nav-subsection">
                 <Select
                   name="locale-select"
                   value={this.props.locale}
@@ -50,6 +47,9 @@ class Nav extends React.Component {
                   onChange={this.handleLanguageChange}
                   clearable={false}
                 />
+                <li className="nav-menu">
+                  <a onClick={this.props.logout}>Log out</a>
+                </li>
               </ul>
             }
           </div>
