@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { NavLink } from 'react-router-dom';
 import Icon from '../ui/Icon';
 import Select from 'react-select';
+import { FormattedMessage } from 'react-intl';
 
 class Nav extends React.Component {
 
@@ -15,13 +16,14 @@ class Nav extends React.Component {
       { value: 'en', label: 'EN' },
       { value: 'es', label: 'ES' }
     ];
+    
     return (
       <div className="row column">
         <nav className="c-nav">
           <h1 className="nav-logo">
             <NavLink exact to="/" activeClassName="-active">
               <Icon className="-small" name="icon-forest-watcher-small"/>
-              Forest Watcher 2.0
+              <FormattedMessage id="app.name" />
             </NavLink>
           </h1>
           <div className="nav-section">

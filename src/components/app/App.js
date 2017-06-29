@@ -3,7 +3,14 @@ import PropTypes from 'prop-types';
 import { Route, Switch, Redirect } from 'react-router-dom';
 import querystring from 'query-string';
 import ReduxToastr from 'react-redux-toastr';
-import { IntlProvider } from 'react-intl'
+import { IntlProvider } from 'react-intl';
+import { addLocaleData } from 'react-intl';
+import en from 'react-intl/locale-data/en';
+import es from 'react-intl/locale-data/es';
+import translations from '../../locales/index.js';
+import { DEFAULT_LANGUAGE } from '../../constants/global';
+
+addLocaleData([...en, ...es]);
 
 // Pages
 import Login from '../pages/login/Login';
@@ -32,18 +39,21 @@ class App extends React.Component {
   }
 
   render() {
-    const { match, user, userChecked, logout } = this.props;
+    const { match, user, userChecked, logout, locale, setLocale } = this.props;
     if (!userChecked) return null;
-
+    const mergedMessages = Object.assign({}, translations[DEFAULT_LANGUAGE], translations[locale]);
     return (
-      <IntlProvider locale={this.props.locale}>
+      <IntlProvider 
+        locale={locale}
+        messages={mergedMessages}
+      >
         <div>
           <header className="l-header" role="banner">
             <Nav 
               loggedIn={user.loggedIn} 
               logout={logout} 
-              locale={this.props.locale}
-              setLocale={this.props.setLocale}
+              locale={locale}
+              setLocale={setLocale}
             />
           </header>
           <main role="main" className="l-main">
