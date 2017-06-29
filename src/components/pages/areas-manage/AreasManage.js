@@ -131,7 +131,7 @@ class AreasManage extends React.Component {
           <div className="row columns">
             <div className="c-form -nav">
               <Link to="/areas">
-                <button className="c-button -light">Cancel</button>
+                <button className="c-button -light" disabled={this.props.saving}>Cancel</button>
               </Link>
               <div className="areas-inputs">
                 <div className="upload-field">
@@ -148,6 +148,7 @@ class AreasManage extends React.Component {
                     value={this.form.name}
                     placeholder="type your title"
                     validations={['required']}
+                    disabled={this.props.saving}
                     />
                 </div>
               </div>
