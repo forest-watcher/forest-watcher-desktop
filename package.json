@@ -20,6 +20,7 @@
     "react": "^15.5.4",
     "react-datepicker": "^0.48.0",
     "react-dom": "^15.5.4",
+    "react-intl": "^2.3.0",
     "react-redux": "^4.4.5",
     "react-redux-toastr": "^6.2.7",
     "react-router-dom": "^4.1.1",
