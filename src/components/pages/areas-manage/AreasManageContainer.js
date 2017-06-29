@@ -20,8 +20,10 @@ const readArea = (state, match) => {
 }
 
 const mapStateToProps = (state, { match }) => ({
-  editing: match.params.areaId ? true : false,
+  mode: match.params.areaId ? 'manage' : 'create',
   loading: state.areas.loading,
+  editing: state.areas.editing,
+  saving: state.areas.saving,
   geojson: readGeojson(state, match),
   area: readArea(state, match)
 });

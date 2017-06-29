@@ -7,7 +7,9 @@ import { validation } from '../../../helpers/validation'; // eslint-disable-line
 import { toastr } from 'react-redux-toastr';
 import Icon from '../../ui/Icon';
 import ZoomControl from '../../ui/ZoomControl';
-import DrawControl from '../../ui/DrawControl';
+import DrawControl from '../../draw-control/DrawControlContainer';
+import Attribution from '../../ui/Attribution';
+import Loader from '../../ui/Loader';
 import { AREAS } from '../../../constants/map';
 
 const geojsonArea = require('@mapbox/geojson-area');
@@ -34,26 +36,30 @@ class AreasManage extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
+    const { history } = this.props;
     this.form = {
       ...this.form,
       id: nextProps.area ? nextProps.area.id : null,
       name: nextProps.area ? nextProps.area.attributes.name : '',
       geojson: nextProps.geojson ? nextProps.geojson : null
     };
+    if (this.props.saving === true && nextProps.saving === false) {
+      history.push('/areas');
+    }
   }
 
   onSubmit = (e) => {
     e.preventDefault();
-    if (this.form.geojson) {
-      const method = this.props.editing ? 'PATCH' : 'POST';
+    if (this.form.geojson && this.form.name !== '') {
+      const method = this.props.mode === 'manage' ? 'PATCH' : 'POST';
       this.props.saveAreaWithGeostore(this.form, this.state.map._container, method);
     } else {
-      toastr.error('Area needed', 'You cannot save without drawing an geojson');
+      toastr.error('Missing fields', 'You cannot save without drawing an geojson or giving a name');
     }
   }
 
-  onInputChange(e) {
-    this.form.name = e.target.value;
+  onInputChange = (e) => {
+    this.form[e.target.name] = e.target.value;
   }
 
   onDrawComplete = (areaGeoJson) => {
@@ -77,7 +83,7 @@ class AreasManage extends React.Component {
     return (
       <div>
         <Hero
-          title={this.props.editing ? "Manage Area of Interest" : "Create an Area of Interest"}
+          title={this.props.mode === 'manage' ? "Manage Area of Interest" : "Create an Area of Interest"}
         />
         <Form onSubmit={this.onSubmit}>
           <div className="l-map">
@@ -102,13 +108,17 @@ class AreasManage extends React.Component {
                   });
                 }}
               />
-            <DrawControl
-              map={this.state.map}
-              onDrawComplete={this.onDrawComplete}
-              onDrawDelete={this.onDrawDelete}
-              geojson={this.form.geojson}
-            />
+              <DrawControl
+                map={this.state.map}
+                onDrawComplete={this.onDrawComplete}
+                onDrawDelete={this.onDrawDelete}
+                geojson={this.form.geojson}
+              />
+              <Attribution />
             </div>
+            { this.props.saving &&
+              <Loader />
+            }
           </div>
           <div className="row columns">
             <div className="c-form -nav">
@@ -125,7 +135,7 @@ class AreasManage extends React.Component {
                   <label className="text -x-small-title">Name the Area: </label>
                   <Input
                     type="text"
-                    onChange={ (e) => { this.form.name = e.target.value } }
+                    onChange={this.onInputChange}
                     name="name"
                     value={this.form.name}
                     placeholder="type your title"
@@ -133,7 +143,7 @@ class AreasManage extends React.Component {
                     />
                 </div>
               </div>
-              <Button className="c-button">Save</Button>
+              <Button className="c-button" disabled={this.props.saving || this.props.editing ? true : false}>Save</Button>
             </div>
           </div>
         </Form>

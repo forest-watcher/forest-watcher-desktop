@@ -5,12 +5,14 @@ import { API_BASE_URL } from '../constants/global';
 const SET_GEOSTORE = 'geostores/SET_GEOSTORE';
 const SET_LOADING_GEOSTORE = 'geostores/SET_LOADING_GEOSTORE';
 const SET_LOADING_GEOSTORE_ERROR = 'geostores/SET_LOADING_GEOSTORE_ERROR';
+const SET_SAVING_GEOSTORE = 'areas/SET_SAVING_GEOSTORE';
 
 // Reducer
 const initialState = {
   ids: [],
   geostores: {},
   loading: false,
+  saving: false,
   error: null
 };
 
@@ -33,6 +35,8 @@ export default function reducer(state = initialState, action) {
     }
     case SET_LOADING_GEOSTORE:
       return Object.assign({}, state, { loading: action.payload });
+    case SET_SAVING_GEOSTORE:
+      return Object.assign({}, state, { saving: action.payload });
     case SET_LOADING_GEOSTORE_ERROR:
       return Object.assign({}, state, { error: action.payload });
     default:
@@ -111,7 +115,7 @@ export function saveGeostore(geojson) {
           payload: normalized
         });
         dispatch({
-          type: SET_LOADING_GEOSTORE,
+          type: SET_SAVING_GEOSTORE,
           payload: false
         });
         return normalized.geoStore;
@@ -122,7 +126,7 @@ export function saveGeostore(geojson) {
           payload: error
         });
         dispatch({
-          type: SET_LOADING_GEOSTORE,
+          type: SET_SAVING_GEOSTORE,
           payload: false
         });
       });

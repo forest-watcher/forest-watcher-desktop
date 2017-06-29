@@ -74,6 +74,22 @@ class DrawControl extends React.Component {
       this.onDrawEventEdit(e);
     });
 
+    this.map.on(L.Draw.Event.EDITSTART, (e) => {
+      this.props.setEditing(true);
+    });
+
+    this.map.on(L.Draw.Event.EDITSTOP, (e) => {
+      this.props.setEditing(false);
+    });
+
+    this.map.on(L.Draw.Event.DELETESTART, (e) => {
+      this.props.setEditing(true);
+    });
+
+    this.map.on(L.Draw.Event.DELETESTOP, (e) => {
+      this.props.setEditing(false);
+    });
+
     this.map.on(L.Draw.Event.DELETED, (e) => {
       this.onDrawEventDelete(e);
     });
