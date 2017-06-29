@@ -1,9 +1,13 @@
 import React from 'react';
 
-function Loader() {
+function Loader(props) {
   return (
-    <div className="c-loader">
-      <div className="c-loading-spinner"></div>
+    <div>
+      {props.isLoading &&
+        <div className="c-loader">
+          <div className="c-loading-spinner"></div>
+        </div>
+      }
     </div>
   );
 }
