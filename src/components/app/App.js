@@ -7,10 +7,13 @@ import { IntlProvider } from 'react-intl';
 import { addLocaleData } from 'react-intl';
 import en from 'react-intl/locale-data/en';
 import es from 'react-intl/locale-data/es';
+import fr from 'react-intl/locale-data/fr';
+import id from 'react-intl/locale-data/id';
+import pt from 'react-intl/locale-data/pt';
 import translations from '../../locales/index.js';
 import { DEFAULT_LANGUAGE } from '../../constants/global';
 
-addLocaleData([...en, ...es]);
+addLocaleData([...en, ...es, ...fr, ...id, ...pt]);
 
 // Pages
 import Login from '../pages/login/Login';
@@ -54,6 +57,7 @@ class App extends React.Component {
               logout={logout} 
               locale={locale}
               setLocale={setLocale}
+              translations={translations}
             />
           </header>
           <main role="main" className="l-main">

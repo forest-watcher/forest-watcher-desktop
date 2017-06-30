@@ -1,6 +1,6 @@
 // Script to request all active languages on transifex and then fetch their respective translations
-var fetch = require('node-fetch');
-var fs = require('fs');
+const fetch = require('node-fetch');
+const fs = require('fs');
 require('dotenv').config();
 
 // Endpoint for fetching available languages

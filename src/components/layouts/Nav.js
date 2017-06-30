@@ -5,15 +5,12 @@ import Icon from '../ui/Icon';
 import Select from 'react-select';
 import { FormattedMessage } from 'react-intl';
 
-const fs = require('fs');
-
 class Nav extends React.Component {
-
-  componentWillMount() {
-    debugger
-    // fs.readdirSync('../src/locales').forEach(file => {
-    //   console.log(file);
-    // })
+  constructor(props) {
+    super(props);
+    this.languages = Object.keys(props.translations).map((lang) => (
+      { value: lang, label: lang.toUpperCase() }
+    ));
   }
 
   handleLanguageChange = (e) => {
@@ -21,10 +18,6 @@ class Nav extends React.Component {
   }
 
   render() {
-    const options = [
-      { value: 'en', label: 'EN' },
-      { value: 'es', label: 'ES' }
-    ];
     return (
       <div className="row column">
         <nav className="c-nav">
@@ -52,7 +45,7 @@ class Nav extends React.Component {
               <Select
                 name="locale-select"
                 value={this.props.locale}
-                options={options}
+                options={this.languages}
                 onChange={this.handleLanguageChange}
                 clearable={false}
               />
