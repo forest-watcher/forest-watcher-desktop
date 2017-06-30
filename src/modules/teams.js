@@ -4,11 +4,13 @@ import normalize from 'json-api-normalizer';
 const GET_TEAMS = 'teams/GET_TEAMS';
 const SAVE_TEAM = 'teams/SAVE_TEAM';
 const SET_EDITING = 'teams/SET_EDITING';
+const ADD_USER = 'teams/ADD_USER';
 
 // Reducer
 const initialState = {
   ids: [],
-  data: []
+  data: [],
+  existingEmail: null
 };
 
 export default function reducer(state = initialState, action) {
@@ -35,6 +37,9 @@ export default function reducer(state = initialState, action) {
     }
     case SET_EDITING:{
       return Object.assign({}, state, { editing: action.payload });
+    }
+    case ADD_USER:{
+      return state;
     }
     default:
       return state;
@@ -152,5 +157,29 @@ export function setEditing(value) {
   return {
     type: SET_EDITING,
     payload: value
+  };
+}
+
+export function addEmail(email) {
+  const url = `http://mymachine:9000/v1/user/email/${email}`;
+  return (dispatch, state) => {
+    return fetch(url, {
+      headers: {
+        Authorization: `Bearer ${state().user.token}`
+      },
+      method: 'GET'
+    })
+      .then((response) => {
+        if (response.ok) return response.json();
+        throw Error(response.statusText);
+      })
+      .then((data) => {
+        dispatch({ type: ADD_USER })
+        return data;
+      })
+      .catch((error) => {
+        // Add toaster error for not found
+        console.warn('error', error)
+      });
   };
 }
