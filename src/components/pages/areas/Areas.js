@@ -46,7 +46,7 @@ class Areas extends React.Component {
           title="areas.title"
         />
         <div className="l-content">
-          <Article title="Your Areas">
+          <Article title="areas.subtitle">
             <GridGallery
               collection={areasList}
               className="area-card-item"

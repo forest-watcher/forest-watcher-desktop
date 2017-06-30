@@ -60,7 +60,7 @@ class Reports extends React.Component {
     return (
       <div>
         <Hero
-          title="Your reports"
+          title="reports.title"
           action={{name:'Download Reports', callback: this.downloadReports}}
         />
           <div className="l-content">

@@ -5,7 +5,16 @@ import Icon from '../ui/Icon';
 import Select from 'react-select';
 import { FormattedMessage } from 'react-intl';
 
+const fs = require('fs');
+
 class Nav extends React.Component {
+
+  componentWillMount() {
+    debugger
+    // fs.readdirSync('../src/locales').forEach(file => {
+    //   console.log(file);
+    // })
+  }
 
   handleLanguageChange = (e) => {
     this.props.setLocale(e.value);
