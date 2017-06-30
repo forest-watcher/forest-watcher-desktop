@@ -4,6 +4,7 @@ import L from 'leaflet';
 import { Draw, Control } from 'leaflet-draw'; // eslint-disable-line no-unused-vars
 import { DRAW_CONTROL, DRAW_CONTROL_DISABLED, POLYGON_STYLES } from '../../constants/map';
 import 'leaflet-draw/dist/leaflet.draw.css';
+import { injectIntl } from 'react-intl';
 
 class DrawControl extends React.Component {
 
@@ -44,7 +45,9 @@ class DrawControl extends React.Component {
   }
 
   setDrawing = () => {
-    const drawControl = Object.assign(DRAW_CONTROL, {
+    const DRAW_CONFIG = {...DRAW_CONTROL};
+    DRAW_CONFIG.draw.polygon.drawError.message = this.props.intl.formatMessage({ id: 'areas.drawError' })
+    const drawControl = Object.assign(DRAW_CONFIG, {
       edit: {
         featureGroup: this.featureGroup,
         remove: true
@@ -145,4 +148,4 @@ DrawControl.propTypes = {
   geojson: PropTypes.object
 };
 
-export default DrawControl;
+export default injectIntl(DrawControl);

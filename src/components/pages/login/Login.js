@@ -21,8 +21,6 @@ function LoginButton({ socialNetwork }) {
   );
 }
 
-
-
 function Login() {
   return (
     <div className="c-login row">

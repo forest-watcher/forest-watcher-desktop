@@ -48,6 +48,7 @@ class AreasManage extends React.Component {
     }
     if (this.props.saving && !nextProps.saving) {
       history.push('/areas');
+      toastr.success(this.props.intl.formatMessage({ id: 'areas.saved' }));
     }
   }
 
@@ -76,7 +77,7 @@ class AreasManage extends React.Component {
       if (area <= AREAS.maxSize) {
         this.form.geojson = areaGeoJson;
       } else {
-        toastr.error('Area too large', 'Please draw a smaller area');
+        toastr.error(this.props.intl.formatMessage({ id: 'areas.tooLarge' }), this.props.intl.formatMessage({ id: 'areas.tooLargeDesc' }));
       }
     }
   }
@@ -133,28 +134,28 @@ class AreasManage extends React.Component {
           <div className="row columns">
             <div className="c-form -nav">
               <Link to="/areas">
-                <button className="c-button -light" disabled={this.props.saving}>Cancel</button>
+                <button className="c-button -light" disabled={this.props.saving}><FormattedMessage id="forms.cancel" /></button>
               </Link>
               <div className="areas-inputs">
                 <div className="upload-field">
-                  <span className="text -x-small-title">Upload an Area</span>
+                  <span className="text -x-small-title"><FormattedMessage id="areas.upload" /></span>
                   <Icon name="icon-download" className="-big -transparent -stroke-green" />
                 </div>
                 <span className="separator -vertical"></span>
                 <div className="horizontal-field">
-                  <label className="text -x-small-title">Name the Area: </label>
+                  <label className="text -x-small-title"><FormattedMessage id="areas.nameArea" />: </label>
                   <Input
                     type="text"
                     onChange={this.onInputChange}
                     name="name"
                     value={this.form.name}
-                    placeholder="type your title"
+                    placeholder={this.props.intl.formatMessage({ id: 'areas.nameAreaPlaceholder' })}
                     validations={['required']}
                     disabled={this.props.saving}
                     />
                 </div>
               </div>
-              <Button className="c-button" disabled={this.props.saving || this.props.editing ? true : false}>Save</Button>
+              <Button className="c-button" disabled={this.props.saving || this.props.editing ? true : false}><FormattedMessage id="forms.save" /></Button>
             </div>
           </div>
         </Form>
