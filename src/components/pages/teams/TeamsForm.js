@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { Input, Form } from '../../form/Form';
 import Hero from '../../layouts/Hero';
 import Select from 'react-select';
-import Icon from '../../ui/Icon';
+import MembersManager from './MembersManager';
 
 class TeamsForm extends React.Component {
   constructor(props) {
@@ -49,21 +49,6 @@ class TeamsForm extends React.Component {
     this.props.setEditing(value);
   }
 
-  handleAddUser = async () => {
-    const email = this.state.emailToSearch;
-    if (email) {
-      const availableUser = await this.props.addEmail(email);
-      if (availableUser) {
-        this.form.selectedUsers.push(availableUser);
-      }
-    }
-  }
-
-  handleDeleteUser = (deletedUser) => {
-    this.form.users = this.form.users.filter(user => user !== deletedUser);
-    this.setState({ selectedUsers: this.form.users });
-  }
-
   handleCancel = () => {
     this.resetSelection(this.props.team);
     this.setEditing(false) 
@@ -76,6 +61,15 @@ class TeamsForm extends React.Component {
   onAreaChange = (selected) => {
     this.setState({selectedAreas: selected});
     this.form.areas = selected.split(',');
+  }
+
+  handleFormUpdate = (field, value) => {
+    this.form[field] = value;
+  }
+
+  updateSelectedUsers = (selectedUsers) => {
+    this.setState({ selectedUsers })
+    this.form.users = selectedUsers;
   }
 
   render() {
@@ -109,39 +103,11 @@ class TeamsForm extends React.Component {
                   onChange={this.onAreaChange}
                 />
               </div>
-              <div className="small-6 columns">
-                <label className="text -x-small-title">Members</label>
-                <input
-                  type="email"
-                  onChange={(event) => this.setState({ emailToSearch: event.target.value})}
-                  value={this.state.emailToSearch}
-                  name="add-member"
-                  placeholder={"Find by email"}
+              <MembersManager 
+                updateSelectedUsers={this.updateSelectedUsers}
+                selectedUsers={this.state.selectedUsers}
+                form={this.form}
                 />
-                <button type="button" onClick={this.handleAddUser} className="c-button -light">Add</button>
-                {this.form.managers && this.form.managers.map((manager, i) => (
-                  <div key={i}> 
-                    <div>
-                      { manager }     
-                      <input type="checkbox" id="admin" defaultChecked onChange={this.handleChangeAdmin}/>
-                      <label htmlFor="admin">Admin</label>
-                    </div>
-                  </div>
-                ))}
-                {this.state.selectedUsers.map((user, i) => (
-                  <div key={i}> 
-                    <div>
-                      { user }
-                      <input type="checkbox" id="admin" onChange={this.handleChangeAdmin}/>
-                      <label htmlFor="admin">Admin</label>
-                      
-                      <button type="button" onClick={() => this.handleDeleteUser(user)}>
-                        <Icon name="icon-delete" className="-medium" />
-                      </button>
-                    </div>
-                  </div>
-                ))}
-              </div>
               <div className="row small-12 columns">
                 <div className="c-form -nav">
                   { team && <button type="button" onClick={this.handleCancel} className="c-button -light">Cancel</button> }
