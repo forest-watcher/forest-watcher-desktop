@@ -59,7 +59,6 @@ class AreasManage extends React.Component {
       this.props.setSaving(true);
       this.props.saveAreaWithGeostore(this.form, this.state.map._container, method);
     } else {
-      debugger
       toastr.error(this.props.intl.formatMessage({ id: 'areas.missingValues' }), this.props.intl.formatMessage({ id: 'areas.missingValuesDesc' }));
     }
   }
