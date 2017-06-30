@@ -24,7 +24,7 @@
   "areas.drawClose": "Click first point to close this shape",
   "areas.delete": "Click on a feature to remove it",
   "areas.saved": "Area saved",
-  "areas.missingValues": "missing values",
+  "areas.missingValues": "Missing values",
   "areas.missingValuesDesc": "Please provide an area and a name",
   "areas.intersectError": "You cannot create an area that intersects",
   "templates.name": "Templates",

@@ -59,7 +59,7 @@ class AreasManage extends React.Component {
       this.props.saveAreaWithGeostore(this.form, this.state.map._container, method);
     } else {
       debugger
-      toastr.error(injectIntl.formatMessage({ id: 'areas.missingValues' }));
+      toastr.error(this.props.intl.formatMessage({ id: 'areas.missingValues' }), this.props.intl.formatMessage({ id: 'areas.missingValuesDesc' }));
     }
   }
 
@@ -163,4 +163,4 @@ class AreasManage extends React.Component {
   }
 }
 
-export default AreasManage;
+export default injectIntl(AreasManage);
