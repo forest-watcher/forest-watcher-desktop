@@ -1,6 +1,7 @@
 import React from 'react';
 import Validation from 'react-validation';
 import ReactSelect from 'react-select';
+import { FormattedMessage } from 'react-intl';
 
 function withWrapper(Component) {
   return class FormWrapper extends React.Component {
@@ -8,7 +9,7 @@ function withWrapper(Component) {
       const { label, ...props } = this.props;
       return (
         <div className="form-control">
-          {label && <label htmlFor={props.name} >{label}</label>}
+          {label && <label htmlFor={props.name} ><FormattedMessage id={label} /></label>}
           <Component id={props.name} {...props} />
         </div>
       );

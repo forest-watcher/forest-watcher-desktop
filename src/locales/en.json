@@ -1,6 +1,6 @@
 {
   "app.name": "Forest Watcher 2.0",
-  "login.logout": "logout",
+  "app.logout": "logout",
   "login.welcome": "Sign in with a MyGFW account",
   "forms.required": "required",
   "areas.name": "Areas",
@@ -42,5 +42,5 @@
   "reports.member": "Member",
   "table.next": "next",
   "table.previous": "previous",
-  "table.page": "page" 
+  "table.page": "page"
 }

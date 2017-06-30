@@ -29,13 +29,13 @@ class Nav extends React.Component {
             {this.props.loggedIn &&
               <ul className="nav-subsection">
                 <li className="nav-link">
-                  <NavLink to="/areas" activeClassName="-active">Areas</NavLink>
+                  <NavLink to="/areas" activeClassName="-active"><FormattedMessage id="areas.name" /></NavLink>
                 </li>
                 <li className="nav-link">
-                  <NavLink to="/templates" activeClassName="-active">Templates</NavLink>
+                  <NavLink to="/templates" activeClassName="-active"><FormattedMessage id="templates.name" /></NavLink>
                 </li>
                 <li className="nav-link">
-                  <NavLink to="/reports" activeClassName="-active">Reports</NavLink>
+                  <NavLink to="/reports" activeClassName="-active"><FormattedMessage id="reports.name" /></NavLink>
                 </li>
               </ul>
             }
@@ -49,7 +49,7 @@ class Nav extends React.Component {
               />
               {this.props.loggedIn &&
                 <li className="nav-menu">
-                  <a onClick={this.props.logout}>Log out</a>
+                  <a onClick={this.props.logout}><FormattedMessage id="app.logout" /></a>
                 </li>
               }
             </ul>

@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Icon from '../ui/Icon';
 import { Link } from 'react-router-dom';
+import { FormattedMessage } from 'react-intl';
 
 class AreaCard extends React.Component {
 
@@ -15,7 +16,7 @@ class AreaCard extends React.Component {
         </div>
         <ul className="area-actions">
           <li className="area-action">
-            <Link className="c-button -light -small" to={'/reports'}>Reports</Link>
+            <Link className="c-button -light -small" to={'/reports'}><FormattedMessage id="areas.reportsBtn" /></Link>
           </li>
           <li className="area-action -edit-area">
             <Link className="c-button -circle -transparent" to={`/areas/${area.id}`}>

@@ -8,6 +8,7 @@ import GridGallery from '../../layouts/GridGallery';
 import AreaCard from '../../area-card/AreaCardContainer';
 import Icon from '../../ui/Icon';
 import querystring from 'query-string';
+import { FormattedMessage } from 'react-intl';
 
 class Areas extends React.Component {
 
@@ -31,7 +32,7 @@ class Areas extends React.Component {
       <Link to="/areas/create">
         <button className="c-add-card">
           <Icon name="icon-plus" className="-medium -green" />
-            <span className="text -x-small-title -green">Add Area</span>
+            <span className="text -x-small-title -green"><FormattedMessage id="areas.addArea" /></span>
         </button>
       </Link>
     );
@@ -42,7 +43,7 @@ class Areas extends React.Component {
     return (
       <div>
         <Hero
-          title="Areas of Interest"
+          title="areas.title"
         />
         <div className="l-content">
           <Article title="Your Areas">

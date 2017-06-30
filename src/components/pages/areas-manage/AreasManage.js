@@ -11,6 +11,7 @@ import DrawControl from '../../draw-control/DrawControlContainer';
 import Attribution from '../../ui/Attribution';
 import Loader from '../../ui/Loader';
 import { AREAS } from '../../../constants/map';
+import { FormattedMessage, injectIntl } from 'react-intl';
 
 const geojsonArea = require('@mapbox/geojson-area');
 
@@ -57,7 +58,8 @@ class AreasManage extends React.Component {
       this.props.setSaving(true);
       this.props.saveAreaWithGeostore(this.form, this.state.map._container, method);
     } else {
-      toastr.error('Missing values', 'Please provide an area and a name');
+      debugger
+      toastr.error(injectIntl.formatMessage({ id: 'areas.missingValues' }));
     }
   }
 
@@ -92,7 +94,7 @@ class AreasManage extends React.Component {
     return (
       <div>
         <Hero
-          title={this.props.mode === 'manage' ? "Manage Area of Interest" : "Create an Area of Interest"}
+          title={this.props.mode === 'manage' ? "areas.manageArea" : "areas.createArea"}
         />
         <Form onSubmit={this.onSubmit}>
           <div className="l-map">
