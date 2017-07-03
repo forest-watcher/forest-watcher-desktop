@@ -3,31 +3,36 @@ import PropTypes from 'prop-types';
 
 import { Input, Form } from '../../form/Form';
 import Hero from '../../layouts/Hero';
+import { includes } from '../../../helpers/utils';
 import Select from 'react-select';
 import MembersManager from './MembersManager';
 
 class TeamsForm extends React.Component {
-  constructor(props) {
+  constructor (props) {
     super(props);
     this.state = {
       selectedAreas: '',
-      selectedUsers: [],
+      selectedUsers: (props.team && props.team.attributes.users) || [],
+      selectedManagers: (props.team && props.team.attributes.managers) || [props.userId],
       emailToSearch: ''
     }
     this.updateForm(props.team);
   }
 
   updateForm(team){
+    let managers = (team && team.attributes.managers) || [];
+    if (!includes(managers, this.props.userId)) managers.push(this.props.userId);
+    
     this.form = {
       name: team && team.attributes.name,
       areas: (team && team.attributes.areas) || [],
-      managers: (team && team.attributes.managers) || [this.props.userId],
+      managers,
       users: (team && team.attributes.users) || []
     }
   }
 
   componentWillReceiveProps(nextProps){
-    if (this.props.team !== nextProps.team){
+    if (this.props.team !== nextProps.team) {
       this.updateForm(nextProps.team);
       if ( nextProps.team ) this.resetSelection(nextProps.team);
     }
@@ -36,7 +41,8 @@ class TeamsForm extends React.Component {
   resetSelection(team) {
     this.setState({ 
       selectedAreas: team.attributes.areas.join(),
-      selectedUsers: team.attributes.users 
+      selectedManagers: team.attributes.managers,
+      selectedUsers: team.attributes.users
     })
   }
 
@@ -70,6 +76,11 @@ class TeamsForm extends React.Component {
   updateSelectedUsers = (selectedUsers) => {
     this.setState({ selectedUsers })
     this.form.users = selectedUsers;
+  }
+
+  updateSelectedManagers = (selectedManagers) => {
+    this.setState({ selectedManagers })
+    this.form.managers = selectedManagers;
   }
 
   render() {
@@ -108,9 +119,10 @@ class TeamsForm extends React.Component {
                 </div>
               </div>
               <MembersManager 
+                updateSelectedManagers={this.updateSelectedManagers}
                 updateSelectedUsers={this.updateSelectedUsers}
                 selectedUsers={this.state.selectedUsers}
-                form={this.form}
+                selectedManagers={this.state.selectedManagers}
               />
               <div className="row small-12 columns">
                 <div className="c-form -nav">

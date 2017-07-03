@@ -12,7 +12,7 @@ class MembersManager extends React.Component {
     }
   }
 
-  handleAddUser = async () => {
+  handleAddEmail = async () => {
     const email = this.state.emailToSearch;
     if (email) {
       const availableUser = await this.props.addEmail(email);
@@ -24,23 +24,40 @@ class MembersManager extends React.Component {
     }
   }
 
-  handleDeleteUser = (deletedUser) => {
+  deleteUser = (deletedUser) => {
     const updatedUsers = this.props.selectedUsers.filter(user => user !== deletedUser);
     this.props.updateSelectedUsers(updatedUsers);
   }
 
-  handleChangeAdmin = (member, toAdmin) => {
+  addUser = (user) => {
+    const updatedUsers = this.props.selectedUsers;
+    updatedUsers.push(user);
+    this.props.updateSelectedUsers(updatedUsers);
+  }
+
+  deleteManager = (deletedManager) => {
+    const updatedManagers = this.props.selectedManagers.filter(manager => manager !== deletedManager);
+    this.props.updateSelectedManagers(updatedManagers);
+  }
+
+  addManager = (manager) => {
+    const updatedManagers = this.props.selectedManagers;
+    updatedManagers.push(manager);
+    this.props.updateSelectedManagers(updatedManagers);
+  }
+
+  handleChangeRole = (member, toAdmin) => {
     if (toAdmin){
-      this.handleDeleteUser(member);
-      //this.handleAddAdmin
+      this.addManager(member);
+      this.deleteUser(member);
     } else {
-      this.handleAddAdmin(member)
-      //this.handleDeleteUser(user);
+      this.addUser(member);
+      this.deleteManager(member);
     }
   }
 
   render() {
-    const { form, selectedUsers } = this.props;
+    const { selectedUsers, selectedManagers } = this.props;
     return (
       <div className="small-6 columns">
         <div className="input-group">
@@ -53,22 +70,22 @@ class MembersManager extends React.Component {
               name="add-member"
               placeholder={"Find by email"}
             />
-            <button type="button" onClick={this.handleAddUser} className="c-button -light">Add</button>
+            <button type="button" onClick={this.handleAddEmail} className="c-button -light">Add</button>
           </div>
-          {form.managers && form.managers.map((manager, i) => (
-            <div key={i} className="horizontal-field-left">
+          {selectedManagers.map((manager) => (
+            <div key={manager} className="horizontal-field-left">
               <div className="user-label">{ manager }</div>
-              <Checkbox id={`admin${i}`} label={"Admin"} callback={() => this.handleChangeAdmin(manager, false)} defaultChecked={true}/>
+              <Checkbox id={`admin${manager}`} label={"Admin"} callback={() => this.handleChangeRole(manager, false)} defaultChecked={true}/>
               <button className="delete-button hidden" type="button">
                 <Icon name="icon-delete" className="-medium" />
               </button>
             </div>
           ))}
-          {selectedUsers.map((user, i) => (
-            <div key={i} className="horizontal-field-left"> 
+          {selectedUsers.map((user) => (
+            <div key={user} className="horizontal-field-left"> 
               <div className="user-label">{ user }</div>
-              <Checkbox id={`user${i}`} label={"Admin"} callback={() => this.handleChangeAdmin(user, true)} />
-              <button class="delete-button" type="button" onClick={() => this.handleDeleteUser(user)}>
+              <Checkbox id={`user${user}`} label={"Admin"} callback={() => this.handleChangeRole(user, true)} />
+              <button className="delete-button" type="button" onClick={() => this.deleteUser(user)}>
                 <Icon name="icon-delete" className="-medium" />
               </button>
             </div>
@@ -80,7 +97,7 @@ class MembersManager extends React.Component {
 }
 
 MembersManager.propTypes = {
-  form: PropTypes.object.isRequired,
+  selectedManagers: PropTypes.array.isRequired,
   selectedUsers: PropTypes.array.isRequired,
   updateSelectedUsers: PropTypes.func.isRequired
 };
