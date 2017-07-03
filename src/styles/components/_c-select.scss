@@ -1,0 +1,91 @@
+.c-select {
+    height: 100%;
+    
+    &:focus {
+        outline: none;
+    }
+
+    .Select-control {
+        height: 100%;
+        background-color: transparent;
+        border: none;
+        border-radius: 0;
+        color: $theme-text;
+        cursor: pointer;
+
+        &:focus {
+            outline: none;
+        }
+
+        .Select-value {
+
+            &:focus {
+                outline: none;
+            }
+        }
+
+        .Select-value-label {
+            height: 100%;
+            display: flex;
+            align-items: center;
+            font-size: $font-size-small;
+            font-weight: $font-weight-bold;
+
+            &:focus {
+                outline: none;
+            }              
+        }
+    }
+
+    .Select-menu-outer {
+        border-bottom-right-radius: 2px;
+        border-bottom-left-radius: 2px;
+        background-color: #fff;
+        border: 0;
+        border-top-color: solid 1px rgba(#979797, 0.5);
+        box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.5);
+        padding-top: 8px;
+        padding-bottom: 8px;
+        margin-top: 0px;
+
+        .Select-option {
+            font-size: $font-size-small;
+            font-weight: $font-weight-bold;
+            color: $theme-text !important;
+            padding-top: 8px;
+            padding-bottom: 8px;
+
+            &.is-focused {
+                background-color: rgba($theme-accent, 0.3);
+                border-radius: 0;
+            }
+
+            &.is-selected {
+                background-color: rgba($theme-accent, 0.2);
+                border-radius: 0;
+            }
+        }
+    }
+
+    &.-dark {
+        
+        .Select-control {
+            color: rgba($white, 0.5) !important;
+
+            .Select-value-label {
+                color: rgba($white, 0.5) !important;                
+            }
+        }
+    }
+
+    &.is-open {
+        
+        .Select-control {
+            background-color: $white;
+
+            .Select-value-label {
+                color: $theme-text !important;                
+            }
+        }
+    }
+}
