@@ -18,6 +18,14 @@ export const POLYGON_STYLES = {
   weight: 2
 };
 
+export const POLYGON_STYLES_ERROR = {
+  color: '#ffffff',
+  opacity: 1,
+  fillColor: '#f15656',
+  fillOpacity: 0.5,
+  weight: 2
+};
+
 export const BLOB_CONFIG = {
   style: {
     width: '100%',
@@ -76,4 +84,4 @@ export const AREAS = {
   maxSize: 1500000000 // square meters
 }
 
-export default { MAP_CONFIG, BLOB_CONFIG, DRAW_CONTROL, DRAW_CONTROL_DISABLED, AREAS };
+export default { MAP_CONFIG, BLOB_CONFIG, POLYGON_STYLES, POLYGON_STYLES_ERROR, DRAW_CONTROL, DRAW_CONTROL_DISABLED, AREAS };

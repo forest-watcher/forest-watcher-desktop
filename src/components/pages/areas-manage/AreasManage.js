@@ -4,16 +4,14 @@ import { Input, Button, Form } from '../../form/Form';
 import Map from '../../map/Map';
 import { Link } from 'react-router-dom';
 import { validation } from '../../../helpers/validation'; // eslint-disable-line no-unused-vars
+import { checkArea } from '../../../helpers/areas';
 import { toastr } from 'react-redux-toastr';
 import Icon from '../../ui/Icon';
 import ZoomControl from '../../ui/ZoomControl';
 import DrawControl from '../../draw-control/DrawControlContainer';
 import Attribution from '../../ui/Attribution';
 import Loader from '../../ui/Loader';
-import { AREAS } from '../../../constants/map';
 import { FormattedMessage, injectIntl } from 'react-intl';
-
-const geojsonArea = require('@mapbox/geojson-area');
 
 class AreasManage extends React.Component {
 
@@ -55,9 +53,13 @@ class AreasManage extends React.Component {
   onSubmit = (e) => {
     e.preventDefault();
     if (this.form.geojson && this.form.name !== '') {
-      const method = this.props.mode === 'manage' ? 'PATCH' : 'POST';
-      this.props.setSaving(true);
-      this.props.saveAreaWithGeostore(this.form, this.state.map._container, method);
+      if (checkArea(this.form.geojson)) {
+        const method = this.props.mode === 'manage' ? 'PATCH' : 'POST';
+        this.props.setSaving(true);
+        this.props.saveAreaWithGeostore(this.form, this.state.map._container, method);
+      } else {
+        toastr.error(this.props.intl.formatMessage({ id: 'areas.tooLarge' }), this.props.intl.formatMessage({ id: 'areas.tooLargeDesc' }));
+      }
     } else {
       toastr.error(this.props.intl.formatMessage({ id: 'areas.missingValues' }), this.props.intl.formatMessage({ id: 'areas.missingValuesDesc' }));
     }
@@ -72,12 +74,10 @@ class AreasManage extends React.Component {
 
   onDrawComplete = (areaGeoJson) => {
     if (areaGeoJson) {
-      const area = geojsonArea.geometry(areaGeoJson.geometry);
-      if (area <= AREAS.maxSize) {
-        this.form.geojson = areaGeoJson;
-      } else {
+      if (!checkArea(areaGeoJson)) {
         toastr.error(this.props.intl.formatMessage({ id: 'areas.tooLarge' }), this.props.intl.formatMessage({ id: 'areas.tooLargeDesc' }));
       }
+      this.form.geojson = areaGeoJson;
     }
   }
 
