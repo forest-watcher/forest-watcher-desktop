@@ -7,8 +7,23 @@ import { Link } from 'react-router-dom';
 import GridGallery from '../../layouts/GridGallery';
 import AreaCard from '../../area-card/AreaCardContainer';
 import Icon from '../../ui/Icon';
+import querystring from 'query-string';
 
 class Areas extends React.Component {
+
+  componentWillMount() {
+    this.trimQueryParams();
+  }
+
+  trimQueryParams() {
+    const { location, history } = this.props;
+    const search = location.search || '';
+    const queryParams = querystring.parse(search);
+    if (queryParams.token) {
+      const newSearch = querystring.stringify({ ...queryParams, token: undefined });
+      history.replace('/areas', { search: newSearch });
+    }
+  }
 
   getAddArea = () => {
     if (this.props.loading) return null;
@@ -46,6 +61,8 @@ class Areas extends React.Component {
 }
 
 Areas.propTypes = {
+  location: PropTypes.object.isRequired,
+  history: PropTypes.object.isRequired,
   areasList: PropTypes.array.isRequired,
   loading: PropTypes.bool.isRequired
 };

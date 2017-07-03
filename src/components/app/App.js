@@ -6,7 +6,6 @@ import ReduxToastr from 'react-redux-toastr'
 
 // Pages
 import Login from '../pages/login/Login';
-import Dashboard from '../pages/dashboard/DashboardContainer';
 import Areas from '../pages/areas/AreasContainer';
 import AreasManage from '../pages/areas-manage/AreasManageContainer';
 import Templates from '../pages/templates/TemplatesContainer';
@@ -29,7 +28,7 @@ class App extends React.Component {
     const search = location.search || '';
     const queryParams = querystring.parse(search);
     if (!user.loggedIn && !queryParams.token) return <Login />;
-    return <Redirect to="/dashboard" />;
+    return <Redirect to="/areas" />;
   }
 
   render() {
@@ -45,7 +44,6 @@ class App extends React.Component {
           <Route exact path="/" render={this.getRootComponent} />
           {user.loggedIn &&
             <div>
-              <Route path={`${match.url}dashboard`} component={Dashboard} />
               <Switch>
                 <Route exact path={`${match.url}areas`} component={Areas} />
                 <Route exact path={`${match.url}areas/create`} component={AreasManage} />
@@ -62,7 +60,11 @@ class App extends React.Component {
             </div>
           }
           {!user.loggedIn && <Redirect to="/" />}
-          <ReduxToastr position="bottom-right" />
+          <ReduxToastr
+            position="bottom-right"
+            transitionIn="fadeIn"
+            transitionOut="fadeOut"
+          />
         </main>
       </div>
     );
