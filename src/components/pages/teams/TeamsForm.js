@@ -84,34 +84,39 @@ class TeamsForm extends React.Component {
           <div className="c-form">
             <div className="row">
               <div className="small-6 columns">
-                <label className="text -x-small-title">Team name</label>
-                <Input
-                  type="text"
-                  onChange={this.onInputChange}
-                  name="name"
-                  value={this.form.name || ''}
-                  placeholder={"Team name"}
-                  validations={['required']}
-                />
-                <label className="text -x-small-title">Associated Areas of Interest </label>
-                <Select
-                  multi
-                  simpleValue
-                  name="areas-select"
-                  options={areaValues}
-                  value={this.state.selectedAreas}
-                  onChange={this.onAreaChange}
-                />
+                <div className="input-group">
+                  <label className="text">Team name</label>
+                  <Input
+                    type="text"
+                    onChange={this.onInputChange}
+                    name="name"
+                    value={this.form.name || ''}
+                    placeholder={"Team name"}
+                    validations={['required']}
+                  />
+                </div>
+                <div className="input-group">
+                  <label className="text">Associated Areas of Interest </label>
+                  <Select
+                    multi
+                    simpleValue
+                    name="areas-select"
+                    options={areaValues}
+                    value={this.state.selectedAreas}
+                    onChange={this.onAreaChange}
+                  />
+                </div>
               </div>
               <MembersManager 
                 updateSelectedUsers={this.updateSelectedUsers}
                 selectedUsers={this.state.selectedUsers}
                 form={this.form}
-                />
+              />
               <div className="row small-12 columns">
                 <div className="c-form -nav">
-                  { team && <button type="button" onClick={this.handleCancel} className="c-button -light">Cancel</button> }
-                  <button type="submit" className="c-button">Save</button>
+                  { team &&
+                    <div><button type="button" onClick={this.handleCancel} className="c-button -light">Cancel</button></div>}
+                  <div><button type="submit" className="c-button -right">Save</button></div>
                 </div>
               </div>
             </div>

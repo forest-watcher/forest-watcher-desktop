@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import Icon from '../../ui/Icon';
+import Checkbox from '../../ui/Checkbox';
 
 class MembersManager extends React.Component {
   constructor() {
@@ -28,41 +29,51 @@ class MembersManager extends React.Component {
     this.props.updateSelectedUsers(updatedUsers);
   }
 
+  handleChangeAdmin = (member, toAdmin) => {
+    if (toAdmin){
+      this.handleDeleteUser(member);
+      //this.handleAddAdmin
+    } else {
+      this.handleAddAdmin(member)
+      //this.handleDeleteUser(user);
+    }
+  }
+
   render() {
     const { form, selectedUsers } = this.props;
     return (
       <div className="small-6 columns">
-        <label className="text -x-small-title">Members</label>
-        <input
-          type="email"
-          onChange={(event) => this.setState({ emailToSearch: event.target.value})}
-          value={this.state.emailToSearch}
-          name="add-member"
-          placeholder={"Find by email"}
-        />
-        <button type="button" onClick={this.handleAddUser} className="c-button -light">Add</button>
-        {form.managers && form.managers.map((manager, i) => (
-          <div key={i}> 
-            <div>
-              { manager }     
-              <input type="checkbox" id="admin" defaultChecked onChange={this.handleChangeAdmin}/>
-              <label htmlFor="admin">Admin</label>
-            </div>
+        <div className="input-group">
+          <label htmlFor="add-member" className="text">Members</label>
+          <div className="horizontal-field-left">
+            <input
+              type="email"
+              onChange={(event) => this.setState({ emailToSearch: event.target.value})}
+              value={this.state.emailToSearch}
+              name="add-member"
+              placeholder={"Find by email"}
+            />
+            <button type="button" onClick={this.handleAddUser} className="c-button -light">Add</button>
           </div>
-        ))}
-        {selectedUsers.map((user, i) => (
-          <div key={i}> 
-            <div>
-              { user }
-              <input type="checkbox" id="admin" onChange={this.handleChangeAdmin}/>
-              <label htmlFor="admin">Admin</label>
-              
-              <button type="button" onClick={() => this.handleDeleteUser(user)}>
+          {form.managers && form.managers.map((manager, i) => (
+            <div key={i} className="horizontal-field-left">
+              <div className="user-label">{ manager }</div>
+              <Checkbox id={`admin${i}`} label={"Admin"} callback={() => this.handleChangeAdmin(manager, false)} defaultChecked={true}/>
+              <button className="delete-button hidden" type="button">
                 <Icon name="icon-delete" className="-medium" />
               </button>
             </div>
-          </div>
-        ))}
+          ))}
+          {selectedUsers.map((user, i) => (
+            <div key={i} className="horizontal-field-left"> 
+              <div className="user-label">{ user }</div>
+              <Checkbox id={`user${i}`} label={"Admin"} callback={() => this.handleChangeAdmin(user, true)} />
+              <button class="delete-button" type="button" onClick={() => this.handleDeleteUser(user)}>
+                <Icon name="icon-delete" className="-medium" />
+              </button>
+            </div>
+          ))}
+        </div>
       </div>
     );
   }

@@ -29,6 +29,29 @@
     align-items: center;
   }
 
+  .horizontal-field-left {
+    display: flex;
+    flex-direction: row;
+    padding-top: 10px;
+    input, .delete-button, .user-label, .c-checkbox {
+      margin-right: 10px;
+      flex: 1;
+    }
+    .hidden{
+      display: none;
+    }
+  }
+
+  .input-group {
+    padding-top: 30px;
+    .form-control, .Select{
+      padding-top: 10px;    
+      input {
+        width: 100%;
+      }
+    }
+  }
+
   &.-nav {
     height: $footer-height;
     display: flex;
