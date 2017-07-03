@@ -44,8 +44,18 @@
     "reports.filterByDate": "Filter by date",
     "reports.areaOfInterest": "Area of Interest",
     "reports.date": "Date",
+    "reports.user": "User",
     "reports.member": "Member",
+    "reports.latLng": "Lat/Lng",
+    "reports.answersTitle": "Answers for the report templates",
+    "reports.downloadAnswers": "Download Answers",
+    "reports.detailLink": "Go to detail",
+    "reports.dateString": "No date",
+    "reports.userString": "No user",
     "table.next": "next",
     "table.previous": "previous",
-    "table.page": "page"
+    "table.page": "page",
+    "filters.area": "Filter by Area",
+    "filters.search": "Search",
+    "filters.date": "Filter by date"
 }

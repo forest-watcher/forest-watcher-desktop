@@ -23,7 +23,7 @@
     "areas.drawFinish": "finish",
     "areas.drawDeletePoint": "delete last point",
     "areas.drawContinue": "Click to continue drawing shape",
-    "areas.drawError": "Spanish",
+    "areas.drawError": "Oh snap! you can't draw that!",
     "areas.drawClose": "Click first point to close this shape",
     "areas.delete": "Click on a feature to remove it",
     "areas.saved": "Area saved",
@@ -44,8 +44,18 @@
     "reports.filterByDate": "Filter by date",
     "reports.areaOfInterest": "Area of Interest",
     "reports.date": "Date",
+    "reports.user": "User",
     "reports.member": "Member",
+    "reports.latLng": "Lat/Lng",
+    "reports.answersTitle": "Answers for the report templates",
+    "reports.downloadAnswers": "Download Answers",
+    "reports.detailLink": "Go to detail",
+    "reports.dateString": "No date",
+    "reports.userString": "No user",
     "table.next": "next",
     "table.previous": "previous",
-    "table.page": "page"
+    "table.page": "page",
+    "filters.area": "Filter by Area",
+    "filters.search": "Search",
+    "filters.date": "Filter by date"
 }
