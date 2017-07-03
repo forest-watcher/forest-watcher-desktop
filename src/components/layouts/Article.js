@@ -5,7 +5,7 @@ import { FormattedMessage } from 'react-intl';
 function Article(props) {
   return (
     <article className="c-article row column">
-      {props.title && <h2 className="text -small-title"><FormattedMessage id={props.title} /></h2>}
+      {props.title && <h2 className="text -medium-title"><FormattedMessage id={props.title} /></h2>}
       {props.children}
     </article>
   );

@@ -8,7 +8,7 @@ function Hero({ title, action }) {
       <div className="row column">
         <div className="hero-content">
           <h1 className="text -large-title -white"><FormattedMessage id={title} /></h1>
-          {action && <button className="c-button -hero" onClick={action.callback}>{action.name}</button>}
+          {action && <button className="c-button -hero" onClick={action.callback}><FormattedMessage id={action.name} /></button>}
         </div>
       </div>
     </aside>

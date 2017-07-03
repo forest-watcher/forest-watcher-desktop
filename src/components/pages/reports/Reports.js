@@ -5,7 +5,7 @@ import Article from '../../layouts/Article';
 import Hero from '../../layouts/Hero'; 
 import ReactTable from 'react-table'
 import 'react-select/dist/react-select.css';
-
+import { FormattedMessage } from 'react-intl';
 import Filters from './FiltersContainer';
 
 class Reports extends React.Component {
@@ -44,16 +44,16 @@ class Reports extends React.Component {
   render() {
     const { answers } = this.props;
     const columns = [{
-      Header: 'Lat/Long',
+      Header: <FormattedMessage id="reports.latLng" />,
       accessor: 'latLong'
     },{
-      Header: 'Area of interest',
+      Header: <FormattedMessage id="reports.areaOfInterest" />,
       accessor: 'aoi'
     },{  
-      Header: 'Date',
+      Header: <FormattedMessage id="reports.date" />,
       accessor: 'date'
     },{
-      Header: 'Member',
+      Header: <FormattedMessage id="reports.member" />,
       accessor: 'member'
     }]
 
@@ -61,7 +61,7 @@ class Reports extends React.Component {
       <div>
         <Hero
           title="reports.title"
-          action={{name:'Download Reports', callback: this.downloadReports}}
+          action={{name: "reports.downloadAnswers", callback: this.downloadReports}}
         />
           <div className="l-content">
             <Article>

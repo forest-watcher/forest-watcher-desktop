@@ -46,7 +46,7 @@ class DrawControl extends React.Component {
 
   setDrawing = () => {
     const DRAW_CONFIG = {...DRAW_CONTROL};
-    DRAW_CONFIG.draw.polygon.drawError.message = this.props.intl.formatMessage({ id: 'areas.drawError' })
+    DRAW_CONFIG.draw.polygon.drawError.message = this.props.intl.formatMessage({ id: 'areas.drawError' });
     const drawControl = Object.assign(DRAW_CONFIG, {
       edit: {
         featureGroup: this.featureGroup,

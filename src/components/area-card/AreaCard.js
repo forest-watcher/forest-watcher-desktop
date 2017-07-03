@@ -12,7 +12,7 @@ class AreaCard extends React.Component {
       <div className="c-area-card">
         <div className="area-content">
           <figure className="area-image" style={{ backgroundImage: `url(${area.image})`}}></figure>
-          <figcaption className="area-title">{area.name}</figcaption>
+          <figcaption className="area-title text -small-title">{area.name}</figcaption>
         </div>
         <ul className="area-actions">
           <li className="area-action">
