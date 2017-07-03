@@ -48,6 +48,7 @@ class Nav extends React.Component {
                 options={this.languages}
                 onChange={this.handleLanguageChange}
                 clearable={false}
+                searchable={false}
               />
               {this.props.loggedIn &&
                 <li className="nav-menu">

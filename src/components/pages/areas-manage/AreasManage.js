@@ -121,6 +121,7 @@ class AreasManage extends React.Component {
               />
               <DrawControl
                 map={this.state.map}
+                mode={this.props.mode}
                 onDrawComplete={this.onDrawComplete}
                 onDrawDelete={this.onDrawDelete}
                 geojson={this.form.geojson}

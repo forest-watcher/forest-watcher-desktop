@@ -23,7 +23,6 @@ class DrawControl extends React.Component {
   componentDidUpdate(prevProps) {
     if (this.props.geojson !== prevProps.geojson) {
       this.setFeatures();
-      this.disableDrawing();
     }
   }
 
@@ -63,10 +62,10 @@ class DrawControl extends React.Component {
     this.drawControl = new L.Control.Draw(drawControl);
     this.drawControlDisabled = new L.Control.Draw(drawControlDisabled);
 
-    if (this.props.geojson) {
-      this.map.addControl(this.drawControlDisabled);
+    if (this.props.mode === 'manage') {
+      this.drawControlDisabled.addTo(this.map);
     } else {
-      this.map.addControl(this.drawControl);
+      this.drawControl.addTo(this.map);
     }
 
     // DRAW LISTENERS
@@ -79,7 +78,6 @@ class DrawControl extends React.Component {
     });
 
     this.map.on(L.Draw.Event.EDITED, (e) => {
-      this.props.setEditing(false);
       this.onDrawEventEdit(e);
     });
 
@@ -92,19 +90,22 @@ class DrawControl extends React.Component {
     });
 
     this.map.on(L.Draw.Event.DELETED, (e) => {
-      this.props.setEditing(false);
       this.onDrawEventDelete(e);
+    });
+
+    this.map.on(L.Draw.Event.DELETESTOP, (e) => {
+      this.props.setEditing(false);
     });
   }
 
   enableDrawing = () => {
     this.map.removeControl(this.drawControlDisabled);
-    this.map.addControl(this.drawControl);
+    this.drawControl.addTo(this.map);
   }
 
   disableDrawing = () => {
     this.map.removeControl(this.drawControl);
-    this.map.addControl(this.drawControlDisabled);
+    this.drawControlDisabled.addTo(this.map);
   }
 
 
@@ -114,8 +115,8 @@ class DrawControl extends React.Component {
     const geoJsonLayer = layer.toGeoJSON();
     this.featureGroup.addLayer(layer);
     this.props.onDrawComplete && this.props.onDrawComplete(geoJsonLayer);
-    this.disableDrawing();
     this.map.fitBounds(layer.getBounds());
+    this.disableDrawing();
   }
 
   onDrawEventEdit = (e) => {
@@ -126,7 +127,6 @@ class DrawControl extends React.Component {
       this.props.onDrawComplete && this.props.onDrawComplete(geoJsonLayer);
       this.map.fitBounds(layer.getBounds());
     });
-    this.disableDrawing();
   }
 
   onDrawEventDelete = (e) => {
