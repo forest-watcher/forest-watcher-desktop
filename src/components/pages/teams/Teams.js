@@ -19,7 +19,7 @@ class Teams extends React.Component {
           {isManager ? 
             <Hero
               title="My Team"
-              action={{name: actionName, callback: () => this.setEditing(true)}}
+              action={{name: actionName, callback: () => this.props.setEditing(true)}}
             /> 
           : 
             <Hero title="My Team" />

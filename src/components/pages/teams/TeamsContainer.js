@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import Teams from './Teams';
-import { getTeams } from '../../../modules/teams';
+import { getTeams, setEditing } from '../../../modules/teams';
 import { includes } from '../../../helpers/utils';
 
 const isManager = (team, userId) => {
@@ -36,7 +36,10 @@ const mapStateToProps = ({ user, teams }) => {
    return {
      getTeams: () => {
        dispatch(getTeams());
-    }
+     },
+     setEditing: (value) => {
+       dispatch(setEditing(value));
+     }
   }
  }
 
