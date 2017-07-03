@@ -11,6 +11,7 @@ import DrawControl from '../../draw-control/DrawControlContainer';
 import Attribution from '../../ui/Attribution';
 import Loader from '../../ui/Loader';
 import { AREAS } from '../../../constants/map';
+import { FormattedMessage, injectIntl } from 'react-intl';
 
 const geojsonArea = require('@mapbox/geojson-area');
 
@@ -47,6 +48,7 @@ class AreasManage extends React.Component {
     }
     if (this.props.saving && !nextProps.saving) {
       history.push('/areas');
+      toastr.success(this.props.intl.formatMessage({ id: 'areas.saved' }));
     }
   }
 
@@ -57,7 +59,7 @@ class AreasManage extends React.Component {
       this.props.setSaving(true);
       this.props.saveAreaWithGeostore(this.form, this.state.map._container, method);
     } else {
-      toastr.error('Missing values', 'Please provide an area and a name');
+      toastr.error(this.props.intl.formatMessage({ id: 'areas.missingValues' }), this.props.intl.formatMessage({ id: 'areas.missingValuesDesc' }));
     }
   }
 
@@ -74,7 +76,7 @@ class AreasManage extends React.Component {
       if (area <= AREAS.maxSize) {
         this.form.geojson = areaGeoJson;
       } else {
-        toastr.error('Area too large', 'Please draw a smaller area');
+        toastr.error(this.props.intl.formatMessage({ id: 'areas.tooLarge' }), this.props.intl.formatMessage({ id: 'areas.tooLargeDesc' }));
       }
     }
   }
@@ -92,7 +94,7 @@ class AreasManage extends React.Component {
     return (
       <div>
         <Hero
-          title={this.props.mode === 'manage' ? "Manage Area of Interest" : "Create an Area of Interest"}
+          title={this.props.mode === 'manage' ? "areas.manageArea" : "areas.createArea"}
         />
         <Form onSubmit={this.onSubmit}>
           <div className="l-map">
@@ -119,6 +121,7 @@ class AreasManage extends React.Component {
               />
               <DrawControl
                 map={this.state.map}
+                mode={this.props.mode}
                 onDrawComplete={this.onDrawComplete}
                 onDrawDelete={this.onDrawDelete}
                 geojson={this.form.geojson}
@@ -131,28 +134,28 @@ class AreasManage extends React.Component {
           <div className="row columns">
             <div className="c-form -nav">
               <Link to="/areas">
-                <button className="c-button -light" disabled={this.props.saving}>Cancel</button>
+                <button className="c-button -light" disabled={this.props.saving}><FormattedMessage id="forms.cancel" /></button>
               </Link>
               <div className="areas-inputs">
                 <div className="upload-field">
-                  <span className="text -x-small-title">Upload an Area</span>
+                  <span className="text -x-small-title"><FormattedMessage id="areas.upload" /></span>
                   <Icon name="icon-download" className="-big -transparent -stroke-green" />
                 </div>
                 <span className="separator -vertical"></span>
                 <div className="horizontal-field">
-                  <label className="text -x-small-title">Name the Area: </label>
+                  <label className="text -x-small-title"><FormattedMessage id="areas.nameArea" />: </label>
                   <Input
                     type="text"
                     onChange={this.onInputChange}
                     name="name"
                     value={this.form.name}
-                    placeholder="type your title"
+                    placeholder={this.props.intl.formatMessage({ id: 'areas.nameAreaPlaceholder' })}
                     validations={['required']}
                     disabled={this.props.saving}
                     />
                 </div>
               </div>
-              <Button className="c-button" disabled={this.props.saving || this.props.editing ? true : false}>Save</Button>
+              <Button className="c-button" disabled={this.props.saving || this.props.editing ? true : false}><FormattedMessage id="forms.save" /></Button>
             </div>
           </div>
         </Form>
@@ -161,4 +164,4 @@ class AreasManage extends React.Component {
   }
 }
 
-export default AreasManage;
+export default injectIntl(AreasManage);

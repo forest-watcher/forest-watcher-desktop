@@ -4,6 +4,7 @@ import L from 'leaflet';
 import { Draw, Control } from 'leaflet-draw'; // eslint-disable-line no-unused-vars
 import { DRAW_CONTROL, DRAW_CONTROL_DISABLED, POLYGON_STYLES } from '../../constants/map';
 import 'leaflet-draw/dist/leaflet.draw.css';
+import { injectIntl } from 'react-intl';
 
 class DrawControl extends React.Component {
 
@@ -22,7 +23,6 @@ class DrawControl extends React.Component {
   componentDidUpdate(prevProps) {
     if (this.props.geojson !== prevProps.geojson) {
       this.setFeatures();
-      this.disableDrawing();
     }
   }
 
@@ -44,7 +44,9 @@ class DrawControl extends React.Component {
   }
 
   setDrawing = () => {
-    const drawControl = Object.assign(DRAW_CONTROL, {
+    const DRAW_CONFIG = {...DRAW_CONTROL};
+    DRAW_CONFIG.draw.polygon.drawError.message = this.props.intl.formatMessage({ id: 'areas.drawError' });
+    const drawControl = Object.assign(DRAW_CONFIG, {
       edit: {
         featureGroup: this.featureGroup,
         remove: true
@@ -60,10 +62,10 @@ class DrawControl extends React.Component {
     this.drawControl = new L.Control.Draw(drawControl);
     this.drawControlDisabled = new L.Control.Draw(drawControlDisabled);
 
-    if (this.props.geojson) {
-      this.map.addControl(this.drawControlDisabled);
+    if (this.props.mode === 'manage') {
+      this.drawControlDisabled.addTo(this.map);
     } else {
-      this.map.addControl(this.drawControl);
+      this.drawControl.addTo(this.map);
     }
 
     // DRAW LISTENERS
@@ -76,7 +78,6 @@ class DrawControl extends React.Component {
     });
 
     this.map.on(L.Draw.Event.EDITED, (e) => {
-      this.props.setEditing(false);
       this.onDrawEventEdit(e);
     });
 
@@ -89,19 +90,22 @@ class DrawControl extends React.Component {
     });
 
     this.map.on(L.Draw.Event.DELETED, (e) => {
-      this.props.setEditing(false);
       this.onDrawEventDelete(e);
+    });
+
+    this.map.on(L.Draw.Event.DELETESTOP, (e) => {
+      this.props.setEditing(false);
     });
   }
 
   enableDrawing = () => {
     this.map.removeControl(this.drawControlDisabled);
-    this.map.addControl(this.drawControl);
+    this.drawControl.addTo(this.map);
   }
 
   disableDrawing = () => {
     this.map.removeControl(this.drawControl);
-    this.map.addControl(this.drawControlDisabled);
+    this.drawControlDisabled.addTo(this.map);
   }
 
 
@@ -111,8 +115,8 @@ class DrawControl extends React.Component {
     const geoJsonLayer = layer.toGeoJSON();
     this.featureGroup.addLayer(layer);
     this.props.onDrawComplete && this.props.onDrawComplete(geoJsonLayer);
-    this.disableDrawing();
     this.map.fitBounds(layer.getBounds());
+    this.disableDrawing();
   }
 
   onDrawEventEdit = (e) => {
@@ -123,7 +127,6 @@ class DrawControl extends React.Component {
       this.props.onDrawComplete && this.props.onDrawComplete(geoJsonLayer);
       this.map.fitBounds(layer.getBounds());
     });
-    this.disableDrawing();
   }
 
   onDrawEventDelete = (e) => {
@@ -145,4 +148,4 @@ DrawControl.propTypes = {
   geojson: PropTypes.object
 };
 
-export default DrawControl;
+export default injectIntl(DrawControl);

@@ -35,7 +35,7 @@ export const DRAW_CONTROL = {
         allowIntersection: false,
         drawError: {
           color: '#f15656',
-          message: '<strong>Oh snap!<strong> you can\'t draw that!'
+          message: "You can draw an area that intersects"
         },
         shapeOptions: POLYGON_STYLES,
         showArea: true,

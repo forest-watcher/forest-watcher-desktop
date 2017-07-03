@@ -19,10 +19,10 @@ class Templates extends React.Component {
     return (
       <div>
         <Hero
-          title="Templates"
+          title="templates.title"
         />
       <div className="l-content">
-          <Article title="Uploaded">
+          <Article title="templates.subtitle">
             <GridGallery
               Component={ReportCard}
               className="report-card-item"
