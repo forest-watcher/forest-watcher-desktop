@@ -63,10 +63,12 @@ class Filters extends React.Component {
         <div className="column">
           <Select
             name="template-select"
+            className="c-select"
             value={options[this.props.templateIndex || 0]}
             options={options}
             onChange={this.handleTemplateChange}
             clearable={false}
+            arrowRenderer={() => <svg className="c-icon -x-small -gray"><use xlinkHref="#icon-arrow-down"></use></svg>}
           />
         </div>
         <div className="column">
@@ -78,6 +80,7 @@ class Filters extends React.Component {
             onChange={this.handleAreaChange}
             resetValue={{value: '', label: ''}}
             placeholder={this.props.intl.formatMessage({ id: 'filters.area' })}
+            arrowRenderer={() => <svg className="c-icon -x-small -gray"><use xlinkHref="#icon-arrow-down"></use></svg>}
           />
         </div>
         <div className="c-search-bar">
@@ -95,7 +98,6 @@ class Filters extends React.Component {
             onChange={this.handleDateChange}
             isClearable={true}
             placeholderText={this.props.intl.formatMessage({ id: 'filters.date' })}
-            arrowRenderer={() => <svg className="c-icon -x-small -gray"><use xlinkHref="#icon-arrow-down"></use></svg>}
           />
         </div>  
       </div>
