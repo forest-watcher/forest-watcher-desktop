@@ -71,6 +71,7 @@ class Filters extends React.Component {
         </div>
         <div className="column">
           <Select
+            className="c-select"
             name="area-filter"
             value={this.props.searchParams.aoi ? { label: this.props.searchParams.aoi, value: this.props.searchParams.aoi } : null}
             options={areasOptions}
@@ -94,6 +95,7 @@ class Filters extends React.Component {
             onChange={this.handleDateChange}
             isClearable={true}
             placeholderText={this.props.intl.formatMessage({ id: 'filters.date' })}
+            arrowRenderer={() => <svg className="c-icon -x-small -gray"><use xlinkHref="#icon-arrow-down"></use></svg>}
           />
         </div>  
       </div>

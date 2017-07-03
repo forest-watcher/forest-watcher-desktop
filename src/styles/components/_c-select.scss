@@ -1,5 +1,6 @@
 .c-select {
     height: 100%;
+    z-index: 1000;
     
     &:focus {
         outline: none;
@@ -34,6 +35,10 @@
             &:focus {
                 outline: none;
             }              
+        }
+
+        .Select-arrow-zone {
+            padding-right: 15px;
         }
     }
 
@@ -76,6 +81,10 @@
                 color: rgba($white, 0.5) !important;                
             }
         }
+
+        .c-icon {
+            fill: rgba($white, 0.5);
+        }
     }
 
     &.is-open {
@@ -86,6 +95,11 @@
             .Select-value-label {
                 color: $theme-text !important;                
             }
+        }
+
+        .c-icon {
+            transform: rotate(180deg);
+            fill: $dark-gray;
         }
     }
 }

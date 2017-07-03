@@ -50,6 +50,7 @@ class Nav extends React.Component {
                 onChange={this.handleLanguageChange}
                 clearable={false}
                 searchable={false}
+                arrowRenderer={() => <svg className="c-icon -x-small -gray"><use xlinkHref="#icon-arrow-down"></use></svg>}
               />
               {this.props.loggedIn &&
                 <li className="nav-menu">
