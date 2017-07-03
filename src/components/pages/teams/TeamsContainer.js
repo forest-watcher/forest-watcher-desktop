@@ -4,7 +4,7 @@ import { getTeams, setEditing } from '../../../modules/teams';
 import { includes } from '../../../helpers/utils';
 
 const isManager = (team, userId) => {
-  return includes(team.attributes.managers,userId);
+  return includes(team.attributes.managers, userId);
 }
 
 const isUser = (team, userId) => {
@@ -18,7 +18,7 @@ const belongsToTeam = (team, userId) => {
 const mapStateToProps = ({ user, teams }) => {
   const userId = user.data.id;
   let teamId = null;
-  if(teams.ids.length > 0){
+  if (teams.ids.length > 0) {
     teamId = Object.keys(teams.data).find((key) => {
         return belongsToTeam(teams.data[key], userId);
       }) || null;
