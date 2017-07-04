@@ -9,4 +9,8 @@ const unique = (value, index, self) => {
     return self.indexOf(value) === index;
 }
 
-export { includes, unique };
+const diff = (original, toSubstract) => {
+	return original.filter((i) => toSubstract.indexOf(i) < 0);
+};
+
+export { includes, unique, diff };

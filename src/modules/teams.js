@@ -1,5 +1,5 @@
 import { API_DEV_BASE_URL, AUTH_DEV_TOKEN } from '../constants/global'
-import { includes, unique } from '../helpers/utils';
+import { unique } from '../helpers/utils';
 
 // Actions
 const GET_TEAM = 'teams/GET_TEAM';

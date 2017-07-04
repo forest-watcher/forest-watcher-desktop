@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 
 import { Input, Form } from '../../form/Form';
 import Hero from '../../layouts/Hero';
-import { includes } from '../../../helpers/utils';
 import Select from 'react-select';
 import MembersManager from './MembersManager';
 

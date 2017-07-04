@@ -1,17 +1,15 @@
 import { connect } from 'react-redux';
 import Teams from './Teams';
 import { getTeam, setEditing } from '../../../modules/teams';
-import { includes } from '../../../helpers/utils';
+import { includes, diff } from '../../../helpers/utils';
 
-const isManager = (team, userId) => {
-  return includes(team.attributes.managers, userId);
-}
 
 const mapStateToProps = ({ user, teams, areas }) => {
   const userId = user.data.id;
-  const diff = (original, toSubstract) => {
-    return original.filter((i) => toSubstract.indexOf(i) < 0);
-  };
+
+  function isUserManager(team, userId) {
+    return includes(team.attributes.managers, userId);
+  }
 
   function removeManagersfromUsers(team) {
     // Managers are always also users. We remove them to handle them only as managers in the app
@@ -21,10 +19,13 @@ const mapStateToProps = ({ user, teams, areas }) => {
     return team;
   }
 
-  let team = removeManagersfromUsers(teams.data);
+  let team = teams.data;
+  const isManager = team && isUserManager(team, userId);
+  team = removeManagersfromUsers(teams.data);
+
     return { 
       team,
-      isManager: team && isManager(team, userId),
+      isManager,
       editing: teams.editing,
       userId
     };
