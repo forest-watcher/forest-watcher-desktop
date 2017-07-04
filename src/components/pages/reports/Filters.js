@@ -63,20 +63,24 @@ class Filters extends React.Component {
         <div className="column">
           <Select
             name="template-select"
+            className="c-select"
             value={options[this.props.templateIndex || 0]}
             options={options}
             onChange={this.handleTemplateChange}
             clearable={false}
+            arrowRenderer={() => <svg className="c-icon -x-small -gray"><use xlinkHref="#icon-arrow-down"></use></svg>}
           />
         </div>
         <div className="column">
           <Select
+            className="c-select"
             name="area-filter"
             value={this.props.searchParams.aoi ? { label: this.props.searchParams.aoi, value: this.props.searchParams.aoi } : null}
             options={areasOptions}
             onChange={this.handleAreaChange}
             resetValue={{value: '', label: ''}}
             placeholder={this.props.intl.formatMessage({ id: 'filters.area' })}
+            arrowRenderer={() => <svg className="c-icon -x-small -gray"><use xlinkHref="#icon-arrow-down"></use></svg>}
           />
         </div>
         <div className="c-search-bar">

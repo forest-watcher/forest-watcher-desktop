@@ -2,7 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import L from 'leaflet';
 import { Draw, Control } from 'leaflet-draw'; // eslint-disable-line no-unused-vars
-import { DRAW_CONTROL, DRAW_CONTROL_DISABLED, POLYGON_STYLES } from '../../constants/map';
+import { DRAW_CONTROL, DRAW_CONTROL_DISABLED, POLYGON_STYLES, POLYGON_STYLES_ERROR } from '../../constants/map';
+import { checkArea } from '../../helpers/areas';
 import 'leaflet-draw/dist/leaflet.draw.css';
 import { injectIntl } from 'react-intl';
 
@@ -35,10 +36,16 @@ class DrawControl extends React.Component {
   setFeatures = () => {
     L.geoJson(this.props.geojson, {
       onEachFeature: (feature, layer) => {
-        layer.setStyle(POLYGON_STYLES);
+        const geoJsonLayer = layer.toGeoJSON();
+        if (!checkArea(geoJsonLayer)) {
+          layer.setStyle(POLYGON_STYLES_ERROR);
+        } else {
+          layer.setStyle(POLYGON_STYLES);
+        }
         this.featureGroup.removeLayer(this.featureGroup.getLayers()[0]);
         this.featureGroup.addLayer(layer);
         this.map.fitBounds(layer.getBounds());
+        this.props.onZoomChange && this.props.onZoomChange(this.map.getBoundsZoom(layer.getBounds()));
       }
     });
   }
@@ -113,9 +120,13 @@ class DrawControl extends React.Component {
   onDrawEventComplete = (e) => {
     const layer = e.layer;
     const geoJsonLayer = layer.toGeoJSON();
+    if (!checkArea(geoJsonLayer)) {
+      layer.setStyle(POLYGON_STYLES_ERROR);
+    }
     this.featureGroup.addLayer(layer);
     this.props.onDrawComplete && this.props.onDrawComplete(geoJsonLayer);
     this.map.fitBounds(layer.getBounds());
+    this.props.onZoomChange && this.props.onZoomChange(this.map.getBoundsZoom(layer.getBounds()));
     this.disableDrawing();
   }
 
@@ -125,7 +136,7 @@ class DrawControl extends React.Component {
       const geoJsonLayer = layer.toGeoJSON();
       this.featureGroup.addLayer(layer);
       this.props.onDrawComplete && this.props.onDrawComplete(geoJsonLayer);
-      this.map.fitBounds(layer.getBounds());
+      // this.map.fitBounds(layer.getBounds());
     });
   }
 

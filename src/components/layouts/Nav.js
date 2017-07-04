@@ -44,11 +44,13 @@ class Nav extends React.Component {
             <ul className="nav-subsection">
               <Select
                 name="locale-select"
+                className="c-select -dark"
                 value={this.props.locale}
                 options={this.languages}
                 onChange={this.handleLanguageChange}
                 clearable={false}
                 searchable={false}
+                arrowRenderer={() => <svg className="c-icon -x-small -gray"><use xlinkHref="#icon-arrow-down"></use></svg>}
               />
               {this.props.loggedIn &&
                 <li className="nav-menu">

@@ -3,6 +3,7 @@
   justify-content: space-between;
   align-items: center;
   margin-right: 10px;
+  height: 40px;
   
   input:focus,
   select:focus,
@@ -12,22 +13,34 @@
   }
 
   input {
-    height: 36px;
+    height: 100%;
     margin-right: 10px;
 	  border-radius: 4px;
 	  background-color: #ffffff;
-	  border: solid 1px #ccc;
+	  border: solid 1px #e6e6e6;
     padding: 0 15px;
+    font-size: $font-size-regular;
+    color: $gray;
+
+    &::placeholder {
+      opacity: 0.5;
+    }
   }
-  .datepicker{
+
+  .datepicker {
+    height: 40px;
     width: 100%;
   }
+
   .react-datepicker__close-icon {
     display: block;
-    &::after{
+
+    &::after {
       background-color: #fff;
       color:#666;
       font-size: 20px;
+      right: 12px;
+      margin: -11px auto 0;
     }
   }
 }

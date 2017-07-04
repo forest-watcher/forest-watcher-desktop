@@ -4,6 +4,11 @@
   height: 20px;
   flex-shrink: 0;
 
+    &.-x-small {
+    width: 16px;
+    height: 10px;
+  }
+
   &.-small {
     width: 15px;
     height: 15px;
