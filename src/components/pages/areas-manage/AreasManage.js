@@ -107,6 +107,7 @@ class AreasManage extends React.Component {
             />
             <div className="c-map-controls">
               <ZoomControl
+                map={this.state.map}
                 zoom={this.state.mapConfig.zoom}
                 minZoom={3}
                 maxZoom={20}
@@ -126,6 +127,14 @@ class AreasManage extends React.Component {
                 onDrawDelete={this.onDrawDelete}
                 geojson={this.form.geojson}
                 saving={this.props.saving}
+                onZoomChange={ (zoom) => {
+                  this.setState({
+                    mapConfig: {
+                      ...this.state.mapConfig,
+                      zoom
+                    }
+                  });
+                }}
               />
               <Attribution />
             </div>

@@ -45,6 +45,7 @@ class DrawControl extends React.Component {
         this.featureGroup.removeLayer(this.featureGroup.getLayers()[0]);
         this.featureGroup.addLayer(layer);
         this.map.fitBounds(layer.getBounds());
+        this.props.onZoomChange && this.props.onZoomChange(this.map.getBoundsZoom(layer.getBounds()));
       }
     });
   }
@@ -125,6 +126,7 @@ class DrawControl extends React.Component {
     this.featureGroup.addLayer(layer);
     this.props.onDrawComplete && this.props.onDrawComplete(geoJsonLayer);
     this.map.fitBounds(layer.getBounds());
+    this.props.onZoomChange && this.props.onZoomChange(this.map.getBoundsZoom(layer.getBounds()));
     this.disableDrawing();
   }
 
@@ -134,7 +136,7 @@ class DrawControl extends React.Component {
       const geoJsonLayer = layer.toGeoJSON();
       this.featureGroup.addLayer(layer);
       this.props.onDrawComplete && this.props.onDrawComplete(geoJsonLayer);
-      this.map.fitBounds(layer.getBounds());
+      // this.map.fitBounds(layer.getBounds());
     });
   }
 
