@@ -10,23 +10,21 @@ import MembersManager from './MembersManager';
 class TeamsForm extends React.Component {
   constructor (props) {
     super(props);
+    const selectedManagers = (props.team && props.team.attributes.managers.filter((user) => user !== props.userId)) || [];
     this.state = {
-      selectedAreas: '',
+      selectedAreas: (props.team && props.team.attributes.areas.join()) || '',
       selectedUsers: (props.team && props.team.attributes.users) || [],
-      selectedManagers: (props.team && props.team.attributes.managers) || [props.userId],
+      selectedManagers,
       emailToSearch: ''
     }
     this.updateForm(props.team);
   }
 
   updateForm(team){
-    let managers = (team && team.attributes.managers) || [];
-    if (!includes(managers, this.props.userId)) managers.push(this.props.userId);
-    
     this.form = {
       name: team && team.attributes.name,
       areas: (team && team.attributes.areas) || [],
-      managers,
+      managers: (team && team.attributes.managers) || [],
       users: (team && team.attributes.users) || []
     }
   }
@@ -107,7 +105,7 @@ class TeamsForm extends React.Component {
                   />
                 </div>
                 <div className="input-group">
-                  <label className="text">Associated Areas of Interest </label>
+                  <label className="text">Associated Areas of Interest</label>
                   <Select
                     multi
                     simpleValue
@@ -123,6 +121,7 @@ class TeamsForm extends React.Component {
                 updateSelectedUsers={this.updateSelectedUsers}
                 selectedUsers={this.state.selectedUsers}
                 selectedManagers={this.state.selectedManagers}
+                addEmail={this.props.addEmail}
               />
               <div className="row small-12 columns">
                 <div className="c-form -nav">
