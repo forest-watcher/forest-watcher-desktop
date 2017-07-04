@@ -7,6 +7,7 @@ import { validation } from '../../../helpers/validation'; // eslint-disable-line
 import { checkArea } from '../../../helpers/areas';
 import { toastr } from 'react-redux-toastr';
 import Icon from '../../ui/Icon';
+import LocateUser from '../../ui/LocateUser';
 import ZoomControl from '../../ui/ZoomControl';
 import DrawControl from '../../draw-control/DrawControlContainer';
 import Attribution from '../../ui/Attribution';
@@ -106,6 +107,7 @@ class AreasManage extends React.Component {
               }}
             />
             <div className="c-map-controls">
+              <LocateUser map={this.state.map} />
               <ZoomControl
                 map={this.state.map}
                 zoom={this.state.mapConfig.zoom}
