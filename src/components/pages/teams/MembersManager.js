@@ -1,8 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-
-import Icon from '../../ui/Icon';
-import Checkbox from '../../ui/Checkbox';
 import MemberList from './MemberList';
 
 class MembersManager extends React.Component {
