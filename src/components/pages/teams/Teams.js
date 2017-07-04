@@ -7,7 +7,7 @@ import TeamsForm from './TeamsFormContainer';
 
 class Teams extends React.Component {
   componentWillMount() {
-    this.props.getTeams();
+    this.props.getTeam(this.props.userId);
   }
 
   render() {
@@ -26,24 +26,38 @@ class Teams extends React.Component {
           }
           <div className="l-content">
             <Article>
-              <div>
-                Team Name
-              </div>
-              <div>
-                {team && team.attributes.name}
-              </div>
-              <div>
-                Associated areas of interest
-              </div>
-              <div>
-                {team && team.attributes.areas && team.attributes.areas.map((area, i) => (<div key={i}>{ area }</div>))}
-              </div>
-              <div>
-                Members
-              </div>
-              <div>
-                {team && team.attributes.managers && team.attributes.managers.map((managers, i) =>  (<div key={i}>{ managers }</div>))}
-                {team && team.attributes.users && team.attributes.users.map((users, i) =>  (<div key={i}>{ users }</div>))}
+              <div className="row">
+                <div className="small-6 columns">
+                  <div className="section">
+                    <div className="title">Team name</div>
+                    <div>
+                      {team && team.attributes.name}
+                    </div>
+                  </div>
+                  <div className="section">
+                    <div className="title">Associated Areas of Interest </div>
+                    {team && team.attributes.areas && team.attributes.areas.map((area, i) => (<div key={i}>{ area }</div>))}
+                  </div>
+                </div>
+                <div className="small-6 columns">
+
+                  <div className="section">
+                    <div className="title">Members</div>
+                  </div>
+                  <div>
+                    {team && team.attributes.managers && team.attributes.managers.map((manager) =>  (
+                      <div className="horizontal-field-left" key={manager}>
+                        { manager }
+                        <span className="admin-selected">ADMIN</span>
+                      </div>
+                      ))}
+                    {team && team.attributes.users && team.attributes.users.map((user) =>  (
+                      <div className="horizontal-field-left" key={user}>
+                        { user }
+                      </div>
+                      ))}
+                  </div>
+                </div>
               </div>
             </Article>
           </div>
@@ -55,8 +69,9 @@ class Teams extends React.Component {
 
 Teams.propTypes = {
   team: PropTypes.object,
-  getTeams: PropTypes.func.isRequired,
-  isManager: PropTypes.bool
+  getTeam: PropTypes.func.isRequired,
+  isManager: PropTypes.bool,
+  userId: PropTypes.string.isRequired
 };
 
 export default Teams;

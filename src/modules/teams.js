@@ -1,39 +1,29 @@
 import normalize from 'json-api-normalizer';
 
 // Actions
-const GET_TEAMS = 'teams/GET_TEAMS';
+const GET_TEAM = 'teams/GET_TEAM';
 const SAVE_TEAM = 'teams/SAVE_TEAM';
 const SET_EDITING = 'teams/SET_EDITING';
 const ADD_USER = 'teams/ADD_USER';
 
 // Reducer
 const initialState = {
-  ids: [],
-  data: [],
-  existingEmail: null
+  data: null
 };
 
 export default function reducer(state = initialState, action) {
   switch (action.type) {
-    case GET_TEAMS: {
-      const teams = action.payload.team;
-      if (teams) return Object.assign({}, state, { ids: Object.keys(teams), data: teams });
+    case GET_TEAM: {
+      const team = action.payload;
+      if (team) return Object.assign({}, state, { data: team });
       return state;
     }
     case SAVE_TEAM: {
       const team = action.payload.team;
-      if (state.ids.indexOf( ...Object.keys(team) ) > -1) {
-        return {
-          ...state,
-          teams: { ...state.teams, ...team }
-        };
-      } else {
-        return {
-          ...state,
-          ids: [...state.ids, ...Object.keys(team)],
-          teams: { ...state.teams, ...team }
-        };
-      }
+      return {
+        ...state,
+        teams: { ...state.teams, ...team }
+      };
     }
     case SET_EDITING:{
       return Object.assign({}, state, { editing: action.payload });
@@ -60,13 +50,13 @@ export function getTeams() {
         if (response.ok) return response.json();
         throw Error(response.statusText);
       })
-      .then((data) => {
-      const normalized = normalize(data);
+      .then((response) => {
+        const team = response.data;
         dispatch({
-          type: GET_TEAMS,
-          payload: normalized
+          type: GET_TEAM,
+          payload: team
         });
-        return normalized;
+        return team;
       })
       .catch((error) => {
         console.warn('error', error)

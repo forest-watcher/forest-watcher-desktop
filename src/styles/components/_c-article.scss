@@ -2,4 +2,18 @@
   h2 {
     margin-bottom: 40px;
   }
+  .section {
+    padding-top: 30px;
+  }
+  .admin-selected {
+    color: $theme-accent;
+    padding-left: 10px;
+  }
+  .horizontal-field-left {
+    padding-top: 20px;
+  }
+  .title {
+    font-weight: bold;
+    padding-bottom: 10px;
+  }
 }

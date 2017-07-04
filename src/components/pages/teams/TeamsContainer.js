@@ -1,41 +1,38 @@
 import { connect } from 'react-redux';
 import Teams from './Teams';
-import { getTeams, setEditing } from '../../../modules/teams';
-import { includes } from '../../../helpers/utils';
+import { getTeam, setEditing } from '../../../modules/teams';
 
 const isManager = (team, userId) => {
   return includes(team.attributes.managers, userId);
 }
 
-const isUser = (team, userId) => {
-  return includes(team.attributes.users, userId);
-}
-
-const belongsToTeam = (team, userId) => {
-  return (isManager(team, userId) || isUser(team, userId));
-}
-
-const mapStateToProps = ({ user, teams }) => {
+const mapStateToProps = ({ user, teams, areas }) => {
   const userId = user.data.id;
-  let teamId = null;
-  if (teams.ids.length > 0) {
-    teamId = Object.keys(teams.data).find((key) => {
-        return belongsToTeam(teams.data[key], userId);
-      }) || null;
+  const diff = (original, toSubstract) => {
+    return original.filter((i) => toSubstract.indexOf(i) < 0);
+  };
+
+  function removeManagersfromUsers(team) {
+    // Managers are always also users. We remove them to handle them only as managers in the app
+    if (team) {
+      team.attributes.users = diff(team.attributes.users, team.attributes.managers)
+    }
+    return team;
   }
 
-  const team = teams.data[teamId]
+  let team = removeManagersfromUsers(teams.data);
     return { 
       team,
       isManager: team && isManager(team, userId),
-      editing: teams.editing
+      editing: teams.editing,
+      userId
     };
   };
 
  function mapDispatchToProps(dispatch) {
    return {
-     getTeams: () => {
-       dispatch(getTeams());
+     getTeam: (userId) => {
+       dispatch(getTeam(userId));
      },
      setEditing: (value) => {
        dispatch(setEditing(value));
