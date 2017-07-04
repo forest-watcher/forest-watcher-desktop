@@ -83,6 +83,7 @@
     }
 
     &.-dark {
+        border-bottom: $border-gray 1px solid;
         
         .Select-control {
             color: rgba($white, 0.5) !important;
