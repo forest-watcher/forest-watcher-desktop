@@ -1,6 +1,7 @@
 import { connect } from 'react-redux';
 import Teams from './Teams';
 import { getTeam, setEditing } from '../../../modules/teams';
+import { includes } from '../../../helpers/utils';
 
 const isManager = (team, userId) => {
   return includes(team.attributes.managers, userId);

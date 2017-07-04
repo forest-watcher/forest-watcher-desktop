@@ -5,4 +5,8 @@ const includes = (container, value) => {
 	return returnValue;
 }
 
-export { includes };
+const unique = (value, index, self) => { 
+    return self.indexOf(value) === index;
+}
+
+export { includes, unique };

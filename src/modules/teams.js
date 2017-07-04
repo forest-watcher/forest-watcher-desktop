@@ -1,4 +1,5 @@
-import normalize from 'json-api-normalizer';
+import { API_DEV_BASE_URL, AUTH_DEV_TOKEN } from '../constants/global'
+import { includes, unique } from '../helpers/utils';
 
 // Actions
 const GET_TEAM = 'teams/GET_TEAM';
@@ -38,12 +39,13 @@ export default function reducer(state = initialState, action) {
 
 // Action Creators
 
-export function getTeams() {
-  const url = `http://mymachine:3005/api/v1/teams/`;
+export function getTeam(userId) {
+  const url = `${API_DEV_BASE_URL}/teams/user/${userId}`;
+  // Authorization: `Bearer ${state().user.token}`
   return (dispatch, state) => {
     return fetch(url, {
       headers: {
-        Authorization: `Bearer ${state().user.token}`
+        Authorization: `Bearer ${AUTH_DEV_TOKEN}`
       }
     })
       .then((response) => {
@@ -64,39 +66,45 @@ export function getTeams() {
   };
 }
 
-export function createTeam(team) {
-  const body = JSON.stringify({
+const getBody = (team) => {
+  // Managers are always users
+  const users = team.users.concat(team.managers).filter(unique);
+  return JSON.stringify({
     name: team.name,
-    managers: team.managers,
-    users: team.users,
-    areas: team.areas,
-    editing: false
+    managers: team.managers.filter(unique),
+    users,
+    areas: team.areas
   })
-  const url = `http://mymachine:3005/api/v1/teams/`;
+}
+
+export function createTeam(team) {
+  const url = `${API_DEV_BASE_URL}/teams/`;
+  // Authorization: `Bearer ${state().user.token}`
   return (dispatch, state) => {
     return fetch(url, {
       headers: {
-        Authorization: `Bearer ${state().user.token}`
+        Authorization: `Bearer ${AUTH_DEV_TOKEN}`,
+        'Content-Type': 'application/json'
       },
       method: 'POST',
-      body
+      body: getBody(team)
     })
       .then((response) => {
         if (response.ok) return response.json();
         throw Error(response.statusText);
       })
-      .then((data) => {
-      const normalized = normalize(data);
+      .then((response) => {
+        const team = response.data;
         dispatch({
           type: SAVE_TEAM,
-          payload: normalized
+          payload: team
         });
-        dispatch(getTeams());
+        dispatch(getTeam(state().user.id));
         dispatch({
           type: SET_EDITING,
           payload: false
         });
-        return normalized;
+        return team;
       })
       .catch((error) => {
         console.warn('error', error)
@@ -104,38 +112,34 @@ export function createTeam(team) {
   };
 }
 export function updateTeam(team, id) {
-  const body = JSON.stringify({
-    name: team.name,
-    managers: team.managers,
-    users: team.users,
-    areas: team.areas,
-    editing: false
-  })
-  const url = `http://mymachine:3005/api/v1/teams/${id}`;
+  const url = `${API_DEV_BASE_URL}/teams/${id}`;
+  // Authorization: `Bearer ${state().user.token}`
   return (dispatch, state) => {
-    return fetch(url, {
-      headers: {
-        Authorization: `Bearer ${state().user.token}`
-      },
-      method: 'PATCH',
-      body
-    })
+    return fetch(url,
+      {
+        headers: {
+          Authorization: `Bearer ${AUTH_DEV_TOKEN}`,
+          'Content-Type': 'application/json'
+        },
+        method: 'PATCH',
+        body: getBody(team)
+      }
+    )
       .then((response) => {
         if (response.ok) return response.json();
         throw Error(response.statusText);
       })
-      .then((data) => {
-      const normalized = normalize(data);
+      .then((response) => {
         dispatch({
           type: SAVE_TEAM,
-          payload: normalized
+          payload: response.data
         });
-        dispatch(getTeams());
+        dispatch(getTeam(state().user.data.id));
         dispatch({
           type: SET_EDITING,
           payload: false
         });
-        return normalized;
+        return response.data;
       })
       .catch((error) => {
         console.warn('error', error)
@@ -151,11 +155,12 @@ export function setEditing(value) {
 }
 
 export function addEmail(email) {
-  const url = `http://mymachine:9000/v1/user/email/${email}`;
+  const url = `${API_DEV_BASE_URL}user/email/${email}`;
+  // Authorization: `Bearer ${state().user.token}`
   return (dispatch, state) => {
     return fetch(url, {
       headers: {
-        Authorization: `Bearer ${state().user.token}`
+        Authorization: `Bearer ${AUTH_DEV_TOKEN}`
       },
       method: 'GET'
     })
