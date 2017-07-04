@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 
 import Icon from '../../ui/Icon';
 import Checkbox from '../../ui/Checkbox';
+import MemberList from './MemberList';
 
 class MembersManager extends React.Component {
   constructor() {
@@ -72,24 +73,8 @@ class MembersManager extends React.Component {
             />
             <button type="button" onClick={this.handleAddEmail} className="c-button -light">Add</button>
           </div>
-          {selectedManagers.map((manager) => (
-            <div key={manager} className="horizontal-field-left">
-              <div className="user-label">{ manager }</div>
-              <Checkbox id={`admin${manager}`} label={"Admin"} callback={() => this.handleChangeRole(manager, false)} defaultChecked={true}/>
-              <button className="delete-button hidden" type="button">
-                <Icon name="icon-delete" className="-medium" />
-              </button>
-            </div>
-          ))}
-          {selectedUsers.map((user) => (
-            <div key={user} className="horizontal-field-left"> 
-              <div className="user-label">{ user }</div>
-              <Checkbox id={`user${user}`} label={"Admin"} callback={() => this.handleChangeRole(user, true)} />
-              <button className="delete-button" type="button" onClick={() => this.deleteUser(user)}>
-                <Icon name="icon-delete" className="-medium" />
-              </button>
-            </div>
-          ))}
+          <MemberList members={selectedManagers} manager={true}/>
+          <MemberList members={selectedUsers} manager={false}/>
         </div>
       </div>
     );
