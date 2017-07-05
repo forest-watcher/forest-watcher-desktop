@@ -15,7 +15,7 @@ class Reports extends React.Component {
     if (reportIds.length === 0) { 
       this.props.getUserTemplates(); 
     } else {
-      this.props.getReportAnswers(reportIds[0]);
+      this.props.getReportAnswers(reportIds[this.props.match.params.templateIndex || 0]);
     }
   }
 
@@ -24,15 +24,17 @@ class Reports extends React.Component {
   }
 
   componentWillReceiveProps(nextProps){
-    if (this.props.templates.ids.length !== nextProps.templates.ids.length){
-      this.props.getReportAnswers(nextProps.templates.ids[this.templateId || 0]);
+    const nextTemplateIndex = nextProps.match.params.templateIndex;
+    if (this.props.templates.ids.length !== nextProps.templates.ids.length || 
+        this.props.match.params.templateIndex !== nextTemplateIndex) {
+      this.props.getReportAnswers(nextProps.templates.ids[nextTemplateIndex || 0]);
     }
   }
 
   shouldComponentUpdate(nextProps, nextState){
     return this.props.templates.ids.length !== nextProps.templates.ids.length || 
-           this.props.answers !== nextProps.answers || 
            this.props.match.params.templateIndex !== nextProps.match.params.templateIndex ||
+           this.props.answers !== nextProps.answers || 
            this.props.location.search !== nextProps.location.search;
   }
 
