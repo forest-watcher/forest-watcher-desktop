@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import TeamsForm from './TeamsForm';
-import { createTeam, updateTeam, setEditing, addEmail } from '../../../modules/teams';
+import { createTeam, updateTeam, setEditing, sendNotifications } from '../../../modules/teams';
 
 const mapStateToProps = ({ areas, user, teams }) => {
   const areaValues = Object.keys(areas.areas).map((key) => ({
@@ -25,8 +25,8 @@ const mapStateToProps = ({ areas, user, teams }) => {
     setEditing: (value) => {
        dispatch(setEditing(value));
     },
-    addEmail: (email) => {
-       dispatch(addEmail(email));
+    sendNotifications: () => {
+       dispatch(sendNotifications());
     }
   }
  }

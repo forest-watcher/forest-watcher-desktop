@@ -45,6 +45,10 @@ class TeamsForm extends React.Component {
 
   handleSubmit = (e) => {
     e.preventDefault();
+    const team = this.props.team;
+    if (!team || team.attributes.users !== this.form.users) {
+      this.props.sendNotifications();
+    }
     this.props.team ? this.props.updateTeam(this.form, this.props.team.id) : this.props.createTeam(this.form);
   }
 
@@ -139,7 +143,8 @@ class TeamsForm extends React.Component {
 
 TeamsForm.propTypes = {
   team: PropTypes.object,
-  areaValues: PropTypes.array.isRequired
+  areaValues: PropTypes.array.isRequired,
+  sendNotifications: PropTypes.func.isRequired
 };
 
 export default TeamsForm;

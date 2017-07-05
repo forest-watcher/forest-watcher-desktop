@@ -1,15 +1,17 @@
 import { API_DEV_BASE_URL, AUTH_DEV_TOKEN } from '../constants/global'
 import { unique } from '../helpers/utils';
+import { toastr } from 'react-redux-toastr';
 
 // Actions
 const GET_TEAM = 'teams/GET_TEAM';
 const SAVE_TEAM = 'teams/SAVE_TEAM';
 const SET_EDITING = 'teams/SET_EDITING';
-const ADD_USER = 'teams/ADD_USER';
+const SEND_NOTIFICATIONS = 'teams/SEND_NOTIFICATIONS'
 
 // Reducer
 const initialState = {
-  data: null
+  data: null,
+  sendNotifications: false
 };
 
 export default function reducer(state = initialState, action) {
@@ -29,8 +31,8 @@ export default function reducer(state = initialState, action) {
     case SET_EDITING:{
       return Object.assign({}, state, { editing: action.payload });
     }
-    case ADD_USER:{
-      return state;
+    case SEND_NOTIFICATIONS:{
+      return Object.assign({}, state, { sendNotifications: action.payload });
     }
     default:
       return state;
@@ -104,6 +106,13 @@ export function createTeam(team) {
           type: SET_EDITING,
           payload: false
         });
+        if (state().teams.sendNotifications) {
+          dispatch({
+            type: SEND_NOTIFICATIONS,
+            payload: false
+          });
+          toastr.success('Request sent');
+        }
         return team;
       })
       .catch((error) => {
@@ -130,16 +139,24 @@ export function updateTeam(team, id) {
         throw Error(response.statusText);
       })
       .then((response) => {
+        const team = response.data;
         dispatch({
           type: SAVE_TEAM,
-          payload: response.data
+          payload: team
         });
         dispatch(getTeam(state().user.data.id));
         dispatch({
           type: SET_EDITING,
           payload: false
         });
-        return response.data;
+        if (state().teams.sendNotifications) {
+          dispatch({
+            type: SEND_NOTIFICATIONS,
+            payload: false
+          });
+          toastr.success('Request sent');
+        }
+        return team;
       })
       .catch((error) => {
         console.warn('error', error)
@@ -154,27 +171,9 @@ export function setEditing(value) {
   };
 }
 
-export function addEmail(email) {
-  const url = `${API_DEV_BASE_URL}user/email/${email}`;
-  // Authorization: `Bearer ${state().user.token}`
-  return (dispatch, state) => {
-    return fetch(url, {
-      headers: {
-        Authorization: `Bearer ${AUTH_DEV_TOKEN}`
-      },
-      method: 'GET'
-    })
-      .then((response) => {
-        if (response.ok) return response.json();
-        throw Error(response.statusText);
-      })
-      .then((data) => {
-        dispatch({ type: ADD_USER })
-        return data;
-      })
-      .catch((error) => {
-        // Add toaster error for not found
-        console.warn('error', error)
-      });
+export function sendNotifications() {
+  return { 
+    type: SEND_NOTIFICATIONS, 
+    payload: true 
   };
 }
