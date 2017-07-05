@@ -1,4 +1,4 @@
-import { API_DEV_BASE_URL, AUTH_DEV_TOKEN } from '../constants/global'
+import { API_BASE_URL } from '../constants/global'
 import { unique } from '../helpers/utils';
 import { toastr } from 'react-redux-toastr';
 
@@ -42,12 +42,11 @@ export default function reducer(state = initialState, action) {
 // Action Creators
 
 export function getTeam(userId) {
-  const url = `${API_DEV_BASE_URL}/teams/user/${userId}`;
-  // Authorization: `Bearer ${state().user.token}`
+  const url = `${API_BASE_URL}/teams/user/${userId}`;
   return (dispatch, state) => {
     return fetch(url, {
       headers: {
-        Authorization: `Bearer ${AUTH_DEV_TOKEN}`
+        Authorization: `Bearer ${state().user.token}`
       }
     })
       .then((response) => {
@@ -80,12 +79,11 @@ const getBody = (team) => {
 }
 
 export function createTeam(team) {
-  const url = `${API_DEV_BASE_URL}/teams/`;
-  // Authorization: `Bearer ${state().user.token}`
+  const url = `${API_BASE_URL}/teams/`;
   return (dispatch, state) => {
     return fetch(url, {
       headers: {
-        Authorization: `Bearer ${AUTH_DEV_TOKEN}`,
+        Authorization: `Bearer ${state().user.token}`,
         'Content-Type': 'application/json'
       },
       method: 'POST',
@@ -121,13 +119,12 @@ export function createTeam(team) {
   };
 }
 export function updateTeam(team, id) {
-  const url = `${API_DEV_BASE_URL}/teams/${id}`;
-  // Authorization: `Bearer ${state().user.token}`
+  const url = `${API_BASE_URL}/teams/${id}`;
   return (dispatch, state) => {
     return fetch(url,
       {
         headers: {
-          Authorization: `Bearer ${AUTH_DEV_TOKEN}`,
+          Authorization: `Bearer ${state().user.token}`,
           'Content-Type': 'application/json'
         },
         method: 'PATCH',
