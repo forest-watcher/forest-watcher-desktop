@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import MemberList from './MemberList';
+import { includes } from '../../../helpers/utils';
 
 class MembersManager extends React.Component {
   constructor() {
@@ -12,13 +13,10 @@ class MembersManager extends React.Component {
 
   handleAddEmail = async () => {
     const email = this.state.emailToSearch;
-    if (email) {
-      const availableUser = await this.props.addEmail(email);
-      if (availableUser) {
-        const updatedUsers = this.props.selectedUsers;
-        updatedUsers.push(availableUser);
-        this.props.updateSelectedUsers(updatedUsers);
-      }
+    const existingUsers = this.props.selectedUsers;
+    if (email && !includes(existingUsers.concat(this.props.selectedManagers), email)) {
+      existingUsers.push(email);
+      this.props.updateSelectedUsers(existingUsers);
     }
   }
 
