@@ -10,17 +10,9 @@ import Filters from './FiltersContainer';
 
 class Reports extends React.Component {
 
-  updateAnswers = () => {
-    const reportIds = this.props.templates.ids;
-    if (reportIds.length === 0) { 
-      // this.props.getUserTemplates(); 
-    } else {
-      this.props.getReportAnswers(reportIds[this.props.match.params.templateIndex || 0]);
-    }
-  }
-
   componentDidMount() {
-    this.updateAnswers();
+    const reportIds = this.props.templates.ids;
+    this.props.getReportAnswers(reportIds[this.props.match.params.templateIndex || 0]);
   }
 
   componentWillReceiveProps(nextProps){

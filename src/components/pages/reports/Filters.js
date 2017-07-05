@@ -56,7 +56,11 @@ class Filters extends React.Component {
       ));
     }
     if (answers.length > 0) {
-      areasOptions = answers.map((answer, index) => ({ label:answer.aoi, value: answer.aoi }))
+      answers.forEach((answer, index) => {
+        if (answer.aoi) {
+          areasOptions.push({ label: answer.aoi, value: answer.aoi })
+        }
+      });
     }
     return (
       <div className="row filter-bar">

@@ -27,7 +27,7 @@
     return answers.filter((answer) => answer.aoi === value);
   }
 
-  const mapStateToProps = ({ reports, templates }, { match, location }) => {
+  const mapStateToProps = ({ reports, templates, areas }, { match, location }) => {
     const templateId = templates.ids[match.params.templateIndex || 0];
     const searchParams = qs.parse(location.search);
     const { aoi, date, searchValues } = searchParams;
@@ -40,7 +40,7 @@
           date: moment(selectedAnswers[answer].attributes.createdAt).format(DEFAULT_FORMAT),
           latLong: selectedAnswers[answer].attributes.userPosition.toString(),
           member: selectedAnswers[answer].attributes.user,
-          aoi: selectedAnswers[answer].attributes.layer // TODO: Change to AOI instead of layer
+          aoi: areas.data[selectedAnswers[answer].attributes.areaOfInterest] ? areas.data[selectedAnswers[answer].attributes.areaOfInterest].attributes.name : null
         }))
         if (aoi !== undefined){ 
           answers = filterBy('aoi', answers, aoi);
