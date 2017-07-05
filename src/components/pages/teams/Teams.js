@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import Hero from '../../layouts/Hero';
 import Article from '../../layouts/Article';
 import TeamsForm from './TeamsFormContainer';
+import { FormattedMessage } from 'react-intl';
 
 class Teams extends React.Component {
   componentWillMount() {
@@ -12,37 +13,36 @@ class Teams extends React.Component {
 
   render() {
     const { team, editing, isManager } = this.props;
-    const actionName = this.props.team ? 'Edit' : 'Create'
     return (
       (team && !editing) ? 
         <div>
           {isManager ? 
             <Hero
-              title="My Team"
-              action={{name: actionName, callback: () => this.props.setEditing(true)}}
+              title={"teams.subtitle"}
+              action={{name: "common.edit", callback: () => this.props.setEditing(true)}}
             /> 
           : 
-            <Hero title="My Team" />
+            <Hero title={"teams.subtitle"} />
           }
           <div className="l-content">
             <Article>
               <div className="row">
                 <div className="small-6 columns">
                   <div className="section">
-                    <div className="title">Team name</div>
+                    <div className="title"><FormattedMessage id={"teams.teamName"} /></div>
                     <div>
                       {team && team.attributes.name}
                     </div>
                   </div>
                   <div className="section">
-                    <div className="title">Associated Areas of Interest </div>
+                    <div className="title"><FormattedMessage id={"teams.areas"} /></div>
                     {team && team.attributes.areas && team.attributes.areas.map((area, i) => (<div key={i}>{ area }</div>))}
                   </div>
                 </div>
                 <div className="small-6 columns">
 
                   <div className="section">
-                    <div className="title">Members</div>
+                    <div className="title"><FormattedMessage id={"teams.members"} /></div>
                   </div>
                   <div>
                     {team && team.attributes.managers && team.attributes.managers.map((manager) =>  (

@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import MemberList from './MemberList';
 import { includes } from '../../../helpers/utils';
+import { FormattedMessage, injectIntl } from 'react-intl';
 
 class MembersManager extends React.Component {
   constructor() {
@@ -57,16 +58,16 @@ class MembersManager extends React.Component {
     return (
       <div className="small-6 columns">
         <div className="input-group">
-          <label htmlFor="add-member" className="text">Members</label>
+          <label htmlFor="add-member" className="text"><FormattedMessage id={"teams.members"} /></label>
           <div className="horizontal-field-left">
             <input
               type="email"
               onChange={(event) => this.setState({ emailToSearch: event.target.value})}
               value={this.state.emailToSearch}
               name="add-member"
-              placeholder={"Find by email"}
+              placeholder={ this.props.intl.formatMessage({ id: 'teams.findByEmail' }) }
             />
-            <button type="button" onClick={this.handleAddEmail} className="c-button -light">Add</button>
+            <button type="button" onClick={this.handleAddEmail} className="c-button -light"><FormattedMessage id={"common.add"} /></button>
           </div>
           <MemberList 
             members={selectedManagers} 
@@ -92,4 +93,4 @@ MembersManager.propTypes = {
   updateSelectedUsers: PropTypes.func.isRequired
 };
 
-export default MembersManager;
+export default injectIntl(MembersManager);

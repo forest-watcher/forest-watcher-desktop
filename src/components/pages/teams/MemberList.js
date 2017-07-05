@@ -2,10 +2,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Icon from '../../ui/Icon';
 import Checkbox from '../../ui/Checkbox';
+import { injectIntl } from 'react-intl';
 
-function MemberList({ members, manager, handleChangeRole, deleteUser }) {
-  const memberType = manager ? 'Admin' : 'User'
-  const deleteClass = manager ? 'hidden' : ''
+function MemberList({ members, manager, handleChangeRole, deleteUser, intl }) {
+  const memberType = manager ? 'admin' : 'user';
+  const deleteClass = manager ? 'hidden' : '';
+  
   return (
     <div>
       {members.map((member) => (
@@ -13,7 +15,7 @@ function MemberList({ members, manager, handleChangeRole, deleteUser }) {
           <div className="user-label">{ member }</div>
           <Checkbox 
               id={`${memberType}${member}`} 
-              label={memberType} 
+              label={ intl.formatMessage({ id: "teams.admin" }) } 
               callback={() => handleChangeRole(member, !manager)} 
               defaultChecked={manager}/>
           <button className="delete-button" type="button" onClick={() => deleteUser(member)}>
@@ -32,4 +34,4 @@ MemberList.propTypes = {
   deleteUser: PropTypes.func.isRequired
 };
 
-export default MemberList;
+export default injectIntl(MemberList);

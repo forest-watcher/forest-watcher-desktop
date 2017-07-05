@@ -5,6 +5,7 @@ import { Input, Form } from '../../form/Form';
 import Hero from '../../layouts/Hero';
 import Select from 'react-select';
 import MembersManager from './MembersManager';
+import { FormattedMessage } from 'react-intl';
 
 class TeamsForm extends React.Component {
   constructor (props) {
@@ -86,18 +87,18 @@ class TeamsForm extends React.Component {
 
   render() {
     const { team, areaValues } = this.props;
-    const actionName = this.props.team ? 'Edit' : 'Create'
+    const title = this.props.team ? "teams.edit" : "teams.create";
     return (
       <div>
         <Hero
-          title={`${actionName} team`}
+          title={title}
         />
         <Form onSubmit={this.handleSubmit}>
           <div className="c-form">
             <div className="row">
               <div className="small-6 columns">
                 <div className="input-group">
-                  <label className="text">Team name</label>
+                  <label className="text"><FormattedMessage id={"teams.teamName"} /></label>
                   <Input
                     type="text"
                     onChange={this.onInputChange}
@@ -108,7 +109,7 @@ class TeamsForm extends React.Component {
                   />
                 </div>
                 <div className="input-group">
-                  <label className="text">Associated Areas of Interest</label>
+                  <label className="text"><FormattedMessage id={"teams.areas"} /></label>
                   <Select
                     multi
                     simpleValue
@@ -129,8 +130,8 @@ class TeamsForm extends React.Component {
               <div className="row small-12 columns">
                 <div className="c-form -nav">
                   { team &&
-                    <div><button type="button" onClick={this.handleCancel} className="c-button -light">Cancel</button></div>}
-                  <div><button type="submit" className="c-button -right">Save</button></div>
+                    <div><button type="button" onClick={this.handleCancel} className="c-button -light"><FormattedMessage id={"common.cancel"} /></button></div>}
+                  <div><button type="submit" className="c-button -right"><FormattedMessage id={"common.save"} /></button></div>
                 </div>
               </div>
             </div>
