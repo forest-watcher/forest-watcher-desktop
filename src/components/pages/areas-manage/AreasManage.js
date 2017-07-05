@@ -7,6 +7,7 @@ import { validation } from '../../../helpers/validation'; // eslint-disable-line
 import { checkArea } from '../../../helpers/areas';
 import { toastr } from 'react-redux-toastr';
 import Icon from '../../ui/Icon';
+import LocateUser from '../../ui/LocateUser';
 import ZoomControl from '../../ui/ZoomControl';
 import DrawControl from '../../draw-control/DrawControlContainer';
 import Attribution from '../../ui/Attribution';
@@ -106,6 +107,7 @@ class AreasManage extends React.Component {
               }}
             />
             <div className="c-map-controls">
+              <LocateUser map={this.state.map} />
               <ZoomControl
                 map={this.state.map}
                 zoom={this.state.mapConfig.zoom}
@@ -138,12 +140,12 @@ class AreasManage extends React.Component {
               />
               <Attribution />
             </div>
-            <Loader isLoading={this.props.saving} />
+            <Loader isLoading={this.props.saving || this.props.loading} />
           </div>
           <div className="row columns">
             <div className="c-form -nav">
               <Link to="/areas">
-                <button className="c-button -light" disabled={this.props.saving}><FormattedMessage id="forms.cancel" /></button>
+                <button className="c-button -light" disabled={this.props.saving || this.props.loading}><FormattedMessage id="forms.cancel" /></button>
               </Link>
               <div className="areas-inputs">
                 <div className="upload-field">
@@ -160,11 +162,11 @@ class AreasManage extends React.Component {
                     value={this.form.name}
                     placeholder={this.props.intl.formatMessage({ id: 'areas.nameAreaPlaceholder' })}
                     validations={['required']}
-                    disabled={this.props.saving}
+                    disabled={this.props.saving || this.props.loading}
                     />
                 </div>
               </div>
-              <Button className="c-button" disabled={this.props.saving || this.props.editing ? true : false}><FormattedMessage id="forms.save" /></Button>
+              <Button className="c-button" disabled={this.props.saving || (this.props.editing ? true : false) || this.props.loading}><FormattedMessage id="forms.save" /></Button>
             </div>
           </div>
         </Form>
