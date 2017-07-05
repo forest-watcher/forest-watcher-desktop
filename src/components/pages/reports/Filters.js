@@ -5,6 +5,7 @@ import Select from 'react-select';
 import { DEFAULT_LANGUAGE, DEFAULT_FORMAT } from '../../../constants/global';
 import DatePicker from 'react-datepicker';
 import moment from 'moment';
+import { injectIntl } from 'react-intl';
 
 import 'react-datepicker/dist/react-datepicker.css';
 
@@ -47,7 +48,9 @@ class Filters extends React.Component {
     let areasOptions = []
     if (templates.data) {
       options = Object.keys(templates.data).map((key, i) => (
-        { label: templates.data[key].attributes.name[DEFAULT_LANGUAGE], 
+        { label: templates.data[key].attributes.name[this.props.locale] ?
+          templates.data[key].attributes.name[this.props.locale] :
+          templates.data[key].attributes.name[DEFAULT_LANGUAGE],
           value: i
         }
       ));
@@ -60,20 +63,24 @@ class Filters extends React.Component {
         <div className="column">
           <Select
             name="template-select"
+            className="c-select"
             value={options[this.props.templateIndex || 0]}
             options={options}
             onChange={this.handleTemplateChange}
             clearable={false}
+            arrowRenderer={() => <svg className="c-icon -x-small -gray"><use xlinkHref="#icon-arrow-down"></use></svg>}
           />
         </div>
         <div className="column">
           <Select
+            className="c-select"
             name="area-filter"
             value={this.props.searchParams.aoi ? { label: this.props.searchParams.aoi, value: this.props.searchParams.aoi } : null}
             options={areasOptions}
             onChange={this.handleAreaChange}
             resetValue={{value: '', label: ''}}
-            placeholder={'Filter by Area'}
+            placeholder={this.props.intl.formatMessage({ id: 'filters.area' })}
+            arrowRenderer={() => <svg className="c-icon -x-small -gray"><use xlinkHref="#icon-arrow-down"></use></svg>}
           />
         </div>
         <div className="c-search-bar">
@@ -82,7 +89,7 @@ class Filters extends React.Component {
             onChange={this.handleSearchChange}
             value={this.props.searchParams.searchValues || ''}
             name="search-bar"
-            placeholder="Search"
+            placeholder={this.props.intl.formatMessage({ id: 'filters.search' })}
           />   
           <DatePicker
             className="datepicker"
@@ -90,7 +97,7 @@ class Filters extends React.Component {
             selected={this.props.searchParams.date && moment(this.props.searchParams.date, DEFAULT_FORMAT)}
             onChange={this.handleDateChange}
             isClearable={true}
-            placeholderText={"Filter by date"}
+            placeholderText={this.props.intl.formatMessage({ id: 'filters.date' })}
           />
         </div>  
       </div>
@@ -105,4 +112,4 @@ Filters.propTypes = {
   searchParams: PropTypes.object
 };
 
-export default Filters;
+export default injectIntl(Filters);

@@ -17,9 +17,16 @@ a {
     font-weight: $font-weight-light;
   }
 
-  &.-small-title {
+  &.-medium-title {
     font-size: $font-size-large;
     font-weight: $font-weight-light;
+  }
+
+  &.-small-title {
+    font-size: $font-size-medium;
+    font-weight: $font-weight-light;
+    text-transform: capitalize;
+    line-height: 1.5;
   }
 
   &.-x-small-title {

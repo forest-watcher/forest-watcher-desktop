@@ -2,50 +2,77 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { NavLink } from 'react-router-dom';
 import Icon from '../ui/Icon';
+import Select from 'react-select';
+import { FormattedMessage } from 'react-intl';
 
-function Nav({ loggedIn, logout }) {
-  return (
-    <div className="row column">
-      <nav className="c-nav">
-        <h1 className="nav-logo">
-          <NavLink exact to="/" activeClassName="-active">
-            <Icon className="-small" name="icon-forest-watcher-small"/>
-            Forest Watcher 2.0
-          </NavLink>
-        </h1>
-        <div className="nav-section">
-          {loggedIn &&
+class Nav extends React.Component {
+  constructor(props) {
+    super(props);
+    this.languages = Object.keys(props.translations).map((lang) => (
+      { value: lang, label: lang.toUpperCase() }
+    ));
+  }
+
+  handleLanguageChange = (e) => {
+    this.props.setLocale(e.value);
+  }
+
+  render() {
+    return (
+      <div className="row column">
+        <nav className="c-nav">
+          <h1 className="nav-logo">
+            <NavLink exact to="/" activeClassName="-active">
+              <Icon className="-small" name="icon-forest-watcher-small"/>
+              <FormattedMessage id="app.name" />
+            </NavLink>
+          </h1>
+          <div className="nav-section">
+            {this.props.loggedIn &&
+              <ul className="nav-subsection">
+                <li className="nav-link">
+                  <NavLink to="/areas" activeClassName="-active"><FormattedMessage id="areas.name" /></NavLink>
+                </li>
+                <li className="nav-link">
+                  <NavLink to="/templates" activeClassName="-active"><FormattedMessage id="templates.name" /></NavLink>
+                </li>
+                <li className="nav-link">
+                  <NavLink to="/reports" activeClassName="-active"><FormattedMessage id="reports.name" /></NavLink>
+                </li>
+                <li className="nav-link">
+                  <NavLink to="/teams" activeClassName="-active"><FormattedMessage id="teams.name" /></NavLink>
+                </li>
+              </ul>
+            }
             <ul className="nav-subsection">
-              <li className="nav-link">
-                <NavLink to="/areas" activeClassName="-active">Areas</NavLink>
-              </li>
-              <li className="nav-link">
-                <NavLink to="/templates" activeClassName="-active">Templates</NavLink>
-              </li>
-              <li className="nav-link">
-                <NavLink to="/reports" activeClassName="-active">Reports</NavLink>
-              </li>
-              <li className="nav-link">
-                <NavLink to="/teams" activeClassName="-active">My Team</NavLink>
-              </li>
+              <Select
+                name="locale-select"
+                className="c-select -dark"
+                value={this.props.locale}
+                options={this.languages}
+                onChange={this.handleLanguageChange}
+                clearable={false}
+                searchable={false}
+                arrowRenderer={() => <svg className="c-icon -x-small -gray"><use xlinkHref="#icon-arrow-down"></use></svg>}
+              />
+              {this.props.loggedIn &&
+                <li className="nav-menu">
+                  <a onClick={this.props.logout}><FormattedMessage id="app.logout" /></a>
+                </li>
+              }
             </ul>
-          }
-          {loggedIn &&
-            <ul>
-              <li className="nav-menu">
-                <a onClick={logout}>Log out</a>
-              </li>
-            </ul>
-          }
-        </div>
-      </nav>
-    </div>
-  );
+          </div>
+        </nav>
+      </div>
+    );
+  }
 }
 
 Nav.propTypes = {
   loggedIn: PropTypes.bool.isRequired,
-  logout: PropTypes.func
+  logout: PropTypes.func,
+  locale: PropTypes.string,
+  setLocale: PropTypes.func
 };
 
 export default Nav;

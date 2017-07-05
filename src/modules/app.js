@@ -1,15 +1,19 @@
 // Actions
 export const USER_CHECKED = 'app/USER_CHECKED';
+export const SET_LOCALE = 'app/SET_LOCALE';
 
 // Reducer
 const initialState = {
-  userChecked: false
+  userChecked: false,
+  locale: 'en'
 };
 
 export default function reducer(state = initialState, action) {
   switch (action.type) {
     case USER_CHECKED:
       return Object.assign({}, state, { userChecked: true });
+    case SET_LOCALE:
+      return Object.assign({}, state, { locale: action.payload });
     default:
       return state;
   }
@@ -19,5 +23,12 @@ export default function reducer(state = initialState, action) {
 export function setUserChecked() {
   return {
     type: USER_CHECKED
+  };
+}
+
+export function setLocale(locale) {
+  return {
+    type: SET_LOCALE,
+    payload: locale
   };
 }

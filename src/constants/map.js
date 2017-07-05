@@ -4,7 +4,7 @@ import L from 'leaflet';
 export const MAP_CONFIG = {
   minZoom: 2,
   initialZoom: 3,
-  basemap: 'http://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+  basemap: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
   center: [51.505, -0.09],
   attribution: ' | Tiles © Esri — Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community',
   zoomControl: false
@@ -14,6 +14,14 @@ export const POLYGON_STYLES = {
   color: '#ffffff',
   opacity: 1,
   fillColor: '#97be32',
+  fillOpacity: 0.5,
+  weight: 2
+};
+
+export const POLYGON_STYLES_ERROR = {
+  color: '#ffffff',
+  opacity: 1,
+  fillColor: '#f15656',
   fillOpacity: 0.5,
   weight: 2
 };
@@ -35,7 +43,7 @@ export const DRAW_CONTROL = {
         allowIntersection: false,
         drawError: {
           color: '#f15656',
-          message: '<strong>Oh snap!<strong> you can\'t draw that!'
+          message: "You can draw an area that intersects"
         },
         shapeOptions: POLYGON_STYLES,
         showArea: true,
@@ -76,4 +84,4 @@ export const AREAS = {
   maxSize: 1500000000 // square meters
 }
 
-export default { MAP_CONFIG, BLOB_CONFIG, DRAW_CONTROL, DRAW_CONTROL_DISABLED, AREAS };
+export default { MAP_CONFIG, BLOB_CONFIG, POLYGON_STYLES, POLYGON_STYLES_ERROR, DRAW_CONTROL, DRAW_CONTROL_DISABLED, AREAS };

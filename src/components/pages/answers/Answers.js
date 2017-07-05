@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
+import { FormattedMessage } from 'react-intl';
 
 class Answers extends React.Component {
 
@@ -13,8 +14,8 @@ class Answers extends React.Component {
   }
 
   getAnswerLink = ({ attributes, id }) => {
-    let dateString = 'No date';
-    let userString = 'No user';
+    let dateString = <FormattedMessage id="reports.dateString" />;
+    let userString = <FormattedMessage id="reports.userString" />;
     const date = attributes.responses.filter(response => response.question === 'date');
     const user = attributes.responses.filter(response => response.question === 'name');
     if (date && date[0]) {
@@ -25,9 +26,9 @@ class Answers extends React.Component {
     }
     return (
       <div>
-        <p><strong>Date: </strong>{dateString}</p>
-        <p><strong>User: </strong>{userString}</p>
-        <Link to={`/reports/${id}`}>Go to detail</Link>
+        <p><strong><FormattedMessage id="reports.date" />: </strong>{dateString}</p>
+        <p><strong><FormattedMessage id="reports.user" />: </strong>{userString}</p>
+        <Link to={`/reports/${id}`}><FormattedMessage id="reports.detailLink" /></Link>
       </div>
     );
   }
@@ -38,8 +39,8 @@ class Answers extends React.Component {
       <div className="row columns">
         <div className="c-dashboard">
           <div className="content-section answers">
-            <h4>Answers for the report template</h4>
-            <button onClick={this.onDownloadClick}> Download answers </button>
+            <h4><FormattedMessage id="reports.answersTitle" /></h4>
+            <button onClick={this.onDownloadClick}><FormattedMessage id="reports.downloadAnswers" /></button>
             <ul>
               {answers.map(answer => (<li key={answer.id}>{this.getAnswerLink(answer)}</li>))}
             </ul>
