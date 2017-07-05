@@ -12,7 +12,7 @@ class Teams extends React.Component {
   }
 
   render() {
-    const { team, editing, isManager } = this.props;
+    const { team, editing, isManager, areasOfInterest } = this.props;
     return (
       (team && !editing) ? 
         <div>
@@ -36,7 +36,14 @@ class Teams extends React.Component {
                   </div>
                   <div className="section">
                     <div className="title"><FormattedMessage id={"teams.areas"} /></div>
-                    {team && team.attributes.areas && team.attributes.areas.map((area, i) => (<div key={i}>{ area }</div>))}
+                    <div className="area-image-container">
+                      {team && areasOfInterest.map((area, i) => (
+                        <div key={i}>
+                          <img className="area-image" src={area.attributes.image} alt={area.attributes.name} />
+                          <div>{ area.attributes.name }</div>
+                        </div>
+                      ))}
+                    </div>
                   </div>
                 </div>
                 <div className="small-6 columns">
