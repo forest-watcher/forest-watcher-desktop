@@ -5,9 +5,9 @@ import AreasManage from './AreasManage';
 
 const readGeojson = (state, match) => {
   const areaId = match.params.areaId;
-  const area = state.areas.areas[areaId] || null;
+  const area = state.areas.data[areaId] || null;
   const geostoreId = area ? area.attributes.geostore : null;
-  const geostore = state.geostores.geostores[geostoreId] || null;
+  const geostore = state.geostores.data[geostoreId] || null;
   const geojson = geostore ? geostore.attributes.geojson.features[0] : null;
   if (geojson) geojson.properties = {}
   return geojson;
@@ -15,7 +15,7 @@ const readGeojson = (state, match) => {
 
 const readArea = (state, match) => {
   const areaId = match.params.areaId;
-  const area = state.areas.areas[areaId] || null;
+  const area = state.areas.data[areaId] || null;
   return area;
 }
 

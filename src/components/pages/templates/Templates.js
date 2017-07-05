@@ -9,11 +9,6 @@ import ReportCard from '../../report-card/ReportCardContainer';
 
 class Templates extends React.Component {
 
-  componentWillMount() {
-    const { getUserTemplates, templateIds } = this.props;
-    if(!templateIds.length) getUserTemplates();
-  }
-
   render() {
     const { templateIds } = this.props;
     return (

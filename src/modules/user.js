@@ -2,6 +2,7 @@ import querystring from 'query-string';
 import { setUserChecked } from './app';
 import { API_BASE_URL } from '../constants/global';
 import { getGeoStoresWithAreas } from './areas';
+import { getUserTemplates } from './templates';
 
 // Actions
 const GET_USER = 'user/GET_USER';
@@ -58,6 +59,7 @@ export function checkLogged(tokenParam) {
         });
         dispatch(setUserChecked());
         dispatch(getGeoStoresWithAreas());
+        dispatch(getUserTemplates());
       })
       .catch((error) => {
         if (user.loggedIn) {

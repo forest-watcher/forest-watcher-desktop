@@ -10,7 +10,7 @@ const SET_SAVING_GEOSTORE = 'areas/SET_SAVING_GEOSTORE';
 // Reducer
 const initialState = {
   ids: [],
-  geostores: {},
+  data: {},
   loading: false,
   saving: false
 };
@@ -22,13 +22,13 @@ export default function reducer(state = initialState, action) {
       if (state.ids.indexOf( ...Object.keys(geostore) ) > -1) {
         return {
           ...state,
-          geostores: { ...state.geostores, ...geostore }
+          data: { ...state.data, ...geostore }
         };
       } else {
         return {
           ...state,
           ids: [...state.ids, ...Object.keys(geostore)],
-          geostores: { ...state.geostores, ...geostore }
+          data: { ...state.data, ...geostore }
         };
       }
     }
