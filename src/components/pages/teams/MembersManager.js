@@ -70,8 +70,18 @@ class MembersManager extends React.Component {
             />
             <button type="button" onClick={this.handleAddEmail} className="c-button -light">Add</button>
           </div>
-          <MemberList members={selectedManagers} manager={true}/>
-          <MemberList members={selectedUsers} manager={false}/>
+          <MemberList 
+            members={selectedManagers} 
+            manager={true} 
+            handleChangeRole={this.handleChangeRole} 
+            deleteUser={this.deleteUser}
+          />
+          <MemberList 
+            members={selectedUsers} 
+            manager={false} 
+            handleChangeRole={this.handleChangeRole} 
+            deleteUser={this.deleteUser}
+          />
         </div>
       </div>
     );
