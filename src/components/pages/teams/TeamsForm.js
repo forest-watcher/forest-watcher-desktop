@@ -6,14 +6,16 @@ import Hero from '../../layouts/Hero';
 import Select from 'react-select';
 import MembersManager from './MembersManager';
 import { FormattedMessage } from 'react-intl';
+import { MANAGER, USER, CONFIRMED_USER } from '../../../constants/global';
 
 class TeamsForm extends React.Component {
   constructor (props) {
     super(props);
-    const selectedManagers = (props.team && props.team.attributes.managers.filter((user) => user !== props.userId)) || [];
+    const selectedManagers = (props.team && props.team.attributes.managers) || [];
     this.state = {
       selectedAreas: (props.team && props.team.attributes.areas.join()) || '',
       selectedUsers: (props.team && props.team.attributes.users) || [],
+      selectedConfirmedUsers: (props.team && props.team.attributes.confirmedUsers) || [],
       selectedManagers,
       emailToSearch: ''
     }
@@ -25,6 +27,7 @@ class TeamsForm extends React.Component {
       name: team && team.attributes.name,
       areas: (team && team.attributes.areas) || [],
       managers: (team && team.attributes.managers) || [],
+      confirmedUsers: (team && team.attributes.confirmedUsers) || [],
       users: (team && team.attributes.users) || []
     }
   }
@@ -40,6 +43,7 @@ class TeamsForm extends React.Component {
     this.setState({ 
       selectedAreas: team.attributes.areas.join(),
       selectedManagers: team.attributes.managers,
+      selectedConfirmedUsers: team.attributes.confirmedUsers || [],
       selectedUsers: team.attributes.users
     })
   }
@@ -48,10 +52,12 @@ class TeamsForm extends React.Component {
     e.preventDefault();
     const team = this.props.team;
     if ((!team && this.form.users.length > 0) ||
-         (team && (team.attributes.users !== this.form.users))) {
+         (team && (team.attributes.users !== this.form.users) && (team.attributes.users.lenght < this.form.users.lenght))) {
       this.props.sendNotifications();
     }
-    team ? this.props.updateTeam(this.form, this.props.team.id) : this.props.createTeam(this.form);
+    if (this.form.name){
+      (team) ? this.props.updateTeam(this.form, this.props.team.id) : this.props.createTeam(this.form);
+    }
   }
 
   setEditing = (value) => {
@@ -76,14 +82,23 @@ class TeamsForm extends React.Component {
     this.form[field] = value;
   }
 
-  updateSelectedUsers = (selectedUsers) => {
-    this.setState({ selectedUsers })
-    this.form.users = selectedUsers;
-  }
-
-  updateSelectedManagers = (selectedManagers) => {
-    this.setState({ selectedManagers })
-    this.form.managers = selectedManagers;
+  updateSelectedMembers = (selectedMembers, role) => {
+    switch (role) {
+      case MANAGER:
+        this.setState({ selectedManagers: selectedMembers });
+        this.form.managers = selectedMembers;    
+        break;
+      case CONFIRMED_USER:
+        this.setState({ selectedConfirmedUsers: selectedMembers });
+        this.form.confirmedUsers = selectedMembers;    
+        break;
+      case USER:
+        this.setState({ selectedUsers: selectedMembers });
+        this.form.users = selectedMembers;    
+        break;
+      default:
+        break;
+    }
   }
 
   render() {
@@ -123,9 +138,9 @@ class TeamsForm extends React.Component {
                 </div>
               </div>
               <MembersManager 
-                updateSelectedManagers={this.updateSelectedManagers}
-                updateSelectedUsers={this.updateSelectedUsers}
+                updateSelectedMembers={this.updateSelectedMembers}
                 selectedUsers={this.state.selectedUsers}
+                selectedConfirmedUsers={this.state.selectedConfirmedUsers}
                 selectedManagers={this.state.selectedManagers}
                 addEmail={this.props.addEmail}
               />

@@ -4,6 +4,7 @@ import MemberList from './MemberList';
 import { includes, validateEmail } from '../../../helpers/utils';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { toastr } from 'react-redux-toastr';
+import { MANAGER, USER, CONFIRMED_USER } from '../../../constants/global';
 
 class MembersManager extends React.Component {
   constructor() {
@@ -13,7 +14,7 @@ class MembersManager extends React.Component {
     }
   }
 
-  handleAddEmail = async () => {
+  handleAddEmail = () => {
     const email = this.state.emailToSearch;
     const existingUsers = this.props.selectedUsers;
     if (email){
@@ -25,46 +26,65 @@ class MembersManager extends React.Component {
       if (isNotOnTheList) {
         existingUsers.push(email);
         this.setState({ emailToSearch: '' });
-        this.props.updateSelectedUsers(existingUsers);
+        this.props.updateSelectedMembers(existingUsers, USER);
       }
 
     }
   }
 
-  deleteUser = (deletedUser) => {
-    const updatedUsers = this.props.selectedUsers.filter(user => user !== deletedUser);
-    this.props.updateSelectedUsers(updatedUsers);
+  getPropName(role){
+    let propName = null;
+    switch (role) {
+      case MANAGER:
+        propName = 'selectedManagers';
+        break;
+      case USER:
+        propName = 'selectedUsers';
+        break;
+      case CONFIRMED_USER:
+        propName = 'selectedConfirmedUsers';
+        break;
+      default:
+        break;
+    }
+    return propName;
   }
 
-  addUser = (user) => {
-    const updatedUsers = this.props.selectedUsers;
-    updatedUsers.push(user);
-    this.props.updateSelectedUsers(updatedUsers);
+  deleteMember = (deletedMember, role) => {
+    const updatedMembers = this.props[this.getPropName(role)].filter(member => member !== deletedMember);
+    this.props.updateSelectedMembers(updatedMembers, role);
   }
 
-  deleteManager = (deletedManager) => {
-    const updatedManagers = this.props.selectedManagers.filter(manager => manager !== deletedManager);
-    this.props.updateSelectedManagers(updatedManagers);
-  }
-
-  addManager = (manager) => {
-    const updatedManagers = this.props.selectedManagers;
-    updatedManagers.push(manager);
-    this.props.updateSelectedManagers(updatedManagers);
+  addMember = (member, role) => {
+    const updatedMembers = this.props[this.getPropName(role)];
+    updatedMembers.push(member);
+    this.props.updateSelectedMembers(updatedMembers, role);
   }
 
   handleChangeRole = (member, toAdmin) => {
     if (toAdmin){
-      this.addManager(member);
-      this.deleteUser(member);
+      this.addMember(member, MANAGER);
+      this.deleteMember(member, CONFIRMED_USER);
     } else {
-      this.addUser(member);
-      this.deleteManager(member);
+      this.addMember(member, CONFIRMED_USER);
+      this.deleteMember(member, MANAGER);
     }
   }
 
+  compareById = (a,b) => {
+    if (a.id < b.id) return -1;
+    if (a.id > b.id) return 1;
+    return 0;
+  }
+
+  getMembers = () => {
+    const { selectedUsers, selectedManagers, selectedConfirmedUsers } = this.props;
+    let members = selectedManagers.map((managerId) => ({ memberType: MANAGER, id: managerId }));
+    members = members.concat(selectedConfirmedUsers.map((confirmedUserId) => ({ memberType: CONFIRMED_USER, id: confirmedUserId })));
+    return members.concat(selectedUsers.map((userId) => ({ memberType: USER, id: userId }))).sort(this.compareById);
+  }
+
   render() {
-    const { selectedUsers, selectedManagers } = this.props;
     return (
       <div className="small-6 columns">
         <div className="input-group">
@@ -80,16 +100,9 @@ class MembersManager extends React.Component {
             <button type="button" onClick={this.handleAddEmail} className="c-button -light"><FormattedMessage id={"common.add"} /></button>
           </div>
           <MemberList 
-            members={selectedManagers} 
-            manager={true} 
+            members={this.getMembers()} 
             handleChangeRole={this.handleChangeRole} 
-            deleteUser={this.deleteUser}
-          />
-          <MemberList 
-            members={selectedUsers} 
-            manager={false} 
-            handleChangeRole={this.handleChangeRole} 
-            deleteUser={this.deleteUser}
+            deleteMember={this.deleteMember}
           />
         </div>
       </div>
@@ -99,8 +112,9 @@ class MembersManager extends React.Component {
 
 MembersManager.propTypes = {
   selectedManagers: PropTypes.array.isRequired,
+  selectedConfirmedUsers: PropTypes.array.isRequired,
   selectedUsers: PropTypes.array.isRequired,
-  updateSelectedUsers: PropTypes.func.isRequired
+  updateSelectedMembers: PropTypes.func.isRequired
 };
 
 export default injectIntl(MembersManager);

@@ -81,6 +81,7 @@ const getBody = (team) => {
   return JSON.stringify({
     name: team.name,
     managers: team.managers.filter(unique),
+    confirmedUsers: team.confirmedUsers.filter(unique),
     users: team.users.filter(unique),
     areas: team.areas
   })
