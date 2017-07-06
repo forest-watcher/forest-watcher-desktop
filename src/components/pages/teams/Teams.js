@@ -61,7 +61,7 @@ class Teams extends React.Component {
                     <div className="section">
                       <div className="title"><FormattedMessage id={"teams.members"} /></div>
                     </div>
-                    <div>
+                    <div className="c-member-list">
                       {team && team.attributes.managers && team.attributes.managers.map((manager) =>  (
                         <div className="horizontal-field-left" key={manager}>
                           { manager }

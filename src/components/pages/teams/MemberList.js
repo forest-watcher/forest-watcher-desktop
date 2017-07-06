@@ -8,24 +8,26 @@ import { MANAGER, USER } from '../../../constants/global';
 
 function MemberList({ members, handleChangeRole, deleteMember, intl }) {
   return (
-    <div>
+    <div className="c-member-list">
       { members.map((member, index) => {
-        const isAdmin = member.memberType === MANAGER;
-        const deleteClass = member.memberType === MANAGER ? 'hidden' : '';
-        const memberId = member.id;
+        const { id, memberType } = member;
+        const isAdmin = memberType === MANAGER;
+        const hiddenButton = memberType === MANAGER ? 'hidden' : '';
         return (
-          <div key={memberId} className="horizontal-field-left">
-            <div className="user-label">{ memberId }</div>
-            {(member.memberType) !== USER && 
+          <div key={id} className="horizontal-field-left">
+            <div className="user-label">{ id }</div>
+            {(memberType) !== USER && 
               <Checkbox 
-                  id={memberId} 
+                  id={id} 
                   label={ intl.formatMessage({ id: "teams.admin" }) } 
-                  callback={() => handleChangeRole(memberId, !isAdmin)} 
+                  callback={() => handleChangeRole(id, !isAdmin)} 
                   defaultChecked={isAdmin}/>
             }
-            <button className="delete-button" type="button" onClick={() => deleteMember(memberId, member.memberType)}>
-              <Icon name="icon-delete" className={"-small " + deleteClass } />
-            </button>
+            <div className={hiddenButton}>
+              <button className={"delete-button"} type="button" onClick={() => deleteMember(id, memberType)}>
+                <Icon name="icon-delete" className="-small " />
+              </button>
+            </div>
           </div>
         )
       })}
