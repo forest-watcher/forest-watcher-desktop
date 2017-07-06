@@ -32,6 +32,7 @@
     const searchParams = qs.parse(location.search);
     const { aoi, date, searchValues } = searchParams;
     let answers = [];
+    let areasOptions = [];
     if (templateId !== undefined && reports.answers[templateId]){
       const selectedAnswers = reports.answers[templateId].data;
       if (selectedAnswers !== undefined) {
@@ -40,8 +41,14 @@
           date: moment(selectedAnswers[answer].attributes.createdAt).format(DEFAULT_FORMAT),
           latLong: selectedAnswers[answer].attributes.userPosition.toString(),
           member: selectedAnswers[answer].attributes.user,
-          aoi: areas.data[selectedAnswers[answer].attributes.areaOfInterest] ? areas.data[selectedAnswers[answer].attributes.areaOfInterest].attributes.name : null
+          aoi: selectedAnswers[answer].attributes.areaOfInterest ? selectedAnswers[answer].attributes.areaOfInterest : null
         }))
+        answers.forEach((answer) => {
+          if (areas.ids.indexOf(answer.aoi) > -1 && areasOptions.indexOf(answer.aoi) < 0) {
+            debugger
+            areasOptions.push({ label: areas.data[answer.aoi] && areas.data[answer.aoi].attributes.name, value: answer.aoi });
+          }
+        });
         if (aoi !== undefined){ 
           answers = filterBy('aoi', answers, aoi);
         }
@@ -56,6 +63,7 @@
     return {
       templates,
       answers,
+      areasOptions,
       loading: templates.loading
     };
   };

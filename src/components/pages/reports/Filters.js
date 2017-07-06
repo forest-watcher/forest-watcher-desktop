@@ -12,16 +12,17 @@ import 'react-datepicker/dist/react-datepicker.css';
 import qs from 'query-string';
 
 class Filters extends React.Component {
+
   handleTemplateChange = (selected) => {
     this.props.history.push({
-      pathname: `/reports/template/${selected.value}`,
+      pathname: `/reports/${selected.value}/answers`,
       search: qs.stringify(this.props.searchParams)
     })
   }
 
   redirectWith(searchParams){
     this.props.history.push({
-      pathname: `/reports/template/${this.props.templateId || 0}`,
+      pathname: `/reports/${this.props.match.params.templateIndex}/answers`,
       search: qs.stringify(searchParams)
     })
   }
@@ -43,9 +44,8 @@ class Filters extends React.Component {
   }
   
   render() {
-    const { answers, templates } = this.props;
+    const { templates, areasOptions } = this.props;
     let options = []
-    let areasOptions = []
     if (templates.data) {
       options = Object.keys(templates.data).map((key, i) => (
         { label: templates.data[key].attributes.name[this.props.locale] ?
@@ -54,13 +54,6 @@ class Filters extends React.Component {
           value: i
         }
       ));
-    }
-    if (answers.length > 0) {
-      answers.forEach((answer, index) => {
-        if (answer.aoi) {
-          areasOptions.push({ label: answer.aoi, value: answer.aoi })
-        }
-      });
     }
     return (
       <div className="row filter-bar">
@@ -79,7 +72,7 @@ class Filters extends React.Component {
           <Select
             className="c-select"
             name="area-filter"
-            value={this.props.searchParams.aoi ? { label: this.props.searchParams.aoi, value: this.props.searchParams.aoi } : null}
+            value={this.props.searchParams.aoi || null}
             options={areasOptions}
             onChange={this.handleAreaChange}
             resetValue={{value: '', label: ''}}

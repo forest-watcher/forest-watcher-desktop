@@ -61,6 +61,7 @@ class Reports extends React.Component {
             <Article>
               <Filters
                 answers={answers}
+                areasOptions={this.props.areasOptions}
               />
               <ReactTable
                 className="c-table"
