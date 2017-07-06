@@ -215,3 +215,12 @@ export function setSaving(bool) {
     });
   };
 }
+
+export function setLoading(bool) {
+  return (dispatch) => {
+    dispatch({
+      type: SET_LOADING_AREAS,
+      payload: bool
+    });
+  };
+}

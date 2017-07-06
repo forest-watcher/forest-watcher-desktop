@@ -107,7 +107,7 @@ class AreasManage extends React.Component {
               }}
             />
             <div className="c-map-controls">
-              <LocateUser map={this.state.map} />
+              <LocateUser map={this.state.map} setLoading={this.props.setLoading} />
               <ZoomControl
                 map={this.state.map}
                 zoom={this.state.mapConfig.zoom}
