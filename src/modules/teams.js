@@ -96,14 +96,14 @@ export function createTeam(team) {
       .then((response) => {
         const team = response.data;
         dispatch({
-          type: SAVE_TEAM,
-          payload: team
-        });
-        dispatch(getTeam(state().user.id));
-        dispatch({
           type: SET_EDITING,
           payload: false
         });
+        dispatch({
+          type: SAVE_TEAM,
+          payload: team
+        });
+        dispatch(getTeam(state().user.data.id));
         if (state().teams.sendNotifications) {
           dispatch({
             type: SEND_NOTIFICATIONS,
