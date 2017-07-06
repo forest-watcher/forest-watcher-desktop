@@ -1,8 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import MemberList from './MemberList';
-import { includes } from '../../../helpers/utils';
+import { includes, validateEmail } from '../../../helpers/utils';
 import { FormattedMessage, injectIntl } from 'react-intl';
+import { toastr } from 'react-redux-toastr';
 
 class MembersManager extends React.Component {
   constructor() {
@@ -15,9 +16,18 @@ class MembersManager extends React.Component {
   handleAddEmail = async () => {
     const email = this.state.emailToSearch;
     const existingUsers = this.props.selectedUsers;
-    if (email && !includes(existingUsers.concat(this.props.selectedManagers), email)) {
-      existingUsers.push(email);
-      this.props.updateSelectedUsers(existingUsers);
+    if (email){
+      if (!validateEmail(email)) {
+        toastr.error('Email is invalid');
+        return;
+      }
+      const isNotOnTheList = !includes(existingUsers.concat(this.props.selectedManagers), email);
+      if (isNotOnTheList) {
+        existingUsers.push(email);
+        this.setState({ emailToSearch: '' });
+        this.props.updateSelectedUsers(existingUsers);
+      }
+
     }
   }
 

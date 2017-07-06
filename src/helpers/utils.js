@@ -13,4 +13,10 @@ const diff = (original, toSubstract) => {
 	return original.filter((i) => toSubstract.indexOf(i) < 0);
 };
 
-export { includes, unique, diff };
+const filterEmpty = (array) => array.filter((elem) => elem);
+
+const validateEmail = (email) => {
+	var regexp = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/; // eslint-disable-line
+	return regexp.test(email);
+}
+export { includes, unique, diff, filterEmpty, validateEmail };
