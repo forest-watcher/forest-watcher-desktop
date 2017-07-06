@@ -7,6 +7,7 @@ import ReactTable from 'react-table'
 import 'react-select/dist/react-select.css';
 import { FormattedMessage } from 'react-intl';
 import Filters from './ReportsFiltersContainer';
+import Loader from '../../ui/Loader';
 
 class Reports extends React.Component {
 
@@ -65,13 +66,16 @@ class Reports extends React.Component {
                 areasOptions={this.props.areasOptions}
                 templateOptions={this.props.templateOptions}
               />
-              <ReactTable
-                className="c-table"
-                data={answers || []}
-                columns={columns}
-                showPageSizeOptions={false}
-                minRows={5}
-              />
+              <div className="l-content">
+                <ReactTable
+                  className="c-table"
+                  data={answers || []}
+                  columns={columns}
+                  showPageSizeOptions={false}
+                  minRows={5}
+                />
+                <Loader isLoading={this.props.loadingTemplates || this.props.loadingReports} />
+              </div>
             </Article>
           </div>
       </div>
