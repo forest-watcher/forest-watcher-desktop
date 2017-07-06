@@ -78,12 +78,10 @@ export function getTeam(userId) {
 }
 
 const getBody = (team) => {
-  // Managers are always users
-  const users = team.users.concat(team.managers).filter(unique);
   return JSON.stringify({
     name: team.name,
     managers: team.managers.filter(unique),
-    users,
+    users: team.users.filter(unique),
     areas: team.areas
   })
 }
