@@ -54,6 +54,12 @@
     }
   }
 
+  .-main {
+    min-height: 500px; 
+    height:auto !important; 
+    height: 500px; 
+  }
+
   &.-nav {
     height: $footer-height;
     display: flex;

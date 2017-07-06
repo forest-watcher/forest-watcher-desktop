@@ -111,7 +111,7 @@ class TeamsForm extends React.Component {
         />
         <Form onSubmit={this.handleSubmit}>
           <div className="c-form">
-            <div className="row">
+            <div className="row -main">
               <div className="small-6 columns">
                 <div className="input-group">
                   <label className="text"><FormattedMessage id={"teams.teamName"} /></label>
@@ -144,13 +144,13 @@ class TeamsForm extends React.Component {
                 selectedManagers={this.state.selectedManagers}
                 addEmail={this.props.addEmail}
               />
-              <div className="row small-12 columns">
-                <div className="c-form -nav">
-                  { team &&
-                    <div><button type="button" onClick={this.handleCancel} className="c-button -light"><FormattedMessage id={"common.cancel"} /></button></div>}
-                  <div><button type="submit" className="c-button -right"><FormattedMessage id={"common.save"} /></button></div>
-                </div>
+            <div className="row small-12 columns">
+              <div className="c-form -nav">
+                { team &&
+                  <div><button type="button" onClick={this.handleCancel} className="c-button -light"><FormattedMessage id={"common.cancel"} /></button></div>}
+                <div><button type="submit" className="c-button -right"><FormattedMessage id={"common.save"} /></button></div>
               </div>
+            </div>
             </div>
           </div>
         </Form>

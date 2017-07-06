@@ -48,6 +48,10 @@
     font-size: 12px;
   }
 
+  &.-right {
+    margin-left: auto;
+  }
+
   &.-white {
     background-color: $white;
     border: 0;
