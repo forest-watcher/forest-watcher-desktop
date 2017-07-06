@@ -1,6 +1,6 @@
 import { connect } from 'react-redux'; 
 import { withRouter } from 'react-router'
-import Filters from './Filters';
+import Filters from './ReportsFilters';
 import qs from 'query-string';
 
 

@@ -3,7 +3,7 @@ import moment from 'moment'
 import { getUserTemplates } from '../../../modules/templates';
 import { getReportAnswers, setSelectedTemplateIndex, setTemplateSearchParams, downloadAnswers } from '../../../modules/reports';
 
-import { DEFAULT_FORMAT } from '../../../constants/global';
+import { DEFAULT_FORMAT, DEFAULT_LANGUAGE } from '../../../constants/global';
 import qs from 'query-string';
 import Reports from './Reports';
 import filterBy from '../../../helpers/filters';
@@ -32,13 +32,26 @@ const getAnswersAreas = (answers, areas) => {
   return areasOptions;
 }
 
+const getTemplateOptions = (templates) => {
+  const templateOptions = Object.keys(templates.data).map((key) => (
+    { label: templates.data[key].attributes.name[DEFAULT_LANGUAGE] ?
+             templates.data[key].attributes.name[DEFAULT_LANGUAGE] :
+             templates.data[key].attributes.name[templates.data[key].attributes.defaultLanguage],
+      value: templates.data[key].id
+    }
+  ));
+  return templateOptions;
+}
+
 const mapStateToProps = ({ areas, templates, reports }, { match, location }) => {
   const searchParams = qs.parse(location.search);
   const { aoi, date, searchValues } = searchParams;
   const templateId = match.params.templateId || 0;
   let areasOptions = [];
   let answers = [];
+  let templateOptions = [];
   if (templateId !== 0 && reports.answers[templateId]) {
+    templateOptions = getTemplateOptions(templates);
     answers = getAnswersByTemplate(templateId, reports);
     areasOptions = getAnswersAreas(answers, areas);
     if (aoi !== undefined){ 
@@ -52,9 +65,11 @@ const mapStateToProps = ({ areas, templates, reports }, { match, location }) => 
     }
   }
   return {
+    templateOptions,
     templates,
     answers,
     areasOptions,
+    reports,
     loading: templates.loading
   };
 };

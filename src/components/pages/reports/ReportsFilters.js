@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import Select from 'react-select';
-import { DEFAULT_LANGUAGE, DEFAULT_FORMAT } from '../../../constants/global';
+import { DEFAULT_FORMAT } from '../../../constants/global';
 import DatePicker from 'react-datepicker';
 import moment from 'moment';
 import { injectIntl } from 'react-intl';
@@ -12,6 +12,13 @@ import 'react-datepicker/dist/react-datepicker.css';
 import qs from 'query-string';
 
 class Filters extends React.Component {
+  
+  redirectWith(searchParams){
+    this.props.history.push({
+      pathname: `/reports/${this.props.match.params.templateIndex}`,
+      search: qs.stringify(searchParams)
+    })
+  }
 
   handleTemplateChange = (selected) => {
     this.props.history.push({
@@ -20,11 +27,9 @@ class Filters extends React.Component {
     })
   }
 
-  redirectWith(searchParams){
-    this.props.history.push({
-      pathname: `/reports/${this.props.match.params.templateIndex}/answers`,
-      search: qs.stringify(searchParams)
-    })
+  handleAreaChange = (selected) => {
+    const searchParams = Object.assign(this.props.searchParams, { aoi: selected.value || undefined });
+    this.redirectWith(searchParams);
   }
 
   handleSearchChange = (event) => {
@@ -38,23 +43,8 @@ class Filters extends React.Component {
     this.redirectWith(searchParams);
   }
 
-  handleAreaChange = (selected) => {
-    const searchParams = Object.assign(this.props.searchParams, { aoi: selected.value || undefined });
-    this.redirectWith(searchParams);
-  }
-  
   render() {
-    const { templates, areasOptions } = this.props;
-    let options = []
-    if (templates.data) {
-      options = Object.keys(templates.data).map((key) => (
-        { label: templates.data[key].attributes.name[this.props.locale] ?
-          templates.data[key].attributes.name[this.props.locale] :
-          templates.data[key].attributes.name[DEFAULT_LANGUAGE],
-          value: templates.data[key].id
-        }
-      ));
-    }
+    const { templateOptions, areasOptions } = this.props;
     return (
       <div className="row filter-bar">
         <div className="column">
@@ -62,9 +52,10 @@ class Filters extends React.Component {
             name="template-select"
             className="c-select"
             value={this.props.match.params.templateId || 0}
-            options={options}
+            options={templateOptions}
             onChange={this.handleTemplateChange}
             clearable={false}
+            searchable={false}
             arrowRenderer={() => <svg className="c-icon -x-small -gray"><use xlinkHref="#icon-arrow-down"></use></svg>}
           />
         </div>

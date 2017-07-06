@@ -6,7 +6,7 @@ import Hero from '../../layouts/Hero';
 import ReactTable from 'react-table'
 import 'react-select/dist/react-select.css';
 import { FormattedMessage } from 'react-intl';
-import Filters from './FiltersContainer';
+import Filters from './ReportsFiltersContainer';
 
 class Reports extends React.Component {
 
@@ -23,22 +23,14 @@ class Reports extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (this.props.templates.ids.length !== nextProps.templates.ids.length) {
-      if (!nextProps.match.params.templateId) {
-        this.props.history.push(`/reports/${nextProps.templates.ids[0]}`);
-        this.props.getReportAnswers(nextProps.templates.ids[0]);
-      } else {
-        this.props.getReportAnswers(nextProps.match.params.templateId);
-      }
+    if (this.props.templates.ids.length !== nextProps.templates.ids.length && !nextProps.match.params.templateId) {
+      this.props.history.push(`/reports/${nextProps.templates.ids[0]}`);
+    }
+    if (nextProps.match.params.templateId !== this.props.match.params.templateId && 
+        !nextProps.reports.answers[nextProps.match.params.templateId]) {
+      this.props.getReportAnswers(nextProps.match.params.templateId);
     }
   }
-
-  // shouldComponentUpdate(nextProps, nextState){
-  //   return this.props.templates.ids.length !== nextProps.templates.ids.length || 
-  //          this.props.match.params.templateId !== nextProps.match.params.templateId ||
-  //          this.props.answers !== nextProps.answers || 
-  //          this.props.location.search !== nextProps.location.search;
-  // }
 
   downloadReports = () => {
     this.props.downloadAnswers(this.props.match.params.templateId);
@@ -71,6 +63,7 @@ class Reports extends React.Component {
               <Filters
                 answers={answers}
                 areasOptions={this.props.areasOptions}
+                templateOptions={this.props.templateOptions}
               />
               <ReactTable
                 className="c-table"
