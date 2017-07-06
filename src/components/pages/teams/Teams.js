@@ -37,12 +37,12 @@ class Teams extends React.Component {
                   <div className="section">
                     <div className="title"><FormattedMessage id={"teams.areas"} /></div>
                     <div className="area-image-container">
-                      {team && areasOfInterest.map((area, i) => (
+                      {team && areasOfInterest.map((area, i) => ( area && (
                         <div key={i}>
                           <img className="area-image" src={area.attributes.image} alt={area.attributes.name} />
                           <div>{ area.attributes.name }</div>
                         </div>
-                      ))}
+                      )))}
                     </div>
                   </div>
                 </div>
