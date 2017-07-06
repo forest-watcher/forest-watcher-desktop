@@ -117,6 +117,7 @@ class TeamsForm extends React.Component {
                     options={areaValues}
                     value={this.state.selectedAreas}
                     onChange={this.onAreaChange}
+                    searchable={false}
                   />
                 </div>
               </div>
