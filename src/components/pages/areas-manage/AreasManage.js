@@ -107,18 +107,20 @@ class AreasManage extends React.Component {
               }}
             />
             <div className="c-map-controls">
-              <LocateUser 
-                map={this.state.map} 
-                setLoading={this.props.setLoading}
-                onZoomChange={ (zoom) => {
-                  this.setState({
-                    mapConfig: {
-                      ...this.state.mapConfig,
-                      zoom
-                    }
-                  });
-                }}
-              />
+              { this.props.mode === 'create' &&
+                <LocateUser 
+                  map={this.state.map} 
+                  setLoading={this.props.setLoading}
+                  onZoomChange={ (zoom) => {
+                    this.setState({
+                      mapConfig: {
+                        ...this.state.mapConfig,
+                        zoom
+                      }
+                    });
+                  }}
+                />
+              }
               <ZoomControl
                 map={this.state.map}
                 zoom={this.state.mapConfig.zoom}
