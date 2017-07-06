@@ -24,11 +24,13 @@ const mapStateToProps = ({ user, teams, areas }) => {
   team = removeManagersfromUsers(teams.data);
   let areasIds = (team && team.attributes.areas) || [];
   areasIds = filterEmpty(areasIds);
+
   const areasOfInterest = areasIds.map((areaId) => areas.areas[areaId]);
     return { 
       team,
       isManager,
       editing: teams.editing,
+      loading: teams.loading,
       userId,
       areasOfInterest
     };

@@ -6,12 +6,15 @@ import { toastr } from 'react-redux-toastr';
 const GET_TEAM = 'teams/GET_TEAM';
 const SAVE_TEAM = 'teams/SAVE_TEAM';
 const SET_EDITING = 'teams/SET_EDITING';
+const SET_LOADING = 'teams/SET_LOADING';
 const SEND_NOTIFICATIONS = 'teams/SEND_NOTIFICATIONS'
 
 // Reducer
 const initialState = {
   data: null,
-  sendNotifications: false
+  sendNotifications: false,
+  editing: false,
+  loading: true
 };
 
 export default function reducer(state = initialState, action) {
@@ -30,6 +33,9 @@ export default function reducer(state = initialState, action) {
     }
     case SET_EDITING:{
       return Object.assign({}, state, { editing: action.payload });
+    }
+    case SET_LOADING:{
+      return Object.assign({}, state, { loading: action.payload });
     }
     case SEND_NOTIFICATIONS:{
       return Object.assign({}, state, { sendNotifications: action.payload });
@@ -58,6 +64,10 @@ export function getTeam(userId) {
         dispatch({
           type: GET_TEAM,
           payload: team
+        });
+        dispatch({
+          type: SET_LOADING,
+          payload: false
         });
         return team;
       })
@@ -98,6 +108,10 @@ export function createTeam(team) {
         dispatch({
           type: SET_EDITING,
           payload: false
+        });
+        dispatch({
+          type: SET_LOADING,
+          payload: true
         });
         dispatch({
           type: SAVE_TEAM,
@@ -141,6 +155,10 @@ export function updateTeam(team, id) {
           type: SAVE_TEAM,
           payload: team
         });
+        dispatch({
+          type: SET_LOADING,
+          payload: true
+        });
         dispatch(getTeam(state().user.data.id));
         dispatch({
           type: SET_EDITING,
@@ -164,6 +182,13 @@ export function updateTeam(team, id) {
 export function setEditing(value) {
   return {
     type: SET_EDITING,
+    payload: value
+  };
+}
+
+export function setLoading(value) {
+  return {
+    type: SET_LOADING,
     payload: value
   };
 }
