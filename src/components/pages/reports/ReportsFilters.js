@@ -15,15 +15,14 @@ class Filters extends React.Component {
   
   redirectWith(searchParams){
     this.props.history.push({
-      pathname: `/reports/${this.props.match.params.templateIndex}`,
+      pathname: `/reports/${this.props.match.params.templateId}`,
       search: qs.stringify(searchParams)
     })
   }
 
   handleTemplateChange = (selected) => {
     this.props.history.push({
-      pathname: `/reports/${selected.value}`,
-      search: qs.stringify(this.props.searchParams)
+      pathname: `/reports/${selected.value}`
     })
   }
 
@@ -67,6 +66,7 @@ class Filters extends React.Component {
             options={areasOptions}
             onChange={this.handleAreaChange}
             resetValue={{value: '', label: ''}}
+            searchable={false}
             placeholder={this.props.intl.formatMessage({ id: 'filters.area' })}
             arrowRenderer={() => <svg className="c-icon -x-small -gray"><use xlinkHref="#icon-arrow-down"></use></svg>}
           />

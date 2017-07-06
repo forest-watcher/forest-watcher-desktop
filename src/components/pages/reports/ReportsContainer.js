@@ -6,7 +6,7 @@ import { getReportAnswers, setSelectedTemplateIndex, setTemplateSearchParams, do
 import { DEFAULT_FORMAT, DEFAULT_LANGUAGE } from '../../../constants/global';
 import qs from 'query-string';
 import Reports from './Reports';
-import filterBy from '../../../helpers/filters';
+import { filterBy } from '../../../helpers/filters';
 
 
 const getAnswersByTemplate = (templateId, reports) => {
@@ -23,9 +23,11 @@ const getAnswersByTemplate = (templateId, reports) => {
 }
 
 const getAnswersAreas = (answers, areas) => {
+  const areasIndex = [];
   const areasOptions = [];
   answers.forEach((answer) => {
-    if (areas.ids.indexOf(answer.aoi) > -1 && areasOptions.indexOf(answer.aoi) === -1) {
+    if (areas.ids.indexOf(answer.aoi) > -1 && areasIndex.indexOf(answer.aoi) === -1) {
+      areasIndex.push(answer.aoi);
       areasOptions.push({ label: areas.data[answer.aoi] && areas.data[answer.aoi].attributes.name, value: answer.aoi });
     }
   });
