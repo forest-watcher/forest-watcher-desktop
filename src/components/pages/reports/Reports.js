@@ -10,29 +10,38 @@ import Filters from './FiltersContainer';
 
 class Reports extends React.Component {
 
-  componentDidMount() {
-    const reportIds = this.props.templates.ids;
-    this.props.getReportAnswers(reportIds[this.props.match.params.templateIndex || 0]);
-  }
-
-  componentWillReceiveProps(nextProps){
-    const nextTemplateIndex = nextProps.match.params.templateIndex;
-    if (this.props.templates.ids.length !== nextProps.templates.ids.length || 
-        this.props.match.params.templateIndex !== nextTemplateIndex) {
-      this.props.getReportAnswers(nextProps.templates.ids[nextTemplateIndex || 0]);
+  componentWillMount() {
+    if (!this.props.match.params.templateId && this.props.templates.ids[0]) {
+      this.props.history.push(`/reports/${this.props.templates.ids[0]}`);
     }
   }
 
-  shouldComponentUpdate(nextProps, nextState){
-    return this.props.templates.ids.length !== nextProps.templates.ids.length || 
-           this.props.match.params.templateIndex !== nextProps.match.params.templateIndex ||
-           this.props.answers !== nextProps.answers || 
-           this.props.location.search !== nextProps.location.search;
+  componentDidMount() {
+    if (this.props.match.params.templateId) {
+      this.props.getReportAnswers(this.props.match.params.templateId);
+    }
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (this.props.templates.ids.length !== nextProps.templates.ids.length) {
+      if (!nextProps.match.params.templateId) {
+        this.props.history.push(`/reports/${nextProps.templates.ids[0]}`);
+        this.props.getReportAnswers(nextProps.templates.ids[0]);
+      } else {
+        this.props.getReportAnswers(nextProps.match.params.templateId);
+      }
+    }
+  }
+
+  // shouldComponentUpdate(nextProps, nextState){
+  //   return this.props.templates.ids.length !== nextProps.templates.ids.length || 
+  //          this.props.match.params.templateId !== nextProps.match.params.templateId ||
+  //          this.props.answers !== nextProps.answers || 
+  //          this.props.location.search !== nextProps.location.search;
+  // }
+
   downloadReports = () => {
-    const index = this.props.match.params.templateIndex || 0
-    this.props.downloadAnswers(this.props.templates.ids[index]);
+    this.props.downloadAnswers(this.props.match.params.templateId);
   }
 
   render() {

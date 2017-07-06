@@ -15,7 +15,7 @@ class Filters extends React.Component {
 
   handleTemplateChange = (selected) => {
     this.props.history.push({
-      pathname: `/reports/${selected.value}/answers`,
+      pathname: `/reports/${selected.value}`,
       search: qs.stringify(this.props.searchParams)
     })
   }
@@ -47,11 +47,11 @@ class Filters extends React.Component {
     const { templates, areasOptions } = this.props;
     let options = []
     if (templates.data) {
-      options = Object.keys(templates.data).map((key, i) => (
+      options = Object.keys(templates.data).map((key) => (
         { label: templates.data[key].attributes.name[this.props.locale] ?
           templates.data[key].attributes.name[this.props.locale] :
           templates.data[key].attributes.name[DEFAULT_LANGUAGE],
-          value: i
+          value: templates.data[key].id
         }
       ));
     }
@@ -61,7 +61,7 @@ class Filters extends React.Component {
           <Select
             name="template-select"
             className="c-select"
-            value={options[this.props.templateIndex || 0]}
+            value={this.props.match.params.templateId || 0}
             options={options}
             onChange={this.handleTemplateChange}
             clearable={false}
