@@ -68,6 +68,11 @@ class Teams extends React.Component {
                           <span className="admin-selected">ADMIN</span>
                         </div>
                         ))}
+                      {team && team.attributes.confirmedUsers && team.attributes.confirmedUsers.map((confirmedUser) =>  (
+                        <div className="horizontal-field-left" key={confirmedUser}>
+                          { confirmedUser }
+                        </div>
+                        ))}
                       {team && team.attributes.users && team.attributes.users.map((user) =>  (
                         <div className="horizontal-field-left" key={user}>
                           { user }
