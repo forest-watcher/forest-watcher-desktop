@@ -19,7 +19,7 @@ class MembersManager extends React.Component {
     const existingUsers = this.props.selectedUsers;
     if (email){
       if (!validateEmail(email)) {
-        toastr.error('Email is invalid');
+        toastr.error(this.props.intl.formatMessage({ id: 'teams.invalidEmail' }));
         return;
       }
       const isNotOnTheList = !includes(existingUsers.concat(this.props.selectedManagers), email);
