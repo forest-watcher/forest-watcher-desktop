@@ -7,8 +7,15 @@ import TeamsForm from './TeamsFormContainer';
 import { FormattedMessage } from 'react-intl';
 
 class Teams extends React.Component {
+  constructor() {
+    super();
+    this.firstLoad = true;
+  }
   componentWillMount() {
-    this.props.getTeam(this.props.userId);
+    if (this.firstLoad){
+      this.props.getTeam(this.props.userId);
+      this.firstLoad = false;
+    }
   }
 
   render() {
