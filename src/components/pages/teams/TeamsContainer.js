@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import Teams from './Teams';
 import { getTeam, setEditing } from '../../../modules/teams';
-import { includes, diff } from '../../../helpers/utils';
+import { includes, diff, filterEmpty } from '../../../helpers/utils';
 
 
 const mapStateToProps = ({ user, teams, areas }) => {
@@ -22,7 +22,8 @@ const mapStateToProps = ({ user, teams, areas }) => {
   let team = teams.data;
   const isManager = team && isUserManager(team, userId);
   team = removeManagersfromUsers(teams.data);
-  const areasIds = (team && team.attributes.areas) || [];
+  let areasIds = (team && team.attributes.areas) || [];
+  areasIds = filterEmpty(areasIds);
   const areasOfInterest = areasIds.map((areaId) => areas.areas[areaId]);
     return { 
       team,
