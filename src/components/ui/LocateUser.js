@@ -7,8 +7,12 @@ export default class LocateUser extends React.Component {
 
   setLocation = () => {
     this.props.setLoading(true);
-    this.props.map.locate({setView: true})
+    this.props.map.locate({
+      setView: true,
+      maxZoom: 15
+    })
       .on('locationfound', (e) => {
+        this.props.onZoomChange && this.props.onZoomChange(this.props.map.getZoom());
         this.props.setLoading(false);
       })
       .on('locationerror', (e) => {
