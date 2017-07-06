@@ -47,7 +47,7 @@ class TeamsForm extends React.Component {
   handleSubmit = (e) => {
     e.preventDefault();
     const team = this.props.team;
-    if (!team || team.attributes.users !== this.form.users) {
+    if ((!team && this.form.users.length > 0) || team.attributes.users !== this.form.users) {
       this.props.sendNotifications();
     }
     this.props.team ? this.props.updateTeam(this.form, this.props.team.id) : this.props.createTeam(this.form);
