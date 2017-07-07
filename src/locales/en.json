@@ -53,6 +53,7 @@
     "reports.detailLink": "Go to detail",
     "reports.dateString": "No date",
     "reports.userString": "No user",
+    "reports.noReportsFound": "No reports found",
     "table.next": "next",
     "table.previous": "previous",
     "table.page": "page",
