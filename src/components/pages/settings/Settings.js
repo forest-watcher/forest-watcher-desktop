@@ -48,7 +48,7 @@ class Settings extends React.Component {
                       <div className="title"><FormattedMessage id={"teams.areas"} /></div>
                       <div className="area-image-container">
                         {team && areas.map((area, i) => ( area && (
-                          <div key={i}>
+                          <div className="area-item" key={i}>
                             <img className="area-image" src={area.attributes.image} alt={area.attributes.name} />
                             <div>{ area.attributes.name }</div>
                           </div>

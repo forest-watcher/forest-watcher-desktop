@@ -1,17 +1,8 @@
-const includes = (container, value) => {
-	let returnValue = false;
-	const position = container.indexOf(value);
-	if (position >= 0) { returnValue = true;}
-	return returnValue;
-}
+const includes = (container, value) => container.indexOf(value) >= 0;
 
-const unique = (value, index, self) => { 
-    return self.indexOf(value) === index;
-}
+const unique = (value, index, self) => self.indexOf(value) === index;
 
-const diff = (original, toSubstract) => {
-	return original.filter((i) => toSubstract.indexOf(i) < 0);
-};
+const diff = (original, toSubstract) => original.filter((i) => toSubstract.indexOf(i) < 0);
 
 const filterEmpty = (array) => array.filter((elem) => elem);
 
