@@ -17,7 +17,7 @@ export default function reducer(state = initialState, action) {
   switch (action.type) {
     case GET_USER_ANSWERS: {
       const reportId = action.payload.reportId;
-      const answers = action.payload.data.answers;
+      const answers = action.payload.data.answers || [];
       const updatedAnswers = {
         ...state.answers,
         [reportId]: {
