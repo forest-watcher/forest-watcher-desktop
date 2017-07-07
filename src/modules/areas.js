@@ -15,11 +15,10 @@ const SET_EDITING_AREA = 'areas/SET_EDITING_AREA';
 // Reducer
 const initialState = {
   ids: [],
-  areas: {},
+  data: {},
   loading: false,
   saving: false,
-  editing: false,
-  error: null
+  editing: false
 };
 
 export default function reducer(state = initialState, action) {
@@ -29,19 +28,19 @@ export default function reducer(state = initialState, action) {
       if (state.ids.indexOf( ...Object.keys(area) ) > -1) {
         return {
           ...state,
-          areas: { ...state.areas, ...area }
+          data: { ...state.data, ...area }
         };
       } else {
         return {
           ...state,
           ids: [...state.ids, ...Object.keys(area)],
-          areas: { ...state.areas, ...area }
+          data: { ...state.data, ...area }
         };
       }
     }
     case SET_AREAS: {
       const { area: areas } = action.payload;
-      if (areas) return Object.assign({}, state, { ids: Object.keys(areas), areas });
+      if (areas) return Object.assign({}, state, { ids: Object.keys(areas), data: areas });
       return state;
     }
     case SET_LOADING_AREAS:
@@ -181,7 +180,7 @@ export function getGeoStoresWithAreas() {
     await dispatch(getAreas());
     let promises = [];
     const areasIds = state().areas.ids;
-    const areas = state().areas.areas;
+    const areas = state().areas.data;
     areasIds.forEach((id) => {
       promises.push(dispatch(getGeostore(areas[id].attributes.geostore)));
     })
@@ -212,6 +211,15 @@ export function setSaving(bool) {
   return (dispatch) => {
     dispatch({
       type: SET_SAVING_AREA,
+      payload: bool
+    });
+  };
+}
+
+export function setLoading(bool) {
+  return (dispatch) => {
+    dispatch({
+      type: SET_LOADING_AREAS,
       payload: bool
     });
   };

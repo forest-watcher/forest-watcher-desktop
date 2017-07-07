@@ -30,6 +30,10 @@
         color: lighten($theme-accent, 10%);
       }
     }
+
+    svg {
+      margin-right: 5px;
+    }
   }
 
   .nav-section {

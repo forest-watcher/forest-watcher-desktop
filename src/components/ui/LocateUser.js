@@ -1,11 +1,23 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Icon from './Icon';
+import { toastr } from 'react-redux-toastr';
 
 export default class LocateUser extends React.Component {
 
   setLocation = () => {
-    this.props.map.locate({setView: true});
+    this.props.setLoading(true);
+    this.props.map.locate({
+      setView: true,
+      maxZoom: 15
+    })
+      .on('locationfound', (e) => {
+        this.props.onZoomChange && this.props.onZoomChange(this.props.map.getZoom());
+        this.props.setLoading(false);
+      })
+      .on('locationerror', (e) => {
+        toastr.error(this.props.intl.formatMessage({ id: 'areas.locateUserError' }));
+      });
   }
 
   render() {

@@ -1,83 +1,100 @@
- import { connect } from 'react-redux';
- import moment from 'moment'
- import { getUserTemplates } from '../../../modules/templates';
- import { setSelectedTemplateIndex, setTemplateSearchParams, downloadAnswers } from '../../../modules/reports';
- import { getReportAnswers } from '../../../modules/reports';
- import { DEFAULT_FORMAT } from '../../../constants/global';
- 
- import qs from 'query-string';
- import Reports from './Reports';
+import { connect } from 'react-redux';
+import moment from 'moment'
+import { getUserTemplates } from '../../../modules/templates';
+import { getReportAnswers, setSelectedTemplateIndex, setTemplateSearchParams, downloadAnswers } from '../../../modules/reports';
 
-  const filterBy = (field, answers, value) => {
-    switch (field) {
-      case 'aoi':
-        return answers.filter((answer) => answer.aoi === value);
-      case 'date':
-        return answers.filter((answer) => answer.date === value);
-      case 'search':
-        return answers.filter((answer) => {
-          return Object.keys(answer).some((key) => {
-            if(answer[key].toLowerCase().includes(value.toLowerCase())) return true;
-            return false;
-          })
-        })
-      default:
-        break;
+import { DEFAULT_FORMAT, DEFAULT_LANGUAGE } from '../../../constants/global';
+import qs from 'query-string';
+import Reports from './Reports';
+import { filterBy } from '../../../helpers/filters';
+
+
+const getAnswersByTemplate = (templateId, reports) => {
+  const reportIds = reports.answers[templateId].ids;
+  const reportData = reports.answers[templateId].data;
+  let answers = reportIds.map((reportId) => ({
+    id: reportData[reportId].id,
+    date: moment(reportData[reportId].attributes.createdAt).format(DEFAULT_FORMAT),
+    latLong: reportData[reportId].attributes.userPosition.toString(),
+    member: reportData[reportId].attributes.user,
+    aoi: reportData[reportId].attributes.areaOfInterest || null
+  }));
+  return answers;
+}
+
+const getAnswersAreas = (answers, areas) => {
+  const areasIndex = [];
+  const areasOptions = [];
+  answers.forEach((answer) => {
+    if (areas.ids.indexOf(answer.aoi) > -1 && areasIndex.indexOf(answer.aoi) === -1) {
+      areasIndex.push(answer.aoi);
+      areasOptions.push({ label: areas.data[answer.aoi] && areas.data[answer.aoi].attributes.name, value: answer.aoi });
     }
-    return answers.filter((answer) => answer.aoi === value);
+  });
+  return areasOptions;
+}
+
+const getTemplateOptions = (templates) => {
+  const templateOptions = Object.keys(templates.data).map((key) => (
+    { label: templates.data[key].attributes.name[DEFAULT_LANGUAGE] ?
+             templates.data[key].attributes.name[DEFAULT_LANGUAGE] :
+             templates.data[key].attributes.name[templates.data[key].attributes.defaultLanguage],
+      value: templates.data[key].id
+    }
+  ));
+  return templateOptions;
+}
+
+const mapStateToProps = ({ areas, templates, reports }, { match, location }) => {
+  const searchParams = qs.parse(location.search);
+  const { aoi, date, searchValues } = searchParams;
+  const templateId = match.params.templateId || 0;
+  let areasOptions = [];
+  let answers = [];
+  let templateOptions = [];
+  if (templateId !== 0 && reports.answers[templateId]) {
+    templateOptions = getTemplateOptions(templates);
+    answers = getAnswersByTemplate(templateId, reports);
+    areasOptions = getAnswersAreas(answers, areas);
+    if (aoi !== undefined){ 
+      answers = filterBy(answers, 'aoi', aoi);
+    }
+    if (searchValues !== undefined){ 
+      answers = filterBy(answers, 'search', searchValues);
+    }
+    if (date !== undefined){ 
+      answers = filterBy(answers, 'date', date);
+    }
   }
-
-  const mapStateToProps = ({ reports, templates }, { match, location }) => {
-    const templateId = templates.ids[match.params.templateIndex || 0];
-    const searchParams = qs.parse(location.search);
-    const { aoi, date, searchValues } = searchParams;
-    let answers = [];
-    if (templateId !== undefined){
-      const selectedAnswers = reports.answers[templateId];
-      if (selectedAnswers !== undefined) {
-        answers = selectedAnswers.map((answer) => ({
-          id: answer.id,
-          date: moment(answer.attributes.createdAt).format(DEFAULT_FORMAT),
-          latLong: answer.attributes.userPosition.toString(),
-          member: answer.attributes.user,
-          aoi: answer.attributes.layer // TODO: Change to AOI instead of layer
-        }))
-        if (aoi !== undefined){ 
-          answers = filterBy('aoi', answers, aoi);
-        }
-        if (searchValues !== undefined){ 
-          answers = filterBy('search', answers, searchValues);
-        }
-        if (date !== undefined){ 
-          answers = filterBy('date', answers, date);
-        }
-      }
-    }
-    return {
-      templates,
-      answers,
-      loading: templates.loading
-    };
+  return {
+    templateOptions,
+    templates,
+    answers,
+    areasOptions,
+    reports,
+    loadingTemplates: templates.loading,
+    loadingReports: reports.loading
   };
- 
- function mapDispatchToProps(dispatch) {
-   return {
-     getUserTemplates: () => {
-       dispatch(getUserTemplates());
+};
+
+function mapDispatchToProps(dispatch) {
+  return {
+    getUserTemplates: () => {
+      dispatch(getUserTemplates());
     },
     getReportAnswers: (id) => {
       dispatch(getReportAnswers(id));
-     },
+    },
     setSelectedTemplateIndex: (index) => {
       dispatch(setSelectedTemplateIndex(index));
-     },
+    },
     setTemplateSearchParams: (queryParams) => {
       dispatch(setTemplateSearchParams(queryParams));
-     },
+    },
     downloadAnswers: (templateId) => {
       dispatch(downloadAnswers(templateId));
     }
   }
- }
+}
 
 export default connect(mapStateToProps, mapDispatchToProps)(Reports);
