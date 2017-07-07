@@ -133,7 +133,7 @@ class TeamsForm extends React.Component {
                     options={areaValues}
                     value={this.state.selectedAreas}
                     onChange={this.onAreaChange}
-                    noResultsText={this.props.intl.formatMessage({ id: 'teams.noTeamsAvailable' })}
+                    noResultsText={this.props.intl.formatMessage({ id: 'filters.noAreasAvailable' })}
                     searchable={false}
                   />
                 </div>

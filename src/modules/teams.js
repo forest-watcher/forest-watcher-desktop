@@ -72,6 +72,10 @@ export function getTeam(userId) {
         return team;
       })
       .catch((error) => {
+        dispatch({
+          type: SET_LOADING,
+          payload: false
+        });
         console.warn('error', error)
       });
   };
@@ -116,6 +120,10 @@ export function createTeam(team) {
           type: SAVE_TEAM,
           payload: team
         });
+        dispatch({
+          type: SET_LOADING,
+          payload: false
+        });
         dispatch(getTeam(state().user.data.id));
         if (state().teams.sendNotifications) {
           dispatch({
@@ -127,6 +135,10 @@ export function createTeam(team) {
         return team;
       })
       .catch((error) => {
+        dispatch({
+          type: SET_LOADING,
+          payload: false
+        });
         console.warn('error', error)
       });
   };
@@ -151,12 +163,16 @@ export function updateTeam(team, id) {
       .then((response) => {
         const team = response.data;
         dispatch({
+          type: SET_LOADING,
+          payload: true
+        });
+        dispatch({
           type: SAVE_TEAM,
           payload: team
         });
         dispatch({
           type: SET_LOADING,
-          payload: true
+          payload: false
         });
         dispatch(getTeam(state().user.data.id));
         dispatch({
@@ -173,6 +189,10 @@ export function updateTeam(team, id) {
         return team;
       })
       .catch((error) => {
+        dispatch({
+          type: SET_LOADING,
+          payload: false
+        });
         console.warn('error', error)
       });
   };
