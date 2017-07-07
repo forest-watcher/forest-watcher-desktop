@@ -20,7 +20,7 @@ class Settings extends React.Component {
   }
 
   render() {
-    const { team, editing, isManager, areasOfInterest } = this.props;
+    const { team, editing, isManager, areas } = this.props;
     return (
       <div>
         <Loader isLoading={this.props.loading} />
@@ -47,7 +47,7 @@ class Settings extends React.Component {
                     <div className="section">
                       <div className="title"><FormattedMessage id={"teams.areas"} /></div>
                       <div className="area-image-container">
-                        {team && areasOfInterest.map((area, i) => ( area && (
+                        {team && areas.map((area, i) => ( area && (
                           <div key={i}>
                             <img className="area-image" src={area.attributes.image} alt={area.attributes.name} />
                             <div>{ area.attributes.name }</div>

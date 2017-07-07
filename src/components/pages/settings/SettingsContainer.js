@@ -23,7 +23,7 @@ const mapStateToProps = ({ user, teams, areas }) => {
       editing: teams.editing,
       loading: teams.loading,
       userId,
-      areasOfInterest
+      areas: areasOfInterest
     };
   };
 
