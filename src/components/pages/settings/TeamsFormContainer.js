@@ -10,7 +10,8 @@ const mapStateToProps = ({ areas, user, teams }) => {
     return { 
       userId: user.data.id,
       areaValues,
-      editing: teams.editing
+      editing: teams.editing,
+      loading: teams.loading
     };
   };
 

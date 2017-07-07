@@ -69,6 +69,7 @@
     "teams.findByEmail": "Find by email",
     "teams.admin": "ADMIN",
     "teams.invalidEmail": "Email is invalid",
+    "teams.teams.noTeamsAvailable": "No teams available",
     "table.next": "next",
     "table.previous": "previous",
     "table.page": "page",
