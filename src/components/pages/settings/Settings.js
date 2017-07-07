@@ -7,7 +7,7 @@ import TeamsForm from './TeamsFormContainer';
 import { FormattedMessage } from 'react-intl';
 import Loader from '../../ui/Loader';
 
-class Teams extends React.Component {
+class Settings extends React.Component {
   constructor() {
     super();
     this.firstLoad = true;
@@ -28,11 +28,11 @@ class Teams extends React.Component {
           <div>
             {isManager ? 
               <Hero
-                title={"teams.subtitle"}
+                title={"settings.name"}
                 action={{name: "common.edit", callback: () => this.props.setEditing(true)}}
               /> 
             : 
-              <Hero title={"teams.subtitle"} />
+              <Hero title={"settings.name"} />
             }
             <div className="l-content">
               <Article>
@@ -91,11 +91,11 @@ class Teams extends React.Component {
   }
 }
 
-Teams.propTypes = {
+Settings.propTypes = {
   team: PropTypes.object,
   getTeam: PropTypes.func.isRequired,
   isManager: PropTypes.bool,
   userId: PropTypes.string.isRequired
 };
 
-export default Teams;
+export default Settings;

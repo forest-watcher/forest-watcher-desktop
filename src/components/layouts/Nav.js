@@ -40,7 +40,7 @@ class Nav extends React.Component {
                   <NavLink to="/reports" activeClassName="-active"><FormattedMessage id="reports.name" /></NavLink>
                 </li>
                 <li className="nav-link">
-                  <NavLink to="/teams" activeClassName="-active"><FormattedMessage id="teams.name" /></NavLink>
+                  <NavLink to="/settings" activeClassName="-active"><FormattedMessage id="settings.name" /></NavLink>
                 </li>
               </ul>
             }

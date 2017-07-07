@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import Teams from './Teams';
+import Settings from './Settings';
 import { getTeam, setEditing } from '../../../modules/teams';
 import { includes, filterEmpty } from '../../../helpers/utils';
 
@@ -38,4 +38,4 @@ const mapStateToProps = ({ user, teams, areas }) => {
   }
  }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Teams);
+export default connect(mapStateToProps, mapDispatchToProps)(Settings);
