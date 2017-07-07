@@ -63,18 +63,18 @@ class Settings extends React.Component {
                     </div>
                     <div className="c-member-list">
                       {team && team.attributes.managers && team.attributes.managers.map((manager) =>  (
-                        <div className="horizontal-field-left" key={manager}>
+                        <div className="horizontal-field-left-aligned" key={manager}>
                           { manager }
                           <span className="admin-selected"><FormattedMessage id={"teams.admin"} /></span>
                         </div>
                         ))}
                       {team && team.attributes.confirmedUsers && team.attributes.confirmedUsers.map((confirmedUser) =>  (
-                        <div className="horizontal-field-left" key={confirmedUser}>
+                        <div className="horizontal-field-left-aligned" key={confirmedUser}>
                           { confirmedUser }
                         </div>
                         ))}
                       {team && team.attributes.users && team.attributes.users.map((user) =>  (
-                        <div className="horizontal-field-left" key={user}>
+                        <div className="horizontal-field-left-aligned" key={user}>
                           { user }
                         </div>
                         ))}
