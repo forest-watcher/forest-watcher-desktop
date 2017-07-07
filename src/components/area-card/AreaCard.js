@@ -12,18 +12,16 @@ class AreaCard extends React.Component {
       <div className="c-area-card">
         <div className="area-content">
           <figure className="area-image" style={{ backgroundImage: `url(${area.image})`}}></figure>
-          <figcaption className="area-title text -small-title">{area.name}</figcaption>
+          <div className="area-detail">
+            <div className="area-title">
+              <figcaption className="text -small-title">{area.name}</figcaption>
+              <Link className="c-button -circle -transparent" to={`/areas/${area.id}`}>
+                <Icon className="-small -gray" name="icon-edit"/>
+              </Link>
+            </div>
+            <Link className="text -logo-title -green" to={'/reports'}><FormattedMessage id="areas.reportsBtn" /></Link>
+          </div>
         </div>
-        <ul className="area-actions">
-          <li className="area-action">
-            <Link className="c-button -light -small" to={'/reports'}><FormattedMessage id="areas.reportsBtn" /></Link>
-          </li>
-          <li className="area-action -edit-area">
-            <Link className="c-button -circle -transparent" to={`/areas/${area.id}`}>
-              <Icon className="-small -gray" name="icon-edit"/>
-            </Link>
-          </li>
-        </ul>
       </div>
     );
   }
