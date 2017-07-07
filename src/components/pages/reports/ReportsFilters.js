@@ -55,6 +55,8 @@ class Filters extends React.Component {
             onChange={this.handleTemplateChange}
             clearable={false}
             searchable={false}
+            placeholder={this.props.intl.formatMessage({ id: 'filters.templates' })}
+            noResultsText={this.props.intl.formatMessage({ id: 'filters.noTemplatesAvailable' })}
             arrowRenderer={() => <svg className="c-icon -x-small -gray"><use xlinkHref="#icon-arrow-down"></use></svg>}
           />
         </div>
@@ -68,6 +70,7 @@ class Filters extends React.Component {
             resetValue={{value: '', label: ''}}
             searchable={false}
             placeholder={this.props.intl.formatMessage({ id: 'filters.area' })}
+            noResultsText={this.props.intl.formatMessage({ id: 'filters.noAreasAvailable' })}
             arrowRenderer={() => <svg className="c-icon -x-small -gray"><use xlinkHref="#icon-arrow-down"></use></svg>}
           />
         </div>
