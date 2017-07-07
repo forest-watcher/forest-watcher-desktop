@@ -14,7 +14,7 @@ function MemberList({ members, handleChangeRole, deleteMember, intl }) {
         const isAdmin = memberType === MANAGER;
         const hiddenButton = memberType === MANAGER ? 'hidden' : '';
         return (
-          <div key={id} className="horizontal-field-left">
+          <div key={id} className="horizontal-field-left-aligned">
             <div className="user-label">{ id }</div>
             {(memberType) !== USER && 
               <Checkbox 

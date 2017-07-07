@@ -89,7 +89,7 @@ class MembersManager extends React.Component {
       <div className="small-6 columns">
         <div className="input-group">
           <label htmlFor="add-member" className="text"><FormattedMessage id={"teams.members"} /></label>
-          <div className="horizontal-field-left">
+          <div className="horizontal-field-left-aligned">
             <input
               type="email"
               onKeyPress={(e) => {if (e.which === 13) { e.preventDefault();}}} // Prevent send on press Enter
