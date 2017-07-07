@@ -23,13 +23,14 @@ class TeamsForm extends React.Component {
   }
 
   updateForm(team){
-    this.form = {
+    const updatedForm = {
       name: team && team.attributes.name,
       areas: (team && team.attributes.areas) || [],
       managers: (team && team.attributes.managers) || [],
       confirmedUsers: (team && team.attributes.confirmedUsers) || [],
       users: (team && team.attributes.users) || []
     }
+    if( this.form !== updatedForm ) this.form = updatedForm;
   }
 
   componentWillReceiveProps(nextProps){
@@ -75,26 +76,27 @@ class TeamsForm extends React.Component {
 
   onAreaChange = (selected) => {
     this.setState({selectedAreas: selected});
-    this.form.areas = selected.split(',');
+    const updatedArea = selected.split(',');
+    if (this.form.areas !== updatedArea) this.form.areas = updatedArea;
   }
 
   handleFormUpdate = (field, value) => {
-    this.form[field] = value;
+    if (this.form[field] !== value) this.form[field] = value;
   }
 
   updateSelectedMembers = (selectedMembers, role) => {
     switch (role) {
       case MANAGER:
         this.setState({ selectedManagers: selectedMembers });
-        this.form.managers = selectedMembers;    
+        if (this.form.managers !== selectedMembers) this.form.managers = selectedMembers;
         break;
       case CONFIRMED_USER:
         this.setState({ selectedConfirmedUsers: selectedMembers });
-        this.form.confirmedUsers = selectedMembers;    
+        if(this.form.confirmedUsers !== selectedMembers) this.form.confirmedUsers = selectedMembers;
         break;
       case USER:
         this.setState({ selectedUsers: selectedMembers });
-        this.form.users = selectedMembers;    
+        if(this.form.users !== selectedMembers) this.form.users = selectedMembers;
         break;
       default:
         break;
