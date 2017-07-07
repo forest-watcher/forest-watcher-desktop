@@ -11,44 +11,24 @@
     background-position: center;
     border-radius: 2px;
     background-color: $medium-gray;
+    margin-bottom: 25px;
+  }
+
+  .area-detail {
+    padding: 0 20px;
   }
 
   .area-title {
-    margin-top: 25px;
-  }
-
-  .area-actions {
     display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    margin-top: 25px;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+    border-bottom: solid 1px #d8d8d8;
+    padding-bottom: 20px;
+    margin-bottom: 20px;
 
-    .area-action {
-
-      &:first-child {
-        position: relative;
-        margin-right: 24px;
-        padding-right: 24px;
-        &::after {
-          position: absolute;
-          content: '';
-          height: 25px;
-          width: 1px;
-          background-color: darken($theme-base, 10%);
-          right: 0;
-          top: 50%;
-          transform: translateY(-50%);
-        }
-      }
-
-      &.-edit-area {
-        > button {
-          width: 45px;
-          height: 45px;
-          padding: 0;
-          border-radius: 100%;
-        }
-      }
+    .text {
+      padding-right: 15px;
     }
   }
 }
