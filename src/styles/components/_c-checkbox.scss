@@ -3,9 +3,9 @@
   flex-direction: row;
   
   input[type=checkbox] {
-	  visibility: hidden;
+    visibility: hidden;
   }
-  .label{
+  .label {
     margin-left: 5px;
     text-transform: uppercase;
   }
@@ -24,7 +24,7 @@
     height: 20px;
     top: 0;
     left: 0;
-    background: $theme-accent;
+    background: #fff;
     border:1px solid #ddd;
   }
   .checkbox label:after {
@@ -41,6 +41,10 @@
     border-right: none;
 
     transform: rotate(-45deg);
+  }
+
+  .checkbox input[type=checkbox]:checked + label {
+    background: $theme-accent;
   }
 
   .checkbox input[type=checkbox]:checked + label:after {
