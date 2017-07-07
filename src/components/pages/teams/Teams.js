@@ -65,7 +65,7 @@ class Teams extends React.Component {
                       {team && team.attributes.managers && team.attributes.managers.map((manager) =>  (
                         <div className="horizontal-field-left" key={manager}>
                           { manager }
-                          <span className="admin-selected">ADMIN</span>
+                          <span className="admin-selected"><FormattedMessage id={"teams.admin"} /></span>
                         </div>
                         ))}
                       {team && team.attributes.confirmedUsers && team.attributes.confirmedUsers.map((confirmedUser) =>  (

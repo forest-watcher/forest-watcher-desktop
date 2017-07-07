@@ -5,7 +5,7 @@ import { Input, Form } from '../../form/Form';
 import Hero from '../../layouts/Hero';
 import Select from 'react-select';
 import MembersManager from './MembersManager';
-import { FormattedMessage } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 import { MANAGER, USER, CONFIRMED_USER } from '../../../constants/global';
 
 class TeamsForm extends React.Component {
@@ -120,7 +120,7 @@ class TeamsForm extends React.Component {
                     onChange={this.onInputChange}
                     name="name"
                     value={this.form.name || ''}
-                    placeholder={"Team name"}
+                    placeholder={this.props.intl.formatMessage({ id: 'teams.teamName' })}
                     validations={['required']}
                   />
                 </div>
@@ -165,4 +165,4 @@ TeamsForm.propTypes = {
   sendNotifications: PropTypes.func.isRequired
 };
 
-export default TeamsForm;
+export default injectIntl(TeamsForm);
