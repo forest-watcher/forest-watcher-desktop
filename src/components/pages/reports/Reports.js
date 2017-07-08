@@ -6,39 +6,35 @@ import Hero from '../../layouts/Hero';
 import ReactTable from 'react-table'
 import 'react-select/dist/react-select.css';
 import { FormattedMessage } from 'react-intl';
-import Filters from './FiltersContainer';
+import Filters from './ReportsFiltersContainer';
+import Loader from '../../ui/Loader';
 
 class Reports extends React.Component {
 
-  updateAnswers = () => {
-    const reportIds = this.props.templates.ids;
-    if (reportIds.length === 0) { 
-      this.props.getUserTemplates(); 
-    } else {
-      this.props.getReportAnswers(reportIds[0]);
+  componentWillMount() {
+    if (!this.props.match.params.templateId && this.props.templates.ids[0]) {
+      this.props.history.push(`/reports/${this.props.templates.ids[0]}`);
     }
   }
 
   componentDidMount() {
-    this.updateAnswers();
-  }
-
-  componentWillReceiveProps(nextProps){
-    if (this.props.templates.ids.length !== nextProps.templates.ids.length){
-      this.props.getReportAnswers(nextProps.templates.ids[this.templateId || 0]);
+    if (this.props.match.params.templateId) {
+      this.props.getReportAnswers(this.props.match.params.templateId);
     }
   }
 
-  shouldComponentUpdate(nextProps, nextState){
-    return this.props.templates.ids.length !== nextProps.templates.ids.length || 
-           this.props.answers !== nextProps.answers || 
-           this.props.match.params.templateIndex !== nextProps.match.params.templateIndex ||
-           this.props.location.search !== nextProps.location.search;
+  componentWillReceiveProps(nextProps) {
+    if (this.props.templates.ids.length !== nextProps.templates.ids.length && !nextProps.match.params.templateId) {
+      this.props.history.push(`/reports/${nextProps.templates.ids[0]}`);
+    }
+    if (nextProps.match.params.templateId !== this.props.match.params.templateId && 
+        !nextProps.reports.answers[nextProps.match.params.templateId]) {
+      this.props.getReportAnswers(nextProps.match.params.templateId);
+    }
   }
 
   downloadReports = () => {
-    const index = this.props.match.params.templateIndex || 0
-    this.props.downloadAnswers(this.props.templates.ids[index]);
+    this.props.downloadAnswers(this.props.match.params.templateId);
   }
 
   render() {
@@ -67,14 +63,19 @@ class Reports extends React.Component {
             <Article>
               <Filters
                 answers={answers}
+                areasOptions={this.props.areasOptions}
+                templateOptions={this.props.templateOptions}
               />
-              <ReactTable
-                className="c-table"
-                data={answers || []}
-                columns={columns}
-                showPageSizeOptions={false}
-                minRows={5}
-              />
+              <div className="l-content">
+                <ReactTable
+                  className="c-table"
+                  data={answers || []}
+                  columns={columns}
+                  showPageSizeOptions={false}
+                  minRows={5}
+                />
+                <Loader isLoading={this.props.loadingTemplates || this.props.loadingReports} />
+              </div>
             </Article>
           </div>
       </div>

@@ -37,6 +37,7 @@
     "areas.intersectError": "You cannot create an area that intersects",
     "areas.tooLarge": "Area too large",
     "areas.tooLargeDesc": "Please draw a smaller area",
+    "areas.locateUserError": "Your location wasn't found",
     "templates.name": "Templates",
     "templates.title": "Templates",
     "templates.subtitle": "Your templates",
@@ -70,7 +71,10 @@
     "table.next": "next",
     "table.previous": "previous",
     "table.page": "page",
-    "filters.area": "Filter by Area",
+    "filters.templates": "Filter by template",
+    "filters.noTemplatesAvailable": "No templates available",
+    "filters.area": "Filter by area",
+    "filters.noAreasAvailable": "No areas available",
     "filters.search": "Search",
     "filters.date": "Filter by date"
 }

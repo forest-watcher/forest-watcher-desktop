@@ -75,7 +75,7 @@ class App extends React.Component {
                   <Route exact path={`${match.url}templates/:reportId`} component={Answers} />
                   <Route path={`${match.url}templates/:reportId/:answerId`} component={AnswersDetail} />
                   <Route exact path={`${match.url}reports`} component={Reports} />
-                  <Route path={`${match.url}reports/template/:templateIndex`} component={Reports} />
+                  <Route path={`${match.url}reports/:templateIndex`} component={Reports} />
                   <Route exact path={`${match.url}settings`} component={Settings} />
                 </Switch>
               </div>
