@@ -30,7 +30,7 @@ class TeamsForm extends React.Component {
       confirmedUsers: (team && team.attributes.confirmedUsers) || [],
       users: (team && team.attributes.users) || []
     }
-    if( this.form !== updatedForm ) this.form = updatedForm;
+    this.form = Object.assign({}, this.form, updatedForm);
   }
 
   componentWillReceiveProps(nextProps){
@@ -71,32 +71,32 @@ class TeamsForm extends React.Component {
  }
 
   onInputChange = (e) => {
-    this.form[e.target.name] = e.target.value;
+    this.form = Object.assign({}, this.form, { [e.target.name]: e.target.value }); 
   }
 
   onAreaChange = (selected) => {
     this.setState({selectedAreas: selected});
-    const updatedArea = selected.split(',');
-    if (this.form.areas !== updatedArea) this.form.areas = updatedArea;
+    const updatedAreas = selected.split(',');
+    this.form = Object.assign({}, this.form, { areas: updatedAreas }); 
   }
 
   handleFormUpdate = (field, value) => {
-    if (this.form[field] !== value) this.form[field] = value;
+    this.form = Object.assign({}, this.form, { [field]: value }); 
   }
 
   updateSelectedMembers = (selectedMembers, role) => {
     switch (role) {
       case MANAGER:
         this.setState({ selectedManagers: selectedMembers });
-        if (this.form.managers !== selectedMembers) this.form.managers = selectedMembers;
+        this.form = Object.assign({}, this.form, { managers: selectedMembers }); 
         break;
       case CONFIRMED_USER:
         this.setState({ selectedConfirmedUsers: selectedMembers });
-        if(this.form.confirmedUsers !== selectedMembers) this.form.confirmedUsers = selectedMembers;
+        this.form = Object.assign({}, this.form, { confirmedUsers: selectedMembers }); 
         break;
       case USER:
         this.setState({ selectedUsers: selectedMembers });
-        if(this.form.users !== selectedMembers) this.form.users = selectedMembers;
+        this.form = Object.assign({}, this.form, { users: selectedMembers }); 
         break;
       default:
         break;
