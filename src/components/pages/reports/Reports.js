@@ -62,7 +62,7 @@ class Reports extends React.Component {
         />
           <div className="l-content">
             <Article>
-              <Filters
+              <ReportsFilters
                 answers={answers}
                 areasOptions={this.props.areasOptions}
                 templateOptions={this.props.templateOptions}

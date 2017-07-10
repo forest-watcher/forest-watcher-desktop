@@ -2,27 +2,16 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import Select from 'react-select';
-import { DEFAULT_FORMAT } from '../../../constants/global';
-import DatePicker from 'react-datepicker';
-import moment from 'moment';
 import { injectIntl } from 'react-intl';
-
-import 'react-datepicker/dist/react-datepicker.css';
 
 import qs from 'query-string';
 
-class ReportsFilters extends React.Component {
+class TemplatesFilters extends React.Component {
   
   redirectWith(searchParams){
     this.props.history.push({
-      pathname: `/reports/${this.props.match.params.templateId}`,
+      pathname: `/templates/${this.props.match.params.templateId}`,
       search: qs.stringify(searchParams)
-    })
-  }
-
-  handleTemplateChange = (selected) => {
-    this.props.history.push({
-      pathname: `/reports/${selected.value}`
     })
   }
 
@@ -36,30 +25,10 @@ class ReportsFilters extends React.Component {
     this.redirectWith(searchParams);
   }
 
-  handleDateChange = (date) => {
-    const parsedDate = date && moment(date).format(DEFAULT_FORMAT);
-    const searchParams = Object.assign(this.props.searchParams, { date: parsedDate || undefined });
-    this.redirectWith(searchParams);
-  }
-
   render() {
     const { templateOptions, areasOptions } = this.props;
     return (
       <div className="row filter-bar">
-        <div className="column">
-          <Select
-            name="template-select"
-            className="c-select"
-            value={this.props.match.params.templateId || 0}
-            options={templateOptions}
-            onChange={this.handleTemplateChange}
-            clearable={false}
-            searchable={false}
-            placeholder={this.props.intl.formatMessage({ id: 'filters.templates' })}
-            noResultsText={this.props.intl.formatMessage({ id: 'filters.noTemplatesAvailable' })}
-            arrowRenderer={() => <svg className="c-icon -x-small -gray"><use xlinkHref="#icon-arrow-down"></use></svg>}
-          />
-        </div>
         <div className="column">
           <Select
             className="c-select"
@@ -82,14 +51,6 @@ class ReportsFilters extends React.Component {
             name="search-bar"
             placeholder={this.props.intl.formatMessage({ id: 'filters.search' })}
           />   
-          <DatePicker
-            className="datepicker"
-            dateFormat={DEFAULT_FORMAT}
-            selected={this.props.searchParams.date && moment(this.props.searchParams.date, DEFAULT_FORMAT)}
-            onChange={this.handleDateChange}
-            isClearable={true}
-            placeholderText={this.props.intl.formatMessage({ id: 'filters.date' })}
-          />
         </div>  
       </div>
     );
@@ -103,4 +64,4 @@ Filters.propTypes = {
   searchParams: PropTypes.object
 };
 
-export default injectIntl(ReportsFilters);
+export default injectIntl(TemplatesFilters);

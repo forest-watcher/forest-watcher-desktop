@@ -6,7 +6,7 @@ import Article from '../../layouts/Article';
 import ReactTable from 'react-table'
 import 'react-select/dist/react-select.css';
 import { FormattedMessage } from 'react-intl';
-// import Filters from './TemplateFiltersContainer';
+import TemplatesFilters from './TemplateFiltersContainer';
 import Loader from '../../ui/Loader';
 import { injectIntl } from 'react-intl';
 
@@ -44,11 +44,9 @@ class Templates extends React.Component {
         />
           <div className="l-content">
             <Article>
-              {/*<Filters
-                answers={answers}
+              <TemplatesFilters
                 areasOptions={this.props.areasOptions}
-                templateOptions={this.props.templateOptions}
-              />*/}
+              />
               <div className="l-loader">
                 <ReactTable
                   className="c-table"
