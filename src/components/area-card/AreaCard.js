@@ -8,7 +8,6 @@ class AreaCard extends React.Component {
 
   render() {
     const { area, templates } = this.props;
-    // console.log(templates);
     return (
       <div className="c-area-card">
         <div className="area-content">
