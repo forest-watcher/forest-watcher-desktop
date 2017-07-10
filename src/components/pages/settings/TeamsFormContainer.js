@@ -3,9 +3,9 @@ import TeamsForm from './TeamsForm';
 import { createTeam, updateTeam, setEditing, sendNotifications } from '../../../modules/teams';
 
 const mapStateToProps = ({ areas, user, teams }) => {
-  const areaValues = Object.keys(areas.areas).map((key) => ({
-    value: areas.areas[key].id,
-    label: areas.areas[key].attributes.name
+  const areaValues = Object.keys(areas.data).map((key) => ({
+    value: areas.data[key].id,
+    label: areas.data[key].attributes.name
   }));
     return { 
       userId: user.data.id,

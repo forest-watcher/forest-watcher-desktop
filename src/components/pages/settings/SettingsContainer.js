@@ -16,7 +16,7 @@ const mapStateToProps = ({ user, teams, areas }) => {
   let areasIds = (team && team.attributes.areas) || [];
   areasIds = filterEmpty(areasIds);
 
-  const areasOfInterest = areasIds.map((areaId) => areas.areas[areaId]);
+  const areasOfInterest = areasIds.map((areaId) => areas.data[areaId]);
     return { 
       team,
       isManager,
