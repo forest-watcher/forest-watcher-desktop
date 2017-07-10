@@ -24,16 +24,16 @@ class Templates extends React.Component {
       accessor: 'title'
     },{
       Header: <FormattedMessage id="reports.areaOfInterest" />,
-      accessor: 'areaOfInterest'
+      accessor: 'aoi'
     },{  
       Header: <FormattedMessage id="templates.defaultLanguage" />,
-      accessor: 'date'
+      accessor: 'defaultLanguage'
     },{
       Header: <FormattedMessage id="templates.status" />,
-      accessor: 'member'
+      accessor: 'status'
     },{
       Header: <FormattedMessage id="templates.reportsSubmitted" />,
-      accessor: 'number'
+      accessor: 'numOfReports'
     }];
     return (
       <div>

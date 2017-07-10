@@ -1,6 +1,4 @@
 import { connect } from 'react-redux';
-import { getUserTemplates } from '../../../modules/templates';
-
 import Templates from './Templates';
 
 const getTemplatesById = (templates, reports) => {
@@ -26,12 +24,4 @@ const mapStateToProps = ({ templates, reports }) => {
   }
 };
 
-function mapDispatchToProps(dispatch) {
-  return {
-    getUserTemplates: () => {
-      dispatch(getUserTemplates());
-    }
-  };
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(Templates);
+export default connect(mapStateToProps)(Templates);
