@@ -67,8 +67,8 @@ class Templates extends React.Component {
 }
 
 Templates.propTypes = {
-  getUserTemplates: PropTypes.func.isRequired,
-  templateIds: PropTypes.array.isRequired
+  intl: PropTypes.object,
+  loading: PropTypes.bool
 };
 
 export default injectIntl(Templates);
