@@ -44,7 +44,7 @@ class Nav extends React.Component {
                 </li>
               </ul>
             }
-            <ul className="nav-subsection">
+            <ul className={this.props.loggedIn ? "nav-subsection -settings" : "nav-subsection"}>
               <Select
                 name="locale-select"
                 className="c-select -dark"

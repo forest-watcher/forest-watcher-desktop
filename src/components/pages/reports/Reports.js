@@ -8,6 +8,7 @@ import 'react-select/dist/react-select.css';
 import { FormattedMessage } from 'react-intl';
 import Filters from './ReportsFiltersContainer';
 import Loader from '../../ui/Loader';
+import { injectIntl } from 'react-intl';
 
 class Reports extends React.Component {
 
@@ -66,13 +67,14 @@ class Reports extends React.Component {
                 areasOptions={this.props.areasOptions}
                 templateOptions={this.props.templateOptions}
               />
-              <div className="l-content">
+              <div className="l-loader">
                 <ReactTable
                   className="c-table"
                   data={answers || []}
                   columns={columns}
                   showPageSizeOptions={false}
                   minRows={5}
+                  noDataText={this.props.intl.formatMessage({ id: 'reports.noReportsFound' })}
                 />
                 <Loader isLoading={this.props.loadingTemplates || this.props.loadingReports} />
               </div>
@@ -89,4 +91,4 @@ Reports.propTypes = {
   getReportAnswers: PropTypes.func.isRequired
 };
 
-export default Reports;
+export default injectIntl(Reports);

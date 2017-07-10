@@ -13,7 +13,7 @@
     "areas.name": "Areas",
     "areas.title": "Areas of Interest",
     "areas.subtitle": "Your areas",
-    "areas.reportsBtn": "reports",
+    "areas.reportsBtn": "show reports",
     "areas.addArea": "add area",
     "areas.createArea": "Create an area",
     "areas.manageArea": "Manage area",
@@ -70,6 +70,7 @@
     "teams.findByEmail": "Find by email",
     "teams.admin": "ADMIN",
     "teams.invalidEmail": "Email is invalid",
+    "reports.noReportsFound": "No reports found",
     "table.next": "next",
     "table.previous": "previous",
     "table.page": "page",
@@ -78,6 +79,5 @@
     "filters.area": "Filter by area",
     "filters.noAreasAvailable": "No areas available",
     "filters.search": "Search",
-    "filters.date": "Filter by date",
-    "filters.noAreasAvailable": "No areas available"
+    "filters.date": "Filter by date"
 }
