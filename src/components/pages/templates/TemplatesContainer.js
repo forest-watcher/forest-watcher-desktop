@@ -26,13 +26,4 @@ const mapStateToProps = ({ templates, reports }) => {
   }
 };
 
-
-function mapDispatchToProps(dispatch) {
-  return {
-    getTemplates: () => {
-      dispatch(getTemplates());
-    }
-  };
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(Templates);
+export default connect(mapStateToProps)(Templates);
