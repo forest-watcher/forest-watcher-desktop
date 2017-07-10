@@ -4,6 +4,7 @@ import { getUserTemplates } from '../../../modules/templates';
 import Templates from './Templates';
 
 const mapStateToProps = ({ templates }) => ({
+  templates,
   templateIds: templates.ids,
   loading: templates.loading
 });

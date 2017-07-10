@@ -7,6 +7,7 @@ import GridGallery from '../../layouts/GridGallery';
 import AreaCard from '../../area-card/AreaCardContainer';
 import Icon from '../../ui/Icon';
 import { FormattedMessage } from 'react-intl';
+import Loader from '../../ui/Loader';
 import { trimQueryParams } from '../../../helpers/login.js';
 
 class Areas extends React.Component {
@@ -43,6 +44,7 @@ class Areas extends React.Component {
               Component={AreaCard}
               after={this.getAddArea()}
             />
+            <Loader isLoading={this.props.loading} />
           </Article>
         </div>
       </div>

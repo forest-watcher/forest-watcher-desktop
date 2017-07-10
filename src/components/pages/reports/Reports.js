@@ -52,7 +52,7 @@ class Reports extends React.Component {
     },{
       Header: <FormattedMessage id="reports.member" />,
       accessor: 'member'
-    }]
+    }];
 
     return (
       <div>
