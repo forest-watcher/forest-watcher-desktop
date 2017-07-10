@@ -11,7 +11,7 @@ const getTemplatesById = (templates, reports) => {
       title: templateData.name[templateData.defaultLanguage],
       defaultLanguage: templateData.defaultLanguage,
       aoi: templateData.areaOfInterest || null,
-      numOfReports: templateData.count || null
+      count: templateData.answersCount || null
     };
   });
   return parsedTemplates;

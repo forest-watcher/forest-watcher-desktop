@@ -33,7 +33,7 @@ class Templates extends React.Component {
       accessor: 'status'
     },{
       Header: <FormattedMessage id="templates.reportsSubmitted" />,
-      accessor: 'numOfReports'
+      accessor: 'count'
     }];
     const isLoading = this.props.loadingTemplates || this.props.loadingReports;
     return (
