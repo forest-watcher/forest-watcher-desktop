@@ -14,7 +14,7 @@ class Reports extends React.Component {
 
   componentWillMount() {
     if (!this.props.match.params.templateId && this.props.templates.ids[0]) {
-      this.props.history.push(`/reports/${this.props.templates.ids[0]}`);
+      this.props.history.replace(`/reports/${this.props.templates.ids[0]}`);
     }
   }
 
