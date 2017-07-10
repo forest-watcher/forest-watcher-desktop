@@ -15,16 +15,23 @@
     padding-bottom: 10px;
   }
   .area-image-container {
+    margin-top: 20px;
     display: flex;
     flex-direction: row;
     justify-content: flex-start;
     .area-item {
-      padding-right: 20px;
+      padding-right: 120px;
       padding-left: 20px;
       border-right: solid 2px lightgray;
-      img {
-        width: 100px;
-        height: 100px;
+      .area-image {
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center;
+        border-radius: 3px;
+        background-color: $medium-gray;
+        margin-bottom: 10px;
+        width: 70px;
+        height: 47px;
       }
     }
     > .area-item:first-child {

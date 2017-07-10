@@ -49,8 +49,8 @@ class Settings extends React.Component {
                       <div className="area-image-container">
                         {team && areas.map((area, i) => ( area && (
                           <div className="area-item" key={i}>
-                            <img className="area-image" src={area.attributes.image} alt={area.attributes.name} />
-                            <div>{ area.attributes.name }</div>
+                            <figure className="area-image" style={{ backgroundImage: `url(${area.attributes.image})`}}></figure>
+                            <figcaption className="text -small-title">{area.attributes.name}</figcaption>
                           </div>
                         )))}
                       </div>
