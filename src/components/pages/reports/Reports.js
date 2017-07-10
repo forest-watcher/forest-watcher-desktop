@@ -12,29 +12,29 @@ import Loader from '../../ui/Loader';
 class Reports extends React.Component {
 
   componentWillMount() {
-    if (!this.props.match.params.templateId && this.props.templates.ids[0]) {
+    if (!this.props.match.params.templateIndex && this.props.templates.ids[0]) {
       this.props.history.push(`/reports/${this.props.templates.ids[0]}`);
     }
   }
 
   componentDidMount() {
-    if (this.props.match.params.templateId) {
-      this.props.getReportAnswers(this.props.match.params.templateId);
+    if (this.props.match.params.templateIndex) {
+      this.props.getReportAnswers(this.props.match.params.templateIndex);
     }
   }
 
   componentWillReceiveProps(nextProps) {
-    if (this.props.templates.ids.length !== nextProps.templates.ids.length && !nextProps.match.params.templateId) {
+    if (this.props.templates.ids.length !== nextProps.templates.ids.length && !nextProps.match.params.templateIndex) {
       this.props.history.push(`/reports/${nextProps.templates.ids[0]}`);
     }
-    if (nextProps.match.params.templateId !== this.props.match.params.templateId && 
-        !nextProps.reports.answers[nextProps.match.params.templateId]) {
-      this.props.getReportAnswers(nextProps.match.params.templateId);
+    if (nextProps.match.params.templateIndex !== this.props.match.params.templateIndex && 
+        !nextProps.reports.answers[nextProps.match.params.templateIndex]) {
+      this.props.getReportAnswers(nextProps.match.params.templateIndex);
     }
   }
 
   downloadReports = () => {
-    this.props.downloadAnswers(this.props.match.params.templateId);
+    this.props.downloadAnswers(this.props.match.params.templateIndex);
   }
 
   render() {
@@ -86,8 +86,7 @@ class Reports extends React.Component {
 Reports.propTypes = {
   answers: PropTypes.array.isRequired,
   templates: PropTypes.object.isRequired,
-  getReportAnswers: PropTypes.func.isRequired,
-  setSelectedTemplateIndex: PropTypes.func.isRequired
+  getReportAnswers: PropTypes.func.isRequired
 };
 
 export default Reports;

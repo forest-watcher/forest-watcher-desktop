@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import moment from 'moment'
 import { getUserTemplates } from '../../../modules/templates';
-import { getReportAnswers, setSelectedTemplateIndex, setTemplateSearchParams, downloadAnswers } from '../../../modules/reports';
+import { getReportAnswers, setTemplateSearchParams, downloadAnswers } from '../../../modules/reports';
 
 import { DEFAULT_FORMAT, DEFAULT_LANGUAGE } from '../../../constants/global';
 import qs from 'query-string';
@@ -9,9 +9,9 @@ import Reports from './Reports';
 import { filterBy } from '../../../helpers/filters';
 
 
-const getAnswersByTemplate = (templateId, reports) => {
-  const reportIds = reports.answers[templateId].ids;
-  const reportData = reports.answers[templateId].data;
+const getAnswersByTemplate = (templateIndex, reports) => {
+  const reportIds = reports.answers[templateIndex].ids;
+  const reportData = reports.answers[templateIndex].data;
   let answers = reportIds.map((reportId) => ({
     id: reportData[reportId].id,
     date: moment(reportData[reportId].attributes.createdAt).format(DEFAULT_FORMAT),
@@ -48,13 +48,13 @@ const getTemplateOptions = (templates) => {
 const mapStateToProps = ({ areas, templates, reports }, { match, location }) => {
   const searchParams = qs.parse(location.search);
   const { aoi, date, searchValues } = searchParams;
-  const templateId = match.params.templateId || 0;
+  const templateIndex = match.params.templateIndex || 0;
   let areasOptions = [];
   let answers = [];
   let templateOptions = [];
-  if (templateId !== 0 && reports.answers[templateId]) {
+  if (templateIndex !== 0 && reports.answers[templateIndex]) {
     templateOptions = getTemplateOptions(templates);
-    answers = getAnswersByTemplate(templateId, reports);
+    answers = getAnswersByTemplate(templateIndex, reports);
     areasOptions = getAnswersAreas(answers, areas);
     if (aoi !== undefined){ 
       answers = filterBy(answers, 'aoi', aoi);
@@ -85,14 +85,11 @@ function mapDispatchToProps(dispatch) {
     getReportAnswers: (id) => {
       dispatch(getReportAnswers(id));
     },
-    setSelectedTemplateIndex: (index) => {
-      dispatch(setSelectedTemplateIndex(index));
-    },
     setTemplateSearchParams: (queryParams) => {
       dispatch(setTemplateSearchParams(queryParams));
     },
-    downloadAnswers: (templateId) => {
-      dispatch(downloadAnswers(templateId));
+    downloadAnswers: (templateIndex) => {
+      dispatch(downloadAnswers(templateIndex));
     }
   }
 }

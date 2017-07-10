@@ -5,12 +5,12 @@ import qs from 'query-string';
 
 
 const mapStateToProps = ({ reports, templates, app }, { match, location }) => {    
-  const templateId = match.params.templateId;
+  const templateIndex = match.params.templateIndex;
   const searchParams = qs.parse(location.search);
   return {
     templates,
     searchParams,
-    templateId,
+    templateIndex,
     locale: app.locale
   };
 };

@@ -15,7 +15,7 @@ class Filters extends React.Component {
   
   redirectWith(searchParams){
     this.props.history.push({
-      pathname: `/reports/${this.props.match.params.templateId}`,
+      pathname: `/reports/${this.props.match.params.templateIndex}`,
       search: qs.stringify(searchParams)
     })
   }
@@ -50,7 +50,7 @@ class Filters extends React.Component {
           <Select
             name="template-select"
             className="c-select"
-            value={this.props.match.params.templateId || 0}
+            value={this.props.match.params.templateIndex || 0}
             options={templateOptions}
             onChange={this.handleTemplateChange}
             clearable={false}
