@@ -2,7 +2,7 @@ import querystring from 'query-string';
 import { setUserChecked } from './app';
 import { API_BASE_URL } from '../constants/global';
 import { getGeoStoresWithAreas } from './areas';
-import { getReportsWithTemplates } from './templates';
+import { getTemplates } from './templates';
 
 // Actions
 const GET_USER = 'user/GET_USER';
@@ -52,14 +52,14 @@ export function checkLogged(tokenParam) {
         if (response.ok) return response.json();
         throw Error(response.statusText);
       })
-      .then((data) => {
+      .then(async (data) => {
         dispatch({
           type: CHECK_USER_LOGGED,
           payload: { data, token, loggedIn: true }
         });
         dispatch(setUserChecked());
         dispatch(getGeoStoresWithAreas());
-        dispatch(getReportsWithTemplates());
+        dispatch(getTemplates());
       })
       .catch((error) => {
         if (user.loggedIn) {

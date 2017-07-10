@@ -1,5 +1,6 @@
 import { connect } from 'react-redux';
 import Templates from './Templates';
+import { getTemplates } from '../../../modules/templates';
 
 const getTemplatesById = (templates, reports) => {
   const templateIds = templates.ids;
@@ -10,7 +11,7 @@ const getTemplatesById = (templates, reports) => {
       title: templateData.name[templateData.defaultLanguage],
       defaultLanguage: templateData.defaultLanguage,
       aoi: templateData.areaOfInterest || null,
-      numOfReports: reports.answers[templateId] ? reports.answers[templateId].ids.length : null
+      numOfReports: templateData.count || null
     };
   });
   return parsedTemplates;
@@ -20,8 +21,18 @@ const mapStateToProps = ({ templates, reports }) => {
   const parsedTemplates = getTemplatesById(templates, reports);
   return {
     templates: parsedTemplates,
-    loading: templates.loading
+    loadingTemplates: templates.loading,
+    loadingReports: reports.loading
   }
 };
 
-export default connect(mapStateToProps)(Templates);
+
+function mapDispatchToProps(dispatch) {
+  return {
+    getTemplates: () => {
+      dispatch(getTemplates());
+    }
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Templates);

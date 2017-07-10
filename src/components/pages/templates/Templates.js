@@ -35,6 +35,7 @@ class Templates extends React.Component {
       Header: <FormattedMessage id="templates.reportsSubmitted" />,
       accessor: 'numOfReports'
     }];
+    const isLoading = this.props.loadingTemplates || this.props.loadingReports;
     return (
       <div>
         <Hero
@@ -51,13 +52,13 @@ class Templates extends React.Component {
               <div className="l-loader">
                 <ReactTable
                   className="c-table"
-                  data={templates || []}
+                  data={!isLoading && templates ? templates : []}
                   columns={columns}
                   showPageSizeOptions={false}
                   minRows={5}
                   noDataText={this.props.intl.formatMessage({ id: 'templates.noTemplatesFound' })}
                 />
-                <Loader isLoading={this.props.loading} />
+                <Loader isLoading={isLoading} />
               </div>
             </Article>
           </div>

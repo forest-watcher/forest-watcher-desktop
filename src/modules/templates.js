@@ -1,7 +1,6 @@
 import normalize from 'json-api-normalizer';
 import { API_BASE_URL } from '../constants/global';
 import { toastr } from 'react-redux-toastr';
-import { getReports } from './reports';
 
 // Actions
 const GET_TEMPLATES = 'templates/GET_TEMPLATES';
@@ -36,7 +35,7 @@ export function getTemplates() {
       type: SET_LOADING_TEMPLATES,
       payload: true
     });
-    fetch(url, {
+    return fetch(url, {
       headers: {
         Authorization: `Bearer ${state().user.token}`
       }
@@ -55,6 +54,7 @@ export function getTemplates() {
           type: SET_LOADING_TEMPLATES,
           payload: false
         });
+        return normalized;
       })
       .catch((error) => {
         dispatch({
@@ -63,18 +63,5 @@ export function getTemplates() {
         });
         toastr.error('Unable to load templates', error);
       });
-  };
-}
-
-// Async get Templates and their Reports
-export function getReportsWithTemplates() {
-  return async (dispatch, state) => {
-    await dispatch(getTemplates());
-    let promises = [];
-    const templateIds = state().templates.ids;
-    templateIds.forEach((id) => {
-      promises.push(dispatch(getReports(id)));
-    })
-    await Promise.all(promises);
   };
 }

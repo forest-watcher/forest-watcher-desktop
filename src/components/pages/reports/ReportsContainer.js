@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import moment from 'moment'
-import { setSelectedTemplateIndex, setTemplateSearchParams, downloadAnswers } from '../../../modules/reports';
+import { getReports, setSelectedTemplateIndex, setTemplateSearchParams, downloadAnswers } from '../../../modules/reports';
 
 import { DEFAULT_FORMAT, DEFAULT_LANGUAGE } from '../../../constants/global';
 import qs from 'query-string';
@@ -78,6 +78,9 @@ const mapStateToProps = ({ areas, templates, reports }, { match, location }) => 
 
 function mapDispatchToProps(dispatch) {
   return {
+    getReports: (id) => {
+      dispatch(getReports(id));
+    },
     setSelectedTemplateIndex: (index) => {
       dispatch(setSelectedTemplateIndex(index));
     },

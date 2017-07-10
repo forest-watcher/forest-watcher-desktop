@@ -18,20 +18,20 @@ class Reports extends React.Component {
     }
   }
 
-  // componentDidMount() {
-  //   if (this.props.match.params.templateId) {
-  //     this.props.getReportAnswers(this.props.match.params.templateId);
-  //   }
-  // }
+  componentDidMount() {
+    if (this.props.match.params.templateId) {
+      this.props.getReports(this.props.match.params.templateId);
+    }
+  }
 
   componentWillReceiveProps(nextProps) {
     if (this.props.templates.ids.length !== nextProps.templates.ids.length && !nextProps.match.params.templateId) {
       this.props.history.push(`/reports/${nextProps.templates.ids[0]}`);
     }
-    // if (nextProps.match.params.templateId !== this.props.match.params.templateId && 
-    //     !nextProps.reports.answers[nextProps.match.params.templateId]) {
-    //   this.props.getReportAnswers(nextProps.match.params.templateId);
-    // }
+    if (nextProps.match.params.templateId !== this.props.match.params.templateId && 
+        !nextProps.reports.answers[nextProps.match.params.templateId]) {
+      this.props.getReports(nextProps.match.params.templateId);
+    }
   }
 
   downloadReports = () => {
