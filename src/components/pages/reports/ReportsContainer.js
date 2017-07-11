@@ -8,16 +8,20 @@ import Reports from './Reports';
 import { filterData, getDataAreas } from '../../../helpers/filters';
 
 
-const getAnswersByTemplate = (templateId, reports) => {
+const getAnswersByTemplate = (templateId, reports, areas) => {
   const reportIds = reports.answers[templateId].ids;
   const reportData = reports.answers[templateId].data;
-  let answers = reportIds.map((reportId) => ({
-    id: reportData[reportId].id,
-    date: moment(reportData[reportId].attributes.createdAt).format(DEFAULT_FORMAT),
-    latLong: reportData[reportId].attributes.userPosition.toString(),
-    member: reportData[reportId].attributes.user,
-    aoi: reportData[reportId].attributes.areaOfInterest || null
-  }));
+  let answers = reportIds.map((reportId) => {
+    const areaId = reportData[reportId].attributes.areaOfInterest;
+    return {
+      id: reportData[reportId].id,
+      date: moment(reportData[reportId].attributes.createdAt).format(DEFAULT_FORMAT),
+      latLong: reportData[reportId].attributes.userPosition.toString(),
+      member: reportData[reportId].attributes.user,
+      aoi: reportData[reportId].attributes.areaOfInterest || null,
+      aoiName: areas.data[areaId] ? areas.data[areaId].attributes.name : null
+    }
+  });
   return answers;
 }
 
@@ -41,7 +45,7 @@ const mapStateToProps = ({ areas, templates, reports }, { match, location }) => 
   let answersFiltered = [];
   if (templateId !== 0 && reports.answers[templateId]) {
     templateOptions = getTemplateOptions(templates);
-    answers = getAnswersByTemplate(templateId, reports);
+    answers = getAnswersByTemplate(templateId, reports, areas);
     areasOptions = getDataAreas(answers, areas);
     answersFiltered = filterData(answers, searchParams);
   }

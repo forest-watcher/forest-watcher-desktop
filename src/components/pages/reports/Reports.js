@@ -45,7 +45,7 @@ class Reports extends React.Component {
       accessor: 'latLong'
     },{
       Header: <FormattedMessage id="reports.areaOfInterest" />,
-      accessor: 'aoi'
+      accessor: 'aoiName'
     },{  
       Header: <FormattedMessage id="reports.date" />,
       accessor: 'date'

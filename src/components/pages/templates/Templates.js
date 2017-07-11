@@ -24,7 +24,7 @@ class Templates extends React.Component {
       accessor: 'title'
     },{
       Header: <FormattedMessage id="reports.areaOfInterest" />,
-      accessor: 'aoi'
+      accessor: 'aoiName'
     },{  
       Header: <FormattedMessage id="templates.defaultLanguage" />,
       accessor: 'defaultLanguage'
