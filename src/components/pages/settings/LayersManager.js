@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 
 import { FormattedMessage } from 'react-intl';
 import Map from '../../map/Map';
@@ -31,14 +30,14 @@ class LayersManager extends React.Component {
     let layers = [].concat(this.state.mapConfig.layers);
     if(!includes(layers, layerUrl)){
       layers = layers.concat(layerUrl);
+      this.setState({
+        mapConfig: {
+          ...this.state.mapConfig,
+          layers
+        },
+        selectedLayers: this.state.selectedLayers.concat(layer)
+      });
     }
-    this.setState({
-      mapConfig: {
-        ...this.state.mapConfig,
-        layers
-      },
-      selectedLayers: this.state.selectedLayers.concat(layer)
-    });
   }
 
   render() {
@@ -57,7 +56,7 @@ class LayersManager extends React.Component {
                     </div>
                   )
                 }
-              <button className="c-button" onClick={this.addLayer}>Add Layer</button>
+              <button className="c-button -light" onClick={this.addLayer}><FormattedMessage id={"common.add"} /></button>
             </div>
           </div>
           <div className="small-6 columns">
@@ -84,8 +83,5 @@ class LayersManager extends React.Component {
     );
   }
 }
-
-LayersManager.propTypes = {
-};
 
 export default LayersManager;
