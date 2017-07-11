@@ -29,7 +29,7 @@ class TemplatesFilters extends React.Component {
     const { areasOptions } = this.props;
     return (
       <div className="row filter-bar">
-        <div className="column">
+        <div className="column small-12 medium-3 medium-offset-6">
           <Select
             className="c-select"
             name="area-filter"
@@ -43,15 +43,17 @@ class TemplatesFilters extends React.Component {
             arrowRenderer={() => <svg className="c-icon -x-small -gray"><use xlinkHref="#icon-arrow-down"></use></svg>}
           />
         </div>
-        <div className="c-search-bar">
-          <input
-            type="text"
-            onChange={this.handleSearchChange}
-            value={this.props.searchParams.searchValues || ''}
-            name="search-bar"
-            placeholder={this.props.intl.formatMessage({ id: 'filters.search' })}
-          />   
-        </div>  
+        <div className="column small-3">
+          <div className="c-search-bar">
+            <input
+              type="text"
+              onChange={this.handleSearchChange}
+              value={this.props.searchParams.searchValues || ''}
+              name="search-bar"
+              placeholder={this.props.intl.formatMessage({ id: 'filters.search' })}
+            />   
+          </div>  
+        </div>
       </div>
     );
   }

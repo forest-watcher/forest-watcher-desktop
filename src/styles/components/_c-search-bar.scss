@@ -2,8 +2,8 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-right: 10px;
   height: 40px;
+  width: 100%;
   
   input:focus,
   select:focus,
@@ -14,7 +14,7 @@
 
   input {
     height: 100%;
-    margin-right: 10px;
+    width: 100%;
 	  border-radius: 4px;
 	  background-color: #ffffff;
 	  border: solid 1px #e6e6e6;
