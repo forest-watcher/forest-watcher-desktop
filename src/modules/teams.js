@@ -94,6 +94,10 @@ const getBody = (team) => {
 export function createTeam(team) {
   const url = `${API_BASE_URL}/teams/`;
   return (dispatch, state) => {
+    dispatch({
+      type: SET_EDITING,
+      payload: false
+    });
     return fetch(url, {
       headers: {
         Authorization: `Bearer ${state().user.token}`,
@@ -108,10 +112,6 @@ export function createTeam(team) {
       })
       .then((response) => {
         const team = response.data;
-        dispatch({
-          type: SET_EDITING,
-          payload: false
-        });
         dispatch({
           type: SET_LOADING,
           payload: true
@@ -146,6 +146,10 @@ export function createTeam(team) {
 export function updateTeam(team, id) {
   const url = `${API_BASE_URL}/teams/${id}`;
   return (dispatch, state) => {
+    dispatch({
+      type: SET_LOADING,
+      payload: true
+    });
     return fetch(url,
       {
         headers: {
@@ -162,10 +166,6 @@ export function updateTeam(team, id) {
       })
       .then((response) => {
         const team = response.data;
-        dispatch({
-          type: SET_LOADING,
-          payload: true
-        });
         dispatch({
           type: SAVE_TEAM,
           payload: team
