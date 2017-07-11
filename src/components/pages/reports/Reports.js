@@ -25,7 +25,7 @@ class Reports extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (this.props.templates.ids.length !== nextProps.templates.ids.length && !nextProps.match.params.templateIndex) {
+    if (this.props.templates.ids.length !== nextProps.templates.ids.length && !nextProps.match.params.templateId) {
       this.props.history.push(`/reports/${nextProps.templates.ids[0]}`);
     }
     if (nextProps.match.params.templateId !== this.props.match.params.templateId && 
@@ -35,7 +35,7 @@ class Reports extends React.Component {
   }
 
   downloadReports = () => {
-    this.props.downloadAnswers(this.props.match.params.templateIndex);
+    this.props.downloadAnswers(this.props.match.params.templateId);
   }
 
   render() {
@@ -87,8 +87,7 @@ class Reports extends React.Component {
 
 Reports.propTypes = {
   answers: PropTypes.array.isRequired,
-  templates: PropTypes.object.isRequired,
-  setSelectedTemplateIndex: PropTypes.func.isRequired
+  templates: PropTypes.object.isRequired
 };
 
 export default injectIntl(Reports);

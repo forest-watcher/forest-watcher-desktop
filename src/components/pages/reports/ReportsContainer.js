@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import moment from 'moment'
-import { getReports, setSelectedTemplateIndex, setTemplateSearchParams, downloadAnswers } from '../../../modules/reports';
+import { getReports, downloadAnswers } from '../../../modules/reports';
 
 import { DEFAULT_FORMAT, DEFAULT_LANGUAGE } from '../../../constants/global';
 import qs from 'query-string';
@@ -8,9 +8,9 @@ import Reports from './Reports';
 import { filterData, getDataAreas } from '../../../helpers/filters';
 
 
-const getAnswersByTemplate = (templateIndex, reports) => {
-  const reportIds = reports.answers[templateIndex].ids;
-  const reportData = reports.answers[templateIndex].data;
+const getAnswersByTemplate = (templateId, reports) => {
+  const reportIds = reports.answers[templateId].ids;
+  const reportData = reports.answers[templateId].data;
   let answers = reportIds.map((reportId) => ({
     id: reportData[reportId].id,
     date: moment(reportData[reportId].attributes.createdAt).format(DEFAULT_FORMAT),
@@ -61,11 +61,8 @@ function mapDispatchToProps(dispatch) {
     getReports: (id) => {
       dispatch(getReports(id));
     },
-    setTemplateSearchParams: (queryParams) => {
-      dispatch(setTemplateSearchParams(queryParams));
-    },
-    downloadAnswers: (templateIndex) => {
-      dispatch(downloadAnswers(templateIndex));
+    downloadAnswers: (templateId) => {
+      dispatch(downloadAnswers(templateId));
     }
   }
 }
