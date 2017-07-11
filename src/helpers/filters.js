@@ -4,7 +4,6 @@ const filterBy = (data, field, value) => {
   if (field === 'search') {
     return data.filter((item) => {
         return Object.keys(item).some((key) => {
-            debugger
             if (item[key] !== null) {
               if(item[key].toLowerCase().includes(value.toLowerCase())) return true;
             }

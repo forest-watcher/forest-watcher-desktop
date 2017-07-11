@@ -87,8 +87,7 @@ class Reports extends React.Component {
 
 Reports.propTypes = {
   answers: PropTypes.array.isRequired,
-  templates: PropTypes.object.isRequired,
-  setSelectedTemplateIndex: PropTypes.func.isRequired
+  templates: PropTypes.object.isRequired
 };
 
 export default injectIntl(Reports);

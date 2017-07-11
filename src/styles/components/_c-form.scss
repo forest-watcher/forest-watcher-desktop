@@ -31,6 +31,38 @@
     align-items: center;
   }
 
+  .horizontal-field-left-aligned {
+    display: flex;
+    flex-direction: row;
+    padding-top: 10px;
+
+    input, .delete-button, .user-label, .c-checkbox {
+      margin-right: 10px;
+      flex: 1;
+    }
+    
+    .hidden{
+      visibility: hidden;
+    }
+  }
+
+  .input-group {
+    padding-top: 30px;
+
+    .form-control, .Select{
+      padding-top: 10px;    
+      input {
+        width: 100%;
+      }
+    }
+  }
+
+  .-main {
+    min-height: 500px; 
+    height:auto !important; 
+    height: 500px; 
+  }
+
   &.-nav {
     height: $footer-height;
     display: flex;

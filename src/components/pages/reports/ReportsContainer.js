@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import moment from 'moment'
-import { getReports, setSelectedTemplateIndex, setTemplateSearchParams, downloadAnswers } from '../../../modules/reports';
+import { getReports, downloadAnswers } from '../../../modules/reports';
 
 import { DEFAULT_FORMAT, DEFAULT_LANGUAGE } from '../../../constants/global';
 import qs from 'query-string';
@@ -60,12 +60,6 @@ function mapDispatchToProps(dispatch) {
   return {
     getReports: (id) => {
       dispatch(getReports(id));
-    },
-    setSelectedTemplateIndex: (index) => {
-      dispatch(setSelectedTemplateIndex(index));
-    },
-    setTemplateSearchParams: (queryParams) => {
-      dispatch(setTemplateSearchParams(queryParams));
     },
     downloadAnswers: (templateId) => {
       dispatch(downloadAnswers(templateId));

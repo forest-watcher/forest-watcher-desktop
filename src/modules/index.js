@@ -5,6 +5,7 @@ export { default as areas } from './areas';
 export { default as geostores } from './geostores';
 export { default as reports } from './reports';
 export { default as templates } from './templates';
+export { default as teams } from './teams';
 
 /* External reducers */
 export { reducer as toastr } from 'react-redux-toastr';
