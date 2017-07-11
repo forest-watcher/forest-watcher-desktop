@@ -9,6 +9,7 @@ import { FormattedMessage } from 'react-intl';
 import TemplatesFilters from './TemplatesFiltersContainer';
 import Loader from '../../ui/Loader';
 import { injectIntl } from 'react-intl';
+import { Link } from 'react-router-dom';
 
 class Templates extends React.Component {
 
@@ -21,7 +22,8 @@ class Templates extends React.Component {
     const { templates } = this.props;
     const columns = [{
       Header: <FormattedMessage id="templates.title" />,
-      accessor: 'title'
+      accessor: 'title',
+      Cell: props => <Link className="text" to={`/templates/${props.original.id}`}><span className='link'>{props.value}</span></Link>
     },{
       Header: <FormattedMessage id="reports.areaOfInterest" />,
       accessor: 'aoiName'
@@ -55,6 +57,10 @@ class Templates extends React.Component {
                   showPageSizeOptions={false}
                   minRows={5}
                   noDataText={this.props.intl.formatMessage({ id: 'templates.noTemplatesFound' })}
+                  previousText=""
+                  nextText=""
+                  pageText=""
+                  loadingText=""
                 />
                 <Loader isLoading={isLoading} />
               </div>
