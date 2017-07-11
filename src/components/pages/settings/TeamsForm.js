@@ -6,6 +6,7 @@ import Select from 'react-select';
 import MembersManager from './MembersManager';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { MANAGER, USER, CONFIRMED_USER } from '../../../constants/global';
+import LayersManager from './LayersManagerContainer';
 
 class TeamsForm extends React.Component {
   constructor (props) {
@@ -142,6 +143,7 @@ class TeamsForm extends React.Component {
                 selectedManagers={this.state.selectedManagers}
                 addEmail={this.props.addEmail}
               />
+            <LayersManager />
             <div className="row small-12 columns">
               <div className="c-form -nav">
                 { team &&
