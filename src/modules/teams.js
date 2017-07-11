@@ -7,6 +7,7 @@ const GET_TEAM = 'teams/GET_TEAM';
 const SAVE_TEAM = 'teams/SAVE_TEAM';
 const SET_EDITING = 'teams/SET_EDITING';
 const SET_LOADING = 'teams/SET_LOADING';
+const SET_SAVING = 'teams/SET_SAVING';
 const SEND_NOTIFICATIONS = 'teams/SEND_NOTIFICATIONS'
 
 // Reducer
@@ -14,7 +15,8 @@ const initialState = {
   data: null,
   sendNotifications: false,
   editing: false,
-  loading: true
+  loading: true,
+  saving: false
 };
 
 export default function reducer(state = initialState, action) {
@@ -37,6 +39,9 @@ export default function reducer(state = initialState, action) {
     case SET_LOADING:{
       return Object.assign({}, state, { loading: action.payload });
     }
+    case SET_SAVING:{
+      return Object.assign({}, state, { saving: action.payload });
+    }
     case SEND_NOTIFICATIONS:{
       return Object.assign({}, state, { sendNotifications: action.payload });
     }
@@ -50,6 +55,7 @@ export default function reducer(state = initialState, action) {
 export function getTeam(userId) {
   const url = `${API_BASE_URL}/teams/user/${userId}`;
   return (dispatch, state) => {
+
     return fetch(url, {
       headers: {
         Authorization: `Bearer ${state().user.token}`
@@ -95,8 +101,8 @@ export function createTeam(team) {
   const url = `${API_BASE_URL}/teams/`;
   return (dispatch, state) => {
     dispatch({
-      type: SET_EDITING,
-      payload: false
+      type: SET_SAVING,
+      payload: true
     });
     return fetch(url, {
       headers: {
@@ -113,41 +119,38 @@ export function createTeam(team) {
       .then((response) => {
         const team = response.data;
         dispatch({
-          type: SET_LOADING,
-          payload: true
-        });
-        dispatch({
           type: SAVE_TEAM,
           payload: team
         });
         dispatch({
-          type: SET_LOADING,
+          type: SET_SAVING,
           payload: false
         });
         dispatch(getTeam(state().user.data.id));
         if (state().teams.sendNotifications) {
+          toastr.success('Request sent');
           dispatch({
             type: SEND_NOTIFICATIONS,
             payload: false
           });
-          toastr.success('Request sent');
         }
         return team;
       })
       .catch((error) => {
         dispatch({
-          type: SET_LOADING,
+          type: SET_SAVING,
           payload: false
         });
         console.warn('error', error)
       });
   };
 }
+
 export function updateTeam(team, id) {
   const url = `${API_BASE_URL}/teams/${id}`;
   return (dispatch, state) => {
     dispatch({
-      type: SET_LOADING,
+      type: SET_SAVING,
       payload: true
     });
     return fetch(url,
@@ -171,7 +174,7 @@ export function updateTeam(team, id) {
           payload: team
         });
         dispatch({
-          type: SET_LOADING,
+          type: SET_SAVING,
           payload: false
         });
         dispatch(getTeam(state().user.data.id));
@@ -180,17 +183,17 @@ export function updateTeam(team, id) {
           payload: false
         });
         if (state().teams.sendNotifications) {
+          toastr.success('Request sent');
           dispatch({
             type: SEND_NOTIFICATIONS,
             payload: false
           });
-          toastr.success('Request sent');
         }
         return team;
       })
       .catch((error) => {
         dispatch({
-          type: SET_LOADING,
+          type: SET_SAVING,
           payload: false
         });
         console.warn('error', error)
@@ -208,6 +211,13 @@ export function setEditing(value) {
 export function setLoading(value) {
   return {
     type: SET_LOADING,
+    payload: value
+  };
+}
+
+export function setSaving(value) {
+  return {
+    type: SET_SAVING,
     payload: value
   };
 }

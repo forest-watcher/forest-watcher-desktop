@@ -22,6 +22,7 @@ const mapStateToProps = ({ user, teams, areas }) => {
       isManager,
       editing: teams.editing,
       loading: teams.loading,
+      saving: teams.saving,
       userId,
       areas: areasOfInterest
     };

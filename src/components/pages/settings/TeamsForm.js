@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import { Input, Form } from '../../form/Form';
-import Hero from '../../layouts/Hero';
 import Select from 'react-select';
 import MembersManager from './MembersManager';
 import { FormattedMessage, injectIntl } from 'react-intl';
@@ -105,12 +104,8 @@ class TeamsForm extends React.Component {
 
   render() {
     const { team, areaValues } = this.props;
-    const title = this.props.team ? "teams.edit" : "teams.create";
     return (
       <div>
-        <Hero
-          title={title}
-        />
         <Form onSubmit={this.handleSubmit}>
           <div className="c-form">
             <div className="row -main">
