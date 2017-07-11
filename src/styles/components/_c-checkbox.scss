@@ -5,10 +5,12 @@
   input[type=checkbox] {
     visibility: hidden;
   }
+
   .label {
     margin-left: 5px;
     text-transform: uppercase;
   }
+
   .checkbox {
     display: inline-block;
     position: relative;
@@ -17,6 +19,7 @@
     margin-left: 10px;
     padding-right: 10px;
   }
+
   .checkbox label {
     cursor: pointer;
     position: absolute;
@@ -27,6 +30,7 @@
     background: #fff;
     border:1px solid #ddd;
   }
+  
   .checkbox label:after {
     opacity: 0.1;
     content: '';
