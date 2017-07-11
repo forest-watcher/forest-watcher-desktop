@@ -6,21 +6,21 @@ import Hero from '../../layouts/Hero';
 import ReactTable from 'react-table'
 import 'react-select/dist/react-select.css';
 import { FormattedMessage } from 'react-intl';
-import Filters from './ReportsFiltersContainer';
+import ReportsFilters from './ReportsFiltersContainer';
 import Loader from '../../ui/Loader';
 import { injectIntl } from 'react-intl';
 
 class Reports extends React.Component {
 
   componentWillMount() {
-    if (!this.props.match.params.templateIndex && this.props.templates.ids[0]) {
-      this.props.history.push(`/reports/${this.props.templates.ids[0]}`);
+    if (!this.props.match.params.templateId && this.props.templates.ids[0]) {
+      this.props.history.replace(`/reports/${this.props.templates.ids[0]}`);
     }
   }
 
   componentDidMount() {
-    if (this.props.match.params.templateIndex) {
-      this.props.getReportAnswers(this.props.match.params.templateIndex);
+    if (this.props.match.params.templateId) {
+      this.props.getReports(this.props.match.params.templateId);
     }
   }
 
@@ -28,9 +28,9 @@ class Reports extends React.Component {
     if (this.props.templates.ids.length !== nextProps.templates.ids.length && !nextProps.match.params.templateIndex) {
       this.props.history.push(`/reports/${nextProps.templates.ids[0]}`);
     }
-    if (nextProps.match.params.templateIndex !== this.props.match.params.templateIndex && 
-        !nextProps.reports.answers[nextProps.match.params.templateIndex]) {
-      this.props.getReportAnswers(nextProps.match.params.templateIndex);
+    if (nextProps.match.params.templateId !== this.props.match.params.templateId && 
+        !nextProps.reports.answers[nextProps.match.params.templateId]) {
+      this.props.getReports(nextProps.match.params.templateId);
     }
   }
 
@@ -52,7 +52,7 @@ class Reports extends React.Component {
     },{
       Header: <FormattedMessage id="reports.member" />,
       accessor: 'member'
-    }]
+    }];
 
     return (
       <div>
@@ -62,7 +62,7 @@ class Reports extends React.Component {
         />
           <div className="l-content">
             <Article>
-              <Filters
+              <ReportsFilters
                 answers={answers}
                 areasOptions={this.props.areasOptions}
                 templateOptions={this.props.templateOptions}
@@ -88,7 +88,7 @@ class Reports extends React.Component {
 Reports.propTypes = {
   answers: PropTypes.array.isRequired,
   templates: PropTypes.object.isRequired,
-  getReportAnswers: PropTypes.func.isRequired
+  setSelectedTemplateIndex: PropTypes.func.isRequired
 };
 
 export default injectIntl(Reports);

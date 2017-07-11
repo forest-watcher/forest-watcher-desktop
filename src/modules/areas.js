@@ -111,7 +111,7 @@ export function getAreas() {
         throw Error(response.statusText);
       })
       .then((data) => {
-      const normalized = normalize(data);
+        const normalized = normalize(data);
         dispatch({
           type: SET_AREAS,
           payload: normalized

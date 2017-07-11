@@ -34,7 +34,7 @@ export default function reducer(state = initialState, action) {
   }
 }
 
-export function getReportAnswers(reportId) {
+export function getReports(reportId) {
   const url = `${API_BASE_URL}/reports/${reportId}/answers`;
   return (dispatch, state) => {
     dispatch({

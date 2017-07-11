@@ -1,12 +1,11 @@
 import { connect } from 'react-redux';
 import moment from 'moment'
-import { getUserTemplates } from '../../../modules/templates';
-import { getReportAnswers, setTemplateSearchParams, downloadAnswers } from '../../../modules/reports';
+import { getReports, setSelectedTemplateIndex, setTemplateSearchParams, downloadAnswers } from '../../../modules/reports';
 
 import { DEFAULT_FORMAT, DEFAULT_LANGUAGE } from '../../../constants/global';
 import qs from 'query-string';
 import Reports from './Reports';
-import { filterBy } from '../../../helpers/filters';
+import { filterData, getDataAreas } from '../../../helpers/filters';
 
 
 const getAnswersByTemplate = (templateIndex, reports) => {
@@ -22,18 +21,6 @@ const getAnswersByTemplate = (templateIndex, reports) => {
   return answers;
 }
 
-const getAnswersAreas = (answers, areas) => {
-  const areasIndex = [];
-  const areasOptions = [];
-  answers.forEach((answer) => {
-    if (areas.ids.indexOf(answer.aoi) > -1 && areasIndex.indexOf(answer.aoi) === -1) {
-      areasIndex.push(answer.aoi);
-      areasOptions.push({ label: areas.data[answer.aoi] && areas.data[answer.aoi].attributes.name, value: answer.aoi });
-    }
-  });
-  return areasOptions;
-}
-
 const getTemplateOptions = (templates) => {
   const templateOptions = Object.keys(templates.data).map((key) => (
     { label: templates.data[key].attributes.name[DEFAULT_LANGUAGE] ?
@@ -47,29 +34,21 @@ const getTemplateOptions = (templates) => {
 
 const mapStateToProps = ({ areas, templates, reports }, { match, location }) => {
   const searchParams = qs.parse(location.search);
-  const { aoi, date, searchValues } = searchParams;
-  const templateIndex = match.params.templateIndex || 0;
+  const templateId = match.params.templateId || 0;
   let areasOptions = [];
   let answers = [];
   let templateOptions = [];
-  if (templateIndex !== 0 && reports.answers[templateIndex]) {
+  let answersFiltered = [];
+  if (templateId !== 0 && reports.answers[templateId]) {
     templateOptions = getTemplateOptions(templates);
-    answers = getAnswersByTemplate(templateIndex, reports);
-    areasOptions = getAnswersAreas(answers, areas);
-    if (aoi !== undefined){ 
-      answers = filterBy(answers, 'aoi', aoi);
-    }
-    if (searchValues !== undefined){ 
-      answers = filterBy(answers, 'search', searchValues);
-    }
-    if (date !== undefined){ 
-      answers = filterBy(answers, 'date', date);
-    }
+    answers = getAnswersByTemplate(templateId, reports);
+    areasOptions = getDataAreas(answers, areas);
+    answersFiltered = filterData(answers, searchParams);
   }
   return {
     templateOptions,
     templates,
-    answers,
+    answers: answersFiltered,
     areasOptions,
     reports,
     loadingTemplates: templates.loading,
@@ -79,11 +58,8 @@ const mapStateToProps = ({ areas, templates, reports }, { match, location }) => 
 
 function mapDispatchToProps(dispatch) {
   return {
-    getUserTemplates: () => {
-      dispatch(getUserTemplates());
-    },
-    getReportAnswers: (id) => {
-      dispatch(getReportAnswers(id));
+    getReports: (id) => {
+      dispatch(getReports(id));
     },
     setTemplateSearchParams: (queryParams) => {
       dispatch(setTemplateSearchParams(queryParams));

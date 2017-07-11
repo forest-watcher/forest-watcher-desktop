@@ -79,5 +79,11 @@
     "filters.area": "Filtra por area",
     "filters.noAreasAvailable": "No hay areas disponibles",
     "filters.search": "Buscar",
-    "filters.date": "Filtra por fecha"
+    "filters.date": "Filtra por fecha",
+    "templates.create": "create template",
+    "templates.areaOfInterest": "area",
+    "templates.defaultLanguage": "default language",
+    "templates.status": "status",
+    "templates.reportsSubmitted": "reports submitted",
+    "templates.noTemplatesFound": "No templates found"
 }
