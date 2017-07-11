@@ -6,7 +6,7 @@ import Hero from '../../layouts/Hero';
 import ReactTable from 'react-table'
 import 'react-select/dist/react-select.css';
 import { FormattedMessage } from 'react-intl';
-import Filters from './ReportsFiltersContainer';
+import ReportsFilters from './ReportsFiltersContainer';
 import Loader from '../../ui/Loader';
 import { injectIntl } from 'react-intl';
 

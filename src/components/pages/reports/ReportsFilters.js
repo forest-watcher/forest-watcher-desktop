@@ -96,10 +96,10 @@ class ReportsFilters extends React.Component {
   }
 }
 
-Filters.propTypes = {
+ReportsFilters.propTypes = {
   answers: PropTypes.array.isRequired,
   templates: PropTypes.object.isRequired,
-  templateIndex: PropTypes.string,
+  templateId: PropTypes.string,
   searchParams: PropTypes.object
 };
 

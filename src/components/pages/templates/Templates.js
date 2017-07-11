@@ -6,7 +6,7 @@ import Article from '../../layouts/Article';
 import ReactTable from 'react-table'
 import 'react-select/dist/react-select.css';
 import { FormattedMessage } from 'react-intl';
-import TemplatesFilters from './TemplateFiltersContainer';
+import TemplatesFilters from './TemplatesFiltersContainer';
 import Loader from '../../ui/Loader';
 import { injectIntl } from 'react-intl';
 

@@ -5,7 +5,7 @@ import { getReports, setSelectedTemplateIndex, setTemplateSearchParams, download
 import { DEFAULT_FORMAT, DEFAULT_LANGUAGE } from '../../../constants/global';
 import qs from 'query-string';
 import Reports from './Reports';
-import { filterBy } from '../../../helpers/filters';
+import { filterData } from '../../../helpers/filters';
 
 
 const getAnswersByTemplate = (templateId, reports) => {
@@ -46,29 +46,21 @@ const getTemplateOptions = (templates) => {
 
 const mapStateToProps = ({ areas, templates, reports }, { match, location }) => {
   const searchParams = qs.parse(location.search);
-  const { aoi, date, searchValues } = searchParams;
   const templateId = match.params.templateId || 0;
   let areasOptions = [];
   let answers = [];
   let templateOptions = [];
+  let answersFiltered = [];
   if (templateId !== 0 && reports.answers[templateId]) {
     templateOptions = getTemplateOptions(templates);
     answers = getAnswersByTemplate(templateId, reports);
     areasOptions = getAnswersAreas(answers, areas);
-    if (aoi !== undefined){ 
-      answers = filterBy(answers, 'aoi', aoi);
-    }
-    if (searchValues !== undefined){ 
-      answers = filterBy(answers, 'search', searchValues);
-    }
-    if (date !== undefined){ 
-      answers = filterBy(answers, 'date', date);
-    }
+    answersFiltered = filterData(answers, searchParams);
   }
   return {
     templateOptions,
     templates,
-    answers,
+    answers: answersFiltered,
     areasOptions,
     reports,
     loadingTemplates: templates.loading,

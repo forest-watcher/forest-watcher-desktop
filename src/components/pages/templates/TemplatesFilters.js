@@ -10,7 +10,7 @@ class TemplatesFilters extends React.Component {
   
   redirectWith(searchParams){
     this.props.history.push({
-      pathname: `/templates/${this.props.match.params.templateId}`,
+      pathname: `/templates`,
       search: qs.stringify(searchParams)
     })
   }
@@ -26,7 +26,7 @@ class TemplatesFilters extends React.Component {
   }
 
   render() {
-    const { templateOptions, areasOptions } = this.props;
+    const { areasOptions } = this.props;
     return (
       <div className="row filter-bar">
         <div className="column">
@@ -57,10 +57,7 @@ class TemplatesFilters extends React.Component {
   }
 }
 
-Filters.propTypes = {
-  answers: PropTypes.array.isRequired,
-  templates: PropTypes.object.isRequired,
-  templateIndex: PropTypes.string,
+TemplatesFilters.propTypes = {
   searchParams: PropTypes.object
 };
 

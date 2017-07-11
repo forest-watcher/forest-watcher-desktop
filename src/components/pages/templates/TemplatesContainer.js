@@ -1,6 +1,7 @@
 import { connect } from 'react-redux';
 import Templates from './Templates';
-import { getTemplates } from '../../../modules/templates';
+import { filterData } from '../../../helpers/filters';
+import qs from 'query-string';
 
 const getTemplatesById = (templates, reports) => {
   const templateIds = templates.ids;
@@ -17,10 +18,12 @@ const getTemplatesById = (templates, reports) => {
   return parsedTemplates;
 }
 
-const mapStateToProps = ({ templates, reports }) => {
+const mapStateToProps = ({ templates, reports }, { match, location }) => {
+  const searchParams = qs.parse(location.search);
   const parsedTemplates = getTemplatesById(templates, reports);
+  const filteredTemplates = filterData(parsedTemplates, searchParams);
   return {
-    templates: parsedTemplates,
+    templates: filteredTemplates,
     loadingTemplates: templates.loading,
     loadingReports: reports.loading
   }
