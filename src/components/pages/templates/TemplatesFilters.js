@@ -44,15 +44,14 @@ class TemplatesFilters extends React.Component {
           />
         </div>
         <div className="column small-3">
-          <div className="c-search-bar">
-            <input
-              type="text"
-              onChange={this.handleSearchChange}
-              value={this.props.searchParams.searchValues || ''}
-              name="search-bar"
-              placeholder={this.props.intl.formatMessage({ id: 'filters.search' })}
-            />   
-          </div>  
+          <input
+            className="c-search"
+            type="text"
+            onChange={this.handleSearchChange}
+            value={this.props.searchParams.searchValues || ''}
+            name="search-bar"
+            placeholder={this.props.intl.formatMessage({ id: 'filters.search' })}
+          />   
         </div>
       </div>
     );

@@ -46,7 +46,7 @@ class ReportsFilters extends React.Component {
     const { templateOptions, areasOptions } = this.props;
     return (
       <div className="row filter-bar">
-        <div className="column small-12 medium-3 medium-offset-3">
+        <div className="column small-12 medium-3">
           <Select
             name="template-select"
             className="c-select"
@@ -75,23 +75,25 @@ class ReportsFilters extends React.Component {
           />
         </div>
         <div className="column small-12 medium-3">
-          <div className="c-search-bar">
-            <input
-              type="text"
-              onChange={this.handleSearchChange}
-              value={this.props.searchParams.searchValues || ''}
-              name="search-bar"
-              placeholder={this.props.intl.formatMessage({ id: 'filters.search' })}
-            />   
+          <input
+            type="text"
+            className="c-search"
+            onChange={this.handleSearchChange}
+            value={this.props.searchParams.searchValues || ''}
+            name="search-bar"
+            placeholder={this.props.intl.formatMessage({ id: 'filters.search' })}
+          />   
+        </div>  
+        <div className="column small-12 medium-3">
+          <div className="c-date-picker">
             <DatePicker
-              className="datepicker"
               dateFormat={DEFAULT_FORMAT}
               selected={this.props.searchParams.date && moment(this.props.searchParams.date, DEFAULT_FORMAT)}
               onChange={this.handleDateChange}
               isClearable={true}
               placeholderText={this.props.intl.formatMessage({ id: 'filters.date' })}
             />
-          </div>  
+          </div>
         </div>
       </div>
     );
