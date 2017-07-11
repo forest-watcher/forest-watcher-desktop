@@ -30,4 +30,16 @@ const filterData = (data, searchParams) => {
   return data;
 }
 
-export { filterData };
+const getDataAreas = (data, areas) => {
+  const areasIndex = [];
+  const areasOptions = [];
+  data.forEach((answer) => {
+    if (areas.ids.indexOf(answer.aoi) > -1 && areasIndex.indexOf(answer.aoi) === -1) {
+      areasIndex.push(answer.aoi);
+      areasOptions.push({ label: areas.data[answer.aoi] && areas.data[answer.aoi].attributes.name, value: answer.aoi });
+    }
+  });
+  return areasOptions;
+}
+
+export { filterData, getDataAreas };

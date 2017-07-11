@@ -5,7 +5,7 @@ import { getReports, setSelectedTemplateIndex, setTemplateSearchParams, download
 import { DEFAULT_FORMAT, DEFAULT_LANGUAGE } from '../../../constants/global';
 import qs from 'query-string';
 import Reports from './Reports';
-import { filterData } from '../../../helpers/filters';
+import { filterData, getDataAreas } from '../../../helpers/filters';
 
 
 const getAnswersByTemplate = (templateId, reports) => {
@@ -19,18 +19,6 @@ const getAnswersByTemplate = (templateId, reports) => {
     aoi: reportData[reportId].attributes.areaOfInterest || null
   }));
   return answers;
-}
-
-const getAnswersAreas = (answers, areas) => {
-  const areasIndex = [];
-  const areasOptions = [];
-  answers.forEach((answer) => {
-    if (areas.ids.indexOf(answer.aoi) > -1 && areasIndex.indexOf(answer.aoi) === -1) {
-      areasIndex.push(answer.aoi);
-      areasOptions.push({ label: areas.data[answer.aoi] && areas.data[answer.aoi].attributes.name, value: answer.aoi });
-    }
-  });
-  return areasOptions;
 }
 
 const getTemplateOptions = (templates) => {
@@ -54,7 +42,7 @@ const mapStateToProps = ({ areas, templates, reports }, { match, location }) => 
   if (templateId !== 0 && reports.answers[templateId]) {
     templateOptions = getTemplateOptions(templates);
     answers = getAnswersByTemplate(templateId, reports);
-    areasOptions = getAnswersAreas(answers, areas);
+    areasOptions = getDataAreas(answers, areas);
     answersFiltered = filterData(answers, searchParams);
   }
   return {

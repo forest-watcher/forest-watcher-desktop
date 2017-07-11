@@ -12,7 +12,7 @@ class TemplatesFilters extends React.Component {
     this.props.history.push({
       pathname: `/templates`,
       search: qs.stringify(searchParams)
-    })
+    });
   }
 
   handleAreaChange = (selected) => {
