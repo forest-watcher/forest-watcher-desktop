@@ -11,7 +11,7 @@ import 'react-datepicker/dist/react-datepicker.css';
 
 import qs from 'query-string';
 
-class Filters extends React.Component {
+class ReportsFilters extends React.Component {
   
   redirectWith(searchParams){
     this.props.history.push({
@@ -46,7 +46,7 @@ class Filters extends React.Component {
     const { templateOptions, areasOptions } = this.props;
     return (
       <div className="row filter-bar">
-        <div className="column">
+        <div className="column small-12 medium-3">
           <Select
             name="template-select"
             className="c-select"
@@ -60,7 +60,7 @@ class Filters extends React.Component {
             arrowRenderer={() => <svg className="c-icon -x-small -gray"><use xlinkHref="#icon-arrow-down"></use></svg>}
           />
         </div>
-        <div className="column">
+        <div className="column small-12 medium-3">
           <Select
             className="c-select"
             name="area-filter"
@@ -74,33 +74,37 @@ class Filters extends React.Component {
             arrowRenderer={() => <svg className="c-icon -x-small -gray"><use xlinkHref="#icon-arrow-down"></use></svg>}
           />
         </div>
-        <div className="c-search-bar">
+        <div className="column small-12 medium-3">
           <input
             type="text"
+            className="c-search"
             onChange={this.handleSearchChange}
             value={this.props.searchParams.searchValues || ''}
             name="search-bar"
             placeholder={this.props.intl.formatMessage({ id: 'filters.search' })}
           />   
-          <DatePicker
-            className="datepicker"
-            dateFormat={DEFAULT_FORMAT}
-            selected={this.props.searchParams.date && moment(this.props.searchParams.date, DEFAULT_FORMAT)}
-            onChange={this.handleDateChange}
-            isClearable={true}
-            placeholderText={this.props.intl.formatMessage({ id: 'filters.date' })}
-          />
         </div>  
+        <div className="column small-12 medium-3">
+          <div className="c-date-picker">
+            <DatePicker
+              dateFormat={DEFAULT_FORMAT}
+              selected={this.props.searchParams.date && moment(this.props.searchParams.date, DEFAULT_FORMAT)}
+              onChange={this.handleDateChange}
+              isClearable={true}
+              placeholderText={this.props.intl.formatMessage({ id: 'filters.date' })}
+            />
+          </div>
+        </div>
       </div>
     );
   }
 }
 
-Filters.propTypes = {
+ReportsFilters.propTypes = {
   answers: PropTypes.array.isRequired,
   templates: PropTypes.object.isRequired,
-  templateIndex: PropTypes.string,
+  templateId: PropTypes.string,
   searchParams: PropTypes.object
 };
 
-export default injectIntl(Filters);
+export default injectIntl(ReportsFilters);

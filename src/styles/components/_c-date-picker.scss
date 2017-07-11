@@ -1,0 +1,35 @@
+.c-date-picker {
+    height: 40px;
+    width: 100%;
+
+    .react-datepicker__input-container {
+        display: block;
+        height: 40px;
+        width: 100%;
+
+        input {
+            height: 40px;
+            width: 100%;
+            border-radius: 4px;
+            background-color: #ffffff;
+            border: solid 1px #e6e6e6;
+            padding: 0 15px;
+            font-size: $font-size-regular;
+            color: $gray;
+
+              &::placeholder {
+                opacity: 0.5;
+            }
+        }
+    }
+
+    .react-datepicker__close-icon {
+        &::after {
+            background-color: #fff;
+            color:#666;
+            font-size: 20px;
+            right: 12px;
+            margin: -11px auto 0;
+        }
+    }
+}

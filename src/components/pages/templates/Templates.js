@@ -3,37 +3,71 @@ import PropTypes from 'prop-types';
 
 import Hero from '../../layouts/Hero';
 import Article from '../../layouts/Article';
-import GridGallery from '../../layouts/GridGallery';
-
-import ReportCard from '../../report-card/ReportCardContainer';
+import ReactTable from 'react-table'
+import 'react-select/dist/react-select.css';
+import { FormattedMessage } from 'react-intl';
+import TemplatesFilters from './TemplatesFiltersContainer';
+import Loader from '../../ui/Loader';
+import { injectIntl } from 'react-intl';
 
 class Templates extends React.Component {
 
+  createTemplate = () => {
+    const { history } = this.props;
+    history.push('/templates/create');
+  }
+
   render() {
-    const { templateIds } = this.props;
+    const { templates } = this.props;
+    const columns = [{
+      Header: <FormattedMessage id="templates.title" />,
+      accessor: 'title'
+    },{
+      Header: <FormattedMessage id="reports.areaOfInterest" />,
+      accessor: 'aoi'
+    },{  
+      Header: <FormattedMessage id="templates.defaultLanguage" />,
+      accessor: 'defaultLanguage'
+    },{
+      Header: <FormattedMessage id="templates.status" />,
+      accessor: 'status'
+    },{
+      Header: <FormattedMessage id="templates.reportsSubmitted" />,
+      accessor: 'count'
+    }];
+    const isLoading = this.props.loadingTemplates || this.props.loadingReports;
     return (
       <div>
         <Hero
           title="templates.title"
+          action={{name: "templates.create", callback: this.createTemplate}}
         />
-      <div className="l-content">
-          <Article title="templates.subtitle">
-            <GridGallery
-              Component={ReportCard}
-              className="report-card-item"
-              collection={templateIds}
-              columns={{ small: 12, medium: 4, large: 3 }}
-            />
-          </Article>
-        </div>
+          <div className="l-content">
+            <Article>
+              <TemplatesFilters
+                areasOptions={this.props.areasOptions}
+              />
+              <div className="l-loader">
+                <ReactTable
+                  className="c-table"
+                  data={!isLoading && templates ? templates : []}
+                  columns={columns}
+                  showPageSizeOptions={false}
+                  minRows={5}
+                  noDataText={this.props.intl.formatMessage({ id: 'templates.noTemplatesFound' })}
+                />
+                <Loader isLoading={isLoading} />
+              </div>
+            </Article>
+          </div>
       </div>
     );
   }
 }
 
 Templates.propTypes = {
-  getUserTemplates: PropTypes.func.isRequired,
-  templateIds: PropTypes.array.isRequired
+  intl: PropTypes.object,
+  loading: PropTypes.bool
 };
 
-export default Templates;
+export default injectIntl(Templates);

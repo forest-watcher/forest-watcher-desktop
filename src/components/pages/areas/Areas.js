@@ -1,29 +1,19 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-
 import Hero from '../../layouts/Hero';
 import Article from '../../layouts/Article';
 import { Link } from 'react-router-dom';
 import GridGallery from '../../layouts/GridGallery';
 import AreaCard from '../../area-card/AreaCardContainer';
 import Icon from '../../ui/Icon';
-import querystring from 'query-string';
 import { FormattedMessage } from 'react-intl';
+import Loader from '../../ui/Loader';
+import { trimQueryParams } from '../../../helpers/login.js';
 
 class Areas extends React.Component {
 
   componentWillMount() {
-    this.trimQueryParams();
-  }
-
-  trimQueryParams() {
-    const { location, history } = this.props;
-    const search = location.search || '';
-    const queryParams = querystring.parse(search);
-    if (queryParams.token) {
-      const newSearch = querystring.stringify({ ...queryParams, token: undefined });
-      history.replace('/areas', { search: newSearch });
-    }
+    trimQueryParams(this.props);
   }
 
   getAddArea = () => {
@@ -54,6 +44,7 @@ class Areas extends React.Component {
               Component={AreaCard}
               after={this.getAddArea()}
             />
+            <Loader isLoading={this.props.loading} />
           </Article>
         </div>
       </div>

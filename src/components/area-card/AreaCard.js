@@ -7,7 +7,7 @@ import { FormattedMessage } from 'react-intl';
 class AreaCard extends React.Component {
 
   render() {
-    const { area } = this.props;
+    const { area, templates } = this.props;
     return (
       <div className="c-area-card">
         <div className="area-content">
@@ -19,7 +19,7 @@ class AreaCard extends React.Component {
                 <Icon className="-small -gray" name="icon-edit"/>
               </Link>
             </div>
-            <Link className="text -x-small-title -green" to={'/reports'}><FormattedMessage id="areas.reportsBtn" /></Link>
+            <Link className="text -x-small-title -green" to={`/reports/${templates.ids[0] || null}?aoi=${area.id || null}`}><FormattedMessage id="areas.reportsBtn" /></Link>
           </div>
         </div>
       </div>

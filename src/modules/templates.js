@@ -3,7 +3,7 @@ import { API_BASE_URL } from '../constants/global';
 import { toastr } from 'react-redux-toastr';
 
 // Actions
-const GET_USER_TEMPLATES = 'templates/GET_USER_TEMPLATES';
+const GET_TEMPLATES = 'templates/GET_TEMPLATES';
 const SET_LOADING_TEMPLATES = 'templates/SET_LOADING_TEMPLATES';
 
 // Reducer
@@ -15,7 +15,7 @@ const initialState = {
 
 export default function reducer(state = initialState, action) {
   switch (action.type) {
-    case GET_USER_TEMPLATES: {
+    case GET_TEMPLATES: {
       const templates = action.payload.reports;
       if (templates) return Object.assign({}, state, { ids: Object.keys(templates), data: templates });
       return state;
@@ -28,14 +28,14 @@ export default function reducer(state = initialState, action) {
 }
 
 // Action Creators
-export function getUserTemplates() {
+export function getTemplates() {
   const url = `${API_BASE_URL}/reports`;
   return (dispatch, state) => {
     dispatch({
       type: SET_LOADING_TEMPLATES,
       payload: true
     });
-    fetch(url, {
+    return fetch(url, {
       headers: {
         Authorization: `Bearer ${state().user.token}`
       }
@@ -47,13 +47,14 @@ export function getUserTemplates() {
       .then((data) => {
         const normalized = normalize(data);
         dispatch({
-          type: GET_USER_TEMPLATES,
+          type: GET_TEMPLATES,
           payload: normalized
         });
         dispatch({
           type: SET_LOADING_TEMPLATES,
           payload: false
         });
+        return normalized;
       })
       .catch((error) => {
         dispatch({

@@ -33,8 +33,8 @@
     "areas.tooLarge": "Area too large",
     "areas.tooLargeDesc": "Please draw a smaller area",
     "areas.locateUserError": "Your location wasn't found",
-    "templates.name": "Templates",
-    "templates.title": "Templates",
+    "templates.name": "templates",
+    "templates.title": "Your Templates",
     "templates.subtitle": "Your templates",
     "reports.name": "Reports",
     "reports.title": "Your Reports",
@@ -62,5 +62,11 @@
     "filters.area": "Filter by area",
     "filters.noAreasAvailable": "No areas available",
     "filters.search": "Search",
-    "filters.date": "Filter by date"
+    "filters.date": "Filter by date",
+    "templates.create": "create template",
+    "templates.areaOfInterest": "area",
+    "templates.defaultLanguage": "default language",
+    "templates.status": "status",
+    "templates.reportsSubmitted": "reports submitted",
+    "templates.noTemplatesFound": "No templates found"
 }
