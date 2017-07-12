@@ -32,7 +32,7 @@
 
     .leaflet-draw-draw-polygon {
       padding: 8px;
-      background-image: url(/images/draw.png) !important;
+      background-image: url(/images/draw_new.png) !important;
       background-position: center !important;
       background-size: contain !important;
       background-repeat: no-repeat !important;
@@ -71,3 +71,11 @@
   background-origin: content-box !important;
 }
 
+.leaflet-draw-edit-remove {
+  padding: 10px;
+  background-image: url(/images/delete.png) !important;
+  background-position: center !important;
+  background-size: contain !important;
+  background-repeat: no-repeat !important;
+  background-origin: content-box !important;
+}
