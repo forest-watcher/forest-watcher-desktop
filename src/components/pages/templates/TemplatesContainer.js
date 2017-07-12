@@ -14,7 +14,8 @@ const getTemplatesById = (templates, reports, areas) => {
       defaultLanguage: templateData.defaultLanguage.toUpperCase(),
       aoi: areaId || null,
       aoiName: areas.data[areaId] ? areas.data[areaId].attributes.name : null,
-      count: templateData.answersCount || null
+      count: templateData.answersCount || null,
+      status: templateData.status || null
     };
   });
   return parsedTemplates;
