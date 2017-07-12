@@ -10,7 +10,6 @@ import Loader from '../../ui/Loader';
 import { injectIntl } from 'react-intl';
 
 import 'react-select/dist/react-select.css';
-// import 'react-table/react-table.css';
 
 class Reports extends React.Component {
 
