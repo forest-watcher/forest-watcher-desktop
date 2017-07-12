@@ -18,7 +18,8 @@ class LayersManager extends React.Component {
         scrollWheelZoom: false,
         layers: []
       },
-      selectedLayers: []
+      selectedLayers: [],
+      tabIndex: 0
     }
   }
   
