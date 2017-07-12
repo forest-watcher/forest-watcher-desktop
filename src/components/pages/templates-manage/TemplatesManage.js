@@ -5,16 +5,26 @@ import Hero from '../../layouts/Hero';
 import 'react-select/dist/react-select.css';
 import { FormattedMessage } from 'react-intl';
 import { injectIntl } from 'react-intl';
-import { Form } from '../../form/Form';
+import { Form, Input } from '../../form/Form';
 import Select from 'react-select';
 
 class TemplatesManage extends React.Component {
   constructor (props) {
     super(props);
     this.state = {
-      selectedArea: this.props.selectedArea || '',
-      defaultLanguage: this.props.selectedArea || ''
+      selectedArea: this.props.selectedArea || null,
+      defaultLanguage: this.props.selectedArea || null
     }
+    this.form = {
+      title: props.template? props.template.name.en : null
+    };
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.form = {
+        ...this.form,
+        title: nextProps.template.title? nextProps.template.title.en : ''
+    };
   }
 
   onAreaChange = (selected) => {
@@ -23,6 +33,10 @@ class TemplatesManage extends React.Component {
 
   onLanguageChange = (selected) => {
     this.setState({defaultLanguage: selected});
+  }
+  
+  onInputChange = (e) => {
+    this.form = Object.assign({}, this.form, { [e.target.name]: e.target.value }); 
   }
 
   render() {
@@ -33,16 +47,14 @@ class TemplatesManage extends React.Component {
           title="templates.create"
         />
         <div className="l-template">
-          <div className="template-meta">
-            <Form onSubmit={this.handleSubmit}>
-              <div className="c-form">
-                <div className="row -main">
+          <Form onSubmit={this.handleSubmit}>
+            <div className="c-form">
+              <div className="template-meta">
+                <div className="row">
                   <div className="column small-12 medium-4 medium-offset-2">
                     <div className="input-group">
-                      <label className="text"><FormattedMessage id={"templates.assignArea"} />:</label>
+                      <label className="text -gray"><FormattedMessage id={"templates.assignArea"} />:</label>
                       <Select
-                        multi
-                        simpleValue
                         name="areas-select"
                         options={areasOptions}
                         value={this.state.selectedArea}
@@ -56,8 +68,6 @@ class TemplatesManage extends React.Component {
                     <div className="input-group">
                       <label className="text"><FormattedMessage id={"templates.defaultLanguage"} />:</label>
                       <Select
-                        multi
-                        simpleValue
                         name="language-select"
                         options={languageOptions}
                         value={this.state.defaultLanguage}
@@ -69,8 +79,25 @@ class TemplatesManage extends React.Component {
                   </div>
                 </div>
               </div>
-            </Form>
-          </div>
+              <div className="template-fields">
+                <div className="row">
+                  <div className="column small-12 medium-8 medium-offset-2">
+                    <div className="c-question -title">
+                      <Input
+                        type="text"
+                        className="-title"
+                        onChange={this.onInputChange}
+                        name="title"
+                        value={this.form.title || ''}
+                        placeholder={this.props.intl.formatMessage({ id: 'templates.title' })}
+                        validations={['required']}
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </Form>
         </div>
       </div>
     );

@@ -1,6 +1,16 @@
 .l-template {
 
     .template-meta {
-        padding: 30px 0;
+        padding: 30px 0 80px;
+
+        label {
+            margin-bottom: 15px;
+            display: block
+        }
+    }
+
+    .template-fields {
+        background: $white;
+        padding-bottom: 60px;
     }
 }

@@ -16,6 +16,7 @@ const mapAreasToOptions = (areas) => {
 
 const mapStateToProps = (state, { match }) => {
     const areasOptions = mapAreasToOptions(state.areas);
+    const templateId = match.params.templateId || null;
     const languageOptions = [
         {
             option: 'en',
@@ -27,7 +28,7 @@ const mapStateToProps = (state, { match }) => {
         }
     ];
     return {
-        templates: state.templates,
+        template: state.templates.data[templateId]? state.templates.data[templateId].attributes : null,
         areasOptions,
         languageOptions
     }

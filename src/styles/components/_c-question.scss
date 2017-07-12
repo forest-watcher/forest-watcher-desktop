@@ -1,0 +1,13 @@
+.c-question {
+    box-shadow: 0 0 8px 0 rgba(0, 0, 0, 0.15), inset 3px 0 0 0 $theme-accent;
+    border-radius: 4px;
+    background: $white;
+
+    &.-title {
+        margin-top: -25px;
+        padding: 40px;
+        padding-top: 60px;
+        border: solid 1px $border-light-gray;
+        box-shadow: none;
+    }
+}

@@ -23,8 +23,6 @@ import Templates from '../pages/templates/TemplatesContainer';
 import TemplatesManage from '../pages/templates-manage/TemplatesManageContainer';
 import Settings from '../pages/settings/SettingsContainer';
 import Reports from '../pages/reports/ReportsContainer';
-import Answers from '../pages/answers/AnswersContainer';
-import AnswersDetail from '../pages/answers-detail/AnswersDetailContainer';
 
 import 'react-redux-toastr/lib/css/react-redux-toastr.min.css';
 
@@ -75,8 +73,7 @@ class App extends React.Component {
                 <Switch>
                   <Route exact path={`${match.url}templates`} component={Templates} />
                   <Route exact path={`${match.url}templates/create`} component={TemplatesManage} />
-                  <Route exact path={`${match.url}templates/:reportId`} component={Answers} />
-                  <Route path={`${match.url}templates/:reportId/:answerId`} component={AnswersDetail} />
+                  <Route exact path={`${match.url}templates/:templateId`} component={TemplatesManage} />
                 </Switch>
                 <Switch>
                   <Route exact path={`${match.url}reports`} component={Reports} />
