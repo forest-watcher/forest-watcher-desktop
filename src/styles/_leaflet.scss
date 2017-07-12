@@ -31,7 +31,12 @@
     }
 
     .leaflet-draw-draw-polygon {
-      background-position: -28px 0px;
+      padding: 8px;
+      background-image: url(/images/draw_new.png) !important;
+      background-position: center !important;
+      background-size: contain !important;
+      background-repeat: no-repeat !important;
+      background-origin: content-box !important;
     }
   }
 
@@ -55,4 +60,26 @@
 
 .leaflet-control-attribution {
   display: none;
+}
+
+.leaflet-draw-edit-edit {
+  padding: 10px;
+  background-image: url(/images/edit.png) !important;
+  background-position: center !important;
+  background-size: contain !important;
+  background-repeat: no-repeat !important;
+  background-origin: content-box !important;
+}
+
+.leaflet-draw-edit-remove {
+  padding: 10px;
+  background-image: url(/images/delete.png) !important;
+  background-position: center !important;
+  background-size: contain !important;
+  background-repeat: no-repeat !important;
+  background-origin: content-box !important;
+}
+
+.leaflet-disabled {
+  opacity: 0.7;
 }

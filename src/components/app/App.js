@@ -74,10 +74,12 @@ class App extends React.Component {
                   <Route exact path={`${match.url}templates`} component={Templates} />
                   <Route exact path={`${match.url}templates/:reportId`} component={Answers} />
                   <Route path={`${match.url}templates/:reportId/:answerId`} component={AnswersDetail} />
+                </Switch>
+                <Switch>
                   <Route exact path={`${match.url}reports`} component={Reports} />
                   <Route path={`${match.url}reports/:templateId`} component={Reports} />
-                  <Route exact path={`${match.url}settings`} component={Settings} />
                 </Switch>
+                <Route exact path={`${match.url}settings`} component={Settings} />
               </div>
             }
             {!user.loggedIn && <Redirect to="/" />}
