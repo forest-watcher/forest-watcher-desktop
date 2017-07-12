@@ -3,6 +3,7 @@ import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import Map from '../../map/Map';
 import { includes } from '../../../helpers/utils';
+import Card from '../../ui/Card';
 import Tab from '../../ui/Tab';
 
 class LayersManager extends React.Component {
@@ -60,34 +61,28 @@ class LayersManager extends React.Component {
               />
             </div>
             <div className="section">
-                { this.props.gfwLayers && this.props.gfwLayers.map((layer, i) => 
+              <Card className={"-big"}>
+                {this.state.tabIndex === 0 ? 
+                  (this.props.gfwLayers && this.props.gfwLayers.map((layer, i) => 
                     <div key={i}>
                       <a onClick={() => this.addLayer(layer)}> {layer.title} </a>
                     </div>
-                  )
-                }
-              <button className="c-button -light" onClick={this.addLayer}><FormattedMessage id={"common.add"} /></button>
+                  ))
+                  : null
+                  }
+               </Card> 
             </div>
           </div>
           <div className="small-6 columns">
-            <div className="section">
-              <div className="title"><FormattedMessage id={"settings.selectedLayers"} /></div>
-            </div>
-            <div className="section">
-                { this.state.selectedLayers.map((layer, i) => 
-                    <div key={i}>{layer.title}</div>
-                  )
-                }
+            <div className="c-map -layers-container">
+              <Map
+                mapConfig={this.state.mapConfig}
+                map={(map) => {
+                  this.setState({map});
+                }}
+              />
             </div>
           </div>
-        </div>
-        <div className="c-map -layers-container row column">
-          <Map
-            mapConfig={this.state.mapConfig}
-            map={(map) => {
-              this.setState({map});
-            }}
-          />
         </div>
       </div>
     );

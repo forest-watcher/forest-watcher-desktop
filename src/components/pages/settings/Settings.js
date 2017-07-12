@@ -111,12 +111,12 @@ class Settings extends React.Component {
                       </div>
                     </div>
                   </div>
-                  <LayersManager />
                 </Article>
               </div>
             </div> 
             : <TeamsForm team={team}/>
           }
+          <LayersManager />
         </div>
       }
       </div>
