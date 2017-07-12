@@ -56,11 +56,12 @@ class Map extends React.Component {
                       .addTo(this.map)
                       .setZIndex(0);
   }
-
+    
   updateLayers(layerUrls) {
     layerUrls.forEach((layerUrl) => {
-      const layer = L.tileLayer(layerUrl, { maxZoom:19 });
-      if (!this.map.hasLayer(layer)) layer.addTo(this.map).setZIndex(0);
+      const lowCaseLayerUrl = layerUrl.replace("{Z}", "{z}").replace("{Y}", "{y}").replace("{X}", "{x}");
+      const layer = L.tileLayer(lowCaseLayerUrl);
+      if (!this.map.hasLayer(layer)) layer.addTo(this.map);
     });
     this.map.eachLayer((layer) => {
       if (layer._url !== MAP_CONFIG.basemap && !includes(layerUrls, layer._url)){
