@@ -56,3 +56,13 @@
 .leaflet-control-attribution {
   display: none;
 }
+
+.leaflet-draw-edit-edit {
+  padding: 10px;
+  background-image: url(/images/edit.png) !important;
+  background-position: center !important;
+  background-size: contain !important;
+  background-repeat: no-repeat !important;
+  background-origin: content-box !important;
+}
+
