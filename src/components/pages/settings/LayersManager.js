@@ -3,6 +3,7 @@ import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import Map from '../../map/Map';
 import { includes } from '../../../helpers/utils';
+import Tab from '../../ui/Tab';
 
 class LayersManager extends React.Component {
   constructor() {
@@ -40,6 +41,10 @@ class LayersManager extends React.Component {
     }
   }
 
+  handleTabIndexChange = (tabIndex) => {
+    this.setState({ tabIndex });
+  }
+
   render() {
     return (
       <div >
@@ -47,7 +52,11 @@ class LayersManager extends React.Component {
           <div className="small-6 columns">
             <div className="section">
               <div className="title"><FormattedMessage id={"settings.contextualLayers"} /></div>
-              <div className="title"><FormattedMessage id={"settings.gfwLayers"} /></div>
+              <Tab 
+                options={["settings.gfwLayers", "settings.customLayers"]}
+                selectedIndex={this.state.tabIndex}
+                handleTabIndexChange={this.handleTabIndexChange}
+              />
             </div>
             <div className="section">
                 { this.props.gfwLayers && this.props.gfwLayers.map((layer, i) => 
