@@ -51,7 +51,7 @@ class LayersManager extends React.Component {
 
   render() {
     return (
-      <div >
+      <div className="c-layers-manager">
         <div className="row">
           <div className="small-6 columns">
             <div className="section">
