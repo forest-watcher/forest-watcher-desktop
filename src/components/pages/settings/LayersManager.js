@@ -2,10 +2,11 @@ import React from 'react';
 
 import { FormattedMessage } from 'react-intl';
 import Map from '../../map/Map';
-import { includes, diff } from '../../../helpers/utils';
+import { includes } from '../../../helpers/utils';
 import Card from '../../ui/Card';
 import Tab from '../../ui/Tab';
 import SwitchButton from 'react-switch-button';
+import Checkbox from '../../ui/Checkbox';
 
 class LayersManager extends React.Component {
   constructor() {
@@ -25,6 +26,7 @@ class LayersManager extends React.Component {
   }
   
   componentWillMount(){
+    this.props.getGFWLayers();
     this.props.getLayers();
   }
 
@@ -32,21 +34,20 @@ class LayersManager extends React.Component {
     this.setState({ tabIndex });
   }
 
-  toggleLayer = (layerUrl) => {
-    let layers = [].concat(this.state.mapConfig.layers);
-    if(!includes(layers, layerUrl)){
-      layers = layers.concat(layerUrl);
-
-    } else {
-      layers = diff(layers, [layerUrl])
+  addLayer = (layer) => {
+    const layerUrl = layer.tileurl;
+    // let mapLayers = [].concat(this.state.mapConfig.layers);
+    let layerUrls = this.props.selectedLayers.map((l) => l.url);
+    if(!includes(layerUrls, layerUrl)){
+      layerUrls = layerUrls.concat(layerUrl);
     }
-    // UpdateLayers in API
-    this.setState({
-      mapConfig: {
-        ...this.state.mapConfig,
-        layers
-      }
-    });
+    this.props.createLayer(layer, null);
+    // this.setState({
+    //   mapConfig: {
+    //     ...this.state.mapConfig,
+    //     layerUrls
+    //   }
+    // });
   }
 
   render() {
@@ -62,19 +63,33 @@ class LayersManager extends React.Component {
                 handleTabIndexChange={this.handleTabIndexChange}
               />
             </div>
-            <div className="section">
-              <Card className={"-big"}>
-                {this.state.tabIndex === 0 ? 
-                  (this.props.gfwLayers && this.props.gfwLayers.map((layer, i) => 
-                    <div key={i}>
-                      <SwitchButton name={`${i}${layer.title}`} labelRight={layer.title} onChange={() => this.toggleLayer(layer.tileurl)} />
-                    </div>
-                  ))
-                  : null
-                  }
-               </Card> 
-            </div>
+            <Card className={"-big"}>
+              {this.state.tabIndex === 0 ? 
+                (this.props.gfwLayers && this.props.gfwLayers.map((layer, i) => 
+                  <div key={i}>
+                  <Checkbox 
+                    id={`${i}${layer.title}`} 
+                    label={ layer.title } 
+                    callback={() => this.addLayer(layer)} 
+                  />
+                  </div>
+                ))
+                : null
+              }
+            </Card> 
           </div>
+          <div className="small-6 columns">
+            <div className="section">
+              <div className="title"><FormattedMessage id={"settings.selectedLayers"} /></div>
+                <div className="section">
+                  {this.props.selectedLayers.map((selectedLayer, i) => (
+                    <div key={i}>
+                      <SwitchButton name={`${i}${selectedLayer.attributes.name}`} labelRight={selectedLayer.attributes.name} onChange={() => this.enableLayer(selectedLayer)} />
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
           <div className="small-6 columns">
             <div className="c-map -layers-container">
               <Map
