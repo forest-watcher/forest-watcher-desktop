@@ -2,9 +2,10 @@ import React from 'react';
 
 import { FormattedMessage } from 'react-intl';
 import Map from '../../map/Map';
-import { includes } from '../../../helpers/utils';
+import { includes, diff } from '../../../helpers/utils';
 import Card from '../../ui/Card';
 import Tab from '../../ui/Tab';
+import SwitchButton from 'react-switch-button';
 
 class LayersManager extends React.Component {
   constructor() {
@@ -19,7 +20,6 @@ class LayersManager extends React.Component {
         scrollWheelZoom: false,
         layers: []
       },
-      selectedLayers: [],
       tabIndex: 0
     }
   }
@@ -28,23 +28,25 @@ class LayersManager extends React.Component {
     this.props.getLayers();
   }
 
-  addLayer = (layer) => {
-    const layerUrl = layer.tileurl;
+  handleTabIndexChange = (tabIndex) => {
+    this.setState({ tabIndex });
+  }
+
+  toggleLayer = (layerUrl) => {
     let layers = [].concat(this.state.mapConfig.layers);
     if(!includes(layers, layerUrl)){
       layers = layers.concat(layerUrl);
-      this.setState({
-        mapConfig: {
-          ...this.state.mapConfig,
-          layers
-        },
-        selectedLayers: this.state.selectedLayers.concat(layer)
-      });
-    }
-  }
 
-  handleTabIndexChange = (tabIndex) => {
-    this.setState({ tabIndex });
+    } else {
+      layers = diff(layers, [layerUrl])
+    }
+    // UpdateLayers in API
+    this.setState({
+      mapConfig: {
+        ...this.state.mapConfig,
+        layers
+      }
+    });
   }
 
   render() {
@@ -65,7 +67,7 @@ class LayersManager extends React.Component {
                 {this.state.tabIndex === 0 ? 
                   (this.props.gfwLayers && this.props.gfwLayers.map((layer, i) => 
                     <div key={i}>
-                      <a onClick={() => this.addLayer(layer)}> {layer.title} </a>
+                      <SwitchButton name={`${i}${layer.title}`} labelRight={layer.title} onChange={() => this.toggleLayer(layer.tileurl)} />
                     </div>
                   ))
                   : null
