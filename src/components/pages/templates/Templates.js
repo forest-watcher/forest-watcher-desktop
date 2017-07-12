@@ -56,6 +56,7 @@ class Templates extends React.Component {
                   columns={columns}
                   showPageSizeOptions={false}
                   minRows={5}
+                  defaultPageSize={8}
                   noDataText={this.props.intl.formatMessage({ id: 'templates.noTemplatesFound' })}
                   previousText=""
                   nextText=""

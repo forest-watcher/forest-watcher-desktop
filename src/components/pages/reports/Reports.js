@@ -76,6 +76,7 @@ class Reports extends React.Component {
                   columns={columns}
                   showPageSizeOptions={false}
                   minRows={5}
+                  defaultPageSize={8}
                   noDataText={this.props.intl.formatMessage({ id: 'reports.noReportsFound' })}
                   previousText=""
                   nextText=""
