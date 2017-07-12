@@ -163,7 +163,7 @@ class AreasManage extends React.Component {
               <div className="areas-inputs">
                 <div className="upload-field">
                   <span className="text -x-small-title"><FormattedMessage id="areas.upload" /></span>
-                  <Icon name="icon-download" className="-big -transparent -stroke-green" />
+                  <Icon name="icon-upload" className="-small -theme-gray" />
                 </div>
                 <span className="separator -vertical"></span>
                 <div className="horizontal-field">

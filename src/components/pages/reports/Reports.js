@@ -4,11 +4,12 @@ import PropTypes from 'prop-types';
 import Article from '../../layouts/Article';
 import Hero from '../../layouts/Hero'; 
 import ReactTable from 'react-table'
-import 'react-select/dist/react-select.css';
 import { FormattedMessage } from 'react-intl';
 import ReportsFilters from './ReportsFiltersContainer';
 import Loader from '../../ui/Loader';
 import { injectIntl } from 'react-intl';
+
+import 'react-select/dist/react-select.css';
 
 class Reports extends React.Component {
 
@@ -45,10 +46,11 @@ class Reports extends React.Component {
       accessor: 'latLong'
     },{
       Header: <FormattedMessage id="reports.areaOfInterest" />,
-      accessor: 'aoi'
+      accessor: 'aoiName'
     },{  
       Header: <FormattedMessage id="reports.date" />,
-      accessor: 'date'
+      accessor: 'date',
+      Cell: props => <span className='number'>{props.value}</span>
     },{
       Header: <FormattedMessage id="reports.member" />,
       accessor: 'member'
@@ -74,7 +76,12 @@ class Reports extends React.Component {
                   columns={columns}
                   showPageSizeOptions={false}
                   minRows={5}
+                  defaultPageSize={8}
                   noDataText={this.props.intl.formatMessage({ id: 'reports.noReportsFound' })}
+                  previousText=""
+                  nextText=""
+                  pageText=""
+                  loadingText=""
                 />
                 <Loader isLoading={this.props.loadingTemplates || this.props.loadingReports} />
               </div>

@@ -4,7 +4,7 @@
   height: 20px;
   flex-shrink: 0;
 
-    &.-x-small {
+  &.-x-small {
     width: 16px;
     height: 10px;
   }
@@ -36,6 +36,10 @@
   &.-gray {
     fill: $dark-gray;
   }
+  
+  &.-theme-gray {
+    fill: $theme-text;
+  }
 
   &.-white {
     fill: $white;
@@ -43,10 +47,6 @@
 
   &.-transparent {
     fill: transparent;
-  }
-
-  &.-stroke-green {
-    stroke: $theme-accent;
   }
 
   //transformations
