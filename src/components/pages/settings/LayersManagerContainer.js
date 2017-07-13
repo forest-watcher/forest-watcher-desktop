@@ -6,7 +6,7 @@ import { getGFWLayers, getLayers, createLayer, toggleLayer } from '../../../modu
 const mapStateToProps = ({ layers }) => {
   const selectedLayers = layers.selectedLayerIds.map((id) => layers.selectedLayers[id]);
     return { 
-      gfwLayers: layers.gfw,
+      GFWLayers: layers.gfw,
       selectedLayers
     };
   };

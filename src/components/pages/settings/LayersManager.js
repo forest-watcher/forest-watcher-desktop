@@ -9,8 +9,8 @@ import SwitchButton from 'react-switch-button';
 import Checkbox from '../../ui/Checkbox';
 
 class LayersManager extends React.Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       map: {},
       mapConfig: {
@@ -21,7 +21,8 @@ class LayersManager extends React.Component {
         scrollWheelZoom: false,
         layers: []
       },
-      tabIndex: 0
+      tabIndex: 0,
+      GFWLayers: props.GFWLayers || []
     }
   }
   
@@ -30,8 +31,39 @@ class LayersManager extends React.Component {
     this.props.getLayers();
   }
 
+  componentWillReceiveProps(nextProps){
+    if (this.props.GFWLayers !== nextProps.GFWLayers) {
+      this.setState({
+        GFWLayers: nextProps.GFWLayers
+      })
+    }
+  }
+
   handleTabIndexChange = (tabIndex) => {
     this.setState({ tabIndex });
+  }
+
+  toggleGFWLayer = (GFWLayer) => {
+    const GFWLayers = [].concat(this.state.GFWLayers);
+    GFWLayers.map((stateGFWlayer) => {
+      if(stateGFWlayer.title === GFWLayer.title){
+        stateGFWlayer.enabled = !stateGFWlayer.enabled;
+      }
+      return stateGFWlayer
+    });
+    this.setState({GFWLayers});
+  }
+
+  addLayers = (e) => {
+    e.preventDefault();
+    const resetedLayers = this.state.GFWLayers.map((GFWLayer) => {
+      if (GFWLayer.enabled){
+        this.addLayer(GFWLayer);
+        GFWLayer.enabled = false;
+      }
+      return GFWLayer
+    });
+    this.setState({ GFWLayers: resetedLayers });
   }
 
   addLayer = (layer) => {
@@ -62,15 +94,19 @@ class LayersManager extends React.Component {
             </div>
             <Card className={"-big"}>
               {this.state.tabIndex === 0 ? 
-                (this.props.gfwLayers && this.props.gfwLayers.map((layer, i) => 
-                  <div key={i}>
-                  <Checkbox 
-                    id={`${i}${layer.title}`} 
-                    label={ layer.title } 
-                    callback={() => this.addLayer(layer)} 
-                  />
-                  </div>
-                ))
+                <form onSubmit={(e) => this.addLayers(e)}>
+                  {this.state.GFWLayers && this.state.GFWLayers.map((GFWlayer, i) => 
+                    <div key={i}>
+                    <Checkbox 
+                      id={`${i}${GFWlayer.title}`} 
+                      label={ GFWlayer.title }
+                      callback={() => this.toggleGFWLayer(GFWlayer)} 
+                      checked={ GFWlayer.enabled || false }
+                    />
+                    </div>
+                  )}
+                  <button className="c-button -right" ><FormattedMessage id="common.add" /></button>
+                </form>
                 : null
               }
             </Card> 
