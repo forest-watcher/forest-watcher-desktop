@@ -22,18 +22,21 @@ export default function reducer(state = initialState, action) {
     }
     case SET_LAYERS: {
       const selectedLayer = action.payload.selectedLayer;
-      if (state.selectedLayerIds.indexOf( ...Object.keys(selectedLayer) ) > -1) {
-        return {
-          ...state,
-          selectedLayers: { ...state.selectedLayers, ...selectedLayer }
-        };
-      } else {
-        return {
-          ...state,
-          selectedLayerIds: [...state.selectedLayerIds, ...Object.keys(selectedLayer)],
-          selectedLayers: { ...state.selectedLayers, ...selectedLayer }
-        };
+      if (selectedLayer) {
+        if (state.selectedLayerIds.indexOf( ...Object.keys(selectedLayer) ) > -1) {
+          return {
+            ...state,
+            selectedLayers: { ...state.selectedLayers, ...selectedLayer }
+          };
+        } else {
+          return {
+            ...state,
+            selectedLayerIds: [...state.selectedLayerIds, ...Object.keys(selectedLayer)],
+            selectedLayers: { ...state.selectedLayers, ...selectedLayer }
+          };
+        }
       }
+      return state;
     }
     default:
       return state;
