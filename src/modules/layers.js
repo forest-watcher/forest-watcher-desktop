@@ -70,7 +70,7 @@ const parseLayer = function(layer){
 
 export function createLayer(layer, teamId) {
   let url = `${API_BASE_URL}/v1/contextual-layer`;
-  if (teamId) url = `${url}'/teams/${teamId}`;
+  if (teamId) url = `${url}/team/${teamId}`;
   return (dispatch, state) => {
     fetch(url, {
         headers: {

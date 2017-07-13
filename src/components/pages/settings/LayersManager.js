@@ -22,7 +22,8 @@ class LayersManager extends React.Component {
         layers: []
       },
       tabIndex: 0,
-      GFWLayers: props.GFWLayers || []
+      GFWLayers: props.GFWLayers || [],
+      teamMode: false
     }
   }
   
@@ -72,7 +73,8 @@ class LayersManager extends React.Component {
     if(!includes(layerUrls, layerUrl)){
       layerUrls = layerUrls.concat(layerUrl);
     }
-    this.props.createLayer(layer, null);
+    const teamId = this.state.teamMode ? this.props.team.id : null;
+    this.props.createLayer(layer, teamId);
   }
 
   toggleLayer = (layer) => {
@@ -105,7 +107,15 @@ class LayersManager extends React.Component {
                     />
                     </div>
                   )}
-                  <button className="c-button -right" ><FormattedMessage id="common.add" /></button>
+                  <div>
+                    { this.props.team && 
+                      <Checkbox 
+                        id={'gfw-teams-add'} 
+                        labelId={ 'settings.addToTeam' }
+                        callback={() => this.setState({teamMode: !this.state.teamMode})}
+                      />}
+                    <button className="c-button -right" ><FormattedMessage id="common.add" /></button>
+                  </div>
                 </form>
                 : null
               }
@@ -123,6 +133,9 @@ class LayersManager extends React.Component {
                         onChange={() => this.toggleLayer(selectedLayer)}
                         defaultChecked={selectedLayer.attributes.enabled}
                       />
+                      {selectedLayer.attributes.owner.type === 'TEAM' && 
+                      <span className="team-flag"><FormattedMessage id={"settings.team"} /></span>
+                      }
                     </div>
                   ))}
                 </div>

@@ -89,5 +89,7 @@
     "settings.contextualLayers": "Contextual layers",
     "settings.customLayers": "Custom layers",
     "settings.gfwLayers": "GFW layers",
-    "settings.selectedLayers": "Selected layers"
+    "settings.selectedLayers": "Selected layers",
+    "settings.addToTeam": "Add to team",
+    "settings.team": "TEAM"
 }
