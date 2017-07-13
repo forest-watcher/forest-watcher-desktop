@@ -68,10 +68,10 @@ class LayersForm extends React.Component {
           selectedIndex={this.state.tabIndex}
           handleTabIndexChange={this.handleTabIndexChange}
         />
-        <Card className={"-big"}>
-          {this.state.tabIndex === 0 ? 
-            <form onSubmit={(e) => this.addLayers(e)}>
-              {this.state.GFWLayers && this.state.GFWLayers.map((GFWlayer, i) => 
+        <form onSubmit={(e) => this.addLayers(e)}>
+          <Card className={"-big"}>
+            {this.state.tabIndex === 0 ? 
+              this.state.GFWLayers && this.state.GFWLayers.map((GFWlayer, i) => 
                 <div key={i}>
                 <Checkbox 
                   id={`${i}${GFWlayer.title}`} 
@@ -80,20 +80,20 @@ class LayersForm extends React.Component {
                   checked={ GFWlayer.enabled || false }
                 />
                 </div>
-              )}
-              <div>
-                { this.props.team && 
-                  <Checkbox 
-                    id={'gfw-teams-add'} 
-                    labelId={ 'settings.addToTeam' }
-                    callback={() => this.setState({teamMode: !this.state.teamMode})}
-                  />}
-                <button className="c-button -right" ><FormattedMessage id="common.add" /></button>
-              </div>
-            </form>
-            : null
-          }
-        </Card> 
+              ) : null
+            }
+          </Card> 
+          <div>
+            { this.props.team && 
+              <Checkbox 
+                id={'gfw-teams-add'} 
+                labelId={ 'settings.addToTeam' }
+                callback={() => this.setState({teamMode: !this.state.teamMode})}
+              />
+            }
+            <button className="c-button -right" ><FormattedMessage id="common.add" /></button>
+          </div>
+        </form>
       </div>
     );
   }
