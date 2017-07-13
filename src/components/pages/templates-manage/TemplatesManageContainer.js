@@ -11,7 +11,7 @@ const mapAreasToOptions = (areas) => {
             option: id,
             label: areas.data[id].attributes.name 
         });
-    })
+    });
     return areasOptions;
 };
 

@@ -5,10 +5,12 @@ import Hero from '../../layouts/Hero';
 import 'react-select/dist/react-select.css';
 import { FormattedMessage } from 'react-intl';
 import { injectIntl } from 'react-intl';
-import { Form, Input } from '../../form/Form';
+import { Form, Input, Button } from '../../form/Form';
 import Select from 'react-select';
 import Loader from '../../ui/Loader';
 import { getSelectorValueFromArray } from '../../../helpers/filters';
+import { Link } from 'react-router-dom';
+import { toastr } from 'react-redux-toastr';
 
 class TemplatesManage extends React.Component {
   constructor (props) {
@@ -44,6 +46,12 @@ class TemplatesManage extends React.Component {
     this.setState({ [e.target.name]: e.target.value })
   }
 
+  onSubmit = (e) => {
+    e.preventDefault();
+    console.info(this.state);
+    toastr.info('Submitted', 'Not currently implemented.');
+  }
+
   render() {
     const { areasOptions, localeOptions, loading, mode } = this.props;
     return (
@@ -55,7 +63,7 @@ class TemplatesManage extends React.Component {
           { mode === 'manage' &&
             <Loader isLoading={loading} />
           }
-          <Form onSubmit={this.handleSubmit}>
+          <Form onSubmit={this.onSubmit}>
             <div className="c-form">
               <div className="template-meta">
                 <div className="row">
@@ -102,6 +110,16 @@ class TemplatesManage extends React.Component {
                       />
                     </div>
                   </div>
+                </div>
+              </div>
+            </div>
+            <div className="c-form-footer">
+              <div className="row column">
+                <div className="container">
+                  <Link to="/templates">
+                    <button className="c-button -light" disabled={this.props.saving || this.props.loading}><FormattedMessage id="forms.cancel" /></button>
+                  </Link>
+                  <Button className="c-button" disabled={this.props.saving || (this.props.editing ? true : false) || this.props.loading}><FormattedMessage id="forms.save" /></Button>
                 </div>
               </div>
             </div>
