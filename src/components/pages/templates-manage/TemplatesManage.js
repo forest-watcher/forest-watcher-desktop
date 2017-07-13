@@ -7,6 +7,7 @@ import { FormattedMessage } from 'react-intl';
 import { injectIntl } from 'react-intl';
 import { Form, Input } from '../../form/Form';
 import Select from 'react-select';
+import Loader from '../../ui/Loader';
 
 class TemplatesManage extends React.Component {
   constructor (props) {
@@ -23,7 +24,7 @@ class TemplatesManage extends React.Component {
   componentWillReceiveProps(nextProps) {
     this.form = {
         ...this.form,
-        title: nextProps.template.title? nextProps.template.title.en : ''
+        title: nextProps.template !== null ? nextProps.template.name.en : ''
     };
   }
 
@@ -40,13 +41,16 @@ class TemplatesManage extends React.Component {
   }
 
   render() {
-    const { areasOptions, languageOptions } = this.props;
+    const { areasOptions, languageOptions, loading, mode } = this.props;
     return (
       <div>
         <Hero
-          title="templates.create"
+          title={mode === 'manage' ? "template.manage" : "templates.create"}
         />
         <div className="l-template">
+          { mode === 'manage' &&
+            <Loader isLoading={loading} />
+          }
           <Form onSubmit={this.handleSubmit}>
             <div className="c-form">
               <div className="template-meta">
