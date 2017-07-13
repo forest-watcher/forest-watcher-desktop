@@ -14,7 +14,7 @@ class LayersSwitcher extends React.Component {
 
   render() {
     return (
-      <div className="section">
+      <div>
         <div className="title"><FormattedMessage id={"settings.selectedLayers"} /></div>
         <div className="section">
           {this.props.selectedLayers.map((selectedLayer, i) => (

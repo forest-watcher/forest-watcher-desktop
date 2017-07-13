@@ -24,10 +24,10 @@ class LayersManager extends React.Component {
     return (
       <div className="c-layers-manager">
         <div className="row">
-          <div className="small-6 columns">
+          <div className="small-5 columns">
             <LayersForm />
           </div>
-          <div className="small-6 columns">
+          <div className="small-offset-1 small-6 columns">
             <LayersSwitcher />
           </div>
           <div className="small-6 columns">

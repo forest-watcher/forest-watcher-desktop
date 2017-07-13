@@ -145,8 +145,24 @@ class TeamsForm extends React.Component {
             <div className="row small-12 columns">
               <div className="c-form -nav">
                 { team &&
-                  <div><button type="button" onClick={this.handleCancel} disabled={this.props.loading} className={`c-button -light `}><FormattedMessage id={"common.cancel"} /></button></div>}
-                <div><button type="submit" disabled={this.props.loading} className="c-button -right"><FormattedMessage id={"common.save"} /></button></div>
+                  <div>
+                    <button 
+                      type="button" 
+                      onClick={this.handleCancel} 
+                      disabled={this.props.loading} 
+                      className={`c-button -light `}>
+                        <FormattedMessage id={"common.cancel"} />
+                    </button>
+                  </div>
+                  }
+                <div>
+                  <button 
+                    type="submit" 
+                    disabled={this.props.loading} 
+                    className="c-button -right">
+                    <FormattedMessage id={"common.save"} />
+                  </button>
+                  </div>
               </div>
             </div>
             </div>
