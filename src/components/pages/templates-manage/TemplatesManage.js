@@ -65,7 +65,7 @@ class TemplatesManage extends React.Component {
 
   // Render
   render() {
-    const { areasOptions, localeOptions, loading, mode, defaultLanguage } = this.props;
+    const { areasOptions, localeOptions, loading, mode } = this.props;
     return (
       <div>
         <Hero
@@ -128,7 +128,7 @@ class TemplatesManage extends React.Component {
                           questionNum={index + 1} 
                           question={question} 
                           syncStateWithProps={this.handleQuestionEdit} 
-                          defaultLanguage={defaultLanguage}
+                          defaultLanguage={this.state.defaultLanguage}
                         />
                       )
                     }
