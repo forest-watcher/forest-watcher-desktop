@@ -27,7 +27,7 @@ class TemplatesManage extends React.Component {
   setPropsToForm = (props) => {
     this.setState({
       title: props.template.name.en || null,
-      defaultLanguage: getSelectorValueFromArray(props.template.defaultLanguage, props.languageOptions) || null,
+      defaultLanguage: getSelectorValueFromArray(props.template.defaultLanguage, props.localeOptions) || null,
       aoi: getSelectorValueFromArray(props.template.areaOfInterest, props.areasOptions) || null
     });
   }
@@ -45,7 +45,7 @@ class TemplatesManage extends React.Component {
   }
 
   render() {
-    const { areasOptions, languageOptions, loading, mode } = this.props;
+    const { areasOptions, localeOptions, loading, mode } = this.props;
     return (
       <div>
         <Hero
@@ -77,11 +77,11 @@ class TemplatesManage extends React.Component {
                       <label className="text"><FormattedMessage id={"templates.defaultLanguage"} />:</label>
                       <Select
                         name="language-select"
-                        options={languageOptions}
+                        options={localeOptions}
                         value={this.state.defaultLanguage}
                         onChange={this.onLanguageChange}
                         noResultsText={this.props.intl.formatMessage({ id: 'filters.noLanguagesAvailable' })}
-                        searchable={false}
+                        searchable={true}
                       />
                     </div>
                   </div>
