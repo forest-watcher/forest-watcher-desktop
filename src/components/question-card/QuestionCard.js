@@ -11,7 +11,13 @@ class QuestionCard extends React.Component {
   }
 
   onInputChange = (e) => {
-    this.setState({ [e.target.name]: e.target.value });
+    this.setState({
+        label: {
+            ...this.state.label,
+            en: e.target.value
+        }
+    });
+    // this.setState({ [e.target.name]: e.target.value });
     this.props.syncStateWithProps(this.state);
   }
 
@@ -22,6 +28,7 @@ class QuestionCard extends React.Component {
             <span className="text -question-number">{prettyNum(questionNum)}.</span>
                 <Input
                     type="text"
+                    className="-question"
                     onChange={this.onInputChange}
                     name="label"
                     value={question.label[defaultLanguage.option] || ''}

@@ -20,36 +20,65 @@ class TemplatesManage extends React.Component {
 
   // Lifecycle
   componentDidMount() {
-    if (this.props.template) this.setPropsToForm(this.props);
+    if (this.props.template) this.setPropsToState(this.props);
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.template !== this.props.template) this.setPropsToForm(nextProps);
+    if (nextProps.template !== this.props.template) this.setPropsToState(nextProps);
   }
 
 
   // Setters
-  setPropsToForm = (props) => {
-    this.setState({
-      title: props.template.name[props.template.defaultLanguage] || null,
-      defaultLanguage: getSelectorValueFromArray(props.template.defaultLanguage, props.localeOptions) || null,
-      aoi: getSelectorValueFromArray(props.template.areaOfInterest, props.areasOptions) || null,
-      questions: props.template.questions || null
-    });
+  setPropsToState = (props) => {
+    this.setState({ ...props.template });
   }
-
 
   // Actions to update state
   onAreaChange = (selected) => {
-    this.setState({ aoi: selected });
+    this.setState({ areaOfInterest: selected.option });
+  }
+
+  setLanguages = (selected) => {
+    const activeLanguages = this.state.languages;
+    activeLanguages.indexOf(selected) === -1 &&
+      activeLanguages.push(selected);
+    const index = activeLanguages.indexOf(this.state.defaultLanguage);
+    if (index > -1) {
+      activeLanguages.splice(index, 1);
+    }
+    return activeLanguages;
+  }
+
+  syncLanguagesWithDefault = (newLanguage) => {
+    let state = { ...this.state };
+    const currentLanguage = this.state.defaultLanguage;
+    const keys = ['name'];
+    keys.forEach((key) => {
+      const obj = { ...this.state[key] };
+      obj[newLanguage] = obj[currentLanguage];
+      delete obj[currentLanguage];
+      state = {
+        ...this.state,
+        [key]: obj
+      }
+    });
+    this.setState(state);
   }
 
   onLanguageChange = (selected) => {
-    this.setState({ defaultLanguage: selected });
+    this.setLanguages(selected.option);
+    this.syncLanguagesWithDefault(selected.option);
+    this.setState({
+      defaultLanguage: selected.option
+    });
   }
   
   onInputChange = (e) => {
-    this.setState({ [e.target.name]: e.target.value })
+    const name = Object.assign({}, this.state.name);
+    name[this.state.defaultLanguage] = e.target.value;
+    this.setState({
+      name
+    });
   }
 
   onSubmit = (e) => {
@@ -59,7 +88,7 @@ class TemplatesManage extends React.Component {
   }
 
   handleQuestionEdit = (question) => {
-    this.setState(question);
+    // this.setState(question);
   }
 
 
@@ -85,7 +114,7 @@ class TemplatesManage extends React.Component {
                       <Select
                         name="areas-select"
                         options={areasOptions}
-                        value={this.state.aoi}
+                        value={this.state.areaOfInterest && areasOptions ? getSelectorValueFromArray(this.state.areaOfInterest, areasOptions) : null}
                         onChange={this.onAreaChange}
                         noResultsText={this.props.intl.formatMessage({ id: 'filters.noAreasAvailable' })}
                         searchable={false}
@@ -98,10 +127,11 @@ class TemplatesManage extends React.Component {
                       <Select
                         name="language-select"
                         options={localeOptions}
-                        value={this.state.defaultLanguage}
+                        value={this.state.defaultLanguage ? getSelectorValueFromArray(this.state.defaultLanguage, localeOptions) : null}
                         onChange={this.onLanguageChange}
                         noResultsText={this.props.intl.formatMessage({ id: 'filters.noLanguagesAvailable' })}
                         searchable={true}
+                        clearable={false}
                       />
                     </div>
                   </div>
@@ -115,21 +145,21 @@ class TemplatesManage extends React.Component {
                         type="text"
                         className="-title"
                         onChange={this.onInputChange}
-                        name="title"
-                        value={this.state.title || ''}
+                        name="name"
+                        value={this.state.name ? this.state.name[this.state.defaultLanguage] : ''}
                         placeholder={this.props.intl.formatMessage({ id: 'templates.title' })}
                         validations={['required']}
                       />
                     </div>
                     {this.state.questions &&
                       this.state.questions.map((question, index) =>
-                        <QuestionCard 
+                        {/*<QuestionCard 
                           key={index} 
                           questionNum={index + 1} 
                           question={question} 
                           syncStateWithProps={this.handleQuestionEdit} 
                           defaultLanguage={this.state.defaultLanguage}
-                        />
+                        />*/}
                       )
                     }
                   </div>
