@@ -8,36 +8,40 @@ import { injectIntl } from 'react-intl';
 import { Form, Input } from '../../form/Form';
 import Select from 'react-select';
 import Loader from '../../ui/Loader';
+import { getSelectorValueFromArray } from '../../../helpers/filters';
 
 class TemplatesManage extends React.Component {
   constructor (props) {
     super(props);
-    this.state = {
-      selectedArea: this.props.selectedArea || null,
-      defaultLanguage: this.props.selectedArea || null
-    }
-    this.form = {
-      title: props.template? props.template.name.en : null
-    };
+    this.state = {};
+  }
+
+  componentDidMount() {
+    if (this.props.template) this.setPropsToForm(this.props);
   }
 
   componentWillReceiveProps(nextProps) {
-    this.form = {
-        ...this.form,
-        title: nextProps.template !== null ? nextProps.template.name.en : ''
-    };
+    if (nextProps.template !== this.props.template) this.setPropsToForm(nextProps);
+  }
+
+  setPropsToForm = (props) => {
+    this.setState({
+      title: props.template.name.en || null,
+      defaultLanguage: getSelectorValueFromArray(props.template.defaultLanguage, props.languageOptions) || null,
+      aoi: getSelectorValueFromArray(props.template.areaOfInterest, props.areasOptions) || null
+    });
   }
 
   onAreaChange = (selected) => {
-    this.setState({selectedArea: selected});
+    this.setState({ aoi: selected });
   }
 
   onLanguageChange = (selected) => {
-    this.setState({defaultLanguage: selected});
+    this.setState({ defaultLanguage: selected });
   }
   
   onInputChange = (e) => {
-    this.form = Object.assign({}, this.form, { [e.target.name]: e.target.value }); 
+    this.setState({ [e.target.name]: e.target.value })
   }
 
   render() {
@@ -45,7 +49,7 @@ class TemplatesManage extends React.Component {
     return (
       <div>
         <Hero
-          title={mode === 'manage' ? "template.manage" : "templates.create"}
+          title={mode === 'manage' ? "templates.manage" : "templates.create"}
         />
         <div className="l-template">
           { mode === 'manage' &&
@@ -61,7 +65,7 @@ class TemplatesManage extends React.Component {
                       <Select
                         name="areas-select"
                         options={areasOptions}
-                        value={this.state.selectedArea}
+                        value={this.state.aoi}
                         onChange={this.onAreaChange}
                         noResultsText={this.props.intl.formatMessage({ id: 'filters.noAreasAvailable' })}
                         searchable={false}
@@ -92,7 +96,7 @@ class TemplatesManage extends React.Component {
                         className="-title"
                         onChange={this.onInputChange}
                         name="title"
-                        value={this.form.title || ''}
+                        value={this.state.title || ''}
                         placeholder={this.props.intl.formatMessage({ id: 'templates.title' })}
                         validations={['required']}
                       />

@@ -30,8 +30,8 @@ const mapStateToProps = (state, { match }) => {
     return {
         mode: match.params.templateId ? 'manage' : 'create',
         template: state.templates.data[templateId]? state.templates.data[templateId].attributes : null,
-        areasOptions,
         loading: state.templates.loading,
+        areasOptions,
         languageOptions
     }
 };
