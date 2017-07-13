@@ -52,16 +52,41 @@ class TemplatesManage extends React.Component {
   syncLanguagesWithDefault = (newLanguage) => {
     let state = { ...this.state };
     const currentLanguage = this.state.defaultLanguage;
-    const keys = ['name'];
-    keys.forEach((key) => {
-      const obj = { ...this.state[key] };
-      obj[newLanguage] = obj[currentLanguage];
-      delete obj[currentLanguage];
-      state = {
-        ...this.state,
-        [key]: obj
+    
+    // first update the name of the template
+    const templateName = { ...this.state.name };
+    templateName[newLanguage] = templateName[currentLanguage];
+    delete templateName[currentLanguage];
+    state = {
+      ...this.state,
+      name: templateName
+    }
+
+    // Now update the labels and values of the questions
+    state.questions.forEach((question, index) => {
+      const label = { ...question.label };
+      label[newLanguage] = label[currentLanguage];
+      delete label[currentLanguage];
+      let newQuestion = {
+        ...question,
+        label
+      };
+
+      // if optional question set values
+      if (question.values) {
+        const values = { ...question.values };
+        values[newLanguage] = values[currentLanguage];
+        delete values[currentLanguage];
+        newQuestion = {
+          ...question,
+          values
+        };
       }
+
+      state.questions[index] = newQuestion;
     });
+
+    // finally update state
     this.setState(state);
   }
 
@@ -83,12 +108,13 @@ class TemplatesManage extends React.Component {
 
   onSubmit = (e) => {
     e.preventDefault();
-    console.info(this.state);
     toastr.info('Submitted', 'Not currently implemented.');
   }
 
-  handleQuestionEdit = (question) => {
-    // this.setState(question);
+  handleQuestionEdit = (question, index) => {
+    const state = { ...this.state };
+    state.questions[index - 1] = question;
+    this.setState(state);
   }
 
 
@@ -153,13 +179,13 @@ class TemplatesManage extends React.Component {
                     </div>
                     {this.state.questions &&
                       this.state.questions.map((question, index) =>
-                        {/*<QuestionCard 
+                        <QuestionCard 
                           key={index} 
                           questionNum={index + 1} 
                           question={question} 
                           syncStateWithProps={this.handleQuestionEdit} 
                           defaultLanguage={this.state.defaultLanguage}
-                        />*/}
+                        />
                       )
                     }
                   </div>

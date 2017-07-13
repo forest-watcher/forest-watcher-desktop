@@ -14,11 +14,10 @@ class QuestionCard extends React.Component {
     this.setState({
         label: {
             ...this.state.label,
-            en: e.target.value
+            [this.props.defaultLanguage]: e.target.value
         }
     });
-    // this.setState({ [e.target.name]: e.target.value });
-    this.props.syncStateWithProps(this.state);
+    this.props.syncStateWithProps(this.state, this.props.questionNum);
   }
 
   render() {
@@ -31,7 +30,7 @@ class QuestionCard extends React.Component {
                     className="-question"
                     onChange={this.onInputChange}
                     name="label"
-                    value={question.label[defaultLanguage.option] || ''}
+                    value={question.label[defaultLanguage] || ''}
                     placeholder={this.props.intl.formatMessage({ id: 'templates.questionPlaceholder' })}
                     validations={['required']}
                 />
@@ -43,7 +42,7 @@ class QuestionCard extends React.Component {
 QuestionCard.propTypes = {
     question: PropTypes.object.isRequired,
     questionNum: PropTypes.number.isRequired,
-    defaultLanguage: PropTypes.object
+    defaultLanguage: PropTypes.string
 };
 
 export default injectIntl(QuestionCard);
