@@ -60,6 +60,17 @@ class LayersForm extends React.Component {
   }
 
   render() {
+    const cardFooter =
+      (<div className="card-footer-actions">
+        { this.props.team && 
+          <Checkbox 
+            id={'gfw-teams-add'} 
+            labelId={ 'settings.addToTeam' }
+            callback={() => this.setState({teamMode: !this.state.teamMode})}
+          />}
+        <div className="card-footer-button"><button className="c-button -right" ><FormattedMessage id="common.add" /></button></div>
+      </div>)
+
     return (
       <div className="c-layers-form">
         <div className="title"><FormattedMessage id={"settings.contextualLayers"} /></div>
@@ -68,7 +79,7 @@ class LayersForm extends React.Component {
           selectedIndex={this.state.tabIndex}
           handleTabIndexChange={this.handleTabIndexChange}
         />
-        <Card className={"-big"}>
+        <Card className={"-big"} footer={cardFooter}>
           {this.state.tabIndex === 0 ? 
             <form onSubmit={(e) => this.addLayers(e)}>
               {this.state.GFWLayers && this.state.GFWLayers.map((GFWlayer, i) => 
@@ -81,15 +92,6 @@ class LayersForm extends React.Component {
                 />
                 </div>
               )}
-              <div>
-                { this.props.team && 
-                  <Checkbox 
-                    id={'gfw-teams-add'} 
-                    labelId={ 'settings.addToTeam' }
-                    callback={() => this.setState({teamMode: !this.state.teamMode})}
-                  />}
-                <button className="c-button -right" ><FormattedMessage id="common.add" /></button>
-              </div>
             </form>
             : null
           }

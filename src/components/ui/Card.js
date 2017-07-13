@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import classnames from 'classnames';
 import Icon from './Icon';
 
-function Card({ className, children, title, fields, actions }) {
+function Card({ className, children, title, fields, actions, footer }) {
   return (
     <div className={classnames(['c-card', className])}>
       <div className="card-content">
@@ -12,6 +12,7 @@ function Card({ className, children, title, fields, actions }) {
           fields.map(field => (<p className="card-field" key={btoa(field)}>{field}</p>))
         }
         {children}
+        <div className="card-footer">{ footer }</div>
       </div>
       <div className="card-actions">
         {
@@ -33,6 +34,7 @@ Card.defaultProps = {
 
 Card.propTypes = {
   children: PropTypes.node,
+  footer: PropTypes.node,
   className: PropTypes.string,
   title: PropTypes.string,
   fields: PropTypes.arrayOf(PropTypes.string),
