@@ -36,22 +36,15 @@ class LayersManager extends React.Component {
 
   addLayer = (layer) => {
     const layerUrl = layer.tileurl;
-    // let mapLayers = [].concat(this.state.mapConfig.layers);
     let layerUrls = this.props.selectedLayers.map((l) => l.url);
     if(!includes(layerUrls, layerUrl)){
       layerUrls = layerUrls.concat(layerUrl);
     }
     this.props.createLayer(layer, null);
-    // this.setState({
-    //   mapConfig: {
-    //     ...this.state.mapConfig,
-    //     layerUrls
-    //   }
-    // });
   }
 
   toggleLayer = (layer) => {
-    this.props.toggleLayer(layer, !layer.attributes.enable);
+    this.props.toggleLayer(layer, !layer.attributes.enabled);
   }
 
   render() {
@@ -92,7 +85,7 @@ class LayersManager extends React.Component {
                         name={`${i}${selectedLayer.attributes.name}`} 
                         labelRight={selectedLayer.attributes.name} 
                         onChange={() => this.toggleLayer(selectedLayer)}
-                        defaultValue={selectedLayer.attributes.enabled}
+                        defaultChecked={selectedLayer.attributes.enabled}
                       />
                     </div>
                   ))}

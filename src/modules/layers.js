@@ -107,7 +107,7 @@ export function toggleLayer(layer, value) {
           'Content-Type': 'application/json'
         }, 
         method: 'PATCH',
-        body: JSON.stringify({enable: value})
+        body: JSON.stringify({enabled: value})
       }
     )
     .then((response) => {
