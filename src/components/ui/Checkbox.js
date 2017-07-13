@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { injectIntl } from 'react-intl';
 
-function Checkbox({ id, callback, label, defaultChecked, checked }) {
+function Checkbox({ id, callback, label, defaultChecked, checked , labelId, intl }) {
   return (
     <div className="c-checkbox">
       <div className="checkbox">
@@ -12,7 +13,7 @@ function Checkbox({ id, callback, label, defaultChecked, checked }) {
         }
         <label htmlFor={id}></label>
       </div>
-      <div className="label">{label}</div>
+      <div className="label">{label || (labelId && intl.formatMessage({ id: labelId }))}</div>
     </div>
   );
 }
@@ -22,7 +23,8 @@ Checkbox.propTypes = {
   callback: PropTypes.func.isRequired,
   defaultChecked: PropTypes.bool,
   checked: PropTypes.bool,
-  label: PropTypes.string
+  label: PropTypes.string,
+  labelId: PropTypes.string
 };
 
-export default Checkbox;
+export default injectIntl(Checkbox);

@@ -86,14 +86,12 @@ class LayersManager extends React.Component {
       <div className="c-layers-manager">
         <div className="row">
           <div className="small-6 columns">
-            <div className="section">
-              <div className="title"><FormattedMessage id={"settings.contextualLayers"} /></div>
-              <Tab 
-                options={["settings.gfwLayers", "settings.customLayers"]}
-                selectedIndex={this.state.tabIndex}
-                handleTabIndexChange={this.handleTabIndexChange}
-              />
-            </div>
+            <div className="title"><FormattedMessage id={"settings.contextualLayers"} /></div>
+            <Tab 
+              options={["settings.gfwLayers", "settings.customLayers"]}
+              selectedIndex={this.state.tabIndex}
+              handleTabIndexChange={this.handleTabIndexChange}
+            />
             <Card className={"-big"}>
               {this.state.tabIndex === 0 ? 
                 <form onSubmit={(e) => this.addLayers(e)}>
