@@ -2,11 +2,8 @@ import React from 'react';
 
 import { FormattedMessage } from 'react-intl';
 import Map from '../../map/Map';
-import { includes } from '../../../helpers/utils';
-import Card from '../../ui/Card';
-import Tab from '../../ui/Tab';
 import SwitchButton from 'react-switch-button';
-import Checkbox from '../../ui/Checkbox';
+import LayersForm from './LayersFormContainer';
 
 class LayersManager extends React.Component {
   constructor(props) {
@@ -28,7 +25,6 @@ class LayersManager extends React.Component {
   }
   
   componentWillMount(){
-    this.props.getGFWLayers();
     this.props.getLayers();
   }
 
@@ -67,16 +63,6 @@ class LayersManager extends React.Component {
     this.setState({ GFWLayers: resetedLayers });
   }
 
-  addLayer = (layer) => {
-    const layerUrl = layer.tileurl;
-    let layerUrls = this.props.selectedLayers.map((l) => l.url);
-    if(!includes(layerUrls, layerUrl)){
-      layerUrls = layerUrls.concat(layerUrl);
-    }
-    const teamId = this.state.teamMode ? this.props.team.id : null;
-    this.props.createLayer(layer, teamId);
-  }
-
   toggleLayer = (layer) => {
     this.props.toggleLayer(layer, !layer.attributes.enabled);
   }
@@ -86,38 +72,7 @@ class LayersManager extends React.Component {
       <div className="c-layers-manager">
         <div className="row">
           <div className="small-6 columns">
-            <div className="title"><FormattedMessage id={"settings.contextualLayers"} /></div>
-            <Tab 
-              options={["settings.gfwLayers", "settings.customLayers"]}
-              selectedIndex={this.state.tabIndex}
-              handleTabIndexChange={this.handleTabIndexChange}
-            />
-            <Card className={"-big"}>
-              {this.state.tabIndex === 0 ? 
-                <form onSubmit={(e) => this.addLayers(e)}>
-                  {this.state.GFWLayers && this.state.GFWLayers.map((GFWlayer, i) => 
-                    <div key={i}>
-                    <Checkbox 
-                      id={`${i}${GFWlayer.title}`} 
-                      label={ GFWlayer.title }
-                      callback={() => this.toggleGFWLayer(GFWlayer)} 
-                      checked={ GFWlayer.enabled || false }
-                    />
-                    </div>
-                  )}
-                  <div>
-                    { this.props.team && 
-                      <Checkbox 
-                        id={'gfw-teams-add'} 
-                        labelId={ 'settings.addToTeam' }
-                        callback={() => this.setState({teamMode: !this.state.teamMode})}
-                      />}
-                    <button className="c-button -right" ><FormattedMessage id="common.add" /></button>
-                  </div>
-                </form>
-                : null
-              }
-            </Card> 
+            <LayersForm />
           </div>
           <div className="small-6 columns">
             <div className="section">
