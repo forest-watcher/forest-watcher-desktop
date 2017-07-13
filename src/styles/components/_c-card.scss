@@ -21,20 +21,6 @@
     font-style: italic;
   }
 
-  .card-footer {
-    color: $pale-gray;
-    padding-top: 30px;
-    .card-footer-actions {
-      .card-footer-button {
-        margin-top: -12px;
-      }
-      display: flex;
-      flex-direction: row;
-      justify-content: space-between;
-    }
-  }
-
-
   .card-actions {
     display: flex;
     flex-direction: column;
