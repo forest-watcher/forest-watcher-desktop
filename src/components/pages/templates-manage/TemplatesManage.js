@@ -3,14 +3,14 @@ import PropTypes from 'prop-types';
 
 import Hero from '../../layouts/Hero';
 import 'react-select/dist/react-select.css';
-import { FormattedMessage } from 'react-intl';
-import { injectIntl } from 'react-intl';
+import { FormattedMessage, injectIntl } from 'react-intl';
 import { Form, Input, Button } from '../../form/Form';
 import Select from 'react-select';
 import Loader from '../../ui/Loader';
 import { getSelectorValueFromArray } from '../../../helpers/filters';
 import { Link } from 'react-router-dom';
 import { toastr } from 'react-redux-toastr';
+import QuestionCard from '../../question-card/QuestionCard';
 
 class TemplatesManage extends React.Component {
   constructor (props) {
@@ -18,6 +18,7 @@ class TemplatesManage extends React.Component {
     this.state = {};
   }
 
+  // Lifecycle
   componentDidMount() {
     if (this.props.template) this.setPropsToForm(this.props);
   }
@@ -26,14 +27,19 @@ class TemplatesManage extends React.Component {
     if (nextProps.template !== this.props.template) this.setPropsToForm(nextProps);
   }
 
+
+  // Setters
   setPropsToForm = (props) => {
     this.setState({
-      title: props.template.name.en || null,
+      title: props.template.name[props.template.defaultLanguage] || null,
       defaultLanguage: getSelectorValueFromArray(props.template.defaultLanguage, props.localeOptions) || null,
-      aoi: getSelectorValueFromArray(props.template.areaOfInterest, props.areasOptions) || null
+      aoi: getSelectorValueFromArray(props.template.areaOfInterest, props.areasOptions) || null,
+      questions: props.template.questions || null
     });
   }
 
+
+  // Actions to update state
   onAreaChange = (selected) => {
     this.setState({ aoi: selected });
   }
@@ -52,8 +58,14 @@ class TemplatesManage extends React.Component {
     toastr.info('Submitted', 'Not currently implemented.');
   }
 
+  handleQuestionEdit = (question) => {
+    this.setState(question);
+  }
+
+
+  // Render
   render() {
-    const { areasOptions, localeOptions, loading, mode } = this.props;
+    const { areasOptions, localeOptions, loading, mode, defaultLanguage } = this.props;
     return (
       <div>
         <Hero
@@ -67,7 +79,7 @@ class TemplatesManage extends React.Component {
             <div className="c-form">
               <div className="template-meta">
                 <div className="row">
-                  <div className="column small-12 medium-4 medium-offset-2">
+                  <div className="column small-12 medium-5 medium-offset-1 large-4 large-offset-2">
                     <div className="input-group">
                       <label className="text -gray"><FormattedMessage id={"templates.assignArea"} />:</label>
                       <Select
@@ -80,7 +92,7 @@ class TemplatesManage extends React.Component {
                       />
                     </div>
                   </div>
-                  <div className="column small-12 medium-4">
+                  <div className="column small-12 medium-5 large-4">
                     <div className="input-group">
                       <label className="text"><FormattedMessage id={"templates.defaultLanguage"} />:</label>
                       <Select
@@ -97,8 +109,8 @@ class TemplatesManage extends React.Component {
               </div>
               <div className="template-fields">
                 <div className="row">
-                  <div className="column small-12 medium-8 medium-offset-2">
-                    <div className="c-question -title">
+                  <div className="column small-12 medium-10 medium-offset-1 large-8 large-offset-2">
+                    <div className="c-question-card -title">
                       <Input
                         type="text"
                         className="-title"
@@ -109,6 +121,17 @@ class TemplatesManage extends React.Component {
                         validations={['required']}
                       />
                     </div>
+                    {this.state.questions &&
+                      this.state.questions.map((question, index) =>
+                        <QuestionCard 
+                          key={index} 
+                          questionNum={index + 1} 
+                          question={question} 
+                          syncStateWithProps={this.handleQuestionEdit} 
+                          defaultLanguage={defaultLanguage}
+                        />
+                      )
+                    }
                   </div>
                 </div>
               </div>

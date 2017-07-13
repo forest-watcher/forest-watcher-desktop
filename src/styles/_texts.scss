@@ -36,6 +36,11 @@ a {
     line-height: 1.62;
   }
 
+  &.-question-number {
+    font-size: $font-size-medium;
+    font-weight: $font-weight-bold;
+  }
+
   // color overrides
   &.-white {
     color: $white;

@@ -10,4 +10,9 @@ const validateEmail = (email) => {
 	var regexp = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/; // eslint-disable-line
 	return regexp.test(email);
 }
-export { includes, unique, diff, filterEmpty, validateEmail };
+
+const prettyNum = (num) => {
+	return (num < 10 ? '0' : '') + num;
+}
+
+export { includes, unique, diff, filterEmpty, validateEmail, prettyNum };

@@ -83,10 +83,10 @@
     "filters.noLanguagesAvailable": "No languages available",
     "templates.create": "Create a Template",
     "templates.manage": "Manage Template",
-    "templates.title": "My Templates",
     "templates.assignArea": "Assign area",
     "templates.defaultLanguage": "Default language",
     "templates.status": "status",
     "templates.reportsSubmitted": "reports submitted",
-    "templates.noTemplatesFound": "No templates found"
+    "templates.noTemplatesFound": "No templates found",
+    "templates.questionPlaceholder": "Type your question..."
 }
