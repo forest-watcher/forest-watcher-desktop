@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import LayersManager from './LayersManager';
-import { getGFWLayers, getLayers, createLayer } from '../../../modules/layers';
+import { getGFWLayers, getLayers, createLayer, toggleLayer } from '../../../modules/layers';
 
 
 const mapStateToProps = ({ layers }) => {
@@ -21,6 +21,9 @@ const mapStateToProps = ({ layers }) => {
      },
     createLayer: (layer, teamId) => {
        dispatch(createLayer(layer, teamId));
+     },
+    toggleLayer: (layer, value) => {
+       dispatch(toggleLayer(layer, value));
      }
    }
  }

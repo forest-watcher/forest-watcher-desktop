@@ -98,6 +98,35 @@ export function createLayer(layer, teamId) {
   };
 }
 
+export function toggleLayer(layer, value) {
+  let url = `${API_BASE_URL}/v1/contextual-layer/${layer.id}`;
+  return (dispatch, state) => {
+    fetch(url, {
+        headers: {
+          Authorization: `Bearer ${state().user.token}`,
+          'Content-Type': 'application/json'
+        }, 
+        method: 'PATCH',
+        body: JSON.stringify({enable: value})
+      }
+    )
+    .then((response) => {
+      if (response.ok) return response.json();
+      throw Error(response.statusText);
+    })
+    .then(async (data) => {
+      const normalized = normalize(data);
+      dispatch({
+        type: SET_LAYERS,
+        payload: {selectedLayer: normalized.contextualLayers}
+      });
+    })
+    .catch((error) => {
+      console.warn(error);
+    });
+  };
+}
+
 export function getLayers() {
   let url = `${API_BASE_URL}/v1/contextual-layer`;
   return (dispatch, state) => {

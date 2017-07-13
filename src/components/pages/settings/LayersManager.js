@@ -50,6 +50,10 @@ class LayersManager extends React.Component {
     // });
   }
 
+  toggleLayer = (layer) => {
+    this.props.toggleLayer(layer, !layer.attributes.enable);
+  }
+
   render() {
     return (
       <div className="c-layers-manager">
@@ -84,7 +88,12 @@ class LayersManager extends React.Component {
                 <div className="section">
                   {this.props.selectedLayers.map((selectedLayer, i) => (
                     <div key={i}>
-                      <SwitchButton name={`${i}${selectedLayer.attributes.name}`} labelRight={selectedLayer.attributes.name} onChange={() => this.enableLayer(selectedLayer)} />
+                      <SwitchButton 
+                        name={`${i}${selectedLayer.attributes.name}`} 
+                        labelRight={selectedLayer.attributes.name} 
+                        onChange={() => this.toggleLayer(selectedLayer)}
+                        defaultValue={selectedLayer.attributes.enabled}
+                      />
                     </div>
                   ))}
                 </div>
