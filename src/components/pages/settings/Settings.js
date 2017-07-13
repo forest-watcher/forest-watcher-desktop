@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import Hero from '../../layouts/Hero';
 import Article from '../../layouts/Article';
 import TeamsForm from './TeamsFormContainer';
-import LayersManager from './LayersManagerContainer';
+import LayersManager from './LayersManager';
 import { FormattedMessage } from 'react-intl';
 import Loader from '../../ui/Loader';
 import { includes } from '../../../helpers/utils';
@@ -13,17 +13,6 @@ class Settings extends React.Component {
   constructor() {
     super();
     this.firstLoad = true;
-    this.state = {
-      map: {},
-      mapConfig: {
-        zoom: 3,
-        lat: 0,
-        lng: 0,
-        zoomControl: false,
-        scrollWheelZoom: false,
-        layers: []
-      }
-    }
   }
 
   componentWillMount() {
@@ -31,19 +20,6 @@ class Settings extends React.Component {
       this.props.getTeam(this.props.userId);
       this.firstLoad = false;
     }
-  }
-  addLayer = () => {
-    const exampleUrl = 'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
-    let layers = [].concat(this.state.mapConfig.layers);
-    if(!includes(layers, exampleUrl)){
-      layers = layers.concat(exampleUrl);
-    }
-    this.setState({
-      mapConfig: {
-        ...this.state.mapConfig,
-        layers
-      }
-    });
   }
 
   render() {
