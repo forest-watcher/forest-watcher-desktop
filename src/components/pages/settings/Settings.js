@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import Hero from '../../layouts/Hero';
 import TeamsShow from './TeamsShowContainer';
 import TeamsForm from './TeamsFormContainer';
-import LayersManager from './LayersManager';
+import LayersManager from '../../LayersManager/LayersManager';
 import Loader from '../../ui/Loader';
 
 class Settings extends React.Component {

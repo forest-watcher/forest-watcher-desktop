@@ -1,9 +1,9 @@
 import React from 'react';
 
 import { FormattedMessage } from 'react-intl';
-import Card from '../../ui/Card';
-import Tab from '../../ui/Tab';
-import Checkbox from '../../ui/Checkbox';
+import Card from '../ui/Card';
+import Tab from '../ui/Tab';
+import Checkbox from '../ui/Checkbox';
 
 class LayersForm extends React.Component {
   constructor(props) {
@@ -69,7 +69,7 @@ class LayersForm extends React.Component {
             {this.state.tabIndex === 0 ? 
               this.state.GFWLayers && this.state.GFWLayers.map((GFWlayer, i) => 
                 <Checkbox 
-                  key={i}
+                  key={`${i}${GFWlayer.cartodb_id}`}
                   id={`${i}${GFWlayer.cartodb_id}`} 
                   label={ GFWlayer.title }
                   callback={() => this.toggleGFWLayer(GFWlayer)} 

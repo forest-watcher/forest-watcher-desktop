@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import LayersSwitcher from './LayersSwitcher';
-import { toggleLayer } from '../../../modules/layers';
+import { toggleLayer } from '../../modules/layers';
 
 
 const mapStateToProps = ({ layers, teams }) => {

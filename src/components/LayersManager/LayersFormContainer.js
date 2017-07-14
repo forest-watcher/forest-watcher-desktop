@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import LayersForm from './LayersForm';
-import { createLayer } from '../../../modules/layers';
+import { createLayer } from '../../modules/layers';
 
 
 const mapStateToProps = ({ layers, teams }) => {
