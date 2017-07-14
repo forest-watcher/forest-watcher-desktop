@@ -3,21 +3,23 @@ import PropTypes from 'prop-types';
 import { Input } from '../form/Form';
 import { injectIntl } from 'react-intl';
 import { prettyNum } from '../../helpers/utils';
+import cloneDeep from 'lodash/cloneDeep';
 
 class QuestionCard extends React.Component {
   constructor (props) {
     super(props);
-    this.state = props.question;
+    this.question = cloneDeep(props.question);
   }
 
   onInputChange = (e) => {
-    this.setState({
+    this.question = {
+        ...this.question,
         label: {
-            ...this.state.label,
+            ...this.question.label,
             [this.props.defaultLanguage]: e.target.value
-        }
-    });
-    this.props.syncStateWithProps(this.state, this.props.questionNum);
+        } 
+    }
+    this.props.syncStateWithProps(this.question, this.props.questionNum);
   }
 
   render() {

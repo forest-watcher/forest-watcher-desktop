@@ -20,7 +20,7 @@ class TemplatesManage extends React.Component {
   }
 
   // Lifecycle
-  componentDidMount() {
+  componentWillMount() {
     if (this.props.template) this.setPropsToState(this.props);
   }
 
@@ -48,10 +48,11 @@ class TemplatesManage extends React.Component {
   }
   
   onInputChange = (e) => {
-    const name = Object.assign({}, this.state.name);
-    name[this.state.defaultLanguage] = e.target.value;
     this.setState({
-      name
+      name: {
+        ...this.state.name,
+        [this.state.defaultLanguage]: e.target.value
+      }
     });
   }
 
@@ -61,15 +62,17 @@ class TemplatesManage extends React.Component {
   }
 
   handleQuestionEdit = (question, index) => {
-    const state = { ...this.state };
-    state.questions[index - 1] = question;
-    this.setState(state);
+    const newQuestions = this.state.questions.slice();
+    newQuestions[index - 1] = question;
+
+    this.setState({
+      questions: newQuestions
+    });
   }
 
 
   // Render
   render() {
-    // console.log(this.state);
     const { areasOptions, localeOptions, loading, mode } = this.props;
     return (
       <div>
@@ -81,7 +84,7 @@ class TemplatesManage extends React.Component {
             <Loader isLoading={loading} />
           }
           <Form onSubmit={this.onSubmit}>
-            <div className="c-form">
+            <div className="c-form -templates">
               <div className="template-meta">
                 <div className="row">
                   <div className="column small-12 medium-5 medium-offset-1 large-4 large-offset-2">

@@ -1,6 +1,11 @@
 .c-form {
   position: relative;
   font-family: $base-font-family;
+
+  &.-templates {
+    min-height: calc(100vh - #{$nav-height} - #{$hero-height});
+    background: $white;
+  }
   
   input:focus,
   select:focus,
