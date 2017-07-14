@@ -16,6 +16,8 @@ class Settings extends React.Component {
   componentWillMount() {
     if (this.firstLoad){
       this.props.getTeam(this.props.userId);
+      this.props.getGFWLayers();
+      this.props.getLayers();
       this.firstLoad = false;
     }
   }

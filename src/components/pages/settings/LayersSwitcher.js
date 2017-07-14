@@ -4,10 +4,6 @@ import { FormattedMessage } from 'react-intl';
 import SwitchButton from 'react-switch-button';
 
 class LayersSwitcher extends React.Component {
-  componentWillMount(){
-    this.props.getLayers();
-  }
-
   toggleLayer = (layer) => {
     this.props.toggleLayer(layer, !layer.attributes.enabled);
   }

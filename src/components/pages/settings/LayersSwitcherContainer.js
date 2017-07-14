@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import LayersSwitcher from './LayersSwitcher';
-import { toggleLayer, getLayers } from '../../../modules/layers';
+import { toggleLayer } from '../../../modules/layers';
 
 
 const mapStateToProps = ({ layers, teams }) => {
@@ -12,11 +12,8 @@ const mapStateToProps = ({ layers, teams }) => {
 
  function mapDispatchToProps(dispatch) {
    return {
-    toggleLayer: (layer, value) => {
+     toggleLayer: (layer, value) => {
        dispatch(toggleLayer(layer, value));
-     },
-    getLayers: () => {
-       dispatch(getLayers());
      }
    }
  }

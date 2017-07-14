@@ -15,10 +15,6 @@ class LayersForm extends React.Component {
     }
   }
   
-  componentWillMount(){
-    this.props.getGFWLayers();
-  }
-
   componentWillReceiveProps(nextProps){
     if (this.props.GFWLayers !== nextProps.GFWLayers) {
       this.setState({
