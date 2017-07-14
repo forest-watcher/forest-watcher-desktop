@@ -1,11 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { Input, Form } from '../../form/Form';
+import { Input, Form } from '../form/Form';
 import Select from 'react-select';
 import MembersManager from './MembersManager';
 import { FormattedMessage, injectIntl } from 'react-intl';
-import { MANAGER, USER, CONFIRMED_USER } from '../../../constants/global';
+import { MANAGER, USER, CONFIRMED_USER } from '../../constants/global';
 
 class TeamsForm extends React.Component {
   constructor (props) {

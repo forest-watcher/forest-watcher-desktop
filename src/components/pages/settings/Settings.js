@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 
 import Hero from '../../layouts/Hero';
 import TeamsShow from './TeamsShowContainer';
-import TeamsForm from './TeamsFormContainer';
-import LayersManager from '../../LayersManager/LayersManager';
+import TeamsForm from '../../teams-form/TeamsFormContainer';
+import LayersManager from '../../layers-manager/LayersManager';
 import Loader from '../../ui/Loader';
 
 class Settings extends React.Component {

@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import TeamsForm from './TeamsForm';
-import { createTeam, updateTeam, setEditing, sendNotifications } from '../../../modules/teams';
+import { createTeam, updateTeam, setEditing, sendNotifications } from '../../modules/teams';
 
 const mapStateToProps = ({ areas, user, teams }) => {
   const areaValues = Object.keys(areas.data).map((key) => ({
