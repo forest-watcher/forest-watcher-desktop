@@ -8,7 +8,7 @@ import cloneDeep from 'lodash/cloneDeep';
 class QuestionCard extends React.Component {
   constructor (props) {
     super(props);
-    this.question = cloneDeep(props.question);
+    this.question = { ...props.question };
   }
 
   onInputChange = (e) => {
