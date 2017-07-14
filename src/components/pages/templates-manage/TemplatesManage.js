@@ -8,6 +8,7 @@ import { Form, Input, Button } from '../../form/Form';
 import Select from 'react-select';
 import Loader from '../../ui/Loader';
 import { getSelectorValueFromArray } from '../../../helpers/filters';
+import { setLanguages, syncLanguagesWithDefaultLanguage } from '../../../helpers/languages';
 import { Link } from 'react-router-dom';
 import { toastr } from 'react-redux-toastr';
 import QuestionCard from '../../question-card/QuestionCard';
@@ -38,61 +39,9 @@ class TemplatesManage extends React.Component {
     this.setState({ areaOfInterest: selected.option });
   }
 
-  setLanguages = (selected) => {
-    const activeLanguages = this.state.languages;
-    activeLanguages.indexOf(selected) === -1 &&
-      activeLanguages.push(selected);
-    const index = activeLanguages.indexOf(this.state.defaultLanguage);
-    if (index > -1) {
-      activeLanguages.splice(index, 1);
-    }
-    return activeLanguages;
-  }
-
-  syncLanguagesWithDefault = (newLanguage) => {
-    let state = { ...this.state };
-    const currentLanguage = this.state.defaultLanguage;
-    
-    // first update the name of the template
-    const templateName = { ...this.state.name };
-    templateName[newLanguage] = templateName[currentLanguage];
-    delete templateName[currentLanguage];
-    state = {
-      ...this.state,
-      name: templateName
-    }
-
-    // Now update the labels and values of the questions
-    state.questions.forEach((question, index) => {
-      const label = { ...question.label };
-      label[newLanguage] = label[currentLanguage];
-      delete label[currentLanguage];
-      let newQuestion = {
-        ...question,
-        label
-      };
-
-      // if optional question set values
-      if (question.values) {
-        const values = { ...question.values };
-        values[newLanguage] = values[currentLanguage];
-        delete values[currentLanguage];
-        newQuestion = {
-          ...question,
-          values
-        };
-      }
-
-      state.questions[index] = newQuestion;
-    });
-
-    // finally update state
-    this.setState(state);
-  }
-
   onLanguageChange = (selected) => {
-    this.setLanguages(selected.option);
-    this.syncLanguagesWithDefault(selected.option);
+    this.setState(setLanguages(selected.option, this.state));
+    this.setState(syncLanguagesWithDefaultLanguage(selected.option, this.state));
     this.setState({
       defaultLanguage: selected.option
     });
@@ -120,6 +69,7 @@ class TemplatesManage extends React.Component {
 
   // Render
   render() {
+    // console.log(this.state);
     const { areasOptions, localeOptions, loading, mode } = this.props;
     return (
       <div>
