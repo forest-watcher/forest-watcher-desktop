@@ -29,6 +29,13 @@ const filterData = (data, searchParams) => {
   return data;
 }
 
+const getSelectorValueFromArray = (value, data) => {
+  const selected = data.filter((obj) => {
+    return obj.option === value;
+  });
+  return selected[0];
+}
+
 const getDataAreas = (data, areas) => {
   const areasIndex = [];
   const areasOptions = [];
@@ -41,4 +48,4 @@ const getDataAreas = (data, areas) => {
   return areasOptions;
 }
 
-export { filterData, getDataAreas };
+export { filterData, getDataAreas, getSelectorValueFromArray };
