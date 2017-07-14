@@ -4,12 +4,14 @@ import normalize from 'json-api-normalizer';
 // Actions
 const GET_GFW_LAYERS = 'layers/GET_GFW_LAYERS';
 const SET_LAYERS = 'layers/SET_LAYERS';
+const SET_LOADING = 'layers/SET_LOADING';
 
 // Reducer
 const initialState = {
   gfw: [],
   selectedLayers: {},
-  selectedLayerIds: []
+  selectedLayerIds: [],
+  loading: false
 };
 
 export default function reducer(state = initialState, action) {
@@ -38,6 +40,9 @@ export default function reducer(state = initialState, action) {
       }
       return state;
     }
+    case SET_LOADING:{
+      return Object.assign({}, state, { loading: action.payload });
+    }
     default:
       return state;
   }
@@ -47,6 +52,10 @@ export default function reducer(state = initialState, action) {
 export function getGFWLayers() {
   const url = `${CARTO_URL}/api/v2/sql?q=SELECT title, tileurl FROM layerspec WHERE tileurl is not NULL AND tileurl <> ''`;
   return (dispatch, state) => {
+    dispatch({
+      type: SET_LOADING,
+      payload: true
+    });
     fetch(url)
     .then((response) => {
       if (response.ok) return response.json();
@@ -57,8 +66,16 @@ export function getGFWLayers() {
         type: GET_GFW_LAYERS,
         payload: data.rows
       });
+      dispatch({
+        type: SET_LOADING,
+        payload: false
+      });
     })
     .catch((error) => {
+      dispatch({
+        type: SET_LOADING,
+        payload: false
+      });
       console.warn(error);
     });
   };
@@ -75,6 +92,10 @@ export function createLayer(layer, teamId) {
   let url = `${API_BASE_URL}/v1/contextual-layer`;
   if (teamId) url = `${url}/team/${teamId}`;
   return (dispatch, state) => {
+    dispatch({
+      type: SET_LOADING,
+      payload: true
+    });
     fetch(url, {
         headers: {
           Authorization: `Bearer ${state().user.token}`,
@@ -91,11 +112,19 @@ export function createLayer(layer, teamId) {
     .then(async (data) => {
       const normalized = normalize(data);
       dispatch({
+        type: SET_LOADING,
+        payload: false
+      });
+      dispatch({
         type: SET_LAYERS,
         payload: {selectedLayer: normalized.contextualLayers}
       });
     })
     .catch((error) => {
+      dispatch({
+        type: SET_LOADING,
+        payload: false
+      });
       console.warn(error);
     });
   };
@@ -104,6 +133,10 @@ export function createLayer(layer, teamId) {
 export function toggleLayer(layer, value) {
   let url = `${API_BASE_URL}/v1/contextual-layer/${layer.id}`;
   return (dispatch, state) => {
+    dispatch({
+      type: SET_LOADING,
+      payload: true
+    });
     fetch(url, {
         headers: {
           Authorization: `Bearer ${state().user.token}`,
@@ -120,11 +153,19 @@ export function toggleLayer(layer, value) {
     .then(async (data) => {
       const normalized = normalize(data);
       dispatch({
+        type: SET_LOADING,
+        payload: false
+      });
+      dispatch({
         type: SET_LAYERS,
         payload: {selectedLayer: normalized.contextualLayers}
       });
     })
     .catch((error) => {
+      dispatch({
+        type: SET_LOADING,
+        payload: false
+      });
       console.warn(error);
     });
   };
@@ -133,6 +174,10 @@ export function toggleLayer(layer, value) {
 export function getLayers() {
   let url = `${API_BASE_URL}/v1/contextual-layer`;
   return (dispatch, state) => {
+    dispatch({
+      type: SET_LOADING,
+      payload: true
+    });
     fetch(url, {
         headers: {
           Authorization: `Bearer ${state().user.token}`,
@@ -147,11 +192,19 @@ export function getLayers() {
     .then(async (data) => {
       const normalized = normalize(data);
       dispatch({
+        type: SET_LOADING,
+        payload: false
+      });
+      dispatch({
         type: SET_LAYERS,
         payload: {selectedLayer: normalized.contextualLayers}
       });
     })
     .catch((error) => {
+      dispatch({
+        type: SET_LOADING,
+        payload: false
+      });
       console.warn(error);
     });
   };

@@ -39,11 +39,12 @@ class Settings extends React.Component {
             <div>
               {(team && !editing) ?
                 <div>
-                  <Loader isLoading={saving} />
                   <TeamsShow />
                 </div>
                 : 
-                <TeamsForm team={team}/>}
+                <TeamsForm team={team}/>
+              }
+              <Loader isLoading={saving} />
               <LayersManager />
             </div>}
         </div>
