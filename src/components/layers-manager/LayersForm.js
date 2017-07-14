@@ -1,9 +1,11 @@
 import React from 'react';
 
 import { FormattedMessage } from 'react-intl';
+import { Input, Form, Textarea } from '../form/Form';
 import Card from '../ui/Card';
 import Tab from '../ui/Tab';
 import Checkbox from '../ui/Checkbox';
+import { injectIntl } from 'react-intl';
 
 class LayersForm extends React.Component {
   constructor(props) {
@@ -12,6 +14,12 @@ class LayersForm extends React.Component {
       tabIndex: 0,
       GFWLayers: props.GFWLayers || [],
       teamMode: false
+    }
+
+    this.form = {
+      title: null,
+      tileurl: null,
+      style: null
     }
   }
   
@@ -37,22 +45,38 @@ class LayersForm extends React.Component {
     });
     this.setState({GFWLayers});
   }
-
+  resetForm (){
+    this.form = Object.assign({}, {
+      title: null,
+      tileurl: null,
+      style: null
+    });
+  }
   addLayers = (e) => {
     e.preventDefault();
-    const resetedLayers = this.state.GFWLayers.map((GFWLayer) => {
-      if (GFWLayer.enabled){
-        this.addLayer(GFWLayer);
-        GFWLayer.enabled = false;
-      }
-      return GFWLayer
-    });
-    this.setState({ GFWLayers: resetedLayers });
+    if (this.state.tabIndex === 0){
+      const resetedLayers = this.state.GFWLayers.map((GFWLayer) => {
+        if (GFWLayer.enabled){
+          this.addLayer(GFWLayer);
+          GFWLayer.enabled = false;
+        }
+        return GFWLayer
+      });
+      this.setState({ GFWLayers: resetedLayers });
+    } else {
+      this.addLayer(this.form);
+      this.resetForm();
+    }
   }
 
   addLayer = (layer) => {
     const teamId = this.state.teamMode ? this.props.team.id : null;
     this.props.createLayer(layer, teamId);
+  }
+
+  onInputChange = (e) => {
+    const form = Object.assign({}, this.form, { [e.target.name]: e.target.value });
+    this.setState({ form });
   }
 
   render() {
@@ -64,7 +88,7 @@ class LayersForm extends React.Component {
           selectedIndex={this.state.tabIndex}
           handleTabIndexChange={this.handleTabIndexChange}
         />
-        <form onSubmit={(e) => this.addLayers(e)}>
+        <Form onSubmit={(e) => this.addLayers(e)}>
           <Card className={"-big"}>
             {this.state.tabIndex === 0 ? 
               this.state.GFWLayers && this.state.GFWLayers.map((GFWlayer, i) => 
@@ -75,7 +99,36 @@ class LayersForm extends React.Component {
                   callback={() => this.toggleGFWLayer(GFWlayer)} 
                   checked={ GFWlayer.enabled || false }
                 />
-              ) : null
+              ) : 
+              <div className="custom-layer-form">
+                <h4>{this.props.intl.formatMessage({ id: 'settings.layerTitle' })}</h4>
+                <Input
+                type="text"
+                onChange={this.onInputChange}
+                name="title"
+                value={this.form.title || ''}
+                placeholder={this.props.intl.formatMessage({ id: 'settings.layerTitle' })}
+                validations={['required']}
+                />
+                <h4>{this.props.intl.formatMessage({ id: 'settings.url' })}</h4>
+                <Input
+                type="text"
+                onChange={this.onInputChange}
+                name="tileurl"
+                value={this.form.tileurl || ''}
+                placeholder={this.props.intl.formatMessage({ id: 'settings.url' })}
+                validations={['required']}
+                />
+                <h4>{this.props.intl.formatMessage({ id: 'settings.cssStyle' })}</h4>
+                <Textarea
+                  type="text"
+                  onChange={this.onInputChange}
+                  name="style"
+                  value={this.form.style || ''}
+                  placeholder={this.props.intl.formatMessage({ id: 'settings.cssStyle' })}
+                  validations={[]}
+                />
+              </div>
             }
           </Card> 
           { this.props.team && 
@@ -86,10 +139,10 @@ class LayersForm extends React.Component {
             />
           }
           <button className="c-button -right" ><FormattedMessage id="common.add" /></button>
-        </form>
+        </Form>
       </div>
     );
   }
 }
 
-export default LayersForm;
+export default injectIntl(LayersForm);
