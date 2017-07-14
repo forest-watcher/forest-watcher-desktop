@@ -88,5 +88,9 @@
     "templates.defaultLanguage": "Default language",
     "templates.status": "status",
     "templates.reportsSubmitted": "reports submitted",
-    "templates.noTemplatesFound": "No templates found"
+    "templates.noTemplatesFound": "No templates found",
+    "settings.contextualLayers": "Contextual layers",
+    "settings.customLayers": "Custom layers",
+    "settings.gfwLayers": "GFW layers",
+    "settings.selectedLayers": "Selected layers"
 }

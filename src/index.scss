@@ -16,6 +16,7 @@
 /* Overides */
 @import "./styles/leaflet";
 @import "./styles/toastr";
+@import "./styles/react-switch-button";
 
 /* Layouts */
 @import "./styles/layouts/l-main";
@@ -37,8 +38,10 @@
 @import "./styles/components/c-button";
 @import "./styles/components/c-icon";
 @import "./styles/components/c-article";
+@import "./styles/components/c-layers-manager";
 @import "./styles/components/c-add-card";
 @import "./styles/components/c-card";
+@import "./styles/components/c-tab";
 @import "./styles/components/c-checkbox";
 @import "./styles/components/c-member-list";
 @import "./styles/components/c-map";

@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { MAP_CONFIG } from '../../constants/map';
+import { equals, includes } from '../../helpers/utils';
 
 class Map extends React.Component {
 
@@ -17,6 +18,9 @@ class Map extends React.Component {
   componentWillReceiveProps(nextProps) {
     if (this.props.mapConfig.zoom !== nextProps.mapConfig.zoom) {
       this.map.setZoom(nextProps.mapConfig.zoom);
+    }
+    if (!equals(this.props.mapConfig.layers, nextProps.mapConfig.layers)) {
+      this.updateLayers(nextProps.mapConfig.layers);
     }
   }
 
@@ -52,7 +56,19 @@ class Map extends React.Component {
                       .addTo(this.map)
                       .setZIndex(0);
   }
-
+    
+  updateLayers(layerUrls) {
+    layerUrls.forEach((layerUrl) => {
+      const lowCaseLayerUrl = layerUrl.replace("{Z}", "{z}").replace("{Y}", "{y}").replace("{X}", "{x}");
+      const layer = L.tileLayer(lowCaseLayerUrl);
+      if (!this.map.hasLayer(layer)) layer.addTo(this.map);
+    });
+    this.map.eachLayer((layer) => {
+      if (layer._url !== MAP_CONFIG.basemap && !includes(layerUrls, layer._url)){
+        this.map.removeLayer(layer);
+      }  
+    })
+  }
 
   // MAP FUNCTONS
   remove() {

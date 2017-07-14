@@ -1,4 +1,4 @@
-import { includes, unique, diff, filterEmpty, validateEmail } from './utils';
+import { includes, unique, diff, filterEmpty, validateEmail , equals } from './utils';
 describe ('includes', () => 
 	it ('returns true only if the value is included in the array', () => {
 		expect(includes([1,2,3], 1)).toEqual(true);
@@ -24,4 +24,11 @@ describe ('validateEmail', () =>
 		expect(validateEmail('bluesman.es')).toEqual(false);
 		expect(validateEmail('blues.man.es')).toEqual(false);
 	})
+)
+
+describe ('equals', () => 
+	it ('returns true if the arrays are equal', () => {
+		expect(equals(['blues@man.es'], [2])).toEqual(false);
+		expect(equals([2,3], [2,3])).toEqual(true);
+    })
 )
