@@ -58,7 +58,7 @@ class LayersForm extends React.Component {
   render() {
     return (
       <div className="c-layers-form">
-        <div className="title"><FormattedMessage id={"settings.contextualLayers"} /></div>
+        <h3><FormattedMessage id={"settings.contextualLayers"} /></h3>
         <Tab 
           options={["settings.gfwLayers", "settings.customLayers"]}
           selectedIndex={this.state.tabIndex}
@@ -68,27 +68,24 @@ class LayersForm extends React.Component {
           <Card className={"-big"}>
             {this.state.tabIndex === 0 ? 
               this.state.GFWLayers && this.state.GFWLayers.map((GFWlayer, i) => 
-                <div key={i}>
                 <Checkbox 
+                  key={i}
                   id={`${i}${GFWlayer.title}`} 
                   label={ GFWlayer.title }
                   callback={() => this.toggleGFWLayer(GFWlayer)} 
                   checked={ GFWlayer.enabled || false }
                 />
-                </div>
               ) : null
             }
           </Card> 
-          <div>
-            { this.props.team && 
-              <Checkbox 
-                id={'gfw-teams-add'} 
-                labelId={ 'settings.addToTeam' }
-                callback={() => this.setState({teamMode: !this.state.teamMode})}
-              />
-            }
-            <button className="c-button -right" ><FormattedMessage id="common.add" /></button>
-          </div>
+          { this.props.team && 
+            <Checkbox 
+              id={'gfw-teams-add'} 
+              labelId={ 'settings.addToTeam' }
+              callback={() => this.setState({teamMode: !this.state.teamMode})}
+            />
+          }
+          <button className="c-button -right" ><FormattedMessage id="common.add" /></button>
         </form>
       </div>
     );
