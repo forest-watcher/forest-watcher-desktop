@@ -30,7 +30,7 @@ class LayersForm extends React.Component {
   toggleGFWLayer = (GFWLayer) => {
     const GFWLayers = [].concat(this.state.GFWLayers);
     GFWLayers.map((stateGFWlayer) => {
-      if(stateGFWlayer.title === GFWLayer.title){
+      if(stateGFWlayer.cartodb_id === GFWLayer.cartodb_id){
         stateGFWlayer.enabled = !stateGFWlayer.enabled;
       }
       return stateGFWlayer
@@ -70,7 +70,7 @@ class LayersForm extends React.Component {
               this.state.GFWLayers && this.state.GFWLayers.map((GFWlayer, i) => 
                 <Checkbox 
                   key={i}
-                  id={`${i}${GFWlayer.title}`} 
+                  id={`${i}${GFWlayer.cartodb_id}`} 
                   label={ GFWlayer.title }
                   callback={() => this.toggleGFWLayer(GFWlayer)} 
                   checked={ GFWlayer.enabled || false }

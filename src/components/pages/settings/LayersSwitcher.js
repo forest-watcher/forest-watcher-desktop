@@ -16,7 +16,7 @@ class LayersSwitcher extends React.Component {
           {this.props.selectedLayers.map((selectedLayer, i) => (
             <div key={i}>
               <SwitchButton 
-                name={`${i}${selectedLayer.attributes.name}`} 
+                name={`selected${i}${selectedLayer.attributes.name}`} 
                 labelRight={selectedLayer.attributes.name} 
                 onChange={() => this.toggleLayer(selectedLayer)}
                 defaultChecked={selectedLayer.attributes.enabled}

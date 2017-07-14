@@ -50,7 +50,7 @@ export default function reducer(state = initialState, action) {
 
 // Action Creators
 export function getGFWLayers() {
-  const url = `${CARTO_URL}/api/v2/sql?q=SELECT title, tileurl FROM layerspec WHERE tileurl is not NULL AND tileurl <> ''`;
+  const url = `${CARTO_URL}/api/v2/sql?q=SELECT cartodb_id, title, tileurl FROM layerspec WHERE tileurl is not NULL AND tileurl <> '' AND title is not NULL`;
   return (dispatch, state) => {
     dispatch({
       type: SET_LOADING,
