@@ -5,6 +5,7 @@ import { Input, Form, Textarea } from '../form/Form';
 import Card from '../ui/Card';
 import Tab from '../ui/Tab';
 import Checkbox from '../ui/Checkbox';
+import { toastr } from 'react-redux-toastr';
 import { injectIntl } from 'react-intl';
 
 class LayersForm extends React.Component {
@@ -67,8 +68,12 @@ class LayersForm extends React.Component {
       });
       this.setState({ GFWLayers: resetedLayers });
     } else { // Custom Layers
-      this.addLayer(this.state.form);
-      this.resetForm();
+      if (Object.keys(this.formNode.getErrors()).length === 0) { // No validation errors
+        this.addLayer(this.state.form);
+        this.resetForm();
+      } else {
+        toastr.error(this.props.intl.formatMessage({ id: 'settings.validationError' }));
+      }
     }
   }
 
@@ -91,7 +96,7 @@ class LayersForm extends React.Component {
           selectedIndex={this.state.tabIndex}
           handleTabIndexChange={this.handleTabIndexChange}
         />
-        <Form onSubmit={(e) => this.addLayers(e)}>
+        <Form onSubmit={(e) => this.addLayers(e)} ref={ f => this.formNode = f }>
           <Card className={"-big"}>
             {this.state.tabIndex === 0 ? 
               this.state.GFWLayers && this.state.GFWLayers.map((GFWlayer, i) => 

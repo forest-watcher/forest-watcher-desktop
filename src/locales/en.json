@@ -94,5 +94,6 @@
     "settings.team": "TEAM",
     "settings.layerTitle": "Title",
     "settings.cssStyle": "Css style",
-    "settings.url": "URL"
+    "settings.url": "URL",
+    "settings.validationError": "There are some errors in the form"
 }
