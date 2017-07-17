@@ -5,7 +5,7 @@ import LayersSwitcher from './LayersSwitcherContainer';
 
 function LayersManager() {
   return(
-    <div className="c-layers-manager">
+    <div className="l-layers-manager">
       <div className="row">
         <div className="small-5 columns">
           <LayersForm />

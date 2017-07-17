@@ -24,6 +24,7 @@
 @import "./styles/layouts/l-content";
 @import "./styles/layouts/l-map";
 @import "./styles/layouts/l-loader";
+@import "./styles/layouts/l-layers-manager";
 
 /* Components */
 @import "./styles/components/c-nav";
@@ -37,7 +38,7 @@
 @import "./styles/components/c-button";
 @import "./styles/components/c-icon";
 @import "./styles/components/c-article";
-@import "./styles/components/c-layers-manager";
+@import "./styles/components/c-layers-switcher";
 @import "./styles/components/c-layers-form";
 @import "./styles/components/c-add-card";
 @import "./styles/components/c-card";

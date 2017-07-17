@@ -1,10 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl } from 'react-intl';
+import classnames from 'classnames';
 
-function Checkbox({ id, callback, label, defaultChecked, checked , labelId, intl }) {
+function Checkbox({ id, callback, label, defaultChecked, checked , labelId, intl, classNames }) {
   return (
-    <div className="c-checkbox">
+    <div className={classnames(['c-checkbox', classNames])}>
       <div className="checkbox">
         { typeof checked !== 'undefined' ? 
           <input type="checkbox" id={id} onChange={callback} defaultChecked={defaultChecked} checked={checked}/>

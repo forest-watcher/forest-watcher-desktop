@@ -100,7 +100,8 @@ class LayersForm extends React.Component {
           <Card className={"-big"}>
             {this.state.tabIndex === 0 ? 
               this.state.GFWLayers && this.state.GFWLayers.map((GFWlayer, i) => 
-                <Checkbox 
+                <Checkbox
+                  classNames="-spaced"
                   key={`${i}${GFWlayer.cartodb_id}`}
                   id={`${i}${GFWlayer.cartodb_id}`} 
                   label={ GFWlayer.title }
@@ -138,15 +139,17 @@ class LayersForm extends React.Component {
                 />
               </div>
             }
-          </Card> 
-          { this.props.team && 
-            <Checkbox 
-              id={'gfw-teams-add'} 
-              labelId={ 'settings.addToTeam' }
-              callback={() => this.setState({teamMode: !this.state.teamMode})}
-            />
-          }
-          <button className="c-button -right" ><FormattedMessage id="common.add" /></button>
+          </Card>
+          <div className='card-actions'>
+            { this.props.team && 
+              <Checkbox 
+                id={'gfw-teams-add'} 
+                labelId={ 'settings.addToTeam' }
+                callback={() => this.setState({teamMode: !this.state.teamMode})}
+              />
+            }
+            <button className="c-button -right" ><FormattedMessage id="common.add" /></button>
+          </div>
         </Form>
       </div>
     );
