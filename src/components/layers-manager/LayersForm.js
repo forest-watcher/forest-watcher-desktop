@@ -13,14 +13,14 @@ class LayersForm extends React.Component {
     this.state = {
       tabIndex: 0,
       GFWLayers: props.GFWLayers || [],
-      teamMode: false
+      teamMode: false,
+      form: {
+        title: null,
+        tileurl: null,
+        style: null
+      }
     }
 
-    this.form = {
-      title: null,
-      tileurl: null,
-      style: null
-    }
   }
   
   componentWillReceiveProps(nextProps){
@@ -45,16 +45,19 @@ class LayersForm extends React.Component {
     });
     this.setState({GFWLayers});
   }
-  resetForm (){
-    this.form = Object.assign({}, {
-      title: null,
-      tileurl: null,
-      style: null
+
+  resetForm =  () => {
+    const form = Object.assign({}, {
+      title: '',
+      tileurl: '',
+      style: ''
     });
+    this.setState({ form });
   }
+
   addLayers = (e) => {
     e.preventDefault();
-    if (this.state.tabIndex === 0){
+    if (this.state.tabIndex === 0) { // GFW Layers
       const resetedLayers = this.state.GFWLayers.map((GFWLayer) => {
         if (GFWLayer.enabled){
           this.addLayer(GFWLayer);
@@ -63,8 +66,8 @@ class LayersForm extends React.Component {
         return GFWLayer
       });
       this.setState({ GFWLayers: resetedLayers });
-    } else {
-      this.addLayer(this.form);
+    } else { // Custom Layers
+      this.addLayer(this.state.form);
       this.resetForm();
     }
   }
@@ -75,7 +78,7 @@ class LayersForm extends React.Component {
   }
 
   onInputChange = (e) => {
-    const form = Object.assign({}, this.form, { [e.target.name]: e.target.value });
+    const form = Object.assign(this.state.form, { [e.target.name]: e.target.value });
     this.setState({ form });
   }
 
@@ -106,7 +109,7 @@ class LayersForm extends React.Component {
                 type="text"
                 onChange={this.onInputChange}
                 name="title"
-                value={this.form.title || ''}
+                value={this.state.form.title || ''}
                 placeholder={this.props.intl.formatMessage({ id: 'settings.layerTitle' })}
                 validations={['required']}
                 />
@@ -115,16 +118,16 @@ class LayersForm extends React.Component {
                 type="text"
                 onChange={this.onInputChange}
                 name="tileurl"
-                value={this.form.tileurl || ''}
+                value={this.state.form.tileurl || ''}
                 placeholder={this.props.intl.formatMessage({ id: 'settings.url' })}
-                validations={['required']}
+                validations={['required', 'url']}
                 />
                 <h4>{this.props.intl.formatMessage({ id: 'settings.cssStyle' })}</h4>
                 <Textarea
                   type="text"
                   onChange={this.onInputChange}
                   name="style"
-                  value={this.form.style || ''}
+                  value={this.state.form.style || ''}
                   placeholder={this.props.intl.formatMessage({ id: 'settings.cssStyle' })}
                   validations={[]}
                 />
