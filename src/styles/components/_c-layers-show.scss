@@ -5,15 +5,23 @@
     border-bottom: 1px solid $medium-gray;
     padding-bottom: 16px;
     margin-top: 16px;
-
-    .layers-title {
-      margin: 0;
-    }
     
     .layer-name {
       text-transform: uppercase;
     }
   }
+  
+  .layers-title {
+    border-bottom: 1px solid $medium-gray;
+    padding-bottom: 16px;
+    margin-top: 60px;
+    color: $theme-accent;
+  }
+
+  .list-header {
+    border: 0;
+  }
+
   .c-icon {
     margin-right: 18px;
   }

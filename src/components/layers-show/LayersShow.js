@@ -8,8 +8,10 @@ class LayersShow extends React.Component {
   render() {
     const { publicLayers, teamLayers, userLayers, isManager } = this.props;
     const renderLayers = (layerType, layers) => (
-      <div className="layers-title">
-        <FormattedMessage id={`settings.${layerType}Layers`} />
+      <div className="layers-type">
+        <div className="layers-title">
+          <FormattedMessage id={`settings.${layerType}Layers`} />
+        </div>
         { layers.map((layer, i) => (
           <div key={i} className="list-row">
             <div className="layer-name">{ layer.attributes.name }</div>
@@ -24,11 +26,11 @@ class LayersShow extends React.Component {
       <div className="c-layers-show">
         <div className="row">
           <div className="small-6 columns">
-            <div className="list-row">
+            <div className="list-row list-header">
               <FormattedMessage id={"settings.selectedLayers"} />
               <FormattedMessage id={"settings.enabled"} />
             </div>
-            <div className="section">
+            <div className="layers-list">
               { isManager && renderLayers('public', publicLayers) }
               { renderLayers('team', teamLayers) }
               { renderLayers('user', userLayers) }

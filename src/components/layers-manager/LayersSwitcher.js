@@ -49,7 +49,7 @@ class LayersSwitcher extends React.Component {
     return (
       <div className="c-layers-switcher">
         <h3><FormattedMessage id={"settings.selectedLayers"} /></h3>
-        <div className="section layers-switchs">
+        <div className="layers-switchs">
           { isManager && renderLayers('public', publicLayers) }
           { renderLayers('team', teamLayers) }
           { renderLayers('user', userLayers) }
