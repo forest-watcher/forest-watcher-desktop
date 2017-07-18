@@ -1,5 +1,6 @@
 .c-form {
   position: relative;
+  font-family: $base-font-family;
   
   input:focus,
   select:focus,
@@ -21,6 +22,19 @@
 
     &::placeholder {
       color: rgba($theme-text, 0.3);
+    }
+
+    &.-title {
+      border: 0;
+      border-bottom: solid 1px $border-light-gray;
+      border-radius: 0;
+      width: 100%;
+      padding: 0 0 25px 0;
+      font-size: 45px;
+      letter-spacing: 0.3px;
+      line-height: 45px;
+      height: 80px;
+      font-weight: $font-weight-light;
     }
   }
 
@@ -97,6 +111,15 @@
         border-left: solid 1px rgba($pale-gray, 0.2);
         height: 100%;
       }
+    }
+  }
+
+  .is-searchable {
+
+    input {
+      border: 0;
+      height: 100%;
+      padding: 0;
     }
   }
 }

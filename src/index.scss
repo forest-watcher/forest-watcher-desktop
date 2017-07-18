@@ -25,6 +25,7 @@
 @import "./styles/layouts/l-map";
 @import "./styles/layouts/l-loader";
 @import "./styles/layouts/l-layers-manager";
+@import "./styles/layouts/l-template";
 
 /* Components */
 @import "./styles/components/c-nav";
@@ -47,9 +48,11 @@
 @import "./styles/components/c-member-list";
 @import "./styles/components/c-map";
 @import "./styles/components/c-form";
+@import "./styles/components/c-form-footer";
 @import "./styles/components/c-locate-user";
 @import "./styles/components/c-zoom-control";
 @import "./styles/components/c-leaflet-attribution";
 @import "./styles/components/c-loading-spinner";
 @import "./styles/components/c-loader";
 @import "./styles/components/c-select";
+@import "./styles/components/c-question";
