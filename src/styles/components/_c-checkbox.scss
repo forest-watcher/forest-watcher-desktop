@@ -2,6 +2,10 @@
   display: flex;
   flex-direction: row;
   
+  &.-spaced {
+    margin-bottom: 8px;
+  }
+  
   input[type=checkbox] {
     visibility: hidden;
   }

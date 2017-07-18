@@ -1,0 +1,42 @@
+.c-tab {
+  height: $nav-height;
+  display: flex;
+
+  &.-right{
+    flex-direction: column;
+    align-items: flex-end;
+  }
+
+  .nav-tab {
+    display: flex;
+    flex-direction: row;
+    
+    a {
+      padding-left: 30px;
+      color: $disabled-font-color;
+      
+      &::after {
+        margin-top: 10px;
+        display: block;
+        content: '';
+        height: 2px;
+        width: 0;
+        background-color: $theme-accent;
+        transition: width .15s $ease-out-cubic;
+      }
+
+      &:hover {
+        &::after {
+          width: 100%;
+        }
+      }
+
+      &.-active {
+        color: $base-font-color;
+        &::after {
+          width: 100%;
+        }
+      }
+    }
+  }
+}

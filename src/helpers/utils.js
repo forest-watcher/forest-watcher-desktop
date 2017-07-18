@@ -15,4 +15,17 @@ const prettyNum = (num) => {
 	return (num < 10 ? '0' : '') + num;
 }
 
-export { includes, unique, diff, filterEmpty, validateEmail, prettyNum };
+const equals = function (array, otherArray) {
+    if (!array || otherArray.length !== array.length) return false;
+    for (var i = 0, l=otherArray.length; i < l; i++) {
+        // Check if we have nested arrays
+        if (otherArray[i] instanceof Array && array[i] instanceof Array) {
+            // recurse into the nested arrays
+            if (!otherArray[i].equals(array[i])) return false;       
+        }
+        else if (otherArray[i] !== array[i]) return false;
+    }       
+    return true;
+}
+
+export { includes, unique, diff, filterEmpty, validateEmail, equals, prettyNum };

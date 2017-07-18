@@ -8,6 +8,12 @@
   border: 1px solid $border-light-gray;
   margin-bottom: 20px;
 
+  &.-big {
+    padding-top: 40px;
+    overflow: auto;
+    height: 500px;
+  }
+
   .card-field {
     font-size: 17px;
     color: $pale-gray;

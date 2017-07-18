@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Icon from '../../ui/Icon';
-import Checkbox from '../../ui/Checkbox';
+import Icon from '../ui/Icon';
+import Checkbox from '../ui/Checkbox';
 import { injectIntl } from 'react-intl';
-import { MANAGER, USER } from '../../../constants/global';
+import { MANAGER, USER } from '../../constants/global';
 
 
 function MemberList({ members, handleChangeRole, deleteMember, intl }) {

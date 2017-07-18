@@ -53,7 +53,6 @@ class Map extends React.Component {
                       .setZIndex(0);
   }
 
-
   // MAP FUNCTONS
   remove() {
     this.map.remove();
