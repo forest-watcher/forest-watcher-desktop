@@ -9,22 +9,37 @@ class LayersSwitcher extends React.Component {
   toggleLayer = (layer) => {
     this.props.toggleLayer(layer, !layer.attributes.enabled);
   }
+
   render() {
     const { publicLayers, teamLayers, userLayers, deleteLayer, isManager } = this.props;
+    
+    const switchRow = (layer, i) => (
+      <div className="switch-row">
+        <SwitchButton
+          name={`${layer.attributes.owner.type}-layer-${i}-${layer.id}`} 
+          labelRight={layer.attributes.name} 
+          onChange={() => this.toggleLayer(layer)}
+          defaultChecked={layer.attributes.enabled}
+        />
+        <button className={"delete-button"} type="button" onClick={() => deleteLayer(layer)}>
+          <Icon name="icon-delete" className="-small " />
+        </button>
+      </div>
+    );
+
     const renderLayers = (layerType, layers) => (
       <div className={`${layerType}-layers`}>
         <h4><FormattedMessage id={`settings.${layerType}Layers`} /></h4>
         { layers.map((layer, i) => (
           <div className="layer-switch" key={`${layer.attributes.owner.type}-layer-${i}-${layer.id}`}>
-            <SwitchButton
-              name={`${layer.attributes.owner.type}-layer-${i}-${layer.attributes.id}`} 
-              labelRight={layer.attributes.name} 
-              onChange={() => this.toggleLayer(layer)}
-              defaultChecked={layer.attributes.enabled}
-            />
-            <button className={"delete-button"} type="button" onClick={() => deleteLayer(layer)}>
-              <Icon name="icon-delete" className="-small " />
-            </button>
+            { ((layer.attributes.owner.type === "USER" && layerType !== 'public') ||
+              (layer.attributes.owner.type === "TEAM" && isManager)) ?
+                switchRow(layer, i)
+              :
+                <div className="switch-row">
+                  <div> {layer.attributes.name} </div>
+                </div>
+            }
           </div>
           ))
         }
