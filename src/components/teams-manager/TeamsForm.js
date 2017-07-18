@@ -1,11 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { Input, Form } from '../../form/Form';
+import { Input, Form } from '../form/Form';
 import Select from 'react-select';
 import MembersManager from './MembersManager';
 import { FormattedMessage, injectIntl } from 'react-intl';
-import { MANAGER, USER, CONFIRMED_USER } from '../../../constants/global';
+import { MANAGER, USER, CONFIRMED_USER } from '../../constants/global';
 
 class TeamsForm extends React.Component {
   constructor (props) {
@@ -145,8 +145,19 @@ class TeamsForm extends React.Component {
             <div className="row small-12 columns">
               <div className="c-form -nav">
                 { team &&
-                  <div><button type="button" onClick={this.handleCancel} disabled={this.props.loading} className={`c-button -light `}><FormattedMessage id={"common.cancel"} /></button></div>}
-                <div><button type="submit" disabled={this.props.loading} className="c-button -right"><FormattedMessage id={"common.save"} /></button></div>
+                  <button 
+                    type="button" 
+                    onClick={this.handleCancel} 
+                    disabled={this.props.loading} 
+                    className={`c-button -light `}>
+                      <FormattedMessage id={"common.cancel"} />
+                  </button> }
+                <button 
+                  type="submit" 
+                  disabled={this.props.loading} 
+                  className="c-button -right">
+                  <FormattedMessage id={"common.save"} />
+                </button>
               </div>
             </div>
             </div>

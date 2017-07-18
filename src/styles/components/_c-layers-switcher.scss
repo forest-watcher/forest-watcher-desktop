@@ -1,0 +1,10 @@
+.c-layers-switcher {
+  .layers-switchs {
+    display: flex;
+    flex-direction: column;
+    div {
+      padding-bottom: 10px;
+      font-weight: bold;
+    }
+  }
+}

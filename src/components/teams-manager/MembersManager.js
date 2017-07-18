@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import MemberList from './MemberList';
-import { includes, validateEmail } from '../../../helpers/utils';
+import { includes, validateEmail } from '../../helpers/utils';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { toastr } from 'react-redux-toastr';
-import { MANAGER, USER, CONFIRMED_USER } from '../../../constants/global';
+import { MANAGER, USER, CONFIRMED_USER } from '../../constants/global';
 
 class MembersManager extends React.Component {
   constructor() {

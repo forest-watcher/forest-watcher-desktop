@@ -73,7 +73,7 @@ export function getArea(id) {
         throw Error(response.statusText);
       })
       .then((data) => {
-      const normalized = normalize(data);
+        const normalized = normalize(data);
         dispatch({
           type: SET_AREA,
           payload: normalized

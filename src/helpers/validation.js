@@ -1,6 +1,6 @@
-import { required } from '../constants/validation-rules';
+import { required, url } from '../constants/validation-rules';
 import Validation from 'react-validation';
 
-const validation = Object.assign(Validation.rules, { required });
+const validation = Object.assign(Validation.rules, { required, url });
 
 export { validation };

@@ -11,9 +11,14 @@ const email = {
   hint: () => <span className="form-error -email">Email not valid</span>
 };
 
+const url = {
+  rule: value => validator.isURL(value),
+  hint: () => <span className="form-error -url">Url not valid</span>
+};
+
 const passwordConfirmation = {
   rule: (value, components) => value === components.password.state.value,
   hint: () => <span className="form-error -password-confirmation">Passwords don't match</span>
 };
 
-export { required, email, passwordConfirmation };
+export { required, url, email, passwordConfirmation };
