@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import LayersSwitcher from './LayersSwitcher';
-import { toggleLayer } from '../../modules/layers';
+import { toggleLayer, deleteLayer } from '../../modules/layers';
 
 const mapStateToProps = ({ layers, teams }) => {
   const selectedLayers = layers.selectedLayerIds.map((id) => layers.selectedLayers[id]);
@@ -16,6 +16,9 @@ const mapStateToProps = ({ layers, teams }) => {
    return {
      toggleLayer: (layer, value) => {
        dispatch(toggleLayer(layer, value));
+     },
+     deleteLayer: (layer) => {
+       dispatch(deleteLayer(layer));
      }
    }
  }

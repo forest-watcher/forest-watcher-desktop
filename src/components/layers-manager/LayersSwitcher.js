@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import Icon from '../ui/Icon';
 import { FormattedMessage } from 'react-intl';
 import SwitchButton from 'react-switch-button';
 
@@ -9,18 +10,21 @@ class LayersSwitcher extends React.Component {
     this.props.toggleLayer(layer, !layer.attributes.enabled);
   }
 
-
   render() {
-    const { teamLayers, userLayers } = this.props;
+    const { teamLayers, userLayers, deleteLayer } = this.props;
     const renderLayers = (layers) => (
       layers.map((layer, i) => (
-        <SwitchButton
-          key={i}
-          name={`${layer.attributes.owner.type}-layer-${i}-${layer.attributes.name}`} 
-          labelRight={layer.attributes.name} 
-          onChange={() => this.toggleLayer(layer)}
-          defaultChecked={layer.attributes.enabled}
-        />
+        <div className="layer-switch" key={`${layer.attributes.owner.type}-layer-${i}-${layer.id}`}>
+          <SwitchButton
+            name={`${layer.attributes.owner.type}-layer-${i}-${layer.attributes.id}`} 
+            labelRight={layer.attributes.name} 
+            onChange={() => this.toggleLayer(layer)}
+            defaultChecked={layer.attributes.enabled}
+          />
+          <button className={"delete-button"} type="button" onClick={() => deleteLayer(layer)}>
+            <Icon name="icon-delete" className="-small " />
+          </button>
+        </div>
       ))
     )
 

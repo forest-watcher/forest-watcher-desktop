@@ -5,6 +5,7 @@ import normalize from 'json-api-normalizer';
 const GET_GFW_LAYERS = 'layers/GET_GFW_LAYERS';
 const SET_LAYERS = 'layers/SET_LAYERS';
 const SET_LOADING = 'layers/SET_LOADING';
+const DELETE_LAYERS = 'layers/DELETE_LAYERS';
 
 // Reducer
 const initialState = {
@@ -37,6 +38,19 @@ export default function reducer(state = initialState, action) {
             selectedLayers: { ...state.selectedLayers, ...selectedLayer }
           };
         }
+      }
+      return state;
+    }
+    case DELETE_LAYERS: {
+      const deletedLayer = action.payload.layer;
+      if (deletedLayer) {
+        const selectedLayers = Object.assign({}, state.selectedLayers);
+        delete selectedLayers[deletedLayer.id];
+        return {
+          ...state,
+          selectedLayerIds: state.selectedLayerIds.filter((id) => id !== deletedLayer.id),
+          selectedLayers
+        };
       }
       return state;
     }
@@ -159,6 +173,43 @@ export function toggleLayer(layer, value) {
       dispatch({
         type: SET_LAYERS,
         payload: {selectedLayer: normalized.contextualLayers}
+      });
+    })
+    .catch((error) => {
+      dispatch({
+        type: SET_LOADING,
+        payload: false
+      });
+      console.warn(error);
+    });
+  };
+}
+
+export function deleteLayer(layer) {
+  let url = `${API_BASE_URL}/v1/contextual-layer/${layer.id}`;
+  return (dispatch, state) => {
+    dispatch({
+      type: SET_LOADING,
+      payload: true
+    });
+    fetch(url, {
+        headers: {
+          Authorization: `Bearer ${state().user.token}`
+        }, 
+        method: 'DELETE'
+      }
+    )
+    .then((response) => {
+      if (!response.ok) throw Error(response.statusText);
+    })
+    .then(() => {
+      dispatch({
+        type: SET_LOADING,
+        payload: false
+      });
+      dispatch({
+        type: DELETE_LAYERS,
+        payload: {layer}
       });
     })
     .catch((error) => {
