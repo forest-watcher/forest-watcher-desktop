@@ -1,7 +1,9 @@
 .l-template {
+    position: relative;
 
     .template-meta {
         padding: 30px 0 80px;
+        background: $theme-base;
 
         label {
             margin-bottom: 15px;

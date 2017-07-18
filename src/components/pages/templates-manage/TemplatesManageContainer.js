@@ -2,6 +2,7 @@ import { connect } from 'react-redux';
 
 import TemplatesManage from './TemplatesManage';
 import { LOCALES_LIST } from '../../../constants/locales';
+import { TEMPLATE } from '../../../constants/templates';
 
 const mapAreasToOptions = (areas) => {
     const areasOptions = [];
@@ -31,7 +32,7 @@ const mapStateToProps = (state, { match }) => {
     const localeOptions = mapLocalesToOptions(LOCALES_LIST);
     return {
         mode: match.params.templateId ? 'manage' : 'create',
-        template: state.templates.data[templateId]? state.templates.data[templateId].attributes : null,
+        template: state.templates.data[templateId] ? state.templates.data[templateId].attributes : TEMPLATE,
         loading: state.templates.loading,
         areasOptions,
         localeOptions

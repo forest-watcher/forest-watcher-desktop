@@ -1,6 +1,11 @@
 .c-form {
   position: relative;
   font-family: $base-font-family;
+
+  &.-templates {
+    min-height: calc(100vh - #{$nav-height} - #{$hero-height});
+    background: $white;
+  }
   
   input:focus,
   select:focus,
@@ -19,6 +24,8 @@
 	  background-color: #ffffff;
 	  border: solid 1px #e6e6e6;
     padding: 0 15px;
+    font-family: $base-font-family;
+    font-weight: $font-weight-regular;
 
     &::placeholder {
       color: rgba($theme-text, 0.3);
@@ -35,6 +42,14 @@
       line-height: 45px;
       height: 80px;
       font-weight: $font-weight-light;
+    }
+
+    &.-question {
+      border: 0;
+      border-bottom: solid 1px #858181;
+      border-radius: 0;
+      padding: 0;
+      width: 100%;
     }
   }
 

@@ -11,6 +11,10 @@ const validateEmail = (email) => {
 	return regexp.test(email);
 }
 
+const prettyNum = (num) => {
+	return (num < 10 ? '0' : '') + num;
+}
+
 const equals = function (array, otherArray) {
     if (!array || otherArray.length !== array.length) return false;
     for (var i = 0, l=otherArray.length; i < l; i++) {
@@ -24,6 +28,4 @@ const equals = function (array, otherArray) {
     return true;
 }
 
-
-
-export { includes, unique, diff, filterEmpty, validateEmail, equals };
+export { includes, unique, diff, filterEmpty, validateEmail, equals, prettyNum };

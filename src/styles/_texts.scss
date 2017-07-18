@@ -44,6 +44,11 @@ h3 {
     line-height: 1.62;
   }
 
+  &.-question-number {
+    font-size: $font-size-regular;
+    font-weight: $font-weight-bold;
+  }
+
   // color overrides
   &.-white {
     color: $white;
