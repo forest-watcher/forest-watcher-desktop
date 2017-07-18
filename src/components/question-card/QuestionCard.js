@@ -5,6 +5,8 @@ import { injectIntl } from 'react-intl';
 import { prettyNum } from '../../helpers/utils';
 import { QUESTION_OPTIONS } from '../../constants/templates';
 import Select from 'react-select';
+import Icon from '../ui/Icon';
+import SwitchButton from 'react-switch-button';
 
 class QuestionCard extends React.Component {
   constructor (props) {
@@ -31,10 +33,15 @@ class QuestionCard extends React.Component {
     this.props.syncStateWithProps(this.question, this.props.questionNum);
   }
 
+  toggleLayer = () => {
+
+  }
+
   render() {
     const { question, questionNum, defaultLanguage } = this.props;
     return (
-        <div className="c-question-card">
+        <section className="c-question-card">
+            <div className="questions">
             <span className="text -question-number">{prettyNum(questionNum)}.</span>
                 <Input
                     type="text"
@@ -55,7 +62,18 @@ class QuestionCard extends React.Component {
                     searchable={false}
                     clearable={false}
                 />
-        </div>
+            </div>
+            <div className="question-actions">
+                <Icon className="-small -gray" name="icon-delete"/>
+                <span className="required-label text -x-small-title">{this.props.intl.formatMessage({ id: 'templates.required' })}</span>
+                <SwitchButton
+                    className="required"
+                    name={`${question.label[defaultLanguage]}-required`} 
+                    onChange={() => this.toggleLayer()}
+                    defaultChecked={false}
+                />
+            </div>
+        </section>
     );
   }
 }
