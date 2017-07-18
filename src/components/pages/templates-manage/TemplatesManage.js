@@ -128,6 +128,7 @@ class TemplatesManage extends React.Component {
                         value={this.state.name ? this.state.name[this.state.defaultLanguage] : ''}
                         placeholder={this.props.intl.formatMessage({ id: 'templates.title' })}
                         validations={['required']}
+                        onKeyPress={(e) => {if (e.which === 13) { e.preventDefault();}}} // Prevent send on press Enter
                       />
                     </div>
                     {this.state.questions &&

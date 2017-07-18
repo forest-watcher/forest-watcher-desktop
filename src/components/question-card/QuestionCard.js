@@ -34,6 +34,7 @@ class QuestionCard extends React.Component {
                     value={question.label[defaultLanguage] || ''}
                     placeholder={this.props.intl.formatMessage({ id: 'templates.questionPlaceholder' })}
                     validations={['required']}
+                    onKeyPress={(e) => {if (e.which === 13) { e.preventDefault();}}} // Prevent send on press Enter
                 />
         </div>
     );
