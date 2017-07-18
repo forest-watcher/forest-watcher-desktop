@@ -30,9 +30,17 @@ const mapStateToProps = (state, { match }) => {
     const areasOptions = mapAreasToOptions(state.areas);
     const templateId = match.params.templateId || null;
     const localeOptions = mapLocalesToOptions(LOCALES_LIST);
+    const defaultTemplate = {
+        ...TEMPLATE,
+        name: {
+            [state.app.locale]: ""       
+        },
+        languages: [state.app.locale],
+        defaultLanguage: state.app.locale
+    }
     return {
         mode: match.params.templateId ? 'manage' : 'create',
-        template: state.templates.data[templateId] ? state.templates.data[templateId].attributes : TEMPLATE,
+        template: state.templates.data[templateId] ? state.templates.data[templateId].attributes : defaultTemplate,
         loading: state.templates.loading,
         areasOptions,
         localeOptions
