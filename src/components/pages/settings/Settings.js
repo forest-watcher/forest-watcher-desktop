@@ -45,7 +45,7 @@ class Settings extends React.Component {
                 <TeamsForm team={team}/>
               }
               <Loader isLoading={saving} />
-              <LayersManager />
+              <LayersManager isManager={isManager}/>
             </div>}
         </div>
       </div>
