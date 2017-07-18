@@ -41,7 +41,7 @@ function dispatch(action) {
 }
 
 const persistConfig = {
-  whitelist: ['user']
+  whitelist: ['user', 'app']
 };
 
 function startApp() {

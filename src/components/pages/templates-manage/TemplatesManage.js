@@ -73,7 +73,7 @@ class TemplatesManage extends React.Component {
 
   // Render
   render() {
-    const { areasOptions, localeOptions, loading, mode } = this.props;
+    const { areasOptions, localeOptions, loading, mode, locale } = this.props;
     return (
       <div>
         <Hero
@@ -106,7 +106,7 @@ class TemplatesManage extends React.Component {
                       <Select
                         name="language-select"
                         options={localeOptions}
-                        value={this.state.defaultLanguage ? getSelectorValueFromArray(this.state.defaultLanguage, localeOptions) : null}
+                        value={this.state.defaultLanguage ? getSelectorValueFromArray(this.state.defaultLanguage, localeOptions) : locale}
                         onChange={this.onLanguageChange}
                         noResultsText={this.props.intl.formatMessage({ id: 'filters.noLanguagesAvailable' })}
                         searchable={true}
