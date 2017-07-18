@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { Input } from '../form/Form';
 import { injectIntl } from 'react-intl';
 import { prettyNum } from '../../helpers/utils';
-import cloneDeep from 'lodash/cloneDeep';
 
 class QuestionCard extends React.Component {
   constructor (props) {
