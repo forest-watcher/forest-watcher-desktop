@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import TeamsShow from './TeamsShow';
-import { filterEmpty } from '../../../helpers/utils';
+import { filterEmpty } from '../../helpers/utils';
 
 
 const mapStateToProps = ({ teams, areas }) => {

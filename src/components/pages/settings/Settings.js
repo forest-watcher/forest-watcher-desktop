@@ -2,8 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import Hero from '../../layouts/Hero';
-import TeamsShow from './TeamsShowContainer';
-import TeamsForm from '../../teams-form/TeamsFormContainer';
+import TeamsShow from '../../teams-show/TeamsShowContainer';
+import TeamsForm from '../../teams-manager/TeamsFormContainer';
 import LayersManager from '../../layers-manager/LayersManager';
 import Loader from '../../ui/Loader';
 

@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import Article from '../../layouts/Article';
+import Article from '../layouts/Article';
 import { FormattedMessage } from 'react-intl';
 
 function TeamsShow({ team, areas }) {
