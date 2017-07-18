@@ -2,9 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import Hero from '../../layouts/Hero';
+import Article from '../../layouts/Article';
 import TeamsShow from '../../teams-show/TeamsShowContainer';
 import TeamsForm from '../../teams-manager/TeamsFormContainer';
 import LayersManager from '../../layers-manager/LayersManager';
+import LayersShow from '../../layers-show/LayersShowContainer';
 import Loader from '../../ui/Loader';
 
 class Settings extends React.Component {
@@ -38,14 +40,19 @@ class Settings extends React.Component {
           {!loading &&
             <div>
               {(team && !editing) ?
-                <div>
-                  <TeamsShow />
+                <div className="settings-show">
+                  <Article>
+                    <TeamsShow />
+                    <LayersShow isManager={isManager}/>
+                  </Article>
                 </div>
                 : 
-                <TeamsForm team={team}/>
+                <div className="settings-edit">
+                  <TeamsForm team={team}/>
+                  <LayersManager isManager={isManager}/>
+                </div>
               }
               <Loader isLoading={saving} />
-              <LayersManager isManager={isManager}/>
             </div>}
         </div>
       </div>
