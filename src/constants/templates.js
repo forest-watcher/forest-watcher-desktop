@@ -13,4 +13,33 @@ export const TEMPLATE = {
     "status": "draft"
 }
 
-export default { TEMPLATE };
+export const QUESTION_TYPES = ['text', 'image', 'list'];
+
+export const QUESTION_OPTIONS = [
+    {
+        value: 'text',
+        label: 'text'
+    },
+    {
+        value: 'image',
+        label: 'image'
+    },
+    {
+        value: 'list',
+        label: 'list'
+    },
+    {
+        value: 'radio',
+        label: 'radio'
+    },
+        {
+        value: 'select',
+        label: 'radio'
+    },
+    {
+        value: 'number',
+        label: 'number'
+    }
+];
+
+export default { TEMPLATE, QUESTION_TYPES, QUESTION_OPTIONS };
