@@ -3,7 +3,7 @@ import React from 'react';
 import LayersForm from './LayersFormContainer';
 import LayersSwitcher from './LayersSwitcherContainer';
 
-function LayersManager({ isManager }) {
+function LayersManager({ isManager, publicLayers, teamLayers, userLayers }) {
   return(
     <div className="l-layers-manager">
       <div className="row">
@@ -11,7 +11,12 @@ function LayersManager({ isManager }) {
           <LayersForm />
         </div>
         <div className="small-offset-1 small-6 columns">
-          <LayersSwitcher isManager={ isManager }/>
+          <LayersSwitcher 
+            isManager={ isManager }
+            publicLayers={publicLayers}
+            teamLayers={teamLayers}
+            userLayers={userLayers}
+          />
         </div>
       </div>
     </div>
