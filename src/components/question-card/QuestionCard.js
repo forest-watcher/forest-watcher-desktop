@@ -86,7 +86,7 @@ class QuestionCard extends React.Component {
                 <span className="required-label text -x-small-title">{this.props.intl.formatMessage({ id: 'templates.required' })}</span>
                 <SwitchButton
                     className="required"
-                    name={`${question.label[defaultLanguage]}-required`} 
+                    name={`${questionNum}-required`} 
                     onChange={this.toggleRequired}
                     defaultChecked={question.required}
                 />
