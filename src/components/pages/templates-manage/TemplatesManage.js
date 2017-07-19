@@ -37,7 +37,7 @@ class TemplatesManage extends React.Component {
 
   // Actions to update state
   onAreaChange = (selected) => {
-    this.setState({ areaOfInterest: selected.option });
+    this.setState({ areaOfInterest: selected ? selected.option : null });
   }
 
   onLanguageChange = (selected) => {
