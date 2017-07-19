@@ -7,6 +7,7 @@ import { FormattedMessage, injectIntl } from 'react-intl';
 import { Form, Input, Button } from '../../form/Form';
 import Select from 'react-select';
 import Loader from '../../ui/Loader';
+import FormFooter from '../../ui/FormFooter';
 import { getSelectorValueFromArray } from '../../../helpers/filters';
 import { setLanguages, syncLanguagesWithDefaultLanguage } from '../../../helpers/languages';
 import { Link } from 'react-router-dom';
@@ -146,16 +147,12 @@ class TemplatesManage extends React.Component {
                 </div>
               </div>
             </div>
-            <div className="c-form-footer">
-              <div className="row column">
-                <div className="container">
-                  <Link to="/templates">
-                    <button className="c-button -light" disabled={this.props.saving || this.props.loading}><FormattedMessage id="forms.cancel" /></button>
-                  </Link>
-                  <Button className="c-button" disabled={this.props.saving || (this.props.editing ? true : false) || this.props.loading}><FormattedMessage id="forms.save" /></Button>
-                </div>
-              </div>
-            </div>
+            <FormFooter>
+              <Link to="/templates">
+                <button className="c-button -light" disabled={this.props.saving || this.props.loading}><FormattedMessage id="forms.cancel" /></button>
+              </Link>
+              <Button className="c-button" disabled={this.props.saving || (this.props.editing ? true : false) || this.props.loading}><FormattedMessage id="forms.save" /></Button>
+            </FormFooter>
           </Form>
         </div>
       </div>

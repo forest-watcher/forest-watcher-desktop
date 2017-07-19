@@ -2,8 +2,10 @@ import React from 'react';
 
 import LayersForm from './LayersFormContainer';
 import LayersSwitcher from './LayersSwitcherContainer';
+import FormFooter from '../ui/FormFooter';
+import { FormattedMessage } from 'react-intl';
 
-function LayersManager({ isManager, publicLayers, teamLayers, userLayers }) {
+function LayersManager({ isManager, publicLayers, teamLayers, userLayers, setEditing }) {
   return(
     <div className="l-layers-manager">
       <div className="row">
@@ -19,6 +21,14 @@ function LayersManager({ isManager, publicLayers, teamLayers, userLayers }) {
           />
         </div>
       </div>
+      <FormFooter>
+        <button 
+          onClick={() => setEditing(false)} 
+          className="c-button -right"
+        >
+          <FormattedMessage id="common.done" />
+        </button>
+      </FormFooter>
     </div>
   )
 }

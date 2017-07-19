@@ -1,9 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { Input, Form } from '../form/Form';
+import { Input, Form, Button } from '../form/Form';
 import Select from 'react-select';
 import MembersManager from './MembersManager';
+import FormFooter from '../ui/FormFooter';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { MANAGER, USER, CONFIRMED_USER } from '../../constants/global';
 
@@ -103,12 +104,12 @@ class TeamsForm extends React.Component {
   }
 
   render() {
-    const { team, areaValues } = this.props;
+    const { areaValues } = this.props;
     return (
       <div>
         <Form onSubmit={this.handleSubmit}>
           <div className="c-form">
-            <div className="row -main">
+            <div className="row">
               <div className="small-6 columns">
                 <div className="input-group">
                   <label className="text"><FormattedMessage id={"teams.teamName"} /></label>
@@ -142,25 +143,22 @@ class TeamsForm extends React.Component {
                 selectedManagers={this.state.selectedManagers}
                 addEmail={this.props.addEmail}
               />
-            <div className="row small-12 columns">
-              <div className="c-form -nav">
-                { team &&
-                  <button 
-                    type="button" 
-                    onClick={this.handleCancel} 
-                    disabled={this.props.loading} 
-                    className={`c-button -light `}>
-                      <FormattedMessage id={"common.cancel"} />
-                  </button> }
-                <button 
-                  type="submit" 
-                  disabled={this.props.loading} 
-                  className="c-button -right">
-                  <FormattedMessage id={"common.save"} />
-                </button>
-              </div>
             </div>
-            </div>
+            <FormFooter>
+              <button 
+                onClick={this.handleCancel} 
+                disabled={this.props.loading} 
+                className="c-button -light"
+              >
+                <FormattedMessage id="common.cancel" />
+              </button>
+              <Button 
+                disabled={this.props.loading} 
+                className="c-button -right"
+              >
+                <FormattedMessage id="common.save" />
+              </Button>
+            </FormFooter>
           </div>
         </Form>
       </div>

@@ -33,11 +33,11 @@ class Settings extends React.Component {
   }
 
   render() {
-    const { team, editing, loading, saving, isManager, publicLayers, teamLayers, userLayers } = this.props;
+    const { team, editing, loading, saving, isManager, publicLayers, teamLayers, userLayers, setEditing } = this.props;
     
     const renderHero = () => {
-      const action = (isManager && !editing) && {name: "common.edit", callback: () => this.props.setEditing(true)};
-      const tabStyle = !(isManager && !editing) && "-no-action";
+      const action = (isManager && !editing) ? {name: "common.edit", callback: () => this.props.setEditing(true)} : null;
+      const tabStyle = !(isManager && !editing) ? "-no-action" : "";
       return (
         <Hero
           title={"settings.name"}
@@ -78,7 +78,8 @@ class Settings extends React.Component {
                 <div className="settings-edit">
                   { this.state.tabIndex === 0 ? 
                     <TeamsForm team={team}/> :
-                    <LayersManager 
+                    <LayersManager
+                      setEditing={setEditing}
                       isManager={isManager}
                       publicLayers={publicLayers}
                       teamLayers={teamLayers}
