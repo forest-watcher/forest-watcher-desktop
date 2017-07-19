@@ -12,7 +12,8 @@ import { setLanguages, syncLanguagesWithDefaultLanguage } from '../../../helpers
 import { Link } from 'react-router-dom';
 import { toastr } from 'react-redux-toastr';
 import QuestionCard from '../../question-card/QuestionCard';
-import { CSSTransitionGroup } from 'react-transition-group'
+import { CSSTransitionGroup } from 'react-transition-group';
+import { QUESTION } from '../../../constants/templates';
 
 class TemplatesManage extends React.Component {
   constructor (props) {
@@ -77,6 +78,16 @@ class TemplatesManage extends React.Component {
     
     this.setState({
       questions: removedQuestions
+    });
+  }
+
+  handleAddQuestion = (e) => {
+    e.preventDefault();
+    const newQuestions = this.state.questions.slice();
+    newQuestions[newQuestions.length] = QUESTION;
+
+    this.setState({
+      questions: newQuestions
     });
   }
 
@@ -160,6 +171,13 @@ class TemplatesManage extends React.Component {
                         </CSSTransitionGroup>
                       }
                   </div>
+                </div>
+              </div>
+            </div>
+            <div className="add-question row">
+              <div className="column small-12 medium-10 medium-offset-1 large-8 large-offset-2">
+                <div className="add-button">
+                  <button className="c-button" onClick={this.handleAddQuestion}><FormattedMessage id="templates.addQuestion" /></button>
                 </div>
               </div>
             </div>

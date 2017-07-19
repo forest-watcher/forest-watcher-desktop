@@ -13,6 +13,22 @@ export const TEMPLATE = {
     "status": "draft"
 }
 
+export const QUESTION = {
+    "type": "text",
+    "name": "",
+    "defaultValue": 0,
+    "conditions": [],
+    "childQuestions": [],
+    "order": 0,
+    "required": false,
+    "values": {
+        "en": ""
+    },
+    "label": {
+        "en": ""
+    }
+};
+
 export const QUESTION_TYPES = ['text', 'image', 'list'];
 
 export const QUESTION_OPTIONS = [
@@ -42,4 +58,4 @@ export const QUESTION_OPTIONS = [
     }
 ];
 
-export default { TEMPLATE, QUESTION_TYPES, QUESTION_OPTIONS };
+export default { TEMPLATE, QUESTION, QUESTION_TYPES, QUESTION_OPTIONS };

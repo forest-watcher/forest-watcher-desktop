@@ -3,7 +3,7 @@
   font-family: $base-font-family;
 
   &.-templates {
-    min-height: calc(100vh - #{$nav-height} - #{$hero-height});
+    // min-height: calc(100vh - #{$nav-height} - #{$hero-height});
     background: $white;
   }
   
