@@ -33,12 +33,18 @@ class QuestionCard extends React.Component {
     this.props.syncStateWithProps(this.question, this.props.questionNum);
   }
 
-  toggleLayer = () => {
-
+  toggleRequired = () => {
+    let required = this.question.required;
+    required = required ? false : true;
+    this.question = { 
+        ...this.question,
+        required: required
+    };
+    this.props.syncStateWithProps(this.question, this.props.questionNum);
   }
 
   render() {
-    const { question, questionNum, defaultLanguage } = this.props;
+    const { question, questionNum, defaultLanguage, deleteQuestion } = this.props;
     return (
         <section className="c-question-card">
             <div className="questions">
@@ -64,13 +70,15 @@ class QuestionCard extends React.Component {
                 />
             </div>
             <div className="question-actions">
-                <Icon className="-small -gray" name="icon-delete"/>
+                <button className={"delete-button"} type="button" onClick={() => { deleteQuestion(questionNum)} }>
+                    <Icon className="-small -gray" name="icon-delete"/>
+                </button>
                 <span className="required-label text -x-small-title">{this.props.intl.formatMessage({ id: 'templates.required' })}</span>
                 <SwitchButton
                     className="required"
                     name={`${question.label[defaultLanguage]}-required`} 
-                    onChange={() => this.toggleLayer()}
-                    defaultChecked={false}
+                    onChange={this.toggleRequired}
+                    defaultChecked={question.required}
                 />
             </div>
         </section>

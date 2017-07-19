@@ -70,6 +70,15 @@ class TemplatesManage extends React.Component {
     });
   }
 
+  handleQuestionDelete = (questionNum) => {
+    const removedQuestions = this.state.questions.slice();
+    removedQuestions.splice(questionNum - 1, 1);
+
+    this.setState({
+      questions: removedQuestions
+    });
+  }
+
 
   // Render
   render() {
@@ -139,6 +148,7 @@ class TemplatesManage extends React.Component {
                           question={question} 
                           syncStateWithProps={this.handleQuestionEdit} 
                           defaultLanguage={this.state.defaultLanguage}
+                          deleteQuestion={(questionNum) => { this.handleQuestionDelete(questionNum)} }
                         />
                       )
                     }
