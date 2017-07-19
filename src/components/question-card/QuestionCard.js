@@ -50,7 +50,8 @@ class QuestionCard extends React.Component {
   }
 
   render() {
-    const { question, questionNum, defaultLanguage, deleteQuestion } = this.props;
+    const { question, questionNum, defaultLanguage, deleteQuestion, status } = this.props;
+    const disabled = status === 'draft' ? false : true;
     return (
         <section className="c-question-card">
             <div className="questions">
@@ -73,12 +74,15 @@ class QuestionCard extends React.Component {
                     onChange={this.onTypeChange}
                     searchable={false}
                     clearable={false}
+                    disabled={disabled}
                 />
             </div>
             <div className="question-actions">
-                <button className={"delete-button"} type="button" onClick={() => { deleteQuestion(questionNum)} }>
-                    <Icon className="-small -gray" name="icon-delete"/>
-                </button>
+                { status === 'draft' &&
+                    <button className={"delete-button"} type="button" onClick={() => { deleteQuestion(questionNum)} }>
+                        <Icon className="-small -gray" name="icon-delete"/>
+                    </button>
+                }
                 <span className="required-label text -x-small-title">{this.props.intl.formatMessage({ id: 'templates.required' })}</span>
                 <SwitchButton
                     className="required"

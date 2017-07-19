@@ -27,7 +27,7 @@ class TemplatesManage extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.template !== this.props.template) this.setPropsToState(nextProps);
+    if (nextProps.template !== this.props.template && this.props.mode === 'manage') this.setPropsToState(nextProps);
   }
 
 
@@ -94,7 +94,7 @@ class TemplatesManage extends React.Component {
 
   // Render
   render() {
-    const { areasOptions, localeOptions, loading, mode, locale } = this.props;
+    const { areasOptions, localeOptions, loading, saving, editing, mode, locale } = this.props;
     return (
       <div>
         <Hero
@@ -166,6 +166,7 @@ class TemplatesManage extends React.Component {
                               syncStateWithProps={this.handleQuestionEdit} 
                               defaultLanguage={this.state.defaultLanguage}
                               deleteQuestion={this.handleQuestionDelete}
+                              status={this.state.status}
                             />
                           )}
                         </CSSTransitionGroup>
@@ -174,20 +175,22 @@ class TemplatesManage extends React.Component {
                 </div>
               </div>
             </div>
-            <div className="add-question row">
-              <div className="column small-12 medium-10 medium-offset-1 large-8 large-offset-2">
-                <div className="add-button">
-                  <button className="c-button" onClick={this.handleAddQuestion}><FormattedMessage id="templates.addQuestion" /></button>
+            { (this.state.status === 'draft' || mode === 'create') &&
+              <div className="add-question row">
+                <div className="column small-12 medium-10 medium-offset-1 large-8 large-offset-2">
+                  <div className="add-button">
+                    <button className="c-button" onClick={this.handleAddQuestion}><FormattedMessage id="templates.addQuestion" /></button>
+                  </div>
                 </div>
               </div>
-            </div>
+            }
             <div className="c-form-footer">
               <div className="row column">
                 <div className="container">
                   <Link to="/templates">
-                    <button className="c-button -light" disabled={this.props.saving || this.props.loading}><FormattedMessage id="forms.cancel" /></button>
+                    <button className="c-button -light" disabled={(saving || loading) && mode === 'manage'}><FormattedMessage id="forms.cancel" /></button>
                   </Link>
-                  <Button className="c-button" disabled={this.props.saving || (this.props.editing ? true : false) || this.props.loading}><FormattedMessage id="forms.save" /></Button>
+                  <Button className="c-button" disabled={(saving || (editing ? true : false) || loading) && mode === 'manage'}><FormattedMessage id="forms.save" /></Button>
                 </div>
               </div>
             </div>

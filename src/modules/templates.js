@@ -10,7 +10,7 @@ const SET_LOADING_TEMPLATES = 'templates/SET_LOADING_TEMPLATES';
 const initialState = {
   ids: [],
   data: {},
-  loading: false
+  loading: true
 };
 
 export default function reducer(state = initialState, action) {
