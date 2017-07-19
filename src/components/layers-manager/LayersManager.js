@@ -11,7 +11,11 @@ function LayersManager({ isManager, publicLayers, teamLayers, userLayers, setEdi
     <div className="l-layers-manager">
       <div className="row">
         <div className="small-12 medium-5 columns">
-          <LayersForm />
+          <LayersForm 
+            publicLayers={publicLayers}
+            teamLayers={teamLayers}
+            userLayers={userLayers}
+          />
         </div>
         <div className="small-12 medium-6 medium-offset-1 columns">
           <LayersSwitcher 

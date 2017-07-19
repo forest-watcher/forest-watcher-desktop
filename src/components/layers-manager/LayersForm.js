@@ -5,6 +5,7 @@ import { FormattedMessage } from 'react-intl';
 import { Input, Form, Textarea } from '../form/Form';
 import Card from '../ui/Card';
 import Tab from '../ui/Tab';
+import { includes } from '../../helpers/utils';
 import Checkbox from '../ui/Checkbox';
 import { toastr } from 'react-redux-toastr';
 import { injectIntl } from 'react-intl';
@@ -57,12 +58,29 @@ class LayersForm extends React.Component {
     this.setState({ form });
   }
 
+  maxLayers = (GFWLayer, teamId, userLayerLength, teamLayerLength) => {
+    return ((teamId && teamLayerLength > 2) || (!teamId && userLayerLength > 2));
+  }
+
+  alreadyExist = (GFWLayer, teamId, userLayerNames, teamLayerNames) => {
+    return ((teamId && includes(teamLayerNames, GFWLayer.title)) || (!teamId && includes(userLayerNames, GFWLayer.title)));
+  }
+
   addLayers = (e) => {
     e.preventDefault();
+    const teamId = this.state.teamMode ? this.props.team.id : null;
+    const typeOfLayer = teamId ? 'settings.teamLayers' : 'settings.userLayers';
+    const userLayerNames = this.props.userLayers.map((selectedLayer) => selectedLayer.attributes.name);
+    const teamLayerNames = this.props.teamLayers.map((selectedLayer) => selectedLayer.attributes.name);   
+    let userLayerLength = userLayerNames.length;
+    let teamLayerLength = teamLayerNames.length;
+
     if (this.state.tabIndex === 0) { // GFW Layers
       const resetedLayers = this.state.GFWLayers.map((GFWLayer) => {
-        if (GFWLayer.enabled){
-          this.addLayer(GFWLayer);
+        if (GFWLayer.enabled && 
+          this.addLayer(GFWLayer, teamId, userLayerNames, teamLayerNames, userLayerLength, teamLayerLength, typeOfLayer)) {
+          // Prevents the user from adding several layers on a batch that exceeds the limit
+          teamId ? teamLayerLength += 1 : userLayerLength += 1; 
           GFWLayer.enabled = false;
         }
         return GFWLayer
@@ -70,17 +88,29 @@ class LayersForm extends React.Component {
       this.setState({ GFWLayers: resetedLayers });
     } else { // Custom Layers
       if (Object.keys(this.formNode.getErrors()).length === 0) { // No validation errors
-        this.addLayer(this.state.form);
-        this.resetForm();
+        if (this.addLayer(this.state.form, teamId, userLayerNames, teamLayerNames, userLayerLength, teamLayerLength, typeOfLayer)){
+          this.resetForm();
+        };
       } else {
         toastr.error(this.props.intl.formatMessage({ id: 'settings.validationError' }));
       }
     }
   }
 
-  addLayer = (layer) => {
-    const teamId = this.state.teamMode ? this.props.team.id : null;
+  addLayer = (layer, teamId, userLayerNames, teamLayerNames, userLayerLength, teamLayerLength, typeOfLayer) => {    
+    if (this.maxLayers(layer, teamId, userLayerLength, teamLayerLength)) {
+      toastr.error(
+        this.props.intl.formatMessage({ id: 'settings.maxNumberLayers' }), 
+        this.props.intl.formatMessage({ id: typeOfLayer }) 
+      );
+      return false;
+    } 
+    if (this.alreadyExist(layer, teamId, userLayerNames, teamLayerNames)){
+      toastr.error(this.props.intl.formatMessage({ id: 'settings.layerAlreadyExists' }), layer.title );
+      return false;
+    }
     this.props.createLayer(layer, teamId);
+    return true;
   }
 
   onInputChange = (e) => {
