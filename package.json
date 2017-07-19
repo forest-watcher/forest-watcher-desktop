@@ -28,6 +28,7 @@
     "react-select": "^1.0.0-rc.5",
     "react-switch-button": "^2.2.2",
     "react-table": "^6.3.0",
+    "react-transition-group": "^1.2.0",
     "react-validation": "^2.10.9",
     "redux": "^3.5.2",
     "redux-persist": "4.6.0",

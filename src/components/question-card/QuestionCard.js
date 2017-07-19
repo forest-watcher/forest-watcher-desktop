@@ -14,6 +14,12 @@ class QuestionCard extends React.Component {
     this.question = { ...props.question };
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.question !== this.props.question) {
+        this.question = { ...nextProps.question };
+    }
+  }
+
   onInputChange = (e) => {
     this.question = {
         ...this.question,
@@ -36,7 +42,7 @@ class QuestionCard extends React.Component {
   toggleRequired = () => {
     let required = this.question.required;
     required = required ? false : true;
-    this.question = { 
+    this.question = {
         ...this.question,
         required: required
     };

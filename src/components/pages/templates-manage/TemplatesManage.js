@@ -12,6 +12,7 @@ import { setLanguages, syncLanguagesWithDefaultLanguage } from '../../../helpers
 import { Link } from 'react-router-dom';
 import { toastr } from 'react-redux-toastr';
 import QuestionCard from '../../question-card/QuestionCard';
+import { CSSTransitionGroup } from 'react-transition-group'
 
 class TemplatesManage extends React.Component {
   constructor (props) {
@@ -73,7 +74,7 @@ class TemplatesManage extends React.Component {
   handleQuestionDelete = (questionNum) => {
     const removedQuestions = this.state.questions.slice();
     removedQuestions.splice(questionNum - 1, 1);
-
+    
     this.setState({
       questions: removedQuestions
     });
@@ -140,18 +141,24 @@ class TemplatesManage extends React.Component {
                         onKeyPress={(e) => {if (e.which === 13) { e.preventDefault();}}} // Prevent send on press Enter
                       />
                     </div>
-                    {this.state.questions &&
-                      this.state.questions.map((question, index) =>
-                        <QuestionCard 
-                          key={index} 
-                          questionNum={index + 1} 
-                          question={question} 
-                          syncStateWithProps={this.handleQuestionEdit} 
-                          defaultLanguage={this.state.defaultLanguage}
-                          deleteQuestion={(questionNum) => { this.handleQuestionDelete(questionNum)} }
-                        />
-                      )
-                    }
+                      {this.state.questions &&
+                        <CSSTransitionGroup
+                          transitionName="example"
+                          transitionEnterTimeout={500}
+                          transitionLeaveTimeout={500}
+                        >
+                          { this.state.questions.map((question, index) =>
+                            <QuestionCard 
+                              key={index} 
+                              questionNum={index + 1} 
+                              question={question} 
+                              syncStateWithProps={this.handleQuestionEdit} 
+                              defaultLanguage={this.state.defaultLanguage}
+                              deleteQuestion={this.handleQuestionDelete}
+                            />
+                          )}
+                        </CSSTransitionGroup>
+                      }
                   </div>
                 </div>
               </div>

@@ -46,4 +46,40 @@
             border-left: solid 1px rgba(#979797, 0.2);
         }
     }
+
+    .question-enter {
+        opacity: 0.01;
+    }
+
+    .question-enter.question-enter-active {
+        opacity: 1;
+        transition: opacity 1000ms ease-in;
+    }
+
+    .question-leave {
+        opacity: 1;
+    }
+
+    .question-leave.question-leave-active {
+        opacity: 0.01;
+        transition: opacity 1000ms ease-in;
+    }
+}
+
+.example-enter {
+  opacity: 0.01;
+}
+
+.example-enter.example-enter-active {
+  opacity: 1;
+  transition: 500ms;
+}
+
+.example-leave {
+  opacity: 1;
+}
+
+.example-leave.example-leave-active {
+  opacity: 0.01;
+  transition: 500ms;
 }
