@@ -176,10 +176,12 @@ class TemplatesManage extends React.Component {
               </div>
             </div>
             { (this.state.status === 'draft' || mode === 'create') &&
-              <div className="add-question row">
-                <div className="column small-12 medium-10 medium-offset-1 large-8 large-offset-2">
-                  <div className="add-button">
-                    <button className="c-button" onClick={this.handleAddQuestion}><FormattedMessage id="templates.addQuestion" /></button>
+              <div className="add-question">
+                <div className="row">
+                  <div className="column small-12 medium-10 medium-offset-1 large-8 large-offset-2">
+                    <div className="add-button">
+                      <button className="c-button" onClick={this.handleAddQuestion}><FormattedMessage id="templates.addQuestion" /></button>
+                    </div>
                   </div>
                 </div>
               </div>
