@@ -102,5 +102,7 @@
     "settings.url": "URL",
     "settings.validationError": "There are some errors in the form",
     "settings.teamLayers": "Team layers",
-    "settings.myLayers": "My layers"
+    "settings.userLayers": "My layers",
+    "settings.publicLayers": "Public layers",
+    "settings.enabled": "Enabled"
 }

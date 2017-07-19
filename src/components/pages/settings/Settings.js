@@ -2,9 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import Hero from '../../layouts/Hero';
+import Article from '../../layouts/Article';
 import TeamsShow from '../../teams-show/TeamsShowContainer';
 import TeamsForm from '../../teams-manager/TeamsFormContainer';
 import LayersManager from '../../layers-manager/LayersManager';
+import LayersShow from '../../layers-show/LayersShow';
 import Loader from '../../ui/Loader';
 
 class Settings extends React.Component {
@@ -23,7 +25,7 @@ class Settings extends React.Component {
   }
 
   render() {
-    const { team, editing, loading, saving, isManager } = this.props;
+    const { team, editing, loading, saving, isManager, publicLayers, teamLayers, userLayers } = this.props;
     return (
       <div>
         {isManager && !editing? 
@@ -38,14 +40,29 @@ class Settings extends React.Component {
           {!loading &&
             <div>
               {(team && !editing) ?
-                <div>
-                  <TeamsShow />
+                <div className="settings-show">
+                  <Article>
+                    <TeamsShow />
+                    <LayersShow 
+                      isManager={isManager}
+                      publicLayers={publicLayers}
+                      teamLayers={teamLayers}
+                      userLayers={userLayers}
+                      />
+                  </Article>
                 </div>
                 : 
-                <TeamsForm team={team}/>
+                <div className="settings-edit">
+                  <TeamsForm team={team}/>
+                  <LayersManager 
+                    isManager={isManager}
+                    publicLayers={publicLayers}
+                    teamLayers={teamLayers}
+                    userLayers={userLayers}
+                  />
+                </div>
               }
               <Loader isLoading={saving} />
-              <LayersManager />
             </div>}
         </div>
       </div>
@@ -57,6 +74,9 @@ Settings.propTypes = {
   team: PropTypes.object,
   getTeam: PropTypes.func.isRequired,
   isManager: PropTypes.bool,
+  publicLayers: PropTypes.array.isRequired,
+  teamLayers: PropTypes.array.isRequired,
+  userLayers: PropTypes.array.isRequired,
   userId: PropTypes.string.isRequired
 };
 

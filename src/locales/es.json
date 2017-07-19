@@ -98,7 +98,5 @@
     "settings.layerTitle": "Title",
     "settings.cssStyle": "Css style",
     "settings.url": "URL",
-    "settings.validationError": "There are some errors in the form",
-    "settings.teamLayers": "Team layers",
-    "settings.myLayers": "My layers"
+    "settings.validationError": "There are some errors in the form"
 }
