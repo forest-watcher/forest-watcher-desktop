@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import LayersForm from './LayersFormContainer';
 import LayersSwitcher from './LayersSwitcherContainer';
@@ -32,5 +33,13 @@ function LayersManager({ isManager, publicLayers, teamLayers, userLayers, setEdi
     </div>
   )
 }
+
+LayersManager.propTypes = {
+  userLayers: PropTypes.array.isRequired,
+  teamLayers: PropTypes.array.isRequired,
+  publicLayers: PropTypes.array.isRequired,
+  isManager: PropTypes.bool.isRequired,
+  setEditing: PropTypes.func.isRequired
+};
 
 export default LayersManager;

@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import { FormattedMessage } from 'react-intl';
 import { Input, Form, Textarea } from '../form/Form';
@@ -155,5 +156,14 @@ class LayersForm extends React.Component {
     );
   }
 }
+
+LayersForm.propTypes = {
+  userLayers: PropTypes.array.isRequired,
+  teamLayers: PropTypes.array.isRequired,
+  publicLayers: PropTypes.array.isRequired,
+  GFWLayers: PropTypes.array.isRequired,
+  team: PropTypes.object.isRequired,
+  createLayer: PropTypes.func.isRequired
+};
 
 export default injectIntl(LayersForm);

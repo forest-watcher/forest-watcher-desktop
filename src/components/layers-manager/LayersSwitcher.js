@@ -70,7 +70,9 @@ class LayersSwitcher extends React.Component {
 LayersSwitcher.propTypes = {
   userLayers: PropTypes.array.isRequired,
   teamLayers: PropTypes.array.isRequired,
-  publicLayers: PropTypes.array.isRequired
+  publicLayers: PropTypes.array.isRequired,
+  isManager: PropTypes.bool.isRequired,
+  deleteLayer: PropTypes.func.isRequired
 };
 
 export default LayersSwitcher;
