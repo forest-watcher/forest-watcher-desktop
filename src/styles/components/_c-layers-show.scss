@@ -1,0 +1,28 @@
+.c-layers-show {
+  .list-row {
+    display: flex;
+    justify-content: space-between;
+    border-bottom: 1px solid $medium-gray;
+    padding-bottom: 16px;
+    margin-top: 16px;
+    
+    .layer-name {
+      text-transform: uppercase;
+    }
+  }
+  
+  .layers-title {
+    border-bottom: 1px solid $medium-gray;
+    padding-bottom: 16px;
+    margin-top: 60px;
+    color: $theme-accent;
+  }
+
+  .list-header {
+    border: 0;
+  }
+
+  .c-icon {
+    margin-right: 18px;
+  }
+}

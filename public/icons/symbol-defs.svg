@@ -124,5 +124,9 @@
 <title>arrow-link</title>
 <path d="M21.257 0.686l-3.2 3.2 9.829 9.829h-27.886v4.571h27.886l-9.829 9.829 3.2 3.2 15.314-15.314z"></path>
 </symbol>
+<symbol id="icon-checkmark" viewBox="0 0 32 32">
+<title>checkmark</title>
+<path d="M27 4l-15 15-7-7-5 5 12 12 20-20z"></path>
+</symbol>
 </defs>
 </svg>
