@@ -102,5 +102,7 @@
     "settings.teamLayers": "Team layers",
     "settings.userLayers": "My layers",
     "settings.publicLayers": "Public layers",
-    "settings.enabled": "Enabled"
+    "settings.enabled": "Enabled",
+    "settings.myTeam": "My team",
+    "settings.layers": "Layers"
 }

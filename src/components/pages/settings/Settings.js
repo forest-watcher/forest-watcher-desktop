@@ -8,11 +8,15 @@ import TeamsForm from '../../teams-manager/TeamsFormContainer';
 import LayersManager from '../../layers-manager/LayersManager';
 import LayersShow from '../../layers-show/LayersShowContainer';
 import Loader from '../../ui/Loader';
+import Tab from '../../ui/Tab';
 
 class Settings extends React.Component {
   constructor() {
     super();
     this.firstLoad = true;
+    this.state = {
+      tabIndex: 0
+    }
   }
 
   componentWillMount() {
@@ -24,32 +28,53 @@ class Settings extends React.Component {
     }
   }
 
+  handleTabIndexChange = (tabIndex) => {
+    this.setState({ tabIndex });
+  }
+
   render() {
     const { team, editing, loading, saving, isManager } = this.props;
+    
+    const renderHero = () => {
+      const action = (isManager && !editing) && {name: "common.edit", callback: () => this.props.setEditing(true)};
+      const tabStyle = !(isManager && !editing) && "-no-action";
+      return (
+        <Hero
+          title={"settings.name"}
+          action={action}
+        >
+          <Tab 
+            pill
+            style={tabStyle}
+            options={["settings.myTeam", "settings.layers"]}
+            selectedIndex={this.state.tabIndex}
+            handleTabIndexChange={this.handleTabIndexChange}
+          />
+        </Hero>
+      )
+    }
+
     return (
       <div>
-        {isManager && !editing? 
-          <Hero
-            title={"settings.name"}
-            action={{name: "common.edit", callback: () => this.props.setEditing(true)}}
-          />
-        : 
-          <Hero title={"settings.name"} />
-        }
+        {renderHero()}
         <div className="l-content">
           {!loading &&
             <div>
               {(team && !editing) ?
                 <div className="settings-show">
                   <Article>
-                    <TeamsShow />
-                    <LayersShow isManager={isManager}/>
+                    { this.state.tabIndex === 0 ? 
+                      <TeamsShow /> :
+                      <LayersShow isManager={isManager}/>
+                    }
                   </Article>
                 </div>
                 : 
                 <div className="settings-edit">
-                  <TeamsForm team={team}/>
-                  <LayersManager isManager={isManager}/>
+                  { this.state.tabIndex === 0 ? 
+                    <TeamsForm team={team}/> :
+                    <LayersManager isManager={isManager}/>
+                  }
                 </div>
               }
               <Loader isLoading={saving} />
