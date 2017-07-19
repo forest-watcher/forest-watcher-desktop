@@ -25,8 +25,8 @@ export const QUESTION_OPTIONS = [
         label: 'image'
     },
     {
-        value: 'list',
-        label: 'list'
+        value: 'checkbox',
+        label: 'checkbox'
     },
     {
         value: 'radio',
