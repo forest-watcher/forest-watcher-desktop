@@ -6,7 +6,7 @@ import { FormattedMessage } from 'react-intl';
 function TeamsShow({ team, areas }) {
   return (
     <div className="row">
-      <div className="small-6 columns">
+      <div className="small-12 medium-6 columns">
         <div className="section">
           <div className="title"><FormattedMessage id={"teams.teamName"} /></div>
           <div>
@@ -25,7 +25,7 @@ function TeamsShow({ team, areas }) {
           </div>
         </div>
       </div>
-      <div className="small-6 columns">
+      <div className="small-12 medium-6 columns">
         <div className="section">
           <div className="title"><FormattedMessage id={"teams.members"} /></div>
         </div>

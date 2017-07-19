@@ -25,7 +25,7 @@ class LayersShow extends React.Component {
     return (
       <div className="c-layers-show">
         <div className="row">
-          <div className="small-6 columns">
+          <div className="small-12 medium-6 columns">
             <div className="list-row list-header">
               <FormattedMessage id={"settings.selectedLayers"} />
               <FormattedMessage id={"settings.enabled"} />

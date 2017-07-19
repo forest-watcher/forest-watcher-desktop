@@ -17,6 +17,15 @@ const mapStateToProps = ({ user, teams, areas, layers }) => {
   let areasIds = (team && team.attributes.areas) || [];
   areasIds = filterEmpty(areasIds);
 
+  const selectedLayers = layers.selectedLayerIds.map((id) => layers.selectedLayers[id]);
+  const publicLayers = selectedLayers.filter((selectedLayer) => selectedLayer.attributes && selectedLayer.attributes.isPublic);
+  const teamLayers = selectedLayers.filter((selectedLayer) => 
+      selectedLayer.attributes && !selectedLayer.attributes.isPublic && selectedLayer.attributes.owner.type === 'TEAM'
+    )
+  const userLayers = selectedLayers.filter((selectedLayer) => 
+    selectedLayer.attributes && !selectedLayer.attributes.isPublic && selectedLayer.attributes.owner.type === 'USER'
+  );
+
   const areasOfInterest = areasIds.map((areaId) => areas.data[areaId]);
     return { 
       team,
@@ -25,7 +34,10 @@ const mapStateToProps = ({ user, teams, areas, layers }) => {
       loading: teams.loading,
       saving: teams.saving || layers.loading,
       userId,
-      areas: areasOfInterest
+      areas: areasOfInterest,
+      publicLayers,
+      teamLayers,
+      userLayers
     };
   };
 

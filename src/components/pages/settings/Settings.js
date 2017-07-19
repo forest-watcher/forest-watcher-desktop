@@ -6,7 +6,7 @@ import Article from '../../layouts/Article';
 import TeamsShow from '../../teams-show/TeamsShowContainer';
 import TeamsForm from '../../teams-manager/TeamsFormContainer';
 import LayersManager from '../../layers-manager/LayersManager';
-import LayersShow from '../../layers-show/LayersShowContainer';
+import LayersShow from '../../layers-show/LayersShow';
 import Loader from '../../ui/Loader';
 import Tab from '../../ui/Tab';
 
@@ -33,7 +33,7 @@ class Settings extends React.Component {
   }
 
   render() {
-    const { team, editing, loading, saving, isManager } = this.props;
+    const { team, editing, loading, saving, isManager, publicLayers, teamLayers, userLayers } = this.props;
     
     const renderHero = () => {
       const action = (isManager && !editing) && {name: "common.edit", callback: () => this.props.setEditing(true)};
@@ -65,7 +65,12 @@ class Settings extends React.Component {
                   <Article>
                     { this.state.tabIndex === 0 ? 
                       <TeamsShow /> :
-                      <LayersShow isManager={isManager}/>
+                      <LayersShow 
+                        isManager={isManager}
+                        publicLayers={publicLayers}
+                        teamLayers={teamLayers}
+                        userLayers={userLayers}
+                      />
                     }
                   </Article>
                 </div>
@@ -73,7 +78,12 @@ class Settings extends React.Component {
                 <div className="settings-edit">
                   { this.state.tabIndex === 0 ? 
                     <TeamsForm team={team}/> :
-                    <LayersManager isManager={isManager}/>
+                    <LayersManager 
+                      isManager={isManager}
+                      publicLayers={publicLayers}
+                      teamLayers={teamLayers}
+                      userLayers={userLayers}
+                    />
                   }
                 </div>
               }
@@ -89,6 +99,9 @@ Settings.propTypes = {
   team: PropTypes.object,
   getTeam: PropTypes.func.isRequired,
   isManager: PropTypes.bool,
+  publicLayers: PropTypes.array.isRequired,
+  teamLayers: PropTypes.array.isRequired,
+  userLayers: PropTypes.array.isRequired,
   userId: PropTypes.string.isRequired
 };
 
