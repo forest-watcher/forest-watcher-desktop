@@ -7,10 +7,10 @@ function LayersManager({ isManager, publicLayers, teamLayers, userLayers }) {
   return(
     <div className="l-layers-manager">
       <div className="row">
-        <div className="small-5 columns">
+        <div className="small-12 medium-5 columns">
           <LayersForm />
         </div>
-        <div className="small-offset-1 small-6 columns">
+        <div className="small-12 medium-6 medium-offset-1 columns">
           <LayersSwitcher 
             isManager={ isManager }
             publicLayers={publicLayers}
