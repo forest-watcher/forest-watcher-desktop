@@ -4,6 +4,7 @@
   .horizontal-field-left-aligned {
     display: flex;
     padding-top: 20px;
+    align-items: flex-end;
     justify-content: space-between;
   }
 }

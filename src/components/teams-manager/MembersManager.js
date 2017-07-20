@@ -92,6 +92,7 @@ class MembersManager extends React.Component {
           <div className="horizontal-field-left-aligned">
             <input
               type="email"
+              id="add-member"
               onKeyPress={(e) => {if (e.which === 13) { e.preventDefault();}}} // Prevent send on press Enter
               onChange={(event) => this.setState({ emailToSearch: event.target.value})}
               value={this.state.emailToSearch}
