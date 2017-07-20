@@ -60,9 +60,13 @@ class TemplatesManage extends React.Component {
 
   onSubmit = (e) => {
     e.preventDefault();
+    const method = this.props.mode === 'manage' ? 'PATCH' : 'POST';
     toastr.info('Submitted', 'Not currently implemented.');
+    this.props.saveTemplate(this.state, method);
   }
 
+  
+  // Question management
   handleQuestionEdit = (question, index) => {
     const newQuestions = this.state.questions.slice();
     newQuestions[index - 1] = question;
@@ -101,9 +105,7 @@ class TemplatesManage extends React.Component {
           title={mode === 'manage' ? "templates.manage" : "templates.create"}
         />
         <div className="l-template">
-          { mode === 'manage' &&
-            <Loader isLoading={loading} />
-          }
+          <Loader isLoading={(loading && mode === 'manage') || saving} />
           <Form onSubmit={this.onSubmit}>
             <div className="c-form -templates">
               <div className="template-meta">
