@@ -114,6 +114,7 @@ class TemplatesManage extends React.Component {
                       <label className="text -gray"><FormattedMessage id={"templates.assignArea"} />:</label>
                       <Select
                         name="areas-select"
+                        className="c-select"
                         options={areasOptions}
                         value={this.state.areaOfInterest && areasOptions ? getSelectorValueFromArray(this.state.areaOfInterest, areasOptions) : null}
                         onChange={this.onAreaChange}
@@ -127,6 +128,7 @@ class TemplatesManage extends React.Component {
                       <label className="text"><FormattedMessage id={"templates.defaultLanguage"} />:</label>
                       <Select
                         name="language-select"
+                        className="c-select"
                         options={localeOptions}
                         value={this.state.defaultLanguage ? getSelectorValueFromArray(this.state.defaultLanguage, localeOptions) : locale}
                         onChange={this.onLanguageChange}

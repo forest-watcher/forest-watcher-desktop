@@ -127,6 +127,7 @@ class TeamsForm extends React.Component {
                   <Select
                     multi
                     simpleValue
+                    className="c-select"
                     name="areas-select"
                     options={areaValues}
                     value={this.state.selectedAreas}
