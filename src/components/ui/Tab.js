@@ -3,7 +3,8 @@ import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 
 function Tab({ options, selectedIndex, handleTabIndexChange, pill, style }) {
-  const tabClass = pill ? `c-pill-tab ${style}` : `c-tab -right ${style}`;
+  let tabClass = pill ? "c-pill-tab" : "c-tab -right";
+  if (style !== undefined) tabClass = `${tabClass} ${style}`;
   return (
     <div className={ tabClass }>
       <div className="nav-tab">

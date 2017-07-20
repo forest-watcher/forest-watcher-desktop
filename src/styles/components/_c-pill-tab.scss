@@ -3,6 +3,8 @@
     justify-content: center;
     margin-top: 14px;
     flex: 1;
+    animation-duration: 1s;
+
     &.-no-action {
       margin-left: -94px;
     }
@@ -15,8 +17,8 @@
 
     a {
       display: block;
-      padding: 0 25px;
-      color: $theme-text;
+      padding: 0 46px;
+      color: $white;
       line-height: 27px;
 
       &.-active {
