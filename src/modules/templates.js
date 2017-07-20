@@ -19,7 +19,7 @@ const initialState = {
 export default function reducer(state = initialState, action) {
   switch (action.type) {
     case SET_TEMPLATE: {
-      const template = action.payload.template;
+      const template = action.payload.reports;
       if (state.ids.indexOf( ...Object.keys(template) ) > -1) {
         return {
           ...state,
@@ -86,7 +86,7 @@ export function getTemplates() {
   };
 }
 
-// POST name, geostore ID
+// POST template
 export function saveTemplate(template, method) {
   return async (dispatch, state) => {
     const url = method === 'PATCH' ? `${API_BASE_URL}/reports/${template.id}` : `${API_BASE_URL}/reports`;
@@ -107,7 +107,7 @@ export function saveTemplate(template, method) {
         throw Error(response.statusText);
       })
       .then((data) => {
-      const normalized = normalize(data);
+        const normalized = normalize(data);
         dispatch({
           type: SET_TEMPLATE,
           payload: normalized

@@ -90,9 +90,6 @@ class TemplatesManage extends React.Component {
     const newQuestions = this.state.questions.slice();
     newQuestions[newQuestions.length] = {
       ...QUESTION,
-      values: {
-        [this.state.defaultLanguage]: ""
-      },
       order: newQuestions.length,
       label: {
         [this.state.defaultLanguage]: ""
