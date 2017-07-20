@@ -12,6 +12,8 @@ import { setLanguages, syncLanguagesWithDefaultLanguage } from '../../../helpers
 import { Link } from 'react-router-dom';
 import { toastr } from 'react-redux-toastr';
 import QuestionCard from '../../question-card/QuestionCard';
+import { CSSTransitionGroup } from 'react-transition-group';
+import { QUESTION } from '../../../constants/templates';
 
 class TemplatesManage extends React.Component {
   constructor (props) {
@@ -25,7 +27,7 @@ class TemplatesManage extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.template !== this.props.template) this.setPropsToState(nextProps);
+    if (nextProps.template !== this.props.template && this.props.mode === 'manage') this.setPropsToState(nextProps);
   }
 
 
@@ -36,7 +38,7 @@ class TemplatesManage extends React.Component {
 
   // Actions to update state
   onAreaChange = (selected) => {
-    this.setState({ areaOfInterest: selected.option });
+    this.setState({ areaOfInterest: selected ? selected.option : null });
   }
 
   onLanguageChange = (selected) => {
@@ -70,10 +72,29 @@ class TemplatesManage extends React.Component {
     });
   }
 
+  handleQuestionDelete = (questionNum) => {
+    const removedQuestions = this.state.questions.slice();
+    removedQuestions.splice(questionNum - 1, 1);
+    
+    this.setState({
+      questions: removedQuestions
+    });
+  }
+
+  handleAddQuestion = (e) => {
+    e.preventDefault();
+    const newQuestions = this.state.questions.slice();
+    newQuestions[newQuestions.length] = QUESTION;
+
+    this.setState({
+      questions: newQuestions
+    });
+  }
+
 
   // Render
   render() {
-    const { areasOptions, localeOptions, loading, mode, locale } = this.props;
+    const { areasOptions, localeOptions, loading, saving, editing, mode, locale } = this.props;
     return (
       <div>
         <Hero
@@ -131,28 +152,47 @@ class TemplatesManage extends React.Component {
                         onKeyPress={(e) => {if (e.which === 13) { e.preventDefault();}}} // Prevent send on press Enter
                       />
                     </div>
-                    {this.state.questions &&
-                      this.state.questions.map((question, index) =>
-                        <QuestionCard 
-                          key={index} 
-                          questionNum={index + 1} 
-                          question={question} 
-                          syncStateWithProps={this.handleQuestionEdit} 
-                          defaultLanguage={this.state.defaultLanguage}
-                        />
-                      )
-                    }
+                      {this.state.questions &&
+                        <CSSTransitionGroup
+                          transitionName="example"
+                          transitionEnterTimeout={500}
+                          transitionLeaveTimeout={500}
+                        >
+                          { this.state.questions.map((question, index) =>
+                            <QuestionCard 
+                              key={index} 
+                              questionNum={index + 1} 
+                              question={question} 
+                              syncStateWithProps={this.handleQuestionEdit} 
+                              defaultLanguage={this.state.defaultLanguage}
+                              deleteQuestion={this.handleQuestionDelete}
+                              status={this.state.status}
+                            />
+                          )}
+                        </CSSTransitionGroup>
+                      }
                   </div>
                 </div>
               </div>
             </div>
+            { (this.state.status === 'draft' || mode === 'create') &&
+              <div className="add-question">
+                <div className="row">
+                  <div className="column small-12 medium-10 medium-offset-1 large-8 large-offset-2">
+                    <div className="add-button">
+                      <button className="c-button" onClick={this.handleAddQuestion}><FormattedMessage id="templates.addQuestion" /></button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            }
             <div className="c-form-footer">
               <div className="row column">
                 <div className="container">
                   <Link to="/templates">
-                    <button className="c-button -light" disabled={this.props.saving || this.props.loading}><FormattedMessage id="forms.cancel" /></button>
+                    <button className="c-button -light" disabled={(saving || loading) && mode === 'manage'}><FormattedMessage id="forms.cancel" /></button>
                   </Link>
-                  <Button className="c-button" disabled={this.props.saving || (this.props.editing ? true : false) || this.props.loading}><FormattedMessage id="forms.save" /></Button>
+                  <Button className="c-button" disabled={(saving || (editing ? true : false) || loading) && mode === 'manage'}><FormattedMessage id="forms.save" /></Button>
                 </div>
               </div>
             </div>

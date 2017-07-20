@@ -89,6 +89,8 @@
     "templates.reportsSubmitted": "reports submitted",
     "templates.noTemplatesFound": "No templates found",
     "templates.questionPlaceholder": "Type your question...",
+    "templates.required": "required",
+    "templates.addQuestion": "Add question",
     "settings.contextualLayers": "Contextual layers",
     "settings.customLayers": "Custom layers",
     "settings.gfwLayers": "GFW layers",
