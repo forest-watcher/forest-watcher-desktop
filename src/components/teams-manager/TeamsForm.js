@@ -110,9 +110,9 @@ class TeamsForm extends React.Component {
         <Form onSubmit={this.handleSubmit}>
           <div className="c-form">
             <div className="row">
-              <div className="small-6 columns">
+              <div className="small-12 medium-5 columns">
                 <div className="input-group">
-                  <label className="text"><FormattedMessage id={"teams.teamName"} /></label>
+                  <h3><label><FormattedMessage id={"teams.teamName"} /></label></h3>
                   <Input
                     type="text"
                     onChange={this.onInputChange}
@@ -123,7 +123,7 @@ class TeamsForm extends React.Component {
                   />
                 </div>
                 <div className="input-group">
-                  <label className="text"><FormattedMessage id={"teams.areas"} /></label>
+                  <h3><label><FormattedMessage id={"teams.areas"} /></label></h3>
                   <Select
                     multi
                     simpleValue
