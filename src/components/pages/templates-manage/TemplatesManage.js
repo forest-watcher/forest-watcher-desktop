@@ -28,7 +28,12 @@ class TemplatesManage extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
+    const { history } = this.props;
     if (nextProps.template !== this.props.template && this.props.mode === 'manage') this.setPropsToState(nextProps);
+    if (this.props.saving && !nextProps.saving) {
+      history.push('/templates');      
+      toastr.success(this.props.intl.formatMessage({ id: 'templates.saved' }));
+    }
   }
 
 
@@ -62,7 +67,6 @@ class TemplatesManage extends React.Component {
   onSubmit = (e) => {
     e.preventDefault();
     const method = this.props.mode === 'manage' ? 'PATCH' : 'POST';
-    toastr.info('Submitted', 'Not currently implemented.');
     this.props.saveTemplate(this.state, method);
   }
 
