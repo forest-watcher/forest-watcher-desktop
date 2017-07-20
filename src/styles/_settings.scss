@@ -14,12 +14,14 @@ $border-light-gray: #e6e6e6;
 $border-gray: #404040;
 $dark-gray: #333333;
 $parrot-green: #97be32;
+$light-parrot-green: #cbde98;
 $light-green: #f4f8ea;
 
 // app palette (prefer using palette over colors when possible)
 $theme-base: $light-gray;
 $theme-secondary: $dark-gray;
 $theme-accent: $parrot-green;
+$theme-accent-light: $light-parrot-green;
 $theme-text: $gray;
 
 // fonts

@@ -5,6 +5,7 @@
     "common.edit": "Edit",
     "common.add": "Add",
     "common.save": "Save",
+    "common.done": "Done",
     "common.cancel": "Cancel",
     "login.welcome": "Sign in with a MyGFW account",
     "forms.required": "required",
@@ -96,6 +97,8 @@
     "settings.gfwLayers": "GFW layers",
     "settings.selectedLayers": "Selected layers",
     "settings.addToTeam": "Add to team",
+    "settings.layerAlreadyExists": "The Layer is already included",
+    "settings.maxNumberLayers": "Maximum number of layers reached",
     "settings.team": "TEAM",
     "settings.layerTitle": "Title",
     "settings.cssStyle": "Css style",
@@ -104,5 +107,7 @@
     "settings.teamLayers": "Team layers",
     "settings.userLayers": "My layers",
     "settings.publicLayers": "Public layers",
-    "settings.enabled": "Enabled"
+    "settings.enabled": "Enabled",
+    "settings.myTeam": "My team",
+    "settings.layers": "Layers"
 }

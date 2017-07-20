@@ -7,6 +7,7 @@ import { FormattedMessage, injectIntl } from 'react-intl';
 import { Form, Input, Button } from '../../form/Form';
 import Select from 'react-select';
 import Loader from '../../ui/Loader';
+import FormFooter from '../../ui/FormFooter';
 import { getSelectorValueFromArray } from '../../../helpers/filters';
 import { setLanguages, syncLanguagesWithDefaultLanguage } from '../../../helpers/languages';
 import { Link } from 'react-router-dom';
@@ -122,6 +123,7 @@ class TemplatesManage extends React.Component {
                       <label className="text -gray"><FormattedMessage id={"templates.assignArea"} />:</label>
                       <Select
                         name="areas-select"
+                        className="c-select"
                         options={areasOptions}
                         value={this.state.areaOfInterest && areasOptions ? getSelectorValueFromArray(this.state.areaOfInterest, areasOptions) : null}
                         onChange={this.onAreaChange}
@@ -136,6 +138,7 @@ class TemplatesManage extends React.Component {
                       <label className="text"><FormattedMessage id={"templates.defaultLanguage"} />:</label>
                       <Select
                         name="language-select"
+                        className="c-select"
                         options={localeOptions}
                         value={this.state.defaultLanguage ? getSelectorValueFromArray(this.state.defaultLanguage, localeOptions) : locale}
                         onChange={this.onLanguageChange}
@@ -199,16 +202,12 @@ class TemplatesManage extends React.Component {
                 </div>
               </div>
             }
-            <div className="c-form-footer">
-              <div className="row column">
-                <div className="container">
-                  <Link to="/templates">
-                    <button className="c-button -light" disabled={saving || loading}><FormattedMessage id="forms.cancel" /></button>
-                  </Link>
-                  <Button className="c-button" disabled={saving || loading || mode === 'manage'}><FormattedMessage id="forms.save" /></Button>
-                </div>
-              </div>
-            </div>
+            <FormFooter>
+              <Link to="/templates">
+                <button className="c-button -light" disabled={saving || loading}><FormattedMessage id="forms.cancel" /></button>
+              </Link>
+              <Button className="c-button" disabled={saving || loading || mode === 'manage'}><FormattedMessage id="forms.save" /></Button>
+            </FormFooter>
           </Form>
         </div>
       </div>

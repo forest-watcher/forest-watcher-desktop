@@ -17,6 +17,18 @@
     padding-right: 15px;
   }
 
+  textarea {
+	  border: solid 1px #e6e6e6;
+    width: 100%;
+    min-height: 200px;
+  }
+
+  .form-error {
+    display: block;
+    margin-top: 6px;
+    color: red;
+  }
+
   input {
     height: 40px;
 	  border-radius: 4px;
@@ -50,6 +62,10 @@
       padding: 0;
       width: 100%;
     }
+
+    &[type='checkbox'] {
+      height: 0px !important;
+    }
   }
 
   .horizontal-field {
@@ -65,7 +81,6 @@
     padding-top: 10px;
 
     input, .delete-button, .user-label, .c-checkbox {
-      margin-right: 10px;
       flex: 1;
     }
     
@@ -76,7 +91,9 @@
 
   .input-group {
     padding-top: 30px;
-
+    #add-member {
+      margin-right: 10px;
+    }
     .form-control, .Select{
       padding-top: 10px;    
       input {

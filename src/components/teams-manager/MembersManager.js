@@ -86,12 +86,13 @@ class MembersManager extends React.Component {
 
   render() {
     return (
-      <div className="small-6 columns">
+      <div className="small-12 medium-offset-2 medium-5 columns">
         <div className="input-group">
-          <label htmlFor="add-member" className="text"><FormattedMessage id={"teams.members"} /></label>
+          <h3><label htmlFor="add-member" className="text"><FormattedMessage id={"teams.members"} /></label></h3>
           <div className="horizontal-field-left-aligned">
             <input
               type="email"
+              id="add-member"
               onKeyPress={(e) => {if (e.which === 13) { e.preventDefault();}}} // Prevent send on press Enter
               onChange={(event) => this.setState({ emailToSearch: event.target.value})}
               value={this.state.emailToSearch}

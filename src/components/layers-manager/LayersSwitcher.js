@@ -55,7 +55,7 @@ class LayersSwitcher extends React.Component {
     return (
       <div className="c-layers-show">
         <div className="list-header">
-          <FormattedMessage id={"settings.selectedLayers"} />
+          <h3><FormattedMessage id={"settings.selectedLayers"} /></h3>
         </div>
         <div className="layers-switchs">
           { isManager && renderLayers('public', publicLayers) }
@@ -70,7 +70,9 @@ class LayersSwitcher extends React.Component {
 LayersSwitcher.propTypes = {
   userLayers: PropTypes.array.isRequired,
   teamLayers: PropTypes.array.isRequired,
-  publicLayers: PropTypes.array.isRequired
+  publicLayers: PropTypes.array.isRequired,
+  isManager: PropTypes.bool.isRequired,
+  deleteLayer: PropTypes.func.isRequired
 };
 
 export default LayersSwitcher;

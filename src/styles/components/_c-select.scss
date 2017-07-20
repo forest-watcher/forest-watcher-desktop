@@ -2,9 +2,37 @@
     height: 100%;
     z-index: 1000;
     font-family: $base-font-family;
-    
+
     &:focus {
         outline: none;
+    }
+
+    &.Select--multi {
+
+      .Select-value {
+        display: flex;
+        padding: 0 !important;
+        margin-bottom: 4px;
+        background-color: $theme-accent-light;
+
+        .Select-value-label {
+          order: 1;
+        }
+
+        .Select-value-icon {
+          order: 2;
+          border-right: 0;
+          font-size: 1.5em;
+          color: $base-font-color;
+        }
+      }
+      .Select-multi-value-wrapper {
+        display: flex;
+      }
+
+      .Select-input {
+        display: none;
+      }
     }
 
     &.is-pseudo-focused {
@@ -43,7 +71,7 @@
 
             &:focus {
                 outline: none;
-            }              
+            }
         }
 
         .Select-arrow-zone {
@@ -83,7 +111,7 @@
     }
 
     &.-dark {
-        
+
         .Select-control {
             color: rgba($white, 0.5) !important;
             background-color: transparent;
@@ -94,14 +122,14 @@
             .Select-value-label {
                 color: rgba($white, 0.5) !important;
                 font-size: $font-size-small;
-                font-weight: $font-weight-bold;          
+                font-weight: $font-weight-bold;
             }
         }
 
         .c-icon {
             fill: rgba($white, 0.5);
         }
-        
+
         .Select-menu-outer {
             margin-top: 0;
             box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.5);
@@ -116,24 +144,20 @@
     }
 
     &.is-open {
-        
+
         .Select-control {
             background-color: $white;
             border-bottom-right-radius: 0;
             border-bottom-left-radius: 0;
 
             .Select-value-label {
-                color: $theme-text !important;                
+                color: $theme-text !important;
             }
         }
 
         .c-icon {
             transform: rotate(180deg);
             fill: $dark-gray;
-        }
-
-        .Select-menu-outer {
-            
         }
     }
 }

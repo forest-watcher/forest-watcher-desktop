@@ -1,11 +1,10 @@
 .c-member-list {
+  padding-top: 20px;
   padding-left: 10px;
-  padding-right: 30px;
-  
   .horizontal-field-left-aligned {
+    display: flex;
     padding-top: 20px;
+    align-items: flex-end;
     justify-content: space-between;
-    padding-left: 10px;
-    padding-right: 30px;
   }
 }

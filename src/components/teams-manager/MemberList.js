@@ -14,13 +14,13 @@ function MemberList({ members, handleChangeRole, deleteMember, intl }) {
         const isAdmin = memberType === MANAGER;
         const hiddenButton = memberType === MANAGER ? 'hidden' : '';
         return (
-          <div key={id} className="horizontal-field-left-aligned">
+          <div key={`${memberType}${id}`} className="horizontal-field-left-aligned">
             <div className="user-label">{ id }</div>
-            {(memberType) !== USER && 
-              <Checkbox 
-                  id={id} 
-                  label={ intl.formatMessage({ id: "teams.admin" }) } 
-                  callback={() => handleChangeRole(id, !isAdmin)} 
+            {(memberType) !== USER &&
+              <Checkbox
+                  id={`${memberType}${id}`}
+                  label={ intl.formatMessage({ id: "teams.admin" }) }
+                  callback={() => handleChangeRole(id, !isAdmin)}
                   defaultChecked={isAdmin}/>
             }
             <div className={hiddenButton}>

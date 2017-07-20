@@ -1,0 +1,37 @@
+.c-pill-tab {
+    display: flex;
+    justify-content: center;
+    margin-top: 14px;
+    flex: 1;
+    animation-duration: 1s;
+
+    &.-no-action {
+      margin-left: -94px;
+    }
+
+  .nav-tab {
+    margin: 12px 0;
+    border: 1px solid rgba($theme-base, .3);
+    border-radius: 40px;
+    display: flex;
+
+    a {
+      display: block;
+      padding: 0 46px;
+      color: $white;
+      line-height: 27px;
+
+      &.-active {
+        border-radius: 40px;
+        background: $theme-base;
+        color: $theme-text;
+        pointer-events: none;
+      }
+
+      &.-disabled {
+        opacity: .3;
+        pointer-events: none;
+      }
+    }
+  }
+}
