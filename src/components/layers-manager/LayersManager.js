@@ -10,16 +10,16 @@ function LayersManager({ isManager, publicLayers, teamLayers, userLayers, setEdi
   return(
     <div className="l-layers-manager">
       <div className="row">
-        <div className="small-12 medium-5 columns">
-          <LayersForm 
+        <div className="small-12 medium-6 columns">
+          <LayersSwitcher 
+            isManager={ isManager }
             publicLayers={publicLayers}
             teamLayers={teamLayers}
             userLayers={userLayers}
           />
         </div>
-        <div className="small-12 medium-6 medium-offset-1 columns">
-          <LayersSwitcher 
-            isManager={ isManager }
+        <div className="small-12 medium-5 medium-offset-1 columns">
+          <LayersForm 
             publicLayers={publicLayers}
             teamLayers={teamLayers}
             userLayers={userLayers}
