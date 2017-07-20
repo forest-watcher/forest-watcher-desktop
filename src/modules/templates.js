@@ -90,6 +90,10 @@ export function getTemplates() {
 export function saveTemplate(template, method) {
   return async (dispatch, state) => {
     const url = method === 'PATCH' ? `${API_BASE_URL}/reports/${template.id}` : `${API_BASE_URL}/reports`;
+    dispatch({
+      type: SET_SAVING_TEMPLATE,
+      payload: true
+    });
     fetch(url, {
       headers: {
         Authorization: `Bearer ${state().user.token}`,
@@ -115,7 +119,6 @@ export function saveTemplate(template, method) {
       })
       .catch((error) => {
         toastr.error('Unable to save template', error);
-        console.warn(error);
         dispatch({
           type: SET_SAVING_TEMPLATE,
           payload: false
