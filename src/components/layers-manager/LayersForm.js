@@ -139,20 +139,20 @@ class LayersForm extends React.Component {
                   checked={ GFWlayer.enabled || false }
                 /> )
             : 
-              <Card className={"-big"}>
-                <div className="custom-layer-form">
-                  <h4>{this.props.intl.formatMessage({ id: 'settings.layerTitle' })}</h4>
+              <Card className="-form -content-full-width">
+                <div className="c-form">
                   <Input
                   type="text"
+                  className="-question"
                   onChange={this.onInputChange}
                   name="title"
                   value={this.state.form.title || ''}
                   placeholder={this.props.intl.formatMessage({ id: 'settings.layerTitle' })}
                   validations={['required']}
                   />
-                  <h4>{this.props.intl.formatMessage({ id: 'settings.url' })}</h4>
                   <Input
                   type="text"
+                  className="-question"
                   onChange={this.onInputChange}
                   name="tileurl"
                   value={this.state.form.tileurl || ''}
