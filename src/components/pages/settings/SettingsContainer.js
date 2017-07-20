@@ -16,7 +16,6 @@ const mapStateToProps = ({ user, teams, areas, layers }) => {
   const isManager = team && isUserManager(team, userId);
   let areasIds = (team && team.attributes.areas) || [];
   areasIds = filterEmpty(areasIds);
-
   const selectedLayers = layers.selectedLayerIds.map((id) => layers.selectedLayers[id]);
   const publicLayers = selectedLayers.filter((selectedLayer) => selectedLayer.attributes && selectedLayer.attributes.isPublic);
   const teamLayers = selectedLayers.filter((selectedLayer) => 

@@ -27,7 +27,7 @@ class LayersShow extends React.Component {
         <div className="row">
           <div className="small-12 medium-6 columns">
             <div className="list-row list-header">
-              <FormattedMessage id={"settings.selectedLayers"} />
+              <h3><FormattedMessage id={"settings.selectedLayers"} /></h3>
               <FormattedMessage id={"settings.enabled"} />
             </div>
             <div className="layers-list">
