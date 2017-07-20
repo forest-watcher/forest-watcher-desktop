@@ -9,6 +9,7 @@ import { includes } from '../../helpers/utils';
 import Checkbox from '../ui/Checkbox';
 import { toastr } from 'react-redux-toastr';
 import { injectIntl } from 'react-intl';
+import { MAX_NUMBER_OF_LAYERS } from '../../constants/global';
 
 class LayersForm extends React.Component {
   constructor(props) {
@@ -59,7 +60,7 @@ class LayersForm extends React.Component {
   }
 
   maxLayers = (GFWLayer, teamId, userLayerLength, teamLayerLength) => {
-    return ((teamId && teamLayerLength > 2) || (!teamId && userLayerLength > 2));
+    return ((teamId && teamLayerLength > MAX_NUMBER_OF_LAYERS) || (!teamId && userLayerLength > MAX_NUMBER_OF_LAYERS));
   }
 
   alreadyExist = (GFWLayer, teamId, userLayerNames, teamLayerNames) => {
