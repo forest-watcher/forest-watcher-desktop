@@ -128,7 +128,6 @@ class LayersForm extends React.Component {
           handleTabIndexChange={this.handleTabIndexChange}
         />
         <Form onSubmit={(e) => this.addLayers(e)} ref={ f => this.formNode = f }>
-          <Card className={"-big"}>
             {this.state.tabIndex === 0 ? 
               this.state.GFWLayers && this.state.GFWLayers.map((GFWlayer, i) => 
                 <Checkbox
@@ -138,40 +137,41 @@ class LayersForm extends React.Component {
                   label={ GFWlayer.title }
                   callback={() => this.toggleGFWLayer(GFWlayer)} 
                   checked={ GFWlayer.enabled || false }
-                />
-              ) : 
-              <div className="custom-layer-form">
-                <h4>{this.props.intl.formatMessage({ id: 'settings.layerTitle' })}</h4>
-                <Input
-                type="text"
-                onChange={this.onInputChange}
-                name="title"
-                value={this.state.form.title || ''}
-                placeholder={this.props.intl.formatMessage({ id: 'settings.layerTitle' })}
-                validations={['required']}
-                />
-                <h4>{this.props.intl.formatMessage({ id: 'settings.url' })}</h4>
-                <Input
-                type="text"
-                onChange={this.onInputChange}
-                name="tileurl"
-                value={this.state.form.tileurl || ''}
-                placeholder={this.props.intl.formatMessage({ id: 'settings.url' })}
-                validations={['required', 'url']}
-                />
-                <h4>{this.props.intl.formatMessage({ id: 'settings.cssStyle' })}</h4>
-                <Textarea
+                /> )
+            : 
+              <Card className={"-big"}>
+                <div className="custom-layer-form">
+                  <h4>{this.props.intl.formatMessage({ id: 'settings.layerTitle' })}</h4>
+                  <Input
                   type="text"
                   onChange={this.onInputChange}
-                  name="style"
-                  value={this.state.form.style || ''}
-                  placeholder={this.props.intl.formatMessage({ id: 'settings.cssStyle' })}
-                  validations={[]}
-                />
-              </div>
+                  name="title"
+                  value={this.state.form.title || ''}
+                  placeholder={this.props.intl.formatMessage({ id: 'settings.layerTitle' })}
+                  validations={['required']}
+                  />
+                  <h4>{this.props.intl.formatMessage({ id: 'settings.url' })}</h4>
+                  <Input
+                  type="text"
+                  onChange={this.onInputChange}
+                  name="tileurl"
+                  value={this.state.form.tileurl || ''}
+                  placeholder={this.props.intl.formatMessage({ id: 'settings.url' })}
+                  validations={['required', 'url']}
+                  />
+                  <h4>{this.props.intl.formatMessage({ id: 'settings.cssStyle' })}</h4>
+                  <Textarea
+                    type="text"
+                    onChange={this.onInputChange}
+                    name="style"
+                    value={this.state.form.style || ''}
+                    placeholder={this.props.intl.formatMessage({ id: 'settings.cssStyle' })}
+                    validations={[]}
+                  />
+                </div>
+              </Card>
             }
-          </Card>
-          <div className='card-actions'>
+          <div className='layer-add'>
             { this.props.team && 
               <Checkbox 
                 id={'gfw-teams-add'} 
@@ -179,7 +179,7 @@ class LayersForm extends React.Component {
                 callback={() => this.setState({teamMode: !this.state.teamMode})}
               />
             }
-            <button className="c-button -right" ><FormattedMessage id="common.add" /></button>
+            <button className="c-button -light -right" ><FormattedMessage id="common.add"/></button>
           </div>
         </Form>
       </div>
