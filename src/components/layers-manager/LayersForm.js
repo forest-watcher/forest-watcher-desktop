@@ -121,17 +121,19 @@ class LayersForm extends React.Component {
   render() {
     return (
       <div className="c-layers-form">
-        <h3><FormattedMessage id={"settings.contextualLayers"} /></h3>
-        <Tab 
-          options={["settings.gfwLayers", "settings.customLayers"]}
-          selectedIndex={this.state.tabIndex}
-          handleTabIndexChange={this.handleTabIndexChange}
-        />
+        <div className="form-header">
+          <h3><FormattedMessage id={"settings.contextualLayers"} /></h3>
+          <Tab 
+            options={["settings.gfwLayers", "settings.customLayers"]}
+            selectedIndex={this.state.tabIndex}
+            handleTabIndexChange={this.handleTabIndexChange}
+          />
+        </div>
         <Form onSubmit={(e) => this.addLayers(e)} ref={ f => this.formNode = f }>
             {this.state.tabIndex === 0 ? 
               this.state.GFWLayers && this.state.GFWLayers.map((GFWlayer, i) => 
                 <Checkbox
-                  classNames="-spaced"
+                  classNames="-spaced -lowercase"
                   key={`${i}${GFWlayer.cartodb_id}`}
                   id={`${i}${GFWlayer.cartodb_id}`} 
                   label={ GFWlayer.title }

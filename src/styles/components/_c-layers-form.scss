@@ -1,4 +1,8 @@
 .c-layers-form {
+  .form-header {
+    display: flex;
+    justify-content: space-around;
+  }
   .layer-add {
     display: flex;
     align-items: center;
