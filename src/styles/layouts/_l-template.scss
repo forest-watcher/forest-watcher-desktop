@@ -15,4 +15,19 @@
         background: $white;
         padding-bottom: 60px;
     }
+
+    .add-question {
+        background: $white;
+        padding-bottom: 120px;
+
+        .add-button {
+            padding-top: 25px;
+            border-top: solid 1px rgba(#979797, 0.2);
+
+            button {
+                float: right;
+            }
+        }
+    }
+
 }

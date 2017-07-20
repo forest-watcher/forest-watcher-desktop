@@ -3,11 +3,21 @@ import PropTypes from 'prop-types';
 import { Input } from '../form/Form';
 import { injectIntl } from 'react-intl';
 import { prettyNum } from '../../helpers/utils';
+import { QUESTION_OPTIONS } from '../../constants/templates';
+import Select from 'react-select';
+import Icon from '../ui/Icon';
+import SwitchButton from 'react-switch-button';
 
 class QuestionCard extends React.Component {
   constructor (props) {
     super(props);
     this.question = { ...props.question };
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.question !== this.props.question) {
+        this.question = { ...nextProps.question };
+    }
   }
 
   onInputChange = (e) => {
@@ -21,10 +31,30 @@ class QuestionCard extends React.Component {
     this.props.syncStateWithProps(this.question, this.props.questionNum);
   }
 
+  onTypeChange = (selected) => {
+    this.question = { 
+        ...this.question,
+        type: selected.value 
+    };
+    this.props.syncStateWithProps(this.question, this.props.questionNum);
+  }
+
+  toggleRequired = () => {
+    let required = this.question.required;
+    required = required ? false : true;
+    this.question = {
+        ...this.question,
+        required: required
+    };
+    this.props.syncStateWithProps(this.question, this.props.questionNum);
+  }
+
   render() {
-    const { question, questionNum, defaultLanguage } = this.props;
+    const { question, questionNum, defaultLanguage, deleteQuestion, status } = this.props;
+    const disabled = status === 'draft' ? false : true;
     return (
-        <div className="c-question-card">
+        <section className="c-question-card">
+            <div className="questions">
             <span className="text -question-number">{prettyNum(questionNum)}.</span>
                 <Input
                     type="text"
@@ -36,7 +66,32 @@ class QuestionCard extends React.Component {
                     validations={['required']}
                     onKeyPress={(e) => {if (e.which === 13) { e.preventDefault();}}} // Prevent send on press Enter
                 />
-        </div>
+                <Select
+                    name="type"
+                    className="type-select"
+                    options={QUESTION_OPTIONS}
+                    value={question.type}
+                    onChange={this.onTypeChange}
+                    searchable={false}
+                    clearable={false}
+                    disabled={disabled}
+                />
+            </div>
+            <div className="question-actions">
+                { status === 'draft' &&
+                    <button className={"delete-button"} type="button" onClick={() => { deleteQuestion(questionNum)} }>
+                        <Icon className="-small -gray" name="icon-delete"/>
+                    </button>
+                }
+                <span className="required-label text -x-small-title">{this.props.intl.formatMessage({ id: 'templates.required' })}</span>
+                <SwitchButton
+                    className="required"
+                    name={`${questionNum}-required`} 
+                    onChange={this.toggleRequired}
+                    defaultChecked={question.required}
+                />
+            </div>
+        </section>
     );
   }
 }
