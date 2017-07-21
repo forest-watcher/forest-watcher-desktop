@@ -30,9 +30,8 @@ class TemplatesManage extends React.Component {
   componentWillReceiveProps(nextProps) {
     const { history } = this.props;
     if (nextProps.template !== this.props.template && this.props.mode === 'manage') this.setPropsToState(nextProps);
-    if (this.props.saving && !nextProps.saving) {
+    if (this.props.saving && !nextProps.saving && !nextProps.error) {
       history.push('/templates');      
-      toastr.success(this.props.intl.formatMessage({ id: 'templates.saved' }));
     }
   }
 
@@ -222,7 +221,9 @@ class TemplatesManage extends React.Component {
 
 TemplatesManage.propTypes = {
   intl: PropTypes.object,
-  loading: PropTypes.bool
+  loading: PropTypes.bool,
+  saving: PropTypes.bool,
+  error: PropTypes.bool
 };
 
 export default injectIntl(TemplatesManage);

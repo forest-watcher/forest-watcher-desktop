@@ -14,7 +14,8 @@ const initialState = {
   ids: [],
   data: {},
   loading: true,
-  saving: false
+  saving: false,
+  error: false
 };
 
 export default function reducer(state = initialState, action) {
@@ -42,7 +43,7 @@ export default function reducer(state = initialState, action) {
     case SET_LOADING_TEMPLATES:
       return Object.assign({}, state, { loading: action.payload });
     case SET_SAVING_TEMPLATE:
-      return Object.assign({}, state, { saving: action.payload });
+      return Object.assign({}, state, { ...action.payload });
     default:
       return state;
   }
@@ -75,6 +76,7 @@ export function getTemplates() {
           type: SET_LOADING_TEMPLATES,
           payload: false
         });
+        toastr.success(this.props.intl.formatMessage({ id: 'templates.saved' }));
         return normalized;
       })
       .catch((error) => {
@@ -93,7 +95,10 @@ export function saveTemplate(template, method) {
     const url = method === 'PATCH' ? `${API_BASE_URL}/reports/${template.id}` : `${API_BASE_URL}/reports`;
     dispatch({
       type: SET_SAVING_TEMPLATE,
-      payload: true
+      payload: {
+        saving: true,
+        error: false
+      }
     });
     fetch(url, {
       headers: {
@@ -116,14 +121,21 @@ export function saveTemplate(template, method) {
         });
         dispatch({
           type: SET_SAVING_TEMPLATE,
-          payload: false
+          payload: {
+            saving: false,
+            error: false
+          }
         });
+        toastr.success(this.props.intl.formatMessage({ id: 'templates.saved' }));
       })
       .catch((error) => {
         toastr.error('Unable to save template', error);
         dispatch({
           type: SET_SAVING_TEMPLATE,
-          payload: false
+          payload: {
+            saving: false,
+            error: true
+          }
         });
       });
   };
