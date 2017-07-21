@@ -41,6 +41,7 @@ class TemplatesManage extends React.Component {
   setPropsToState = (props) => {
     this.setState({ ...props.template });
   }
+  
 
   // Actions to update state
   onAreaChange = (selected) => {

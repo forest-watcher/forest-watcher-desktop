@@ -4,6 +4,7 @@ import TemplatesManage from './TemplatesManage';
 import { LOCALES_LIST } from '../../../constants/locales';
 import { TEMPLATE } from '../../../constants/templates';
 import { saveTemplate } from '../../../modules/templates';
+import { filterBy } from '../../../helpers/filters';
 
 const mapAreasToOptions = (areas) => {
     const areasOptions = [];
@@ -28,7 +29,7 @@ const mapLocalesToOptions = (locales) => {
 };
 
 const mapStateToProps = (state, { match }) => {
-    const areasOptions = mapAreasToOptions(state.areas);
+    const areasOptions = filterBy(mapAreasToOptions(state.areas), 'templateId', '');
     const templateId = match.params.templateId || null;
     const localeOptions = mapLocalesToOptions(LOCALES_LIST);
     const defaultTemplate = {

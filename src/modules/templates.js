@@ -1,6 +1,7 @@
 import normalize from 'json-api-normalizer';
 import { API_BASE_URL } from '../constants/global';
 import { toastr } from 'react-redux-toastr';
+import { getArea } from './areas';
 
 // Actions
 const SET_TEMPLATE = 'templates/SET_TEMPLATE';
@@ -108,6 +109,7 @@ export function saveTemplate(template, method) {
       })
       .then((data) => {
         const normalized = normalize(data);
+        dispatch(getArea(template.areaOfInterest));
         dispatch({
           type: SET_TEMPLATE,
           payload: normalized

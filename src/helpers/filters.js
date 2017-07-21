@@ -48,4 +48,4 @@ const getDataAreas = (data, areas) => {
   return areasOptions;
 }
 
-export { filterData, getDataAreas, getSelectorValueFromArray };
+export { filterData, getDataAreas, getSelectorValueFromArray, filterBy };

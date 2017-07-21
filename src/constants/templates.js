@@ -44,7 +44,7 @@ export const QUESTION_OPTIONS = [
     },
         {
         value: 'select',
-        label: 'radio'
+        label: 'select'
     },
     {
         value: 'number',
