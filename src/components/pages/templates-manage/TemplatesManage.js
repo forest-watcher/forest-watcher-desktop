@@ -31,7 +31,11 @@ class TemplatesManage extends React.Component {
     const { history } = this.props;
     if (nextProps.template !== this.props.template && this.props.mode === 'manage') this.setPropsToState(nextProps);
     if (this.props.saving && !nextProps.saving && !nextProps.error) {
-      history.push('/templates');      
+      history.push('/templates');  
+      toastr.success(this.props.intl.formatMessage({ id: 'templates.saved' }));
+    }
+    if (nextProps.error) {
+      toastr.success(this.props.intl.formatMessage({ id: 'templates.errorSaving' }));
     }
   }
 

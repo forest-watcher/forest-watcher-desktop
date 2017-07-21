@@ -93,6 +93,7 @@
     "templates.required": "required",
     "templates.saved": "Template saved!",
     "templates.addQuestion": "Add question",
+    "templates.errorSaving": "Unable to save template",
     "settings.contextualLayers": "Contextual layers",
     "settings.customLayers": "Custom layers",
     "settings.gfwLayers": "GFW layers",

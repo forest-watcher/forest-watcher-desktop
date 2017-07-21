@@ -154,7 +154,7 @@ export function saveArea(area, node, method) {
         throw Error(response.statusText);
       })
       .then((data) => {
-      const normalized = normalize(data);
+        const normalized = normalize(data);
         dispatch({
           type: SET_AREA,
           payload: normalized
@@ -165,7 +165,6 @@ export function saveArea(area, node, method) {
         });
       })
       .catch((error) => {
-        toastr.error('Unable to save area', error);
         dispatch({
           type: SET_SAVING_AREA,
           payload: false

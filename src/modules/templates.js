@@ -76,15 +76,14 @@ export function getTemplates() {
           type: SET_LOADING_TEMPLATES,
           payload: false
         });
-        toastr.success(this.props.intl.formatMessage({ id: 'templates.saved' }));
         return normalized;
       })
       .catch((error) => {
+        debugger
         dispatch({
           type: SET_LOADING_TEMPLATES,
           payload: false
         });
-        toastr.error('Unable to load templates', error);
       });
   };
 }
@@ -114,7 +113,9 @@ export function saveTemplate(template, method) {
       })
       .then((data) => {
         const normalized = normalize(data);
-        dispatch(getArea(template.areaOfInterest));
+        if (template.areaOfInterest) {
+          dispatch(getArea(template.areaOfInterest));
+        }
         dispatch({
           type: SET_TEMPLATE,
           payload: normalized
@@ -126,10 +127,8 @@ export function saveTemplate(template, method) {
             error: false
           }
         });
-        toastr.success(this.props.intl.formatMessage({ id: 'templates.saved' }));
       })
       .catch((error) => {
-        toastr.error('Unable to save template', error);
         dispatch({
           type: SET_SAVING_TEMPLATE,
           payload: {

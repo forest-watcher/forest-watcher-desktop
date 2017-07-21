@@ -10,10 +10,12 @@ const mapAreasToOptions = (areas) => {
     const areasOptions = [];
     const areasIds = areas.ids;
     areasIds.forEach((id) => {
-        areasOptions.push({
-            option: id,
-            label: areas.data[id].attributes.name 
-        });
+        if (!areas.data[id].attributes.templateId || areas.data[id].attributes.templateId === '') {
+            areasOptions.push({
+                option: id,
+                label: areas.data[id].attributes.name 
+            });
+        }
     });
     return areasOptions;
 };
@@ -29,7 +31,7 @@ const mapLocalesToOptions = (locales) => {
 };
 
 const mapStateToProps = (state, { match }) => {
-    const areasOptions = filterBy(mapAreasToOptions(state.areas), 'templateId', '');
+    const areasOptions = mapAreasToOptions(state.areas);
     const templateId = match.params.templateId || null;
     const localeOptions = mapLocalesToOptions(LOCALES_LIST);
     const defaultTemplate = {
