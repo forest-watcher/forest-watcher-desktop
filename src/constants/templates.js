@@ -9,7 +9,7 @@ export const TEMPLATE = {
     "areaOfInterest": "",
     "questions": [],
     "public": false,
-    "status": "draft"
+    "status": "unpublished"
 }
 
 export const QUESTION = {
@@ -23,33 +23,6 @@ export const QUESTION = {
     "label": {}
 };
 
-export const QUESTION_TYPES = ['text', 'image', 'list'];
+export const QUESTION_TYPES = ['text', 'image', 'checkbox', 'radio', 'select', 'number'];
 
-export const QUESTION_OPTIONS = [
-    {
-        value: 'text',
-        label: 'text'
-    },
-    {
-        value: 'image',
-        label: 'image'
-    },
-    {
-        value: 'checkbox',
-        label: 'checkbox'
-    },
-    {
-        value: 'radio',
-        label: 'radio'
-    },
-        {
-        value: 'select',
-        label: 'select'
-    },
-    {
-        value: 'number',
-        label: 'number'
-    }
-];
-
-export default { TEMPLATE, QUESTION, QUESTION_TYPES, QUESTION_OPTIONS };
+export default { TEMPLATE, QUESTION, QUESTION_TYPES };

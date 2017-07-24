@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { Input } from '../form/Form';
 import { injectIntl } from 'react-intl';
 import { prettyNum } from '../../helpers/utils';
-import { QUESTION_OPTIONS } from '../../constants/templates';
 import Select from 'react-select';
 import Icon from '../ui/Icon';
 import SwitchButton from 'react-switch-button';
@@ -50,8 +49,8 @@ class QuestionCard extends React.Component {
   }
 
   render() {
-    const { question, questionNum, defaultLanguage, deleteQuestion, status, mode } = this.props;
-    const disabled = status === 'draft' ? false : true;
+    const { question, questionOptions, questionNum, defaultLanguage, deleteQuestion, status, mode } = this.props;
+    const disabled = status === 'unpublished' && mode === 'create' ? false : true;
     return (
         <section className="c-question-card">
             <div className="questions">
@@ -70,7 +69,7 @@ class QuestionCard extends React.Component {
                 <Select
                     name="type"
                     className="type-select"
-                    options={QUESTION_OPTIONS}
+                    options={questionOptions}
                     value={question.type}
                     onChange={this.onTypeChange}
                     searchable={false}

@@ -2,7 +2,7 @@ import { connect } from 'react-redux';
 
 import TemplatesManage from './TemplatesManage';
 import { LOCALES_LIST } from '../../../constants/locales';
-import { TEMPLATE } from '../../../constants/templates';
+import { TEMPLATE, QUESTION_TYPES } from '../../../constants/templates';
 import { saveTemplate } from '../../../modules/templates';
 
 const mapAreasToOptions = (areas) => {
@@ -19,6 +19,16 @@ const mapAreasToOptions = (areas) => {
     return areasOptions;
 };
 
+const mapQuestionType = (questionTypes) => {
+    const questionOptions = questionTypes.map((type) => {
+        return {
+            value: type,
+            label: type
+        }
+    });
+    return questionOptions;
+}
+
 const mapLocalesToOptions = (locales) => {
     const localeOptions = locales.map((locale) => {
         return {
@@ -33,6 +43,7 @@ const mapStateToProps = (state, { match }) => {
     const areasOptions = mapAreasToOptions(state.areas);
     const templateId = match.params.templateId || null;
     const localeOptions = mapLocalesToOptions(LOCALES_LIST);
+    const questionOptions = mapQuestionType(QUESTION_TYPES);
     const defaultTemplate = {
         ...TEMPLATE,
         name: {
@@ -48,7 +59,8 @@ const mapStateToProps = (state, { match }) => {
         saving: state.templates.saving,
         error: state.templates.error,
         areasOptions,
-        localeOptions
+        localeOptions,
+        questionOptions
     }
 };
 

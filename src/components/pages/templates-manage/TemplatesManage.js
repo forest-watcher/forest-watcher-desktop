@@ -15,6 +15,7 @@ import { toastr } from 'react-redux-toastr';
 import QuestionCard from '../../question-card/QuestionCard';
 import { CSSTransitionGroup } from 'react-transition-group';
 import { QUESTION } from '../../../constants/templates';
+import SwitchButton from 'react-switch-button';
 
 class TemplatesManage extends React.Component {
   constructor (props) {
@@ -68,6 +69,11 @@ class TemplatesManage extends React.Component {
     });
   }
 
+  toggleStatus = () => {
+    const newStatus = this.state.status === 'published' ? 'unpublished' : 'published';
+    this.setState({ status: newStatus });
+  } 
+
   onSubmit = (e) => {
     e.preventDefault();
     const method = this.props.mode === 'manage' ? 'PATCH' : 'POST';
@@ -114,7 +120,7 @@ class TemplatesManage extends React.Component {
 
   // Render
   render() {
-    const { areasOptions, localeOptions, loading, saving, mode, locale } = this.props;
+    const { areasOptions, localeOptions, questionOptions, loading, saving, mode, locale } = this.props;
     return (
       <div>
         <Hero
@@ -186,7 +192,8 @@ class TemplatesManage extends React.Component {
                               key={index} 
                               questionNum={index + 1} 
                               question={question} 
-                              syncStateWithProps={this.handleQuestionEdit} 
+                              syncStateWithProps={this.handleQuestionEdit}
+                              questionOptions={questionOptions}
                               defaultLanguage={this.state.defaultLanguage}
                               deleteQuestion={this.handleQuestionDelete}
                               status={this.state.status}
@@ -214,6 +221,17 @@ class TemplatesManage extends React.Component {
               <Link to="/templates">
                 <button className="c-button -light" disabled={saving || loading}><FormattedMessage id="forms.cancel" /></button>
               </Link>
+              <div className="template-status">
+                <span className="status-label text -x-small-title">{this.props.intl.formatMessage({ id: 'templates.statusUnpublished' })}</span>
+                <SwitchButton
+                  className="status"
+                  name={'status'} 
+                  onChange={this.toggleStatus}
+                  defaultChecked={this.state.status === 'published' ? true : false}
+                  disabled={saving || loading || mode === 'manage'}
+                />
+                <span className="status-label text -x-small-title">{this.props.intl.formatMessage({ id: 'templates.statusPublished' })}</span>
+              </div>
               <Button className="c-button" disabled={saving || loading || mode === 'manage'}><FormattedMessage id="forms.save" /></Button>
             </FormFooter>
           </Form>
