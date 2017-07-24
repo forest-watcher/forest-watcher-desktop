@@ -23,7 +23,7 @@ const mapLocalesToOptions = (locales) => {
     const localeOptions = locales.map((locale) => {
         return {
             option: locale.code,
-            label: locale.nativeName
+            label: locale.name
         }
     });
     return localeOptions;
