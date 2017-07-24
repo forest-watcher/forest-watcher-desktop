@@ -7,7 +7,6 @@ export const TEMPLATE = {
     ],
     "defaultLanguage": "en",
     "areaOfInterest": "",
-    "user": "",
     "questions": [],
     "public": false,
     "status": "draft"
@@ -16,17 +15,12 @@ export const TEMPLATE = {
 export const QUESTION = {
     "type": "text",
     "name": "",
-    "defaultValue": 0,
     "conditions": [],
     "childQuestions": [],
     "order": 0,
     "required": false,
-    "values": {
-        "en": ""
-    },
-    "label": {
-        "en": ""
-    }
+    "values": {},
+    "label": {}
 };
 
 export const QUESTION_TYPES = ['text', 'image', 'list'];
@@ -50,7 +44,7 @@ export const QUESTION_OPTIONS = [
     },
         {
         value: 'select',
-        label: 'radio'
+        label: 'select'
     },
     {
         value: 'number',

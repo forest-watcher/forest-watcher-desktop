@@ -28,7 +28,15 @@ class TemplatesManage extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
+    const { history } = this.props;
     if (nextProps.template !== this.props.template && this.props.mode === 'manage') this.setPropsToState(nextProps);
+    if (this.props.saving && !nextProps.saving && !nextProps.error) {
+      history.push('/templates');  
+      toastr.success(this.props.intl.formatMessage({ id: 'templates.saved' }));
+    }
+    if (nextProps.error) {
+      toastr.success(this.props.intl.formatMessage({ id: 'templates.errorSaving' }));
+    }
   }
 
 
@@ -36,6 +44,7 @@ class TemplatesManage extends React.Component {
   setPropsToState = (props) => {
     this.setState({ ...props.template });
   }
+  
 
   // Actions to update state
   onAreaChange = (selected) => {
@@ -61,9 +70,12 @@ class TemplatesManage extends React.Component {
 
   onSubmit = (e) => {
     e.preventDefault();
-    toastr.info('Submitted', 'Not currently implemented.');
+    const method = this.props.mode === 'manage' ? 'PATCH' : 'POST';
+    this.props.saveTemplate(this.state, method);
   }
 
+  
+  // Question management
   handleQuestionEdit = (question, index) => {
     const newQuestions = this.state.questions.slice();
     newQuestions[index - 1] = question;
@@ -85,7 +97,14 @@ class TemplatesManage extends React.Component {
   handleAddQuestion = (e) => {
     e.preventDefault();
     const newQuestions = this.state.questions.slice();
-    newQuestions[newQuestions.length] = QUESTION;
+    newQuestions[newQuestions.length] = {
+      ...QUESTION,
+      order: newQuestions.length,
+      label: {
+        [this.state.defaultLanguage]: ""
+      },
+      name: `question-${newQuestions.length + 1}`
+    };
 
     this.setState({
       questions: newQuestions
@@ -95,16 +114,14 @@ class TemplatesManage extends React.Component {
 
   // Render
   render() {
-    const { areasOptions, localeOptions, loading, saving, editing, mode, locale } = this.props;
+    const { areasOptions, localeOptions, loading, saving, mode, locale } = this.props;
     return (
       <div>
         <Hero
           title={mode === 'manage' ? "templates.manage" : "templates.create"}
         />
         <div className="l-template">
-          { mode === 'manage' &&
-            <Loader isLoading={loading} />
-          }
+          <Loader isLoading={loading || saving} />
           <Form onSubmit={this.onSubmit}>
             <div className="c-form -templates">
               <div className="template-meta">
@@ -120,6 +137,7 @@ class TemplatesManage extends React.Component {
                         onChange={this.onAreaChange}
                         noResultsText={this.props.intl.formatMessage({ id: 'filters.noAreasAvailable' })}
                         searchable={false}
+                        disabled={saving || loading || mode === 'manage'}
                       />
                     </div>
                   </div>
@@ -135,6 +153,7 @@ class TemplatesManage extends React.Component {
                         noResultsText={this.props.intl.formatMessage({ id: 'filters.noLanguagesAvailable' })}
                         searchable={true}
                         clearable={false}
+                        disabled={saving || loading || mode === 'manage'}
                       />
                     </div>
                   </div>
@@ -153,6 +172,7 @@ class TemplatesManage extends React.Component {
                         placeholder={this.props.intl.formatMessage({ id: 'templates.title' })}
                         validations={['required']}
                         onKeyPress={(e) => {if (e.which === 13) { e.preventDefault();}}} // Prevent send on press Enter
+                        disabled={saving || loading || mode === 'manage'}
                       />
                     </div>
                       {this.state.questions &&
@@ -170,6 +190,7 @@ class TemplatesManage extends React.Component {
                               defaultLanguage={this.state.defaultLanguage}
                               deleteQuestion={this.handleQuestionDelete}
                               status={this.state.status}
+                              mode={mode}
                             />
                           )}
                         </CSSTransitionGroup>
@@ -183,7 +204,7 @@ class TemplatesManage extends React.Component {
                 <div className="row">
                   <div className="column small-12 medium-10 medium-offset-1 large-8 large-offset-2">
                     <div className="add-button">
-                      <button className="c-button" onClick={this.handleAddQuestion}><FormattedMessage id="templates.addQuestion" /></button>
+                      <button className="c-button" onClick={this.handleAddQuestion} disabled={saving || loading || mode === 'manage'}><FormattedMessage id="templates.addQuestion" /></button>
                     </div>
                   </div>
                 </div>
@@ -191,9 +212,9 @@ class TemplatesManage extends React.Component {
             }
             <FormFooter>
               <Link to="/templates">
-                <button className="c-button -light" disabled={(saving || loading) && mode === 'manage'}><FormattedMessage id="forms.cancel" /></button>
+                <button className="c-button -light" disabled={saving || loading}><FormattedMessage id="forms.cancel" /></button>
               </Link>
-              <Button className="c-button" disabled={(saving || (editing ? true : false) || loading) && mode === 'manage'}><FormattedMessage id="forms.save" /></Button>
+              <Button className="c-button" disabled={saving || loading || mode === 'manage'}><FormattedMessage id="forms.save" /></Button>
             </FormFooter>
           </Form>
         </div>
@@ -204,7 +225,9 @@ class TemplatesManage extends React.Component {
 
 TemplatesManage.propTypes = {
   intl: PropTypes.object,
-  loading: PropTypes.bool
+  loading: PropTypes.bool,
+  saving: PropTypes.bool,
+  error: PropTypes.bool
 };
 
 export default injectIntl(TemplatesManage);

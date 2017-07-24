@@ -50,7 +50,7 @@ class QuestionCard extends React.Component {
   }
 
   render() {
-    const { question, questionNum, defaultLanguage, deleteQuestion, status } = this.props;
+    const { question, questionNum, defaultLanguage, deleteQuestion, status, mode } = this.props;
     const disabled = status === 'draft' ? false : true;
     return (
         <section className="c-question-card">
@@ -65,6 +65,7 @@ class QuestionCard extends React.Component {
                     placeholder={this.props.intl.formatMessage({ id: 'templates.questionPlaceholder' })}
                     validations={['required']}
                     onKeyPress={(e) => {if (e.which === 13) { e.preventDefault();}}} // Prevent send on press Enter
+                    disabled={disabled || mode === 'manage'}
                 />
                 <Select
                     name="type"
@@ -74,12 +75,17 @@ class QuestionCard extends React.Component {
                     onChange={this.onTypeChange}
                     searchable={false}
                     clearable={false}
-                    disabled={disabled}
+                    disabled={disabled || mode === 'manage'}
                 />
             </div>
             <div className="question-actions">
                 { status === 'draft' &&
-                    <button className={"delete-button"} type="button" onClick={() => { deleteQuestion(questionNum)} }>
+                    <button 
+                        className={"delete-button"} 
+                        type="button" 
+                        onClick={() => { deleteQuestion(questionNum)} }
+                        disabled={disabled || mode === 'manage' }
+                    >
                         <Icon className="-small -gray" name="icon-delete"/>
                     </button>
                 }
@@ -89,6 +95,7 @@ class QuestionCard extends React.Component {
                     name={`${questionNum}-required`} 
                     onChange={this.toggleRequired}
                     defaultChecked={question.required}
+                    disabled={disabled || mode === 'manage' }
                 />
             </div>
         </section>

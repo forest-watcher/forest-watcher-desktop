@@ -3,15 +3,18 @@ import { connect } from 'react-redux';
 import TemplatesManage from './TemplatesManage';
 import { LOCALES_LIST } from '../../../constants/locales';
 import { TEMPLATE } from '../../../constants/templates';
+import { saveTemplate } from '../../../modules/templates';
 
 const mapAreasToOptions = (areas) => {
     const areasOptions = [];
     const areasIds = areas.ids;
     areasIds.forEach((id) => {
-        areasOptions.push({
-            option: id,
-            label: areas.data[id].attributes.name 
-        });
+        if (!areas.data[id].attributes.templateId || areas.data[id].attributes.templateId === '') {
+            areasOptions.push({
+                option: id,
+                label: areas.data[id].attributes.name 
+            });
+        }
     });
     return areasOptions;
 };
@@ -42,6 +45,8 @@ const mapStateToProps = (state, { match }) => {
         mode: match.params.templateId ? 'manage' : 'create',
         template: state.templates.data[templateId] ? state.templates.data[templateId].attributes : defaultTemplate,
         loading: state.templates.loading,
+        saving: state.templates.saving,
+        error: state.templates.error,
         areasOptions,
         localeOptions
     }
@@ -49,6 +54,9 @@ const mapStateToProps = (state, { match }) => {
 
 function mapDispatchToProps(dispatch) {
   return {
+    saveTemplate: (template, method) => {
+      dispatch(saveTemplate(template, method));
+    }
   };
 }
 

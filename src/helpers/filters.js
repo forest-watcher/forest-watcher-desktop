@@ -1,6 +1,5 @@
 // filter data by a field and its desired value
 const filterBy = (data, field, value) => {
-  // debugger
   if (field === 'search') {
     return data.filter((item) => {
         return Object.keys(item).some((key) => {
@@ -48,4 +47,4 @@ const getDataAreas = (data, areas) => {
   return areasOptions;
 }
 
-export { filterData, getDataAreas, getSelectorValueFromArray };
+export { filterData, getDataAreas, getSelectorValueFromArray, filterBy };
