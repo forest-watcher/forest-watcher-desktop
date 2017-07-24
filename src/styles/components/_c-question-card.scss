@@ -63,6 +63,14 @@
         opacity: 0.01;
         transition: opacity 1000ms ease-in;
     }
+
+    .question-options {
+
+        .option-input {
+            width: 80%;
+            margin-bottom: 10px;
+        }
+    }
 }
 
 .example-enter {

@@ -5,6 +5,7 @@ import { getArea } from './areas';
 // Actions
 const SET_TEMPLATE = 'templates/SET_TEMPLATE';
 const SET_TEMPLATES = 'templates/SET_TEMPLATES';
+const DELETE_TEMPLATE = 'templates/DELETE_TEMPLATE';
 const SET_LOADING_TEMPLATES = 'templates/SET_LOADING_TEMPLATES';
 const SET_SAVING_TEMPLATE = 'templates/SET_SAVING_TEMPLATE';
 
@@ -43,6 +44,19 @@ export default function reducer(state = initialState, action) {
       return Object.assign({}, state, { loading: action.payload });
     case SET_SAVING_TEMPLATE:
       return Object.assign({}, state, { ...action.payload });
+    case DELETE_TEMPLATE: {
+      const templateId = action.payload;
+      if (templateId) {
+        const templates = Object.assign({}, state.data);
+        delete templates[templateId];
+        return {
+          ...state,
+          ids: state.ids.filter((id) => id !== templateId),
+          data: templates
+        };
+      }
+      return state;
+    }
     default:
       return state;
   }
@@ -118,6 +132,51 @@ export function saveTemplate(template, method) {
         dispatch({
           type: SET_TEMPLATE,
           payload: normalized
+        });
+        dispatch({
+          type: SET_SAVING_TEMPLATE,
+          payload: {
+            saving: false,
+            error: false
+          }
+        });
+      })
+      .catch((error) => {
+        dispatch({
+          type: SET_SAVING_TEMPLATE,
+          payload: {
+            saving: false,
+            error: true
+          }
+        });
+      });
+  };
+}
+
+// DELETE template
+export function deleteTemplate(templateId) {
+  return async (dispatch, state) => {
+    dispatch({
+      type: SET_SAVING_TEMPLATE,
+      payload: {
+        saving: true,
+        error: false
+      }
+    });
+    fetch(`${API_BASE_URL}/reports/${templateId}`, {
+      headers: {
+        Authorization: `Bearer ${state().user.token}`
+      },
+      method: 'DELETE'
+    })
+      .then((response) => {
+        if (response.ok) return response.json();
+        throw Error(response.statusText);
+      })
+      .then((data) => {
+        dispatch({
+          type: DELETE_TEMPLATE,
+          payload: templateId
         });
         dispatch({
           type: SET_SAVING_TEMPLATE,

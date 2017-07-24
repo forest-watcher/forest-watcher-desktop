@@ -80,12 +80,16 @@ class TemplatesManage extends React.Component {
     this.props.saveTemplate(this.state, method);
   }
 
+  deleteTemplate = () => {
+    this.props.deleteTemplate(this.props.templateId);
+  }
+
   
   // Question management
   handleQuestionEdit = (question, index) => {
     const newQuestions = this.state.questions.slice();
     newQuestions[index - 1] = question;
-
+    
     this.setState({
       questions: newQuestions
     });
@@ -125,6 +129,7 @@ class TemplatesManage extends React.Component {
       <div>
         <Hero
           title={mode === 'manage' ? "templates.manage" : "templates.create"}
+          action={!this.state.public && this.state.answersCount === 0 ? {name: "templates.delete", callback: this.deleteTemplate} : null}
         />
         <div className="l-template">
           <Loader isLoading={loading || saving} />
@@ -198,6 +203,7 @@ class TemplatesManage extends React.Component {
                               deleteQuestion={this.handleQuestionDelete}
                               status={this.state.status}
                               mode={mode}
+                              answersCount={this.state.answersCount}
                             />
                           )}
                         </CSSTransitionGroup>
@@ -228,7 +234,7 @@ class TemplatesManage extends React.Component {
                   name={'status'} 
                   onChange={this.toggleStatus}
                   defaultChecked={this.state.status === 'published' ? true : false}
-                  disabled={saving || loading || mode === 'manage'}
+                  disabled={saving || loading}
                 />
                 <span className="status-label text -x-small-title">{this.props.intl.formatMessage({ id: 'templates.statusPublished' })}</span>
               </div>

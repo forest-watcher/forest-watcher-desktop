@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import TemplatesManage from './TemplatesManage';
 import { LOCALES_LIST } from '../../../constants/locales';
 import { TEMPLATE, QUESTION_TYPES } from '../../../constants/templates';
-import { saveTemplate } from '../../../modules/templates';
+import { saveTemplate, deleteTemplate } from '../../../modules/templates';
 
 const mapAreasToOptions = (areas) => {
     const areasOptions = [];
@@ -53,6 +53,7 @@ const mapStateToProps = (state, { match }) => {
         defaultLanguage: state.app.locale
     }
     return {
+        templateId: match.params.templateId,
         mode: match.params.templateId ? 'manage' : 'create',
         template: state.templates.data[templateId] ? state.templates.data[templateId].attributes : defaultTemplate,
         loading: state.templates.loading,
@@ -68,6 +69,9 @@ function mapDispatchToProps(dispatch) {
   return {
     saveTemplate: (template, method) => {
       dispatch(saveTemplate(template, method));
+    },
+    deleteTemplate: (templateId) => {
+      dispatch(deleteTemplate(templateId));
     }
   };
 }
