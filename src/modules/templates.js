@@ -1,6 +1,5 @@
 import normalize from 'json-api-normalizer';
 import { API_BASE_URL } from '../constants/global';
-import { toastr } from 'react-redux-toastr';
 import { getArea } from './areas';
 
 // Actions

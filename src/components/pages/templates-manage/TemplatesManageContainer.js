@@ -4,7 +4,6 @@ import TemplatesManage from './TemplatesManage';
 import { LOCALES_LIST } from '../../../constants/locales';
 import { TEMPLATE } from '../../../constants/templates';
 import { saveTemplate } from '../../../modules/templates';
-import { filterBy } from '../../../helpers/filters';
 
 const mapAreasToOptions = (areas) => {
     const areasOptions = [];
