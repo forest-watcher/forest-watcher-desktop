@@ -148,6 +148,7 @@ class QuestionCard extends React.Component {
                     searchable={false}
                     clearable={false}
                     disabled={!canEdit}
+                    arrowRenderer={() => <svg className="c-icon -x-small -gray"><use xlinkHref="#icon-arrow-down"></use></svg>}
                 />
                 <div className="question-options">
                     { isConditional && 
@@ -196,6 +197,7 @@ class QuestionCard extends React.Component {
                                     searchable={false}
                                     clearable={false}
                                     disabled={!canEdit}
+                                    arrowRenderer={() => <svg className="c-icon -x-small -gray"><use xlinkHref="#icon-arrow-down"></use></svg>}
                                 />
                                 <label className="text">{this.props.intl.formatMessage({ id: 'templates.moreInfoSecond' })}</label>
                             </div>

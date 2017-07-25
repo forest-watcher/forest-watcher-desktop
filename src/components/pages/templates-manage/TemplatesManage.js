@@ -153,6 +153,7 @@ class TemplatesManage extends React.Component {
                         noResultsText={this.props.intl.formatMessage({ id: 'filters.noAreasAvailable' })}
                         searchable={false}
                         disabled={isLoading || !canManage}
+                        arrowRenderer={() => <svg className="c-icon -x-small -gray"><use xlinkHref="#icon-arrow-down"></use></svg>}
                       />
                     </div>
                   </div>
@@ -169,6 +170,7 @@ class TemplatesManage extends React.Component {
                         searchable={true}
                         clearable={false}
                         disabled={isLoading || !canManage}
+                        arrowRenderer={() => <svg className="c-icon -x-small -gray"><use xlinkHref="#icon-arrow-down"></use></svg>}
                       />
                     </div>
                   </div>
