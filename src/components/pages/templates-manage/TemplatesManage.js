@@ -126,13 +126,13 @@ class TemplatesManage extends React.Component {
   // Render
   render() {
     const { areasOptions, localeOptions, questionOptions, loading, saving, mode, locale, user } = this.props;
-    const canEdit = (this.state.answersCount === 0 && this.props.template.status === 'unpublished' && this.state.user === user) || mode === 'create' ? true : false;
+    const canEdit = ((this.state.answersCount === 0 || !this.state.answersCount) && this.props.template.status === 'unpublished' && this.state.user === user) || mode === 'create' ? true : false;
     const isLoading = loading || saving ? true : false;
     return (
       <div>
         <Hero
           title={mode === 'manage' ? "templates.manage" : "templates.create"}
-          action={canEdit ? {name: "templates.delete", callback: this.deleteTemplate} : null}
+          action={canEdit && mode === 'manage' ? {name: "templates.delete", callback: this.deleteTemplate} : null}
         />
         <div className="l-template">
           <Loader isLoading={isLoading} />
@@ -151,7 +151,7 @@ class TemplatesManage extends React.Component {
                         onChange={this.onAreaChange}
                         noResultsText={this.props.intl.formatMessage({ id: 'filters.noAreasAvailable' })}
                         searchable={false}
-                        disabled={isLoading}
+                        disabled={isLoading || !canEdit}
                       />
                     </div>
                   </div>
@@ -167,7 +167,7 @@ class TemplatesManage extends React.Component {
                         noResultsText={this.props.intl.formatMessage({ id: 'filters.noLanguagesAvailable' })}
                         searchable={true}
                         clearable={false}
-                        disabled={isLoading}
+                        disabled={isLoading || !canEdit}
                       />
                     </div>
                   </div>
@@ -186,7 +186,7 @@ class TemplatesManage extends React.Component {
                         placeholder={this.props.intl.formatMessage({ id: 'templates.title' })}
                         validations={['required']}
                         onKeyPress={(e) => {if (e.which === 13) { e.preventDefault();}}} // Prevent send on press Enter
-                        disabled={isLoading}
+                        disabled={isLoading || !canEdit}
                       />
                     </div>
                       {this.state.questions &&
@@ -215,8 +215,8 @@ class TemplatesManage extends React.Component {
                 </div>
               </div>
             </div>
-            { canEdit &&
-              <div className="add-question">
+            <div className="add-question">
+              { canEdit &&
                 <div className="row">
                   <div className="column small-12 medium-10 medium-offset-1 large-8 large-offset-2">
                     <div className="add-button">
@@ -230,8 +230,8 @@ class TemplatesManage extends React.Component {
                     </div>
                   </div>
                 </div>
-              </div>
-            }
+              }
+            </div>
             <FormFooter>
               <Link to="/templates">
                 <button className="c-button -light" disabled={isLoading}><FormattedMessage id="forms.cancel" /></button>
@@ -243,11 +243,11 @@ class TemplatesManage extends React.Component {
                   name={'status'} 
                   onChange={this.toggleStatus}
                   defaultChecked={this.state.status === 'published' ? true : false}
-                  disabled={isLoading}
+                  disabled={isLoading || !canEdit}
                 />
                 <span className="status-label text -x-small-title">{this.props.intl.formatMessage({ id: 'templates.statusPublished' })}</span>
               </div>
-              <Button className="c-button" disabled={isLoading}><FormattedMessage id="forms.save" /></Button>
+              <Button className="c-button" disabled={isLoading || !canEdit}><FormattedMessage id="forms.save" /></Button>
             </FormFooter>
           </Form>
         </div>

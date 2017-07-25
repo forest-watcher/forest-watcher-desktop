@@ -145,14 +145,17 @@ class QuestionCard extends React.Component {
                                     onKeyPress={(e) => {if (e.which === 13) { e.preventDefault();}}} // Prevent send on press Enter
                                     placeholder={this.props.intl.formatMessage({ id: 'templates.optionPlaceholder' })}
                                     onChange={(e) => this.onQuestionOptionChange(e, index)}
-                                />
-                                <button 
-                                    className={"delete-button"} 
-                                    type="button" 
                                     disabled={!canEdit}
-                                >
-                                    <Icon className="-small -gray" name="icon-close"/>
-                                </button>
+                                />
+                                { canEdit &&
+                                    <button 
+                                        className={"delete-button"} 
+                                        type="button" 
+                                        disabled={!canEdit}
+                                    >
+                                        <Icon className="-small -gray" name="icon-close"/>
+                                    </button>
+                                }
                             </div>
                         )
                     }
