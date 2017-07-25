@@ -74,7 +74,7 @@ class QuestionCard extends React.Component {
   }
 
   onTypeChange = (selected) => {
-    if (selected.value === 'radio') {
+    if (selected.value === 'radio' || selected.value === 'select' || selected.value === 'checkbox') {
         this.question = { 
             ...this.question,
             type: selected.value,
@@ -108,6 +108,7 @@ class QuestionCard extends React.Component {
 
   render() {
     const { question, questionOptions, questionNum, defaultLanguage, deleteQuestion, canEdit } = this.props;
+    const isConditional = question.type === 'radio' || question.type === 'select' || question.type === 'checkbox' ? true : false;
     return (
         <section className="c-question-card">
           <div className="questions">
@@ -134,7 +135,7 @@ class QuestionCard extends React.Component {
                     disabled={!canEdit}
                 />
                 <div className="question-options">
-                    { question.type === 'radio' && 
+                    { isConditional && 
                         question.values[defaultLanguage].map((value, index) =>
                             <div key={`${question.name}-value-${index}`} >
                                 <input
@@ -155,14 +156,14 @@ class QuestionCard extends React.Component {
                             </div>
                         )
                     }
-                    { question.type === 'radio' || question.type === 'select' || question.type === 'checkbox' && 
+                    { isConditional && 
                         <button 
-                        className={"c-button add-option-button"} 
-                        type="button" 
-                        onClick={this.onQuestionOptionAdd}
-                        disabled={!canEdit}
+                            className={"c-button add-option-button"} 
+                            type="button" 
+                            onClick={this.onQuestionOptionAdd}
+                            disabled={!canEdit}
                         >
-                        <FormattedMessage id={"templates.optionPlaceholder"} />
+                            <FormattedMessage id={"templates.optionPlaceholder"} />
                         </button>
                     }
                 </div>
