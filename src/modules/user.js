@@ -3,12 +3,12 @@ import { setUserChecked } from './app';
 import { API_BASE_URL } from '../constants/global';
 import { getGeoStoresWithAreas } from './areas';
 import { getTemplates } from './templates';
+import { getTeam } from './teams';
 import { toastr } from 'react-redux-toastr';
 
 // Actions
 const GET_USER = 'user/GET_USER';
 const CHECK_USER_LOGGED = 'user/CHECK_USER_LOGGED';
-const CONFIRM_USER = 'user/CONFIRM_USER';
 export const LOGOUT = 'user/LOGOUT';
 
 // Reducer
@@ -22,8 +22,6 @@ export default function reducer(state = initialState, action) {
   switch (action.type) {
     case CHECK_USER_LOGGED:
       return Object.assign({}, state, { ...action.payload });
-    case CONFIRM_USER:
-      return state;
     case GET_USER: {
       if (action.payload.data) {
         const user = action.payload.data.attributes;
@@ -90,10 +88,8 @@ export function confirmUser(token) {
         throw Error(response.statusText);
       })
       .then(async (data) => {
-        dispatch({
-          type: CONFIRM_USER
-        });
         toastr.success('You have become a confirmed user');
+        dispatch(getTeam(state().user.data.id));
       })
       .catch((error) => {
         toastr.error('Error in confirmation');
