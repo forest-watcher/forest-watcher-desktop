@@ -42,6 +42,19 @@ export default function reducer(state = initialState, action) {
     }
     case SET_LOADING_TEMPLATES:
       return Object.assign({}, state, { loading: action.payload });
+    case DELETE_TEMPLATE: {
+      const templateId = action.payload;
+      if (templateId) {
+        const templates = Object.assign({}, state.data);
+        delete templates[templateId];
+        return {
+          ...state,
+          ids: state.ids.filter((id) => id !== templateId),
+          data: templates
+        };
+      }
+      return state;
+    }
     case SET_SAVING_TEMPLATE:
       return Object.assign({}, state, { ...action.payload });
     default:
@@ -155,26 +168,20 @@ export function deleteTemplate(templateId) {
       },
       method: 'DELETE'
     })
-      .then((response) => {
-        debugger;
-        if (response.ok) return response.json();
-        throw Error(response.statusText);
-      })
-      .then((data) => {
-        // dispatch({
-        //   type: DELETE_TEMPLATE,
-        //   payload: templateId
-        // });
-        // dispatch({
-        //   type: SET_SAVING_TEMPLATE,
-        //   payload: {
-        //     saving: false,
-        //     error: false
-        //   }
-        // });
+      .then(() => {
+        dispatch({
+          type: DELETE_TEMPLATE,
+          payload: templateId
+        });
+        dispatch({
+          type: SET_SAVING_TEMPLATE,
+          payload: {
+            saving: false,
+            error: false
+          }
+        });
       })
       .catch((error) => {
-        debugger;
         dispatch({
           type: SET_SAVING_TEMPLATE,
           payload: {
