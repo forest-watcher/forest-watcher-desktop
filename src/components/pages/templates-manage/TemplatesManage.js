@@ -251,7 +251,7 @@ class TemplatesManage extends React.Component {
                 />
                 <span className="status-label text -x-small-title">{this.props.intl.formatMessage({ id: 'templates.statusPublished' })}</span>
               </div>
-              <Button className="c-button" disabled={isLoading || !canEdit}><FormattedMessage id="forms.save" /></Button>
+              <Button className="c-button" disabled={isLoading || !canManage}><FormattedMessage id="forms.save" /></Button>
             </FormFooter>
           </Form>
         </div>

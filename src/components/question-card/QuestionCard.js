@@ -116,7 +116,7 @@ class QuestionCard extends React.Component {
     const { question, questionOptions, questionNum, defaultLanguage, deleteQuestion, canEdit, canManage } = this.props;
     const isConditional = question.type === 'radio' || question.type === 'select' || question.type === 'checkbox' ? true : false;
     const conditionalOptions = [];
-    if (question.values) {
+    if (question.values && question.values[defaultLanguage]) {
         question.values[defaultLanguage].forEach((value) => {
             conditionalOptions.push({
                 option: value.value,
