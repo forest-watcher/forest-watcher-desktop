@@ -18,10 +18,11 @@ function MemberList({ members, handleChangeRole, deleteMember, intl }) {
             <div className="user-label">{ id }</div>
             {(memberType) !== USER &&
               <Checkbox
-                  id={`${memberType}${id}`}
-                  label={ intl.formatMessage({ id: "teams.admin" }) }
-                  callback={() => handleChangeRole(id, !isAdmin)}
-                  defaultChecked={isAdmin}/>
+                id={`${memberType}${id}`}
+                label={ intl.formatMessage({ id: "teams.admin" }) }
+                callback={() => handleChangeRole(id, !isAdmin)}
+                defaultChecked={isAdmin}
+              />
             }
             <div className={hiddenButton}>
               <button className={"delete-button"} type="button" onClick={() => deleteMember(id, memberType)}>

@@ -1,6 +1,7 @@
 .c-checkbox {
   display: flex;
   flex-direction: row;
+  height: 20px;
 
   &.-spaced {
     margin-bottom: 8px;
@@ -20,6 +21,7 @@
   .label {
     margin-left: 5px;
     text-transform: uppercase;
+    border-radius: 2px;
   }
 
   .checkbox {
@@ -27,7 +29,6 @@
     position: relative;
     line-height: initial;
     vertical-align: -webkit-baseline-middle;
-    margin-left: 10px;
     padding-right: 10px;
   }
 
@@ -40,6 +41,7 @@
     left: 0;
     background: #fff;
     border:1px solid #ddd;
+    border-radius: 2px;
   }
 
   .checkbox label:after {
@@ -51,7 +53,7 @@
     background: transparent;
     top: 5px;
     left: 5px;
-    border: 3px solid #fff;
+    border: 2px solid #fff;
     border-top: none;
     border-right: none;
 

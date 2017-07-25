@@ -6,6 +6,7 @@ import { prettyNum } from '../../helpers/utils';
 import Select from 'react-select';
 import Icon from '../ui/Icon';
 import SwitchButton from 'react-switch-button';
+import Checkbox from '../ui/Checkbox';
 
 class QuestionCard extends React.Component {
   constructor (props) {
@@ -106,6 +107,10 @@ class QuestionCard extends React.Component {
     this.props.syncStateWithProps(this.question, this.props.questionNum);
   }
 
+  handleChangeMoreInfo = () => {
+    
+  }
+
   render() {
     const { question, questionOptions, questionNum, defaultLanguage, deleteQuestion, canEdit, canManage } = this.props;
     const isConditional = question.type === 'radio' || question.type === 'select' || question.type === 'checkbox' ? true : false;
@@ -156,13 +161,34 @@ class QuestionCard extends React.Component {
                         )
                     }
                     { isConditional && canEdit &&
-                        <button 
-                            className={"c-button add-option-button"} 
-                            type="button" 
-                            onClick={this.onQuestionOptionAdd}
-                        >
-                            <FormattedMessage id={"templates.optionPlaceholder"} />
-                        </button>
+                        <div>
+                            <button 
+                                className={"c-button add-option-button"} 
+                                type="button" 
+                                onClick={this.onQuestionOptionAdd}
+                            >
+                                <FormattedMessage id={"templates.optionPlaceholder"} />
+                            </button>
+                                <div className="question-more-info">
+                                <Checkbox
+                                    id={`${questionNum}-more-info`}
+                                    callback={() => this.handleChangeMoreInfo(questionNum)}
+                                    defaultChecked={question.childQuestions.length > 0}
+                                />
+                                <label className="text">if the answers is</label>
+                                <Select
+                                    name="more-info-answer"
+                                    className="more-info-select"
+                                    options={questionOptions}
+                                    value={question.type}
+                                    onChange={this.onTypeChange}
+                                    searchable={false}
+                                    clearable={false}
+                                    disabled={!canEdit}
+                                />
+                                <label className="text">ask for more info</label>
+                            </div>
+                        </div>
                     }
                 </div>
             </div>
