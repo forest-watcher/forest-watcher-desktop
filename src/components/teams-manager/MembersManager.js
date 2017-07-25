@@ -80,7 +80,7 @@ class MembersManager extends React.Component {
   getMembers = () => {
     const { selectedUsers, selectedManagers, selectedConfirmedUsers } = this.props;
     let members = selectedManagers.map((managerId) => ({ memberType: MANAGER, id: managerId }));
-    members = members.concat(selectedConfirmedUsers.map((confirmedUserId) => ({ memberType: CONFIRMED_USER, id: confirmedUserId })));
+    members = members.concat(selectedConfirmedUsers.map((confirmedUser) => ({ memberType: CONFIRMED_USER, id: confirmedUser.id || confirmedUser, email: confirmedUser.email })));
     return members.concat(selectedUsers.map((userId) => ({ memberType: USER, id: userId }))).sort(this.compareById);
   }
 

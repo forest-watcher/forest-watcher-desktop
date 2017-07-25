@@ -37,8 +37,8 @@ function TeamsShow({ team, areas }) {
             </div>
             ))}
           {team && team.attributes.confirmedUsers && team.attributes.confirmedUsers.map((confirmedUser) =>  (
-            <div className="horizontal-field-left-aligned" key={confirmedUser}>
-              { confirmedUser }
+            <div className="horizontal-field-left-aligned" key={confirmedUser.id || confirmedUser}>
+              { confirmedUser.email || confirmedUser }
             </div>
             ))}
           {team && team.attributes.users && team.attributes.users.map((user) =>  (
