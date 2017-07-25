@@ -31,7 +31,10 @@ import Nav from '../layouts/Nav';
 class App extends React.Component {
 
   componentWillMount() {
+    const queryParams = querystring.parse(this.props.location.search);
+    const confirmToken = queryParams.confirmToken;
     this.props.checkLogged(this.props.location.search);
+    if (confirmToken) this.props.confirmUser(confirmToken);
   }
 
   getRootComponent = () => {
