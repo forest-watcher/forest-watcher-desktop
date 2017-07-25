@@ -163,7 +163,8 @@ class QuestionCard extends React.Component {
                                     disabled={!canManage}
                                 />
                                 { canEdit &&
-                                    <button className={"delete-button"} type="button">
+                                    <button className={"delete-button"} type="button" 
+                                        onClick={() => { this.deleteOption(index) }}>
                                         <Icon className="-small -gray" name="icon-close"/>
                                     </button>
                                 }
