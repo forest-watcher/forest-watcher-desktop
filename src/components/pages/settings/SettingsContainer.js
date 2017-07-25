@@ -9,7 +9,7 @@ const mapStateToProps = ({ user, teams, areas, layers }) => {
   const userId = user.data.id;
 
   function isUserManager(team, userId) {
-    return includes(team.attributes.managers, userId);
+    return includes(team.attributes.managers, userId) || includes(team.attributes.managers.map(m => m.id), userId);
   }
 
   let team = teams.data;
