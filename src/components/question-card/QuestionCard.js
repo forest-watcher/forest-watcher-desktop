@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Input } from '../form/Form';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { prettyNum } from '../../helpers/utils';
+import { getSelectorValueFromArray } from '../../helpers/filters';
 import Select from 'react-select';
 import Icon from '../ui/Icon';
 import SwitchButton from 'react-switch-button';
@@ -114,6 +115,15 @@ class QuestionCard extends React.Component {
   render() {
     const { question, questionOptions, questionNum, defaultLanguage, deleteQuestion, canEdit, canManage } = this.props;
     const isConditional = question.type === 'radio' || question.type === 'select' || question.type === 'checkbox' ? true : false;
+    const conditionalOptions = [];
+    if (question.values) {
+        question.values[defaultLanguage].forEach((value) => {
+            conditionalOptions.push({
+                option: value.value,
+                label: value.label
+            });
+        });
+    }
     return (
         <section className="c-question-card">
           <div className="questions">
@@ -175,18 +185,18 @@ class QuestionCard extends React.Component {
                                     callback={() => this.handleChangeMoreInfo(questionNum)}
                                     defaultChecked={question.childQuestions.length > 0}
                                 />
-                                <label className="text">if the answers is</label>
+                                <label className="text">{this.props.intl.formatMessage({ id: 'templates.moreInfoFirst' })}</label>
                                 <Select
                                     name="more-info-answer"
                                     className="more-info-select"
-                                    options={questionOptions}
-                                    value={question.type}
+                                    options={conditionalOptions}
+                                    value={getSelectorValueFromArray(question.childQuestions[0].conditionalValue, conditionalOptions)}
                                     onChange={this.onTypeChange}
                                     searchable={false}
                                     clearable={false}
                                     disabled={!canEdit}
                                 />
-                                <label className="text">ask for more info</label>
+                                <label className="text">{this.props.intl.formatMessage({ id: 'templates.moreInfoSecond' })}</label>
                             </div>
                         </div>
                     }

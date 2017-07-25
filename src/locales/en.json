@@ -99,6 +99,8 @@
     "templates.statusUnpublished": "Unpublished",
     "templates.statusPublished": "Published",    
     "templates.delete": "Delete",
+    "templates.moreInfoFirst": "if the answer is",
+    "templates.moreInfoSecond": "ask for more info",
     "settings.contextualLayers": "Contextual layers",
     "settings.customLayers": "Custom layers",
     "settings.gfwLayers": "GFW layers",
