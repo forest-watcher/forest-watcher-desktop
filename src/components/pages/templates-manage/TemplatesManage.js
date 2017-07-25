@@ -127,6 +127,7 @@ class TemplatesManage extends React.Component {
   render() {
     const { areasOptions, localeOptions, questionOptions, loading, saving, mode, locale, user } = this.props;
     const canEdit = ((this.state.answersCount === 0 || !this.state.answersCount) && this.props.template.status === 'unpublished' && this.state.user === user) || mode === 'create' ? true : false;
+    const canManage = this.state.user === user ? true : false;
     const isLoading = loading || saving ? true : false;
     return (
       <div>
@@ -151,7 +152,7 @@ class TemplatesManage extends React.Component {
                         onChange={this.onAreaChange}
                         noResultsText={this.props.intl.formatMessage({ id: 'filters.noAreasAvailable' })}
                         searchable={false}
-                        disabled={isLoading || !canEdit}
+                        disabled={isLoading || !canManage}
                       />
                     </div>
                   </div>
@@ -167,7 +168,7 @@ class TemplatesManage extends React.Component {
                         noResultsText={this.props.intl.formatMessage({ id: 'filters.noLanguagesAvailable' })}
                         searchable={true}
                         clearable={false}
-                        disabled={isLoading || !canEdit}
+                        disabled={isLoading || !canManage}
                       />
                     </div>
                   </div>
@@ -186,7 +187,7 @@ class TemplatesManage extends React.Component {
                         placeholder={this.props.intl.formatMessage({ id: 'templates.title' })}
                         validations={['required']}
                         onKeyPress={(e) => {if (e.which === 13) { e.preventDefault();}}} // Prevent send on press Enter
-                        disabled={isLoading || !canEdit}
+                        disabled={isLoading || !canManage}
                       />
                     </div>
                       {this.state.questions &&
@@ -206,6 +207,7 @@ class TemplatesManage extends React.Component {
                               deleteQuestion={this.handleQuestionDelete}
                               status={this.state.status}
                               canEdit={canEdit}
+                              canManage={canManage}
                               mode={mode}
                             />
                           )}
@@ -243,7 +245,7 @@ class TemplatesManage extends React.Component {
                   name={'status'} 
                   onChange={this.toggleStatus}
                   defaultChecked={this.state.status === 'published' ? true : false}
-                  disabled={isLoading || !canEdit}
+                  disabled={isLoading || !canManage}
                 />
                 <span className="status-label text -x-small-title">{this.props.intl.formatMessage({ id: 'templates.statusPublished' })}</span>
               </div>

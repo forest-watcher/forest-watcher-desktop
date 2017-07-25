@@ -107,7 +107,7 @@ class QuestionCard extends React.Component {
   }
 
   render() {
-    const { question, questionOptions, questionNum, defaultLanguage, deleteQuestion, canEdit } = this.props;
+    const { question, questionOptions, questionNum, defaultLanguage, deleteQuestion, canEdit, canManage } = this.props;
     const isConditional = question.type === 'radio' || question.type === 'select' || question.type === 'checkbox' ? true : false;
     return (
         <section className="c-question-card">
@@ -122,7 +122,7 @@ class QuestionCard extends React.Component {
                     placeholder={this.props.intl.formatMessage({ id: 'templates.questionPlaceholder' })}
                     validations={['required']}
                     onKeyPress={(e) => {if (e.which === 13) { e.preventDefault();}}} // Prevent send on press Enter
-                    disabled={!canEdit}
+                    disabled={!canManage}
                 />
                 <Select
                     name="type"
@@ -145,26 +145,21 @@ class QuestionCard extends React.Component {
                                     onKeyPress={(e) => {if (e.which === 13) { e.preventDefault();}}} // Prevent send on press Enter
                                     placeholder={this.props.intl.formatMessage({ id: 'templates.optionPlaceholder' })}
                                     onChange={(e) => this.onQuestionOptionChange(e, index)}
-                                    disabled={!canEdit}
+                                    disabled={!canManage}
                                 />
                                 { canEdit &&
-                                    <button 
-                                        className={"delete-button"} 
-                                        type="button" 
-                                        disabled={!canEdit}
-                                    >
+                                    <button className={"delete-button"} type="button">
                                         <Icon className="-small -gray" name="icon-close"/>
                                     </button>
                                 }
                             </div>
                         )
                     }
-                    { isConditional && 
+                    { isConditional && canEdit &&
                         <button 
                             className={"c-button add-option-button"} 
                             type="button" 
                             onClick={this.onQuestionOptionAdd}
-                            disabled={!canEdit}
                         >
                             <FormattedMessage id={"templates.optionPlaceholder"} />
                         </button>
@@ -188,7 +183,7 @@ class QuestionCard extends React.Component {
                     name={`${questionNum}-required`} 
                     onChange={this.toggleRequired}
                     defaultChecked={question.required}
-                    disabled={!canEdit}
+                    disabled={!canManage}
                 />
             </div>
         </section>
