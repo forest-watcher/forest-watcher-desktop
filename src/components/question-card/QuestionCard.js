@@ -162,10 +162,10 @@ class QuestionCard extends React.Component {
                                     onChange={(e) => this.onQuestionOptionChange(e, index)}
                                     disabled={!canManage}
                                 />
-                                { canEdit &&
+                                { canEdit && (question.values[defaultLanguage].length > 1) &&
                                     <button className={"delete-button"} type="button" 
                                         onClick={() => { this.deleteOption(index) }}>
-                                        <Icon className="-small -gray" name="icon-close"/>
+                                        <Icon className="-small -theme-gray" name="icon-more"/>
                                     </button>
                                 }
                             </div>

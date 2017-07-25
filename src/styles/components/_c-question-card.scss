@@ -66,6 +66,10 @@
 
     .question-options {
 
+        .delete-button {
+            transform: rotate(45deg);
+        }
+
         .option-input {
             width: 80%;
             margin-bottom: 10px;
