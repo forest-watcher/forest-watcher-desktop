@@ -38,13 +38,16 @@ class App extends React.Component {
     const { user, location } = this.props;
     const search = location.search || '';
     const queryParams = querystring.parse(search);
-    if (!user.loggedIn && !queryParams.token) return <Login />;
+    const callbackUrl = queryParams.callbackUrl;
+    if (!user.loggedIn && !queryParams.token) return <Login callbackUrl={callbackUrl}/>;
     return <Redirect to="/areas" />;
   }
 
   render() {
     const { match, user, userChecked, logout, locale, setLocale } = this.props;
     if (!userChecked) return null;
+    const queryParams = querystring.parse(location.search || '');
+    const callbackUrl = queryParams.callbackUrl;
     const mergedMessages = Object.assign({}, translations[DEFAULT_LANGUAGE], translations[locale]);
     return (
       <IntlProvider 
@@ -82,7 +85,14 @@ class App extends React.Component {
                 <Route exact path={`${match.url}settings`} component={Settings} />
               </div>
             }
-            {!user.loggedIn && <Redirect to="/" />}
+            {!user.loggedIn &&
+              (callbackUrl !== undefined ?
+                <Redirect to={{
+                  pathname: '/',
+                  search: location.search
+                }}/> :
+                <Redirect to={'/'}/>)
+            }
             <ReduxToastr
               position="bottom-right"
               transitionIn="fadeIn"
