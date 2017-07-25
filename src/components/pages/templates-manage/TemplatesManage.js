@@ -124,12 +124,12 @@ class TemplatesManage extends React.Component {
 
   // Render
   render() {
-    const { areasOptions, localeOptions, questionOptions, loading, saving, mode, locale } = this.props;
+    const { areasOptions, localeOptions, questionOptions, loading, saving, mode, locale, user } = this.props;
     return (
       <div>
         <Hero
           title={mode === 'manage' ? "templates.manage" : "templates.create"}
-          action={!this.state.public && this.state.answersCount === 0 ? {name: "templates.delete", callback: this.deleteTemplate} : null}
+          action={this.state.answersCount === 0 && this.state.user === user ? {name: "templates.delete", callback: this.deleteTemplate} : null}
         />
         <div className="l-template">
           <Loader isLoading={loading || saving} />

@@ -61,7 +61,8 @@ const mapStateToProps = (state, { match }) => {
         error: state.templates.error,
         areasOptions,
         localeOptions,
-        questionOptions
+        questionOptions,
+        user: state.user.data.id
     }
 };
 

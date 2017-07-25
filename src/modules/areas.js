@@ -18,7 +18,8 @@ const initialState = {
   data: {},
   loading: false,
   saving: false,
-  editing: false
+  editing: false,
+  error: false
 };
 
 export default function reducer(state = initialState, action) {
@@ -46,7 +47,7 @@ export default function reducer(state = initialState, action) {
     case SET_LOADING_AREAS:
       return Object.assign({}, state, { loading: action.payload });
     case SET_SAVING_AREA:
-      return Object.assign({}, state, { saving: action.payload });
+      return Object.assign({}, state, { ...action.payload });
     case SET_EDITING_AREA:
       return Object.assign({}, state, { editing: action.payload });
     default:
@@ -135,6 +136,13 @@ export function getAreas() {
 // POST name, geostore ID
 export function saveArea(area, node, method) {
   return async (dispatch, state) => {
+    dispatch({
+      type: SET_SAVING_AREA,
+      payload: {
+        saving: true,
+        error: false
+      }
+    });
     const url = method === 'PATCH' ? `${API_BASE_URL}/area/${area.id}` : `${API_BASE_URL}/area`;
     const body = new FormData();
     const blob = await domtoimage.toBlob(node, BLOB_CONFIG);
@@ -161,13 +169,19 @@ export function saveArea(area, node, method) {
         });
         dispatch({
           type: SET_SAVING_AREA,
-          payload: false
+          payload: {
+            saving: false,
+            error: false
+          }
         });
       })
       .catch((error) => {
         dispatch({
           type: SET_SAVING_AREA,
-          payload: false
+          payload: {
+            saving: false,
+            error: true
+          }
         });
       });
   };
@@ -206,11 +220,11 @@ export function setEditing(bool) {
   };
 }
 
-export function setSaving(bool) {
+export function setSaving(payload) {
   return (dispatch) => {
     dispatch({
       type: SET_SAVING_AREA,
-      payload: bool
+      payload: payload
     });
   };
 }

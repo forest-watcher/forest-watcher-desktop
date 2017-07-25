@@ -44,19 +44,6 @@ export default function reducer(state = initialState, action) {
       return Object.assign({}, state, { loading: action.payload });
     case SET_SAVING_TEMPLATE:
       return Object.assign({}, state, { ...action.payload });
-    case DELETE_TEMPLATE: {
-      const templateId = action.payload;
-      if (templateId) {
-        const templates = Object.assign({}, state.data);
-        delete templates[templateId];
-        return {
-          ...state,
-          ids: state.ids.filter((id) => id !== templateId),
-          data: templates
-        };
-      }
-      return state;
-    }
     default:
       return state;
   }
@@ -92,7 +79,6 @@ export function getTemplates() {
         return normalized;
       })
       .catch((error) => {
-        debugger
         dispatch({
           type: SET_LOADING_TEMPLATES,
           payload: false
@@ -170,23 +156,25 @@ export function deleteTemplate(templateId) {
       method: 'DELETE'
     })
       .then((response) => {
+        debugger;
         if (response.ok) return response.json();
         throw Error(response.statusText);
       })
       .then((data) => {
-        dispatch({
-          type: DELETE_TEMPLATE,
-          payload: templateId
-        });
-        dispatch({
-          type: SET_SAVING_TEMPLATE,
-          payload: {
-            saving: false,
-            error: false
-          }
-        });
+        // dispatch({
+        //   type: DELETE_TEMPLATE,
+        //   payload: templateId
+        // });
+        // dispatch({
+        //   type: SET_SAVING_TEMPLATE,
+        //   payload: {
+        //     saving: false,
+        //     error: false
+        //   }
+        // });
       })
       .catch((error) => {
+        debugger;
         dispatch({
           type: SET_SAVING_TEMPLATE,
           payload: {
@@ -198,11 +186,11 @@ export function deleteTemplate(templateId) {
   };
 }
 
-export function setSaving(bool) {
+export function setSaving(payload) {
   return (dispatch) => {
     dispatch({
       type: SET_SAVING_TEMPLATE,
-      payload: bool
+      payload: payload
     });
   };
 }

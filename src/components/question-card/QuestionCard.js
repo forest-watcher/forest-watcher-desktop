@@ -20,16 +20,6 @@ class QuestionCard extends React.Component {
     }
   }
 
-//   componentDidUpdate(nextProps) {
-//     if (nextProps.question.values && this.inputs[nextProps.question.values[this.props.defaultLanguage].length - 1]) {
-//         this.inputs[nextProps.question.values[this.props.defaultLanguage].length - 1].focus();
-//     }
-//   }
-
-//   shouldComponentUpdate(nextProps) {
-//     return !isEqual(nextProps.question.values, this.props.question.values);
-//   }
-
   onInputChange = (e) => {
     this.question = {
         ...this.question,
