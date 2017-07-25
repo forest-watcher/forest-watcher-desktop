@@ -71,8 +71,8 @@ function mapDispatchToProps(dispatch) {
     saveTemplate: (template, method) => {
       dispatch(saveTemplate(template, method));
     },
-    deleteTemplate: (templateId) => {
-      dispatch(deleteTemplate(templateId));
+    deleteTemplate: (templateId, aois) => {
+      dispatch(deleteTemplate(templateId, aois));
     }
   };
 }

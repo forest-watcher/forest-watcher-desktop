@@ -32,7 +32,7 @@ class TemplatesManage extends React.Component {
     const { history } = this.props;
     if (nextProps.template !== this.props.template && this.props.mode === 'manage') this.setPropsToState(nextProps);
     if (this.props.saving && !nextProps.saving && !nextProps.error) {
-      history.push('/templates');  
+      history.push('/templates');
       toastr.success(this.props.intl.formatMessage({ id: 'templates.saved' }));
     }
     if (nextProps.error) {
@@ -47,7 +47,7 @@ class TemplatesManage extends React.Component {
   }
   
 
-  // Actions to update state
+  // Form actions
   onAreaChange = (selected) => {
     this.setState({ areaOfInterest: selected ? selected.option : null });
   }
@@ -72,7 +72,7 @@ class TemplatesManage extends React.Component {
   toggleStatus = () => {
     const newStatus = this.state.status === 'published' ? 'unpublished' : 'published';
     this.setState({ status: newStatus });
-  } 
+  }
 
   onSubmit = (e) => {
     e.preventDefault();
@@ -81,7 +81,8 @@ class TemplatesManage extends React.Component {
   }
 
   deleteTemplate = () => {
-    this.props.deleteTemplate(this.props.templateId);
+    const aois = null;
+    this.props.deleteTemplate(this.props.templateId, aois);
   }
 
   
@@ -104,7 +105,7 @@ class TemplatesManage extends React.Component {
     });
   }
 
-  handleAddQuestion = (e) => {
+  handleQuestionAdd = (e) => {
     e.preventDefault();
     const newQuestions = this.state.questions.slice();
     newQuestions[newQuestions.length] = {
@@ -125,14 +126,16 @@ class TemplatesManage extends React.Component {
   // Render
   render() {
     const { areasOptions, localeOptions, questionOptions, loading, saving, mode, locale, user } = this.props;
+    const canEdit = (this.state.answersCount === 0 && this.props.template.status === 'unpublished' && this.state.user === user) || mode === 'create' ? true : false;
+    const isLoading = loading || saving ? true : false;
     return (
       <div>
         <Hero
           title={mode === 'manage' ? "templates.manage" : "templates.create"}
-          action={this.state.answersCount === 0 && this.state.user === user ? {name: "templates.delete", callback: this.deleteTemplate} : null}
+          action={canEdit ? {name: "templates.delete", callback: this.deleteTemplate} : null}
         />
         <div className="l-template">
-          <Loader isLoading={loading || saving} />
+          <Loader isLoading={isLoading} />
           <Form onSubmit={this.onSubmit}>
             <div className="c-form -templates">
               <div className="template-meta">
@@ -148,7 +151,7 @@ class TemplatesManage extends React.Component {
                         onChange={this.onAreaChange}
                         noResultsText={this.props.intl.formatMessage({ id: 'filters.noAreasAvailable' })}
                         searchable={false}
-                        disabled={saving || loading || mode === 'manage'}
+                        disabled={isLoading}
                       />
                     </div>
                   </div>
@@ -164,7 +167,7 @@ class TemplatesManage extends React.Component {
                         noResultsText={this.props.intl.formatMessage({ id: 'filters.noLanguagesAvailable' })}
                         searchable={true}
                         clearable={false}
-                        disabled={saving || loading || mode === 'manage'}
+                        disabled={isLoading}
                       />
                     </div>
                   </div>
@@ -183,7 +186,7 @@ class TemplatesManage extends React.Component {
                         placeholder={this.props.intl.formatMessage({ id: 'templates.title' })}
                         validations={['required']}
                         onKeyPress={(e) => {if (e.which === 13) { e.preventDefault();}}} // Prevent send on press Enter
-                        disabled={saving || loading || mode === 'manage'}
+                        disabled={isLoading}
                       />
                     </div>
                       {this.state.questions &&
@@ -196,14 +199,14 @@ class TemplatesManage extends React.Component {
                             <QuestionCard 
                               key={index} 
                               questionNum={index + 1} 
-                              question={question} 
+                              question={question}
                               syncStateWithProps={this.handleQuestionEdit}
                               questionOptions={questionOptions}
                               defaultLanguage={this.state.defaultLanguage}
                               deleteQuestion={this.handleQuestionDelete}
                               status={this.state.status}
+                              canEdit={canEdit}
                               mode={mode}
-                              answersCount={this.state.answersCount}
                             />
                           )}
                         </CSSTransitionGroup>
@@ -212,12 +215,18 @@ class TemplatesManage extends React.Component {
                 </div>
               </div>
             </div>
-            { (this.state.status === 'draft' || mode === 'create') &&
+            { canEdit &&
               <div className="add-question">
                 <div className="row">
                   <div className="column small-12 medium-10 medium-offset-1 large-8 large-offset-2">
                     <div className="add-button">
-                      <button className="c-button" onClick={this.handleAddQuestion} disabled={saving || loading || mode === 'manage'}><FormattedMessage id="templates.addQuestion" /></button>
+                      <button 
+                        className="c-button" 
+                        onClick={this.handleQuestionAdd} 
+                        disabled={isLoading}
+                      >
+                        <FormattedMessage id="templates.addQuestion" />
+                      </button>
                     </div>
                   </div>
                 </div>
@@ -225,7 +234,7 @@ class TemplatesManage extends React.Component {
             }
             <FormFooter>
               <Link to="/templates">
-                <button className="c-button -light" disabled={saving || loading}><FormattedMessage id="forms.cancel" /></button>
+                <button className="c-button -light" disabled={isLoading}><FormattedMessage id="forms.cancel" /></button>
               </Link>
               <div className="template-status">
                 <span className="status-label text -x-small-title">{this.props.intl.formatMessage({ id: 'templates.statusUnpublished' })}</span>
@@ -234,11 +243,11 @@ class TemplatesManage extends React.Component {
                   name={'status'} 
                   onChange={this.toggleStatus}
                   defaultChecked={this.state.status === 'published' ? true : false}
-                  disabled={saving || loading}
+                  disabled={isLoading}
                 />
                 <span className="status-label text -x-small-title">{this.props.intl.formatMessage({ id: 'templates.statusPublished' })}</span>
               </div>
-              <Button className="c-button" disabled={saving || loading || mode === 'manage'}><FormattedMessage id="forms.save" /></Button>
+              <Button className="c-button" disabled={isLoading}><FormattedMessage id="forms.save" /></Button>
             </FormFooter>
           </Form>
         </div>

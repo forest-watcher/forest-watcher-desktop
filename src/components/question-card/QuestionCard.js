@@ -107,8 +107,7 @@ class QuestionCard extends React.Component {
   }
 
   render() {
-    const { question, questionOptions, questionNum, defaultLanguage, deleteQuestion, status, mode, answersCount } = this.props;
-    const disabled = status === 'unpublished' && mode === 'create' ? false : true;
+    const { question, questionOptions, questionNum, defaultLanguage, deleteQuestion, canEdit } = this.props;
     return (
         <section className="c-question-card">
           <div className="questions">
@@ -122,7 +121,7 @@ class QuestionCard extends React.Component {
                     placeholder={this.props.intl.formatMessage({ id: 'templates.questionPlaceholder' })}
                     validations={['required']}
                     onKeyPress={(e) => {if (e.which === 13) { e.preventDefault();}}} // Prevent send on press Enter
-                    disabled={disabled || mode === 'manage'}
+                    disabled={!canEdit}
                 />
                 <Select
                     name="type"
@@ -132,7 +131,7 @@ class QuestionCard extends React.Component {
                     onChange={this.onTypeChange}
                     searchable={false}
                     clearable={false}
-                    disabled={disabled || mode === 'manage'}
+                    disabled={!canEdit}
                 />
                 <div className="question-options">
                     { question.type === 'radio' && 
@@ -149,19 +148,19 @@ class QuestionCard extends React.Component {
                                 <button 
                                     className={"delete-button"} 
                                     type="button" 
-                                    disabled={disabled || mode === 'manage' }
+                                    disabled={!canEdit}
                                 >
                                     <Icon className="-small -gray" name="icon-close"/>
                                 </button>
                             </div>
                         )
                     }
-                    { question.type === 'radio' && 
+                    { question.type === 'radio' || question.type === 'select' || question.type === 'checkbox' && 
                         <button 
                         className={"c-button add-option-button"} 
                         type="button" 
                         onClick={this.onQuestionOptionAdd}
-                        disabled={disabled || mode === 'manage' }
+                        disabled={!canEdit}
                         >
                         <FormattedMessage id={"templates.optionPlaceholder"} />
                         </button>
@@ -169,13 +168,12 @@ class QuestionCard extends React.Component {
                 </div>
             </div>
             <div className="question-actions">
-                { status === 'unpublished' && 
-                    answersCount > 0 &&
+                { canEdit &&
                     <button 
                         className={"delete-button"} 
                         type="button" 
                         onClick={() => { deleteQuestion(questionNum)} }
-                        disabled={disabled || mode === 'manage' }
+                        disabled={!canEdit}
                     >
                         <Icon className="-small -gray" name="icon-delete"/>
                     </button>
@@ -186,7 +184,7 @@ class QuestionCard extends React.Component {
                     name={`${questionNum}-required`} 
                     onChange={this.toggleRequired}
                     defaultChecked={question.required}
-                    disabled={disabled || mode === 'manage' }
+                    disabled={!canEdit}
                 />
             </div>
         </section>

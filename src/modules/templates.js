@@ -153,7 +153,7 @@ export function saveTemplate(template, method) {
 }
 
 // DELETE template
-export function deleteTemplate(templateId) {
+export function deleteTemplate(templateId, aois) {
   return async (dispatch, state) => {
     dispatch({
       type: SET_SAVING_TEMPLATE,
@@ -162,7 +162,8 @@ export function deleteTemplate(templateId) {
         error: false
       }
     });
-    fetch(`${API_BASE_URL}/reports/${templateId}`, {
+    const aoisQuery = aois !== null ? `?aoi=${aois.toString()}` : '';
+    fetch(`${API_BASE_URL}/reports/${templateId}${aoisQuery}`, {
       headers: {
         Authorization: `Bearer ${state().user.token}`
       },
