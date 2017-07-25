@@ -93,8 +93,10 @@ export function confirmUser(token) {
         dispatch({
           type: CONFIRM_USER
         });
+        toastr.success('You have become a confirmed user');
       })
       .catch((error) => {
+        toastr.error('Error in confirmation');
         console.warn(error);
       });
   };
