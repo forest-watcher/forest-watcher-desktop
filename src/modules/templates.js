@@ -78,7 +78,6 @@ export function getTemplates() {
         return normalized;
       })
       .catch((error) => {
-        debugger
         dispatch({
           type: SET_LOADING_TEMPLATES,
           payload: false
