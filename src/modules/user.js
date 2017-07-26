@@ -1,8 +1,7 @@
 import querystring from 'query-string';
 import { setUserChecked } from './app';
 import { API_BASE_URL } from '../constants/global';
-import { getGeoStoresWithAreas } from './areas';
-import { getTemplates } from './templates';
+import { syncApp } from './app';
 import { getTeam } from './teams';
 import { toastr } from 'react-redux-toastr';
 
@@ -60,8 +59,7 @@ export function checkLogged(tokenParam) {
           payload: { data, token, loggedIn: true }
         });
         dispatch(setUserChecked());
-        dispatch(getGeoStoresWithAreas());
-        dispatch(getTemplates());
+        dispatch(syncApp());
       })
       .catch((error) => {
         if (user.loggedIn) {

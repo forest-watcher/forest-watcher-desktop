@@ -23,6 +23,7 @@
         .type-select {
             margin: 25px 0;
             max-width: 60%;
+            text-transform: capitalize;
         }
     }
 
@@ -62,6 +63,41 @@
     .question-leave.question-leave-active {
         opacity: 0.01;
         transition: opacity 1000ms ease-in;
+    }
+
+    .question-options {
+
+        .delete-button {
+            transform: rotate(45deg);
+        }
+
+        .option-input {
+            display: inline-block;
+            width: 70%;
+            margin-bottom: 10px;
+        }
+    }
+
+    .question-more-info {
+        display: block;
+
+        .conditional-settings {
+            display: flex;
+            flex-direction: row;
+            justify-content: flex-start;
+            align-items: center;
+            margin-top: 30px;
+            margin-bottom: 10px;
+
+            .more-info-select {
+                width: 160px;
+                margin-right: 15px;
+            }  
+        }
+
+        .child-input {
+            width: 70%;
+        }
     }
 }
 

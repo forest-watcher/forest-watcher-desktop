@@ -17,6 +17,7 @@
     }
 
     .add-question {
+        min-height: 40px;
         background: $white;
         padding-bottom: 120px;
 
@@ -27,6 +28,12 @@
             button {
                 float: right;
             }
+        }
+    }
+
+    .template-status {
+        .status-label {
+            padding: 0 10px;
         }
     }
 
