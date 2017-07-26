@@ -58,6 +58,7 @@ const mapStateToProps = (state, { match }) => {
         template: state.templates.data[templateId] ? state.templates.data[templateId].attributes : defaultTemplate,
         loading: state.templates.loading,
         saving: state.templates.saving,
+        deleting: state.templates.deleting,
         error: state.templates.error,
         areasOptions,
         localeOptions,

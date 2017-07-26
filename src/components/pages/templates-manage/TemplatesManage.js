@@ -38,6 +38,13 @@ class TemplatesManage extends React.Component {
     if (nextProps.error) {
       toastr.error(this.props.intl.formatMessage({ id: 'templates.errorSaving' }));
     }
+    if (this.props.deleting && !nextProps.deleting && !nextProps.error) {
+      history.push('/templates');
+      toastr.info(this.props.intl.formatMessage({ id: 'templates.deleted' }));
+    }
+    if (nextProps.error) {
+      toastr.error(this.props.intl.formatMessage({ id: 'templates.errorDeleting' }));
+    }
   }
 
 
@@ -125,11 +132,11 @@ class TemplatesManage extends React.Component {
 
   // Render
   render() {
-    const { areasOptions, localeOptions, questionOptions, loading, saving, mode, locale, user, template } = this.props;
+    const { areasOptions, localeOptions, questionOptions, loading, saving, deleting, mode, locale, user, template } = this.props;
     const canEdit = ((template.answersCount === 0 || !template.answersCount) && (template.status === 'unpublished' || template.status === 'draft') && user.id === this.state.user) || mode === 'create' ? true : false;
     const canManage = user.id === this.state.user || mode === 'create' ? true : false;
     const canSave = this.state.questions.length && this.state.name[this.state.defaultLanguage] ? true : false;
-    const isLoading = loading || saving ? true : false;
+    const isLoading = loading || saving || deleting ? true : false;
     return (
       <div>
         <Hero
