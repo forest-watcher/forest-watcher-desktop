@@ -2,7 +2,7 @@ import { connect } from 'react-redux';
 
 import TemplatesManage from './TemplatesManage';
 import { LOCALES_LIST } from '../../../constants/locales';
-import { TEMPLATE, QUESTION_TYPES } from '../../../constants/templates';
+import { TEMPLATE, QUESTION_TYPES, QUESTION } from '../../../constants/templates';
 import { saveTemplate, deleteTemplate } from '../../../modules/templates';
 
 const mapAreasToOptions = (areas) => {
@@ -50,7 +50,17 @@ const mapStateToProps = (state, { match }) => {
             [state.app.locale]: ""       
         },
         languages: [state.app.locale],
-        defaultLanguage: state.app.locale
+        defaultLanguage: state.app.locale,
+        questions: [
+            {
+                ...QUESTION,
+                order: 1,
+                label: {
+                    [state.app.locale]: ""
+                },
+                name: `question-1`
+            }
+        ]
     }
     return {
         templateId: match.params.templateId,
