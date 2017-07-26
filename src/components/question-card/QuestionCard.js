@@ -154,7 +154,7 @@ class QuestionCard extends React.Component {
   }
 
   render() {
-    const { question, questionOptions, questionNum, defaultLanguage, deleteQuestion, canEdit, canManage } = this.props;
+    const { template, question, questionOptions, questionNum, defaultLanguage, deleteQuestion, canEdit, canManage } = this.props;
     const isConditional = question.type === 'radio' || question.type === 'select' || question.type === 'checkbox' ? true : false;
     const conditionalOptions = [];
     if (question.values && question.values[defaultLanguage]) {
@@ -263,7 +263,7 @@ class QuestionCard extends React.Component {
                 </div>
             </div>
             <div className="question-actions">
-                { canEdit &&
+                { canEdit && template.questions.length > 1 &&
                     <button 
                         className={"delete-button"} 
                         type="button" 

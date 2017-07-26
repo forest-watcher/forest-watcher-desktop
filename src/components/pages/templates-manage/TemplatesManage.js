@@ -231,6 +231,7 @@ class TemplatesManage extends React.Component {
                               key={index} 
                               questionNum={index + 1} 
                               question={question}
+                              template={this.state}
                               syncStateWithProps={this.handleQuestionEdit}
                               questionOptions={questionOptions}
                               defaultLanguage={this.state.defaultLanguage}
