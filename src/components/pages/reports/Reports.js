@@ -8,8 +8,10 @@ import { FormattedMessage } from 'react-intl';
 import ReportsFilters from './ReportsFiltersContainer';
 import Loader from '../../ui/Loader';
 import { injectIntl } from 'react-intl';
+import qs from 'query-string';
 
 import 'react-select/dist/react-select.css';
+
 
 class Reports extends React.Component {
 
@@ -39,8 +41,16 @@ class Reports extends React.Component {
     this.props.downloadAnswers(this.props.match.params.templateId);
   }
 
+  handlePageChange = (page) => {
+    const searchParams = Object.assign(this.props.searchParams, { page: page + 1 || undefined });
+    this.props.history.push({
+      pathname: `/reports/${this.props.match.params.templateId}`,
+      search: qs.stringify(searchParams)
+    });
+  }
+
   render() {
-    const { answers } = this.props;
+    const { answers, searchParams } = this.props;
     const columns = [{
       Header: <FormattedMessage id="reports.latLng" />,
       accessor: 'latLong'
@@ -77,11 +87,13 @@ class Reports extends React.Component {
                   showPageSizeOptions={false}
                   minRows={5}
                   defaultPageSize={8}
+                  page={parseInt(searchParams.page) - 1 || 0}
                   noDataText={this.props.intl.formatMessage({ id: 'reports.noReportsFound' })}
                   previousText=""
                   nextText=""
                   pageText=""
                   loadingText=""
+                  onPageChange={(page) => {this.handlePageChange(page)}}
                 />
                 <Loader isLoading={this.props.loadingTemplates || this.props.loadingReports} />
               </div>
