@@ -141,6 +141,16 @@ class QuestionCard extends React.Component {
     this.props.syncStateWithProps(this.question, this.props.questionNum);
   }
 
+  onChildInputChange = (e) => {
+    let childQuestions = this.question.childQuestions.slice();
+    childQuestions[0].label[this.props.defaultLanguage] = e.target.value;
+    this.question.child = { 
+        ...this.question,
+        childQuestions: childQuestions
+    };
+    this.props.syncStateWithProps(this.question, this.props.questionNum);
+  }
+
   render() {
     const { question, questionOptions, questionNum, defaultLanguage, deleteQuestion, canEdit, canManage } = this.props;
     const isConditional = question.type === 'radio' || question.type === 'select' || question.type === 'checkbox' ? true : false;
@@ -153,6 +163,7 @@ class QuestionCard extends React.Component {
             });
         });
     }
+    console.log(question);
     return (
         <section className="c-question-card">
           <div className="questions">
