@@ -170,12 +170,11 @@ class QuestionCard extends React.Component {
         <section className="c-question-card">
           <div className="questions">
             <span className="text -question-number">{prettyNum(questionNum)}.</span>
-                <Input
+                <input
                     type="text"
                     className="-question"
                     onChange={this.onInputChange}
                     name="label"
-                    validations={['required']}                    
                     value={question.label[defaultLanguage] || ''}
                     placeholder={this.props.intl.formatMessage({ id: 'templates.questionPlaceholder' })}
                     onKeyPress={(e) => {if (e.which === 13) { e.preventDefault();}}} // Prevent send on press Enter
@@ -196,11 +195,10 @@ class QuestionCard extends React.Component {
                     { isConditional && 
                         question.values[defaultLanguage].map((value, index) =>
                             <div key={`${question.name}-value-${index}`} >
-                                <Input
+                                <input
                                     className="option-input -question"
                                     ref={(input) => { this.inputs[index] = input; }}
                                     value={value.label}
-                                    validations={['required']}                                    
                                     onKeyPress={(e) => {if (e.which === 13) { e.preventDefault();}}} // Prevent send on press Enter
                                     placeholder={this.props.intl.formatMessage({ id: 'templates.optionPlaceholder' })}
                                     onChange={(e) => this.onQuestionOptionChange(e, index)}
@@ -250,14 +248,13 @@ class QuestionCard extends React.Component {
                                 <label className="text">{this.props.intl.formatMessage({ id: 'templates.moreInfoSecond' })}</label>
                             </div>
                             { question.childQuestions.length > 0 &&
-                                <Input
+                                <input
                                     type="text"
                                     className="child-input -question"
                                     onChange={this.onChildInputChange}
                                     name="childquestion-label"
                                     value={question.childQuestions[0].label[defaultLanguage] || ''}
                                     placeholder={this.props.intl.formatMessage({ id: 'templates.childQuestionPlaceholder' })}
-                                    validations={['required']}
                                     onKeyPress={(e) => {if (e.which === 13) { e.preventDefault();}}} // Prevent send on press Enter
                                     disabled={!canEdit}
                                 />

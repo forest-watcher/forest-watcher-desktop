@@ -22,6 +22,7 @@ class TemplatesManage extends React.Component {
   constructor (props) {
     super(props);
     this.state = {};
+    this.canSubmit = true;
   }
 
   // Lifecycle
@@ -57,16 +58,15 @@ class TemplatesManage extends React.Component {
   validateState = (state) => {
     // This function handles arrays and objects
     for (var field in state) {
-        if (typeof state[field] === 'string' && state[field] === '') {
-          return false;
-        } else if (typeof state[field] === 'object' && state[field] !== null) {
-          // object but not one we want to change, start again
-          this.validateState(state[field]);
-        } else {
-          // lets start again!
-        }
+      if (typeof state[field] === 'string' && state[field] === '') {
+        this.canSubmit = false;
+      } else if (typeof state[field] === 'object' && state[field] !== null) {
+        // object but not one we want to change, start again
+        this.validateState(state[field]);
+      } else {
+        // lets start again!
+      }
     }
-    return true;
   }
 
   // Form actions
@@ -98,9 +98,14 @@ class TemplatesManage extends React.Component {
 
   onSubmit = (e) => {
     e.preventDefault();
-    const canSubmit = this.validateState(this.state);
-    const method = this.props.mode === 'manage' ? 'PATCH' : 'POST';
-    this.props.saveTemplate(this.state, method);
+    this.validateState(this.state);
+    if (this.canSubmit) {
+      const method = this.props.mode === 'manage' ? 'PATCH' : 'POST';
+      this.props.saveTemplate(this.state, method);
+    } else {
+      toastr.error(this.props.intl.formatMessage({ id: 'templates.missingFields' }), this.props.intl.formatMessage({ id: 'templates.missingFieldsDetail' }));      
+    }
+    this.canSubmit = true;
   }
 
   deleteTemplate = () => {
@@ -204,12 +209,11 @@ class TemplatesManage extends React.Component {
                 <div className="row">
                   <div className="column small-12 medium-10 medium-offset-1 large-8 large-offset-2">
                     <div className="c-question-card -title">
-                      <Input
+                      <input
                         type="text"
                         className="-title"
                         onChange={this.onInputChange}
                         name="name"
-                        validations={['required']}
                         value={this.state.name ? this.state.name[this.state.defaultLanguage] : ''}
                         placeholder={this.props.intl.formatMessage({ id: 'templates.title' })}
                         onKeyPress={(e) => {if (e.which === 13) { e.preventDefault();}}} // Prevent send on press Enter
@@ -275,11 +279,7 @@ class TemplatesManage extends React.Component {
                 />
                 <span className="status-label text -x-small-title">{this.props.intl.formatMessage({ id: 'templates.statusPublished' })}</span>
               </div>
-              { this.state.questions.length ?
-                <Button className="c-button"><FormattedMessage id="forms.save" /></Button>
-                :
-                <Button className="c-button" disabled><FormattedMessage id="forms.save" /></Button>                
-              }
+              <Button className="c-button" disabled={isLoading || !canManage}><FormattedMessage id="forms.save" /></Button>                
             </FormFooter>
           </Form>
         </div>
