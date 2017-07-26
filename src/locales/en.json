@@ -103,6 +103,7 @@
     "templates.moreInfoSecond": "ask for more info",
     "templates.selectCondition": "Select condition",
     "templates.noConditions": "No options created",
+    "templates.childQuestionPlaceholder": "How shall this question appear?",
     "settings.contextualLayers": "Contextual layers",
     "settings.customLayers": "Custom layers",
     "settings.gfwLayers": "GFW layers",

@@ -128,10 +128,17 @@ class QuestionCard extends React.Component {
             childQuestions: childQuestions
         }
     }
+    this.props.syncStateWithProps(this.question, this.props.questionNum);
   }
 
-  onMoreInfoSelect = () => {
-    // update child question with selected value
+  onMoreInfoSelect = (selected) => {
+    let childQuestions = this.question.childQuestions.slice();
+    childQuestions[0].conditionalValue = selected.option;
+    this.question = { 
+        ...this.question,
+        childQuestions: childQuestions
+    };
+    this.props.syncStateWithProps(this.question, this.props.questionNum);
   }
 
   render() {
@@ -205,28 +212,42 @@ class QuestionCard extends React.Component {
                     }
                     { isConditional &&
                         <div className="question-more-info">
-                            <Checkbox
-                                id={`${questionNum}-more-info`}
-                                callback={() => this.handleChangeMoreInfo(questionNum)}
-                                defaultChecked={question.childQuestions.length > 0}
-                                disabled={!canEdit}
-                            />
-                            <label className="text">{this.props.intl.formatMessage({ id: 'templates.moreInfoFirst' })}</label>
-                            <Select
-                                name="more-info-answer"
-                                className="more-info-select"
-                                options={conditionalOptions}
-                                value={question.childQuestions.length ? getSelectorValueFromArray(question.childQuestions[0].conditionalValue, conditionalOptions) : null}
-                                onChange={this.onMoreInfoSelect}
-                                searchable={false}
-                                clearable={false}
-                                disabled={!canEdit}
-                                placeholder={this.props.intl.formatMessage({ id: 'templates.selectCondition' })}
-                                noResultsText={this.props.intl.formatMessage({ id: 'templates.noConditions' })}
-                                arrowRenderer={() => <svg className="c-icon -x-small -gray"><use xlinkHref="#icon-arrow-down"></use></svg>}
-                                disabled={!canEdit}
-                            />
-                            <label className="text">{this.props.intl.formatMessage({ id: 'templates.moreInfoSecond' })}</label>
+                            <div className="conditional-settings">
+                                <Checkbox
+                                    id={`${questionNum}-more-info`}
+                                    callback={() => this.handleChangeMoreInfo(questionNum)}
+                                    defaultChecked={question.childQuestions.length > 0}
+                                    disabled={!canEdit}
+                                />
+                                <label className="text">{this.props.intl.formatMessage({ id: 'templates.moreInfoFirst' })}</label>
+                                <Select
+                                    name="more-info-answer"
+                                    className="more-info-select"
+                                    options={conditionalOptions}
+                                    value={question.childQuestions.length ? getSelectorValueFromArray(question.childQuestions[0].conditionalValue, conditionalOptions) : null}
+                                    onChange={this.onMoreInfoSelect}
+                                    searchable={false}
+                                    clearable={false}
+                                    placeholder={this.props.intl.formatMessage({ id: 'templates.selectCondition' })}
+                                    noResultsText={this.props.intl.formatMessage({ id: 'templates.noConditions' })}
+                                    arrowRenderer={() => <svg className="c-icon -x-small -gray"><use xlinkHref="#icon-arrow-down"></use></svg>}
+                                    disabled={!canEdit || !question.childQuestions.length}
+                                />
+                                <label className="text">{this.props.intl.formatMessage({ id: 'templates.moreInfoSecond' })}</label>
+                            </div>
+                            { question.childQuestions.length > 0 &&
+                                <Input
+                                    type="text"
+                                    className="child-input -question"
+                                    onChange={this.onChildInputChange}
+                                    name="childquestion-label"
+                                    value={question.childQuestions[0].label[defaultLanguage] || ''}
+                                    placeholder={this.props.intl.formatMessage({ id: 'templates.childQuestionPlaceholder' })}
+                                    validations={['required']}
+                                    onKeyPress={(e) => {if (e.which === 13) { e.preventDefault();}}} // Prevent send on press Enter
+                                    disabled={!canEdit}
+                                />
+                            }
                         </div>
                     }
                 </div>

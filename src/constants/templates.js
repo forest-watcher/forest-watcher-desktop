@@ -25,11 +25,12 @@ export const QUESTION = {
 
 export const CHILD_QUESTION = {
     "type": "text",
-    "name": "more-info",
+    "name": "",
     "conditionalValue": 0,
     "order": 0,
-    "required": "false",
-    "label": {}
+    "required": false,
+    "label": {},
+    "values": {}
 }
 
 export const QUESTION_TYPES = ['text', 'image', 'checkbox', 'radio', 'select', 'number'];

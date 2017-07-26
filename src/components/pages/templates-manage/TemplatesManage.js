@@ -36,7 +36,7 @@ class TemplatesManage extends React.Component {
       toastr.success(this.props.intl.formatMessage({ id: 'templates.saved' }));
     }
     if (nextProps.error) {
-      toastr.success(this.props.intl.formatMessage({ id: 'templates.errorSaving' }));
+      toastr.error(this.props.intl.formatMessage({ id: 'templates.errorSaving' }));
     }
   }
 
@@ -112,7 +112,7 @@ class TemplatesManage extends React.Component {
       ...QUESTION,
       order: newQuestions.length,
       label: {
-        [this.state.defaultLanguage]: ""
+        [this.state.defaultLanguage]: "more-info"
       },
       name: `question-${newQuestions.length + 1}`
     };
@@ -125,9 +125,9 @@ class TemplatesManage extends React.Component {
 
   // Render
   render() {
-    const { areasOptions, localeOptions, questionOptions, loading, saving, mode, locale, user, template, answersCount } = this.props;
-    const canEdit = ((answersCount === 0 || !answersCount) && (template.status === 'unpublished' || template.status === 'draft') && user.id === user) || mode === 'create' ? true : false;
-    const canManage = user.id === user || mode === 'create' ? true : false;
+    const { areasOptions, localeOptions, questionOptions, loading, saving, mode, locale, user, template } = this.props;
+    const canEdit = ((template.answersCount === 0 || !template.answersCount) && (template.status === 'unpublished' || template.status === 'draft') && user.id === this.state.user) || mode === 'create' ? true : false;
+    const canManage = user.id === this.state.user || mode === 'create' ? true : false;
     const canSave = this.state.questions.length && this.state.name[this.state.defaultLanguage] ? true : false;
     const isLoading = loading || saving ? true : false;
     return (
