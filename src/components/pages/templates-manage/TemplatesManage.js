@@ -125,9 +125,10 @@ class TemplatesManage extends React.Component {
 
   // Render
   render() {
-    const { areasOptions, localeOptions, questionOptions, loading, saving, mode, locale, user } = this.props;
-    const canEdit = ((this.state.answersCount === 0 || !this.state.answersCount) && (this.props.template.status === 'unpublished' || this.props.template.status === 'draft') && this.state.user === user) || mode === 'create' ? true : false;
-    const canManage = this.state.user === user ? true : false;
+    const { areasOptions, localeOptions, questionOptions, loading, saving, mode, locale, user, template, answersCount } = this.props;
+    const canEdit = ((answersCount === 0 || !answersCount) && (template.status === 'unpublished' || template.status === 'draft') && user.id === user) || mode === 'create' ? true : false;
+    const canManage = user.id === user || mode === 'create' ? true : false;
+    const canSave = this.state.questions.length && this.state.name[this.state.defaultLanguage] ? true : false;
     const isLoading = loading || saving ? true : false;
     return (
       <div>
@@ -180,14 +181,13 @@ class TemplatesManage extends React.Component {
                 <div className="row">
                   <div className="column small-12 medium-10 medium-offset-1 large-8 large-offset-2">
                     <div className="c-question-card -title">
-                      <Input
+                      <input
                         type="text"
                         className="-title"
                         onChange={this.onInputChange}
                         name="name"
                         value={this.state.name ? this.state.name[this.state.defaultLanguage] : ''}
                         placeholder={this.props.intl.formatMessage({ id: 'templates.title' })}
-                        validations={['required']}
                         onKeyPress={(e) => {if (e.which === 13) { e.preventDefault();}}} // Prevent send on press Enter
                         disabled={isLoading || !canManage}
                       />
@@ -251,7 +251,7 @@ class TemplatesManage extends React.Component {
                 />
                 <span className="status-label text -x-small-title">{this.props.intl.formatMessage({ id: 'templates.statusPublished' })}</span>
               </div>
-              <Button className="c-button" disabled={isLoading || !canManage}><FormattedMessage id="forms.save" /></Button>
+              <Button className="c-button" disabled={isLoading || !canManage || !canSave}><FormattedMessage id="forms.save" /></Button>
             </FormFooter>
           </Form>
         </div>

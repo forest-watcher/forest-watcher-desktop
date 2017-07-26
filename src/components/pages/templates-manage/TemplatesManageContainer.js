@@ -62,7 +62,7 @@ const mapStateToProps = (state, { match }) => {
         areasOptions,
         localeOptions,
         questionOptions,
-        user: state.user.data.id
+        user: state.user.data
     }
 };
 
