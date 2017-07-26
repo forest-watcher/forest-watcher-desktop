@@ -1,10 +1,15 @@
 .c-member-list {
   padding-top: 20px;
   padding-left: 10px;
+
   .horizontal-field-left-aligned {
     display: flex;
     padding-top: 20px;
-    align-items: flex-end;
+    align-items: center;
     justify-content: space-between;
+  }
+
+  .user-label {
+    margin-right: 15px;
   }
 }

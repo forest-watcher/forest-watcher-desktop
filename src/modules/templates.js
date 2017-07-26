@@ -1,12 +1,15 @@
 import normalize from 'json-api-normalizer';
 import { API_BASE_URL } from '../constants/global';
 import { getArea } from './areas';
+import { toastr } from 'react-redux-toastr';
 
 // Actions
 const SET_TEMPLATE = 'templates/SET_TEMPLATE';
 const SET_TEMPLATES = 'templates/SET_TEMPLATES';
+const DELETE_TEMPLATE = 'templates/DELETE_TEMPLATE';
 const SET_LOADING_TEMPLATES = 'templates/SET_LOADING_TEMPLATES';
 const SET_SAVING_TEMPLATE = 'templates/SET_SAVING_TEMPLATE';
+const SET_DELETING_TEMPLATE = 'templates/SET_DELETING_TEMPLATE';
 
 // Reducer
 const initialState = {
@@ -14,6 +17,7 @@ const initialState = {
   data: {},
   loading: true,
   saving: false,
+  deleting: false,
   error: false
 };
 
@@ -41,7 +45,22 @@ export default function reducer(state = initialState, action) {
     }
     case SET_LOADING_TEMPLATES:
       return Object.assign({}, state, { loading: action.payload });
+    case DELETE_TEMPLATE: {
+      const templateId = action.payload;
+      if (templateId) {
+        const templates = Object.assign({}, state.data);
+        delete templates[templateId];
+        return {
+          ...state,
+          ids: state.ids.filter((id) => id !== templateId),
+          data: templates
+        };
+      }
+      return state;
+    }
     case SET_SAVING_TEMPLATE:
+      return Object.assign({}, state, { ...action.payload });
+    case SET_DELETING_TEMPLATE:
       return Object.assign({}, state, { ...action.payload });
     default:
       return state;
@@ -86,10 +105,51 @@ export function getTemplates() {
   };
 }
 
+export function getTemplate(templateId) {
+  const url = `${API_BASE_URL}/reports/${templateId}`;
+  return (dispatch, state) => {
+    dispatch({
+      type: SET_LOADING_TEMPLATES,
+      payload: true
+    });
+    return fetch(url, {
+      headers: {
+        Authorization: `Bearer ${state().user.token}`
+      }
+    })
+      .then((response) => {
+        if (response.ok) return response.json();
+        throw Error(response.statusText);
+      })
+      .then((data) => {
+        const normalized = normalize(data);
+        dispatch({
+          type: SET_TEMPLATE,
+          payload: normalized
+        });
+        dispatch({
+          type: SET_LOADING_TEMPLATES,
+          payload: false
+        });
+        return normalized;
+      })
+      .catch((error) => {
+        dispatch({
+          type: SET_LOADING_TEMPLATES,
+          payload: false
+        });
+      });
+  };
+}
+
 // POST template
 export function saveTemplate(template, method) {
   return async (dispatch, state) => {
     const url = method === 'PATCH' ? `${API_BASE_URL}/reports/${template.id}` : `${API_BASE_URL}/reports`;
+    if (method === 'PATCH') {
+      toastr.info('Update not yet implemented');
+      return;
+    }
     dispatch({
       type: SET_SAVING_TEMPLATE,
       payload: {
@@ -138,11 +198,53 @@ export function saveTemplate(template, method) {
   };
 }
 
-export function setSaving(bool) {
+// DELETE template
+export function deleteTemplate(templateId, aois) {
+  return async (dispatch, state) => {
+    dispatch({
+      type: SET_DELETING_TEMPLATE,
+      payload: {
+        deleting: true,
+        error: false
+      }
+    });
+    const aoisQuery = aois !== null ? `?aoi=${aois.toString()}` : '';
+    fetch(`${API_BASE_URL}/reports/${templateId}${aoisQuery}`, {
+      headers: {
+        Authorization: `Bearer ${state().user.token}`
+      },
+      method: 'DELETE'
+    })
+      .then(() => {
+        dispatch({
+          type: DELETE_TEMPLATE,
+          payload: templateId
+        });
+        dispatch({
+          type: SET_DELETING_TEMPLATE,
+          payload: {
+            deleting: false,
+            error: false
+          }
+        });
+      })
+      .catch((error) => {
+        dispatch({
+          type: SET_DELETING_TEMPLATE,
+          payload: {
+            deleting: false,
+            error: true
+          }
+        });
+      });
+  };
+}
+
+export function setSaving(payload) {
   return (dispatch) => {
     dispatch({
       type: SET_SAVING_TEMPLATE,
-      payload: bool
+      payload: payload
     });
   };
 }

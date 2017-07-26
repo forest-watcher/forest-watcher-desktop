@@ -45,9 +45,12 @@ class AreasManage extends React.Component {
         geojson: nextProps.geojson ? nextProps.geojson : null
       };
     }
-    if (this.props.saving && !nextProps.saving) {
-      history.push('/areas');
+    if (this.props.saving && !nextProps.saving && !nextProps.error) {
+      history.push('/areas');  
       toastr.success(this.props.intl.formatMessage({ id: 'areas.saved' }));
+    }
+    if (nextProps.error) {
+      toastr.success(this.props.intl.formatMessage({ id: 'areas.errorSaving' }));
     }
   }
 

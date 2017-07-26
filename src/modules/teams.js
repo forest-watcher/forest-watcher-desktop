@@ -55,7 +55,6 @@ export default function reducer(state = initialState, action) {
 export function getTeam(userId) {
   const url = `${API_BASE_URL}/teams/user/${userId}`;
   return (dispatch, state) => {
-
     return fetch(url, {
       headers: {
         Authorization: `Bearer ${state().user.token}`

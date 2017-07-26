@@ -2,8 +2,8 @@ import { connect } from 'react-redux';
 
 import TemplatesManage from './TemplatesManage';
 import { LOCALES_LIST } from '../../../constants/locales';
-import { TEMPLATE } from '../../../constants/templates';
-import { saveTemplate } from '../../../modules/templates';
+import { TEMPLATE, QUESTION_TYPES } from '../../../constants/templates';
+import { saveTemplate, deleteTemplate } from '../../../modules/templates';
 
 const mapAreasToOptions = (areas) => {
     const areasOptions = [];
@@ -19,6 +19,16 @@ const mapAreasToOptions = (areas) => {
     return areasOptions;
 };
 
+const mapQuestionType = (questionTypes) => {
+    const questionOptions = questionTypes.map((type) => {
+        return {
+            value: type,
+            label: type
+        }
+    });
+    return questionOptions;
+}
+
 const mapLocalesToOptions = (locales) => {
     const localeOptions = locales.map((locale) => {
         return {
@@ -33,6 +43,7 @@ const mapStateToProps = (state, { match }) => {
     const areasOptions = mapAreasToOptions(state.areas);
     const templateId = match.params.templateId || null;
     const localeOptions = mapLocalesToOptions(LOCALES_LIST);
+    const questionOptions = mapQuestionType(QUESTION_TYPES);
     const defaultTemplate = {
         ...TEMPLATE,
         name: {
@@ -42,13 +53,17 @@ const mapStateToProps = (state, { match }) => {
         defaultLanguage: state.app.locale
     }
     return {
+        templateId: match.params.templateId,
         mode: match.params.templateId ? 'manage' : 'create',
         template: state.templates.data[templateId] ? state.templates.data[templateId].attributes : defaultTemplate,
         loading: state.templates.loading,
         saving: state.templates.saving,
+        deleting: state.templates.deleting,
         error: state.templates.error,
         areasOptions,
-        localeOptions
+        localeOptions,
+        questionOptions,
+        user: state.user.data
     }
 };
 
@@ -56,6 +71,9 @@ function mapDispatchToProps(dispatch) {
   return {
     saveTemplate: (template, method) => {
       dispatch(saveTemplate(template, method));
+    },
+    deleteTemplate: (templateId, aois) => {
+      dispatch(deleteTemplate(templateId, aois));
     }
   };
 }

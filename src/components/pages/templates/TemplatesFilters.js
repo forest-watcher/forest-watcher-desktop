@@ -16,12 +16,12 @@ class TemplatesFilters extends React.Component {
   }
 
   handleAreaChange = (selected) => {
-    const searchParams = Object.assign(this.props.searchParams, { aoi: selected.value || undefined });
+    const searchParams = Object.assign(this.props.searchParams, { page: 1}, { aoi: selected.value || undefined });
     this.redirectWith(searchParams);
   }
 
   handleSearchChange = (event) => {
-    const searchParams = Object.assign(this.props.searchParams, { searchValues: event.target.value || undefined });
+    const searchParams = Object.assign(this.props.searchParams, { page: 1}, { searchValues: event.target.value || undefined });
     this.redirectWith(searchParams);
   }
 

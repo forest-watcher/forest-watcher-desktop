@@ -10,6 +10,8 @@ import TemplatesFilters from './TemplatesFiltersContainer';
 import Loader from '../../ui/Loader';
 import { injectIntl } from 'react-intl';
 import { Link } from 'react-router-dom';
+import qs from 'query-string';
+import { TABLE_PAGE_SIZE } from '../../../constants/global';
 
 class Templates extends React.Component {
 
@@ -18,8 +20,16 @@ class Templates extends React.Component {
     history.push('/templates/create');
   }
 
+  handlePageChange = (page) => {
+    const searchParams = Object.assign(this.props.searchParams, { page: page + 1 || undefined });
+    this.props.history.push({
+      pathname: `/templates`,
+      search: qs.stringify(searchParams)
+    });
+  }
+
   render() {
-    const { templates } = this.props;
+    const { templates, searchParams } = this.props;
     const columns = [{
       Header: <FormattedMessage id="templates.title" />,
       accessor: 'title',
@@ -55,13 +65,16 @@ class Templates extends React.Component {
                   data={!isLoading && templates ? templates : []}
                   columns={columns}
                   showPageSizeOptions={false}
-                  minRows={5}
-                  defaultPageSize={8}
+                  showPagination={templates.length > TABLE_PAGE_SIZE}
+                  minRows={TABLE_PAGE_SIZE}
+                  page={parseInt(searchParams.page, 10) - 1 || 0}
+                  defaultPageSize={TABLE_PAGE_SIZE}
                   noDataText={this.props.intl.formatMessage({ id: 'templates.noTemplatesFound' })}
                   previousText=""
                   nextText=""
                   pageText=""
                   loadingText=""
+                  onPageChange={(page) => {this.handlePageChange(page)}}
                 />
                 <Loader isLoading={isLoading} />
               </div>

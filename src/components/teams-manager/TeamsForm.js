@@ -134,6 +134,7 @@ class TeamsForm extends React.Component {
                     onChange={this.onAreaChange}
                     noResultsText={this.props.intl.formatMessage({ id: 'filters.noAreasAvailable' })}
                     searchable={false}
+                    arrowRenderer={() => <svg className="c-icon -x-small -gray"><use xlinkHref="#icon-arrow-down"></use></svg>}
                   />
                 </div>
               </div>

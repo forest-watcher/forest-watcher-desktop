@@ -27,18 +27,18 @@ class ReportsFilters extends React.Component {
   }
 
   handleAreaChange = (selected) => {
-    const searchParams = Object.assign(this.props.searchParams, { aoi: selected.value || undefined });
+    const searchParams = Object.assign(this.props.searchParams, { page: 1}, { aoi: selected.value || undefined });
     this.redirectWith(searchParams);
   }
 
   handleSearchChange = (event) => {
-    const searchParams = Object.assign(this.props.searchParams, { searchValues: event.target.value || undefined });
+    const searchParams = Object.assign(this.props.searchParams, { page: 1}, { searchValues: event.target.value || undefined });
     this.redirectWith(searchParams);
   }
 
   handleDateChange = (date) => {
     const parsedDate = date && moment(date).format(DEFAULT_FORMAT);
-    const searchParams = Object.assign(this.props.searchParams, { date: parsedDate || undefined });
+    const searchParams = Object.assign(this.props.searchParams, { page: 1}, { date: parsedDate || undefined });
     this.redirectWith(searchParams);
   }
 
