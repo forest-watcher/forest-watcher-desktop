@@ -54,6 +54,20 @@ class TemplatesManage extends React.Component {
     this.setState({ ...props.template });
   }
   
+  validateState = (state) => {
+    // This function handles arrays and objects
+    for (var field in state) {
+        if (typeof state[field] === 'string' && state[field] === '') {
+          return false;
+        } else if (typeof state[field] === 'object' && state[field] !== null) {
+          // object but not one we want to change, start again
+          this.validateState(state[field]);
+        } else {
+          // lets start again!
+        }
+    }
+    return true;
+  }
 
   // Form actions
   onAreaChange = (selected) => {
@@ -84,6 +98,7 @@ class TemplatesManage extends React.Component {
 
   onSubmit = (e) => {
     e.preventDefault();
+    const canSubmit = this.validateState(this.state);
     const method = this.props.mode === 'manage' ? 'PATCH' : 'POST';
     this.props.saveTemplate(this.state, method);
   }

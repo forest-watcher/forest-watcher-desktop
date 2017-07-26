@@ -6,7 +6,7 @@ export const TEMPLATE = {
         "en"
     ],
     "defaultLanguage": "en",
-    "areaOfInterest": "",
+    "areaOfInterest": null,
     "questions": [],
     "public": false,
     "status": "unpublished"
