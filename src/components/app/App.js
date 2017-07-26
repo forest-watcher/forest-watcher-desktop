@@ -100,7 +100,7 @@ class App extends React.Component {
               </div>
             }
             {!user.loggedIn &&
-              ((!callbackUrl || !confirmToken) ?
+              ((callbackUrl || confirmToken) ?
                 <Redirect to={{
                   pathname: '/',
                   search: location.search
