@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import Hero from '../../layouts/Hero';
 import 'react-select/dist/react-select.css';
 import { FormattedMessage, injectIntl } from 'react-intl';
-import { Form, Input, Button } from '../../form/Form';
+import { Form, Button } from '../../form/Form';
 import Select from 'react-select';
 import Loader from '../../ui/Loader';
 import FormFooter from '../../ui/FormFooter';

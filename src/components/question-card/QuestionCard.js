@@ -195,34 +195,38 @@ class QuestionCard extends React.Component {
                         )
                     }
                     { isConditional && canEdit &&
-                        <div>
-                            <button 
-                                className={"c-button add-option-button"} 
-                                type="button" 
-                                onClick={this.onQuestionOptionAdd}
-                            >
-                                <FormattedMessage id={"templates.optionPlaceholder"} />
-                            </button>
-                                <div className="question-more-info">
-                                <Checkbox
-                                    id={`${questionNum}-more-info`}
-                                    callback={() => this.handleChangeMoreInfo(questionNum)}
-                                    defaultChecked={question.childQuestions.length > 0}
-                                />
-                                <label className="text">{this.props.intl.formatMessage({ id: 'templates.moreInfoFirst' })}</label>
-                                <Select
-                                    name="more-info-answer"
-                                    className="more-info-select"
-                                    options={conditionalOptions}
-                                    value={question.childQuestions.length ? getSelectorValueFromArray(question.childQuestions[0].conditionalValue, conditionalOptions) : null}
-                                    onChange={this.onMoreInfoSelect}
-                                    searchable={false}
-                                    clearable={false}
-                                    disabled={!canEdit}
-                                    arrowRenderer={() => <svg className="c-icon -x-small -gray"><use xlinkHref="#icon-arrow-down"></use></svg>}
-                                />
-                                <label className="text">{this.props.intl.formatMessage({ id: 'templates.moreInfoSecond' })}</label>
-                            </div>
+                        <button 
+                            className={"c-button add-option-button"} 
+                            type="button" 
+                            onClick={this.onQuestionOptionAdd}
+                        >
+                            <FormattedMessage id={"templates.optionPlaceholder"} />
+                        </button>
+                    }
+                    { isConditional &&
+                        <div className="question-more-info">
+                            <Checkbox
+                                id={`${questionNum}-more-info`}
+                                callback={() => this.handleChangeMoreInfo(questionNum)}
+                                defaultChecked={question.childQuestions.length > 0}
+                                disabled={!canEdit}
+                            />
+                            <label className="text">{this.props.intl.formatMessage({ id: 'templates.moreInfoFirst' })}</label>
+                            <Select
+                                name="more-info-answer"
+                                className="more-info-select"
+                                options={conditionalOptions}
+                                value={question.childQuestions.length ? getSelectorValueFromArray(question.childQuestions[0].conditionalValue, conditionalOptions) : null}
+                                onChange={this.onMoreInfoSelect}
+                                searchable={false}
+                                clearable={false}
+                                disabled={!canEdit}
+                                placeholder={this.props.intl.formatMessage({ id: 'templates.selectCondition' })}
+                                noResultsText={this.props.intl.formatMessage({ id: 'templates.noConditions' })}
+                                arrowRenderer={() => <svg className="c-icon -x-small -gray"><use xlinkHref="#icon-arrow-down"></use></svg>}
+                                disabled={!canEdit}
+                            />
+                            <label className="text">{this.props.intl.formatMessage({ id: 'templates.moreInfoSecond' })}</label>
                         </div>
                     }
                 </div>

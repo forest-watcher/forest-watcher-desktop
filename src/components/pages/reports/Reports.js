@@ -87,7 +87,7 @@ class Reports extends React.Component {
                   showPageSizeOptions={false}
                   minRows={5}
                   defaultPageSize={8}
-                  page={parseInt(searchParams.page) - 1 || 0}
+                  page={parseInt(searchParams.page, 10) - 1 || 0}
                   noDataText={this.props.intl.formatMessage({ id: 'reports.noReportsFound' })}
                   previousText=""
                   nextText=""
