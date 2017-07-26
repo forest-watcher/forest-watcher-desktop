@@ -144,7 +144,7 @@ class QuestionCard extends React.Component {
   onChildInputChange = (e) => {
     let childQuestions = this.question.childQuestions.slice();
     childQuestions[0].label[this.props.defaultLanguage] = e.target.value;
-    this.question.child = { 
+    this.question = { 
         ...this.question,
         childQuestions: childQuestions
     };

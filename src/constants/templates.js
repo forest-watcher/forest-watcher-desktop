@@ -25,7 +25,7 @@ export const QUESTION = {
 
 export const CHILD_QUESTION = {
     "type": "text",
-    "name": "",
+    "name": "more-info",
     "conditionalValue": 0,
     "order": 0,
     "required": false,

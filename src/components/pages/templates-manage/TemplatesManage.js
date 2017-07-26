@@ -112,7 +112,7 @@ class TemplatesManage extends React.Component {
       ...QUESTION,
       order: newQuestions.length,
       label: {
-        [this.state.defaultLanguage]: "more-info"
+        [this.state.defaultLanguage]: ""
       },
       name: `question-${newQuestions.length + 1}`
     };
