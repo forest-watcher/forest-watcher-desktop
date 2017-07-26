@@ -109,7 +109,7 @@ export function createTeam(team) {
         'Content-Type': 'application/json'
       },
       method: 'POST',
-      body: getBody(team)
+      body: Object.assign(getBody(team), { locale: state().app.locale })
     })
       .then((response) => {
         if (response.ok) return response.json();
@@ -159,7 +159,7 @@ export function updateTeam(team, id) {
           'Content-Type': 'application/json'
         },
         method: 'PATCH',
-        body: getBody(team)
+        body: Object.assign(getBody(team), { locale: state().app.locale })
       }
     )
       .then((response) => {

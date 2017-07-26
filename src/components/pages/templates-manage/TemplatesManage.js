@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import Hero from '../../layouts/Hero';
 import 'react-select/dist/react-select.css';
 import { FormattedMessage, injectIntl } from 'react-intl';
-import { Form, Input, Button } from '../../form/Form';
+import { Form, Button } from '../../form/Form';
 import { validation } from '../../../helpers/validation'; // eslint-disable-line no-unused-vars
 import Select from 'react-select';
 import Loader from '../../ui/Loader';
@@ -279,7 +279,7 @@ class TemplatesManage extends React.Component {
                 />
                 <span className="status-label text -x-small-title">{this.props.intl.formatMessage({ id: 'templates.statusPublished' })}</span>
               </div>
-              <Button className="c-button" disabled={isLoading || !canManage}><FormattedMessage id="forms.save" /></Button>                
+              <Button className="c-button" disabled={isLoading || !canSave}><FormattedMessage id="forms.save" /></Button>                
             </FormFooter>
           </Form>
         </div>

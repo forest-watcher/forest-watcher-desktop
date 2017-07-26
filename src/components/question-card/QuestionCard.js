@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Input } from '../form/Form';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { prettyNum } from '../../helpers/utils';
 import { getSelectorValueFromArray } from '../../helpers/filters';
