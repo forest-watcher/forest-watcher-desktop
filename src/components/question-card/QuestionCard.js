@@ -109,7 +109,12 @@ class QuestionCard extends React.Component {
   }
 
   handleChangeMoreInfo = () => {
-    
+    //remove or add child question
+    // get from constants with simple translation
+  }
+
+  onMoreInfoSelect = () => {
+    // update child question with selected value
   }
 
   render() {
@@ -193,7 +198,7 @@ class QuestionCard extends React.Component {
                                     className="more-info-select"
                                     options={conditionalOptions}
                                     value={getSelectorValueFromArray(question.childQuestions[0].conditionalValue, conditionalOptions)}
-                                    onChange={this.onTypeChange}
+                                    onChange={this.onMoreInfoSelect}
                                     searchable={false}
                                     clearable={false}
                                     disabled={!canEdit}
