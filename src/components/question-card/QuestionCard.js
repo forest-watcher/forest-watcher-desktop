@@ -163,7 +163,6 @@ class QuestionCard extends React.Component {
             });
         });
     }
-    console.log(question);
     return (
         <section className="c-question-card">
           <div className="questions">
