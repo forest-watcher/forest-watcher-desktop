@@ -3,6 +3,8 @@ import { setUserChecked } from './app';
 import { API_BASE_URL } from '../constants/global';
 import { getGeoStoresWithAreas } from './areas';
 import { getTemplates } from './templates';
+import { getTeam } from './teams';
+import { toastr } from 'react-redux-toastr';
 
 // Actions
 const GET_USER = 'user/GET_USER';
@@ -68,6 +70,29 @@ export function checkLogged(tokenParam) {
           });
         }
         dispatch(setUserChecked());
+        console.warn(error);
+      });
+  };
+}
+
+export function confirmUser(token) {
+  const url = `${API_BASE_URL}/teams/confirm/${token}`;
+  return (dispatch, state) => {
+    fetch(url, {
+      headers: {
+        Authorization: `Bearer ${state().user.token}`
+      }
+    })
+      .then((response) => {
+        if (response.ok) return response;
+        throw Error(response.statusText);
+      })
+      .then(async (data) => {
+        toastr.success('You have become a confirmed user');
+        dispatch(getTeam(state().user.data.id));
+      })
+      .catch((error) => {
+        toastr.error('Error in confirmation');
         console.warn(error);
       });
   };
