@@ -65,6 +65,7 @@ class Templates extends React.Component {
                   data={!isLoading && templates ? templates : []}
                   columns={columns}
                   showPageSizeOptions={false}
+                  showPagination={templates.length > 8}
                   minRows={5}
                   page={parseInt(searchParams.page, 10) - 1 || 0}
                   defaultPageSize={8}

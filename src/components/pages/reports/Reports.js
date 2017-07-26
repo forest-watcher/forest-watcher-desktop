@@ -85,6 +85,7 @@ class Reports extends React.Component {
                   data={answers || []}
                   columns={columns}
                   showPageSizeOptions={false}
+                  showPagination={answers.length > 8}
                   minRows={5}
                   defaultPageSize={8}
                   page={parseInt(searchParams.page, 10) - 1 || 0}

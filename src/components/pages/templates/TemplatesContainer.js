@@ -16,7 +16,6 @@ const getTemplatesById = (templates, reports, areas, user) => {
       aoiName: areas.data[areaId] ? areas.data[areaId].attributes.name : null,
       count: templateData.answersCount || null,
       status: templateData.status || null,
-      public: templateData.public || null,
       user: templateData.user || null
     };
   });
