@@ -4,7 +4,8 @@ import PropTypes from 'prop-types';
 import Hero from '../../layouts/Hero';
 import 'react-select/dist/react-select.css';
 import { FormattedMessage, injectIntl } from 'react-intl';
-import { Form, Button } from '../../form/Form';
+import { Form, Input, Button } from '../../form/Form';
+import { validation } from '../../../helpers/validation'; // eslint-disable-line no-unused-vars
 import Select from 'react-select';
 import Loader from '../../ui/Loader';
 import FormFooter from '../../ui/FormFooter';
@@ -188,15 +189,16 @@ class TemplatesManage extends React.Component {
                 <div className="row">
                   <div className="column small-12 medium-10 medium-offset-1 large-8 large-offset-2">
                     <div className="c-question-card -title">
-                      <input
+                      <Input
                         type="text"
                         className="-title"
                         onChange={this.onInputChange}
                         name="name"
+                        validations={['required']}
                         value={this.state.name ? this.state.name[this.state.defaultLanguage] : ''}
                         placeholder={this.props.intl.formatMessage({ id: 'templates.title' })}
                         onKeyPress={(e) => {if (e.which === 13) { e.preventDefault();}}} // Prevent send on press Enter
-                        disabled={isLoading || !canManage}
+                        disabled={isLoading}
                       />
                     </div>
                       {this.state.questions &&
@@ -258,7 +260,11 @@ class TemplatesManage extends React.Component {
                 />
                 <span className="status-label text -x-small-title">{this.props.intl.formatMessage({ id: 'templates.statusPublished' })}</span>
               </div>
-              <Button className="c-button" disabled={isLoading || !canManage || !canSave}><FormattedMessage id="forms.save" /></Button>
+              { this.state.questions.length ?
+                <Button className="c-button"><FormattedMessage id="forms.save" /></Button>
+                :
+                <Button className="c-button" disabled><FormattedMessage id="forms.save" /></Button>                
+              }
             </FormFooter>
           </Form>
         </div>

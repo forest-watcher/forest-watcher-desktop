@@ -92,6 +92,7 @@
     "templates.noTemplatesFound": "No templates found",
     "templates.questionPlaceholder": "Type your question...",
     "templates.optionPlaceholder": "Type option...",
+    "templates.addOption": "Add option",    
     "templates.required": "required",
     "templates.saved": "Template saved!",
     "templates.deleted": "Template deleted",

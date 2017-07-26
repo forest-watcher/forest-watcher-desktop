@@ -93,7 +93,10 @@ class QuestionCard extends React.Component {
     } else {
         this.question = { 
             ...this.question,
-            type: selected.value
+            type: selected.value,
+            values: {},
+            childQuestions: [],
+            conditions: []
         };
     }
     this.props.syncStateWithProps(this.question, this.props.questionNum);
@@ -175,7 +178,6 @@ class QuestionCard extends React.Component {
                     validations={['required']}                    
                     value={question.label[defaultLanguage] || ''}
                     placeholder={this.props.intl.formatMessage({ id: 'templates.questionPlaceholder' })}
-                    validations={['required']}
                     onKeyPress={(e) => {if (e.which === 13) { e.preventDefault();}}} // Prevent send on press Enter
                     disabled={!canManage}
                 />
@@ -219,7 +221,7 @@ class QuestionCard extends React.Component {
                             type="button" 
                             onClick={this.onQuestionOptionAdd}
                         >
-                            <FormattedMessage id={"templates.optionPlaceholder"} />
+                            <FormattedMessage id={"templates.addOption"} />
                         </button>
                     }
                     { isConditional &&
