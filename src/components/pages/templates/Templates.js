@@ -11,7 +11,7 @@ import Loader from '../../ui/Loader';
 import { injectIntl } from 'react-intl';
 import { Link } from 'react-router-dom';
 import qs from 'query-string';
-
+import { TABLE_PAGE_SIZE } from '../../../constants/global';
 
 class Templates extends React.Component {
 
@@ -65,10 +65,10 @@ class Templates extends React.Component {
                   data={!isLoading && templates ? templates : []}
                   columns={columns}
                   showPageSizeOptions={false}
-                  showPagination={templates.length > 8}
-                  minRows={5}
+                  showPagination={templates.length > TABLE_PAGE_SIZE}
+                  minRows={TABLE_PAGE_SIZE}
                   page={parseInt(searchParams.page, 10) - 1 || 0}
-                  defaultPageSize={8}
+                  defaultPageSize={TABLE_PAGE_SIZE}
                   noDataText={this.props.intl.formatMessage({ id: 'templates.noTemplatesFound' })}
                   previousText=""
                   nextText=""

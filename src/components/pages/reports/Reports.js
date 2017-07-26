@@ -9,6 +9,7 @@ import ReportsFilters from './ReportsFiltersContainer';
 import Loader from '../../ui/Loader';
 import { injectIntl } from 'react-intl';
 import qs from 'query-string';
+import { TABLE_PAGE_SIZE } from '../../../constants/global';
 
 import 'react-select/dist/react-select.css';
 
@@ -85,9 +86,9 @@ class Reports extends React.Component {
                   data={answers || []}
                   columns={columns}
                   showPageSizeOptions={false}
-                  showPagination={answers.length > 8}
-                  minRows={5}
-                  defaultPageSize={8}
+                  showPagination={answers.length > TABLE_PAGE_SIZE}
+                  minRows={TABLE_PAGE_SIZE}
+                  defaultPageSize={TABLE_PAGE_SIZE}
                   page={parseInt(searchParams.page, 10) - 1 || 0}
                   noDataText={this.props.intl.formatMessage({ id: 'reports.noReportsFound' })}
                   previousText=""
