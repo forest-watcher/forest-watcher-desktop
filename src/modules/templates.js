@@ -144,6 +144,8 @@ export function getTemplate(templateId) {
 // POST template
 export function saveTemplate(template, method) {
   return async (dispatch, state) => {
+    debugger
+    return;
     const url = method === 'PATCH' ? `${API_BASE_URL}/reports/${template.id}` : `${API_BASE_URL}/reports`;
     dispatch({
       type: SET_SAVING_TEMPLATE,

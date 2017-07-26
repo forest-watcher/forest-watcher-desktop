@@ -172,6 +172,7 @@ class QuestionCard extends React.Component {
                     className="-question"
                     onChange={this.onInputChange}
                     name="label"
+                    validations={['required']}                    
                     value={question.label[defaultLanguage] || ''}
                     placeholder={this.props.intl.formatMessage({ id: 'templates.questionPlaceholder' })}
                     validations={['required']}
@@ -193,10 +194,11 @@ class QuestionCard extends React.Component {
                     { isConditional && 
                         question.values[defaultLanguage].map((value, index) =>
                             <div key={`${question.name}-value-${index}`} >
-                                <input
+                                <Input
                                     className="option-input -question"
                                     ref={(input) => { this.inputs[index] = input; }}
                                     value={value.label}
+                                    validations={['required']}                                    
                                     onKeyPress={(e) => {if (e.which === 13) { e.preventDefault();}}} // Prevent send on press Enter
                                     placeholder={this.props.intl.formatMessage({ id: 'templates.optionPlaceholder' })}
                                     onChange={(e) => this.onQuestionOptionChange(e, index)}
