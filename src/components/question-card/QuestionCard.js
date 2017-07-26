@@ -214,7 +214,7 @@ class QuestionCard extends React.Component {
                                     name="more-info-answer"
                                     className="more-info-select"
                                     options={conditionalOptions}
-                                    value={getSelectorValueFromArray(question.childQuestions[0].conditionalValue, conditionalOptions)}
+                                    value={question.childQuestions.length ? getSelectorValueFromArray(question.childQuestions[0].conditionalValue, conditionalOptions) : null}
                                     onChange={this.onMoreInfoSelect}
                                     searchable={false}
                                     clearable={false}
