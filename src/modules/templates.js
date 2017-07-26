@@ -100,6 +100,43 @@ export function getTemplates() {
   };
 }
 
+export function getTemplate(templateId) {
+  const url = `${API_BASE_URL}/reports/${templateId}`;
+  return (dispatch, state) => {
+    dispatch({
+      type: SET_LOADING_TEMPLATES,
+      payload: true
+    });
+    return fetch(url, {
+      headers: {
+        Authorization: `Bearer ${state().user.token}`
+      }
+    })
+      .then((response) => {
+        if (response.ok) return response.json();
+        throw Error(response.statusText);
+      })
+      .then((data) => {
+        const normalized = normalize(data);
+        dispatch({
+          type: SET_TEMPLATE,
+          payload: normalized
+        });
+        dispatch({
+          type: SET_LOADING_TEMPLATES,
+          payload: false
+        });
+        return normalized;
+      })
+      .catch((error) => {
+        dispatch({
+          type: SET_LOADING_TEMPLATES,
+          payload: false
+        });
+      });
+  };
+}
+
 // POST template
 export function saveTemplate(template, method) {
   return async (dispatch, state) => {

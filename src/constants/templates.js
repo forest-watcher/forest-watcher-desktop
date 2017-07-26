@@ -23,6 +23,15 @@ export const QUESTION = {
     "label": {}
 };
 
+export const CHILD_QUESTION = {
+    "type": "text",
+    "name": "more-info",
+    "conditionalValue": 0,
+    "order": 0,
+    "required": "false",
+    "label": {}
+}
+
 export const QUESTION_TYPES = ['text', 'image', 'checkbox', 'radio', 'select', 'number'];
 
 export default { TEMPLATE, QUESTION, QUESTION_TYPES };

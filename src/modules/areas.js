@@ -1,7 +1,7 @@
 import normalize from 'json-api-normalizer';
 import { API_BASE_URL } from '../constants/global';
 import { BLOB_CONFIG } from '../constants/map';
-import { getGeostore, saveGeostore } from './geostores';
+import { saveGeostore } from './geostores';
 import domtoimage from 'dom-to-image';
 import { toastr } from 'react-redux-toastr';
 
@@ -96,7 +96,7 @@ export function getArea(id) {
 }
 
 export function getAreas() {
-  const url = `${API_BASE_URL}/area`;
+  const url = `${API_BASE_URL}/area/fw`;
   return (dispatch, state) => {
     dispatch({
       type: SET_LOADING_AREAS,
@@ -184,20 +184,6 @@ export function saveArea(area, node, method) {
           }
         });
       });
-  };
-}
-
-// async get Areas and their Geostores
-export function getGeoStoresWithAreas() {
-  return async (dispatch, state) => {
-    await dispatch(getAreas());
-    let promises = [];
-    const areasIds = state().areas.ids;
-    const areas = state().areas.data;
-    areasIds.forEach((id) => {
-      promises.push(dispatch(getGeostore(areas[id].attributes.geostore)));
-    })
-    await Promise.all(promises);
   };
 }
 

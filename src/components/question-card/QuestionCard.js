@@ -8,6 +8,7 @@ import Select from 'react-select';
 import Icon from '../ui/Icon';
 import SwitchButton from 'react-switch-button';
 import Checkbox from '../ui/Checkbox';
+import { CHILD_QUESTION } from '../../constants/templates';
 
 class QuestionCard extends React.Component {
   constructor (props) {
@@ -109,8 +110,24 @@ class QuestionCard extends React.Component {
   }
 
   handleChangeMoreInfo = () => {
-    //remove or add child question
-    // get from constants with simple translation
+    if (this.question.childQuestions.length > 0) {
+        this.question = {
+            ...this.question,
+            childQuestions: []
+        }
+    } else {
+        let childQuestions = []
+        childQuestions[0] = {
+            ...CHILD_QUESTION,
+            label: {
+                [this.props.defaultLanguage]: ""
+            }
+        }
+        this.question = {
+            ...this.question,
+            childQuestions: childQuestions
+        }
+    }
   }
 
   onMoreInfoSelect = () => {
