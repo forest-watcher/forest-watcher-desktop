@@ -31,10 +31,20 @@ import Nav from '../layouts/Nav';
 class App extends React.Component {
 
   componentWillMount() {
-    const queryParams = querystring.parse(this.props.location.search);
-    const confirmToken = queryParams.confirmToken;
     this.props.checkLogged(this.props.location.search);
-    if (confirmToken) this.props.confirmUser(confirmToken);
+  }
+
+  componentDidMount() {
+    this.checkConfirmedUser(this.props);
+  }
+  componentWillReceiveProps(nextProps) {
+    this.checkConfirmedUser(nextProps);
+  }
+
+  checkConfirmedUser(props) {
+    const queryParams = querystring.parse(props.location.search);
+    const confirmToken = queryParams.confirmToken;
+    if (confirmToken && props.user.token) this.props.confirmUser(confirmToken);
   }
 
   getRootComponent = () => {
@@ -51,6 +61,7 @@ class App extends React.Component {
     if (!userChecked) return null;
     const queryParams = querystring.parse(location.search || '');
     const callbackUrl = queryParams.callbackUrl;
+    const confirmToken = queryParams.confirmToken;
     const mergedMessages = Object.assign({}, translations[DEFAULT_LANGUAGE], translations[locale]);
     return (
       <IntlProvider 
@@ -89,7 +100,7 @@ class App extends React.Component {
               </div>
             }
             {!user.loggedIn &&
-              (callbackUrl !== undefined ?
+              ((!callbackUrl || !confirmToken) ?
                 <Redirect to={{
                   pathname: '/',
                   search: location.search
