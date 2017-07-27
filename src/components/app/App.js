@@ -23,6 +23,7 @@ import Templates from '../pages/templates/TemplatesContainer';
 import TemplatesManage from '../pages/templates-manage/TemplatesManageContainer';
 import Settings from '../pages/settings/SettingsContainer';
 import Reports from '../pages/reports/ReportsContainer';
+import Landing from '../pages/landing/Landing';
 
 import 'react-redux-toastr/lib/css/react-redux-toastr.min.css';
 
@@ -83,6 +84,7 @@ class App extends React.Component {
             {user.loggedIn &&
               <div>
                 <Switch>
+                  <Route exact path={`${match.url}landing`} component={Landing} />
                   <Route exact path={`${match.url}areas`} component={Areas} />
                   <Route exact path={`${match.url}areas/create`} component={AreasManage} />
                   <Route exact path={`${match.url}areas/:areaId`} component={AreasManage} />
