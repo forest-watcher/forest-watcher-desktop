@@ -1,0 +1,17 @@
+.c-switcher {
+  height: 20px;
+  border-radius: 10px;
+  width: 40px;
+  border: 1px solid $border-light-gray;
+  background: $light-gray;
+
+  &.on {
+    background: $theme-accent;
+  }
+
+  .switch-toggle {
+    width: 18px;
+    height: 18px;
+    border-radius: 10px;
+  }
+}

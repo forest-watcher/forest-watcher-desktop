@@ -16,7 +16,9 @@ import { toastr } from 'react-redux-toastr';
 import QuestionCard from '../../question-card/QuestionCard';
 import { CSSTransitionGroup } from 'react-transition-group';
 import { QUESTION } from '../../../constants/templates';
-import SwitchButton from 'react-switch-button';
+import Switch from 'react-toggle-switch'
+
+import 'react-toggle-switch/dist/css/switch.min.css';
 
 class TemplatesManage extends React.Component {
   constructor (props) {
@@ -174,6 +176,7 @@ class TemplatesManage extends React.Component {
     const modeCreate = mode === 'create' ? true : false;
     const canSave = this.state.questions.length && this.state.name[this.state.defaultLanguage] ? true : false;
     const isLoading = loading || saving || deleting ? true : false;
+    console.log(this.state);
     return (
       <div>
         <Hero
@@ -289,12 +292,11 @@ class TemplatesManage extends React.Component {
               </Link>
               <div className="template-status">
                 <span className="status-label text -x-small-title">{this.props.intl.formatMessage({ id: 'templates.statusUnpublished' })}</span>
-                <SwitchButton
-                  className="status"
-                  name={'status'} 
-                  onChange={this.toggleStatus}
-                  defaultChecked={this.state.status === 'published' ? true : false}
-                  disabled={isLoading || !canManage}
+                <Switch
+                  className="c-switcher"
+                  onClick={this.toggleStatus}
+                  on={this.state.status === 'published' ? true : false}
+                  enabled={!isLoading || canManage}
                 />
                 <span className="status-label text -x-small-title">{this.props.intl.formatMessage({ id: 'templates.statusPublished' })}</span>
               </div>

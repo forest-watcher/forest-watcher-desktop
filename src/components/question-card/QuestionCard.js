@@ -5,10 +5,10 @@ import { prettyNum } from '../../helpers/utils';
 import { getSelectorValueFromArray } from '../../helpers/filters';
 import Select from 'react-select';
 import Icon from '../ui/Icon';
-import SwitchButton from 'react-switch-button';
 import Checkbox from '../ui/Checkbox';
 import { CHILD_QUESTION, CONDITIONAL_QUESTION_TYPES } from '../../constants/templates';
 import { filterBy } from '../../helpers/filters';
+import Switch from 'react-toggle-switch'
 
 
 class QuestionCard extends React.Component {
@@ -392,12 +392,11 @@ class QuestionCard extends React.Component {
                         </button>
                     }
                     <span className="required-label text -x-small-title">{this.props.intl.formatMessage({ id: 'templates.required' })}</span>
-                    <SwitchButton
-                        className="required"
-                        name={`${questionNum}-required`} 
-                        onChange={this.toggleRequired}
-                        defaultChecked={question.required}
-                        disabled={!canManage}
+                    <Switch
+                        className="c-switcher required"
+                        onClick={this.toggleRequired}
+                        on={question.required}
+                        enabled={canManage}
                     />
                 </div>
             </div>

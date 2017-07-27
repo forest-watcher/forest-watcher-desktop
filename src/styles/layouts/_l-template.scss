@@ -32,9 +32,13 @@
     }
 
     .template-status {
+        height: 30px;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+
         .status-label {
             padding: 0 10px;
         }
     }
-
 }
