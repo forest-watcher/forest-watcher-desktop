@@ -257,7 +257,7 @@ class TemplatesManage extends React.Component {
                               defaultLanguage={this.state.defaultLanguage}
                               deleteQuestion={this.handleQuestionDelete}
                               status={this.state.status}
-                              canEdit={canEdit}
+                              canEdit={modeCreate}
                               canManage={modeCreate}
                               mode={mode}
                             />
@@ -269,7 +269,7 @@ class TemplatesManage extends React.Component {
               </div>
             </div>
             <div className="add-question">
-              { canEdit &&
+              { modeCreate &&
                 <div className="row">
                   <div className="column small-12 medium-10 medium-offset-1 large-8 large-offset-2">
                     <div className="add-button">
