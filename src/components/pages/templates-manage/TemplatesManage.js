@@ -176,7 +176,6 @@ class TemplatesManage extends React.Component {
     const modeCreate = mode === 'create' ? true : false;
     const canSave = this.state.questions.length && this.state.name[this.state.defaultLanguage] ? true : false;
     const isLoading = loading || saving || deleting ? true : false;
-    console.log(this.state);
     return (
       <div>
         <Hero
