@@ -33,8 +33,8 @@ export const CHILD_QUESTION = {
     "values": {}
 }
 
-export const QUESTION_TYPES = ['text', 'blob', 'checkbox', 'radio', 'select', 'number'];
+export const QUESTION_TYPES = ['text', 'blob', 'radio', 'select', 'number'];
 
-export const CONDITIONAL_QUESTION_TYPES = ['radio', 'checkbox', 'select'];
+export const CONDITIONAL_QUESTION_TYPES = ['radio', 'select'];
 
 export default { TEMPLATE, QUESTION, QUESTION_TYPES, CONDITIONAL_QUESTION_TYPES };
