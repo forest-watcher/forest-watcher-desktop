@@ -6,8 +6,8 @@ import Icon from '../../ui/Icon';
 
 import { API_BASE_URL, API_CALLBACK_URL } from '../../../constants/global';
 
-function LoginButton({ socialNetwork }) {
-  const url =`${API_BASE_URL}/auth/${socialNetwork}?token=true&callbackUrl=${API_CALLBACK_URL}`;
+function LoginButton({ socialNetwork, callbackUrl }) {
+  const url =`${API_BASE_URL}/auth/${socialNetwork}?token=true&callbackUrl=${callbackUrl || API_CALLBACK_URL}`;
   return (
     <div className={`login-button -${socialNetwork}`}>
       <a href={url}>
@@ -21,7 +21,7 @@ function LoginButton({ socialNetwork }) {
   );
 }
 
-function Login() {
+function Login({callbackUrl}) {
   return (
     <div className="c-login row">
       <div className="column small-12">
@@ -31,9 +31,9 @@ function Login() {
             <h1 className="text -logo-title"><FormattedMessage id="app.name" /></h1>
             <p className="text -logo-subtitle"><FormattedMessage id="login.welcome" /></p>
           </div>
-          <LoginButton socialNetwork="facebook" />
-          <LoginButton socialNetwork="twitter" />
-          <LoginButton socialNetwork="google" />
+          <LoginButton socialNetwork="facebook" callbackUrl={callbackUrl}/>
+          <LoginButton socialNetwork="twitter" callbackUrl={callbackUrl}/>
+          <LoginButton socialNetwork="google" callbackUrl={callbackUrl}/>
         </div>
       </div>
     </div>

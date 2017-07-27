@@ -56,7 +56,8 @@ const mapStateToProps = ({ areas, templates, reports }, { match, location }) => 
     areasOptions,
     reports,
     loadingTemplates: templates.loading,
-    loadingReports: reports.loading
+    loadingReports: reports.loading,
+    searchParams: searchParams
   };
 };
 

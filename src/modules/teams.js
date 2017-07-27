@@ -55,7 +55,6 @@ export default function reducer(state = initialState, action) {
 export function getTeam(userId) {
   const url = `${API_BASE_URL}/teams/user/${userId}`;
   return (dispatch, state) => {
-
     return fetch(url, {
       headers: {
         Authorization: `Bearer ${state().user.token}`
@@ -87,13 +86,14 @@ export function getTeam(userId) {
   };
 }
 
-const getBody = (team) => {
+const getBody = (team, locale) => {
   return JSON.stringify({
     name: team.name,
     managers: team.managers.filter(unique),
     confirmedUsers: team.confirmedUsers.filter(unique),
     users: team.users.filter(unique),
-    areas: team.areas
+    areas: team.areas,
+    locale: locale
   })
 }
 
@@ -110,7 +110,7 @@ export function createTeam(team) {
         'Content-Type': 'application/json'
       },
       method: 'POST',
-      body: getBody(team)
+      body: getBody(team, state().app.locale)
     })
       .then((response) => {
         if (response.ok) return response.json();
@@ -160,7 +160,7 @@ export function updateTeam(team, id) {
           'Content-Type': 'application/json'
         },
         method: 'PATCH',
-        body: getBody(team)
+        body: getBody(team, state().app.locale)
       }
     )
       .then((response) => {

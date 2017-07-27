@@ -6,10 +6,10 @@ export const TEMPLATE = {
         "en"
     ],
     "defaultLanguage": "en",
-    "areaOfInterest": "",
+    "areaOfInterest": null,
     "questions": [],
     "public": false,
-    "status": "draft"
+    "status": "unpublished"
 }
 
 export const QUESTION = {
@@ -23,33 +23,16 @@ export const QUESTION = {
     "label": {}
 };
 
-export const QUESTION_TYPES = ['text', 'image', 'list'];
+export const CHILD_QUESTION = {
+    "type": "text",
+    "name": "more-info",
+    "conditionalValue": 0,
+    "order": 0,
+    "required": false,
+    "label": {},
+    "values": {}
+}
 
-export const QUESTION_OPTIONS = [
-    {
-        value: 'text',
-        label: 'text'
-    },
-    {
-        value: 'image',
-        label: 'image'
-    },
-    {
-        value: 'checkbox',
-        label: 'checkbox'
-    },
-    {
-        value: 'radio',
-        label: 'radio'
-    },
-        {
-        value: 'select',
-        label: 'select'
-    },
-    {
-        value: 'number',
-        label: 'number'
-    }
-];
+export const QUESTION_TYPES = ['text', 'image', 'checkbox', 'radio', 'select', 'number'];
 
-export default { TEMPLATE, QUESTION, QUESTION_TYPES, QUESTION_OPTIONS };
+export default { TEMPLATE, QUESTION, QUESTION_TYPES };

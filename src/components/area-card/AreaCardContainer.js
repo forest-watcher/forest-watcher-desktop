@@ -1,11 +1,12 @@
 import { connect } from 'react-redux';
 import AreaCard from './AreaCard';
 
-const mapStateToProps = ({ areas, templates }, { id }) => {
+const mapStateToProps = ({ areas, templates, user }, { id }) => {
   const area = areas.data[id] && areas.data[id].attributes;
   return { 
     area: { ...area, id },
-    templates
+    templates,
+    user: user.data
   };
 };
 
