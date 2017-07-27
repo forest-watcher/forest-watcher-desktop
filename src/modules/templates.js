@@ -2,6 +2,7 @@ import normalize from 'json-api-normalizer';
 import { API_BASE_URL } from '../constants/global';
 import { getArea } from './areas';
 import { toastr } from 'react-redux-toastr';
+import { syncApp } from './app';
 
 // Actions
 const SET_TEMPLATE = 'templates/SET_TEMPLATE';
@@ -227,6 +228,7 @@ export function deleteTemplate(templateId, aois) {
             error: false
           }
         });
+        dispatch(syncApp());
       })
       .catch((error) => {
         dispatch({
