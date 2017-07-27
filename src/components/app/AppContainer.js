@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 import { setLocale } from '../../modules/app';
-import { checkLogged, confirmUser, logout, getUserEmail } from '../../modules/user';
+import { checkLogged, confirmUser, logout } from '../../modules/user';
 import App from './App';
 
 const mapStateToProps = ({ app, user }) => ({
@@ -23,9 +23,6 @@ function mapDispatchToProps(dispatch) {
     },
     setLocale: (language) => {
       dispatch(setLocale(language));
-    },
-    getUserEmail: () => {
-      dispatch(getUserEmail());
     }
   };
 }

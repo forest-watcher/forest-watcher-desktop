@@ -35,7 +35,6 @@ class App extends React.Component {
   }
 
   componentDidMount() {
-    if(this.props.user.loggedIn && !this.props.user.email) this.props.getUserEmail();
     this.checkConfirmedUser(this.props);
   }
   componentWillReceiveProps(nextProps) {
