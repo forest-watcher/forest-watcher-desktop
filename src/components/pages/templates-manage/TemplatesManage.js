@@ -52,7 +52,7 @@ class TemplatesManage extends React.Component {
 
   // Setters
   setPropsToState = (props) => {
-    this.setState({ ...props.template });
+    this.setState({ ...props.template, areaOfInterest: props.areaOfInterest });
   }
   
   validateState = (state) => {

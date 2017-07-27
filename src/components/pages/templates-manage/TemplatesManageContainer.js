@@ -4,12 +4,13 @@ import TemplatesManage from './TemplatesManage';
 import { LOCALES_LIST } from '../../../constants/locales';
 import { TEMPLATE, QUESTION_TYPES, QUESTION } from '../../../constants/templates';
 import { saveTemplate, deleteTemplate } from '../../../modules/templates';
+import { filterBy } from '../../../helpers/filters';
 
-const mapAreasToOptions = (areas) => {
+const mapAreasToOptions = (areas, templateId) => {
     const areasOptions = [];
     const areasIds = areas.ids;
     areasIds.forEach((id) => {
-        if (!areas.data[id].attributes.templateId || areas.data[id].attributes.templateId === '') {
+        if (!areas.data[id].attributes.templateId || areas.data[id].attributes.templateId === '' || templateId === areas.data[id].attributes.templateId) {
             areasOptions.push({
                 option: id,
                 label: areas.data[id].attributes.name 
@@ -40,10 +41,17 @@ const mapLocalesToOptions = (locales) => {
 };
 
 const mapStateToProps = (state, { match }) => {
-    const areasOptions = mapAreasToOptions(state.areas);
     const templateId = match.params.templateId || null;
     const localeOptions = mapLocalesToOptions(LOCALES_LIST);
     const questionOptions = mapQuestionType(QUESTION_TYPES);
+    let areaOfInterest = null;
+    state.areas.ids.forEach((areaId) => {
+        if (state.areas.data[areaId].attributes.templateId === templateId) {
+            areaOfInterest = areaId;
+            return;
+        } 
+    });
+    const areasOptions = mapAreasToOptions(state.areas, templateId);
     const defaultTemplate = {
         ...TEMPLATE,
         name: {
@@ -64,6 +72,7 @@ const mapStateToProps = (state, { match }) => {
     }
     return {
         templateId: match.params.templateId,
+        areaOfInterest: areaOfInterest,
         mode: match.params.templateId ? 'manage' : 'create',
         template: state.templates.data[templateId] ? state.templates.data[templateId].attributes : defaultTemplate,
         loading: state.templates.loading,
