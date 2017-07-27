@@ -9,6 +9,8 @@ const filterBy = (data, field, value) => {
             return false;
         })
     });
+  } else if (Array.isArray(value)) {
+    return data.filter((item) => value.indexOf(item[field]) > -1 );
   } else {
     return data.filter((item) => item[field] === value);
   }

@@ -8,6 +8,8 @@ import Icon from '../ui/Icon';
 import SwitchButton from 'react-switch-button';
 import Checkbox from '../ui/Checkbox';
 import { CHILD_QUESTION } from '../../constants/templates';
+import { filterBy } from '../../helpers/filters';
+
 
 class QuestionCard extends React.Component {
   constructor (props) {
@@ -133,6 +135,27 @@ class QuestionCard extends React.Component {
     this.props.syncStateWithProps(this.question, this.props.questionNum);
   }
 
+  handleChangeOnlyShow = () => {
+    if (this.question.conditions.length > 0) {
+        this.question = {
+            ...this.question,
+            conditions: []
+        }
+    } else {
+        let conditions = [];
+        const conditionalQuestions = filterBy(this.props.template.questions, 'type', 'checkbox');
+        conditions[0] = {
+            name: conditionalQuestions[0].name,
+            value: 0
+        }
+        this.question = {
+            ...this.question,
+            conditions: conditions
+        }
+    }
+    this.props.syncStateWithProps(this.question, this.props.questionNum);
+  }
+
   onMoreInfoSelect = (selected) => {
     let childQuestions = this.question.childQuestions.slice();
     childQuestions[0].conditionalValue = selected.option;
@@ -154,9 +177,16 @@ class QuestionCard extends React.Component {
   }
 
   render() {
+    // permissions and rendering variables
     const { template, question, questionOptions, questionNum, defaultLanguage, deleteQuestion, canEdit, canManage } = this.props;
     const isConditional = question.type === 'radio' || question.type === 'select' || question.type === 'checkbox' ? true : false;
     const conditionalOptions = [];
+    const conditionalQuestionCount = filterBy(this.props.template.questions, 'type', ['checkbox', 'radio', 'select']).length;
+    const canSetConditional = template.questions.length && 
+                              ((conditionalQuestionCount > 0 && !isConditional) ||
+                              (conditionalQuestionCount > 1))
+                              ? true : false;
+    // selector values dependant on user inout
     if (question.values && question.values[defaultLanguage]) {
         question.values[defaultLanguage].forEach((value) => {
             conditionalOptions.push({
@@ -284,42 +314,44 @@ class QuestionCard extends React.Component {
                     />
                 </div>
             </div>
-            <div className="question-footer">
-                <Checkbox
-                    id={`${questionNum}-only-show`}
-                    callback={() => this.handleChangeMoreInfo(questionNum)}
-                    defaultChecked={question.childQuestions.length > 0}
-                    disabled={!canEdit}
-                />
-                <label className="text">{this.props.intl.formatMessage({ id: 'templates.onlyShow' })}</label>
-                <Select
-                    name="only-show-question"
-                    className="only-show-select"
-                    options={conditionalOptions}
-                    value={question.childQuestions.length ? getSelectorValueFromArray(question.childQuestions[0].conditionalValue, conditionalOptions) : null}
-                    onChange={this.onMoreInfoSelect}
-                    searchable={false}
-                    clearable={false}
-                    placeholder={this.props.intl.formatMessage({ id: 'templates.selectCondition' })}
-                    noResultsText={this.props.intl.formatMessage({ id: 'templates.noConditions' })}
-                    arrowRenderer={() => <svg className="c-icon -x-small -gray"><use xlinkHref="#icon-arrow-down"></use></svg>}
-                    disabled={!canEdit || !question.childQuestions.length}
-                />
-                <label className="text">{this.props.intl.formatMessage({ id: 'templates.is' })}</label>
-                <Select
-                    name="only-show-question"
-                    className="only-show-select"
-                    options={conditionalOptions}
-                    value={question.childQuestions.length ? getSelectorValueFromArray(question.childQuestions[0].conditionalValue, conditionalOptions) : null}
-                    onChange={this.onMoreInfoSelect}
-                    searchable={false}
-                    clearable={false}
-                    placeholder={this.props.intl.formatMessage({ id: 'templates.selectCondition' })}
-                    noResultsText={this.props.intl.formatMessage({ id: 'templates.noConditions' })}
-                    arrowRenderer={() => <svg className="c-icon -x-small -gray"><use xlinkHref="#icon-arrow-down"></use></svg>}
-                    disabled={!canEdit || !question.childQuestions.length}
-                />
-            </div>
+            { canSetConditional &&
+                <div className="question-footer">
+                    <Checkbox
+                        id={`${questionNum}-only-show`}
+                        callback={() => this.handleChangeOnlyShow(questionNum)}
+                        defaultChecked={question.childQuestions.length > 0}
+                        disabled={!canEdit}
+                    />
+                    <label className="text">{this.props.intl.formatMessage({ id: 'templates.onlyShow' })}</label>
+                    <Select
+                        name="only-show-question"
+                        className="only-show-select"
+                        options={conditionalOptions}
+                        value={question.childQuestions.length ? getSelectorValueFromArray(question.childQuestions[0].conditionalValue, conditionalOptions) : null}
+                        onChange={this.onMoreInfoSelect}
+                        searchable={false}
+                        clearable={false}
+                        placeholder={this.props.intl.formatMessage({ id: 'templates.selectCondition' })}
+                        noResultsText={this.props.intl.formatMessage({ id: 'templates.noConditions' })}
+                        arrowRenderer={() => <svg className="c-icon -x-small -gray"><use xlinkHref="#icon-arrow-down"></use></svg>}
+                        disabled={!canEdit || !question.childQuestions.length}
+                    />
+                    <label className="text">{this.props.intl.formatMessage({ id: 'templates.is' })}</label>
+                    <Select
+                        name="only-show-question"
+                        className="only-show-select"
+                        options={conditionalOptions}
+                        value={question.childQuestions.length ? getSelectorValueFromArray(question.childQuestions[0].conditionalValue, conditionalOptions) : null}
+                        onChange={this.onMoreInfoSelect}
+                        searchable={false}
+                        clearable={false}
+                        placeholder={this.props.intl.formatMessage({ id: 'templates.selectCondition' })}
+                        noResultsText={this.props.intl.formatMessage({ id: 'templates.noConditions' })}
+                        arrowRenderer={() => <svg className="c-icon -x-small -gray"><use xlinkHref="#icon-arrow-down"></use></svg>}
+                        disabled={!canEdit || !question.childQuestions.length}
+                    />
+                </div>
+            }
         </section>
     );
   }
