@@ -16,7 +16,7 @@ const SET_EDITING_AREA = 'areas/SET_EDITING_AREA';
 const initialState = {
   ids: [],
   data: {},
-  loading: false,
+  loading: true,
   saving: false,
   editing: false,
   error: false
