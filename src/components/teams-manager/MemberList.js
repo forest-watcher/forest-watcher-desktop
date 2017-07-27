@@ -9,11 +9,11 @@ function MemberList({ members, handleChangeRole, deleteMember, intl }) {
   return (
     <div className="c-member-list">
       { members.map((member, index) => {
-        const { id, memberType } = member;
+        const { email, id, memberType } = member;
         const hiddenButton = memberType === MANAGER ? 'hidden' : '';
         return (
           <div key={`${memberType}${id}`} className="horizontal-field-left-aligned">
-            <div className="user-label">{ id }</div>
+            <div className="user-label">{ email || id }</div>
             <div className={hiddenButton}>
               <button className={"delete-button"} type="button" onClick={() => deleteMember(id, memberType)}>
                 <Icon name="icon-delete" className="-small " />
