@@ -153,6 +153,7 @@ class TemplatesManage extends React.Component {
 
   // Render
   render() {
+    // console.log(this.state);
     const { areasOptions, localeOptions, questionOptions, loading, saving, deleting, mode, locale, user, template } = this.props;
     const canEdit = ((template.answersCount === 0 || !template.answersCount) && (template.status === 'unpublished' || template.status === 'draft') && user.id === this.state.user) || mode === 'create' ? true : false;
     const canManage = user.id === this.state.user || mode === 'create' ? true : false;

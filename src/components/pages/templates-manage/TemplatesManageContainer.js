@@ -21,6 +21,12 @@ const mapAreasToOptions = (areas, templateId) => {
 
 const mapQuestionType = (questionTypes) => {
     const questionOptions = questionTypes.map((type) => {
+        if (type === 'blob') {
+            return {
+                value: type,
+                label: 'image'
+            }
+        }
         return {
             value: type,
             label: type
@@ -61,7 +67,7 @@ const mapStateToProps = (state, { match }) => {
         questions: [
             {
                 ...QUESTION,
-                order: 1,
+                order: 0,
                 label: {
                     [state.app.locale]: ""
                 },
