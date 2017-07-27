@@ -4,7 +4,6 @@ import TemplatesManage from './TemplatesManage';
 import { LOCALES_LIST } from '../../../constants/locales';
 import { TEMPLATE, QUESTION_TYPES, QUESTION } from '../../../constants/templates';
 import { saveTemplate, deleteTemplate } from '../../../modules/templates';
-import { filterBy } from '../../../helpers/filters';
 
 const mapAreasToOptions = (areas, templateId) => {
     const areasOptions = [];
