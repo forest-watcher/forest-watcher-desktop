@@ -186,12 +186,12 @@ class QuestionCard extends React.Component {
     } else {
         let conditions = [];
         const conditionalQuestions = filterBy(this.props.template.questions, 'type', CONDITIONAL_QUESTION_TYPES);
-        conditionalQuestions.some((question) => {
-            if (question.name !== this.question.name) {
+        conditionalQuestions.some((tempQuestion) => {
+            if (tempQuestion.name !== this.question.name) {
                 conditions[0] = {
-                    name: question.name,
+                    name: tempQuestion.name,
                     value: 0,
-                    index: question.order
+                    index: tempQuestion.order
                 }
                 return true;
             }
@@ -242,7 +242,7 @@ class QuestionCard extends React.Component {
     
     // rendering variables
     const isConditional = CONDITIONAL_QUESTION_TYPES.indexOf(question.type) > -1 ? true : false;
-    const conditionalQuestions = filterBy(this.props.template.questions, 'type', CONDITIONAL_QUESTION_TYPES);
+    const conditionalQuestions = filterBy(template.questions, 'type', CONDITIONAL_QUESTION_TYPES);
     const conditionalQuestionsFiltered = conditionalQuestions.filter((item) => {
         if (item.order < question.order) {
             return item;
@@ -262,13 +262,16 @@ class QuestionCard extends React.Component {
                 }
             }
         });
-        conditionsAnswers = template.questions[question.conditions[0].index].values[template.defaultLanguage].map((tempQuestion) => {
+        conditionsAnswers = template.questions[question.conditions[0].index].values[template.defaultLanguage].map((tempAnswers) => {
             return {
-                option: tempQuestion.value,
-                label: tempQuestion.label
+                option: tempAnswers.value,
+                label: tempAnswers.label
             }
         });
     }
+    // console.log(questionNum);
+    // console.log(conditionalQuestionsFiltered);
+
     if (question.values && question.values[defaultLanguage]) {
         question.values[defaultLanguage].forEach((value) => {
             conditionalOptions.push({
@@ -280,10 +283,7 @@ class QuestionCard extends React.Component {
 
     // permissions bools that are dependant on locale state
     const conditionalQuestionCount = filterBy(conditionalQuestionsFiltered, 'type', CONDITIONAL_QUESTION_TYPES).length;
-    const canSetConditional = template.questions.length && 
-                              ((conditionalQuestionCount > 0 && !isConditional) ||
-                              (conditionalQuestionCount > 1))
-                              ? true : false;
+    const canSetConditional = template.questions.length && conditionalQuestionCount > 0 ? true : false;
 
     // finally we can render all that fancy stuff
     return (
