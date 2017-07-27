@@ -31,7 +31,6 @@ const filterData = (data, searchParams) => {
 }
 
 const getSelectorValueFromArray = (value, data) => {
-  debugger;
   const selected = data.filter((obj) => {
     return obj.option === value;
   });

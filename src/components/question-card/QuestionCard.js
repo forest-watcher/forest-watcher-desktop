@@ -208,7 +208,8 @@ class QuestionCard extends React.Component {
     let conditions = this.question.conditions.slice();
     conditions[0] = {
         ...conditions[0],
-        name: selected.value
+        name: selected.option,
+        value: 0
     }
     selected.option;
     this.question = { 
@@ -222,7 +223,7 @@ class QuestionCard extends React.Component {
     let conditions = this.question.conditions.slice();
     conditions[0] = {
         ...conditions[0],
-        value: selected.value
+        value: selected.option
     }
     selected.option;
     this.question = { 
@@ -239,16 +240,21 @@ class QuestionCard extends React.Component {
   render() {
     const { template, question, questionOptions, questionNum, defaultLanguage, deleteQuestion, canEdit, canManage } = this.props;
     
-    // permissions and rendering variables
+    // rendering variables
     const isConditional = CONDITIONAL_QUESTION_TYPES.indexOf(question.type) > -1 ? true : false;
     const conditionalQuestions = filterBy(this.props.template.questions, 'type', CONDITIONAL_QUESTION_TYPES);
+    const conditionalQuestionsFiltered = conditionalQuestions.filter((item) => {
+        if (item.order < question.order) {
+            return item;
+        }
+    });
    
     // selector options that are dependant on local state
     const conditionalOptions = [];
     let conditionsQuestions = [];
     let conditionsAnswers = [];
     if (question.conditions.length) {
-        conditionsQuestions = conditionalQuestions.map((tempQuestion) => {
+        conditionsQuestions = conditionalQuestionsFiltered.map((tempQuestion) => {
             if (tempQuestion.name !== question.name) {
                 return {
                     option: tempQuestion.name,
@@ -257,11 +263,9 @@ class QuestionCard extends React.Component {
             }
         });
         conditionsAnswers = template.questions[question.conditions[0].index].values[template.defaultLanguage].map((tempQuestion) => {
-            if (tempQuestion.name !== this.question.name) {
-                return {
-                    option: tempQuestion.value,
-                    label: tempQuestion.label
-                }
+            return {
+                option: tempQuestion.value,
+                label: tempQuestion.label
             }
         });
     }
@@ -275,7 +279,7 @@ class QuestionCard extends React.Component {
     }
 
     // permissions bools that are dependant on locale state
-    const conditionalQuestionCount = filterBy(this.props.template.questions, 'type', CONDITIONAL_QUESTION_TYPES).length;
+    const conditionalQuestionCount = filterBy(conditionalQuestionsFiltered, 'type', CONDITIONAL_QUESTION_TYPES).length;
     const canSetConditional = template.questions.length && 
                               ((conditionalQuestionCount > 0 && !isConditional) ||
                               (conditionalQuestionCount > 1))
