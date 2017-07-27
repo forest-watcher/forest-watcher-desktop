@@ -8,6 +8,7 @@ import { toastr } from 'react-redux-toastr';
 // Actions
 const GET_USER = 'user/GET_USER';
 const CHECK_USER_LOGGED = 'user/CHECK_USER_LOGGED';
+const GET_USER_EMAIL = 'user/GET_USER_EMAIL';
 export const LOGOUT = 'user/LOGOUT';
 
 // Reducer
@@ -28,6 +29,18 @@ export default function reducer(state = initialState, action) {
         return Object.assign({}, state, { data: user });
       }
       return state;
+    }
+    case GET_USER_EMAIL: {
+      const user = state.data;
+      user.email = action.payload;
+
+      return {
+        ...state,
+        data: {
+          ...state.data,
+          email: user.email
+        }
+      }
     }
     case LOGOUT:
       return initialState;
@@ -91,6 +104,32 @@ export function confirmUser(token) {
       })
       .catch((error) => {
         toastr.error('Error in confirmation');
+        console.warn(error);
+      });
+  };
+}
+
+export function getUserEmail() {
+  const url = `${API_BASE_URL}/user`;
+  return (dispatch, state) => {
+    fetch(url, {
+      headers: {
+        Authorization: `Bearer ${state().user.token}`
+      }
+    })
+      .then((response) => {
+        if (response.ok) return response.json();
+        throw Error(response.statusText);
+      })
+      .then(async (res) => {
+        const user = res.data;
+        dispatch({
+          type: GET_USER_EMAIL,
+          payload: user && user.attributes.email
+        });
+
+      })
+      .catch((error) => {
         console.warn(error);
       });
   };
