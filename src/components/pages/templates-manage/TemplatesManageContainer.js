@@ -93,8 +93,8 @@ const mapStateToProps = (state, { match }) => {
 
 function mapDispatchToProps(dispatch) {
   return {
-    saveTemplate: (template, method) => {
-      dispatch(saveTemplate(template, method));
+    saveTemplate: (template, method, templateId) => {
+      dispatch(saveTemplate(template, method, templateId));
     },
     deleteTemplate: (templateId, aois) => {
       dispatch(deleteTemplate(templateId, aois));

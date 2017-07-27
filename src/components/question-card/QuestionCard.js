@@ -190,6 +190,7 @@ class QuestionCard extends React.Component {
                     value: 0
                 }
             }
+            return true;
         })
         this.question = {
             ...this.question,
@@ -206,7 +207,6 @@ class QuestionCard extends React.Component {
         name: selected.option,
         value: 0
     }
-    selected.option;
     this.question = { 
         ...this.question,
         conditions: conditions
@@ -220,7 +220,6 @@ class QuestionCard extends React.Component {
         ...conditions[0],
         value: selected.option
     }
-    selected.option;
     this.question = { 
         ...this.question,
         conditions: conditions

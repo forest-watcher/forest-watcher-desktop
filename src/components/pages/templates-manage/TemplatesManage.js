@@ -82,7 +82,7 @@ class TemplatesManage extends React.Component {
     this.validateState(this.state);
     if (this.canSubmit) {
       const method = this.props.mode === 'manage' ? 'PATCH' : 'POST';
-      this.props.saveTemplate(this.state, method);
+      this.props.saveTemplate(this.state, method, this.props.templateId);
     } else {
       toastr.error(this.props.intl.formatMessage({ id: 'templates.missingFields' }), this.props.intl.formatMessage({ id: 'templates.missingFieldsDetail' }));      
     }
@@ -171,6 +171,7 @@ class TemplatesManage extends React.Component {
     const { areasOptions, localeOptions, questionOptions, loading, saving, deleting, mode, locale, user, template } = this.props;
     const canEdit = ((template.answersCount === 0 || !template.answersCount) && (template.status === 'unpublished' || template.status === 'draft') && user.id === this.state.user) || mode === 'create' ? true : false;
     const canManage = user.id === this.state.user || mode === 'create' ? true : false;
+    const modeCreate = mode === 'create' ? true : false;
     const canSave = this.state.questions.length && this.state.name[this.state.defaultLanguage] ? true : false;
     const isLoading = loading || saving || deleting ? true : false;
     return (
@@ -196,7 +197,7 @@ class TemplatesManage extends React.Component {
                         onChange={this.onAreaChange}
                         noResultsText={this.props.intl.formatMessage({ id: 'filters.noAreasAvailable' })}
                         searchable={false}
-                        disabled={isLoading || !canManage}
+                        disabled={isLoading}
                         arrowRenderer={() => <svg className="c-icon -x-small -gray"><use xlinkHref="#icon-arrow-down"></use></svg>}
                       />
                     </div>
@@ -213,7 +214,7 @@ class TemplatesManage extends React.Component {
                         noResultsText={this.props.intl.formatMessage({ id: 'filters.noLanguagesAvailable' })}
                         searchable={true}
                         clearable={false}
-                        disabled={isLoading || !canManage}
+                        disabled={isLoading || !modeCreate}
                         arrowRenderer={() => <svg className="c-icon -x-small -gray"><use xlinkHref="#icon-arrow-down"></use></svg>}
                       />
                     </div>
@@ -255,7 +256,7 @@ class TemplatesManage extends React.Component {
                               deleteQuestion={this.handleQuestionDelete}
                               status={this.state.status}
                               canEdit={canEdit}
-                              canManage={canManage}
+                              canManage={modeCreate}
                               mode={mode}
                             />
                           )}

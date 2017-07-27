@@ -1,7 +1,6 @@
 import normalize from 'json-api-normalizer';
 import { API_BASE_URL } from '../constants/global';
 import { getArea } from './areas';
-import { toastr } from 'react-redux-toastr';
 import { syncApp } from './app';
 
 // Actions
@@ -144,13 +143,9 @@ export function getTemplate(templateId) {
 }
 
 // POST template
-export function saveTemplate(template, method) {
+export function saveTemplate(template, method, templateId) {
   return async (dispatch, state) => {
-    const url = method === 'PATCH' ? `${API_BASE_URL}/reports/${template.id}` : `${API_BASE_URL}/reports`;
-    if (method === 'PATCH') {
-      toastr.info('Update not yet implemented');
-      return;
-    }
+    const url = method === 'PATCH' ? `${API_BASE_URL}/reports/${templateId}` : `${API_BASE_URL}/reports`;
     dispatch({
       type: SET_SAVING_TEMPLATE,
       payload: {
