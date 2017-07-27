@@ -85,7 +85,9 @@ class QuestionCard extends React.Component {
                         label: ""
                     }
                 ]
-            }
+            },
+            childQuestions: [],
+            conditions: []
         };
     } else {
         this.question = { 
@@ -410,7 +412,8 @@ class QuestionCard extends React.Component {
                     <Checkbox
                         id={`${questionNum}-only-show`}
                         callback={() => this.handleChangeOnlyShow(questionNum)}
-                        defaultChecked={question.childQuestions.length > 0}
+                        defaultChecked={question.conditions.length > 0}
+                        checked={question.conditions.length > 0}
                         disabled={!canEdit}
                     />
                     <label className="text">{this.props.intl.formatMessage({ id: 'templates.onlyShow' })}</label>
