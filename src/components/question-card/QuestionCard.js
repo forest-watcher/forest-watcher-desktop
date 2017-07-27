@@ -27,8 +27,19 @@ class QuestionCard extends React.Component {
 
 
   ///////////////////////////////
-  // add question handler
+  // simple question actions -> name, type, options (for conditional type questions)
   ///////////////////////////////
+  onInputChange = (e) => {
+    this.question = {
+        ...this.question,
+        label: {
+            ...this.question.label,
+            [this.props.defaultLanguage]: e.target.value
+        } 
+    }
+    this.props.syncStateWithProps(this.question, this.props.questionNum);
+  }
+
   onQuestionOptionAdd = () => {
     let values = this.question.values[this.props.defaultLanguage];
     values.push({
@@ -41,21 +52,6 @@ class QuestionCard extends React.Component {
             ...this.question.values,
             [this.props.defaultLanguage]: values
         }
-    }
-    this.props.syncStateWithProps(this.question, this.props.questionNum);
-  }
-
-
-  ///////////////////////////////
-  // simple question actions -> name, type, options (for conditional type questions)
-  ///////////////////////////////
-  onInputChange = (e) => {
-    this.question = {
-        ...this.question,
-        label: {
-            ...this.question.label,
-            [this.props.defaultLanguage]: e.target.value
-        } 
     }
     this.props.syncStateWithProps(this.question, this.props.questionNum);
   }
@@ -187,15 +183,12 @@ class QuestionCard extends React.Component {
         }
     } else {
         let conditions = [];
-        const conditionalQuestions = filterBy(this.props.template.questions, 'type', CONDITIONAL_QUESTION_TYPES);
-        conditionalQuestions.some((tempQuestion) => {
-            if (tempQuestion.name !== this.question.name) {
+        const conditionalQuestions = this.props.template.questions.some((tempQuestion) => {
+            if (tempQuestion.name !== this.question.name && CONDITIONAL_QUESTION_TYPES.indexOf(tempQuestion.type) > -1) {
                 conditions[0] = {
                     name: tempQuestion.name,
-                    value: 0,
-                    index: tempQuestion.order
+                    value: 0
                 }
-                return true;
             }
         })
         this.question = {
@@ -264,15 +257,17 @@ class QuestionCard extends React.Component {
                 }
             }
         });
-        conditionsAnswers = template.questions[question.conditions[0].index].values[template.defaultLanguage].map((tempAnswers) => {
+
+        const tempQuestionIndex = filterBy(template.questions, 'name', question.conditions[0].name);
+        conditionsAnswers = template.questions[tempQuestionIndex[0].order].values[template.defaultLanguage].map((tempAnswers) => {
             return {
                 option: tempAnswers.value,
                 label: tempAnswers.label
             }
         });
     }
-    // console.log(questionNum);
-    // console.log(conditionalQuestionsFiltered);
+
+    // console.log(question.name, question.conditions[0]);
 
     if (question.values && question.values[defaultLanguage]) {
         question.values[defaultLanguage].forEach((value) => {
@@ -407,12 +402,11 @@ class QuestionCard extends React.Component {
                     />
                 </div>
             </div>
-            { canSetConditional &&
+            { canSetConditional && 
                 <div className="question-footer">
                     <Checkbox
                         id={`${questionNum}-only-show`}
                         callback={() => this.handleChangeOnlyShow(questionNum)}
-                        defaultChecked={question.conditions.length > 0}
                         checked={question.conditions.length > 0}
                         disabled={!canEdit}
                     />
@@ -427,7 +421,7 @@ class QuestionCard extends React.Component {
                         clearable={false}
                         placeholder={this.props.intl.formatMessage({ id: 'templates.selectQuestion' })}
                         arrowRenderer={() => <svg className="c-icon -x-small -gray"><use xlinkHref="#icon-arrow-down"></use></svg>}
-                        disabled={!question.conditions.length}
+                        disabled={!canEdit || !question.conditions.length}
                     />
                     <label className="text">{this.props.intl.formatMessage({ id: 'templates.is' })}</label>
                     <Select
@@ -440,7 +434,7 @@ class QuestionCard extends React.Component {
                         clearable={false}
                         placeholder={this.props.intl.formatMessage({ id: 'templates.selectOption' })}
                         arrowRenderer={() => <svg className="c-icon -x-small -gray"><use xlinkHref="#icon-arrow-down"></use></svg>}
-                        disabled={!question.conditions.length}
+                        disabled={!canEdit || !question.conditions.length}
                     />
                 </div>
             }
