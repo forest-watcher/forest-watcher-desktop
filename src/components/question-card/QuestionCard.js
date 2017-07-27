@@ -18,36 +18,17 @@ class QuestionCard extends React.Component {
     this.inputs = {};
   }
 
+  // life cycle
   componentWillReceiveProps(nextProps) {
     if (nextProps.question !== this.props.question) {
         this.question = { ...nextProps.question };
     }
   }
 
-  onInputChange = (e) => {
-    this.question = {
-        ...this.question,
-        label: {
-            ...this.question.label,
-            [this.props.defaultLanguage]: e.target.value
-        } 
-    }
-    this.props.syncStateWithProps(this.question, this.props.questionNum);
-  }
 
-  onQuestionOptionChange = (e, index) => {
-    let values = this.question.values[this.props.defaultLanguage];
-    values[index].label = e.target.value;
-    this.question = {
-        ...this.question,
-        values: {
-            ...this.question.values,
-            [this.props.defaultLanguage]: values
-        } 
-    }
-    this.props.syncStateWithProps(this.question, this.props.questionNum);
-  }
-
+  ///////////////////////////////
+  // add question handler
+  ///////////////////////////////
   onQuestionOptionAdd = () => {
     let values = this.question.values[this.props.defaultLanguage];
     values.push({
@@ -64,9 +45,24 @@ class QuestionCard extends React.Component {
     this.props.syncStateWithProps(this.question, this.props.questionNum);
   }
 
-  deleteOption = (index) => {
+
+  ///////////////////////////////
+  // simple question actions -> name, type, options (for conditional type questions)
+  ///////////////////////////////
+  onInputChange = (e) => {
+    this.question = {
+        ...this.question,
+        label: {
+            ...this.question.label,
+            [this.props.defaultLanguage]: e.target.value
+        } 
+    }
+    this.props.syncStateWithProps(this.question, this.props.questionNum);
+  }
+
+  onQuestionOptionChange = (e, index) => {
     let values = this.question.values[this.props.defaultLanguage];
-    values.splice(index, 1);
+    values[index].label = e.target.value;
     this.question = {
         ...this.question,
         values: {
@@ -103,16 +99,10 @@ class QuestionCard extends React.Component {
     this.props.syncStateWithProps(this.question, this.props.questionNum);
   }
 
-  toggleRequired = () => {
-    let required = this.question.required;
-    required = required ? false : true;
-    this.question = {
-        ...this.question,
-        required: required
-    };
-    this.props.syncStateWithProps(this.question, this.props.questionNum);
-  }
 
+  ///////////////////////////////
+  // hnadle childquestions inputs -> checkbox, selector for option, more info translation input
+  ///////////////////////////////
   handleChangeMoreInfo = () => {
     if (this.question.childQuestions.length > 0) {
         this.question = {
@@ -135,6 +125,58 @@ class QuestionCard extends React.Component {
     this.props.syncStateWithProps(this.question, this.props.questionNum);
   }
 
+  onMoreInfoSelect = (selected) => {
+    let childQuestions = this.question.childQuestions.slice();
+    childQuestions[0].conditionalValue = selected.option;
+    this.question = { 
+        ...this.question,
+        childQuestions: childQuestions
+    };
+    this.props.syncStateWithProps(this.question, this.props.questionNum);
+  }
+
+  onChildInputChange = (e) => {
+    let childQuestions = this.question.childQuestions.slice();
+    childQuestions[0].label[this.props.defaultLanguage] = e.target.value;
+    this.question = { 
+        ...this.question,
+        childQuestions: childQuestions
+    };
+    this.props.syncStateWithProps(this.question, this.props.questionNum);
+  }
+
+
+  ///////////////////////////////
+  // actions for card footer actions -> delete question, make required
+  ///////////////////////////////
+  deleteOption = (index) => {
+    let values = this.question.values[this.props.defaultLanguage];
+    values.splice(index, 1);
+    this.question = {
+        ...this.question,
+        values: {
+            ...this.question.values,
+            [this.props.defaultLanguage]: values
+        } 
+    }
+    this.props.syncStateWithProps(this.question, this.props.questionNum);
+  }
+
+    
+  toggleRequired = () => {
+    let required = this.question.required;
+    required = required ? false : true;
+    this.question = {
+        ...this.question,
+        required: required
+    };
+    this.props.syncStateWithProps(this.question, this.props.questionNum);
+  }
+
+
+  ///////////////////////////////
+  // handle external conditions -> checkbox, question selector, answers selector
+  ///////////////////////////////
   handleChangeOnlyShow = () => {
     if (this.question.conditions.length > 0) {
         this.question = {
@@ -162,62 +204,67 @@ class QuestionCard extends React.Component {
     this.props.syncStateWithProps(this.question, this.props.questionNum);
   }
 
-  onMoreInfoSelect = (selected) => {
-    let childQuestions = this.question.childQuestions.slice();
-    childQuestions[0].conditionalValue = selected.option;
+  onOnlyShowQuestionSelect = (selected) => {
+    let conditions = this.question.conditions.slice();
+    conditions[0] = {
+        ...conditions[0],
+        name: selected.value
+    }
+    selected.option;
     this.question = { 
         ...this.question,
-        childQuestions: childQuestions
+        conditions: conditions
     };
     this.props.syncStateWithProps(this.question, this.props.questionNum);
   }
 
-  onChildInputChange = (e) => {
-    let childQuestions = this.question.childQuestions.slice();
-    childQuestions[0].label[this.props.defaultLanguage] = e.target.value;
+  onOnlyShowAnswerSelect = (selected) => {
+    let conditions = this.question.conditions.slice();
+    conditions[0] = {
+        ...conditions[0],
+        value: selected.value
+    }
+    selected.option;
     this.question = { 
         ...this.question,
-        childQuestions: childQuestions
+        conditions: conditions
     };
     this.props.syncStateWithProps(this.question, this.props.questionNum);
   }
 
+
+  ///////////////////////////////
+  // time to render -> just like bender
+  ///////////////////////////////
   render() {
-    // permissions and rendering variables
     const { template, question, questionOptions, questionNum, defaultLanguage, deleteQuestion, canEdit, canManage } = this.props;
+    
+    // permissions and rendering variables
     const isConditional = CONDITIONAL_QUESTION_TYPES.indexOf(question.type) > -1 ? true : false;
     const conditionalQuestions = filterBy(this.props.template.questions, 'type', CONDITIONAL_QUESTION_TYPES);
+   
+    // selector options that are dependant on local state
     const conditionalOptions = [];
     let conditionsQuestions = [];
     let conditionsAnswers = [];
-
-    // if (question.conditions.length) {
-    //     const conditionsQuestions = conditionalQuestions.map((tempQuestion) => {
-    //         if (tempQuestion.name !== question.name) {
-    //             return {
-    //                 option: tempQuestion.name,
-    //                 label: tempQuestion.label[template.defaultLanguage]
-    //             }
-    //         }
-    //         debugger;
-    //     });
-    //     const conditionsAnswers = template.questions[question.conditions[0].index].values[template.defaultLanguage].map((tempQuestion) => {
-    //         if (tempQuestion.name !== this.question.name) {
-    //             return {
-    //                 option: tempQuestion.name,
-    //                 label: tempQuestion.label[template.defaultLanguage]
-    //             }
-    //         }
-    //     });
-    // }
-
-    const conditionalQuestionCount = filterBy(this.props.template.questions, 'type', CONDITIONAL_QUESTION_TYPES).length;
-    const canSetConditional = template.questions.length && 
-                              ((conditionalQuestionCount > 0 && !isConditional) ||
-                              (conditionalQuestionCount > 1))
-                              ? true : false;
-
-    // selector values dependant on user inout
+    if (question.conditions.length) {
+        conditionsQuestions = conditionalQuestions.map((tempQuestion) => {
+            if (tempQuestion.name !== question.name) {
+                return {
+                    option: tempQuestion.name,
+                    label: tempQuestion.label[template.defaultLanguage]
+                }
+            }
+        });
+        conditionsAnswers = template.questions[question.conditions[0].index].values[template.defaultLanguage].map((tempQuestion) => {
+            if (tempQuestion.name !== this.question.name) {
+                return {
+                    option: tempQuestion.value,
+                    label: tempQuestion.label
+                }
+            }
+        });
+    }
     if (question.values && question.values[defaultLanguage]) {
         question.values[defaultLanguage].forEach((value) => {
             conditionalOptions.push({
@@ -226,6 +273,15 @@ class QuestionCard extends React.Component {
             });
         });
     }
+
+    // permissions bools that are dependant on locale state
+    const conditionalQuestionCount = filterBy(this.props.template.questions, 'type', CONDITIONAL_QUESTION_TYPES).length;
+    const canSetConditional = template.questions.length && 
+                              ((conditionalQuestionCount > 0 && !isConditional) ||
+                              (conditionalQuestionCount > 1))
+                              ? true : false;
+
+    // finally we can render all that fancy stuff
     return (
         <section className="c-question-card">
             <div className="question-card">
@@ -359,7 +415,7 @@ class QuestionCard extends React.Component {
                         className="only-show-select"
                         options={conditionsQuestions}
                         value={question.conditions.length ? getSelectorValueFromArray(question.conditions[0].name, conditionsQuestions) : null}
-                        onChange={this.onMoreInfoSelect}
+                        onChange={this.onOnlyShowQuestionSelect}
                         searchable={false}
                         clearable={false}
                         placeholder={this.props.intl.formatMessage({ id: 'templates.selectQuestion' })}
@@ -372,7 +428,7 @@ class QuestionCard extends React.Component {
                         className="only-show-select"
                         options={conditionsAnswers}
                         value={question.conditions.length ? getSelectorValueFromArray(question.conditions[0].value, conditionsAnswers) : null}
-                        onChange={this.onMoreInfoSelect}
+                        onChange={this.onOnlyShowAnswerSelect}
                         searchable={false}
                         clearable={false}
                         placeholder={this.props.intl.formatMessage({ id: 'templates.selectOption' })}

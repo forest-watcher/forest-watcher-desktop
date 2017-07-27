@@ -25,7 +25,9 @@ class TemplatesManage extends React.Component {
     this.canSubmit = true;
   }
 
-  // Lifecycle
+  ///////////////////////////////
+  // life cycle
+  ///////////////////////////////
   componentWillMount() {
     if (this.props.template) this.setPropsToState(this.props);
   }
@@ -50,11 +52,17 @@ class TemplatesManage extends React.Component {
   }
 
 
-  // Setters
+  ///////////////////////////////
+  // sync state after fetch
+  ///////////////////////////////
   setPropsToState = (props) => {
     this.setState({ ...props.template, areaOfInterest: props.areaOfInterest });
   }
-  
+
+
+  ///////////////////////////////
+  // handle global action -> validate state for empty strings, submit, delete
+  ///////////////////////////////
   validateState = (state) => {
     // This function handles arrays and objects
     for (var field in state) {
@@ -67,33 +75,6 @@ class TemplatesManage extends React.Component {
         // lets start again!
       }
     }
-  }
-
-  // Form actions
-  onAreaChange = (selected) => {
-    this.setState({ areaOfInterest: selected ? selected.option : null });
-  }
-
-  onLanguageChange = (selected) => {
-    this.setState(setLanguages(selected.option, this.state));
-    this.setState(syncLanguagesWithDefaultLanguage(selected.option, this.state));
-    this.setState({
-      defaultLanguage: selected.option
-    });
-  }
-  
-  onInputChange = (e) => {
-    this.setState({
-      name: {
-        ...this.state.name,
-        [this.state.defaultLanguage]: e.target.value
-      }
-    });
-  }
-
-  toggleStatus = () => {
-    const newStatus = this.state.status === 'published' ? 'unpublished' : 'published';
-    this.setState({ status: newStatus });
   }
 
   onSubmit = (e) => {
@@ -113,8 +94,41 @@ class TemplatesManage extends React.Component {
     this.props.deleteTemplate(this.props.templateId, aois);
   }
 
+
+  ///////////////////////////////
+  // handle change of top level meta -> areas, defaultLanguage, title, status
+  ///////////////////////////////
+  onAreaChange = (selected) => {
+    this.setState({ areaOfInterest: selected ? selected.option : null });
+  }
+
+  onLanguageChange = (selected) => {
+    this.setState(setLanguages(selected.option, this.state));
+    this.setState(syncLanguagesWithDefaultLanguage(selected.option, this.state));
+    this.setState({
+      defaultLanguage: selected.option
+    });
+  }
   
-  // Question management
+  onTitleChange = (e) => {
+    this.setState({
+      name: {
+        ...this.state.name,
+        [this.state.defaultLanguage]: e.target.value
+      }
+    });
+  }
+
+  toggleStatus = () => {
+    const newStatus = this.state.status === 'published' ? 'unpublished' : 'published';
+    this.setState({ status: newStatus });
+  }
+
+
+  
+  ///////////////////////////////
+  // handle question card changes with state -> edit, delete, add
+  ///////////////////////////////
   handleQuestionEdit = (question, index) => {
     const newQuestions = this.state.questions.slice();
     newQuestions[index - 1] = question;
@@ -151,9 +165,10 @@ class TemplatesManage extends React.Component {
   }
 
 
-  // Render
+  ///////////////////////////////
+  // consider it rendered
+  ///////////////////////////////
   render() {
-    // console.log(this.state);
     const { areasOptions, localeOptions, questionOptions, loading, saving, deleting, mode, locale, user, template } = this.props;
     const canEdit = ((template.answersCount === 0 || !template.answersCount) && (template.status === 'unpublished' || template.status === 'draft') && user.id === this.state.user) || mode === 'create' ? true : false;
     const canManage = user.id === this.state.user || mode === 'create' ? true : false;
@@ -214,7 +229,7 @@ class TemplatesManage extends React.Component {
                         <input
                           type="text"
                           className="-title"
-                          onChange={this.onInputChange}
+                          onChange={this.onTitleChange}
                           name="name"
                           value={this.state.name ? this.state.name[this.state.defaultLanguage] : ''}
                           placeholder={this.props.intl.formatMessage({ id: 'templates.title' })}
