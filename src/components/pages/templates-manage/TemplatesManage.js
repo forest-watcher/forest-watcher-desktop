@@ -124,7 +124,6 @@ class TemplatesManage extends React.Component {
     this.setState({ status: newStatus });
   }
 
-
   
   ///////////////////////////////
   // handle question card changes with state -> edit, delete, add
