@@ -167,119 +167,157 @@ class QuestionCard extends React.Component {
     }
     return (
         <section className="c-question-card">
-          <div className="questions">
-            <span className="text -question-number">{prettyNum(questionNum)}.</span>
-                <input
-                    type="text"
-                    className="-question"
-                    onChange={this.onInputChange}
-                    name="label"
-                    value={question.label[defaultLanguage] || ''}
-                    placeholder={this.props.intl.formatMessage({ id: 'templates.questionPlaceholder' })}
-                    onKeyPress={(e) => {if (e.which === 13) { e.preventDefault();}}} // Prevent send on press Enter
-                    disabled={!canManage}
-                />
-                <Select
-                    name="type"
-                    className="type-select"
-                    options={questionOptions}
-                    value={question.type}
-                    onChange={this.onTypeChange}
-                    searchable={false}
-                    clearable={false}
-                    disabled={!canEdit}
-                    arrowRenderer={() => <svg className="c-icon -x-small -gray"><use xlinkHref="#icon-arrow-down"></use></svg>}
-                />
-                <div className="question-options">
-                    { isConditional && 
-                        question.values[defaultLanguage].map((value, index) =>
-                            <div key={`${question.name}-value-${index}`} >
-                                <input
-                                    className="option-input -question"
-                                    ref={(input) => { this.inputs[index] = input; }}
-                                    value={value.label}
-                                    onKeyPress={(e) => {if (e.which === 13) { e.preventDefault();}}} // Prevent send on press Enter
-                                    placeholder={this.props.intl.formatMessage({ id: 'templates.optionPlaceholder' })}
-                                    onChange={(e) => this.onQuestionOptionChange(e, index)}
-                                    disabled={!canManage}
-                                />
-                                { canEdit && (question.values[defaultLanguage].length > 1) &&
-                                    <button className={"delete-button"} type="button" 
-                                        onClick={() => { this.deleteOption(index) }}>
-                                        <Icon className="-small -theme-gray" name="icon-more"/>
-                                    </button>
+            <div className="question-card">
+                <div className="questions">
+                    <span className="text -question-number">{prettyNum(questionNum)}.</span>
+                        <input
+                            type="text"
+                            className="-question"
+                            onChange={this.onInputChange}
+                            name="label"
+                            value={question.label[defaultLanguage] || ''}
+                            placeholder={this.props.intl.formatMessage({ id: 'templates.questionPlaceholder' })}
+                            onKeyPress={(e) => {if (e.which === 13) { e.preventDefault();}}} // Prevent send on press Enter
+                            disabled={!canManage}
+                        />
+                        <Select
+                            name="type"
+                            className="type-select"
+                            options={questionOptions}
+                            value={question.type}
+                            onChange={this.onTypeChange}
+                            searchable={false}
+                            clearable={false}
+                            disabled={!canEdit}
+                            arrowRenderer={() => <svg className="c-icon -x-small -gray"><use xlinkHref="#icon-arrow-down"></use></svg>}
+                        />
+                        <div className="question-options">
+                            { isConditional && 
+                                question.values[defaultLanguage].map((value, index) =>
+                                    <div key={`${question.name}-value-${index}`} >
+                                        <input
+                                            className="option-input -question"
+                                            ref={(input) => { this.inputs[index] = input; }}
+                                            value={value.label}
+                                            onKeyPress={(e) => {if (e.which === 13) { e.preventDefault();}}} // Prevent send on press Enter
+                                            placeholder={this.props.intl.formatMessage({ id: 'templates.optionPlaceholder' })}
+                                            onChange={(e) => this.onQuestionOptionChange(e, index)}
+                                            disabled={!canManage}
+                                        />
+                                        { canEdit && (question.values[defaultLanguage].length > 1) &&
+                                            <button className={"delete-button"} type="button" 
+                                                onClick={() => { this.deleteOption(index) }}>
+                                                <Icon className="-small -theme-gray" name="icon-more"/>
+                                            </button>
+                                        }
+                                    </div>
+                                )
+                            }
+                            { isConditional && canEdit &&
+                                <button 
+                                    className={"c-button add-option-button"} 
+                                    type="button" 
+                                    onClick={this.onQuestionOptionAdd}
+                                >
+                                    <FormattedMessage id={"templates.addOption"} />
+                                </button>
+                            }
+                            { isConditional &&
+                            <div className="question-more-info">
+                                <div className="conditional-settings">
+                                    <Checkbox
+                                        id={`${questionNum}-more-info`}
+                                        callback={() => this.handleChangeMoreInfo(questionNum)}
+                                        defaultChecked={question.childQuestions.length > 0}
+                                        disabled={!canEdit}
+                                    />
+                                    <label className="text">{this.props.intl.formatMessage({ id: 'templates.moreInfoFirst' })}</label>
+                                    <Select
+                                        name="more-info-answer"
+                                        className="more-info-select"
+                                        options={conditionalOptions}
+                                        value={question.childQuestions.length ? getSelectorValueFromArray(question.childQuestions[0].conditionalValue, conditionalOptions) : null}
+                                        onChange={this.onMoreInfoSelect}
+                                        searchable={false}
+                                        clearable={false}
+                                        placeholder={this.props.intl.formatMessage({ id: 'templates.selectCondition' })}
+                                        noResultsText={this.props.intl.formatMessage({ id: 'templates.noConditions' })}
+                                        arrowRenderer={() => <svg className="c-icon -x-small -gray"><use xlinkHref="#icon-arrow-down"></use></svg>}
+                                        disabled={!canEdit || !question.childQuestions.length}
+                                    />
+                                    <label className="text">{this.props.intl.formatMessage({ id: 'templates.moreInfoSecond' })}</label>
+                                </div>
+                                { question.childQuestions.length > 0 &&
+                                    <input
+                                        type="text"
+                                        className="child-input -question"
+                                        onChange={this.onChildInputChange}
+                                        name="childquestion-label"
+                                        value={question.childQuestions[0].label[defaultLanguage] || ''}
+                                        placeholder={this.props.intl.formatMessage({ id: 'templates.childQuestionPlaceholder' })}
+                                        onKeyPress={(e) => {if (e.which === 13) { e.preventDefault();}}} // Prevent send on press Enter
+                                        disabled={!canEdit}
+                                    />
                                 }
                             </div>
-                        )
-                    }
-                    { isConditional && canEdit &&
+                        }
+                    </div>
+                </div>
+                <div className="question-actions">
+                    { canEdit && template.questions.length > 1 &&
                         <button 
-                            className={"c-button add-option-button"} 
+                            className={"delete-button"} 
                             type="button" 
-                            onClick={this.onQuestionOptionAdd}
+                            onClick={() => { deleteQuestion(questionNum)} }
+                            disabled={!canEdit}
                         >
-                            <FormattedMessage id={"templates.addOption"} />
+                            <Icon className="-small -gray" name="icon-delete"/>
                         </button>
                     }
-                    { isConditional &&
-                        <div className="question-more-info">
-                            <div className="conditional-settings">
-                                <Checkbox
-                                    id={`${questionNum}-more-info`}
-                                    callback={() => this.handleChangeMoreInfo(questionNum)}
-                                    defaultChecked={question.childQuestions.length > 0}
-                                    disabled={!canEdit}
-                                />
-                                <label className="text">{this.props.intl.formatMessage({ id: 'templates.moreInfoFirst' })}</label>
-                                <Select
-                                    name="more-info-answer"
-                                    className="more-info-select"
-                                    options={conditionalOptions}
-                                    value={question.childQuestions.length ? getSelectorValueFromArray(question.childQuestions[0].conditionalValue, conditionalOptions) : null}
-                                    onChange={this.onMoreInfoSelect}
-                                    searchable={false}
-                                    clearable={false}
-                                    placeholder={this.props.intl.formatMessage({ id: 'templates.selectCondition' })}
-                                    noResultsText={this.props.intl.formatMessage({ id: 'templates.noConditions' })}
-                                    arrowRenderer={() => <svg className="c-icon -x-small -gray"><use xlinkHref="#icon-arrow-down"></use></svg>}
-                                    disabled={!canEdit || !question.childQuestions.length}
-                                />
-                                <label className="text">{this.props.intl.formatMessage({ id: 'templates.moreInfoSecond' })}</label>
-                            </div>
-                            { question.childQuestions.length > 0 &&
-                                <input
-                                    type="text"
-                                    className="child-input -question"
-                                    onChange={this.onChildInputChange}
-                                    name="childquestion-label"
-                                    value={question.childQuestions[0].label[defaultLanguage] || ''}
-                                    placeholder={this.props.intl.formatMessage({ id: 'templates.childQuestionPlaceholder' })}
-                                    onKeyPress={(e) => {if (e.which === 13) { e.preventDefault();}}} // Prevent send on press Enter
-                                    disabled={!canEdit}
-                                />
-                            }
-                        </div>
-                    }
+                    <span className="required-label text -x-small-title">{this.props.intl.formatMessage({ id: 'templates.required' })}</span>
+                    <SwitchButton
+                        className="required"
+                        name={`${questionNum}-required`} 
+                        onChange={this.toggleRequired}
+                        defaultChecked={question.required}
+                        disabled={!canManage}
+                    />
                 </div>
             </div>
-            <div className="question-actions">
-                { canEdit && template.questions.length > 1 &&
-                    <button 
-                        className={"delete-button"} 
-                        type="button" 
-                        onClick={() => { deleteQuestion(questionNum)} }
-                        disabled={!canEdit}
-                    >
-                        <Icon className="-small -gray" name="icon-delete"/>
-                    </button>
-                }
-                <span className="required-label text -x-small-title">{this.props.intl.formatMessage({ id: 'templates.required' })}</span>
-                <SwitchButton
-                    className="required"
-                    name={`${questionNum}-required`} 
-                    onChange={this.toggleRequired}
-                    defaultChecked={question.required}
-                    disabled={!canManage}
+            <div className="question-footer">
+                <Checkbox
+                    id={`${questionNum}-only-show`}
+                    callback={() => this.handleChangeMoreInfo(questionNum)}
+                    defaultChecked={question.childQuestions.length > 0}
+                    disabled={!canEdit}
+                />
+                <label className="text">{this.props.intl.formatMessage({ id: 'templates.onlyShow' })}</label>
+                <Select
+                    name="only-show-question"
+                    className="only-show-select"
+                    options={conditionalOptions}
+                    value={question.childQuestions.length ? getSelectorValueFromArray(question.childQuestions[0].conditionalValue, conditionalOptions) : null}
+                    onChange={this.onMoreInfoSelect}
+                    searchable={false}
+                    clearable={false}
+                    placeholder={this.props.intl.formatMessage({ id: 'templates.selectCondition' })}
+                    noResultsText={this.props.intl.formatMessage({ id: 'templates.noConditions' })}
+                    arrowRenderer={() => <svg className="c-icon -x-small -gray"><use xlinkHref="#icon-arrow-down"></use></svg>}
+                    disabled={!canEdit || !question.childQuestions.length}
+                />
+                <label className="text">{this.props.intl.formatMessage({ id: 'templates.is' })}</label>
+                <Select
+                    name="only-show-question"
+                    className="only-show-select"
+                    options={conditionalOptions}
+                    value={question.childQuestions.length ? getSelectorValueFromArray(question.childQuestions[0].conditionalValue, conditionalOptions) : null}
+                    onChange={this.onMoreInfoSelect}
+                    searchable={false}
+                    clearable={false}
+                    placeholder={this.props.intl.formatMessage({ id: 'templates.selectCondition' })}
+                    noResultsText={this.props.intl.formatMessage({ id: 'templates.noConditions' })}
+                    arrowRenderer={() => <svg className="c-icon -x-small -gray"><use xlinkHref="#icon-arrow-down"></use></svg>}
+                    disabled={!canEdit || !question.childQuestions.length}
                 />
             </div>
         </section>

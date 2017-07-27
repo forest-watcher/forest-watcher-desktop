@@ -208,17 +208,19 @@ class TemplatesManage extends React.Component {
               <div className="template-fields">
                 <div className="row">
                   <div className="column small-12 medium-10 medium-offset-1 large-8 large-offset-2">
-                    <div className="c-question-card -title">
-                      <input
-                        type="text"
-                        className="-title"
-                        onChange={this.onInputChange}
-                        name="name"
-                        value={this.state.name ? this.state.name[this.state.defaultLanguage] : ''}
-                        placeholder={this.props.intl.formatMessage({ id: 'templates.title' })}
-                        onKeyPress={(e) => {if (e.which === 13) { e.preventDefault();}}} // Prevent send on press Enter
-                        disabled={isLoading}
-                      />
+                    <div className="c-question-card">
+                      <div className="question-card -title">
+                        <input
+                          type="text"
+                          className="-title"
+                          onChange={this.onInputChange}
+                          name="name"
+                          value={this.state.name ? this.state.name[this.state.defaultLanguage] : ''}
+                          placeholder={this.props.intl.formatMessage({ id: 'templates.title' })}
+                          onKeyPress={(e) => {if (e.which === 13) { e.preventDefault();}}} // Prevent send on press Enter
+                          disabled={isLoading}
+                        />
+                      </div>
                     </div>
                       {this.state.questions &&
                         <CSSTransitionGroup
