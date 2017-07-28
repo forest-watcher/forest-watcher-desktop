@@ -1,0 +1,60 @@
+.c-landing {
+  .logo-image {
+    background-image: url(/images/logo-gfw@2x.png) !important;
+    background-repeat: no-repeat;
+    height: 100px;
+  }
+
+  .build-buttons {
+    display: flex;
+    a {
+      flex: 1;
+      height: 50px;
+      background-repeat: no-repeat;
+      background-size: contain;
+    }
+  }
+
+  .phone-screen {
+    position: relative;
+    height: 1000px;
+    div {
+      background-repeat: no-repeat;
+      position: absolute;
+      left: 50px;
+      right: 0;
+      bottom: 0;
+    }
+    .phone-image {
+      top: 0%;
+      background-image: url(/images/phone@2x.png) !important;
+      z-index: 4;
+      height: 80%;
+    }
+
+    .screen-image {
+      top: 5%;
+      height: 70%;
+      background-image: url(/images/screen-1@2x.png) !important;
+      z-index: 5;
+    }
+
+  }
+
+  .button-ios-image {
+    background-image: url(/images/app-store@2x.png) !important;
+  }
+
+  .button-android-image {
+    background-image: url(/images/google-play@2x.png) !important;
+  }
+
+
+  h1 {
+    color: $theme-accent;
+    font-size: 2em;
+  }
+  h2 {
+    color: $disabled-font-color;
+  }
+}

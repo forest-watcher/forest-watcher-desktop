@@ -1,26 +1,22 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
 import { FormattedMessage } from 'react-intl';
 
 class Answers extends React.Component {
   render() {
+    const gfwLogo = 'logo-gfw.png'
     return (
       <div className="c-landing">
         <div className="row">
           <div className="small-12 medium-6">
-            GFW logo
+            <div className='logo-image'></div>
             <div className="main">
               <h1><FormattedMessage id="app.name" /></h1>
-              <h4><FormattedMessage id="app.description" /></h4>
-              <button onClick={this.handleIosLink}>
-                Button IOS
-              </button>
-              <button onClick={this.handleAndroidLink}>
-                Button Android
-              </button>
-              <ul>
-              </ul>
+              <h2><FormattedMessage id="app.description" /></h2>
+
+              <div className='build-buttons'>
+                <a className='button-ios-image' onClick={this.handleIosLink}></a>
+                <a className='button-android-image' onClick={this.handleAndroidLink}></a>
+              </div>
             </div>
           </div>
           <div className="small-12 medium-offset-1 medium-5">
@@ -30,8 +26,9 @@ class Answers extends React.Component {
                 <FormattedMessage id="app.login" />
               </button>
             </div>
-            <div className="phone-image">
-              Phone Image
+            <div className="phone-screen">
+              <div className='phone-image'></div>
+              <div className='screen-image'></div>
             </div>
           </div>
         </div>
