@@ -2,7 +2,8 @@
   .logo-image {
     background-image: url(/images/logo-gfw@2x.png) !important;
     background-repeat: no-repeat;
-    height: 100px;
+    background-size: contain;
+    height: 90px;
   }
 
   .build-buttons {
@@ -17,7 +18,6 @@
 
   .phone-screen {
     position: relative;
-    height: 1000px;
     div {
       background-repeat: no-repeat;
       position: absolute;
@@ -27,18 +27,40 @@
     }
     .phone-image {
       top: 0%;
+      height: 700px;
+      background-size: contain;
       background-image: url(/images/phone@2x.png) !important;
       z-index: 4;
-      height: 80%;
     }
 
     .screen-image {
-      top: 5%;
-      height: 70%;
+      top: 83px;
+      left: 71px;
+      height: 617px;
+      background-size: contain;
+      width: 402px;
       background-image: url(/images/screen-1@2x.png) !important;
       z-index: 5;
     }
 
+  }
+
+  .main {
+    padding-top: 200px;
+  }
+
+  .login-bar {
+    display: flex;
+    align-items: baseline;
+    justify-content: flex-end;
+    color: $disabled-font-color;
+    margin-top: 20px;
+    margin-bottom: 40px;
+
+    .login-button {
+      margin-left: 20px;
+      margin-right: 6px;
+    }
   }
 
   .button-ios-image {
@@ -52,9 +74,13 @@
 
   h1 {
     color: $theme-accent;
-    font-size: 2em;
+    font-size: 3em;
+    padding-bottom: 16px;
   }
   h2 {
     color: $disabled-font-color;
+    line-height: 24px;
+    font-size: 1.2em;
+    padding-bottom: 16px;
   }
 }

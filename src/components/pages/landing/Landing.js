@@ -1,9 +1,9 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
+import { Link } from 'react-router-dom';
 
 class Answers extends React.Component {
   render() {
-    const gfwLogo = 'logo-gfw.png'
     return (
       <div className="c-landing">
         <div className="row">
@@ -20,11 +20,11 @@ class Answers extends React.Component {
             </div>
           </div>
           <div className="small-12 medium-offset-1 medium-5">
-            <div className="log-in-bar">
+            <div className="login-bar">
               <FormattedMessage id="app.alreadyHaveAnAccount" />
-              <button className="c-button" onClick={this.handleIosLink}>
+              <Link className="login-button c-button" to={'/login'}>
                 <FormattedMessage id="app.login" />
-              </button>
+              </Link>
             </div>
             <div className="phone-screen">
               <div className='phone-image'></div>
