@@ -77,7 +77,6 @@ class App extends React.Component {
     const { match, user, userChecked, logout, locale, setLocale } = this.props;
     if (!userChecked) return null;
     const queryParams = querystring.parse(location.search || '');
-    const callbackUrl = queryParams.callbackUrl;
     const mergedMessages = Object.assign({}, translations[DEFAULT_LANGUAGE], translations[locale]);
     return (
       <IntlProvider 

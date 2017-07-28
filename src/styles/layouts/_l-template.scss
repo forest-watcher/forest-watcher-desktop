@@ -13,7 +13,7 @@
 
     .template-fields {
         background: $white;
-        padding-bottom: 60px;
+        padding-bottom: 20px;
     }
 
     .add-question {
@@ -32,9 +32,13 @@
     }
 
     .template-status {
+        height: 30px;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+
         .status-label {
             padding: 0 10px;
         }
     }
-
 }

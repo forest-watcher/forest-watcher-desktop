@@ -16,7 +16,9 @@ import { toastr } from 'react-redux-toastr';
 import QuestionCard from '../../question-card/QuestionCard';
 import { CSSTransitionGroup } from 'react-transition-group';
 import { QUESTION } from '../../../constants/templates';
-import SwitchButton from 'react-switch-button';
+import Switch from 'react-toggle-switch'
+
+import 'react-toggle-switch/dist/css/switch.min.css';
 
 class TemplatesManage extends React.Component {
   constructor (props) {
@@ -25,7 +27,9 @@ class TemplatesManage extends React.Component {
     this.canSubmit = true;
   }
 
-  // Lifecycle
+  ///////////////////////////////
+  // life cycle
+  ///////////////////////////////
   componentWillMount() {
     if (this.props.template) this.setPropsToState(this.props);
   }
@@ -50,11 +54,22 @@ class TemplatesManage extends React.Component {
   }
 
 
-  // Setters
+  ///////////////////////////////
+  // sync state after fetch
+  ///////////////////////////////
   setPropsToState = (props) => {
-    this.setState({ ...props.template, areaOfInterest: props.areaOfInterest });
+    const areaOfInterest = props.mode === 'create' ? null : props.areaOfInterest;
+    this.setState({ 
+      ...props.template, 
+      areaOfInterest: areaOfInterest, 
+      oldAreaOfInterest: props.areaOfInterest 
+    });
   }
-  
+
+
+  ///////////////////////////////
+  // handle global action -> validate state for empty strings, submit, delete
+  ///////////////////////////////
   validateState = (state) => {
     // This function handles arrays and objects
     for (var field in state) {
@@ -69,7 +84,27 @@ class TemplatesManage extends React.Component {
     }
   }
 
-  // Form actions
+  onSubmit = (e) => {
+    e.preventDefault();
+    this.validateState(this.state);
+    if (this.canSubmit) {
+      const method = this.props.mode === 'manage' ? 'PATCH' : 'POST';
+      this.props.saveTemplate(this.state, method, this.props.templateId);
+    } else {
+      toastr.error(this.props.intl.formatMessage({ id: 'templates.missingFields' }), this.props.intl.formatMessage({ id: 'templates.missingFieldsDetail' }));      
+    }
+    this.canSubmit = true;
+  }
+
+  deleteTemplate = () => {
+    const aois = this.props.areaOfInterest !== null ?  [this.props.areaOfInterest] : null;
+    this.props.deleteTemplate(this.props.templateId, aois);
+  }
+
+
+  ///////////////////////////////
+  // handle change of top level meta -> areas, defaultLanguage, title, status
+  ///////////////////////////////
   onAreaChange = (selected) => {
     this.setState({ areaOfInterest: selected ? selected.option : null });
   }
@@ -82,7 +117,7 @@ class TemplatesManage extends React.Component {
     });
   }
   
-  onInputChange = (e) => {
+  onTitleChange = (e) => {
     this.setState({
       name: {
         ...this.state.name,
@@ -96,24 +131,10 @@ class TemplatesManage extends React.Component {
     this.setState({ status: newStatus });
   }
 
-  onSubmit = (e) => {
-    e.preventDefault();
-    this.validateState(this.state);
-    if (this.canSubmit) {
-      const method = this.props.mode === 'manage' ? 'PATCH' : 'POST';
-      this.props.saveTemplate(this.state, method);
-    } else {
-      toastr.error(this.props.intl.formatMessage({ id: 'templates.missingFields' }), this.props.intl.formatMessage({ id: 'templates.missingFieldsDetail' }));      
-    }
-    this.canSubmit = true;
-  }
-
-  deleteTemplate = () => {
-    this.props.deleteTemplate(this.props.templateId, [this.state.areaOfInterest]);
-  }
-
   
-  // Question management
+  ///////////////////////////////
+  // handle question card changes with state -> edit, delete, add
+  ///////////////////////////////
   handleQuestionEdit = (question, index) => {
     const newQuestions = this.state.questions.slice();
     newQuestions[index - 1] = question;
@@ -150,11 +171,14 @@ class TemplatesManage extends React.Component {
   }
 
 
-  // Render
+  ///////////////////////////////
+  // consider it rendered
+  ///////////////////////////////
   render() {
     const { areasOptions, localeOptions, questionOptions, loading, saving, deleting, mode, locale, user, template } = this.props;
     const canEdit = ((template.answersCount === 0 || !template.answersCount) && (template.status === 'unpublished' || template.status === 'draft') && user.id === this.state.user) || mode === 'create' ? true : false;
     const canManage = user.id === this.state.user || mode === 'create' ? true : false;
+    const modeCreate = mode === 'create' ? true : false;
     const canSave = this.state.questions.length && this.state.name[this.state.defaultLanguage] ? true : false;
     const isLoading = loading || saving || deleting ? true : false;
     return (
@@ -180,7 +204,7 @@ class TemplatesManage extends React.Component {
                         onChange={this.onAreaChange}
                         noResultsText={this.props.intl.formatMessage({ id: 'filters.noAreasAvailable' })}
                         searchable={false}
-                        disabled={isLoading || !canManage}
+                        disabled={isLoading}
                         arrowRenderer={() => <svg className="c-icon -x-small -gray"><use xlinkHref="#icon-arrow-down"></use></svg>}
                       />
                     </div>
@@ -197,7 +221,7 @@ class TemplatesManage extends React.Component {
                         noResultsText={this.props.intl.formatMessage({ id: 'filters.noLanguagesAvailable' })}
                         searchable={true}
                         clearable={false}
-                        disabled={isLoading || !canManage}
+                        disabled={isLoading || !modeCreate}
                         arrowRenderer={() => <svg className="c-icon -x-small -gray"><use xlinkHref="#icon-arrow-down"></use></svg>}
                       />
                     </div>
@@ -207,17 +231,19 @@ class TemplatesManage extends React.Component {
               <div className="template-fields">
                 <div className="row">
                   <div className="column small-12 medium-10 medium-offset-1 large-8 large-offset-2">
-                    <div className="c-question-card -title">
-                      <input
-                        type="text"
-                        className="-title"
-                        onChange={this.onInputChange}
-                        name="name"
-                        value={this.state.name ? this.state.name[this.state.defaultLanguage] : ''}
-                        placeholder={this.props.intl.formatMessage({ id: 'templates.title' })}
-                        onKeyPress={(e) => {if (e.which === 13) { e.preventDefault();}}} // Prevent send on press Enter
-                        disabled={isLoading}
-                      />
+                    <div className="c-question-card">
+                      <div className="question-card -title">
+                        <input
+                          type="text"
+                          className="-title"
+                          onChange={this.onTitleChange}
+                          name="name"
+                          value={this.state.name ? this.state.name[this.state.defaultLanguage] : ''}
+                          placeholder={this.props.intl.formatMessage({ id: 'templates.title' })}
+                          onKeyPress={(e) => {if (e.which === 13) { e.preventDefault();}}} // Prevent send on press Enter
+                          disabled={isLoading}
+                        />
+                      </div>
                     </div>
                       {this.state.questions &&
                         <CSSTransitionGroup
@@ -236,8 +262,8 @@ class TemplatesManage extends React.Component {
                               defaultLanguage={this.state.defaultLanguage}
                               deleteQuestion={this.handleQuestionDelete}
                               status={this.state.status}
-                              canEdit={canEdit}
-                              canManage={canManage}
+                              canEdit={modeCreate}
+                              canManage={modeCreate}
                               mode={mode}
                             />
                           )}
@@ -248,7 +274,7 @@ class TemplatesManage extends React.Component {
               </div>
             </div>
             <div className="add-question">
-              { canEdit &&
+              { modeCreate &&
                 <div className="row">
                   <div className="column small-12 medium-10 medium-offset-1 large-8 large-offset-2">
                     <div className="add-button">
@@ -270,12 +296,11 @@ class TemplatesManage extends React.Component {
               </Link>
               <div className="template-status">
                 <span className="status-label text -x-small-title">{this.props.intl.formatMessage({ id: 'templates.statusUnpublished' })}</span>
-                <SwitchButton
-                  className="status"
-                  name={'status'} 
-                  onChange={this.toggleStatus}
-                  defaultChecked={this.state.status === 'published' ? true : false}
-                  disabled={isLoading || !canManage}
+                <Switch
+                  className="c-switcher"
+                  onClick={this.toggleStatus}
+                  on={this.state.status === 'published' ? true : false}
+                  enabled={!isLoading || canManage}
                 />
                 <span className="status-label text -x-small-title">{this.props.intl.formatMessage({ id: 'templates.statusPublished' })}</span>
               </div>

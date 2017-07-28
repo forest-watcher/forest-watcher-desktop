@@ -7,14 +7,19 @@ const getTemplatesById = (templates, reports, areas, user) => {
   const templateIds = templates.ids;
   let parsedTemplates = templateIds.map((templateId) => {
     const templateData = templates.data[templateId].attributes || null;
-    const areaId = templateData.areaOfInterest;
+    let areaId = null;
+    areas.ids.forEach((id) => {
+      if (areas.data[id].attributes.templateId && areas.data[id].attributes.templateId === templateId) {
+        areaId = id;
+      }
+    });
     return {
       id: templateId,
       title: templateData.name[templateData.defaultLanguage],
       defaultLanguage: templateData.defaultLanguage.toUpperCase(),
-      aoi: areaId || null,
+      aoi: areaId,
       aoiName: areas.data[areaId] ? areas.data[areaId].attributes.name : null,
-      count: templateData.answersCount || null,
+      count: templateData.answersCount || "0",
       status: templateData.status || null,
       user: templateData.user || null
     };

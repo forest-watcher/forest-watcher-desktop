@@ -1,8 +1,6 @@
 import normalize from 'json-api-normalizer';
 import { API_BASE_URL } from '../constants/global';
-import { getArea } from './areas';
-import { toastr } from 'react-redux-toastr';
-import { syncApp } from './app';
+import { getAreas } from './areas';
 
 // Actions
 const SET_TEMPLATE = 'templates/SET_TEMPLATE';
@@ -144,13 +142,9 @@ export function getTemplate(templateId) {
 }
 
 // POST template
-export function saveTemplate(template, method) {
+export function saveTemplate(template, method, templateId) {
   return async (dispatch, state) => {
-    const url = method === 'PATCH' ? `${API_BASE_URL}/reports/${template.id}` : `${API_BASE_URL}/reports`;
-    if (method === 'PATCH') {
-      toastr.info('Update not yet implemented');
-      return;
-    }
+    const url = method === 'PATCH' ? `${API_BASE_URL}/reports/${templateId}` : `${API_BASE_URL}/reports`;
     dispatch({
       type: SET_SAVING_TEMPLATE,
       payload: {
@@ -172,9 +166,7 @@ export function saveTemplate(template, method) {
       })
       .then((data) => {
         const normalized = normalize(data);
-        if (template.areaOfInterest) {
-          dispatch(getArea(template.areaOfInterest));
-        }
+        dispatch(getAreas());
         dispatch({
           type: SET_TEMPLATE,
           payload: normalized
@@ -221,6 +213,7 @@ export function deleteTemplate(templateId, aois) {
           type: DELETE_TEMPLATE,
           payload: templateId
         });
+        dispatch(getAreas());
         dispatch({
           type: SET_DELETING_TEMPLATE,
           payload: {
@@ -228,7 +221,6 @@ export function deleteTemplate(templateId, aois) {
             error: false
           }
         });
-        dispatch(syncApp());
       })
       .catch((error) => {
         dispatch({

@@ -71,7 +71,7 @@ class Reports extends React.Component {
       <div>
         <Hero
           title="reports.title"
-          action={{name: "reports.downloadAnswers", callback: this.downloadReports}}
+          action={answers.length ? {name: "reports.downloadAnswers", callback: this.downloadReports} : null}
         />
           <div className="l-content">
             <Article>

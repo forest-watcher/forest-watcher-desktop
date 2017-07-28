@@ -4,13 +4,12 @@ import TemplatesManage from './TemplatesManage';
 import { LOCALES_LIST } from '../../../constants/locales';
 import { TEMPLATE, QUESTION_TYPES, QUESTION } from '../../../constants/templates';
 import { saveTemplate, deleteTemplate } from '../../../modules/templates';
-import { filterBy } from '../../../helpers/filters';
 
 const mapAreasToOptions = (areas, templateId) => {
     const areasOptions = [];
     const areasIds = areas.ids;
     areasIds.forEach((id) => {
-        if (!areas.data[id].attributes.templateId || areas.data[id].attributes.templateId === '' || templateId === areas.data[id].attributes.templateId) {
+        if (!areas.data[id].attributes.templateId || areas.data[id].attributes.templateId === null || templateId === areas.data[id].attributes.templateId) {
             areasOptions.push({
                 option: id,
                 label: areas.data[id].attributes.name 
@@ -68,7 +67,7 @@ const mapStateToProps = (state, { match }) => {
         questions: [
             {
                 ...QUESTION,
-                order: 1,
+                order: 0,
                 label: {
                     [state.app.locale]: ""
                 },
@@ -94,8 +93,8 @@ const mapStateToProps = (state, { match }) => {
 
 function mapDispatchToProps(dispatch) {
   return {
-    saveTemplate: (template, method) => {
-      dispatch(saveTemplate(template, method));
+    saveTemplate: (template, method, templateId) => {
+      dispatch(saveTemplate(template, method, templateId));
     },
     deleteTemplate: (templateId, aois) => {
       dispatch(deleteTemplate(templateId, aois));
