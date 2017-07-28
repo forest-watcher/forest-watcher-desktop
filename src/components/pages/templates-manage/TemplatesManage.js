@@ -58,9 +58,10 @@ class TemplatesManage extends React.Component {
   // sync state after fetch
   ///////////////////////////////
   setPropsToState = (props) => {
+    const areaOfInterest = props.mode === 'create' ? null : props.areaOfInterest;
     this.setState({ 
       ...props.template, 
-      areaOfInterest: props.areaOfInterest, 
+      areaOfInterest: areaOfInterest, 
       oldAreaOfInterest: props.areaOfInterest 
     });
   }
