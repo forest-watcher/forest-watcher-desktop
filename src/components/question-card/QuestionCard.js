@@ -148,6 +148,7 @@ class QuestionCard extends React.Component {
   // actions for card footer actions -> delete question, make required
   ///////////////////////////////
   deleteOption = (index) => {
+    // FIXME: Without mutation conditionals do not appear correctly
     let values = this.question.values[this.props.defaultLanguage];
     values.splice(index, 1);
     this.question = {
