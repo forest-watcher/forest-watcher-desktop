@@ -192,10 +192,10 @@ class LayersForm extends React.Component {
 
 LayersForm.propTypes = {
   userLayers: PropTypes.array.isRequired,
-  teamLayers: PropTypes.array.isRequired,
+  teamLayers: PropTypes.array,
   publicLayers: PropTypes.array.isRequired,
   GFWLayers: PropTypes.array.isRequired,
-  team: PropTypes.object.isRequired,
+  team: PropTypes.object,
   createLayer: PropTypes.func.isRequired
 };
 

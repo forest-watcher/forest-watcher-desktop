@@ -23,6 +23,7 @@ import Templates from '../pages/templates/TemplatesContainer';
 import TemplatesManage from '../pages/templates-manage/TemplatesManageContainer';
 import Settings from '../pages/settings/SettingsContainer';
 import Reports from '../pages/reports/ReportsContainer';
+import Landing from '../pages/landing/Landing';
 
 import 'react-redux-toastr/lib/css/react-redux-toastr.min.css';
 
@@ -37,8 +38,13 @@ class App extends React.Component {
   componentDidMount() {
     this.checkConfirmedUser(this.props);
   }
+
   componentWillReceiveProps(nextProps) {
-    this.checkConfirmedUser(nextProps);
+    const queryParams = querystring.parse(nextProps.location.search);
+    const confirmToken = queryParams.confirmToken;
+    if ((nextProps.user.token !== this.props.user.token) && confirmToken){
+      this.checkConfirmedUser(nextProps);
+    }
   }
 
   checkConfirmedUser(props) {
@@ -47,21 +53,31 @@ class App extends React.Component {
     if (confirmToken && props.user.token) this.props.confirmUser(confirmToken);
   }
 
-  getRootComponent = () => {
+  getLoginComponent = () => {
     const { user, location } = this.props;
     const search = location.search || '';
     const queryParams = querystring.parse(search);
     const callbackUrl = queryParams.callbackUrl;
-    if (!user.loggedIn && !queryParams.token) return <Login callbackUrl={callbackUrl}/>;
-    return <Redirect to="/areas" />;
+    const confirmToken = queryParams.confirmToken;
+    if (!user.loggedIn && queryParams.token && ((callbackUrl || confirmToken) )) {
+      return <Redirect to={{
+        pathname: '/login',
+        search: location.search
+      }}/>;
+    } else if (user.loggedIn) {
+      return <Redirect to="/areas" />;
+    } else {
+      return <Login callbackUrl={callbackUrl}/>;
+    }
   }
-
+  redirectToLogin(){
+    return <Redirect to="/login" />;
+  }
   render() {
     const { match, user, userChecked, logout, locale, setLocale } = this.props;
     if (!userChecked) return null;
     const queryParams = querystring.parse(location.search || '');
     const callbackUrl = queryParams.callbackUrl;
-    const confirmToken = queryParams.confirmToken;
     const mergedMessages = Object.assign({}, translations[DEFAULT_LANGUAGE], translations[locale]);
     return (
       <IntlProvider 
@@ -79,34 +95,25 @@ class App extends React.Component {
             />
           </header>
           <main role="main" className="l-main">
-            <Route exact path="/" render={this.getRootComponent} />
-            {user.loggedIn &&
-              <div>
+            <Switch>
+              <Route exact path="/" component={Landing} />
+              <Route path={`${match.url}login`} render={this.getLoginComponent} />
+              {user.loggedIn ?
                 <Switch>
                   <Route exact path={`${match.url}areas`} component={Areas} />
                   <Route exact path={`${match.url}areas/create`} component={AreasManage} />
                   <Route exact path={`${match.url}areas/:areaId`} component={AreasManage} />
-                </Switch>
-                <Switch>
                   <Route exact path={`${match.url}templates`} component={Templates} />
                   <Route exact path={`${match.url}templates/create`} component={TemplatesManage} />
                   <Route exact path={`${match.url}templates/:templateId`} component={TemplatesManage} />
-                </Switch>
-                <Switch>
                   <Route exact path={`${match.url}reports`} component={Reports} />
                   <Route path={`${match.url}reports/:templateId`} component={Reports} />
+                  <Route exact path={`${match.url}settings`} component={Settings} />
                 </Switch>
-                <Route exact path={`${match.url}settings`} component={Settings} />
-              </div>
-            }
-            {!user.loggedIn &&
-              ((callbackUrl || confirmToken) ?
-                <Redirect to={{
-                  pathname: '/',
-                  search: location.search
-                }}/> :
-                <Redirect to={'/'}/>)
-            }
+                :
+                !queryParams.token && <Route path={`${match.url}`} render={this.redirectToLogin} />
+              }
+            </Switch>
             <ReduxToastr
               position="bottom-right"
               transitionIn="fadeIn"

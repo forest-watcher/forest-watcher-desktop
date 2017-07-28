@@ -22,7 +22,9 @@ class MembersManager extends React.Component {
         toastr.error(this.props.intl.formatMessage({ id: 'teams.invalidEmail' }));
         return;
       }
-      const isNotOnTheList = !includes(existingUsers.concat(this.props.selectedManagers), email);
+      const managerEmails = this.props.selectedManagers.map(m => m.email || m);
+      const confirmedUserEmails = this.props.selectedConfirmedUsers.map(m => m.email || m);
+      const isNotOnTheList = !includes(existingUsers.concat(confirmedUserEmails).concat(managerEmails), email);
       if (isNotOnTheList) {
         existingUsers.push(email);
         this.setState({ emailToSearch: '' });
@@ -79,8 +81,8 @@ class MembersManager extends React.Component {
 
   getMembers = () => {
     const { selectedUsers, selectedManagers, selectedConfirmedUsers } = this.props;
-    let members = selectedManagers.map((managerId) => ({ memberType: MANAGER, id: managerId }));
-    members = members.concat(selectedConfirmedUsers.map((confirmedUserId) => ({ memberType: CONFIRMED_USER, id: confirmedUserId })));
+    let members = selectedManagers.map((manager) => ({ memberType: MANAGER, id: manager.id || manager, email: manager.email }));
+    members = members.concat(selectedConfirmedUsers.map((confirmedUser) => ({ memberType: CONFIRMED_USER, id: confirmedUser.id || confirmedUser, email: confirmedUser.email })));
     return members.concat(selectedUsers.map((userId) => ({ memberType: USER, id: userId }))).sort(this.compareById);
   }
 
