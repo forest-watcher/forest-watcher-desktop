@@ -9,7 +9,7 @@ const mapAreasToOptions = (areas, templateId) => {
     const areasOptions = [];
     const areasIds = areas.ids;
     areasIds.forEach((id) => {
-        if (!areas.data[id].attributes.templateId || areas.data[id].attributes.templateId === '' || templateId === areas.data[id].attributes.templateId) {
+        if (!areas.data[id].attributes.templateId || areas.data[id].attributes.templateId === null || templateId === areas.data[id].attributes.templateId) {
             areasOptions.push({
                 option: id,
                 label: areas.data[id].attributes.name 

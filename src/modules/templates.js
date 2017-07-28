@@ -1,6 +1,6 @@
 import normalize from 'json-api-normalizer';
 import { API_BASE_URL } from '../constants/global';
-import { getArea, getAreas } from './areas';
+import { getAreas } from './areas';
 
 // Actions
 const SET_TEMPLATE = 'templates/SET_TEMPLATE';
@@ -166,9 +166,7 @@ export function saveTemplate(template, method, templateId) {
       })
       .then((data) => {
         const normalized = normalize(data);
-        if (template.areaOfInterest) {
-          dispatch(getArea(template.areaOfInterest));
-        }
+        dispatch(getAreas());
         dispatch({
           type: SET_TEMPLATE,
           payload: normalized
