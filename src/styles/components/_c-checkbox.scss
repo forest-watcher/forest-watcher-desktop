@@ -8,20 +8,12 @@
     margin-bottom: 8px;
   }
 
-  &.-lowercase {
-    .label {
-      text-transform: none;
-    }
-    margin-bottom: 8px;
-  }
-
   input[type=checkbox] {
     visibility: hidden;
   }
 
   .label {
     margin-left: 5px;
-    text-transform: uppercase;
     border-radius: 2px;
   }
 
