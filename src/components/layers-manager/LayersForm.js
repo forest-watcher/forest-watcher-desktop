@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import capitalize from 'lodash/capitalize';
 import { FormattedMessage } from 'react-intl';
 import { Input, Form, Textarea } from '../form/Form';
 import Card from '../ui/Card';
@@ -26,7 +27,7 @@ class LayersForm extends React.Component {
     }
 
   }
-  
+
   componentWillReceiveProps(nextProps){
     if (this.props.GFWLayers !== nextProps.GFWLayers) {
       this.setState({
@@ -72,16 +73,16 @@ class LayersForm extends React.Component {
     const teamId = this.state.teamMode ? this.props.team.id : null;
     const typeOfLayer = teamId ? 'settings.teamLayers' : 'settings.userLayers';
     const userLayerNames = this.props.userLayers.map((selectedLayer) => selectedLayer.attributes.name);
-    const teamLayerNames = this.props.teamLayers.map((selectedLayer) => selectedLayer.attributes.name);   
+    const teamLayerNames = this.props.teamLayers.map((selectedLayer) => selectedLayer.attributes.name);
     let userLayerLength = userLayerNames.length;
     let teamLayerLength = teamLayerNames.length;
 
     if (this.state.tabIndex === 0) { // GFW Layers
       const resetedLayers = this.state.GFWLayers.map((GFWLayer) => {
-        if (GFWLayer.enabled && 
+        if (GFWLayer.enabled &&
           this.addLayer(GFWLayer, teamId, userLayerNames, teamLayerNames, userLayerLength, teamLayerLength, typeOfLayer)) {
           // Prevents the user from adding several layers on a batch that exceeds the limit
-          teamId ? teamLayerLength += 1 : userLayerLength += 1; 
+          teamId ? teamLayerLength += 1 : userLayerLength += 1;
           GFWLayer.enabled = false;
         }
         return GFWLayer
@@ -98,14 +99,14 @@ class LayersForm extends React.Component {
     }
   }
 
-  addLayer = (layer, teamId, userLayerNames, teamLayerNames, userLayerLength, teamLayerLength, typeOfLayer) => {    
+  addLayer = (layer, teamId, userLayerNames, teamLayerNames, userLayerLength, teamLayerLength, typeOfLayer) => {
     if (this.maxLayers(layer, teamId, userLayerLength, teamLayerLength)) {
       toastr.error(
-        this.props.intl.formatMessage({ id: 'settings.maxNumberLayers' }), 
-        this.props.intl.formatMessage({ id: typeOfLayer }) 
+        this.props.intl.formatMessage({ id: 'settings.maxNumberLayers' }),
+        this.props.intl.formatMessage({ id: typeOfLayer })
       );
       return false;
-    } 
+    }
     if (this.alreadyExist(layer, teamId, userLayerNames, teamLayerNames)){
       toastr.error(this.props.intl.formatMessage({ id: 'settings.layerAlreadyExists' }), layer.title );
       return false;
@@ -124,24 +125,24 @@ class LayersForm extends React.Component {
       <div className="c-layers-form">
         <div className="form-header">
           <h3><FormattedMessage id={"settings.contextualLayers"} /></h3>
-          <Tab 
+          <Tab
             options={["settings.gfwLayers", "settings.customLayers"]}
             selectedIndex={this.state.tabIndex}
             handleTabIndexChange={this.handleTabIndexChange}
           />
         </div>
         <Form onSubmit={(e) => this.addLayers(e)} ref={ f => this.formNode = f }>
-            {this.state.tabIndex === 0 ? 
-              this.state.GFWLayers && this.state.GFWLayers.map((GFWlayer, i) => 
+            {this.state.tabIndex === 0 ?
+              this.state.GFWLayers && this.state.GFWLayers.map((GFWlayer, i) =>
                 <Checkbox
-                  classNames="-spaced -lowercase"
+                  classNames="-spaced"
                   key={`${i}${GFWlayer.cartodb_id}`}
-                  id={`${i}${GFWlayer.cartodb_id}`} 
-                  label={ GFWlayer.title }
-                  callback={() => this.toggleGFWLayer(GFWlayer)} 
+                  id={`${i}${GFWlayer.cartodb_id}`}
+                  label={capitalize(GFWlayer.title)}
+                  callback={() => this.toggleGFWLayer(GFWlayer)}
                   checked={ GFWlayer.enabled || false }
                 /> )
-            : 
+            :
               <Card className="-form -content-full-width">
                 <div className="c-form">
                   <Input
@@ -175,9 +176,9 @@ class LayersForm extends React.Component {
               </Card>
             }
           <div className='layer-add'>
-            { this.props.team && 
-              <Checkbox 
-                id={'gfw-teams-add'} 
+            { this.props.team &&
+              <Checkbox
+                id={'gfw-teams-add'}
                 labelId={ 'settings.addToTeam' }
                 callback={() => this.setState({teamMode: !this.state.teamMode})}
               />
@@ -200,3 +201,4 @@ LayersForm.propTypes = {
 };
 
 export default injectIntl(LayersForm);
+

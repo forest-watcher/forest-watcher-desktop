@@ -1,0 +1,49 @@
+{
+  "version": "0.0.1",
+  "name": "forest_watcher_ctx_layers_nm",
+  "layergroup": {
+    "layers": 
+    [
+      {
+        "type": "cartodb",
+        "options": {
+          "cartocss_version": "2.1.1",
+          "cartocss": "#table_layer { polygon-fill: #FF6600; polygon-opacity: 0.7; line-width: 0.2; line-opacity: 0.6; [zoom>3] { line-width: 0.3; line-opacity: 0.7; line-clip: false; polygon-clip: false; } [zoom>5] { line-width: 0.4; line-clip: false; } [zoom>6] { line-width: 0.6; line-opacity: 0.8; line-clip: false; } [zoom>7] { line-width: 0.8; line-clip: false; } [zoom>8] { line-width: 1; line-opacity: 1; line-clip: false; } [layer='gfw_oil_palm'] { polygon-fill: #ee9587; line-color: #ee9587; line-clip: false; polygon-clip: false; } }",
+          "sql": "SELECT 'oilpalm' as tablename, cartodb_id, the_geom_webmercator, name,company, type, country, area_ha, 'gfw_oil_palm' AS layer, true AS analysis FROM gfw_oil_palm"
+        }
+      },
+      {
+        "type": "cartodb",
+        "options": {
+          "cartocss_version": "2.1.1",
+          "cartocss": "#table_layer { polygon-fill: #FF6600; polygon-opacity: 0.7; line-width: 0.2; line-opacity: 0.6; [zoom>3] { line-width: 0.3; line-opacity: 0.7; line-clip: false; polygon-clip: false; } [zoom>5] { line-width: 0.4; line-clip: false; } [zoom>6] { line-width: 0.6; line-opacity: 0.8; line-clip: false; } [zoom>7] { line-width: 0.8; line-clip: false; } [zoom>8] { line-width: 1; line-opacity: 1; line-clip: false; } [layer='gfw_logging'] { polygon-fill: #fecc5c; line-color: #B38E3B; line-clip: false; polygon-clip: false; } }",
+          "sql": "SELECT 'gfw_logging' as tablename, cartodb_id, the_geom_webmercator, company, country, round(area_ha::float) as area_ha, name, source,status, 'gfw_logging' AS layer, true AS analysis FROM gfw_logging"
+        }
+      },
+      {
+        "type": "cartodb",
+        "options": {
+          "cartocss_version": "2.1.1",
+          "cartocss": "#table_layer { polygon-fill: #FF6600; polygon-opacity: 0.7; line-width: 0.2; line-opacity: 0.6; [zoom>3] { line-width: 0.3; line-opacity: 0.7; line-clip: false; polygon-clip: false; } [zoom>5] { line-width: 0.4; line-clip: false; } [zoom>6] { line-width: 0.6; line-opacity: 0.8; line-clip: false; } [zoom>7] { line-width: 0.8; line-clip: false; } [zoom>8] { line-width: 1; line-opacity: 1; line-clip: false; } [layer='gfw_wood_fiber'] { polygon-fill: #e6adb9; line-color: #e6adb9; line-clip: false; polygon-clip: false; } }",
+          "sql": "SELECT 'fiber' as tablename, cartodb_id, source as provider, the_geom_webmercator,name, country, type, last_updat as last_update, group_comp as group, area_ha, 'gfw_wood_fiber' AS layer, true AS analysis FROM gfw_wood_fiber"
+        }
+      },
+      {
+        "type": "cartodb",
+        "options": {
+          "cartocss_version": "2.1.1",
+          "cartocss": "#table_layer { polygon-fill: #FF6600; polygon-opacity: 0.7; line-width: 0.2; line-opacity: 0.6; [zoom>3] { line-width: 0.3; line-opacity: 0.7; line-clip: false; polygon-clip: false; } [zoom>5] { line-width: 0.4; line-clip: false; } [zoom>6] { line-width: 0.6; line-opacity: 0.8; line-clip: false; } [zoom>7] { line-width: 0.8; line-clip: false; } [zoom>8] { line-width: 1; line-opacity: 1; line-clip: false; } [layer='wdpa_protected_areas'] { polygon-fill: #2167AB; polygon-opacity: 0.5; line-color: #2167AB; line-width: 1; line-opacity: 1; } }",
+          "sql": "SELECT the_geom_webmercator, the_geom,iucn_cat, desig_eng, iso3 as country, name, wdpaid as id, true AS analysis, 'wdpa_protected_areas' as layer FROM wdpa_protected_areas"
+        }
+      },
+      {
+        "type": "cartodb",
+        "options": {
+          "cartocss_version": "2.1.1",
+          "cartocss": "#table_layer { polygon-fill: #FF6600; polygon-opacity: 0.7; line-width: 0.2; line-opacity: 0.6; [zoom>3] { line-width: 0.3; line-opacity: 0.7; line-clip: false; polygon-clip: false; } [zoom>5] { line-width: 0.4; line-clip: false; } [zoom>6] { line-width: 0.6; line-opacity: 0.8; line-clip: false; } [zoom>7] { line-width: 0.8; line-clip: false; } [zoom>8] { line-width: 1; line-opacity: 1; line-clip: false; } [layer='gfw_mining'] { polygon-fill: #fd8d3c; line-color: #fd8d3c; line-clip: false; polygon-clip: false; } } ",
+          "sql": "SELECT cartodb_id, 'mining' as tablename, the_geom_webmercator, status, company, country, round(area_ha::float) as area_ha, name, permit as permit_num, mineral, type, province, 'gfw_mining' AS layer, true AS analysis FROM gfw_mining"
+        }
+      }
+    ]
+  }
+}

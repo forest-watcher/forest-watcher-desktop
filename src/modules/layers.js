@@ -1,4 +1,4 @@
-import { CARTO_URL, API_BASE_URL } from '../constants/global';
+import { CARTO_URL, CARTO_TABLE, API_BASE_URL } from '../constants/global';
 import normalize from 'json-api-normalizer';
 
 // Actions
@@ -64,8 +64,8 @@ export default function reducer(state = initialState, action) {
 
 // Action Creators
 export function getGFWLayers() {
-  const url = `${CARTO_URL}/api/v2/sql?q=SELECT cartodb_id, title, tileurl FROM layerspec WHERE tileurl is not NULL AND tileurl <> '' AND title is not NULL`;
-  return (dispatch, state) => {
+  const url = `${CARTO_URL}/api/v2/sql?q=SELECT cartodb_id, name as title, tileurl FROM ${CARTO_TABLE} WHERE tileurl is not NULL AND tileurl <> '' AND name is not NULL`;
+  return (dispatch) => {
     dispatch({
       type: SET_LOADING,
       payload: true
@@ -114,7 +114,7 @@ export function createLayer(layer, teamId) {
         headers: {
           Authorization: `Bearer ${state().user.token}`,
           'Content-Type': 'application/json'
-        }, 
+        },
         method: 'POST',
         body: JSON.stringify(parseLayer(layer))
       }
@@ -155,7 +155,7 @@ export function toggleLayer(layer, value) {
         headers: {
           Authorization: `Bearer ${state().user.token}`,
           'Content-Type': 'application/json'
-        }, 
+        },
         method: 'PATCH',
         body: JSON.stringify({enabled: value})
       }
@@ -195,7 +195,7 @@ export function deleteLayer(layer) {
     fetch(url, {
         headers: {
           Authorization: `Bearer ${state().user.token}`
-        }, 
+        },
         method: 'DELETE'
       }
     )
