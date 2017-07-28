@@ -184,7 +184,6 @@ class QuestionCard extends React.Component {
     } else {
         let conditions = [];
         const conditionalQuestions = this.props.template.questions.some((tempQuestion) => {
-            debugger
             if (tempQuestion.name !== this.question.name && CONDITIONAL_QUESTION_TYPES.indexOf(tempQuestion.type) > -1) {
                 conditions[0] = {
                     name: tempQuestion.name,
