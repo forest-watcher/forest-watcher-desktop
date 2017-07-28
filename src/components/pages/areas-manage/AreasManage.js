@@ -6,7 +6,6 @@ import { Link } from 'react-router-dom';
 import { validation } from '../../../helpers/validation'; // eslint-disable-line no-unused-vars
 import { checkArea } from '../../../helpers/areas';
 import { toastr } from 'react-redux-toastr';
-import Icon from '../../ui/Icon';
 import LocateUser from '../../ui/LocateUser';
 import ZoomControl from '../../ui/ZoomControl';
 import DrawControl from '../../draw-control/DrawControlContainer';
@@ -164,11 +163,6 @@ class AreasManage extends React.Component {
                 <button className="c-button -light" disabled={this.props.saving || this.props.loading}><FormattedMessage id="forms.cancel" /></button>
               </Link>
               <div className="areas-inputs">
-                <div className="upload-field">
-                  <span className="text -x-small-title"><FormattedMessage id="areas.upload" /></span>
-                  <Icon name="icon-upload" className="-small -theme-gray" />
-                </div>
-                <span className="separator -vertical"></span>
                 <div className="horizontal-field">
                   <label className="text -x-small-title"><FormattedMessage id="areas.nameArea" />: </label>
                   <Input
