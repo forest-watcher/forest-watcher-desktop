@@ -17,9 +17,9 @@ const getTemplatesById = (templates, reports, areas, user) => {
       id: templateId,
       title: templateData.name[templateData.defaultLanguage],
       defaultLanguage: templateData.defaultLanguage.toUpperCase(),
-      aoi: areaId || null,
+      aoi: areaId,
       aoiName: areas.data[areaId] ? areas.data[areaId].attributes.name : null,
-      count: templateData.answersCount || 0,
+      count: templateData.answersCount || "0",
       status: templateData.status || null,
       user: templateData.user || null
     };
