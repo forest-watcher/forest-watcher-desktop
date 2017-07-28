@@ -13,7 +13,7 @@ const mapStateToProps = ({ user, teams, areas, layers }) => {
   }
 
   let team = teams.data;
-  const isManager = team && isUserManager(team, userId);
+  const isManager = team && isUserManager(team, userId) ? true : false;
   let areasIds = (team && team.attributes.areas) || [];
   areasIds = filterEmpty(areasIds);
   const selectedLayers = layers.selectedLayerIds.map((id) => layers.selectedLayers[id]);

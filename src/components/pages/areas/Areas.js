@@ -12,11 +12,10 @@ import { trimQueryParams } from '../../../helpers/login.js';
 
 class Areas extends React.Component {
 
-  componentWillReceiveProps(nextProps) {
-
-    if (nextProps.userChecked !== this.props.userChecked){
-      trimQueryParams(nextProps);
-    }
+  componentWillMount() {
+  
+  
+      trimQueryParams(this.props);
   }
 
   getAddArea = () => {
