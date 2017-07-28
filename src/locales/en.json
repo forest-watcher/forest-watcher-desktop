@@ -1,6 +1,9 @@
 {
     "app.name": "Forest Watcher 2.0",
+    "app.description": "Download the new Global Forest Watch app and receive forest change alerts to report deforestation activity in the field.",
+    "app.alreadyHaveAnAccount": "Already have a MyGFW account?",
     "app.logout": "logout",
+    "app.login": "Log in",
     "common.create": "Create",
     "common.edit": "Edit",
     "common.add": "Add",
@@ -92,7 +95,7 @@
     "templates.noTemplatesFound": "No templates found",
     "templates.questionPlaceholder": "Type your question...",
     "templates.optionPlaceholder": "Type option...",
-    "templates.addOption": "Add option",    
+    "templates.addOption": "Add option",
     "templates.required": "required",
     "templates.saved": "Template saved!",
     "templates.deleted": "Template deleted",
