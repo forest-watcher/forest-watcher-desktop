@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import Templates from './Templates';
-import { filterData, getDataAreas, filterBy } from '../../../helpers/filters';
+import { filterData, getDataAreas } from '../../../helpers/filters';
 import qs from 'query-string';
 
 const getTemplatesById = (templates, reports, areas, user) => {

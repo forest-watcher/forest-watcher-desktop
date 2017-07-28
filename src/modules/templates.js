@@ -194,7 +194,6 @@ export function saveTemplate(template, method, templateId) {
 // DELETE template
 export function deleteTemplate(templateId, aois) {
   return async (dispatch, state) => {
-    debugger;
     dispatch({
       type: SET_DELETING_TEMPLATE,
       payload: {
