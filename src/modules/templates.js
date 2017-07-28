@@ -1,7 +1,6 @@
 import normalize from 'json-api-normalizer';
 import { API_BASE_URL } from '../constants/global';
-import { getArea } from './areas';
-import { syncApp } from './app';
+import { getArea, getAreas } from './areas';
 
 // Actions
 const SET_TEMPLATE = 'templates/SET_TEMPLATE';
@@ -197,6 +196,7 @@ export function saveTemplate(template, method, templateId) {
 // DELETE template
 export function deleteTemplate(templateId, aois) {
   return async (dispatch, state) => {
+    debugger;
     dispatch({
       type: SET_DELETING_TEMPLATE,
       payload: {
@@ -216,6 +216,7 @@ export function deleteTemplate(templateId, aois) {
           type: DELETE_TEMPLATE,
           payload: templateId
         });
+        dispatch(getAreas());
         dispatch({
           type: SET_DELETING_TEMPLATE,
           payload: {
@@ -223,7 +224,6 @@ export function deleteTemplate(templateId, aois) {
             error: false
           }
         });
-        dispatch(syncApp());
       })
       .catch((error) => {
         dispatch({

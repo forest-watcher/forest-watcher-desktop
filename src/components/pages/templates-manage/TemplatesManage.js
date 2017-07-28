@@ -58,7 +58,11 @@ class TemplatesManage extends React.Component {
   // sync state after fetch
   ///////////////////////////////
   setPropsToState = (props) => {
-    this.setState({ ...props.template, areaOfInterest: props.areaOfInterest });
+    this.setState({ 
+      ...props.template, 
+      areaOfInterest: props.areaOfInterest, 
+      oldAreaOfInterest: props.areaOfInterest 
+    });
   }
 
 
@@ -92,7 +96,7 @@ class TemplatesManage extends React.Component {
   }
 
   deleteTemplate = () => {
-    const aois = null;
+    const aois = this.props.areaOfInterest !== null ?  [this.props.areaOfInterest] : null;
     this.props.deleteTemplate(this.props.templateId, aois);
   }
 
