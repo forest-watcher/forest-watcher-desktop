@@ -34,10 +34,9 @@
     }
 
     .screen-image {
-
-      top: 80px;
-      left: 14%;
-      height: 638px;
+      top: 83px;
+      left: 71px;
+      height: 617px;
       background-size: contain;
       width: 402px;
       background-image: url(/images/screen-1@2x.png) !important;
@@ -53,10 +52,15 @@
   .login-bar {
     display: flex;
     align-items: baseline;
-    justify-content: space-around;
+    justify-content: flex-end;
     color: $disabled-font-color;
     margin-top: 20px;
     margin-bottom: 40px;
+
+    .login-button {
+      margin-left: 20px;
+      margin-right: 6px;
+    }
   }
 
   .button-ios-image {

@@ -22,7 +22,7 @@ class Answers extends React.Component {
           <div className="small-12 medium-offset-1 medium-5">
             <div className="login-bar">
               <FormattedMessage id="app.alreadyHaveAnAccount" />
-              <Link className="c-button" to={'/login'}>
+              <Link className="login-button c-button" to={'/login'}>
                 <FormattedMessage id="app.login" />
               </Link>
             </div>
