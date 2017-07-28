@@ -4,7 +4,6 @@ import { Link } from 'react-router-dom';
 
 class Answers extends React.Component {
   render() {
-    const gfwLogo = 'logo-gfw.png'
     return (
       <div className="c-landing">
         <div className="row">
