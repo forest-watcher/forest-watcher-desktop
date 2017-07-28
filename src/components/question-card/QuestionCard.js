@@ -184,13 +184,13 @@ class QuestionCard extends React.Component {
     } else {
         let conditions = [];
         const conditionalQuestions = this.props.template.questions.some((tempQuestion) => {
+            debugger
             if (tempQuestion.name !== this.question.name && CONDITIONAL_QUESTION_TYPES.indexOf(tempQuestion.type) > -1) {
                 conditions[0] = {
                     name: tempQuestion.name,
                     value: 0
                 }
             }
-            return true;
         })
         this.question = {
             ...this.question,
@@ -280,7 +280,6 @@ class QuestionCard extends React.Component {
     // permissions bools that are dependant on locale state
     const conditionalQuestionCount = filterBy(conditionalQuestionsFiltered, 'type', CONDITIONAL_QUESTION_TYPES).length;
     const canSetConditional = template.questions.length && conditionalQuestionCount > 0 ? true : false;
-
     // finally we can render all that fancy stuff
     return (
         <section className="c-question-card">
