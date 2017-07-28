@@ -99,23 +99,17 @@ class App extends React.Component {
               <Route exact path="/" component={Landing} />
               <Route path={`${match.url}login`} render={this.getLoginComponent} />
               {user.loggedIn ?
-                <div>
-                  <Switch>
-                    <Route exact path={`${match.url}areas`} component={Areas} />
-                    <Route exact path={`${match.url}areas/create`} component={AreasManage} />
-                    <Route exact path={`${match.url}areas/:areaId`} component={AreasManage} />
-                  </Switch>
-                  <Switch>
-                    <Route exact path={`${match.url}templates`} component={Templates} />
-                    <Route exact path={`${match.url}templates/create`} component={TemplatesManage} />
-                    <Route exact path={`${match.url}templates/:templateId`} component={TemplatesManage} />
-                  </Switch>
-                  <Switch>
-                    <Route exact path={`${match.url}reports`} component={Reports} />
-                    <Route path={`${match.url}reports/:templateId`} component={Reports} />
-                  </Switch>
+                <Switch>
+                  <Route exact path={`${match.url}areas`} component={Areas} />
+                  <Route exact path={`${match.url}areas/create`} component={AreasManage} />
+                  <Route exact path={`${match.url}areas/:areaId`} component={AreasManage} />
+                  <Route exact path={`${match.url}templates`} component={Templates} />
+                  <Route exact path={`${match.url}templates/create`} component={TemplatesManage} />
+                  <Route exact path={`${match.url}templates/:templateId`} component={TemplatesManage} />
+                  <Route exact path={`${match.url}reports`} component={Reports} />
+                  <Route path={`${match.url}reports/:templateId`} component={Reports} />
                   <Route exact path={`${match.url}settings`} component={Settings} />
-                </div>
+                </Switch>
                 :
                 !queryParams.token && <Route path={`${match.url}`} render={this.redirectToLogin} />
               }
