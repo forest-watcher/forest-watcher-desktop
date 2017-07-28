@@ -85,15 +85,16 @@ class App extends React.Component {
         messages={mergedMessages}
       >
         <div>
-          <header className="l-header" role="banner">
-            <Nav 
-              loggedIn={user.loggedIn} 
-              logout={logout} 
+          { (user.loggedIn || location.pathname === "/login") &&
+            <header className="l-header" role="banner">
+            <Nav
+              loggedIn={user.loggedIn}
+              logout={logout}
               locale={locale}
               setLocale={setLocale}
               translations={translations}
             />
-          </header>
+          </header>}
           <main role="main" className="l-main">
             <Switch>
               <Route exact path="/" component={Landing} />
