@@ -109,8 +109,7 @@ class TemplatesManage extends React.Component {
   }
 
   deleteTemplate = () => {
-    const aois = null;
-    this.props.deleteTemplate(this.props.templateId, aois);
+    this.props.deleteTemplate(this.props.templateId, [this.state.areaOfInterest]);
   }
 
   
