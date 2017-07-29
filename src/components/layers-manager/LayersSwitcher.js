@@ -3,7 +3,8 @@ import PropTypes from 'prop-types';
 
 import Icon from '../ui/Icon';
 import { FormattedMessage } from 'react-intl';
-import SwitchButton from 'react-switch-button';
+import Switch from 'react-toggle-switch';
+
 
 class LayersSwitcher extends React.Component {
   toggleLayer = (layer) => {
@@ -16,12 +17,19 @@ class LayersSwitcher extends React.Component {
     const switchRow = (layer, i) => (
       <div className="list-row">
         <div className="layer-name">
-          <SwitchButton
+          {/* <Switch
             name={`${layer.attributes.owner.type}-layer-${i}-${layer.id}`} 
             labelRight={layer.attributes.name} 
             onChange={() => this.toggleLayer(layer)}
             defaultChecked={layer.attributes.enabled}
+          /> */}
+          <Switch
+            className="c-switcher"
+            onClick={() => this.toggleLayer(layer)}
+            on={layer.attributes.enabled}
+            enabled={true}
           />
+          <label>{layer.attributes.name}</label>
         </div>
         <button className={"delete-button"} type="button" onClick={() => deleteLayer(layer)}>
           <Icon name="icon-delete" className="-small " />

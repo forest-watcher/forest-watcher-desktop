@@ -2,7 +2,7 @@ import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { Link } from 'react-router-dom';
 
-class Answers extends React.Component {
+class Landing extends React.Component {
   render() {
     return (
       <div className="c-landing">
@@ -12,7 +12,6 @@ class Answers extends React.Component {
             <div className="main">
               <h1><FormattedMessage id="app.name" /></h1>
               <h2><FormattedMessage id="app.description" /></h2>
-
               <div className='build-buttons'>
                 <a className='button-ios-image' onClick={this.handleIosLink}></a>
                 <a className='button-android-image' onClick={this.handleAndroidLink}></a>
@@ -21,9 +20,17 @@ class Answers extends React.Component {
           </div>
           <div className="small-12 medium-offset-1 medium-5">
             <div className="login-bar">
-              <FormattedMessage id="app.alreadyHaveAnAccount" />
+              { this.props.loggedIn ?
+                <FormattedMessage id="app.alreadyLoggedIn" />
+                :
+                <FormattedMessage id="app.alreadyHaveAnAccount" />
+              }
               <Link className="login-button c-button" to={'/login'}>
-                <FormattedMessage id="app.login" />
+                { this.props.loggedIn ? 
+                  <FormattedMessage id="app.goToApp" />
+                  :
+                  <FormattedMessage id="app.login" />
+                }
               </Link>
             </div>
             <div className="phone-screen">
@@ -37,4 +44,4 @@ class Answers extends React.Component {
   }
 }
 
-export default Answers;
+export default Landing;

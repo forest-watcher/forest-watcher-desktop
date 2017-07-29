@@ -27,7 +27,6 @@
     "react-redux-toastr": "^6.2.7",
     "react-router-dom": "^4.1.1",
     "react-select": "^1.0.0-rc.5",
-    "react-switch-button": "^2.2.2",
     "react-table": "^6.3.0",
     "react-toggle-switch": "^2.1.4",
     "react-transition-group": "^1.2.0",
