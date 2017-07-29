@@ -7,13 +7,19 @@
     
     .layer-name {
       text-transform: uppercase;
+      display: flex;
+      align-items: center;
+
+      label {
+        margin-left: 10px;
+      }
     }
   }
   
   .layers-title {
     border-bottom: 1px solid $medium-gray;
     padding-bottom: 16px;
-    margin-top: 60px;
+    margin-top: 30px;
     color: $theme-accent;
   }
 
