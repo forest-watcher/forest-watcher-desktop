@@ -23,7 +23,7 @@ import Templates from '../pages/templates/TemplatesContainer';
 import TemplatesManage from '../pages/templates-manage/TemplatesManageContainer';
 import Settings from '../pages/settings/SettingsContainer';
 import Reports from '../pages/reports/ReportsContainer';
-import Landing from '../pages/landing/Landing';
+import Landing from '../pages/landing/LandingContainer';
 
 import 'react-redux-toastr/lib/css/react-redux-toastr.min.css';
 
@@ -84,7 +84,7 @@ class App extends React.Component {
         messages={mergedMessages}
       >
         <div>
-          { (user.loggedIn || location.pathname === "/login") &&
+          { ((user.loggedIn && location.pathname !== '/') || location.pathname === "/login") &&
             <header className="l-header" role="banner">
             <Nav
               loggedIn={user.loggedIn}

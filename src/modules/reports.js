@@ -65,7 +65,6 @@ export function getReports(reportId) {
         });
       })
       .catch((error) => {
-        toastr.error('Unable to load reports', error);
         dispatch({
           type: SET_LOADING_REPORTS,
           payload: false
