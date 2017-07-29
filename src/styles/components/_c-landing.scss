@@ -1,4 +1,6 @@
 .c-landing {
+  height: 100vh;
+
   .logo-image {
     background-image: url(/images/logo-gfw@2x.png) !important;
     background-repeat: no-repeat;
@@ -25,10 +27,10 @@
     }
 
     .screen-image {
-      left: 23px;
-      height: 694px;
+      left: 22px;
+      height: 696px;
       background-size: cover;
-      width: 402px;
+      width: 399px;
       background-image: url(/images/screen-1@2x.png) !important;
       z-index: 5;
     }
