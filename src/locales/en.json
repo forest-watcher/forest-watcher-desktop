@@ -127,7 +127,7 @@
     "settings.maxNumberLayers": "Maximum number of layers reached",
     "settings.team": "TEAM",
     "settings.layerTitle": "Title",
-    "settings.cssStyle": "Css style",
+    "settings.description": "Description",
     "settings.url": "URL",
     "settings.validationError": "There are some errors in the form",
     "settings.teamLayers": "Team layers",
