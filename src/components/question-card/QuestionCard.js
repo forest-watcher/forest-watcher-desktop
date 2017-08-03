@@ -184,14 +184,14 @@ class QuestionCard extends React.Component {
         }
     } else {
         let conditions = [];
-        this.props.template.questions.some((tempQuestion) => {
-            if (tempQuestion.name !== this.question.name && CONDITIONAL_QUESTION_TYPES.indexOf(tempQuestion.type) > -1) {
-                conditions[0] = {
-                    name: tempQuestion.name,
-                    value: 0
-                }
-            }
-        })
+        const firstQuestion = this.props.template.questions.filter((tempQuestion) => {
+            return tempQuestion.name !== this.question.name && CONDITIONAL_QUESTION_TYPES.indexOf(tempQuestion.type) > -1;
+        });
+        conditions[0] = {
+            name: firstQuestion[0].name,
+            value: 0
+        }
+
         this.question = {
             ...this.question,
             conditions: conditions
@@ -238,9 +238,7 @@ class QuestionCard extends React.Component {
     const isConditional = CONDITIONAL_QUESTION_TYPES.indexOf(question.type) > -1 ? true : false;
     const conditionalQuestions = filterBy(template.questions, 'type', CONDITIONAL_QUESTION_TYPES);
     const conditionalQuestionsFiltered = conditionalQuestions.filter((item) => {
-        if (item.order < question.order) {
-            return item;
-        }
+        return item.order < question.order;
     });
    
     // selector options that are dependant on local state
@@ -248,15 +246,13 @@ class QuestionCard extends React.Component {
     let conditionsQuestions = [];
     let conditionsAnswers = [];
     if (question.conditions.length) {
-        conditionsQuestions = conditionalQuestionsFiltered.map((tempQuestion) => {
-            if (tempQuestion.name !== question.name) {
-                return {
-                    option: tempQuestion.name,
-                    label: tempQuestion.label[template.defaultLanguage]
-                }
-            }
+        const tempFiltered = conditionalQuestionsFiltered.filter((tempQuestion) => {
+            return tempQuestion.name !== question.name;
         });
-
+        conditionsQuestions[0] = {
+            option: tempFiltered[0].name,
+            label: tempFiltered[0].label[template.defaultLanguage]
+        }
         const tempQuestionIndex = filterBy(template.questions, 'name', question.conditions[0].name);
         conditionsAnswers = template.questions[tempQuestionIndex[0].order].values[template.defaultLanguage].map((tempAnswers) => {
             return {
