@@ -23,9 +23,9 @@ class CountrySearch extends React.Component {
     this.setState({
       country: selected
     })
-    const activeCountryBounds = this.props.countries.filter((country) => {
+    const activeCountryBounds = this.props.countries.find((country) => {
       return country.iso === selected.option;
-    })[0].bbox;
+    }).bbox;
     const geoJSON = JSON.parse(activeCountryBounds);
     const countryBounds = geoJSON.coordinates[0].map(pt => [pt[1], pt[0]]);
     const bounds = L.latLngBounds(countryBounds, { padding: [15, 15] });

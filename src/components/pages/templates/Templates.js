@@ -13,6 +13,7 @@ import { Link } from 'react-router-dom';
 import qs from 'query-string';
 import { TABLE_PAGE_SIZE } from '../../../constants/global';
 
+
 class Templates extends React.Component {
 
   createTemplate = () => {
@@ -33,7 +34,16 @@ class Templates extends React.Component {
     const columns = [{
       Header: <FormattedMessage id="templates.title" />,
       accessor: 'title',
-      Cell: props => <Link className="table-link text" to={`/templates/${props.original.id}`}><span className='link'>{props.value}</span><svg className="c-icon -x-small -green"><use xlinkHref="#icon-arrow-link"></use></svg></Link>
+      Cell: props => (
+        <Link className="table-link text" to={`/templates/${props.original.id}`}>
+          <span className='link'>
+            {props.value}
+          </span>
+          <svg className="c-icon -x-small -green">
+            <use xlinkHref="#icon-arrow-link"></use>
+          </svg>
+        </Link>
+      )
     },{
       Header: <FormattedMessage id="reports.areaOfInterest" />,
       accessor: 'aoiName'
@@ -48,7 +58,16 @@ class Templates extends React.Component {
       Header: <FormattedMessage id="templates.reportsSubmitted" />,
       accessor: 'count',
       className: 'report-link',
-      Cell: props => <Link className="text -x-small-title" to={`/reports/${props.original.id}`}><span>{props.value}</span><span className='link text -x-small-title'>{this.props.intl.formatMessage({ id: 'templates.showReports' })}</span></Link>
+      Cell: props => (
+        <Link className="text -x-small-title" to={`/reports/${props.original.id}`}>
+          <span>
+            {props.value}
+          </span>
+          <span className='link text -x-small-title'>
+            {this.props.intl.formatMessage({ id: 'templates.showReports' })}
+          </span>
+        </Link>
+      )
     }];
     const isLoading = this.props.loadingTemplates || this.props.loadingReports;
     return (
