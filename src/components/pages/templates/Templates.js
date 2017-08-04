@@ -33,19 +33,22 @@ class Templates extends React.Component {
     const columns = [{
       Header: <FormattedMessage id="templates.title" />,
       accessor: 'title',
-      Cell: props => <Link className="text" to={`/templates/${props.original.id}`}><span className='link'>{props.value}</span><svg className="c-icon -x-small -green"><use xlinkHref="#icon-arrow-link"></use></svg></Link>
+      Cell: props => <Link className="table-link text" to={`/templates/${props.original.id}`}><span className='link'>{props.value}</span><svg className="c-icon -x-small -green"><use xlinkHref="#icon-arrow-link"></use></svg></Link>
     },{
       Header: <FormattedMessage id="reports.areaOfInterest" />,
       accessor: 'aoiName'
     },{  
       Header: <FormattedMessage id="templates.defaultLanguage" />,
-      accessor: 'defaultLanguage'
+      accessor: 'defaultLanguageName'
     },{
       Header: <FormattedMessage id="templates.status" />,
-      accessor: 'status'
+      accessor: 'status',
+      className: 'status'
     },{
       Header: <FormattedMessage id="templates.reportsSubmitted" />,
-      accessor: 'count'
+      accessor: 'count',
+      className: 'report-link',
+      Cell: props => <Link className="text -x-small-title" to={`/reports/${props.original.id}`}><span>{props.value}</span><span className='link text -x-small-title'>{this.props.intl.formatMessage({ id: 'templates.showReports' })}</span></Link>
     }];
     const isLoading = this.props.loadingTemplates || this.props.loadingReports;
     return (

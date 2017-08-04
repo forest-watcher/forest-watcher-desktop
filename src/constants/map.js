@@ -6,7 +6,7 @@ export const MAP_CONFIG = {
   initialZoom: 3,
   basemap: `http://a.tile.openstreetmap.org/{z}/{x}/{y}.png`,
   center: [51.505, -0.09],
-  attribution: '© <a href="https://www.mapbox.com/about/maps/">Mapbox</a> © <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> <strong><a href="https://www.mapbox.com/map-feedback/" target="_blank">Improve this map</a></strong>',
+  attribution: '<a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
   zoomControl: false
 }
 

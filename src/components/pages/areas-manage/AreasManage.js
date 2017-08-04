@@ -57,9 +57,9 @@ class AreasManage extends React.Component {
   onSubmit = (e) => {
     e.preventDefault();
     if (this.form.geojson && this.form.name !== '') {
+      this.props.setSaving(true);
       if (checkArea(this.form.geojson)) {
         const method = this.props.mode === 'manage' ? 'PATCH' : 'POST';
-        this.props.setSaving(true);
         this.props.saveAreaWithGeostore(this.form, this.state.map._container, method);
       } else {
         toastr.error(this.props.intl.formatMessage({ id: 'areas.tooLarge' }), this.props.intl.formatMessage({ id: 'areas.tooLargeDesc' }));

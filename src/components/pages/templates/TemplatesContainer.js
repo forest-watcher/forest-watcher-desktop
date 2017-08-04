@@ -2,6 +2,7 @@ import { connect } from 'react-redux';
 import Templates from './Templates';
 import { filterData, getDataAreas } from '../../../helpers/filters';
 import qs from 'query-string';
+import { LOCALES_LIST } from '../../../constants/locales';
 
 const getTemplatesById = (templates, reports, areas, user) => {
   const templateIds = templates.ids;
@@ -13,13 +14,17 @@ const getTemplatesById = (templates, reports, areas, user) => {
         areaId = id;
       }
     });
+    const prettyLanguage = LOCALES_LIST.filter((lang) => {
+      return lang.code === templateData.defaultLanguage;
+    });
     return {
       id: templateId,
       title: templateData.name[templateData.defaultLanguage],
-      defaultLanguage: templateData.defaultLanguage.toUpperCase(),
+      defaultLanguage: templateData.defaultLanguage,
+      defaultLanguageName: prettyLanguage[0].name,
       aoi: areaId,
       aoiName: areas.data[areaId] ? areas.data[areaId].attributes.name : null,
-      count: templateData.answersCount || "0",
+      count: templateData.answersCount || "-",
       status: templateData.status || null,
       user: templateData.user || null
     };
