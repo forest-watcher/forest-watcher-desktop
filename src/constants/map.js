@@ -1,11 +1,10 @@
 import L from 'leaflet';
-import { MAPBOX_TOKEN } from './global';
 
 // Map
 export const MAP_CONFIG = {
   minZoom: 2,
   initialZoom: 3,
-  basemap: `https://api.mapbox.com/styles/v1/forestwatcher/cj4772tx20vsv2rrza5q3v0d4/tiles/{z}/{x}/{y}@2x?access_token=${MAPBOX_TOKEN}`,
+  basemap: `http://a.tile.openstreetmap.org/{z}/{x}/{y}.png`,
   center: [51.505, -0.09],
   attribution: '© <a href="https://www.mapbox.com/about/maps/">Mapbox</a> © <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> <strong><a href="https://www.mapbox.com/map-feedback/" target="_blank">Improve this map</a></strong>',
   zoomControl: false

@@ -45,6 +45,7 @@
     "areas.tooLarge": "Area too large",
     "areas.tooLargeDesc": "Please draw a smaller area",
     "areas.locateUserError": "Your location wasn't found",
+    "areas.countryPlaceholder": "Search country...",
     "templates.name": "templates",
     "templates.title": "Your Templates",
     "templates.subtitle": "Your templates",

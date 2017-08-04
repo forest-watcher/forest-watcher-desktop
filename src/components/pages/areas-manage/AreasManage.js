@@ -12,6 +12,7 @@ import DrawControl from '../../draw-control/DrawControlContainer';
 import Attribution from '../../ui/Attribution';
 import Loader from '../../ui/Loader';
 import { FormattedMessage, injectIntl } from 'react-intl';
+import CountrySearch from '../../country-search/CountrySearchContainer';
 
 class AreasManage extends React.Component {
 
@@ -109,6 +110,9 @@ class AreasManage extends React.Component {
               }}
             />
             <div className="c-map-controls">
+              <CountrySearch 
+                map={this.state.map}
+              />
               { this.props.mode === 'create' &&
                 <LocateUser 
                   map={this.state.map} 
