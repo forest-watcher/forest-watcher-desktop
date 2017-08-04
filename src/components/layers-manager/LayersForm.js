@@ -163,13 +163,13 @@ class LayersForm extends React.Component {
                   placeholder={this.props.intl.formatMessage({ id: 'settings.url' })}
                   validations={['required', 'url']}
                   />
-                  <h4>{this.props.intl.formatMessage({ id: 'settings.cssStyle' })}</h4>
+                  <h4>{this.props.intl.formatMessage({ id: 'settings.description' })}</h4>
                   <Textarea
                     type="text"
                     onChange={this.onInputChange}
                     name="style"
                     value={this.state.form.style || ''}
-                    placeholder={this.props.intl.formatMessage({ id: 'settings.cssStyle' })}
+                    placeholder={this.props.intl.formatMessage({ id: 'settings.description' })}
                     validations={[]}
                   />
                 </div>

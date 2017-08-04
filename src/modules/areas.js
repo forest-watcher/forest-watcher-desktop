@@ -1,5 +1,5 @@
 import normalize from 'json-api-normalizer';
-import { API_BASE_URL } from '../constants/global';
+import { API_BASE_URL, CARTO_COUNTRIES } from '../constants/global';
 import { BLOB_CONFIG } from '../constants/map';
 import { saveGeostore } from './geostores';
 import domtoimage from 'dom-to-image';
@@ -8,6 +8,7 @@ import { toastr } from 'react-redux-toastr';
 // Actions
 const SET_AREA = 'areas/SET_AREA';
 const SET_AREAS = 'areas/SET_AREAS';
+const SET_COUNTRIES = 'areas/SET_COUNTRIES';
 const SET_LOADING_AREAS = 'areas/SET_LOADING_AREAS';
 const SET_SAVING_AREA = 'areas/SET_SAVING_AREA';
 const SET_EDITING_AREA = 'areas/SET_EDITING_AREA';
@@ -16,6 +17,7 @@ const SET_EDITING_AREA = 'areas/SET_EDITING_AREA';
 const initialState = {
   ids: [],
   data: {},
+  countries: [],
   loading: true,
   saving: false,
   editing: false,
@@ -44,6 +46,8 @@ export default function reducer(state = initialState, action) {
       if (areas) return Object.assign({}, state, { ids: Object.keys(areas), data: areas });
       return state;
     }
+    case SET_COUNTRIES:
+      return Object.assign({}, state, { countries: action.payload });
     case SET_LOADING_AREAS:
       return Object.assign({}, state, { loading: action.payload });
     case SET_SAVING_AREA:
@@ -129,6 +133,26 @@ export function getAreas() {
           type: SET_LOADING_AREAS,
           payload: false
         });
+      });
+  };
+}
+
+export function getCountries() {
+  const url = `${CARTO_COUNTRIES}`;
+  return (dispatch, state) => {
+    return fetch(url)
+      .then((response) => {
+        if (response.ok) return response.json();
+        throw Error(response.statusText);
+      })
+      .then((data) => {
+        dispatch({
+          type: SET_COUNTRIES,
+          payload: data.rows
+        });
+      })
+      .catch((error) => {
+        console.info('failed to fetch countries');
       });
   };
 }

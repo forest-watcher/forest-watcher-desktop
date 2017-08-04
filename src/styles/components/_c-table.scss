@@ -48,8 +48,29 @@
             transition-property: width, min-width, padding, opacity;
             transition: .3s ease;
 
-            .number {
-                text-align: right;
+            .link {
+                color: $theme-accent;
+            }
+
+            .table-link {
+                display: flex;
+                flex-direction: column;
+
+                .link {
+                    margin-bottom: 5px;
+                    color: $gray;
+                }
+            }
+
+            &.report-link {
+                
+                .link {
+                    float: right;
+                }
+            }
+
+            &.status {
+                text-transform: capitalize;
             }
         }
     }

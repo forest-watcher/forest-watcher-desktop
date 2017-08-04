@@ -12,6 +12,7 @@ import DrawControl from '../../draw-control/DrawControlContainer';
 import Attribution from '../../ui/Attribution';
 import Loader from '../../ui/Loader';
 import { FormattedMessage, injectIntl } from 'react-intl';
+import CountrySearch from '../../country-search/CountrySearchContainer';
 
 class AreasManage extends React.Component {
 
@@ -56,9 +57,9 @@ class AreasManage extends React.Component {
   onSubmit = (e) => {
     e.preventDefault();
     if (this.form.geojson && this.form.name !== '') {
+      this.props.setSaving(true);
       if (checkArea(this.form.geojson)) {
         const method = this.props.mode === 'manage' ? 'PATCH' : 'POST';
-        this.props.setSaving(true);
         this.props.saveAreaWithGeostore(this.form, this.state.map._container, method);
       } else {
         toastr.error(this.props.intl.formatMessage({ id: 'areas.tooLarge' }), this.props.intl.formatMessage({ id: 'areas.tooLargeDesc' }));
@@ -109,8 +110,18 @@ class AreasManage extends React.Component {
               }}
             />
             <div className="c-map-controls">
-              { this.props.mode === 'create' &&
-                <LocateUser 
+              <CountrySearch 
+                map={this.state.map}
+                onZoomChange={ (zoom) => {
+                  this.setState({
+                    mapConfig: {
+                      ...this.state.mapConfig,
+                      zoom
+                    }
+                  });
+                }}
+              />
+              <LocateUser 
                   map={this.state.map} 
                   setLoading={this.props.setLoading}
                   onZoomChange={ (zoom) => {
@@ -122,7 +133,6 @@ class AreasManage extends React.Component {
                     });
                   }}
                 />
-              }
               <ZoomControl
                 map={this.state.map}
                 zoom={this.state.mapConfig.zoom}
