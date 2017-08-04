@@ -112,6 +112,14 @@ class AreasManage extends React.Component {
             <div className="c-map-controls">
               <CountrySearch 
                 map={this.state.map}
+                onZoomChange={ (zoom) => {
+                  this.setState({
+                    mapConfig: {
+                      ...this.state.mapConfig,
+                      zoom
+                    }
+                  });
+                }}
               />
               { this.props.mode === 'create' &&
                 <LocateUser 

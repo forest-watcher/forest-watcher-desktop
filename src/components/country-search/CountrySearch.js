@@ -30,6 +30,7 @@ class CountrySearch extends React.Component {
     const countryBounds = geoJSON.coordinates[0].map(pt => [pt[1], pt[0]]);
     const bounds = L.latLngBounds(countryBounds, { padding: [15, 15] });
     this.props.map.fitBounds(bounds);
+    this.props.onZoomChange && this.props.onZoomChange(this.props.map.getZoom());
   }
 
   render() {
