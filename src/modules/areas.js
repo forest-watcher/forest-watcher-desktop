@@ -140,10 +140,6 @@ export function getAreas() {
 export function getCountries() {
   const url = `${CARTO_COUNTRIES}`;
   return (dispatch, state) => {
-    dispatch({
-      type: SET_LOADING_AREAS,
-      payload: true
-    });
     return fetch(url)
       .then((response) => {
         if (response.ok) return response.json();
@@ -154,17 +150,9 @@ export function getCountries() {
           type: SET_COUNTRIES,
           payload: data.rows
         });
-        dispatch({
-          type: SET_LOADING_AREAS,
-          payload: false
-        });
       })
       .catch((error) => {
-        toastr.error('Unable to load countries', error);
-        dispatch({
-          type: SET_LOADING_AREAS,
-          payload: false
-        });
+        console.info('failed to fetch countries');
       });
   };
 }
