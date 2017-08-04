@@ -121,8 +121,7 @@ class AreasManage extends React.Component {
                   });
                 }}
               />
-              { this.props.mode === 'create' &&
-                <LocateUser 
+              <LocateUser 
                   map={this.state.map} 
                   setLoading={this.props.setLoading}
                   onZoomChange={ (zoom) => {
@@ -134,7 +133,6 @@ class AreasManage extends React.Component {
                     });
                   }}
                 />
-              }
               <ZoomControl
                 map={this.state.map}
                 zoom={this.state.mapConfig.zoom}

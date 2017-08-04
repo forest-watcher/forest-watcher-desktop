@@ -81,6 +81,7 @@ class DrawControl extends React.Component {
     });
 
     this.map.on(L.Draw.Event.EDITSTART, (e) => {
+      this.setFeatures();
       this.props.setEditing(true);
     });
 
@@ -93,6 +94,7 @@ class DrawControl extends React.Component {
     });
 
     this.map.on(L.Draw.Event.DELETESTART, (e) => {
+      this.setFeatures();
       this.props.setEditing(true);
     });
 
