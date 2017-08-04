@@ -45,7 +45,8 @@ class Templates extends React.Component {
       accessor: 'status'
     },{
       Header: <FormattedMessage id="templates.reportsSubmitted" />,
-      accessor: 'count'
+      accessor: 'count',
+      Cell: props => <Link className="text" to={`/reports/${props.original.id}`}><span className='link'>{props.value}</span></Link>
     }];
     const isLoading = this.props.loadingTemplates || this.props.loadingReports;
     return (

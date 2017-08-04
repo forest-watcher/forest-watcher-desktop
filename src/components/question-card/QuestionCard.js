@@ -99,7 +99,7 @@ class QuestionCard extends React.Component {
 
 
   ///////////////////////////////
-  // hnadle childquestions inputs -> checkbox, selector for option, more info translation input
+  // handle childquestions inputs -> checkbox, selector for option, more info translation input
   ///////////////////////////////
   handleChangeMoreInfo = () => {
     if (this.question.childQuestions.length > 0) {
@@ -113,7 +113,8 @@ class QuestionCard extends React.Component {
             ...CHILD_QUESTION,
             label: {
                 [this.props.defaultLanguage]: ""
-            }
+            },
+            name: `${this.question.name}-more-info`
         }
         this.question = {
             ...this.question,
