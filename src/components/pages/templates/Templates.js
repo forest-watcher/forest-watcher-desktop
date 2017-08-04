@@ -33,7 +33,7 @@ class Templates extends React.Component {
     const columns = [{
       Header: <FormattedMessage id="templates.title" />,
       accessor: 'title',
-      Cell: props => <Link className="text" to={`/templates/${props.original.id}`}><span className='link'>{props.value}</span></Link>
+      Cell: props => <Link className="text" to={`/templates/${props.original.id}`}><span className='link'>{props.value}</span><svg className="c-icon -x-small -green"><use xlinkHref="#icon-arrow-link"></use></svg></Link>
     },{
       Header: <FormattedMessage id="reports.areaOfInterest" />,
       accessor: 'aoiName'
