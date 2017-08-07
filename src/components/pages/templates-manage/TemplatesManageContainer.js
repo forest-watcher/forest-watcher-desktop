@@ -12,7 +12,7 @@ const mapAreasToOptions = (areas, templateId) => {
         if (!areas.data[id].attributes.templateId || areas.data[id].attributes.templateId === null || templateId === areas.data[id].attributes.templateId) {
             areasOptions.push({
                 option: id,
-                label: areas.data[id].attributes.name 
+                label: areas.data[id].attributes.name
             });
         }
     });
@@ -21,16 +21,29 @@ const mapAreasToOptions = (areas, templateId) => {
 
 const mapQuestionType = (questionTypes) => {
     const questionOptions = questionTypes.map((type) => {
-        if (type === 'blob') {
+        switch(type) {
+          case 'blob':
             return {
-                value: type,
-                label: 'image'
-            }
+              value: type,
+              label: 'image'
+            };
+          case 'radio':
+            return {
+              value: type,
+              label: 'single selection'
+            };
+          case 'select':
+            return {
+              value: type,
+              label: 'multiple selection'
+            };
+          default:
+            return {
+              value: type,
+              label: type
+            };
         }
-        return {
-            value: type,
-            label: type
-        }
+
     });
     return questionOptions;
 }
@@ -54,13 +67,13 @@ const mapStateToProps = (state, { match }) => {
         if (state.areas.data[areaId].attributes.templateId === templateId) {
             areaOfInterest = areaId;
             return;
-        } 
+        }
     });
     const areasOptions = mapAreasToOptions(state.areas, templateId);
     const defaultTemplate = {
         ...TEMPLATE,
         name: {
-            [state.app.locale]: ""       
+            [state.app.locale]: ""
         },
         languages: [state.app.locale],
         defaultLanguage: state.app.locale,
