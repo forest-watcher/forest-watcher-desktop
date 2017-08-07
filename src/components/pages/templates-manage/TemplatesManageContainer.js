@@ -1,4 +1,5 @@
 import { connect } from 'react-redux';
+import Locales from '../../../locales';
 
 import TemplatesManage from './TemplatesManage';
 import { LOCALES_LIST } from '../../../constants/locales';
@@ -19,31 +20,13 @@ const mapAreasToOptions = (areas, templateId) => {
     return areasOptions;
 };
 
-const mapQuestionType = (questionTypes) => {
+const mapQuestionType = (questionTypes, lang) => {
+    const typesLocale = Locales[lang].questionTypes;
     const questionOptions = questionTypes.map((type) => {
-        switch(type) {
-          case 'blob':
-            return {
-              value: type,
-              label: 'image'
-            };
-          case 'radio':
-            return {
-              value: type,
-              label: 'single selection'
-            };
-          case 'select':
-            return {
-              value: type,
-              label: 'multiple selection'
-            };
-          default:
-            return {
-              value: type,
-              label: type
-            };
-        }
-
+      return {
+        value: type,
+        label: typesLocale[type]
+      };
     });
     return questionOptions;
 }
@@ -61,7 +44,7 @@ const mapLocalesToOptions = (locales) => {
 const mapStateToProps = (state, { match }) => {
     const templateId = match.params.templateId || null;
     const localeOptions = mapLocalesToOptions(LOCALES_LIST);
-    const questionOptions = mapQuestionType(QUESTION_TYPES);
+    const questionOptions = mapQuestionType(QUESTION_TYPES, state.app.locale);
     let areaOfInterest = null;
     state.areas.ids.forEach((areaId) => {
         if (state.areas.data[areaId].attributes.templateId === templateId) {

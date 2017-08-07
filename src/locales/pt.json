@@ -137,5 +137,12 @@
     "settings.publicLayers": "Camadas públicas",
     "settings.enabled": "Ativado",
     "settings.myTeam": "A minha equipa",
-    "settings.layers": "Camadas"
+    "settings.layers": "Camadas",
+    "questionTypes": {
+        "text": "text",
+        "blob": "image",
+        "radio": "single selection",
+        "select": "multiple selection",
+        "number": "number"
+    }
 }

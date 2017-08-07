@@ -137,5 +137,12 @@
     "settings.publicLayers": "Public layers",
     "settings.enabled": "Enabled",
     "settings.myTeam": "My team",
-    "settings.layers": "Layers"
+    "settings.layers": "Layers",
+    "questionTypes": {
+        "text": "text",
+        "blob": "image",
+        "radio": "single selection",
+        "select": "multiple selection",
+        "number": "number"
+    }
 }

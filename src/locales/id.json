@@ -137,5 +137,12 @@
     "settings.publicLayers": "Lapisan umum",
     "settings.enabled": "Aktif",
     "settings.myTeam": "Tim saya",
-    "settings.layers": "Lapisan"
+    "settings.layers": "Lapisan",
+    "questionTypes": {
+        "text": "text",
+        "blob": "image",
+        "radio": "single selection",
+        "select": "multiple selection",
+        "number": "number"
+    }
 }
