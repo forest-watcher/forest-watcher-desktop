@@ -5,7 +5,7 @@
   &.-templates {
     background: $white;
   }
-  
+
   input:focus,
   select:focus,
   textarea:focus,
@@ -21,6 +21,10 @@
 	  border: solid 1px #e6e6e6;
     width: 100%;
     min-height: 200px;
+
+    .-small {
+      min-height: 160px;
+    }
   }
 
   .form-error {
@@ -83,7 +87,7 @@
     input, .delete-button, .user-label, .c-checkbox {
       flex: 1;
     }
-    
+
     .hidden{
       visibility: hidden;
     }
@@ -95,7 +99,7 @@
       margin-right: 10px;
     }
     .form-control, .Select{
-      padding-top: 10px;    
+      padding-top: 10px;
       input {
         width: 100%;
       }
@@ -103,9 +107,9 @@
   }
 
   .-main {
-    min-height: 500px; 
-    height:auto !important; 
-    height: 500px; 
+    min-height: 500px;
+    height:auto !important;
+    height: 500px;
   }
 
   &.-nav {
