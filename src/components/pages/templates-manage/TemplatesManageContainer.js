@@ -1,4 +1,5 @@
 import { connect } from 'react-redux';
+import Locales from '../../../locales';
 
 import TemplatesManage from './TemplatesManage';
 import { LOCALES_LIST } from '../../../constants/locales';
@@ -12,25 +13,20 @@ const mapAreasToOptions = (areas, templateId) => {
         if (!areas.data[id].attributes.templateId || areas.data[id].attributes.templateId === null || templateId === areas.data[id].attributes.templateId) {
             areasOptions.push({
                 option: id,
-                label: areas.data[id].attributes.name 
+                label: areas.data[id].attributes.name
             });
         }
     });
     return areasOptions;
 };
 
-const mapQuestionType = (questionTypes) => {
+const mapQuestionType = (questionTypes, lang) => {
+    const typesLocale = Locales[lang].questionTypes;
     const questionOptions = questionTypes.map((type) => {
-        if (type === 'blob') {
-            return {
-                value: type,
-                label: 'image'
-            }
-        }
-        return {
-            value: type,
-            label: type
-        }
+      return {
+        value: type,
+        label: typesLocale[type]
+      };
     });
     return questionOptions;
 }
@@ -48,19 +44,19 @@ const mapLocalesToOptions = (locales) => {
 const mapStateToProps = (state, { match }) => {
     const templateId = match.params.templateId || null;
     const localeOptions = mapLocalesToOptions(LOCALES_LIST);
-    const questionOptions = mapQuestionType(QUESTION_TYPES);
+    const questionOptions = mapQuestionType(QUESTION_TYPES, state.app.locale);
     let areaOfInterest = null;
     state.areas.ids.forEach((areaId) => {
         if (state.areas.data[areaId].attributes.templateId === templateId) {
             areaOfInterest = areaId;
             return;
-        } 
+        }
     });
     const areasOptions = mapAreasToOptions(state.areas, templateId);
     const defaultTemplate = {
         ...TEMPLATE,
         name: {
-            [state.app.locale]: ""       
+            [state.app.locale]: ""
         },
         languages: [state.app.locale],
         defaultLanguage: state.app.locale,

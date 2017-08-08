@@ -137,5 +137,12 @@
     "settings.publicLayers": "Publicar capas",
     "settings.enabled": "Habilitado",
     "settings.myTeam": "Mi equipo",
-    "settings.layers": "Capas"
+    "settings.layers": "Capas",
+    "questionTypes": {
+        "text": "texto",
+        "blob": "imagen",
+        "radio": "selección simple",
+        "select": "selección múltiple",
+        "number": "número"
+    }
 }

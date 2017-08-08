@@ -137,5 +137,12 @@
     "settings.publicLayers": "Calques publics",
     "settings.enabled": "Activé",
     "settings.myTeam": "Mon équipe",
-    "settings.layers": "Calques"
+    "settings.layers": "Calques",
+    "questionTypes": {
+        "text": "text",
+        "blob": "image",
+        "radio": "single selection",
+        "select": "multiple selection",
+        "number": "number"
+    }
 }
