@@ -92,7 +92,7 @@ class LayersForm extends React.Component {
       if (Object.keys(this.formNode.getErrors()).length === 0) { // No validation errors
         if (this.addLayer(this.state.form, teamId, userLayerNames, teamLayerNames, userLayerLength, teamLayerLength, typeOfLayer)){
           this.resetForm();
-        };
+        }
       } else {
         toastr.error(this.props.intl.formatMessage({ id: 'settings.validationError' }));
       }
@@ -116,7 +116,7 @@ class LayersForm extends React.Component {
   }
 
   onInputChange = (e) => {
-    const form = Object.assign(this.state.form, { [e.target.name]: e.target.value });
+    const form = { ...this.state.form, [e.target.name]: e.target.value };
     this.setState({ form });
   }
 
@@ -146,7 +146,8 @@ class LayersForm extends React.Component {
               <CustomLayers
                 form={this.state.form}
                 onInputChange={this.onInputChange}
-                intl={this.props.intl} />
+                intl={this.props.intl}
+              />
             }
           <div className='layer-add'>
             { this.props.team &&

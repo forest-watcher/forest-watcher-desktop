@@ -53,7 +53,7 @@ class CustomLayers extends Component {
             name="tileurl"
             value={form.tileurl || ''}
             placeholder={intl.formatMessage({ id: 'settings.url' })}
-            validations={['required', 'url']}
+            validations={['required', 'urlTile']}
           />
           <h4>{intl.formatMessage({ id: 'settings.description' })}</h4>
           <Textarea
@@ -65,7 +65,13 @@ class CustomLayers extends Component {
             validations={[]}
           />
         </div>
-        <ModalCard className="-big" open={this.state.open} close={this.closeModal} fields={['This', 'is', 'an', 'example']}/>
+        <ModalCard
+          open={this.state.open}
+          close={this.closeModal}
+          title="This is an example"
+          fields={['subtitle']}>
+          Main content goes here
+        </ModalCard>
       </div>
     );
   }
