@@ -35,16 +35,18 @@ function withModal(WrappedComponent) {
       const { open, close, ...props } = this.props; // eslint-disable-line
       if (!open) return null;
       return (
-        <section className="c-modal" onClick={close}>
+        <article className="c-modal" onClick={close}>
           <div className="modal-container" onClick={this.stopPropagation}>
-            <div className="modal-content">
+            <div className="modal-frame">
               <button className="modal-close-icon" onClick={close}>
                 <Icon name="icon-close" className="-small" />
               </button>
-              <WrappedComponent { ...props } />
+              <div className="modal-content">
+                <WrappedComponent { ...props } />
+              </div>
             </div>
           </div>
-        </section>
+        </article>
       );
     }
   };

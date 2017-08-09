@@ -14,15 +14,13 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    background-color: white;
     overflow: hidden;
-    padding: 45px;
   }
 
-  .modal-content {
+  .modal-frame {
     position: relative;
-    overflow-x: hidden;
-    overflow-y: auto;
+    background-color: $white;
+    padding: 45px;
 
     .modal-close-icon {
       position: absolute;
@@ -33,5 +31,10 @@
         opacity: 0.7;
       }
     }
+  }
+
+  .modal-content {
+    overflow-x: hidden;
+    overflow-y: auto;
   }
 }
