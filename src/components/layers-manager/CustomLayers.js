@@ -9,22 +9,7 @@ import Icon from '../ui/Icon';
 
 const WalkthroughModal = withModal(Walkthrough);
 
-const WALKTHROUGH_TEXTS = [
-  {
-    content: 'customLayers.step1'
-  },
-  {
-    content: 'customLayers.step2'
-  },
-  {
-    content: 'customLayers.step3',
-    childContent: 'customLayers.step3.1'
-  },
-  {
-    content: 'customLayers.step4'
-
-  }
-];
+import { customLayers as WALKTHROUGH_TEXTS } from '../../constants/walkthrough-texts';
 
 class CustomLayers extends Component {
 
