@@ -1,12 +1,30 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Input, Textarea } from '../form/Form';
+import { injectIntl } from 'react-intl';
 
 import withModal from '../ui/withModal';
-import Card from '../ui/Card';
+import Walkthrough from '../ui/Walkthrough';
 import Icon from '../ui/Icon';
 
-const ModalCard = withModal(Card);
+const WalkthroughModal = withModal(Walkthrough);
+
+const WALKTHROUGH_TEXTS = [
+  {
+    content: 'customLayers.step1'
+  },
+  {
+    content: 'customLayers.step2'
+  },
+  {
+    content: 'customLayers.step3',
+    childContent: 'customLayers.step3.1'
+  },
+  {
+    content: 'customLayers.step4'
+
+  }
+];
 
 class CustomLayers extends Component {
 
@@ -18,6 +36,15 @@ class CustomLayers extends Component {
 
   state = {
     open: false
+  }
+
+  componentDidMount = () => {
+    this.walkthroughTexts = WALKTHROUGH_TEXTS.map(step => {
+      return {
+        content: step.content && this.props.intl.formatMessage({ id: step.content }),
+        childContent: step.childContent && this.props.intl.formatMessage({ id: step.childContent })
+      };
+    });
   }
 
   onInfoClick = (e) => {
@@ -65,16 +92,17 @@ class CustomLayers extends Component {
             validations={[]}
           />
         </div>
-        <ModalCard
+        <WalkthroughModal
           open={this.state.open}
           close={this.closeModal}
-          title="This is an example"
-          fields={['subtitle']}>
-          Main content goes here
-        </ModalCard>
+          title={intl.formatMessage({ id: 'customLayers.title'})}
+          intro={intl.formatMessage({ id: 'customLayers.intro'})}
+          steps={this.walkthroughTexts}
+          onAccept={this.closeModal}
+        />
       </div>
     );
   }
 }
 
-export default CustomLayers;
+export default injectIntl(CustomLayers);

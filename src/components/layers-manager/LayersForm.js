@@ -146,7 +146,6 @@ class LayersForm extends React.Component {
               <CustomLayers
                 form={this.state.form}
                 onInputChange={this.onInputChange}
-                intl={this.props.intl}
               />
             }
           <div className='layer-add'>
