@@ -3,14 +3,14 @@ import PropTypes from 'prop-types';
 
 import capitalize from 'lodash/capitalize';
 import { FormattedMessage } from 'react-intl';
-import { Input, Form, Textarea } from '../form/Form';
-import Card from '../ui/Card';
+import { Form } from '../form/Form';
 import Tab from '../ui/Tab';
 import { includes } from '../../helpers/utils';
 import Checkbox from '../ui/Checkbox';
 import { toastr } from 'react-redux-toastr';
 import { injectIntl } from 'react-intl';
 import { MAX_NUMBER_OF_LAYERS } from '../../constants/global';
+import CustomLayers from './CustomLayers';
 
 class LayersForm extends React.Component {
   constructor(props) {
@@ -143,38 +143,10 @@ class LayersForm extends React.Component {
                   checked={ GFWlayer.enabled || false }
                 /> )
             :
-              <Card className="-form -content-full-width">
-                <div className="c-form">
-                  <Input
-                  type="text"
-                  className="-question"
-                  onChange={this.onInputChange}
-                  name="title"
-                  value={this.state.form.title || ''}
-                  placeholder={this.props.intl.formatMessage({ id: 'settings.layerTitle' })}
-                  validations={['required']}
-                  />
-                  <Input
-                  type="text"
-                  className="-question"
-                  onChange={this.onInputChange}
-                  name="tileurl"
-                  value={this.state.form.tileurl || ''}
-                  placeholder={this.props.intl.formatMessage({ id: 'settings.url' })}
-                  validations={['required', 'urlTile']}
-                  />
-                  <h4>{this.props.intl.formatMessage({ id: 'settings.description' })}</h4>
-                  <Textarea
-                    type="text"
-                    className="-small"
-                    onChange={this.onInputChange}
-                    name="style"
-                    value={this.state.form.style || ''}
-                    placeholder={this.props.intl.formatMessage({ id: 'settings.description' })}
-                    validations={[]}
-                  />
-                </div>
-              </Card>
+              <CustomLayers
+                form={this.state.form}
+                onInputChange={this.onInputChange}
+              />
             }
           <div className='layer-add'>
             { this.props.team &&

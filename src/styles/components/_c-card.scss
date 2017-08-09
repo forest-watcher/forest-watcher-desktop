@@ -14,22 +14,6 @@
     height: 500px;
   }
 
-  &.-form {
-    overflow: auto;
-    height: 420px;
-
-    .form-control {
-      padding-bottom: 20px;
-    }
-  }
-
-  &.-content-full-width {
-    .card-content {
-      padding-left: 10px;
-      width: 100%;
-    }
-  }
-
   .card-field {
     font-size: 17px;
     color: $pale-gray;
