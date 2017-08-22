@@ -1,8 +1,9 @@
 {
     "app.name": "Forest Watcher",
-    "app.description": "Download the new Global Forest Watch app and receive forest change alerts to report deforestation activity in the field.",
+    "app.description": "Forest Watcher brings the dynamic online forest monitoring and alert systems of Global Forest Watch offline and into the field. Monitor areas of interest, view deforestation and fires alerts, navigate to a point to investigate, and collect information about what you find, regardless of connectivity.",
     "app.alreadyHaveAnAccount": "Already have a MyGFW account?",
     "app.alreadyLoggedIn": "You are already logged in.",
+    "app.accessDesktopApp": "Access desktop app",
     "app.logout": "logout",
     "app.login": "Log in",
     "app.goToApp": "Go to App",

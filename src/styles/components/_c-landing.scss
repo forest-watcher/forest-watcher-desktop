@@ -1,6 +1,13 @@
 .c-landing {
   height: 100vh;
-
+  .row {
+    .info-column.gwf-grid-adjusted {
+      margin-left: 7%;
+    }
+    .image-column.gwf-grid-adjusted {
+      margin-left: 9.666%;
+    }
+  }
   .logo-image {
     background-image: url(/images/logo-gfw@2x.png) !important;
     background-repeat: no-repeat;
@@ -10,7 +17,7 @@
 
   .phone-screen {
     position: relative;
-    height: 792px;
+    height: 600px;
     div {
       background-repeat: no-repeat;
       position: absolute;
@@ -19,41 +26,39 @@
       bottom: 0;
     }
     .phone-image {
-      left: 0;
-      height: 788px;
-      background-size: contain;
       background-image: url(/images/phone@2x.png) !important;
+      background-size: contain;
+      left: 0;
+      height: 555px;
       z-index: 4;
     }
 
     .screen-image {
-      left: 22px;
-      height: 696px;
-      background-size: cover;
-      width: 399px;
       background-image: url(/images/screen-1@2x.png) !important;
+      background-size: cover;
+      left: 16px;
+      height: 491px;
+      width: 279px;
       z-index: 5;
     }
 
   }
 
   .main {
-    padding-top: 200px;
+    padding-top: 138px;
   }
 
-  .login-bar {
-    display: flex;
-    align-items: baseline;
-    justify-content: flex-end;
+  .description {
     color: $disabled-font-color;
-    font-size: 20px;
-    margin-top: 20px;
-    margin-bottom: 40px;
+    font-size: 14px;
+    line-height: 1.57;
+    margin-top: 60px;
+  }
 
-    .login-button {
-      margin-left: 20px;
-      margin-right: 6px;
-    }
+  .login-button {
+    margin-top: 20px;
+    margin-right: 6px;
+    width: 226px;
   }
 
   .build-buttons {
@@ -82,9 +87,10 @@
     padding-bottom: 16px;
   }
   h2 {
-    color: $disabled-font-color;
-    line-height: 30px;
-    font-size: 20px;
+    color: $gray;
+    font-size: 17px;
+    line-height: 1.65;
+    letter-spacing: -0.2px;
     padding-bottom: 16px;
   }
 }

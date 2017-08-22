@@ -22,8 +22,7 @@ class Landing extends React.Component {
       <div className="c-landing">
         <div id="headerGfw"></div>
         <div className="row">
-          <div className="small-12 medium-6">
-            <div className='logo-image'></div>
+          <div className="small-12 medium-6 info-column gwf-grid-adjusted">
             <div className="main">
               <h1><FormattedMessage id="app.name" /></h1>
               <h2><FormattedMessage id="app.description" /></h2>
@@ -31,23 +30,15 @@ class Landing extends React.Component {
                 <a className='button-ios-image' onClick={this.handleIosLink}></a>
                 <a className='button-android-image' onClick={this.handleAndroidLink}></a>
               </div>
-            </div>
-          </div>
-          <div className="small-12 medium-offset-1 medium-5">
-            <div className="login-bar">
-              { this.props.loggedIn ?
-                <FormattedMessage id="app.alreadyLoggedIn" />
-                :
-                <FormattedMessage id="app.alreadyHaveAnAccount" />
-              }
+              <div className="description">
+                Forest Watcher mobile is a complete application on its own, but if you have access to the desktop application, you have even more capabilities, including viewing and collecting reports, creating and assigning AOIs, and uploading your own contextual data.
+              </div>
               <Link className="login-button c-button" to={'/login'}>
-                { this.props.loggedIn ? 
-                  <FormattedMessage id="app.goToApp" />
-                  :
-                  <FormattedMessage id="app.login" />
-                }
+                <FormattedMessage id="app.accessDesktopApp" />
               </Link>
             </div>
+          </div>
+          <div className="small-12 medium-offset-1 medium-4 image-column gwf-grid-adjusted">
             <div className="phone-screen">
               <div className='phone-image'></div>
               <div className='screen-image'></div>
