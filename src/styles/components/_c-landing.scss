@@ -9,7 +9,7 @@
     }
   }
   .logo-image {
-    background-image: url(/images/logo-gfw@2x.png) !important;
+    background-image: url(/images/logo-gfw@2x.png);
     background-repeat: no-repeat;
     background-size: contain;
     height: 90px;
@@ -26,7 +26,7 @@
       bottom: 0;
     }
     .phone-image {
-      background-image: url(/images/phone@2x.png) !important;
+      background-image: url(/images/phone@2x.png);
       background-size: contain;
       left: 0;
       height: 555px;
@@ -34,7 +34,7 @@
     }
 
     .screen-image {
-      background-image: url(/images/screen-1@2x.png) !important;
+      background-image: url(/images/screen-1@2x.png);
       background-size: cover;
       left: 16px;
       height: 491px;
@@ -70,11 +70,11 @@
       width: 150px;
     }
     .button-ios-image {
-      background-image: url(/images/app-store@2x.png) !important;
+      background-image: url(/images/app-store@2x.png);
     }
 
     .button-android-image {
-      background-image: url(/images/google-play@2x.png) !important;
+      background-image: url(/images/google-play@2x.png);
       margin-left: 12px;
     }
   }

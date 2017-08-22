@@ -48,17 +48,17 @@ class SocialFooter extends React.Component {
           <div className="small-6 columns">
             <div className="text -title-xxs -color-5">Sign up to receive updates</div>
             <div className="c-social__icons">
-              <a href="?show_newsletter=true" title="Receive Global Forest Watch updates" onclick="ga('send', 'event', 'Footer', 'Click', 'Subscribe');">
+              <a href="?show_newsletter=true" title="Receive Global Forest Watch updates" >
                 <svg className="icon">
                   <use xlinkHref="#icon-mail" />
                 </svg>
               </a>
-              <a href="https://twitter.com/globalforests" title="Follow @globalforests" target="_blank" onclick="ga('send', 'event', 'Footer', 'Click', 'Twitter');">
+              <a href="https://twitter.com/globalforests" title="Follow @globalforests" target="_blank">
                 <svg className="icon">
                   <use xlinkHref="#icon-twitter" />
                 </svg>
               </a>
-              <a href="http://instagram.com/globalforests" title="Follow @globalforests Instagram" target="_blank" onclick="ga('send', 'event', 'Footer', 'Click', 'Instagram');">
+              <a href="http://instagram.com/globalforests" title="Follow @globalforests Instagram" target="_blank">
                 <svg className="icon">
                   <use xlinkHref="#icon-instagram" />
                 </svg>
