@@ -1,6 +1,7 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { Link } from 'react-router-dom';
+import { LIVE_SETTINGS, GFW_ASSETS_PATH } from '../../../constants/landing';
 import SocialFooter from './SocialFooter';
 
 class Landing extends React.Component {
@@ -8,14 +9,17 @@ class Landing extends React.Component {
     this.script = document.createElement('script');
     this.script.type = 'text/javascript';
     this.script.async = true;
-    this.script.innerHTML = "window.liveSettings = {picker: '#transifexTranslateElement',api_key: '9eda410a7db74687ba40771c56abd357',detectlang: false,site: 'gfw-watcher'};";
+
+    this.script.innerHtml = LIVE_SETTINGS;
+
     document.body.appendChild(this.script);
 
     this.scriptLoader = document.createElement('script');
     this.scriptLoader.type = 'text/javascript';
     this.scriptLoader.async = true;
     this.scriptLoader.id = 'loader-gfw';
-    this.scriptLoader.src = 'http://gfw-assets.s3.amazonaws.com/static/gfw-assets.nightly.js';
+    this.scriptLoader.src = GFW_ASSETS_PATH;
+
     document.body.appendChild(this.scriptLoader);
   }
 
