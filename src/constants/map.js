@@ -4,7 +4,7 @@ import L from 'leaflet';
 export const MAP_CONFIG = {
   minZoom: 2,
   initialZoom: 3,
-  basemap: `http://a.tile.openstreetmap.org/{z}/{x}/{y}.png`,
+  basemap: `https://a.tile.openstreetmap.org/{z}/{x}/{y}.png`,
   center: [51.505, -0.09],
   attribution: '<a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
   zoomControl: false
