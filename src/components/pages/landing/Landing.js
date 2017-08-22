@@ -38,7 +38,7 @@ class Landing extends React.Component {
                 <a className='button-android-image' onClick={this.handleAndroidLink}></a>
               </div>
               <div className="description">
-                Forest Watcher mobile is a complete application on its own, but if you have access to the desktop application, you have even more capabilities, including viewing and collecting reports, creating and assigning AOIs, and uploading your own contextual data.
+                <FormattedMessage id="app.desktopDescription" />
               </div>
               <Link className="login-button c-button" to={'/login'}>
                 <FormattedMessage id="app.accessDesktopApp" />
