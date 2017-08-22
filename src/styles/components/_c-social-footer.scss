@@ -1,6 +1,11 @@
+@function rem($px, $base: 16px) {
+  @return ($px / $base) * 1rem;
+}
+
 .c-social {
   display: none;
   padding: rem(45px) 0;
+  border-top: solid 1px #d6d6d9;
 
   .columns:last-child {
     text-align: right;
@@ -8,9 +13,13 @@
 
   .c-social__buttons {
     margin-top: rem(17px);
+    div, iframe {
+      margin-left: 5px;
+      margin-right: 5px;
+    }
 
     .fb_iframe_widget {
-      top: rem(-7px);
+      top: -2px;
     }
   }
 
@@ -24,14 +33,25 @@
     margin-top: rem(15px);
 
     .icon {
-      fill: black;
+      fill: $theme-secondary;
       height: rem(22px);
       width: rem(22px);
     }
   }
 
   @media screen and (min-width: 240px) {
-    color: red;
     display: block;
+    background-color: $white;
+  }
+
+  .text {
+    &.-color-5 {
+      color: $disabled-font-color;
+    }
+
+    &.-title-xxs {
+      font-size: 14px;
+      letter-spacing: 0.1px;
+    }
   }
 }
