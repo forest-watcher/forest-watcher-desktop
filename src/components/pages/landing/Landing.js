@@ -1,22 +1,29 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { Link } from 'react-router-dom';
+import SocialFooter from './SocialFooter';
 
 class Landing extends React.Component {
   componentDidMount(){
-    const script = document.createElement('script');
-    script.type = 'text/javascript';
-    script.async = true;
-    script.innerHTML = "window.liveSettings = {picker: '#transifexTranslateElement',api_key: '9eda410a7db74687ba40771c56abd357',detectlang: false,site: 'gfw-watcher'};";
-    document.body.appendChild(script);
+    this.script = document.createElement('script');
+    this.script.type = 'text/javascript';
+    this.script.async = true;
+    this.script.innerHTML = "window.liveSettings = {picker: '#transifexTranslateElement',api_key: '9eda410a7db74687ba40771c56abd357',detectlang: false,site: 'gfw-watcher'};";
+    document.body.appendChild(this.script);
 
-    const scriptLoader = document.createElement('script');
-    scriptLoader.type = 'text/javascript';
-    scriptLoader.async = true;
-    scriptLoader.id = 'loader-gfw';
-    scriptLoader.src = 'http://gfw-assets.s3.amazonaws.com/static/gfw-assets.nightly.js';
-    document.body.appendChild(scriptLoader);
+    this.scriptLoader = document.createElement('script');
+    this.scriptLoader.type = 'text/javascript';
+    this.scriptLoader.async = true;
+    this.scriptLoader.id = 'loader-gfw';
+    this.scriptLoader.src = 'http://gfw-assets.s3.amazonaws.com/static/gfw-assets.nightly.js';
+    document.body.appendChild(this.scriptLoader);
   }
+
+  componentWillUnmount(){
+    document.body.removeChild(this.script);
+    document.body.removeChild(this.scriptLoader);
+  }
+
   render() {
     return (
       <div className="c-landing">
@@ -45,7 +52,8 @@ class Landing extends React.Component {
             </div>
           </div>
         </div>
-         <div id="footerGfw"></div>
+        <SocialFooter />
+        <div id="footerGfw"></div>
       </div>
     );
   }
