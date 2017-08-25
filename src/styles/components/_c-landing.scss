@@ -1,59 +1,56 @@
 .c-landing {
   height: 100vh;
-
+  .row {
+    .info-column.gwf-grid-adjusted {
+      margin-left: 7%;
+    }
+    .image-column.gwf-grid-adjusted {
+      margin-left: 9.666%;
+    }
+  }
   .logo-image {
-    background-image: url(/images/logo-gfw@2x.png) !important;
+    background-image: url(/images/logo-gfw@2x.png);
     background-repeat: no-repeat;
     background-size: contain;
     height: 90px;
   }
 
   .phone-screen {
-    position: relative;
-    height: 792px;
-    div {
-      background-repeat: no-repeat;
-      position: absolute;
-      left: 50px;
-      right: 0;
-      bottom: 0;
-    }
-    .phone-image {
-      left: 0;
-      height: 788px;
-      background-size: contain;
-      background-image: url(/images/phone@2x.png) !important;
-      z-index: 4;
-    }
+    height: 100%;
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-start;
 
-    .screen-image {
-      left: 22px;
-      height: 696px;
-      background-size: cover;
-      width: 399px;
-      background-image: url(/images/screen-1@2x.png) !important;
-      z-index: 5;
+    .phone-image {
+      position: relative;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      background-image: url(/images/phone@2x.png);
+      background-size: contain;
+      background-repeat: no-repeat;
+      height: 85%;
+      width: 85%;
+      z-index: 4;
     }
 
   }
 
   .main {
-    padding-top: 200px;
+    padding-top: 138px;
   }
 
-  .login-bar {
-    display: flex;
-    align-items: baseline;
-    justify-content: flex-end;
+  .description {
     color: $disabled-font-color;
-    font-size: 20px;
-    margin-top: 20px;
-    margin-bottom: 40px;
+    font-size: 14px;
+    line-height: 1.57;
+    margin-top: 90px;
+  }
 
-    .login-button {
-      margin-left: 20px;
-      margin-right: 6px;
-    }
+  .login-button {
+    margin-top: 20px;
+    margin-right: 6px;
+    width: 226px;
   }
 
   .build-buttons {
@@ -65,11 +62,11 @@
       width: 150px;
     }
     .button-ios-image {
-      background-image: url(/images/app-store@2x.png) !important;
+      background-image: url(/images/app-store@2x.png);
     }
 
     .button-android-image {
-      background-image: url(/images/google-play@2x.png) !important;
+      background-image: url(/images/google-play@2x.png);
       margin-left: 12px;
     }
   }
@@ -82,9 +79,10 @@
     padding-bottom: 16px;
   }
   h2 {
-    color: $disabled-font-color;
-    line-height: 30px;
-    font-size: 20px;
+    color: $gray;
+    font-size: 17px;
+    line-height: 1.65;
+    letter-spacing: -0.2px;
     padding-bottom: 16px;
   }
 }
