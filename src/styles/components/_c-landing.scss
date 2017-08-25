@@ -16,30 +16,22 @@
   }
 
   .phone-screen {
-    position: relative;
-    height: 655px;
-    div {
-      background-repeat: no-repeat;
-      position: absolute;
-      left: 50px;
-      right: 0;
-      bottom: 0;
-    }
+    height: 100%;
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-start;
+
     .phone-image {
+      position: relative;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
       background-image: url(/images/phone@2x.png);
       background-size: contain;
-      left: 0;
-      height: 555px;
+      background-repeat: no-repeat;
+      height: 85%;
+      width: 85%;
       z-index: 4;
-    }
-
-    .screen-image {
-      background-image: url(/images/screen-1@2x.png);
-      background-size: cover;
-      left: 16px;
-      height: 491px;
-      width: 279px;
-      z-index: 5;
     }
 
   }

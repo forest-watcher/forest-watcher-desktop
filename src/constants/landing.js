@@ -1,13 +1,13 @@
+import { GFW_API_KEY, FACEBOOK_WIDGET_API, GOOGLE_PLUS_ONE_WIDGET_API, TWITTER_WIDGET_API } from './global';
+
+export const GFW_ASSETS_PATH = process.env.REACT_APP_GFW_ASSETS_PATH;
+
 export const LIVE_SETTINGS = `window.liveSettings = {
     picker: '#transifexTranslateElement',
-    api_key: ${process.env.GFW_API_KEY},
+    api_key: '${GFW_API_KEY}',
     detectlang: false,
     site: 'gfw-watcher'};`;
-export const GFW_ASSETS_PATH = process.env.GFW_ASSETS_PATH;
-const TWITTER_WIDGET_API = process.env.TWITTER_WIDGET_API;
-const FACEBOOK_WIDGET_API = process.env.FACEBOOK_WIDGET_API;
-const GOOGLE_PLUS_ONE_WIDGET_API = process.env.GOOGLE_PLUS_ONE_WIDGET_API;
-  
+
 export const SOCIAL_FOOTER_SCRIPT = `
       // Twitter
       !function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="${TWITTER_WIDGET_API}";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");
@@ -31,6 +31,6 @@ export const SOCIAL_FOOTER_SCRIPT = `
 
 export default {
   LIVE_SETTINGS,
-  GFW_ASSETS_PATH,
-  SOCIAL_FOOTER_SCRIPT
+  SOCIAL_FOOTER_SCRIPT,
+  GFW_ASSETS_PATH
 };

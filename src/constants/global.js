@@ -1,9 +1,15 @@
-// API URLs
+// env
 export const API_BASE_URL = process.env.REACT_APP_API_AUTH;
 export const CARTO_URL = process.env.REACT_APP_CARTO;
 export const CARTO_TABLE = process.env.REACT_APP_CARTO_TABLE;
 export const API_CALLBACK_URL = process.env.REACT_APP_API_AUTH_CALLBACK_URL;
 export const CARTO_COUNTRIES = process.env.REACT_APP_CARTO_COUNTRIES;
+export const GFW_API_KEY = process.env.REACT_APP_GFW_API_KEY;
+export const TWITTER_WIDGET_API = process.env.REACT_APP_TWITTER_WIDGET_API;
+export const FACEBOOK_WIDGET_API = process.env.REACT_APP_FACEBOOK_WIDGET_API;
+export const GOOGLE_PLUS_ONE_WIDGET_API = process.env.REACT_APP_GOOGLE_PLUS_ONE_WIDGET_API;
+
+// constants
 export const DEFAULT_LANGUAGE = 'en';
 export const DEFAULT_FORMAT = 'DD/MM/YYYY';
 export const ADMIN = 'ADMIN';
@@ -21,5 +27,9 @@ export default {
   CARTO_URL,
   CARTO_COUNTRIES,
   MAX_NUMBER_OF_LAYERS,
-  TABLE_PAGE_SIZE
+  TABLE_PAGE_SIZE,
+  GFW_API_KEY,
+  TWITTER_WIDGET_API,
+  FACEBOOK_WIDGET_API,
+  GOOGLE_PLUS_ONE_WIDGET_API
 };

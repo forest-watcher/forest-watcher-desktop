@@ -5,14 +5,14 @@ import { LIVE_SETTINGS, GFW_ASSETS_PATH } from '../../../constants/landing';
 import SocialFooter from './SocialFooter';
 
 class Landing extends React.Component {
-  componentDidMount(){
+
+  componentDidMount() {
     this.script = document.createElement('script');
     this.script.type = 'text/javascript';
     this.script.async = true;
+    this.script.innerHTML = LIVE_SETTINGS;
 
-    this.script.innerHtml = LIVE_SETTINGS;
-
-    document.body.appendChild(this.script);
+    document.head.appendChild(this.script);
 
     this.scriptLoader = document.createElement('script');
     this.scriptLoader.type = 'text/javascript';
@@ -20,12 +20,12 @@ class Landing extends React.Component {
     this.scriptLoader.id = 'loader-gfw';
     this.scriptLoader.src = GFW_ASSETS_PATH;
 
-    document.body.appendChild(this.scriptLoader);
+    document.head.appendChild(this.scriptLoader);
   }
 
   componentWillUnmount(){
-    document.body.removeChild(this.script);
-    document.body.removeChild(this.scriptLoader);
+    document.head.removeChild(this.script);
+    document.head.removeChild(this.scriptLoader);
   }
 
   render() {
@@ -51,8 +51,7 @@ class Landing extends React.Component {
           </div>
           <div className="small-12 medium-offset-1 medium-4 image-column gwf-grid-adjusted">
             <div className="phone-screen">
-              <div className='phone-image'></div>
-              <div className='screen-image'></div>
+              <div className="phone-image" />
             </div>
           </div>
         </div>
