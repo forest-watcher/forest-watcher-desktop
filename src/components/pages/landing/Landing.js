@@ -26,6 +26,7 @@ class Landing extends React.Component {
   componentWillUnmount(){
     document.head.removeChild(this.script);
     document.head.removeChild(this.scriptLoader);
+    window._babelPolyfill = false;
   }
 
   render() {
