@@ -29,7 +29,7 @@ function Login({callbackUrl}) {
           <div className="login-heading">
             <Icon className="-huge" name="icon-forest-watcher-big" />
             <h1 className="text -logo-title"><FormattedMessage id="app.name" /></h1>
-            <p className="text -logo-subtitle"><FormattedMessage id="login.welcome" /></p>
+            <p className="text -logo-subtitle text-message"><FormattedMessage id="login.welcome" /></p>
           </div>
           <LoginButton socialNetwork="facebook" callbackUrl={callbackUrl}/>
           <LoginButton socialNetwork="twitter" callbackUrl={callbackUrl}/>
