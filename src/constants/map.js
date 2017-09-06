@@ -4,9 +4,9 @@ import L from 'leaflet';
 export const MAP_CONFIG = {
   minZoom: 2,
   initialZoom: 3,
-  basemap: `https://a.tile.openstreetmap.org/{z}/{x}/{y}.png`,
+  basemap: `https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}`,
   center: [51.505, -0.09],
-  attribution: '<a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+  attribution: '| Tiles © Esri — Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community',
   zoomControl: false
 }
 
