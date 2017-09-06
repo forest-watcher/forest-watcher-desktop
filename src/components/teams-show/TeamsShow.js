@@ -31,14 +31,14 @@ function TeamsShow({ team, areas }) {
         </div>
         <div className="c-member-list">
           {team && team.attributes.managers && team.attributes.managers.map((manager) =>  (
-            <div className="horizontal-field-left-aligned" key={manager.id || manager}>
-              <div>{ manager.email || manager }</div>
+            <div className="horizontal-field-left-aligned" key={manager.id}>
+              <div>{ manager.email || manager.id }</div>
               <div className="admin-selected"><FormattedMessage id={"teams.admin"} /></div>
             </div>
             ))}
           {team && team.attributes.confirmedUsers && team.attributes.confirmedUsers.map((confirmedUser) =>  (
-            <div className="horizontal-field-left-aligned" key={confirmedUser.id || confirmedUser}>
-              { confirmedUser.email || confirmedUser }
+            <div className="horizontal-field-left-aligned" key={confirmedUser.id}>
+              { confirmedUser.email || confirmedUser.id }
             </div>
             ))}
           {team && team.attributes.users && team.attributes.users.map((user) =>  (
