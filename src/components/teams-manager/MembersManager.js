@@ -88,10 +88,10 @@ class MembersManager extends React.Component {
 
   render() {
     return (
-      <div className="small-12 medium-offset-2 medium-5 columns">
+      <div className="c-members-manager small-12 medium-offset-2 medium-5 columns">
         <div className="input-group">
           <h3><label htmlFor="add-member" className="text"><FormattedMessage id={"teams.members"} /></label></h3>
-          <div className="horizontal-field-left-aligned">
+            <div className="horizontal-field-left-aligned">
             <input
               type="email"
               id="add-member"
@@ -103,11 +103,23 @@ class MembersManager extends React.Component {
             />
             <button type="button" onClick={this.handleAddEmail} className="c-button -light"><FormattedMessage id={"common.add"} /></button>
           </div>
-          <MemberList 
-            members={this.getMembers()} 
-            handleChangeRole={this.handleChangeRole} 
+          <MemberList
+            members={this.getMembers()}
+            handleChangeRole={this.handleChangeRole}
             deleteMember={this.deleteMember}
           />
+          <span className="members-tip">
+            *members must have a
+            <a
+              className="text -green"
+              href="https://www.globalforestwatch.org/my_gfw"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+            MyGFW
+          </a>
+            account to join a team
+          </span>
         </div>
       </div>
     );
