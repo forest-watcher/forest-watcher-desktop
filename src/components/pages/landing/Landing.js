@@ -33,8 +33,8 @@ class Landing extends React.Component {
     return (
       <div className="c-landing">
         <div id="headerGfw"></div>
-        <div className="row">
-          <div className="small-12 medium-6 info-column gwf-grid-adjusted">
+        <div className="row align-middle landing-content">
+          <div className="column align-middle small-12 medium-6 info-column gwf-grid-adjusted">
             <div className="main">
               <h1><FormattedMessage id="app.name" /></h1>
               <h2><FormattedMessage id="app.description" /></h2>
@@ -48,9 +48,28 @@ class Landing extends React.Component {
               <Link className="login-button c-button" to={'/login'}>
                 <FormattedMessage id="app.accessDesktopApp" />
               </Link>
+              <div className="landing-links">
+                <a
+                  href="https://bit.ly/ForestWatcherApp"
+                  className="text -green"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Read more about Forest Watcher
+                </a>
+                and
+                <a
+                  className="text -green"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  href="https://www.globalforestwatch.org/howto/tags/forest-watcher"
+                >
+                  learn how to use it.
+                </a>
+              </div>
             </div>
           </div>
-          <div className="small-12 medium-offset-1 medium-4 image-column gwf-grid-adjusted">
+          <div className="column small-12 medium-offset-1 medium-4 image-column gwf-grid-adjusted">
             <div className="phone-screen">
               <div className="phone-image" />
             </div>
