@@ -14,7 +14,7 @@
     "common.save": "Save",
     "common.done": "Done",
     "common.cancel": "Cancel",
-    "login.welcome": "Sign in with a MyGFW account",
+    "login.welcome": "Log in using one of following accounts:",
     "forms.required": "required",
     "forms.save": "save",
     "forms.cancel": "cancel",
