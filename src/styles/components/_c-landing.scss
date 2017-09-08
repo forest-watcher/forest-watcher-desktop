@@ -1,5 +1,10 @@
 .c-landing {
   height: 100vh;
+
+  .landing-content {
+    height: calc(100% - 58px);
+  }
+
   .row {
     .info-column.gwf-grid-adjusted {
       margin-left: 7%;
@@ -13,6 +18,11 @@
     background-repeat: no-repeat;
     background-size: contain;
     height: 90px;
+  }
+
+  .image-column {
+    position: relative;
+    height: 100%;
   }
 
   .phone-screen {
@@ -29,23 +39,18 @@
       background-image: url(/images/phone@2x.png);
       background-size: contain;
       background-repeat: no-repeat;
-      height: 85%;
+      height: 75%;
       width: 85%;
       z-index: 4;
     }
 
   }
 
-  .main {
-    padding-top: 138px;
-    padding-bottom: 40px;
-  }
-
   .description {
     color: $disabled-font-color;
     font-size: 14px;
     line-height: 1.57;
-    margin-top: 90px;
+    margin-top: 16px;
   }
 
   .login-button {
