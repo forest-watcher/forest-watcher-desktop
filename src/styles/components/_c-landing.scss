@@ -59,6 +59,21 @@
     width: 226px;
   }
 
+  .landing-links {
+    margin-top: 20px;
+    a {
+      margin: 0 5px;
+
+      &:first-child {
+        margin-left: 0;
+      }
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+
   .build-buttons {
     a {
       background-repeat: no-repeat;
