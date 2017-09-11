@@ -12,6 +12,7 @@ const getLatLng = coords => coords
   .join(', ');
 
 const getTeamUser = (userId, team) => {
+  if (!team) return userId;
   const member = [...team.managers, ...team.confirmedUsers].find(member => member.id === userId);
   return member ? member.email : userId;
 };
@@ -50,13 +51,14 @@ const getTemplateOptions = (templates) => {
 const mapStateToProps = ({ areas, templates, reports, user, teams }, { match, location }) => {
   const searchParams = qs.parse(location.search);
   const templateId = match.params.templateId || 0;
+  const team = teams.data && teams.data.attributes;
   let areasOptions = [];
   let answers = [];
   let templateOptions = [];
   let answersFiltered = [];
   if (templateId !== 0 && reports.answers[templateId]) {
     templateOptions = getTemplateOptions(templates);
-    answers = getAnswersByTemplate(templateId, reports, areas, user.data, teams.data.attributes);
+    answers = getAnswersByTemplate(templateId, reports, areas, user.data, team);
     areasOptions = getDataAreas(answers, areas);
     answersFiltered = filterData(answers, searchParams);
   }
