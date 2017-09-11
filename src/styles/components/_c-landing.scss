@@ -1,7 +1,13 @@
 .c-landing {
   .landing-content {
-    height: calc(100vh - 60px);
+    min-height: 0;
     align-items: flex-end;
+    padding: 100px 0 50px;
+
+    @media screen and (min-width: 1024px) {
+      min-height: calc(100vh - 60px);
+      padding: 0;
+    }
 
     .main {
       h1 {
@@ -24,9 +30,13 @@
         a {
           background-repeat: no-repeat;
           background-size: contain;
-          display: inline-block;
           height: 50px;
           width: 150px;
+          display: block;
+
+          @media screen and (min-width: 500px) {
+            display: inline-block;
+          }
         }
         .button-ios-image {
           background-image: url(/images/app-store@2x.png);
@@ -34,7 +44,14 @@
 
         .button-android-image {
           background-image: url(/images/google-play@2x.png);
-          margin-left: 12px;
+          margin-left: 0;
+          margin-top: 12px;
+
+          @media screen and (min-width: 500px) {
+            display: inline-block;
+            margin-left: 12px;
+            margin-top: 0;
+          }
         }
       }
 
@@ -69,8 +86,12 @@
   }
 
   .info-column {
-    height: calc(100vh - 59px);
+    height: auto;
     display: flex;
+
+    @media screen and (min-width: 1024px) {
+      height: calc(100vh - 59px);
+    }
 
     .main {
       padding: 0 50px;
