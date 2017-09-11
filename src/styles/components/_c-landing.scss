@@ -1,109 +1,122 @@
 .c-landing {
-  height: 100vh;
-
   .landing-content {
-    height: calc(100% - 58px);
+    height: calc(100vh - 60px);
+    align-items: flex-end;
+
+    .main {
+      h1 {
+        font-size: $font-size-xx-large;
+        color: $theme-accent;
+        line-height: 1.02;
+        font-family: $base-font-family;
+      }
+
+      h2 {
+        margin-top: 10px;
+        font-size: $font-size-medium;
+        line-height: 1.65;
+        letter-spacing: -0.2px;
+      }
+
+      .build-buttons {
+        margin: 16px 0;
+
+        a {
+          background-repeat: no-repeat;
+          background-size: contain;
+          display: inline-block;
+          height: 50px;
+          width: 150px;
+        }
+        .button-ios-image {
+          background-image: url(/images/app-store@2x.png);
+        }
+
+        .button-android-image {
+          background-image: url(/images/google-play@2x.png);
+          margin-left: 12px;
+        }
+      }
+
+      .description {
+        color: $disabled-font-color;
+        font-size: $font-size-regular;
+        line-height: 1.57;
+        margin-top: 16px;
+      }
+
+      .login-button {
+        margin-top: 20px;
+        margin-right: 6px;
+        width: 226px;
+      }
+
+      .landing-links {
+        margin-top: 20px;
+        a {
+          margin: 0 5px;
+
+          &:first-child {
+            margin-left: 0;
+          }
+
+          &:hover {
+            text-decoration: underline;
+          }
+        }
+      }
+    }
   }
 
-  .row {
-    .info-column.gwf-grid-adjusted {
-      margin-left: 7%;
+  .info-column {
+    height: calc(100vh - 59px);
+    display: flex;
+
+    .main {
+      padding: 0 50px;
+
+      @media screen and (min-width: 1024px) {
+        padding: inherit;
+      }
     }
-    .image-column.gwf-grid-adjusted {
-      margin-left: 9.666%;
-    }
-  }
-  .logo-image {
-    background-image: url(/images/logo-gfw@2x.png);
-    background-repeat: no-repeat;
-    background-size: contain;
-    height: 90px;
   }
 
   .image-column {
+    min-width: 340px;
     position: relative;
-    height: 100%;
-  }
+    display: none;
 
-  .phone-screen {
-    height: 100%;
-    display: flex;
-    align-items: flex-end;
-    justify-content: flex-start;
+    @media screen and (min-width: 1024px) {
+      display: block;
+    }
 
-    .phone-image {
-      position: relative;
+    .phone-screen {
+      min-width: 340px;
+      height: 100%;
       display: flex;
       align-items: flex-end;
-      justify-content: center;
-      background-image: url(/images/phone@2x.png);
-      background-size: contain;
-      background-repeat: no-repeat;
-      height: 75%;
-      width: 85%;
-      z-index: 4;
-    }
+      justify-content: flex-start;
 
-  }
+      .phone-image {
+        min-width: 340px;
+        position: relative;
+        display: flex;
+        align-items: flex-end;
+        justify-content: center;
+        background-image: url(/images/phone@2x.png);
+        background-size: contain;
+        background-repeat: no-repeat;
+        width: 100%;
+        height: 500px;
+        min-height: 500px;
+        min-width: 335px;
 
-  .description {
-    color: $disabled-font-color;
-    font-size: 14px;
-    line-height: 1.57;
-    margin-top: 16px;
-  }
-
-  .login-button {
-    margin-top: 20px;
-    margin-right: 6px;
-    width: 226px;
-  }
-
-  .landing-links {
-    margin-top: 20px;
-    a {
-      margin: 0 5px;
-
-      &:first-child {
-        margin-left: 0;
-      }
-
-      &:hover {
-        text-decoration: underline;
+        @media screen and (min-width: 1500px) {
+          height: 600px;
+          min-height: 600px;
+          min-width: 335px;
+        }
       }
     }
-  }
-
-  .build-buttons {
-    a {
-      background-repeat: no-repeat;
-      background-size: contain;
-      display: inline-block;
-      height: 50px;
-      width: 150px;
-    }
-    .button-ios-image {
-      background-image: url(/images/app-store@2x.png);
-    }
-
-    .button-android-image {
-      background-image: url(/images/google-play@2x.png);
-      margin-left: 12px;
-    }
-  }
-
-
-
-  h1 {
-    color: $theme-accent;
-    font-size: 66px;
-    padding-bottom: 16px;
-  }
-  h2 {
-    color: $gray;
-    font-size: 17px;
-    line-height: 1.65;
-    letter-spacing: -0.2px;
-    padding-bottom: 16px;
   }
 }
