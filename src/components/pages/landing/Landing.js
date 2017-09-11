@@ -33,8 +33,8 @@ class Landing extends React.Component {
     return (
       <div className="c-landing">
         <div id="headerGfw"></div>
-        <div className="row align-middle landing-content">
-          <div className="column align-middle small-12 medium-6 info-column gwf-grid-adjusted">
+        <div className="row landing-content">
+          <div className="column align-middle small-12 medium-12 large-6 info-column gwf-grid-adjusted">
             <div className="main">
               <h1><FormattedMessage id="app.name" /></h1>
               <h2><FormattedMessage id="app.description" /></h2>
@@ -69,7 +69,7 @@ class Landing extends React.Component {
               </div>
             </div>
           </div>
-          <div className="column small-12 medium-offset-1 medium-4 image-column gwf-grid-adjusted">
+          <div className="column small-12 medium-offset-1 medium-12 large-4 image-column gwf-grid-adjusted">
             <div className="phone-screen">
               <div className="phone-image" />
             </div>
