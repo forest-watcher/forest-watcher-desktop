@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import Article from '../../layouts/Article';
-import Hero from '../../layouts/Hero'; 
+import Hero from '../../layouts/Hero';
 import ReactTable from 'react-table'
 import { FormattedMessage } from 'react-intl';
 import ReportsFilters from './ReportsFiltersContainer';
@@ -32,7 +32,7 @@ class Reports extends React.Component {
     if (this.props.templates.ids.length !== nextProps.templates.ids.length && !nextProps.match.params.templateId) {
       this.props.history.push(`/reports/${nextProps.templates.ids[0]}`);
     }
-    if (nextProps.match.params.templateId !== this.props.match.params.templateId && 
+    if (nextProps.match.params.templateId !== this.props.match.params.templateId &&
         !nextProps.reports.answers[nextProps.match.params.templateId]) {
       this.props.getReports(nextProps.match.params.templateId);
     }
@@ -52,13 +52,19 @@ class Reports extends React.Component {
 
   render() {
     const { answers, searchParams } = this.props;
+
     const columns = [{
       Header: <FormattedMessage id="reports.latLng" />,
       accessor: 'latLong'
     },{
+      Header: 'Report Name',
+      accessor: 'reportName',
+      Cell: props => <span style={{ 'word-wrap': 'break-word', 'white-space': 'normal' }} title={props.value}>{props.value}</span>
+    },
+      {
       Header: <FormattedMessage id="reports.areaOfInterest" />,
       accessor: 'aoiName'
-    },{  
+    },{
       Header: <FormattedMessage id="reports.date" />,
       accessor: 'date',
       Cell: props => <span className='number'>{props.value}</span>

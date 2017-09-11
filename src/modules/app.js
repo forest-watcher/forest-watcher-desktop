@@ -4,7 +4,7 @@ export const SET_LOCALE = 'app/SET_LOCALE';
 import { getGeostore } from './geostores';
 import { getAreas } from './areas';
 import { getTemplates, getTemplate } from './templates';
-
+import { getTeam } from './teams';
 // Reducer
 const initialState = {
   userChecked: false,
@@ -26,9 +26,11 @@ export default function reducer(state = initialState, action) {
 export function syncApp() {
   return async (dispatch, state) => {
     // fetch all areas and their geostores
+    const user = state().user.data;
+    dispatch(getTeam(user.id));
     await dispatch(getAreas());
     let areaPromises = [];
-    let teamTemplateIds = [];    
+    let teamTemplateIds = [];
     const areasIds = state().areas.ids;
     const areas = state().areas.data;
     areasIds.forEach((id) => {
@@ -49,7 +51,7 @@ export function syncApp() {
       if (templateIds.indexOf(id) === -1) {
         templatePromises.push(dispatch(getTemplate(id)));
       }
-    })
+    });
     await Promise.all(templatePromises);
   };
 }

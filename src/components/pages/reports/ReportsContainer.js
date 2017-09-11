@@ -7,8 +7,18 @@ import qs from 'query-string';
 import Reports from './Reports';
 import { filterData, getDataAreas } from '../../../helpers/filters';
 
+const getLatLng = coords => coords
+  .map(coord => parseFloat(coord).toFixed(5).toString())
+  .join(', ');
 
-const getAnswersByTemplate = (templateId, reports, areas) => {
+const getTeamUser = (userId, team) => {
+  const member = [...team.managers, ...team.confirmedUsers].find(member => member.id === userId);
+  return member ? member.email : userId;
+};
+
+const getUser = (userId, id, team) => (userId === id ? 'me' : getTeamUser(userId, team));
+
+const getAnswersByTemplate = (templateId, reports, areas, user, team) => {
   const reportIds = reports.answers[templateId].ids;
   const reportData = reports.answers[templateId].data;
   let answers = reportIds.map((reportId) => {
@@ -16,10 +26,11 @@ const getAnswersByTemplate = (templateId, reports, areas) => {
     return {
       id: reportData[reportId].id,
       date: moment(reportData[reportId].attributes.createdAt).format(DEFAULT_FORMAT),
-      latLong: reportData[reportId].attributes.userPosition.toString(),
-      member: reportData[reportId].attributes.user,
+      latLong: getLatLng(reportData[reportId].attributes.userPosition),
+      member: getUser(reportData[reportId].attributes.user, user.id, team),
       aoi: reportData[reportId].attributes.areaOfInterest || null,
-      aoiName: areas.data[areaId] ? areas.data[areaId].attributes.name : null
+      aoiName: areas.data[areaId] ? areas.data[areaId].attributes.name : null,
+      reportName: reportData[reportId].attributes.reportName
     }
   });
   return answers;
@@ -36,7 +47,7 @@ const getTemplateOptions = (templates) => {
   return templateOptions;
 }
 
-const mapStateToProps = ({ areas, templates, reports }, { match, location }) => {
+const mapStateToProps = ({ areas, templates, reports, user, teams }, { match, location }) => {
   const searchParams = qs.parse(location.search);
   const templateId = match.params.templateId || 0;
   let areasOptions = [];
@@ -45,7 +56,7 @@ const mapStateToProps = ({ areas, templates, reports }, { match, location }) => 
   let answersFiltered = [];
   if (templateId !== 0 && reports.answers[templateId]) {
     templateOptions = getTemplateOptions(templates);
-    answers = getAnswersByTemplate(templateId, reports, areas);
+    answers = getAnswersByTemplate(templateId, reports, areas, user.data, teams.data.attributes);
     areasOptions = getDataAreas(answers, areas);
     answersFiltered = filterData(answers, searchParams);
   }
