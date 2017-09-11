@@ -8,6 +8,7 @@
     "app.logout": "logout",
     "app.login": "Log in",
     "app.goToApp": "Go to App",
+    "app.setupEmail":"Setup your email",
     "common.create": "Create",
     "common.edit": "Edit",
     "common.add": "Add",

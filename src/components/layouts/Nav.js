@@ -18,6 +18,9 @@ class Nav extends React.Component {
   }
 
   render() {
+    const { user } = this.props;
+    const username = user.data && user.data.email || <FormattedMessage id="app.setupEmail" />;
+    const setUpEmailLink = (!user.data || !user.data.email) ? 'https://www.globalforestwatch.org/my_gfw' : 'javascript:false;';
     return (
       <div className="row column">
         <nav className="c-nav">
@@ -41,6 +44,9 @@ class Nav extends React.Component {
                 </li>
                 <li className="nav-link">
                   <NavLink to="/settings" activeClassName="-active"><FormattedMessage id="settings.name" /></NavLink>
+                </li>
+                <li className={`nav-link ${user.data && user.data.email ? '-disabled' : ''}`}>
+                  <a href={setUpEmailLink}>{username}</a>
                 </li>
               </ul>
             }
@@ -72,7 +78,8 @@ Nav.propTypes = {
   loggedIn: PropTypes.bool.isRequired,
   logout: PropTypes.func,
   locale: PropTypes.string,
-  setLocale: PropTypes.func
+  setLocale: PropTypes.func,
+  user: PropTypes.object
 };
 
 export default Nav;

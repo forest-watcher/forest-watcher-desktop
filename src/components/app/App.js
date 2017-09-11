@@ -79,7 +79,7 @@ class App extends React.Component {
     const queryParams = querystring.parse(location.search || '');
     const mergedMessages = Object.assign({}, translations[DEFAULT_LANGUAGE], translations[locale]);
     return (
-      <IntlProvider 
+      <IntlProvider
         locale={locale}
         messages={mergedMessages}
       >
@@ -92,6 +92,7 @@ class App extends React.Component {
               locale={locale}
               setLocale={setLocale}
               translations={translations}
+              user={user}
             />
           </header>}
           <main role="main" className="l-main">

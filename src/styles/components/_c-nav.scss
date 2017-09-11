@@ -55,7 +55,7 @@
   }
 
   .nav-link {
-    padding-right: 60px;
+    padding-right: 35px;
 
     a {
       color: rgba($white, 0.5);
@@ -84,6 +84,17 @@
 
         &::after {
           width: 100%;
+        }
+      }
+    }
+
+    &.-disabled {
+      a {
+        cursor: default;
+        &:hover {
+          &::after {
+            width: 0;
+          }
         }
       }
     }

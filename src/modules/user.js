@@ -9,6 +9,7 @@ import { toastr } from 'react-redux-toastr';
 const GET_USER = 'user/GET_USER';
 const CHECK_USER_LOGGED = 'user/CHECK_USER_LOGGED';
 export const LOGOUT = 'user/LOGOUT';
+export const SET_USER_DATA = 'user/SET_USER_DATA';
 
 // Reducer
 const initialState = {
@@ -19,6 +20,8 @@ const initialState = {
 
 export default function reducer(state = initialState, action) {
   switch (action.type) {
+    case SET_USER_DATA:
+      return { ...state, data: action.payload };
     case CHECK_USER_LOGGED:
       return Object.assign({}, state, { ...action.payload });
     case GET_USER: {
@@ -101,5 +104,30 @@ export function logout() {
     dispatch({
       type: LOGOUT
     });
+  };
+}
+
+export function getUser() {
+  const url = `${API_BASE_URL}/user`;
+  return (dispatch, state) => {
+    fetch(url, {
+      headers: {
+        Authorization: `Bearer ${state().user.token}`
+      }
+    })
+      .then((response) => {
+        if (response.ok) return response.json();
+        throw Error(response.statusText);
+      })
+      .then(({ data = {} }) => {
+        dispatch({
+          type: SET_USER_DATA,
+          payload: { ...data.attributes, id: data.id }
+        });
+      })
+      .catch((error) => {
+        toastr.error('Error in user retrieval');
+        console.warn(error);
+      });
   };
 }
