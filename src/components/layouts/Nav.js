@@ -19,8 +19,8 @@ class Nav extends React.Component {
 
   render() {
     const { user } = this.props;
-    const username = user.data && user.data.email || <FormattedMessage id="app.setupEmail" />;
-    const setUpEmailLink = (!user.data || !user.data.email) ? 'https://www.globalforestwatch.org/my_gfw' : 'javascript:false;';
+    const username = (user.data && user.data.email) || <FormattedMessage id="app.setupEmail" />;
+    const setUpEmailLink = (!user.data || !user.data.email) ? 'http://www.globalforestwatch.org/my_gfw' : undefined;
     return (
       <div className="row column">
         <nav className="c-nav">
