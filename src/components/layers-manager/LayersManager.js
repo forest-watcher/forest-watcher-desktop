@@ -6,12 +6,13 @@ import LayersSwitcher from './LayersSwitcherContainer';
 import FormFooter from '../ui/FormFooter';
 import { FormattedMessage } from 'react-intl';
 
-function LayersManager({ isManager, publicLayers, teamLayers, userLayers, setEditing }) {
+function LayersManager(props) {
+  const { isManager, publicLayers, teamLayers, userLayers, setEditing, editing } = props;
   return(
     <div className="l-layers-manager">
       <div className="row">
         <div className="small-12 medium-6 columns">
-          <LayersSwitcher 
+          <LayersSwitcher
             isManager={ isManager }
             publicLayers={publicLayers}
             teamLayers={teamLayers}
@@ -19,7 +20,7 @@ function LayersManager({ isManager, publicLayers, teamLayers, userLayers, setEdi
           />
         </div>
         <div className="small-12 medium-5 medium-offset-1 columns">
-          <LayersForm 
+          <LayersForm
             publicLayers={publicLayers}
             teamLayers={teamLayers}
             userLayers={userLayers}
@@ -27,12 +28,14 @@ function LayersManager({ isManager, publicLayers, teamLayers, userLayers, setEdi
         </div>
       </div>
       <FormFooter>
-        <button 
-          onClick={() => setEditing(false)} 
-          className="c-button -right"
-        >
-          <FormattedMessage id="common.done" />
-        </button>
+        {editing &&
+          <button
+            onClick={() => setEditing(false)}
+            className="c-button -right"
+          >
+            <FormattedMessage id="common.done"/>
+          </button>
+        }
       </FormFooter>
     </div>
   )

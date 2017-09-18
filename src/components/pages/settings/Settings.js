@@ -33,8 +33,18 @@ class Settings extends React.Component {
   }
 
   render() {
-    const { team, editing, loading, saving, isManager, publicLayers, teamLayers, userLayers, setEditing } = this.props;
-    
+    const {
+      team,
+      editing,
+      loading,
+      saving,
+      isManager,
+      publicLayers,
+      teamLayers,
+      userLayers,
+      setEditing
+    } = this.props;
+
     const renderHero = () => {
       const action = (isManager && !editing) ? {name: "common.edit", callback: () => this.props.setEditing(true)} : null;
       const tabStyle = !(isManager && !editing) ? "-no-action" : "";
@@ -43,7 +53,7 @@ class Settings extends React.Component {
           title={"settings.name"}
           action={action}
         >
-          <Tab 
+          <Tab
             pill
             style={tabStyle}
             options={["settings.myTeam", "settings.layers"]}
@@ -63,9 +73,9 @@ class Settings extends React.Component {
               {(team && !editing) ?
                 <div className="settings-show">
                   <Article>
-                    { this.state.tabIndex === 0 ? 
+                    { this.state.tabIndex === 0 ?
                       <TeamsShow /> :
-                      <LayersShow 
+                      <LayersShow
                         isManager={isManager}
                         publicLayers={publicLayers}
                         teamLayers={teamLayers}
@@ -74,11 +84,12 @@ class Settings extends React.Component {
                     }
                   </Article>
                 </div>
-                : 
+                :
                 <div className="settings-edit">
-                  { this.state.tabIndex === 0 ? 
-                    <TeamsForm team={team}/> :
+                  { this.state.tabIndex === 0 ?
+                    <TeamsForm setEditing={setEditing} editing={editing} team={team}/> :
                     <LayersManager
+                      editing={editing}
                       setEditing={setEditing}
                       isManager={isManager}
                       publicLayers={publicLayers}

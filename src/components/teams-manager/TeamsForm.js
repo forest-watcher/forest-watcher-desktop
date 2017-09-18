@@ -41,7 +41,7 @@ class TeamsForm extends React.Component {
   }
 
   resetSelection(team) {
-    this.setState({ 
+    this.setState({
       selectedAreas: team.attributes.areas.join(),
       selectedManagers: team.attributes.managers,
       selectedConfirmedUsers: team.attributes.confirmedUsers || [],
@@ -61,42 +61,40 @@ class TeamsForm extends React.Component {
     }
   }
 
-  setEditing = (value) => {
-    this.props.setEditing(value);
-  }
-
-  handleCancel = () => {
+  handleCancel = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
     this.resetSelection(this.props.team);
-    this.setEditing(false) 
+    this.props.setEditing(false)
  }
 
   onInputChange = (e) => {
-    this.form = Object.assign({}, this.form, { [e.target.name]: e.target.value }); 
+    this.form = Object.assign({}, this.form, { [e.target.name]: e.target.value });
   }
 
   onAreaChange = (selected) => {
     this.setState({selectedAreas: selected});
     const updatedAreas = selected.split(',');
-    this.form = Object.assign({}, this.form, { areas: updatedAreas }); 
+    this.form = Object.assign({}, this.form, { areas: updatedAreas });
   }
 
   handleFormUpdate = (field, value) => {
-    this.form = Object.assign({}, this.form, { [field]: value }); 
+    this.form = Object.assign({}, this.form, { [field]: value });
   }
 
   updateSelectedMembers = (selectedMembers, role) => {
     switch (role) {
       case MANAGER:
         this.setState({ selectedManagers: selectedMembers });
-        this.form = Object.assign({}, this.form, { managers: selectedMembers }); 
+        this.form = Object.assign({}, this.form, { managers: selectedMembers });
         break;
       case CONFIRMED_USER:
         this.setState({ selectedConfirmedUsers: selectedMembers });
-        this.form = Object.assign({}, this.form, { confirmedUsers: selectedMembers }); 
+        this.form = Object.assign({}, this.form, { confirmedUsers: selectedMembers });
         break;
       case USER:
         this.setState({ selectedUsers: selectedMembers });
-        this.form = Object.assign({}, this.form, { users: selectedMembers }); 
+        this.form = Object.assign({}, this.form, { users: selectedMembers });
         break;
       default:
         break;
@@ -104,7 +102,7 @@ class TeamsForm extends React.Component {
   }
 
   render() {
-    const { areaValues } = this.props;
+    const { areaValues, editing, addEmail, intl, loading } = this.props;
     return (
       <div>
         <Form onSubmit={this.handleSubmit}>
@@ -118,7 +116,7 @@ class TeamsForm extends React.Component {
                     onChange={this.onInputChange}
                     name="name"
                     value={this.form.name || ''}
-                    placeholder={this.props.intl.formatMessage({ id: 'teams.teamName' })}
+                    placeholder={intl.formatMessage({ id: 'teams.teamName' })}
                     validations={['required']}
                   />
                 </div>
@@ -132,30 +130,32 @@ class TeamsForm extends React.Component {
                     options={areaValues}
                     value={this.state.selectedAreas}
                     onChange={this.onAreaChange}
-                    noResultsText={this.props.intl.formatMessage({ id: 'filters.noAreasAvailable' })}
+                    noResultsText={intl.formatMessage({ id: 'filters.noAreasAvailable' })}
                     searchable={false}
                     arrowRenderer={() => <svg className="c-icon -x-small -gray"><use xlinkHref="#icon-arrow-down"></use></svg>}
                   />
                 </div>
               </div>
-              <MembersManager 
+              <MembersManager
                 updateSelectedMembers={this.updateSelectedMembers}
                 selectedUsers={this.state.selectedUsers}
                 selectedConfirmedUsers={this.state.selectedConfirmedUsers}
                 selectedManagers={this.state.selectedManagers}
-                addEmail={this.props.addEmail}
+                addEmail={addEmail}
               />
             </div>
             <FormFooter>
-              <button 
-                onClick={this.handleCancel} 
-                disabled={this.props.loading} 
-                className="c-button -light"
-              >
-                <FormattedMessage id="common.cancel" />
-              </button>
-              <Button 
-                disabled={this.props.loading} 
+              {editing &&
+                <button
+                  onClick={this.handleCancel}
+                  disabled={loading}
+                  className="c-button -light"
+                >
+                  <FormattedMessage id="common.cancel"/>
+                </button>
+              }
+              <Button
+                disabled={loading}
                 className="c-button -right"
               >
                 <FormattedMessage id="common.save" />
@@ -170,6 +170,8 @@ class TeamsForm extends React.Component {
 
 TeamsForm.propTypes = {
   team: PropTypes.object,
+  editing: PropTypes.bool.isRequired,
+  setEditing: PropTypes.func.isRequired,
   areaValues: PropTypes.array.isRequired,
   sendNotifications: PropTypes.func.isRequired
 };

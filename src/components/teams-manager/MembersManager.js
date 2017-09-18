@@ -112,7 +112,7 @@ class MembersManager extends React.Component {
             *members must have a
             <a
               className="text -green"
-              href="https://www.globalforestwatch.org/my_gfw"
+              href="http://www.globalforestwatch.org/my_gfw"
               target="_blank"
               rel="noopener noreferrer"
             >
