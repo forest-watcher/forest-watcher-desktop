@@ -1,6 +1,6 @@
-import { CARTO_URL, CARTO_TABLE, API_BASE_URL } from '../constants/global';
 import normalize from 'json-api-normalizer';
-
+import { CARTO_URL, CARTO_TABLE, API_BASE_URL } from '../constants/global';
+import { LAYERS_BLACKLIST } from '../constants/global';
 // Actions
 const GET_GFW_LAYERS = 'layers/GET_GFW_LAYERS';
 const SET_LAYERS = 'layers/SET_LAYERS';
@@ -78,7 +78,7 @@ export function getGFWLayers() {
     .then(async (data) => {
       dispatch({
         type: GET_GFW_LAYERS,
-        payload: data.rows
+        payload: data.rows.filter(layer => !LAYERS_BLACKLIST.includes(layer.cartodb_id))
       });
       dispatch({
         type: SET_LOADING,

@@ -18,6 +18,8 @@ export const CONFIRMED_USER = 'CONFIRMED_USER';
 export const MAX_NUMBER_OF_LAYERS = 2;
 export const TABLE_PAGE_SIZE = 8;
 
+export const LAYERS_BLACKLIST = [6];
+
 export default {
   API_BASE_URL,
   API_CALLBACK_URL,
