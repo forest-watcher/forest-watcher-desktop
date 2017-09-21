@@ -9,7 +9,8 @@ class LayersSelector extends React.Component {
   constructor (props) {
     super(props);
     this.state = {
-      layer: null
+      layerOption: null,
+      mapLayer: null
     };
   }
 
@@ -20,7 +21,14 @@ class LayersSelector extends React.Component {
   }
 
   onChange = (selected) => {
-    this.setState({ layer: selected })
+    if (this.state.mapLayer) this.props.map.removeLayer(this.state.mapLayer);
+    if (selected) {
+      const { map, layers: { [selected.option]: layer }} = this.props;
+      const mapLayer = L.tileLayer(layer.attributes.url).addTo(map);
+      this.setState({ layerOption: selected, mapLayer });
+    } else {
+      this.setState({ layerOption: null, mapLayer: null });
+    }
   };
 
   render() {
@@ -31,7 +39,7 @@ class LayersSelector extends React.Component {
           name="layers-select"
           className="c-select -map"
           options={layersOptions}
-          value={this.state.layer}
+          value={this.state.layerOption}
           onChange={this.onChange}
           placeholder={this.props.intl.formatMessage({ id: 'areas.layersPlaceholder' })}
           searchable={false}
@@ -44,10 +52,10 @@ class LayersSelector extends React.Component {
 }
 
 LayersSelector.propTypes = {
-  map: PropTypes.object,
-  layers: PropTypes.array,
-  layersOptions: PropTypes.array,
-  getLayers: PropTypes.func
+  map: PropTypes.object.isRequired,
+  layers: PropTypes.object.isRequired,
+  layersOptions: PropTypes.array.isRequired,
+  getLayers: PropTypes.func.isRequired
 };
 
 export default injectIntl(LayersSelector);
