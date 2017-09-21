@@ -4,9 +4,7 @@ import capitalize from 'lodash/capitalize';
 import LayersSelector from './LayersSelector';
 
 const mapStateToProps = (state) => {
-  const publicLayers = Object.values(state.layers.selectedLayers)
-    .filter(layer => (layer.attributes && layer.attributes.isPublic));
-  const layersOptions = publicLayers.map(layer => ({
+  const layersOptions = Object.values(state.layers.selectedLayers).map(layer => ({
     option: layer.id,
     label: capitalize(layer.attributes.name)
   }));
