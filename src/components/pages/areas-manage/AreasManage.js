@@ -13,6 +13,7 @@ import Attribution from '../../ui/Attribution';
 import Loader from '../../ui/Loader';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import CountrySearch from '../../country-search/CountrySearchContainer';
+import LayersSelector from '../../layers-selector/LayersSelectorContainer';
 
 class AreasManage extends React.Component {
 
@@ -46,7 +47,7 @@ class AreasManage extends React.Component {
       };
     }
     if (this.props.saving && !nextProps.saving && !nextProps.error) {
-      history.push('/areas');  
+      history.push('/areas');
       toastr.success(this.props.intl.formatMessage({ id: 'areas.saved' }));
     }
     if (nextProps.error) {
@@ -110,7 +111,10 @@ class AreasManage extends React.Component {
               }}
             />
             <div className="c-map-controls">
-              <CountrySearch 
+              <LayersSelector
+                map={this.state.map}
+              />
+              <CountrySearch
                 map={this.state.map}
                 onZoomChange={ (zoom) => {
                   this.setState({
@@ -121,8 +125,8 @@ class AreasManage extends React.Component {
                   });
                 }}
               />
-              <LocateUser 
-                  map={this.state.map} 
+              <LocateUser
+                  map={this.state.map}
                   setLoading={this.props.setLoading}
                   onZoomChange={ (zoom) => {
                     this.setState({
