@@ -12,7 +12,7 @@ class CountrySearch extends React.Component {
       country: null
     };
   }
-  
+
   componentDidMount() {
     if (!this.props.countries.length) {
       this.props.getCountries();
@@ -20,9 +20,7 @@ class CountrySearch extends React.Component {
   }
 
   handleFitCountry = (selected) => {
-    this.setState({
-      country: selected
-    })
+    this.setState({ country: selected });
     const activeCountryBounds = this.props.countries.find((country) => {
       return country.iso === selected.option;
     }).bbox;
@@ -47,7 +45,7 @@ class CountrySearch extends React.Component {
             searchable={true}
             clearable={false}
             arrowRenderer={() => <svg className="c-icon -x-small -gray"><use xlinkHref="#icon-arrow-down"></use></svg>}
-          />        
+          />
       </div>
     );
   }
