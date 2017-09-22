@@ -153,7 +153,7 @@
     "customLayers.intro": "La caractéristique de jeux de données personnalisés fonctionne via des tuiles liantes, hébergées sur un service web externe, vers Forest Watcher. En utilisant cette URL, le système interrogera la tuile et recevra uniquement les données liées à vos centres d'intérêt. Pour configurer cela, allez dans l'onglet des paramètres, sélectionnez les couches de données et collez l'URL du service de tuile pertinent.",
     "customLayers.step1": "Téléchargez notre jeu de données vers un service web qui prend en charge le partage de tuiles. Des choses comme Carto ou Mapbox serait bien.",
     "customLayers.step2": "Trouvez l'URL de partage pour votre couche dans votre service de tuiles.",
-    "customLayers.step3": "Vous devrez la formater légèrement pour nous permettre d'interroger la couche. Ajoutez /{z}/{x}/{y} à la fin de votre URL et ajoutez aussi l'extension (généralement .png ou .jpg). Nous acceptons la plupart des formats d'image. Cela devrait ressembler à cela : ",
-    "customLayers.step3.1": "http://maps.protectedplanet.net/blue/{z}/{x}/{y}.{extension}\n",
+    "customLayers.step3": "You will need to format it slightly to allow us to query the layer. Add /{z}/{x}/{y} to the end of your URL, and optionally add the extension (usually .png or .jpg). We accept most image formats. It should look like this:",
+    "customLayers.step3.1": "http://maps.protectedplanet.net/blue/{z}/{x}/{y}",
     "customLayers.step4": "Complétez la case de l'URL. N'oubliez pas de donner un titre à votre couche : la description est facultative. "
 }

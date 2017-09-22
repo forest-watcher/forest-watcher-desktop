@@ -153,7 +153,7 @@
     "customLayers.intro": "La característica de conjuntos de datos personalizados funciona enlazando Tiles, que están alojados en un servicio web externo, con Forest Watcher. Al usar esa URL, el sistema consultará el Tile y recibirá solo los datos relacionados con tus áreas de interés. Para configurarlo, ve a la pestaña de configuración, selecciona capas de datos y pega la URL del servicio de Tiles relevante.",
     "customLayers.step1": "Sube tus datos a un servicio web que permita compartir Tiles. Carto o Mapbox estarían bien.",
     "customLayers.step2": "Encuentra la URL a compartir para tu capa en tu servicio de Tiles.",
-    "customLayers.step3": "Tendrás que formatearlo ligeramente para permitirnos consultar la capa. Añade /{z}/{x}/{y} al final de la URL y añade también la extensión (generalmente .png o .jpg). Aceptamos la mayoría de los formatos de imagen. Debería tener este aspecto:",
-    "customLayers.step3.1": "http://maps.protectedplanet.net/blue/{z}/{x}/{y}.{extension}",
+    "customLayers.step3": "You will need to format it slightly to allow us to query the layer. Add /{z}/{x}/{y} to the end of your URL, and optionally add the extension (usually .png or .jpg). We accept most image formats. It should look like this:",
+    "customLayers.step3.1": "http://maps.protectedplanet.net/blue/{z}/{x}/{y}",
     "customLayers.step4": "Completa la celda de la URL. No olvides ponerle un título a tu capa. La descripción es opcional."
 }
