@@ -25,11 +25,12 @@ const urlTile = {
   hint: value => <span className="form-error is-visible">Text is not a URL tile layer</span>,
   rule: (value) => {
     if (!value) return false;
-    const parts = value.split('/{z}/{x}/{y}.');
+    const parts = value.split('/{z}/{x}/{y}');
     if (parts.length !== 2) return false;
     const isUrl = validator.isURL(parts[0]);
-    const isImage = validator.isAlphanumeric(parts[1]);
-    return (isUrl && isImage);
+    const isImage = (parts[1].startsWith('.') && validator.isAlphanumeric(parts[1].slice(1)));
+    const noExtension = parts[1] === '';
+    return (isUrl && (isImage || noExtension));
   }
 };
 
