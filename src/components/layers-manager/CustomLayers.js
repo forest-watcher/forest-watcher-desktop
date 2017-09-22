@@ -65,7 +65,7 @@ class CustomLayers extends Component {
             name="tileurl"
             value={form.tileurl || ''}
             placeholder={intl.formatMessage({ id: 'settings.url' })}
-            validations={['required', 'urlTile']}
+            validations={['required']}
           />
           <h4>{intl.formatMessage({ id: 'settings.description' })}</h4>
           <Textarea
