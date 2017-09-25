@@ -11,7 +11,8 @@ import fr from 'react-intl/locale-data/fr';
 import id from 'react-intl/locale-data/id';
 import pt from 'react-intl/locale-data/pt';
 import translations from '../../locales/index.js';
-import { DEFAULT_LANGUAGE } from '../../constants/global';
+import { DEFAULT_LANGUAGE, GA_UA } from '../../constants/global';
+import ReactGA from 'react-ga';
 
 addLocaleData([...en, ...es, ...fr, ...id, ...pt]);
 
@@ -33,6 +34,7 @@ class App extends React.Component {
 
   componentWillMount() {
     this.props.checkLogged(this.props.location.search);
+    ReactGA.initialize(GA_UA); //Unique Google Analytics tracking number
   }
 
   componentDidMount() {
@@ -40,11 +42,20 @@ class App extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
+    const { location } = nextProps;
     const queryParams = querystring.parse(nextProps.location.search);
     const confirmToken = queryParams.confirmToken;
     if ((nextProps.user.token !== this.props.user.token) && confirmToken){
       this.checkConfirmedUser(nextProps);
     }
+    if (location.pathname !== this.props.location.pathname || location.search !== this.props.location.search) {
+      this.fireTracking(nextProps.location);
+    }
+  }
+
+  fireTracking = (location) => {
+    ReactGA.set({ page: location.pathname + location.search });
+    ReactGA.pageview(location.pathname + location.search);
   }
 
   checkConfirmedUser(props) {
