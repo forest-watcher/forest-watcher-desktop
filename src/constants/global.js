@@ -8,6 +8,7 @@ export const GFW_API_KEY = process.env.REACT_APP_GFW_API_KEY;
 export const TWITTER_WIDGET_API = process.env.REACT_APP_TWITTER_WIDGET_API;
 export const FACEBOOK_WIDGET_API = process.env.REACT_APP_FACEBOOK_WIDGET_API;
 export const GOOGLE_PLUS_ONE_WIDGET_API = process.env.REACT_APP_GOOGLE_PLUS_ONE_WIDGET_API;
+export const GA_UA = process.env.REACT_APP_GA_UA;
 
 // constants
 export const DEFAULT_LANGUAGE = 'en';
@@ -33,5 +34,6 @@ export default {
   GFW_API_KEY,
   TWITTER_WIDGET_API,
   FACEBOOK_WIDGET_API,
-  GOOGLE_PLUS_ONE_WIDGET_API
+  GOOGLE_PLUS_ONE_WIDGET_API,
+  GA_UA
 };
