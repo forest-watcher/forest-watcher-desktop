@@ -65,6 +65,7 @@
     "reports.user": "User",
     "reports.member": "User",
     "reports.latLng": "Lat,Long",
+    "reports.reportName": "Report Name",
     "reports.answersTitle": "Answers for the report templates",
     "reports.downloadAnswers": "Download Answers",
     "reports.detailLink": "Go to detail",

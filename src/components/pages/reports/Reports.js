@@ -57,7 +57,7 @@ class Reports extends React.Component {
       Header: <FormattedMessage id="reports.latLng" />,
       accessor: 'latLong'
     },{
-      Header: 'Report Name',
+      Header: <FormattedMessage id="reports.reportName" />,
       accessor: 'reportName',
       Cell: props => <span style={{ 'wordWrap': 'break-word', 'whiteSpace': 'normal' }} title={props.value}>{props.value}</span>
     },
