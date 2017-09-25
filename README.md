@@ -1,6 +1,7 @@
 # Forest Watcher Desktop
 
-Desktop application for viewing your forest watcher data
+Desktop application for viewing your
+[forest watcher](http://forestwatcher.globalforestwatch.org) data
 
 
 ## Set up:
