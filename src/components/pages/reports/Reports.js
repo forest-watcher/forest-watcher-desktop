@@ -59,7 +59,7 @@ class Reports extends React.Component {
     },{
       Header: 'Report Name',
       accessor: 'reportName',
-      Cell: props => <span style={{ 'word-wrap': 'break-word', 'white-space': 'normal' }} title={props.value}>{props.value}</span>
+      Cell: props => <span style={{ 'wordWrap': 'break-word', 'whiteSpace': 'normal' }} title={props.value}>{props.value}</span>
     },
       {
       Header: <FormattedMessage id="reports.areaOfInterest" />,
