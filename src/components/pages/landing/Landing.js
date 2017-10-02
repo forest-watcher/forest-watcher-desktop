@@ -62,7 +62,7 @@ class Landing extends React.Component {
                   className="text -green"
                   target="_blank"
                   rel="noopener noreferrer"
-                  href="http://www.globalforestwatch.org/howto/tags/forest-watcher"
+                  href="http://www.globalforestwatch.org/howto/tags/forest-watcher/"
                 >
                   learn how to use it.
                 </a>
