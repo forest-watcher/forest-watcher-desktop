@@ -151,7 +151,7 @@
         "number": "number"
     },
     "customLayers.title": "How to add a custom layer",
-    "customLayers.intro": "The custom datasets feature works through linking tiles, hosted on an external web service, to Forest Watcher. Using that URL, the system will query the tile and receive just the data related to your Areas of Interest. To configure this, go to the settings tab, select data layers and paste the URL for the relevant tile service. If you have any trouble, contact <a href="mailto:forestwatcher@wri.org">forestwatcher@wri.org</a> for help.",
+    "customLayers.intro": "The custom datasets feature works through linking tiles, hosted on an external web service, to Forest Watcher. Using that URL, the system will query the tile and receive just the data related to your Areas of Interest. To configure this, go to the settings tab, select data layers and paste the URL for the relevant tile service. If you have any trouble, contact <a href='mailto:forestwatcher@wri.org'>forestwatcher@wri.org</a> for help.",
     "customLayers.step1": "Upload your dataset to a web service that supports tile sharing. Things like Carto or Mapbox would be good.",
     "customLayers.step2": "Find the share URL for your layer, from your tile service.",
     "customLayers.step3": "You will need to format it slightly to allow us to query the layer. Add /{z}/{x}/{y} to the end of your URL, and optionally add the extension (usually .png or .jpg). We accept most image formats. It should look like this:",
