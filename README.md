@@ -1,7 +1,7 @@
 # Forest Watcher Desktop
 
 Desktop application for viewing your
-[forest watcher](http://forestwatcher.globalforestwatch.org) data
+[forest watcher](http://forestwatcher.globalforestwatch.org) data.
 
 
 ## Set up:
