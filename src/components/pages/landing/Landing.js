@@ -29,6 +29,14 @@ class Landing extends React.Component {
     window._babelPolyfill = false;
   }
 
+  handleIosLink() {
+    window.location = 'https://itunes.apple.com/us/app/forest-watcher/id1277787116';
+  }
+
+  handleAndroidLink() {
+    window.location = 'https://play.google.com/store/apps/details?id=com.forestwatcher';
+  }
+
   render() {
     return (
       <div className="c-landing">
