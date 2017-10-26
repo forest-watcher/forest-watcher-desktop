@@ -1,14 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import Hero from '../../layouts/Hero';
-import Article from '../../layouts/Article';
-import TeamsShow from '../../teams-show/TeamsShowContainer';
-import TeamsForm from '../../teams-manager/TeamsFormContainer';
-import LayersManager from '../../layers-manager/LayersManager';
-import LayersShow from '../../layers-show/LayersShow';
-import Loader from '../../ui/Loader';
-import Tab from '../../ui/Tab';
+import Hero from '../../components/layouts/Hero';
+import Article from '../../components/layouts/Article';
+import TeamsShow from '../../components/teams-show/TeamsShowContainer';
+import TeamsForm from '../../components/teams-manager/TeamsFormContainer';
+import LayersManager from '../../components/layers-manager/LayersManager';
+import LayersShow from '../../components/layers-show/LayersShow';
+import Loader from '../../components/ui/Loader';
+import Tab from '../../components/ui/Tab';
 
 class Settings extends React.Component {
   constructor() {

@@ -2,9 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 
-import Icon from '../../ui/Icon';
+import Icon from '../../components/ui/Icon';
 
-import { API_BASE_URL, API_CALLBACK_URL } from '../../../constants/global';
+import { API_BASE_URL, API_CALLBACK_URL } from '../../constants/global';
 
 function LoginButton({ socialNetwork, callbackUrl }) {
   const url =`${API_BASE_URL}/auth/${socialNetwork}?token=true&callbackUrl=${callbackUrl || API_CALLBACK_URL}`;

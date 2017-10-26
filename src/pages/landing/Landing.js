@@ -1,7 +1,7 @@
 import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import { Link } from 'react-router-dom';
-import { LIVE_SETTINGS, GFW_ASSETS_PATH } from '../../../constants/landing';
+import { LIVE_SETTINGS, GFW_ASSETS_PATH } from '../../constants/landing';
 import SocialFooter from './SocialFooter';
 
 class Landing extends React.Component {

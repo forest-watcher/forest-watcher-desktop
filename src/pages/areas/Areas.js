@@ -1,20 +1,20 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Hero from '../../layouts/Hero';
-import Article from '../../layouts/Article';
+import Hero from '../../components/layouts/Hero';
+import Article from '../../components/layouts/Article';
 import { Link } from 'react-router-dom';
-import GridGallery from '../../layouts/GridGallery';
-import AreaCard from '../../area-card/AreaCardContainer';
-import Icon from '../../ui/Icon';
+import GridGallery from '../../components/layouts/GridGallery';
+import AreaCard from '../../components/area-card/AreaCardContainer';
+import Icon from '../../components/ui/Icon';
 import { FormattedMessage } from 'react-intl';
-import Loader from '../../ui/Loader';
-import { trimQueryParams } from '../../../helpers/login.js';
+import Loader from '../../components/ui/Loader';
+import { trimQueryParams } from '../../helpers/login.js';
 
 class Areas extends React.Component {
 
   componentWillMount() {
-  
-  
+
+
       trimQueryParams(this.props);
   }
 

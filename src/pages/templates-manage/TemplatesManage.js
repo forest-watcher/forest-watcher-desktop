@@ -1,21 +1,21 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import Hero from '../../layouts/Hero';
+import Hero from '../../components/layouts/Hero';
 import 'react-select/dist/react-select.css';
 import { FormattedMessage, injectIntl } from 'react-intl';
-import { Form, Button } from '../../form/Form';
-import { validation } from '../../../helpers/validation'; // eslint-disable-line no-unused-vars
+import { Form, Button } from '../../components/form/Form';
+import { validation } from '../../helpers/validation'; // eslint-disable-line no-unused-vars
 import Select from 'react-select';
-import Loader from '../../ui/Loader';
-import FormFooter from '../../ui/FormFooter';
-import { getSelectorValueFromArray } from '../../../helpers/filters';
-import { setLanguages, syncLanguagesWithDefaultLanguage } from '../../../helpers/languages';
+import Loader from '../../components/ui/Loader';
+import FormFooter from '../../components/ui/FormFooter';
+import { getSelectorValueFromArray } from '../../helpers/filters';
+import { setLanguages, syncLanguagesWithDefaultLanguage } from '../../helpers/languages';
 import { Link } from 'react-router-dom';
 import { toastr } from 'react-redux-toastr';
-import QuestionCard from '../../question-card/QuestionCard';
+import QuestionCard from '../../components/question-card/QuestionCard';
 import { CSSTransitionGroup } from 'react-transition-group';
-import { QUESTION } from '../../../constants/templates';
+import { QUESTION } from '../../constants/templates';
 import Switch from 'react-toggle-switch'
 
 import 'react-toggle-switch/dist/css/switch.min.css';
@@ -59,10 +59,10 @@ class TemplatesManage extends React.Component {
   ///////////////////////////////
   setPropsToState = (props) => {
     const areaOfInterest = props.mode === 'create' ? null : props.areaOfInterest;
-    this.setState({ 
-      ...props.template, 
-      areaOfInterest: areaOfInterest, 
-      oldAreaOfInterest: props.areaOfInterest 
+    this.setState({
+      ...props.template,
+      areaOfInterest: areaOfInterest,
+      oldAreaOfInterest: props.areaOfInterest
     });
   }
 
@@ -91,7 +91,7 @@ class TemplatesManage extends React.Component {
       const method = this.props.mode === 'manage' ? 'PATCH' : 'POST';
       this.props.saveTemplate(this.state, method, this.props.templateId);
     } else {
-      toastr.error(this.props.intl.formatMessage({ id: 'templates.missingFields' }), this.props.intl.formatMessage({ id: 'templates.missingFieldsDetail' }));      
+      toastr.error(this.props.intl.formatMessage({ id: 'templates.missingFields' }), this.props.intl.formatMessage({ id: 'templates.missingFieldsDetail' }));
     }
     this.canSubmit = true;
   }
@@ -116,7 +116,7 @@ class TemplatesManage extends React.Component {
       defaultLanguage: selected.option
     });
   }
-  
+
   onTitleChange = (e) => {
     this.setState({
       name: {
@@ -131,14 +131,14 @@ class TemplatesManage extends React.Component {
     this.setState({ status: newStatus });
   }
 
-  
+
   ///////////////////////////////
   // handle question card changes with state -> edit, delete, add
   ///////////////////////////////
   handleQuestionEdit = (question, index) => {
     const newQuestions = this.state.questions.slice();
     newQuestions[index - 1] = question;
-    
+
     this.setState({
       questions: newQuestions
     });
@@ -147,7 +147,7 @@ class TemplatesManage extends React.Component {
   handleQuestionDelete = (questionNum) => {
     const removedQuestions = this.state.questions.slice();
     removedQuestions.splice(questionNum - 1, 1);
-    
+
     this.setState({
       questions: removedQuestions
     });
@@ -252,9 +252,9 @@ class TemplatesManage extends React.Component {
                           transitionLeaveTimeout={500}
                         >
                           { this.state.questions.map((question, index) =>
-                            <QuestionCard 
-                              key={index} 
-                              questionNum={index + 1} 
+                            <QuestionCard
+                              key={index}
+                              questionNum={index + 1}
                               question={question}
                               template={this.state}
                               syncStateWithProps={this.handleQuestionEdit}
@@ -278,9 +278,9 @@ class TemplatesManage extends React.Component {
                 <div className="row">
                   <div className="column small-12 medium-10 medium-offset-1 large-8 large-offset-2">
                     <div className="add-button">
-                      <button 
-                        className="c-button" 
-                        onClick={this.handleQuestionAdd} 
+                      <button
+                        className="c-button"
+                        onClick={this.handleQuestionAdd}
                         disabled={isLoading}
                       >
                         <FormattedMessage id="templates.addQuestion" />
@@ -304,7 +304,7 @@ class TemplatesManage extends React.Component {
                 />
                 <span className="status-label text -x-small-title">{this.props.intl.formatMessage({ id: 'templates.statusPublished' })}</span>
               </div>
-              <Button className="c-button" disabled={isLoading || !canSave}><FormattedMessage id="forms.save" /></Button>                
+              <Button className="c-button" disabled={isLoading || !canSave}><FormattedMessage id="forms.save" /></Button>
             </FormFooter>
           </Form>
         </div>

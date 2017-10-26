@@ -1,8 +1,8 @@
 import { connect } from 'react-redux';
 import Templates from './Templates';
-import { filterData, getDataAreas } from '../../../helpers/filters';
+import { filterData, getDataAreas } from '../../helpers/filters';
 import qs from 'query-string';
-import { LOCALES_LIST } from '../../../constants/locales';
+import { LOCALES_LIST } from '../../constants/locales';
 
 const getTemplatesById = (templates, reports, areas, user) => {
   const templateIds = templates.ids;

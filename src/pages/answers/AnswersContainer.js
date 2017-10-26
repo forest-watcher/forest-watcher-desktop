@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { getReportAnswers, downloadAnswers } from '../../../modules/reports';
+import { getReportAnswers, downloadAnswers } from '../../modules/reports';
 
 import Answers from './Answers';
 

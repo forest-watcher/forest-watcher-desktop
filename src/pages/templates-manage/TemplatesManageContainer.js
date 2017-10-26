@@ -1,10 +1,10 @@
 import { connect } from 'react-redux';
-import Locales from '../../../locales';
+import Locales from '../../locales';
 
 import TemplatesManage from './TemplatesManage';
-import { LOCALES_LIST } from '../../../constants/locales';
-import { TEMPLATE, QUESTION_TYPES, QUESTION } from '../../../constants/templates';
-import { saveTemplate, deleteTemplate } from '../../../modules/templates';
+import { LOCALES_LIST } from '../../constants/locales';
+import { TEMPLATE, QUESTION_TYPES, QUESTION } from '../../constants/templates';
+import { saveTemplate, deleteTemplate } from '../../modules/templates';
 
 const mapAreasToOptions = (areas, templateId) => {
     const areasOptions = [];

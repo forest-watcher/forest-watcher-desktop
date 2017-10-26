@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import Select from 'react-select';
-import { DEFAULT_FORMAT } from '../../../constants/global';
+import { DEFAULT_FORMAT } from '../../constants/global';
 import DatePicker from 'react-datepicker';
 import moment from 'moment';
 import { injectIntl } from 'react-intl';
@@ -12,7 +12,7 @@ import 'react-datepicker/dist/react-datepicker.css';
 import qs from 'query-string';
 
 class ReportsFilters extends React.Component {
-  
+
   redirectWith(searchParams){
     this.props.history.push({
       pathname: `/reports/${this.props.match.params.templateId}`,
@@ -82,8 +82,8 @@ class ReportsFilters extends React.Component {
             value={this.props.searchParams.searchValues || ''}
             name="search-bar"
             placeholder={this.props.intl.formatMessage({ id: 'filters.search' })}
-          />   
-        </div>  
+          />
+        </div>
         <div className="column small-12 medium-3">
           <div className="c-date-picker">
             <DatePicker

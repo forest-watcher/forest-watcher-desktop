@@ -1,19 +1,19 @@
 import React from 'react';
-import Hero from '../../layouts/Hero';
-import { Input, Button, Form } from '../../form/Form';
-import Map from '../../map/Map';
+import Hero from '../../components/layouts/Hero';
+import { Input, Button, Form } from '../../components/form/Form';
+import Map from '../../components/map/Map';
 import { Link } from 'react-router-dom';
-import { validation } from '../../../helpers/validation'; // eslint-disable-line no-unused-vars
-import { checkArea } from '../../../helpers/areas';
+import { validation } from '../../helpers/validation'; // eslint-disable-line no-unused-vars
+import { checkArea } from '../../helpers/areas';
 import { toastr } from 'react-redux-toastr';
-import LocateUser from '../../ui/LocateUser';
-import ZoomControl from '../../ui/ZoomControl';
-import DrawControl from '../../draw-control/DrawControlContainer';
-import Attribution from '../../ui/Attribution';
-import Loader from '../../ui/Loader';
+import LocateUser from '../../components/ui/LocateUser';
+import ZoomControl from '../../components/ui/ZoomControl';
+import DrawControl from '../../components/draw-control/DrawControlContainer';
+import Attribution from '../../components/ui/Attribution';
+import Loader from '../../components/ui/Loader';
 import { FormattedMessage, injectIntl } from 'react-intl';
-import CountrySearch from '../../country-search/CountrySearchContainer';
-import LayersSelector from '../../layers-selector/LayersSelectorContainer';
+import CountrySearch from '../../components/country-search/CountrySearchContainer';
+import LayersSelector from '../../components/layers-selector/LayersSelectorContainer';
 
 class AreasManage extends React.Component {
 

@@ -1,8 +1,8 @@
 import { connect } from 'react-redux';
 import Settings from './Settings';
-import { getTeam, setEditing } from '../../../modules/teams';
-import { getLayers, getGFWLayers } from '../../../modules/layers';
-import { includes, filterEmpty } from '../../../helpers/utils';
+import { getTeam, setEditing } from '../../modules/teams';
+import { getLayers, getGFWLayers } from '../../modules/layers';
+import { includes, filterEmpty } from '../../helpers/utils';
 
 
 const mapStateToProps = ({ user, teams, areas, layers }) => {
@@ -18,15 +18,15 @@ const mapStateToProps = ({ user, teams, areas, layers }) => {
   areasIds = filterEmpty(areasIds);
   const selectedLayers = layers.selectedLayerIds.map((id) => layers.selectedLayers[id]);
   const publicLayers = selectedLayers.filter((selectedLayer) => selectedLayer.attributes && selectedLayer.attributes.isPublic);
-  const teamLayers = selectedLayers.filter((selectedLayer) => 
+  const teamLayers = selectedLayers.filter((selectedLayer) =>
       selectedLayer.attributes && !selectedLayer.attributes.isPublic && selectedLayer.attributes.owner.type === 'TEAM'
     )
-  const userLayers = selectedLayers.filter((selectedLayer) => 
+  const userLayers = selectedLayers.filter((selectedLayer) =>
     selectedLayer.attributes && !selectedLayer.attributes.isPublic && selectedLayer.attributes.owner.type === 'USER'
   );
 
   const areasOfInterest = areasIds.map((areaId) => areas.data[areaId]);
-    return { 
+    return {
       team,
       isManager,
       editing: teams.editing,

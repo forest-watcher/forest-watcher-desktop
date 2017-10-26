@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { saveAreaWithGeostore, setSaving, setLoading } from '../../../modules/areas';
+import { saveAreaWithGeostore, setSaving, setLoading } from '../../modules/areas';
 
 import AreasManage from './AreasManage';
 

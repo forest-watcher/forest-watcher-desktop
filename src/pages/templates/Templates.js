@@ -1,17 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import Hero from '../../layouts/Hero';
-import Article from '../../layouts/Article';
+import Hero from '../../components/layouts/Hero';
+import Article from '../../components/layouts/Article';
 import ReactTable from 'react-table'
 import 'react-select/dist/react-select.css';
 import { FormattedMessage } from 'react-intl';
 import TemplatesFilters from './TemplatesFiltersContainer';
-import Loader from '../../ui/Loader';
+import Loader from '../../components/ui/Loader';
 import { injectIntl } from 'react-intl';
 import { Link } from 'react-router-dom';
 import qs from 'query-string';
-import { TABLE_PAGE_SIZE } from '../../../constants/global';
+import { TABLE_PAGE_SIZE } from '../../constants/global';
 
 
 class Templates extends React.Component {
@@ -47,7 +47,7 @@ class Templates extends React.Component {
     },{
       Header: <FormattedMessage id="reports.areaOfInterest" />,
       accessor: 'aoiName'
-    },{  
+    },{
       Header: <FormattedMessage id="templates.defaultLanguage" />,
       accessor: 'defaultLanguageName'
     },{

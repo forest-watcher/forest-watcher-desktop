@@ -1,5 +1,5 @@
 import React from 'react';
-import { SOCIAL_FOOTER_SCRIPT } from '../../../constants/landing';
+import { SOCIAL_FOOTER_SCRIPT } from '../../constants/landing';
 
 class SocialFooter extends React.Component {
   componentDidMount(){

@@ -17,14 +17,14 @@ import ReactGA from 'react-ga';
 addLocaleData([...en, ...es, ...fr, ...id, ...pt]);
 
 // Pages
-import Login from '../pages/login/Login';
-import Areas from '../pages/areas/AreasContainer';
-import AreasManage from '../pages/areas-manage/AreasManageContainer';
-import Templates from '../pages/templates/TemplatesContainer';
-import TemplatesManage from '../pages/templates-manage/TemplatesManageContainer';
-import Settings from '../pages/settings/SettingsContainer';
-import Reports from '../pages/reports/ReportsContainer';
-import Landing from '../pages/landing/LandingContainer';
+import Login from '../../pages/login/Login';
+import Areas from '../../pages/areas/AreasContainer';
+import AreasManage from '../../pages/areas-manage/AreasManageContainer';
+import Templates from '../../pages/templates/TemplatesContainer';
+import TemplatesManage from '../../pages/templates-manage/TemplatesManageContainer';
+import Settings from '../../pages/settings/SettingsContainer';
+import Reports from '../../pages/reports/ReportsContainer';
+import Landing from '../../pages/landing/LandingContainer';
 
 import 'react-redux-toastr/lib/css/react-redux-toastr.min.css';
 

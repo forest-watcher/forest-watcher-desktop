@@ -1,11 +1,11 @@
 import { connect } from 'react-redux';
 import moment from 'moment'
-import { getReports, downloadAnswers } from '../../../modules/reports';
+import { getReports, downloadAnswers } from '../../modules/reports';
 
-import { DEFAULT_FORMAT, DEFAULT_LANGUAGE } from '../../../constants/global';
+import { DEFAULT_FORMAT, DEFAULT_LANGUAGE } from '../../constants/global';
 import qs from 'query-string';
 import Reports from './Reports';
-import { filterData, getDataAreas } from '../../../helpers/filters';
+import { filterData, getDataAreas } from '../../helpers/filters';
 
 const getLatLng = coords => coords
   .map(coord => parseFloat(coord).toFixed(5).toString())
