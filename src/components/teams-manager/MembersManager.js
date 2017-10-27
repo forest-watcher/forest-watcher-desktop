@@ -1,5 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import startCase from 'lodash/startCase';
+import capitalize from 'lodash/capitalize';
 import MemberList from './MemberList';
 import { includes, validateEmail } from '../../helpers/utils';
 import { FormattedMessage, injectIntl } from 'react-intl';
@@ -7,8 +9,8 @@ import { toastr } from 'react-redux-toastr';
 import { MANAGER, USER, CONFIRMED_USER } from '../../constants/global';
 
 class MembersManager extends React.Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       emailToSearch: ''
     }
@@ -34,31 +36,22 @@ class MembersManager extends React.Component {
     }
   }
 
-  getPropName(role){
-    let propName = null;
-    switch (role) {
-      case MANAGER:
-        propName = 'selectedManagers';
-        break;
-      case USER:
-        propName = 'selectedUsers';
-        break;
-      case CONFIRMED_USER:
-        propName = 'selectedConfirmedUsers';
-        break;
-      default:
-        break;
-    }
-    return propName;
+  formatRole(role) {
+    const formatted = startCase(role)
+      .split(' ')
+      .map(w => capitalize(w))
+      .join('');
+    return `selected${formatted}s`
   }
 
   deleteMember = (deletedMember, role) => {
-    const updatedMembers = this.props[this.getPropName(role)].filter(member => member !== deletedMember);
+    const selected = this.props[this.formatRole(role)];
+    const updatedMembers = selected.filter(member => member.id !== deletedMember);
     this.props.updateSelectedMembers(updatedMembers, role);
   }
 
   addMember = (member, role) => {
-    const updatedMembers = this.props[this.getPropName(role)];
+    const updatedMembers = this.props[this.formatRole(role)];
     updatedMembers.push(member);
     this.props.updateSelectedMembers(updatedMembers, role);
   }
@@ -106,7 +99,7 @@ class MembersManager extends React.Component {
           <MemberList
             members={this.getMembers()}
             handleChangeRole={this.handleChangeRole}
-            deleteMember={this.deleteMember}
+            deleteMember={(...rest) => this.deleteMember(...rest)}
           />
           <span className="members-tip">
             *members must have a

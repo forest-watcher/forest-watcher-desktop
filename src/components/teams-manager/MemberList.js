@@ -8,11 +8,11 @@ import { MANAGER } from '../../constants/global';
 function MemberList({ members, handleChangeRole, deleteMember, intl }) {
   return (
     <div className="c-member-list">
-      { members.map((member, index) => {
+      { members.map((member, k) => {
         const { email, id, memberType } = member;
         const hiddenButton = memberType === MANAGER ? 'hidden' : '';
         return (
-          <div key={`${memberType}${id}`} className="horizontal-field-left-aligned">
+          <div key={`${memberType}${id}${k}`} className="horizontal-field-left-aligned">
             <div className="user-label">{ email || id }</div>
             <div className={hiddenButton}>
               <button className={"delete-button"} type="button" onClick={() => deleteMember(id, memberType)}>
