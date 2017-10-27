@@ -30,19 +30,19 @@ function TeamsShow({ team, areas }) {
           <h3><FormattedMessage id={"teams.members"} /></h3>
         </div>
         <div className="c-member-list">
-          {team && team.attributes.managers && team.attributes.managers.map((manager) =>  (
-            <div className="horizontal-field-left-aligned" key={manager.id}>
+          {team && team.attributes.managers && team.attributes.managers.map((manager, key) =>  (
+            <div className="horizontal-field-left-aligned" key={manager.id + key}>
               <div>{ manager.email || manager.id }</div>
               <div className="admin-selected"><FormattedMessage id={"teams.admin"} /></div>
             </div>
             ))}
-          {team && team.attributes.confirmedUsers && team.attributes.confirmedUsers.map((confirmedUser) =>  (
-            <div className="horizontal-field-left-aligned" key={confirmedUser.id}>
+          {team && team.attributes.confirmedUsers && team.attributes.confirmedUsers.map((confirmedUser, key) =>  (
+            <div className="horizontal-field-left-aligned" key={confirmedUser.id + key}>
               { confirmedUser.email || confirmedUser.id }
             </div>
             ))}
-          {team && team.attributes.users && team.attributes.users.map((user) =>  (
-            <div className="horizontal-field-left-aligned" key={user}>
+          {team && team.attributes.users && team.attributes.users.map((user, key) =>  (
+            <div className="horizontal-field-left-aligned" key={user + key}>
               { user }
             </div>
             ))}

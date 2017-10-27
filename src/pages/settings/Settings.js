@@ -46,8 +46,9 @@ class Settings extends React.Component {
     } = this.props;
 
     const renderHero = () => {
-      const action = (isManager && !editing) ? {name: "common.edit", callback: () => this.props.setEditing(true)} : null;
-      const tabStyle = !(isManager && !editing) ? "-no-action" : "";
+      const canEdit = !editing && (isManager || this.state.tabIndex === 1);
+      const action = (canEdit) ? {name: "common.edit", callback: () => this.props.setEditing(true)} : null;
+      const tabStyle = !(canEdit) ? "-no-action" : "";
       return (
         <Hero
           title={"settings.name"}
