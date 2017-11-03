@@ -1,4 +1,13 @@
 .c-landing {
+
+  .landing-locale-container {
+    position: absolute;
+    top: 0;
+    right: 45px;
+    height: 35px;
+    z-index: 1001;
+  }
+
   .landing-content {
     min-height: 0;
     align-items: flex-end;

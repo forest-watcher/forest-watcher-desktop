@@ -108,7 +108,16 @@ class App extends React.Component {
           </header>}
           <main role="main" className="l-main">
             <Switch>
-              <Route exact path="/" component={Landing} />
+              <Route
+                exact
+                path="/"
+                render={() => (
+                  <Landing
+                  locale={locale}
+                  setLocale={setLocale}
+                  translations={translations} />
+                )}
+              />
               <Route path={`${match.url}login`} render={this.getLoginComponent} />
               {user.loggedIn ?
                 <Switch>

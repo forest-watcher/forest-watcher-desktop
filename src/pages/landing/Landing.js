@@ -1,10 +1,26 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import { Link } from 'react-router-dom';
 import { LIVE_SETTINGS, GFW_ASSETS_PATH } from '../../constants/landing';
 import SocialFooter from './SocialFooter';
+import Select from 'react-select';
 
 class Landing extends React.Component {
+
+  static propTypes = {
+    locale: PropTypes.string,
+    setLocale: PropTypes.func,
+    translations: PropTypes.array
+  };
+
+  constructor(props) {
+    super(props);
+    this.handleLanguageChange = this.handleLanguageChange.bind(this);
+    this.languages = props.translations && Object.keys(props.translations).map((lang) => (
+      { value: lang, label: lang.toUpperCase() }
+    ));
+  }
 
   componentDidMount() {
     this.script = document.createElement('script');
@@ -37,9 +53,25 @@ class Landing extends React.Component {
     window.location = 'https://play.google.com/store/apps/details?id=com.forestwatcher';
   }
 
+  handleLanguageChange(e) {
+    this.props.setLocale(e.value);
+  }
+
   render() {
     return (
       <div className="c-landing">
+        <div className="landing-locale-container">
+        <Select
+          name="locale-select"
+          className="c-select -dark"
+          value={this.props.locale}
+          options={this.languages}
+          onChange={this.handleLanguageChange}
+          clearable={false}
+          searchable={false}
+          arrowRenderer={() => <svg className="c-icon -x-small -gray"><use xlinkHref="#icon-arrow-down"></use></svg>}
+        />
+        </div>
         <div id="headerGfw"></div>
         <div className="row landing-content">
           <div className="column align-middle small-12 medium-12 large-6 info-column gwf-grid-adjusted">
@@ -63,16 +95,16 @@ class Landing extends React.Component {
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  Read more about Forest Watcher
+                  <FormattedMessage id="app.readMoreLink" />
                 </a>
-                and
+                <FormattedMessage id="app.and" />
                 <a
                   className="text -green"
                   target="_blank"
                   rel="noopener noreferrer"
                   href="http://www.globalforestwatch.org/howto/tags/forest-watcher/"
                 >
-                  learn how to use it.
+                  <FormattedMessage id="app.learnHowToLink" />
                 </a>
               </div>
             </div>

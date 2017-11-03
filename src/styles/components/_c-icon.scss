@@ -8,6 +8,7 @@
   &.-x-small {
     width: 16px;
     height: 10px;
+    margin-left: 15px;
   }
 
   &.-small {
@@ -37,7 +38,7 @@
   &.-gray {
     fill: $dark-gray;
   }
-  
+
   &.-theme-gray {
     fill: $theme-text;
   }
