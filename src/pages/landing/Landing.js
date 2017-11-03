@@ -60,19 +60,23 @@ class Landing extends React.Component {
   render() {
     return (
       <div className="c-landing">
-        <div className="landing-locale-container">
-        <Select
-          name="locale-select"
-          className="c-select -dark"
-          value={this.props.locale}
-          options={this.languages}
-          onChange={this.handleLanguageChange}
-          clearable={false}
-          searchable={false}
-          arrowRenderer={() => <svg className="c-icon -x-small -gray"><use xlinkHref="#icon-arrow-down"></use></svg>}
-        />
+        <div className="landing-nav">
+          <div className="locale-container">
+            <div className="locale-select-container">
+              <Select
+                name="locale-select"
+                className="c-select"
+                value={this.props.locale}
+                options={this.languages}
+                onChange={this.handleLanguageChange}
+                clearable={false}
+                searchable={false}
+                arrowRenderer={() => <svg className="c-icon -x-small -gray"><use xlinkHref="#icon-arrow-down"></use></svg>}
+              />
+            </div>
+          </div>
+          <div id="headerGfw"></div>
         </div>
-        <div id="headerGfw"></div>
         <div className="row landing-content">
           <div className="column align-middle small-12 medium-12 large-6 info-column gwf-grid-adjusted">
             <div className="main">
