@@ -1,10 +1,18 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import Icon from '../ui/Icon';
 import { FormattedMessage } from 'react-intl';
+import Icon from '../ui/Icon';
 
 class LayersShow extends React.Component {
+
+  getLayerName(name) {
+    if (name.match(/^layers\./) !== null) {
+      return (<FormattedMessage id={name}/>)
+    }
+    return name;
+  }
+
   render() {
     const { publicLayers, teamLayers, userLayers, isManager } = this.props;
     const renderLayers = (layerType, layers) => (
@@ -14,7 +22,7 @@ class LayersShow extends React.Component {
         </div>
         { layers.map((layer, i) => (
           <div key={i} className="list-row">
-            <div className="layer-name">{ layer.attributes.name }</div>
+            <div className="layer-name">{this.getLayerName(layer.attributes.name)}</div>
             { layer.attributes.enabled && <Icon className="-small -green" name="icon-checkmark"/> }
           </div>
           ))
@@ -37,7 +45,7 @@ class LayersShow extends React.Component {
             </div>
           </div>
         </div>
-      </div> 
+      </div>
     );
   }
 }

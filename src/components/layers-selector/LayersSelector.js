@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { injectIntl } from 'react-intl';
+import { injectIntl, FormattedMessage } from 'react-intl';
 import Select from 'react-select';
 import L from 'leaflet';
 
@@ -20,6 +20,13 @@ class LayersSelector extends React.Component {
     }
   }
 
+  getLayerName(name) {
+    if (name.match(/^layers\./) !== null) {
+      return (<FormattedMessage id={name}/>)
+    }
+    return name;
+  }
+
   onChange = (selected) => {
     if (this.state.mapLayer) this.props.map.removeLayer(this.state.mapLayer);
     if (selected) {
@@ -32,16 +39,17 @@ class LayersSelector extends React.Component {
   };
 
   render() {
-    const { layersOptions } = this.props;
+    const { layersOptions, intl } = this.props;
+    const options = layersOptions.map(option => ({ ...option, label: this.getLayerName(option.label) }));
     return (
       <div className="c-layers-selector">
         <Select
           name="layers-select"
           className="c-select -map"
-          options={layersOptions}
+          options={options}
           value={this.state.layerOption}
           onChange={this.onChange}
-          placeholder={this.props.intl.formatMessage({ id: 'areas.layersPlaceholder' })}
+          placeholder={intl.formatMessage({ id: 'areas.layersPlaceholder' })}
           searchable={false}
           clearable={true}
           arrowRenderer={() => <svg className="c-icon -x-small -gray"><use xlinkHref="#icon-arrow-down"></use></svg>}

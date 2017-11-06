@@ -159,5 +159,12 @@
     "customLayers.step2": "Trouvez l'URL de partage pour votre couche dans votre service de tuiles.",
     "customLayers.step3": "You will need to format it slightly to allow us to query the layer. Add /{z}/{x}/{y} to the end of your URL, and optionally add the extension (usually .png or .jpg). We accept most image formats. It should look like this:",
     "customLayers.step3.1": "http://maps.protectedplanet.net/blue/{z}/{x}/{y}",
-    "customLayers.step4": "Complétez la case de l'URL. N'oubliez pas de donner un titre à votre couche : la description est facultative. "
+    "customLayers.step4": "Complétez la case de l'URL. N'oubliez pas de donner un titre à votre couche : la description est facultative. ",
+    "layers.protectedAreas": "Protected Areas",
+    "layers.treeCoverLoss2014": "Tree Cover Loss (2014)",
+    "layers.treeCoverLoss2015": "Tree Cover Loss (2015)",
+    "layers.oilPalm": "Oil Palm",
+    "layers.mangedForests": "Managed Forests",
+    "layers.woodFiber": "Wood Fiber",
+    "layers.mining": "Mining"
 }

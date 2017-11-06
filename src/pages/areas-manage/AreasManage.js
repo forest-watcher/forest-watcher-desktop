@@ -190,7 +190,7 @@ class AreasManage extends React.Component {
                     />
                 </div>
               </div>
-              <Button className="c-button" disabled={this.props.saving || (this.props.editing ? true : false) || this.props.loading}><FormattedMessage id="forms.save" /></Button>
+              <Button className="c-button" disabled={this.props.saving || (!!this.props.editing) || this.props.loading}><FormattedMessage id="forms.save" /></Button>
             </div>
           </div>
         </Form>

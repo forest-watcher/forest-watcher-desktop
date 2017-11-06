@@ -11,25 +11,26 @@ class LayersSwitcher extends React.Component {
     this.props.toggleLayer(layer, !layer.attributes.enabled);
   }
 
+  getLayerName(name) {
+    if (name.match(/^layers\./) !== null) {
+      return (<FormattedMessage id={name}/>)
+    }
+    return name;
+  }
+
   render() {
     const { publicLayers, teamLayers, userLayers, deleteLayer, isManager } = this.props;
-    
+
     const switchRow = (layer, i) => (
       <div className="list-row">
         <div className="layer-name">
-          {/* <Switch
-            name={`${layer.attributes.owner.type}-layer-${i}-${layer.id}`} 
-            labelRight={layer.attributes.name} 
-            onChange={() => this.toggleLayer(layer)}
-            defaultChecked={layer.attributes.enabled}
-          /> */}
           <Switch
             className="c-switcher"
             onClick={() => this.toggleLayer(layer)}
             on={layer.attributes.enabled}
             enabled={true}
           />
-          <label>{layer.attributes.name}</label>
+          <label>{this.getLayerName(layer.attributes.name)}</label>
         </div>
         <button className={"delete-button"} type="button" onClick={() => deleteLayer(layer)}>
           <Icon name="icon-delete" className="-small " />
@@ -50,7 +51,7 @@ class LayersSwitcher extends React.Component {
               :
                 <div className="list-row">
                   <div className="layer-name">
-                    <div> {layer.attributes.name} </div>
+                    <div> {this.getLayerName(layer.attributes.name)} </div>
                   </div>
                 </div>
             }
@@ -70,7 +71,7 @@ class LayersSwitcher extends React.Component {
           { renderLayers('team', teamLayers) }
           { renderLayers('user', userLayers) }
         </div>
-      </div> 
+      </div>
     );
   }
 }
