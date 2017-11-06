@@ -42,6 +42,13 @@ class LayersForm extends React.Component {
     return name;
   }
 
+  backwardsCompatLayerTitle(name) {
+    if (name.match(/^layers\./) !== null) {
+      return name.split('layers.')[1];
+    }
+    return name;
+  }
+
   handleTabIndexChange = (tabIndex) => {
     this.setState({ tabIndex });
   }
@@ -71,7 +78,7 @@ class LayersForm extends React.Component {
   }
 
   alreadyExist = (GFWLayer, teamId, userLayerNames, teamLayerNames) => {
-    return ((teamId && includes(teamLayerNames, this.getLayerName(GFWLayer.title))) || (!teamId && includes(userLayerNames, this.getLayerName(GFWLayer.title))));
+    return ((teamId && includes(teamLayerNames, this.backwardsCompatLayerTitle(GFWLayer.title))) || (!teamId && includes(userLayerNames, this.backwardsCompatLayerTitle(GFWLayer.title))));
   }
 
   addLayers = (e) => {
