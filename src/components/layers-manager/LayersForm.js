@@ -71,7 +71,7 @@ class LayersForm extends React.Component {
   }
 
   alreadyExist = (GFWLayer, teamId, userLayerNames, teamLayerNames) => {
-    return ((teamId && includes(teamLayerNames, GFWLayer.title)) || (!teamId && includes(userLayerNames, GFWLayer.title)));
+    return ((teamId && includes(teamLayerNames, this.getLayerName(GFWLayer.title))) || (!teamId && includes(userLayerNames, this.getLayerName(GFWLayer.title))));
   }
 
   addLayers = (e) => {
