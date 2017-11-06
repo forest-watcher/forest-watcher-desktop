@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import capitalize from 'lodash/capitalize';
 import { FormattedMessage } from 'react-intl';
 import { Form } from '../form/Form';
 import Tab from '../ui/Tab';
@@ -34,6 +33,13 @@ class LayersForm extends React.Component {
         GFWLayers: nextProps.GFWLayers
       })
     }
+  }
+
+  getLayerName(name) {
+    if (name.match(/^layers\./) !== null) {
+      return (<FormattedMessage id={name}/>)
+    }
+    return name;
   }
 
   handleTabIndexChange = (tabIndex) => {
@@ -138,7 +144,7 @@ class LayersForm extends React.Component {
                   classNames="-spaced"
                   key={`${i}${GFWlayer.cartodb_id}`}
                   id={`${i}${GFWlayer.cartodb_id}`}
-                  label={capitalize(GFWlayer.title)}
+                  label={this.getLayerName(GFWlayer.title)}
                   callback={() => this.toggleGFWLayer(GFWlayer)}
                   checked={ GFWlayer.enabled || false }
                 /> )
