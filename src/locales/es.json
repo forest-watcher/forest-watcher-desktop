@@ -164,7 +164,7 @@
     "layers.treeCoverLoss2014": "Tree Cover Loss (2014)",
     "layers.treeCoverLoss2015": "Tree Cover Loss (2015)",
     "layers.oilPalm": "Oil Palm",
-    "layers.mangedForests": "Managed Forests",
+    "layers.managedForests": "Managed Forests",
     "layers.woodFiber": "Wood Fiber",
     "layers.mining": "Mining"
 }
