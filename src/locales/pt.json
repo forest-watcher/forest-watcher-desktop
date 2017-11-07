@@ -160,11 +160,11 @@
     "customLayers.step3": "You will need to format it slightly to allow us to query the layer. Add /{z}/{x}/{y} to the end of your URL, and optionally add the extension (usually .png or .jpg). We accept most image formats. It should look like this:",
     "customLayers.step3.1": "http://maps.protectedplanet.net/blue/{z}/{x}/{y}",
     "customLayers.step4": "Preencha a célula do URL. Não se esqueça de dar um título à sua camada: a descrição é opcional.",
-    "layers.protectedAreas": "Protected Areas",
-    "layers.treeCoverLoss2014": "Tree Cover Loss (2014)",
-    "layers.treeCoverLoss2015": "Tree Cover Loss (2015)",
-    "layers.oilPalm": "Oil Palm",
-    "layers.managedForests": "Managed Forests",
-    "layers.woodFiber": "Wood Fiber",
-    "layers.mining": "Mining"
+    "layers.protectedAreas": "Áreas protegidas",
+    "layers.treeCoverLoss2014": "Área desflorestada (2014)",
+    "layers.treeCoverLoss2015": "Área desflorestada (2015)",
+    "layers.oilPalm": "Óleo de palma",
+    "layers.managedForests": "Concessões florestais",
+    "layers.woodFiber": "Fibra de madeira",
+    "layers.mining": "Zona de minas"
 }
