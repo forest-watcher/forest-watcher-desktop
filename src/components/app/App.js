@@ -39,6 +39,7 @@ class App extends React.Component {
 
   componentDidMount() {
     this.checkConfirmedUser(this.props);
+    this.fireTracking(this.props.location);
   }
 
   componentWillReceiveProps(nextProps) {

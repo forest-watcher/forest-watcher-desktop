@@ -11,7 +11,7 @@ class Landing extends React.Component {
   static propTypes = {
     locale: PropTypes.string,
     setLocale: PropTypes.func,
-    translations: PropTypes.array
+    translations: PropTypes.object
   };
 
   constructor(props) {
