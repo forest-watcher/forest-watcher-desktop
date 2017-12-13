@@ -19,8 +19,11 @@
       }
 
       @media (min-width: 1171px) {
-        position: absolute;
-        width: 385px;
+        right: 235px;
+      }
+
+      @media (min-width: 1691px) {
+        right: 445px;
       }
 
       .locale-select-container {
