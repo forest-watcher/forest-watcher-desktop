@@ -2,9 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import { Link } from 'react-router-dom';
-import { LIVE_SETTINGS, GFW_ASSETS_PATH } from '../../constants/landing';
+import { GFW_ASSETS_PATH } from '../../constants/landing';
 import SocialFooter from './SocialFooter';
 import Select from 'react-select';
+import Script from 'react-load-script'
 
 class Landing extends React.Component {
 
@@ -20,30 +21,31 @@ class Landing extends React.Component {
     this.languages = props.translations && Object.keys(props.translations).map((lang) => (
       { value: lang, label: lang.toUpperCase() }
     ));
+    this.state = {
+      gfwBarLoaded: false
+    };
   }
 
-  componentDidMount() {
-    this.script = document.createElement('script');
-    this.script.type = 'text/javascript';
-    this.script.async = true;
-    this.script.innerHTML = LIVE_SETTINGS;
-
-    document.head.appendChild(this.script);
-
-    this.scriptLoader = document.createElement('script');
-    this.scriptLoader.type = 'text/javascript';
-    this.scriptLoader.async = true;
-    this.scriptLoader.id = 'loader-gfw';
-    this.scriptLoader.src = GFW_ASSETS_PATH;
-
-    document.head.appendChild(this.scriptLoader);
+  componentDidMount(){
+    this.uglyHackToSetGFWBar(true);
   }
 
   componentWillUnmount(){
-    document.head.removeChild(this.script);
-    document.head.removeChild(this.scriptLoader);
+    this.uglyHackToSetGFWBar(false);
     window._babelPolyfill = false;
   }
+
+  uglyHackToSetGFWBar(open) {
+    this.header = document.getElementById('headerGfw');
+    if (this.header) {
+      if (open) {
+        this.header.style = 'height: auto; visibility: visible;';
+      } else {
+        this.header.style = `height: 0px; visibility: hidden;`;
+      }
+    }
+  }
+
 
   handleIosLink() {
     window.location = 'https://itunes.apple.com/us/app/forest-watcher/id1277787116';
@@ -61,7 +63,7 @@ class Landing extends React.Component {
     return (
       <div className="c-landing">
         <div className="landing-nav">
-          <div className="locale-container">
+          {this.state.gfwBarLoaded && <div className="locale-container">
             <div className="locale-select-container">
               <Select
                 name="locale-select"
@@ -74,8 +76,12 @@ class Landing extends React.Component {
                 arrowRenderer={() => <svg className="c-icon -x-small -gray"><use xlinkHref="#icon-arrow-down"></use></svg>}
               />
             </div>
-          </div>
-          <div id="headerGfw"></div>
+          </div>}
+          <div id="loader-gfw" />
+          <Script
+            url={GFW_ASSETS_PATH}
+            onLoad={() => {this.setState({gfwBarLoaded: true })}}
+          />
         </div>
         <div className="row landing-content">
           <div className="column align-middle small-12 medium-12 large-6 info-column gwf-grid-adjusted">
