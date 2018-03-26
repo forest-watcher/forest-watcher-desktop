@@ -5,7 +5,7 @@
 
 Desktop app for managing your [forest watcher](http://forestwatcher.globalforestwatch.org) data.
 
-- [Documentation](https://vizzuality.gitbooks.io/forest-watcher-desktop/content/)
+- [Documentation](https://vizzuality.gitbooks.io/forest-watcher/content/desktop/introduction.html)
 - [Read more](http://vizzuality.com/projects/forest-watcher)
 
 ## License
