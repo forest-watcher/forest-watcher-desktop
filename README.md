@@ -1,27 +1,14 @@
-# Forest Watcher Desktop
+<p align="center"><img src="fw-logo.png" height=92></p>
+<h1 align="center">Forest Watcher Desktop</h1>
+<br>
+<br>
 
-Desktop application for viewing your
-[forest watcher](http://forestwatcher.globalforestwatch.org) data.
+Desktop app for managing your [forest watcher](http://forestwatcher.globalforestwatch.org) data.
 
+- [Documentation](https://vizzuality.gitbooks.io/forest-watcher-desktop/content/)
+- [Read more](http://vizzuality.com/projects/forest-watcher)
 
-## Set up:
+## License
+MIT License
 
-1. Add a `.env` file with the following variables:
-
-```
-REACT_APP_API_AUTH=https://production-api.globalforestwatch.org
-REACT_APP_API_AUTH_CALLBACK_URL=http://localhost:3000/areas
-REACT_APP_API_MAPBOX_TOKEN=
-REACT_APP_CARTO=
-REACT_APP_CARTO_COUNTRIES=
-REACT_APP_CARTO_TABLE=
-REACT_APP_GA_UA=
-TRANSIFEX_API_TOKEN=
-TRANSIFEX_PROJECT=
-TRANSIFEX_SLUG=
-TRANSIFEX_URL=https://www.transifex.com/api/2/project
-LOCALES_PATH=src/locales
-```
-
-2. Run `npm install`
-3. Run `npm start`
+Copyright (c) 2017 Vizzuality
