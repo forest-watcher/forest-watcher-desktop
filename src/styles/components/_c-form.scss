@@ -13,7 +13,7 @@
     outline: none;
   }
 
-  label {
+  label:not(.c-button) {
     padding-right: 15px;
   }
 
@@ -69,6 +69,21 @@
 
     &[type='checkbox'] {
       height: 0px !important;
+    }
+
+    &[type='file'] {
+      height: auto;
+      background-color: transparent;
+      border: none;
+    }
+
+    &.file-hidden {
+      width: 0.1px;
+      height: 0.1px;
+      opacity: 0;
+      overflow: hidden;
+      position: absolute;
+      z-index: -1;
     }
   }
 

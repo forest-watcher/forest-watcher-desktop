@@ -29,6 +29,7 @@
     "areas.addArea": "ajouter une zone",
     "areas.createArea": "Créer une zone",
     "areas.manageArea": "Gérer la zone",
+    "areas.uploadShapefile": "Télécharger shapefile",
     "areas.cancel": "annuler",
     "areas.save": "sauvegarder",
     "areas.upload": "mettre une zone en ligne",
