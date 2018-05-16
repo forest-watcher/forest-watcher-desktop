@@ -15,14 +15,14 @@
   }
 
   .area-detail {
-    padding: 0 20px;
+    padding: 0;
   }
 
   .area-title {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    align-items: flex-start;
+    align-items: center;
     border-bottom: solid 1px #d8d8d8;
     padding-bottom: 20px;
     margin-bottom: 20px;
@@ -30,6 +30,21 @@
     .text {
       padding-right: 15px;
       word-break: break-word;
+    }
+  }
+
+  .area-actions {
+    display: flex;
+
+    > .c-button {
+      margin: 0 5px;
+
+      &:first-child {
+        margin-left: 0;
+      }
+      &:last-child {
+        margin-right: 0;
+      }
     }
   }
 }

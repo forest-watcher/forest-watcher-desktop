@@ -99,6 +99,23 @@ export function getArea(id) {
   };
 }
 
+export function deleteArea(areaId) {
+  return (dispatch, state) => {
+    fetch(`${API_BASE_URL}/area/${areaId}`, {
+      headers: {
+        Authorization: `Bearer ${state().user.token}`
+      },
+      method: 'DELETE'
+    })
+      .then(() => {
+        dispatch(getAreas());
+      })
+      .catch((error) => {
+        console.warn(error);
+      });
+  };
+}
+
 export function getAreas() {
   const url = `${API_BASE_URL}/area/fw`;
   return (dispatch, state) => {

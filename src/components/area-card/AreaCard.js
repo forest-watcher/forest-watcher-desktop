@@ -6,6 +6,11 @@ import { FormattedMessage } from 'react-intl';
 
 class AreaCard extends React.Component {
 
+  handleAreaDelete = () => {
+    const { area, deleteArea } = this.props;
+    deleteArea(area.id);
+  }
+
   render() {
     const { area, templates, user } = this.props;
     return (
@@ -15,11 +20,16 @@ class AreaCard extends React.Component {
           <div className="area-detail">
             <div className="area-title">
               <figcaption className="text -small-title">{area.name}</figcaption>
-              { user.id === area.userId &&
-                <Link className="c-button -circle -transparent" to={`/areas/${area.id}`}>
-                  <Icon className="-small -gray" name="icon-edit"/>
-                </Link>
-              }
+              <div className="area-actions">
+                { user.id === area.userId &&
+                  <Link className="c-button -circle -transparent" to={`/areas/${area.id}`}>
+                    <Icon className="-small -gray" name="icon-edit"/>
+                  </Link>
+                }
+                <button className="c-button -circle -transparent" onClick={this.handleAreaDelete}>
+                  <Icon className="-small -gray" name="icon-delete" />
+                </button>
+              </div>
             </div>
             <Link className="text -x-small-title -green" to={`/reports/${templates.ids[0] || null}?aoi=${area.id || null}`}><FormattedMessage id="areas.reportsBtn" /></Link>
           </div>
@@ -30,7 +40,8 @@ class AreaCard extends React.Component {
 }
 
 AreaCard.propTypes = {
-  area: PropTypes.object.isRequired
+  area: PropTypes.object.isRequired,
+  deleteArea: PropTypes.func.isRequired
 };
 
 export default AreaCard;
