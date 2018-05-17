@@ -4,6 +4,7 @@ import { BLOB_CONFIG } from '../constants/map';
 import { saveGeostore } from './geostores';
 import domtoimage from 'dom-to-image';
 import { toastr } from 'react-redux-toastr';
+import omit from 'lodash/omit';
 
 // Actions
 const SET_AREA = 'areas/SET_AREA';
@@ -12,6 +13,7 @@ const SET_COUNTRIES = 'areas/SET_COUNTRIES';
 const SET_LOADING_AREAS = 'areas/SET_LOADING_AREAS';
 const SET_SAVING_AREA = 'areas/SET_SAVING_AREA';
 const SET_EDITING_AREA = 'areas/SET_EDITING_AREA';
+const SET_AREA_DELETED = 'areas/SET_AREA_DELETED';
 
 // Reducer
 const initialState = {
@@ -45,6 +47,12 @@ export default function reducer(state = initialState, action) {
       const { area: areas } = action.payload;
       if (areas) return Object.assign({}, state, { ids: Object.keys(areas), data: areas });
       return state;
+    }
+    case SET_AREA_DELETED: {
+      const areaId = action.payload;
+      const ids = state.ids.filter(id => id !== areaId);
+      const data = omit(state.data, areaId);
+      return { ...state, ids, data };
     }
     case SET_COUNTRIES:
       return Object.assign({}, state, { countries: action.payload });
@@ -108,7 +116,10 @@ export function deleteArea(areaId) {
       method: 'DELETE'
     })
       .then(() => {
-        dispatch(getAreas());
+        dispatch({
+          type: SET_AREA_DELETED,
+          payload: areaId
+        });
       })
       .catch((error) => {
         console.warn(error);

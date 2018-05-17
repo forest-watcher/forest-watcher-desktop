@@ -20,16 +20,16 @@ class AreaCard extends React.Component {
           <div className="area-detail">
             <div className="area-title">
               <figcaption className="text -small-title">{area.name}</figcaption>
-              <div className="area-actions">
-                { user.id === area.userId &&
+              { user.id === area.userId &&
+                <div className="area-actions">
                   <Link className="c-button -circle -transparent" to={`/areas/${area.id}`}>
                     <Icon className="-small -gray" name="icon-edit"/>
                   </Link>
-                }
-                <button className="c-button -circle -transparent" onClick={this.handleAreaDelete}>
-                  <Icon className="-small -gray" name="icon-delete" />
-                </button>
-              </div>
+                  <button className="c-button -circle -transparent" onClick={this.handleAreaDelete}>
+                    <Icon className="-small -gray" name="icon-delete" />
+                  </button>
+                </div>
+              }
             </div>
             <Link className="text -x-small-title -green" to={`/reports/${templates.ids[0] || null}?aoi=${area.id || null}`}><FormattedMessage id="areas.reportsBtn" /></Link>
           </div>
