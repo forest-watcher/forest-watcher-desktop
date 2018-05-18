@@ -136,13 +136,16 @@ export function getGeoFromShape(shapefile) {
       method: 'POST',
       body
     })
-    .then((response) => {
-      if (response.ok) return response.json();
-      throw Error(response.statusText);
-    })
-    .then((data) => {
-      const geojson = data && data.data && data.data.attributes;
-      return geojson;
-    })
+      .then((response) => {
+        if (response.ok) return response.json();
+        throw Error(response.statusText);
+      })
+      .then((data) => {
+        const geojson = data && data.data && data.data.attributes;
+        return geojson;
+      })
+      .catch(() => {
+        toastr.error('Unable to load shapefile');
+      });
   };
 }

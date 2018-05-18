@@ -202,6 +202,7 @@ class AreasManage extends React.Component {
                   id="shapefile"
                   name="shapefile"
                   className="file-hidden"
+                  accept=".zip"
                   onChange={this.onShapefileChange}
                 />
               </div>
