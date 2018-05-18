@@ -1,5 +1,6 @@
 import { connect } from 'react-redux';
 import { saveAreaWithGeostore, setSaving, setLoading } from '../../modules/areas';
+import { getGeoFromShape } from '../../modules/geostores';
 
 import AreasManage from './AreasManage';
 
@@ -30,6 +31,9 @@ const mapStateToProps = (state, { match }) => ({
 
 function mapDispatchToProps(dispatch) {
   return {
+    getGeoFromShape: async (area) => {
+      return await dispatch(getGeoFromShape(area));
+    },
     saveAreaWithGeostore: (area, node, method) => {
       dispatch(saveAreaWithGeostore(area, node, method));
     },

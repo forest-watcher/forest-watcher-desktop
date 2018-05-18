@@ -98,12 +98,12 @@ export function saveGeostore(geojson) {
       method: 'POST',
       body: JSON.stringify(body)
     })
-      .then((response) => {
-        if (response.ok) return response.json();
-        throw Error(response.statusText);
-      })
-      .then((data) => {
-      const normalized = normalize(data);
+    .then((response) => {
+      if (response.ok) return response.json();
+      throw Error(response.statusText);
+    })
+    .then((data) => {
+        const normalized = normalize(data);
         dispatch({
           type: SET_GEOSTORE,
           payload: normalized
@@ -119,6 +119,33 @@ export function saveGeostore(geojson) {
           type: SET_SAVING_GEOSTORE,
           payload: false
         });
+      });
+  };
+}
+
+
+export function getGeoFromShape(shapefile) {
+  return (dispatch, state) => {
+    const url = `${API_BASE_URL}/ogr/convert`;
+    const body = new FormData();
+    body.append('file', shapefile);
+    return fetch(url, {
+      headers: {
+        Authorization: `Bearer ${state().user.token}`
+      },
+      method: 'POST',
+      body
+    })
+      .then((response) => {
+        if (response.ok) return response.json();
+        throw Error(response.statusText);
+      })
+      .then((data) => {
+        const geojson = data && data.data && data.data.attributes;
+        return geojson;
+      })
+      .catch(() => {
+        toastr.error('Unable to load shapefile');
       });
   };
 }

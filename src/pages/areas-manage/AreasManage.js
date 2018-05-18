@@ -14,6 +14,7 @@ import Loader from '../../components/ui/Loader';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import CountrySearch from '../../components/country-search/CountrySearchContainer';
 import LayersSelector from '../../components/layers-selector/LayersSelectorContainer';
+import union from '@turf/union';
 
 class AreasManage extends React.Component {
 
@@ -77,6 +78,24 @@ class AreasManage extends React.Component {
     };
   }
 
+  onShapefileChange = async (e) => {
+    const shapeFile = e.target.files && e.target.files[0];
+    const geojson = await this.props.getGeoFromShape(shapeFile);
+    if (geojson && geojson.features) {
+      const geojsonParsed = geojson.features.reduce(union);
+      if (geojsonParsed) {
+        this.onDrawComplete(geojsonParsed);
+        const dotIndex = shapeFile.name.lastIndexOf('.') > -1
+          ? shapeFile.name.lastIndexOf('.')
+          : shapeFile.name.length;
+        const areaName = shapeFile.name.substr(0, dotIndex);
+        this.form.name = areaName;
+        // Force render to notify the draw control of the external geojson
+        this.forceUpdate();
+      }
+    }
+  }
+
   onDrawComplete = (areaGeoJson) => {
     if (areaGeoJson) {
       if (!checkArea(areaGeoJson)) {
@@ -126,17 +145,17 @@ class AreasManage extends React.Component {
                 }}
               />
               <LocateUser
-                  map={this.state.map}
-                  setLoading={this.props.setLoading}
-                  onZoomChange={ (zoom) => {
-                    this.setState({
-                      mapConfig: {
-                        ...this.state.mapConfig,
-                        zoom
-                      }
-                    });
-                  }}
-                />
+                map={this.state.map}
+                setLoading={this.props.setLoading}
+                onZoomChange={ (zoom) => {
+                  this.setState({
+                    mapConfig: {
+                      ...this.state.mapConfig,
+                      zoom
+                    }
+                  });
+                }}
+              />
               <ZoomControl
                 map={this.state.map}
                 zoom={this.state.mapConfig.zoom}
@@ -176,6 +195,17 @@ class AreasManage extends React.Component {
               <Link to="/areas">
                 <button className="c-button -light" disabled={this.props.saving || this.props.loading}><FormattedMessage id="forms.cancel" /></button>
               </Link>
+              <div className="horizontal-field">
+                <label className="c-button -light" htmlFor="shapefile"><FormattedMessage id="areas.uploadShapefile" /> </label>
+                <input
+                  type="file"
+                  id="shapefile"
+                  name="shapefile"
+                  className="file-hidden"
+                  accept=".zip"
+                  onChange={this.onShapefileChange}
+                />
+              </div>
               <div className="areas-inputs">
                 <div className="horizontal-field">
                   <label className="text -x-small-title"><FormattedMessage id="areas.nameArea" />: </label>
@@ -187,7 +217,7 @@ class AreasManage extends React.Component {
                     placeholder={this.props.intl.formatMessage({ id: 'areas.nameAreaPlaceholder' })}
                     validations={['required']}
                     disabled={this.props.saving || this.props.loading}
-                    />
+                  />
                 </div>
               </div>
               <Button className="c-button" disabled={this.props.saving || (!!this.props.editing) || this.props.loading}><FormattedMessage id="forms.save" /></Button>

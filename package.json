@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@mapbox/geojson-area": "^0.2.2",
+    "@turf/union": "^6.0.2",
     "classnames": "^2.2.5",
     "dom-to-image": "^2.5.2",
     "fecha": "^2.3.1",
