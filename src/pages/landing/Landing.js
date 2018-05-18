@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import { Link } from 'react-router-dom';
-import { GFW_ASSETS_PATH } from '../../constants/landing';
+import { GFW_ASSETS_PATH, DOWNLOAD_APK_LINK, DOWNLOAD_APK_VERSION } from '../../constants/landing';
 import SocialFooter from './SocialFooter';
 import Select from 'react-select';
 import Script from 'react-load-script'
@@ -46,15 +46,6 @@ class Landing extends React.Component {
     }
   }
 
-
-  handleIosLink() {
-    window.location = 'https://itunes.apple.com/us/app/forest-watcher/id1277787116';
-  }
-
-  handleAndroidLink() {
-    window.location = 'https://play.google.com/store/apps/details?id=com.forestwatcher';
-  }
-
   handleLanguageChange(e) {
     this.props.setLocale(e.value);
   }
@@ -89,9 +80,14 @@ class Landing extends React.Component {
               <h1><FormattedMessage id="app.name" /></h1>
               <h2><FormattedMessage id="app.description" /></h2>
               <div className='build-buttons'>
-                <a className='button-ios-image' onClick={this.handleIosLink}></a>
-                <a className='button-android-image' onClick={this.handleAndroidLink}></a>
+                <a className='button-ios-image' href="https://itunes.apple.com/us/app/forest-watcher/id1277787116"></a>
+                <a className='button-android-image' href="https://play.google.com/store/apps/details?id=com.forestwatcher"></a>
               </div>
+              <span className="text"><FormattedMessage id="app.or" />&nbsp;
+                <a className='text -green' target="_blank" href={DOWNLOAD_APK_LINK}>
+                  <FormattedMessage id="app.download" /> .apk (v{DOWNLOAD_APK_VERSION})
+                </a>
+              </span>
               <div className="description">
                 <FormattedMessage id="app.desktopDescription" />
               </div>

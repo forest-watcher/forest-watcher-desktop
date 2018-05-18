@@ -20,6 +20,8 @@
 
       @media (min-width: 1171px) {
         right: 235px;
+        position: absolute;
+        top: -58px;
       }
 
       @media (min-width: 1691px) {
@@ -106,9 +108,9 @@
       }
 
       .login-button {
+        display: inline-flex;
         margin-top: 20px;
         margin-right: 6px;
-        width: 226px;
       }
 
       .landing-links {
