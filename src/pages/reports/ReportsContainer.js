@@ -1,14 +1,13 @@
 import { connect } from 'react-redux';
-import moment from 'moment'
 import { getReports, downloadAnswers } from '../../modules/reports';
 
-import { DEFAULT_FORMAT, DEFAULT_LANGUAGE } from '../../constants/global';
+import { DEFAULT_LANGUAGE } from '../../constants/global';
 import qs from 'query-string';
 import Reports from './Reports';
 import { filterData, getDataAreas } from '../../helpers/filters';
 
 const getLatLng = coords => coords
-  .map(coord => parseFloat(coord).toFixed(5).toString())
+  .map(coord => parseFloat(coord).toFixed(6).toString())
   .join(', ');
 
 const getTeamUser = (userId, team) => {
@@ -22,16 +21,19 @@ const getUser = (userId, id, team) => (userId === id ? 'me' : getTeamUser(userId
 const getAnswersByTemplate = (templateId, reports, areas, user, team) => {
   const reportIds = reports.answers[templateId].ids;
   const reportData = reports.answers[templateId].data;
+
   let answers = reportIds.map((reportId) => {
-    const areaId = reportData[reportId].attributes.areaOfInterest;
+    const report = reportData[reportId].attributes;
+    const areaId = report.areaOfInterest;
     return {
       id: reportData[reportId].id,
-      date: moment(reportData[reportId].attributes.createdAt).format(DEFAULT_FORMAT),
-      latLong: getLatLng(reportData[reportId].attributes.userPosition),
-      member: getUser(reportData[reportId].attributes.user, user.id, team),
-      aoi: reportData[reportId].attributes.areaOfInterest || null,
+      date: report.createdAt,
+      latLong: getLatLng(report.userPosition),
+      member: getUser(report.user, user.id, team),
+      aoi: report.areaOfInterest || null,
       aoiName: areas.data[areaId] ? areas.data[areaId].attributes.name : null,
-      reportName: reportData[reportId].attributes.reportName
+      reportName: report.reportName,
+      reportedPosition: getLatLng([report.clickedPosition[0].lat, report.clickedPosition[0].lon])
     }
   });
   return answers;

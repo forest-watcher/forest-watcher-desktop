@@ -1,5 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import moment from 'moment'
+import { DEFAULT_FORMAT } from '../../constants/global';
 
 import Article from '../../components/layouts/Article';
 import Hero from '../../components/layouts/Hero';
@@ -12,6 +14,32 @@ import qs from 'query-string';
 import { TABLE_PAGE_SIZE } from '../../constants/global';
 
 import 'react-select/dist/react-select.css';
+
+
+const columns = [
+  {
+    Header: <FormattedMessage id="reports.reportPosition" />,
+    accessor: 'reportedPosition'
+  },{
+    Header: <FormattedMessage id="reports.userPosition" />,
+    accessor: 'latLong'
+  },{
+    Header: <FormattedMessage id="reports.reportName" />,
+    accessor: 'reportName',
+    Cell: props => <span style={{ 'wordWrap': 'break-word', 'whiteSpace': 'normal' }} title={props.value}>{props.value}</span>
+  },
+    {
+    Header: <FormattedMessage id="reports.areaOfInterest" />,
+    accessor: 'aoiName'
+  },{
+    Header: <FormattedMessage id="reports.date" />,
+    accessor: 'date',
+    Cell: props => <span className='number'>{moment(props.value).format(DEFAULT_FORMAT)}</span>
+  },{
+    Header: <FormattedMessage id="reports.member" />,
+    accessor: 'member'
+  }
+];
 
 
 class Reports extends React.Component {
@@ -53,26 +81,6 @@ class Reports extends React.Component {
   render() {
     const { answers, searchParams } = this.props;
 
-    const columns = [{
-      Header: <FormattedMessage id="reports.latLng" />,
-      accessor: 'latLong'
-    },{
-      Header: <FormattedMessage id="reports.reportName" />,
-      accessor: 'reportName',
-      Cell: props => <span style={{ 'wordWrap': 'break-word', 'whiteSpace': 'normal' }} title={props.value}>{props.value}</span>
-    },
-      {
-      Header: <FormattedMessage id="reports.areaOfInterest" />,
-      accessor: 'aoiName'
-    },{
-      Header: <FormattedMessage id="reports.date" />,
-      accessor: 'date',
-      Cell: props => <span className='number'>{props.value}</span>
-    },{
-      Header: <FormattedMessage id="reports.member" />,
-      accessor: 'member'
-    }];
-
     return (
       <div>
         <Hero
@@ -102,6 +110,10 @@ class Reports extends React.Component {
                   pageText=""
                   loadingText=""
                   onPageChange={(page) => {this.handlePageChange(page)}}
+                  defaultSorted={[{
+                    id   : 'date',
+                    desc : true
+                  }]}
                 />
                 <Loader isLoading={this.props.loadingTemplates || this.props.loadingReports} />
               </div>
