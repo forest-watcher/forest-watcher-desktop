@@ -31,7 +31,7 @@ const getAnswersByTemplate = (templateId, reports, areas, user, team) => {
       latLong: getLatLng(report.userPosition),
       member: getUser(report.user, user.id, team),
       aoi: report.areaOfInterest || null,
-      aoiName: areas.data[areaId] ? areas.data[areaId].attributes.name : null,
+      aoiName: areas.data[areaId] ? areas.data[areaId].attributes.name : report.areaOfInterestName,
       reportName: report.reportName,
       reportedPosition: getLatLng([report.clickedPosition[0].lat, report.clickedPosition[0].lon])
     }
