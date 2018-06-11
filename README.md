@@ -1,11 +1,11 @@
 <p align="center"><img src="fw-logo.png" height=92></p>
-<h1 align="center">Forest Watcher Desktop</h1>
+<h1 align="center">Forest Watcher Web</h1>
 <br>
 <br>
 
-Desktop app for managing your [forest watcher](http://forestwatcher.globalforestwatch.org) data.
+Web app for managing your [forest watcher](http://forestwatcher.globalforestwatch.org) data.
 
-- [Documentation](https://vizzuality.gitbooks.io/forest-watcher/content/desktop/introduction.html)
+- [Documentation](https://vizzuality.gitbooks.io/forest-watcher/web/)
 - [Read more](http://vizzuality.com/projects/forest-watcher)
 
 ## License

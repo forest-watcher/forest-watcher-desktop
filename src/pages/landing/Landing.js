@@ -89,10 +89,10 @@ class Landing extends React.Component {
                 </a>
               </span>
               <div className="description">
-                <FormattedMessage id="app.desktopDescription" />
+                <FormattedMessage id="app.webDescription" />
               </div>
               <Link className="login-button c-button" to={'/login'}>
-                <FormattedMessage id="app.accessDesktopApp" />
+                <FormattedMessage id="app.accessWebApp" />
               </Link>
               <div className="landing-links">
                 <a
