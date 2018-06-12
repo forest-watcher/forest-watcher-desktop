@@ -176,8 +176,8 @@ class TemplatesManage extends React.Component {
   ///////////////////////////////
   render() {
     const { areasOptions, localeOptions, questionOptions, loading, saving, deleting, mode, locale, user, template } = this.props;
-    const canEdit = ((template.answersCount === 0 || !template.answersCount) && (template.status === 'unpublished' || template.status === 'draft') && user.id === this.state.user) || mode === 'create' ? true : false;
-    const canManage = user.id === this.state.user || mode === 'create' ? true : false;
+    const canEdit = ((template.answersCount === 0 || !template.answersCount) && (template.status === 'unpublished' || template.status === 'draft') && user.id === template.user) || mode === 'create' ? true : false;
+    const canManage = user.id === template.user || mode === 'create' ? true : false;
     const modeCreate = mode === 'create' ? true : false;
     const canSave = this.state.questions.length && this.state.name[this.state.defaultLanguage] ? true : false;
     const isLoading = loading || saving || deleting ? true : false;
@@ -185,7 +185,10 @@ class TemplatesManage extends React.Component {
       <div>
         <Hero
           title={mode === 'manage' ? "templates.manage" : "templates.create"}
-          action={canEdit && mode === 'manage' ? {name: "templates.delete", callback: this.deleteTemplate} : null}
+          action={canEdit && mode === 'manage'
+            ? { name: "templates.delete", callback: this.deleteTemplate }
+            : null
+          }
         />
         <div className="l-template">
           <Loader isLoading={isLoading} />
@@ -262,8 +265,8 @@ class TemplatesManage extends React.Component {
                               defaultLanguage={this.state.defaultLanguage}
                               deleteQuestion={this.handleQuestionDelete}
                               status={this.state.status}
-                              canEdit={modeCreate}
-                              canManage={modeCreate}
+                              canEdit={canEdit}
+                              canManage={canManage}
                               mode={mode}
                             />
                           )}
