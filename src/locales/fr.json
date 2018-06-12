@@ -65,6 +65,7 @@
     "reports.search": "Recherche",
     "reports.filterByDate": "Filtrer par date",
     "reports.areaOfInterest": "Zone d'intérêt",
+    "reports.alertType": "Alert type",
     "reports.date": "Date",
     "reports.user": "Utilisateur",
     "reports.member": "Utilisateur\n",
@@ -169,5 +170,7 @@
     "layers.oilPalm": "Palmier à huile",
     "layers.managedForests": "Forêts gérées",
     "layers.woodFiber": "Fibre de bois",
-    "layers.mining": "Exploitation minière"
+    "layers.mining": "Exploitation minière",
+    "layers.umd_as_it_happens": "La déforestation (GLAD)",
+    "layers.viirs": "Les feus (VIIRS)"
 }

@@ -65,6 +65,7 @@
     "reports.search": "Búsqueda",
     "reports.filterByDate": "Filtrar por fecha",
     "reports.areaOfInterest": "Área de interés",
+    "reports.alertType": "Tipo de alerta",
     "reports.date": "Fecha",
     "reports.user": "Usuario",
     "reports.member": "Usuario",
@@ -169,5 +170,7 @@
     "layers.oilPalm": "Aceite de palma",
     "layers.managedForests": "Bosques gestionados",
     "layers.woodFiber": "Fibra de madera",
-    "layers.mining": "Minería"
+    "layers.mining": "Minería",
+    "layers.umd_as_it_happens": "Deforestación (GLAD)",
+    "layers.viirs": "Incendios (VIIRS)"
 }

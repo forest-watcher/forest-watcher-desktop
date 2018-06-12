@@ -4,7 +4,7 @@
     "app.webDescription": "A Forest Watcher é uma aplicação móvel completa e independente. No entanto, ao aceder à versão da aplicação para desktop terá ainda mais funcionalidades à sua disposição, incluindo a visualização e recolha de relatórios, a criação e atribuição de AOI (áreas de interesse) e a possibilidade de fazer o upload dos seus próprios dados contextuais.",
     "app.alreadyHaveAnAccount": "Já tem uma conta MyGFW?",
     "app.alreadyLoggedIn": "Já entrou.",
-    "app.accessWebApp": "Aceda à aplicação de desktop",
+    "app.accessWebApp": "Aceda à aplicação web",
     "app.readMoreLink": "Leia mais sobre o Forest Watcher",
     "app.learnHowToLink": "aprenda como utilizar.",
     "app.and": "e",
@@ -65,6 +65,7 @@
     "reports.search": "Pesquisar",
     "reports.filterByDate": "Filtrar por data",
     "reports.areaOfInterest": "Área de interesse",
+    "reports.alertType": "Alert type",
     "reports.date": "Data",
     "reports.user": "Usuário",
     "reports.member": "Utilizador",
@@ -167,7 +168,9 @@
     "layers.treeCoverLoss2014": "Perda de cobertura arbórea (2014)",
     "layers.treeCoverLoss2015": "Perda de cobertura arbórea (2015)",
     "layers.oilPalm": "Dendê",
-    "layers.managedForests": "Floresta manejada\n",
+    "layers.managedForests": "Floresta manejada",
     "layers.woodFiber": "Fibra de madeira",
-    "layers.mining": "Mineração"
+    "layers.mining": "Mineração",
+    "layers.umd_as_it_happens": "Desflorestamento (GLAD)",
+    "layers.viirs": "Incêndios (VIIRS)"
 }

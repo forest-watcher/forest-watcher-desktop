@@ -10,13 +10,14 @@ const getLatLng = coords => coords
   .map(coord => parseFloat(coord).toFixed(6).toString())
   .join(', ');
 
-const getTeamUser = (userId, team) => {
-  if (!team) return userId;
+const getTeamUser = ({ userId, userName }, team) => {
+  const user = userName || userId;
+  if (!team) return user;
   const member = [...team.managers, ...team.confirmedUsers].find(member => member.id === userId);
-  return member ? member.email : userId;
+  return member ? member.email : user;
 };
 
-const getUser = (userId, id, team) => (userId === id ? 'me' : getTeamUser(userId, team));
+const getUser = (reportUser, id, team) => (reportUser.userId === id ? 'me' : getTeamUser(reportUser, team));
 
 const getAnswersByTemplate = (templateId, reports, areas, user, team) => {
   const reportIds = reports.answers[templateId].ids;
@@ -25,12 +26,17 @@ const getAnswersByTemplate = (templateId, reports, areas, user, team) => {
   let answers = reportIds.map((reportId) => {
     const report = reportData[reportId].attributes;
     const areaId = report.areaOfInterest;
+    const reportUser = {
+      userId: report.user,
+      userName: report.username
+    }
     return {
       id: reportData[reportId].id,
       date: report.createdAt,
       latLong: getLatLng(report.userPosition),
-      member: getUser(report.user, user.id, team),
+      member: getUser(reportUser, user.id, team),
       aoi: report.areaOfInterest || null,
+      alertType: report.layer,
       aoiName: areas.data[areaId] ? areas.data[areaId].attributes.name : report.areaOfInterestName,
       reportName: report.reportName,
       reportedPosition: getLatLng([report.clickedPosition[0].lat, report.clickedPosition[0].lon])

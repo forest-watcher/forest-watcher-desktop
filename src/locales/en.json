@@ -65,6 +65,7 @@
     "reports.search": "Search",
     "reports.filterByDate": "Filter by date",
     "reports.areaOfInterest": "Area of Interest",
+    "reports.alertType": "Alert type",
     "reports.date": "Date",
     "reports.user": "User",
     "reports.member": "User",
@@ -169,5 +170,7 @@
     "layers.oilPalm": "Oil Palm",
     "layers.managedForests": "Managed Forests",
     "layers.woodFiber": "Wood Fiber",
-    "layers.mining": "Mining"
+    "layers.mining": "Mining",
+    "layers.umd_as_it_happens": "Deforestation (GLAD)",
+    "layers.viirs": "Fires (VIIRS)"
 }

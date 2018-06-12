@@ -16,33 +16,37 @@ import { TABLE_PAGE_SIZE } from '../../constants/global';
 import 'react-select/dist/react-select.css';
 
 
-const columns = [
-  {
-    Header: <FormattedMessage id="reports.reportPosition" />,
-    accessor: 'reportedPosition'
-  },{
-    Header: <FormattedMessage id="reports.userPosition" />,
-    accessor: 'latLong'
-  },{
-    Header: <FormattedMessage id="reports.reportName" />,
-    accessor: 'reportName',
-    Cell: props => <span style={{ 'wordWrap': 'break-word', 'whiteSpace': 'normal' }} title={props.value}>{props.value}</span>
-  },
-    {
-    Header: <FormattedMessage id="reports.areaOfInterest" />,
-    accessor: 'aoiName'
-  },{
-    Header: <FormattedMessage id="reports.date" />,
-    accessor: 'date',
-    Cell: props => <span className='number'>{moment(props.value).format(DEFAULT_FORMAT)}</span>
-  },{
-    Header: <FormattedMessage id="reports.member" />,
-    accessor: 'member'
-  }
-];
-
-
 class Reports extends React.Component {
+  constructor() {
+    super();
+    this.columns = [
+      {
+        Header: <FormattedMessage id="reports.reportPosition" />,
+        accessor: 'reportedPosition'
+      },{
+        Header: <FormattedMessage id="reports.userPosition" />,
+        accessor: 'latLong'
+      },{
+        Header: <FormattedMessage id="reports.reportName" />,
+        accessor: 'reportName',
+        Cell: props => <span style={{ 'wordWrap': 'break-word', 'whiteSpace': 'normal' }} title={props.value}>{props.value}</span>
+      },{
+        Header: <FormattedMessage id="reports.areaOfInterest" />,
+        accessor: 'aoiName'
+      },{
+        Header: <FormattedMessage id="reports.alertType" />,
+        accessor: 'alertType',
+        Cell: props => <span>{this.props.intl.formatMessage({ id: `layers.${props.value}` })}</span>
+      },{
+        Header: <FormattedMessage id="reports.date" />,
+        accessor: 'date',
+        Cell: props => <span className='number'>{moment(props.value).format(DEFAULT_FORMAT)}</span>
+      },{
+        Header: <FormattedMessage id="reports.member" />,
+        accessor: 'member'
+      }
+    ];
+  }
 
   componentWillMount() {
     if (!this.props.match.params.templateId && this.props.templates.ids[0]) {
@@ -98,7 +102,7 @@ class Reports extends React.Component {
                 <ReactTable
                   className="c-table"
                   data={answers || []}
-                  columns={columns}
+                  columns={this.columns}
                   showPageSizeOptions={false}
                   showPagination={answers.length > TABLE_PAGE_SIZE}
                   minRows={TABLE_PAGE_SIZE}
