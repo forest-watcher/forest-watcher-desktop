@@ -56,6 +56,10 @@
                 display: flex;
                 flex-direction: column;
 
+                &.-row {
+                  flex-direction: row;
+                }
+
                 .link {
                     margin-bottom: 5px;
                     color: $gray;
@@ -63,7 +67,7 @@
             }
 
             &.report-link {
-                
+
                 .link {
                     float: right;
                 }
@@ -152,7 +156,7 @@
                 }
             }
         }
-        
+
         .-pageInfo {
             display: inline-block;
             margin: 3px 20px;
