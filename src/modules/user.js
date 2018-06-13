@@ -120,9 +120,10 @@ export function getUser() {
         throw Error(response.statusText);
       })
       .then(({ data = {} }) => {
+        const userData = (data && data.attributes) || {};
         dispatch({
           type: SET_USER_DATA,
-          payload: { ...data.attributes, id: data.id }
+          payload: { ...userData, id: userData.id }
         });
       })
       .catch((error) => {
