@@ -302,7 +302,7 @@ class TemplatesManage extends React.Component {
                 <Switch
                   className="c-switcher"
                   onClick={this.toggleStatus}
-                  on={this.state.status === 'published' ? true : false}
+                  on={this.state.status === 'published'}
                   enabled={!isLoading || canManage}
                 />
                 <span className="status-label text -x-small-title">{this.props.intl.formatMessage({ id: 'templates.statusPublished' })}</span>
