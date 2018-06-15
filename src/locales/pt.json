@@ -1,5 +1,7 @@
 {
     "app.name": "Forest Watcher",
+    "app.or": "ou",
+    "app.download": "baixar",
     "app.description": "A aplicação móvel Forest Watcher permite que a monitorização de florestas, online e dinâmica, e os sistemas de alerta do Global Forest Watch sejam usados offline e no terreno. É possível monitorizar áreas de interesse, ver alertas de fogos e desmatamento, navegar até um determinado ponto para investigar e recolher informações sobre aquilo que encontrar, mesmo sem uma ligação à Internet.",
     "app.webDescription": "A Forest Watcher é uma aplicação móvel completa e independente. No entanto, ao aceder à versão da aplicação para desktop terá ainda mais funcionalidades à sua disposição, incluindo a visualização e recolha de relatórios, a criação e atribuição de AOI (áreas de interesse) e a possibilidade de fazer o upload dos seus próprios dados contextuais.",
     "app.alreadyHaveAnAccount": "Já tem uma conta MyGFW?",

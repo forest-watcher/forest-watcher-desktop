@@ -1,5 +1,7 @@
 {
     "app.name": "Forest Watcher",
+    "app.or": "or",
+    "app.download": "download",
     "app.description": "Aplikasi seluler Forest Watcher menghadirkan sistem pemantauan dan lansiran hutan online dinamis dari Global Forest Watch secara luring dan sesuai di lapangan. Pantau area minat, lihat penggundulan hutan dan lansiran kebakaran, arahkan ke satu titik untuk investigasi, dan kumpulkan informasi tentang apa yang Anda temukan, apa pun konektivitasnya.",
     "app.webDescription": "Forest Watcher seluler adalah aplikasi yang lengkap tersendiri. Namun, mengakses aplikasi versi desktop memungkinkan kemampuan lebih banyak, termasuk melihat dan mengumpulkan laporan, membuat dan menetapkan Area Minat, dan mengunggah data kontekstual Anda sendiri.",
     "app.alreadyHaveAnAccount": "Sudah punya akun MyGFW?",
@@ -158,11 +160,11 @@
         "number": "angka"
     },
     "customLayers.title": "Cara menambahkan lapisan kustom",
-    "customLayers.intro": "Fitur kustomisasi himpunan data bekerja dengan mengaitkan antar ubin, dilayani dari layanan web eksternal dari Pengamat Hutan. Menggunakan URL tersebut, sistem akan membuat permintaan ke ubin dan menerima hanya data terkait Area Peminatan. Untuk mengatur hal ini, masuklah ke tab pengaturan, pilih lapisan data, dan tempelkan URL untuk layanan ubin yang relevan. Apabila Anda mengalami kesulitan, hubungi forestwatcher@wri.org untuk bantuan.\n",
+    "customLayers.intro": "Fitur kustomisasi himpunan data bekerja dengan mengaitkan antar ubin, dilayani dari layanan web eksternal dari Pengamat Hutan. Menggunakan URL tersebut, sistem akan membuat permintaan ke ubin dan menerima hanya data terkait Area Peminatan. Untuk mengatur hal ini, masuklah ke tab pengaturan, pilih lapisan data, dan tempelkan URL untuk layanan ubin yang relevan. Apabila Anda mengalami kesulitan, hubungi forestwatcher@wri.org untuk bantuan.",
     "customLayers.step1": "Unggah dataset Anda ke layanan web yang mendukung berbagi petak. Hal-hal seperti Carto atau Mapbox bagus juga.",
     "customLayers.step2": "Temukan URL bersama untuk lapisan Anda, dari layanan petak Anda.",
-    "customLayers.step3": "Anda perlu memformatnya sedikit agar kami dapat meminta data ke lapisan itu. Tambahkan /{z}/{x}/{y} pada akhir URL, dan juga dapat ditambahkan ekstensi (biasanya .png atau .jpg). Kami menerima sebagian besar format gambar. Seharusnya tampak seperti ini:\n",
-    "customLayers.step3.1": "http://maps.protectedplanet.net/blue/{z}/{x}/{y}\n",
+    "customLayers.step3": "Anda perlu memformatnya sedikit agar kami dapat meminta data ke lapisan itu. Tambahkan /{z}/{x}/{y} pada akhir URL, dan juga dapat ditambahkan ekstensi (biasanya .png atau .jpg). Kami menerima sebagian besar format gambar. Seharusnya tampak seperti ini:",
+    "customLayers.step3.1": "http://maps.protectedplanet.net/blue/{z}/{x}/{y}",
     "customLayers.step4": "Selesaikan sel URL. Jangan lupa untuk memberikan judul pada lapisan Anda: deskripsinya opsional.",
     "layers.protectedAreas": "Wilayah Terlindung",
     "layers.treeCoverLoss2014": "Kehilangan Tutupan Pohon (2014)",

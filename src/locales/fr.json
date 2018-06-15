@@ -1,5 +1,7 @@
 {
     "app.name": "Forest Watcher",
+    "app.or": "ou",
+    "app.download": "télécharger",
     "app.description": "L'application mobile Forest Watcher rend les systèmes dynamiques de suivi et d'alerte forestiers en ligne de Global Forest Watch disponibles hors ligne et sur le terrain. Suivez les Centres d'intérêt, affichez des alertes de déforestation et de feux de forêts, rendez-vous à un emplacement pour enquêter et collectez des informations sur ce que vous trouvez, peu importe la connectivité.",
     "app.webDescription": "Forest Watcher est une application mobile complète. Toutefois, la version de bureau offre beaucoup plus de fonctionnalités, notamment l'affichage et la collecte de rapports, la création et l'affectation de Centres d'intérêt et la mise en ligne de vos propres données contextuelles.",
     "app.alreadyHaveAnAccount": "Vous avez déjà un compte MyGFW ?",
