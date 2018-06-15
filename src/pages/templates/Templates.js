@@ -35,11 +35,11 @@ class Templates extends React.Component {
       Header: <FormattedMessage id="templates.title" />,
       accessor: 'title',
       Cell: props => (
-        <Link className="table-link text" to={`/templates/${props.original.id}`}>
+        <Link className="table-link -row text" to={`/templates/${props.original.id}`}>
           <span className='link'>
             {props.value}
           </span>
-          <svg className="c-icon -x-small -green">
+          <svg className="c-icon -x-small -green -no-margin">
             <use xlinkHref="#icon-arrow-link"></use>
           </svg>
         </Link>

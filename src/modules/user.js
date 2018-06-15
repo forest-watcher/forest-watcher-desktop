@@ -6,7 +6,6 @@ import { getTeam } from './teams';
 import { toastr } from 'react-redux-toastr';
 
 // Actions
-const GET_USER = 'user/GET_USER';
 const CHECK_USER_LOGGED = 'user/CHECK_USER_LOGGED';
 export const LOGOUT = 'user/LOGOUT';
 export const SET_USER_DATA = 'user/SET_USER_DATA';
@@ -24,14 +23,6 @@ export default function reducer(state = initialState, action) {
       return { ...state, data: action.payload };
     case CHECK_USER_LOGGED:
       return Object.assign({}, state, { ...action.payload });
-    case GET_USER: {
-      if (action.payload.data) {
-        const user = action.payload.data.attributes;
-        user.id = action.payload.data.id;
-        return Object.assign({}, state, { data: user });
-      }
-      return state;
-    }
     case LOGOUT:
       return initialState;
     default:
@@ -119,10 +110,11 @@ export function getUser() {
         if (response.ok) return response.json();
         throw Error(response.statusText);
       })
-      .then(({ data = {} }) => {
+      .then(({ data }) => {
+        const userData = data || {};
         dispatch({
           type: SET_USER_DATA,
-          payload: { ...data.attributes, id: data.id }
+          payload: { ...userData.attributes, id: userData.id }
         });
       })
       .catch((error) => {

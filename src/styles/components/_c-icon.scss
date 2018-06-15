@@ -55,4 +55,8 @@
   &.-rotate-right {
     transform: rotate(-90deg);
   }
+
+  &.-no-margin {
+    margin-left: 2px;
+  }
 }
