@@ -5,11 +5,18 @@ import { Provider } from 'react-redux';
 import createHistory from 'history/createBrowserHistory';
 import thunk from 'redux-thunk';
 import { persistStore, autoRehydrate } from 'redux-persist';
+import * as Sentry from '@sentry/browser';
+import { SENTRY_DSN } from './constants/global';
 
 import * as reducers from './modules';
 import Routes from './routes';
 
 import './index.css';
+
+/** Initialise Sentry */
+Sentry.init({
+ dsn: SENTRY_DSN
+});
 
 /**
  * Reducers
