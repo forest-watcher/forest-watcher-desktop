@@ -7,7 +7,7 @@ pipelines:
           caches:
             - node
           artifacts:
-            - public/**
+            - build/**
           script:
             - yarn install
             - yarn build
@@ -19,7 +19,7 @@ pipelines:
           caches:
             - node
           artifacts:
-            - public/**
+            - build/**
           script:
             - yarn install
             - yarn build
@@ -28,9 +28,9 @@ pipelines:
           deployment: test
           image: atlassian/pipelines-awscli
           artifacts:
-            - public/**
+            - build/**
           script:
-            - cd public
+            - cd build
             - aws s3 sync . s3://forest-watcher-web-client-dev
   custom:
     "deploy-develop":
@@ -40,7 +40,7 @@ pipelines:
             caches:
               - node
             artifacts:
-              - public/**
+              - build/**
             script:
               - yarn install
               - yarn build
@@ -49,7 +49,7 @@ pipelines:
             deployment: test
             image: atlassian/pipelines-awscli
             artifacts:
-              - public/**
+              - build/**
             script:
-              - cd public
+              - cd build
               - aws s3 sync . s3://forest-watcher-web-client-dev
