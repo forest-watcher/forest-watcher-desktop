@@ -1,0 +1,55 @@
+pipelines:
+  pull-requests:
+    '**': # This runs as default for any branch not elsewhere defined
+      - step:
+          name: Install JS dependencies & build
+          image: node:8.11.2
+          caches:
+            - node
+          artifacts:
+            - public/**
+          script:
+            - yarn install
+            - yarn build
+  custom:
+    "deploy-develop":
+        - step:
+            name: Install JS dependencies & build
+            image: node:8.11.2
+            caches:
+              - node
+            artifacts:
+              - public/**
+            script:
+              - yarn install
+              - yarn build
+        - step:
+            name: Deploy GFW develop branch to dev environment
+            deployment: develop
+            image: atlassian/pipelines-awscli
+            artifacts:
+              - public/**
+            script:
+              - cd public
+              - aws s3 sync . s3://forest-watcher-web-client-dev
+  branches:
+    develop:
+      - step:
+          name: Install JS dependencies & build
+          image: node:8.11.2
+          caches:
+            - node
+          artifacts:
+            - public/**
+          script:
+            - yarn install
+            - yarn build
+      - step:
+          name: Deploy GFW develop branch to dev environment
+          deployment: develop
+          image: atlassian/pipelines-awscli
+          artifacts:
+            - public/**
+          script:
+            - cd public
+            - aws s3 sync . s3://forest-watcher-web-client-dev
