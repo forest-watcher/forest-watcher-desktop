@@ -2,8 +2,18 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { NavLink } from 'react-router-dom';
 import Icon from '../ui/Icon';
-import Select from 'react-select';
+import Select, { components } from 'react-select';
 import { FormattedMessage } from 'react-intl';
+
+const DropdownIndicator = (props) => {
+  return components.DropdownIndicator && (
+    <components.DropdownIndicator {...props}>
+      <svg className="c-icon -x-small -gray">
+        <use xlinkHref="#icon-arrow-down"></use>
+      </svg>
+    </components.DropdownIndicator>
+  );
+};
 
 class Nav extends React.Component {
   constructor(props) {
@@ -51,16 +61,19 @@ class Nav extends React.Component {
               </ul>
             }
             <ul className={this.props.loggedIn ? "nav-subsection -settings" : "nav-subsection"}>
-              <Select
-                name="locale-select"
-                className="c-select -dark"
-                value={this.props.locale}
-                options={this.languages}
-                onChange={this.handleLanguageChange}
-                clearable={false}
-                searchable={false}
-                arrowRenderer={() => <svg className="c-icon -x-small -gray"><use xlinkHref="#icon-arrow-down"></use></svg>}
-              />
+              <li className="nav-menu">
+                <Select
+                  name="locale-select"
+                  className="c-select -dark"
+                  classNamePrefix="Select"
+                  value={{value: this.props.locale, label: this.props.locale.toUpperCase()}}
+                  options={this.languages}
+                  onChange={this.handleLanguageChange}
+                  isSearchable={false}
+                  components={{ DropdownIndicator }}
+                />
+              </li>
+
               {this.props.loggedIn &&
                 <li className="nav-menu">
                   <a onClick={this.props.logout}><FormattedMessage id="app.logout" /></a>
@@ -73,6 +86,7 @@ class Nav extends React.Component {
     );
   }
 }
+
 
 Nav.propTypes = {
   loggedIn: PropTypes.bool.isRequired,
