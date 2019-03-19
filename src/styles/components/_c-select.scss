@@ -44,7 +44,21 @@
         border-radius: 4px;
         color: $theme-text;
         cursor: pointer;
-                    display: flex;
+        display: flex;
+
+        &.Select__control--menu-is-open {
+              background-color: $white;
+              border-bottom-right-radius: 0;
+              border-bottom-left-radius: 0;
+
+              .Select__single-value {
+                  color: $theme-text !important;
+              }
+
+            .c-icon {
+                transform: rotate(180deg);
+            }
+        }
 
         .Select__value-container {
             padding-left: 15px;
@@ -119,21 +133,6 @@
             font-size: $font-size-regular;
             color: $gray;
             letter-spacing: 0.1px;
-
-            &.Select__control--menu-is-open {
-                  background-color: $white;
-                  border-bottom-right-radius: 0;
-                  border-bottom-left-radius: 0;
-
-                  .Select__single-value {
-                      color: $theme-text !important;
-                  }
-
-                .c-icon {
-                    transform: rotate(180deg);
-                    fill: $dark-gray;
-                }
-            }
 
             .Select__single-value {
                 color: rgba($white, 0.5) !important;
