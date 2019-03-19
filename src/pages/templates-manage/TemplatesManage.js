@@ -2,10 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import Hero from '../../components/layouts/Hero';
-import 'react-select/dist/react-select.css';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { Form, Button } from '../../components/form/Form';
-import { validation } from '../../helpers/validation'; // eslint-disable-line no-unused-vars
 import Select from 'react-select';
 import Loader from '../../components/ui/Loader';
 import FormFooter from '../../components/ui/FormFooter';

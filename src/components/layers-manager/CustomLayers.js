@@ -7,9 +7,10 @@ import withModal from '../ui/withModal';
 import Walkthrough from '../ui/Walkthrough';
 import Icon from '../ui/Icon';
 
+import { customLayers as WALKTHROUGH_TEXTS } from '../../constants/walkthrough-texts';
+
 const WalkthroughModal = withModal(Walkthrough);
 
-import { customLayers as WALKTHROUGH_TEXTS } from '../../constants/walkthrough-texts';
 
 class CustomLayers extends Component {
 

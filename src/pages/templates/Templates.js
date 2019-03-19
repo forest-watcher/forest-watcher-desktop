@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import Hero from '../../components/layouts/Hero';
 import Article from '../../components/layouts/Article';
 import ReactTable from 'react-table'
-import 'react-select/dist/react-select.css';
 import { FormattedMessage } from 'react-intl';
 import TemplatesFilters from './TemplatesFiltersContainer';
 import Loader from '../../components/ui/Loader';

@@ -2,7 +2,7 @@ import React from 'react';
 import { render } from 'react-dom';
 import { createStore, combineReducers, applyMiddleware, compose } from 'redux';
 import { Provider } from 'react-redux';
-import createHistory from 'history/createBrowserHistory';
+import { createBrowserHistory } from 'history';
 import thunk from 'redux-thunk';
 import { persistStore, autoRehydrate } from 'redux-persist';
 import * as Sentry from '@sentry/browser';
@@ -30,7 +30,7 @@ const reducer = combineReducers({
 });
 
 // Create a history of your choosing (we're using a browser history in this case)
-const history = createHistory();
+const history = createBrowserHistory();
 
 const store = createStore(
   reducer,
