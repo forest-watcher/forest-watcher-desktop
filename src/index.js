@@ -15,8 +15,6 @@ import './index.css';
 
 /** Initialise Sentry */
 if (ENVIRONMENT !== 'development') {
-  // eslint-disable-next-line
-  console.log('sentry initialised')
   Sentry.init({
    dsn: SENTRY_DSN
   });
