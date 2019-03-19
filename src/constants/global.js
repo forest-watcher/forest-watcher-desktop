@@ -10,6 +10,7 @@ export const FACEBOOK_WIDGET_API = process.env.REACT_APP_FACEBOOK_WIDGET_API;
 export const GOOGLE_PLUS_ONE_WIDGET_API = process.env.REACT_APP_GOOGLE_PLUS_ONE_WIDGET_API;
 export const GA_UA = process.env.REACT_APP_GA_UA;
 export const SENTRY_DSN = process.env.REACT_APP_SENTRY_DSN;
+export const ENVIRONMENT = process.env.NODE_ENV
 
 // constants
 export const DEFAULT_LANGUAGE = 'en';

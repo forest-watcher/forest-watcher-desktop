@@ -6,7 +6,7 @@ import createHistory from 'history/createBrowserHistory';
 import thunk from 'redux-thunk';
 import { persistStore, autoRehydrate } from 'redux-persist';
 import * as Sentry from '@sentry/browser';
-import { SENTRY_DSN } from './constants/global';
+import { SENTRY_DSN, ENVIRONMENT } from './constants/global';
 
 import * as reducers from './modules';
 import Routes from './routes';
@@ -14,9 +14,13 @@ import Routes from './routes';
 import './index.css';
 
 /** Initialise Sentry */
-Sentry.init({
- dsn: SENTRY_DSN
-});
+if (ENVIRONMENT !== 'development') {
+  // eslint-disable-next-line
+  console.log('sentry initialised')
+  Sentry.init({
+   dsn: SENTRY_DSN
+  });
+}
 
 /**
  * Reducers
