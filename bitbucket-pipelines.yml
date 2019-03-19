@@ -1,0 +1,85 @@
+pipelines:
+  pull-requests:
+    '**': # This runs as default for any branch not elsewhere defined
+      - step:
+          name: Install JS dependencies & build
+          image: node:8.11.2
+          caches:
+            - node
+          artifacts:
+            - build/**
+          script:
+            - yarn install
+            - yarn build
+  branches:
+    develop:
+      - step:
+          name: Install JS dependencies & build
+          image: node:8.11.2
+          caches:
+            - node
+          artifacts:
+            - build/**
+          script:
+            - yarn install
+            - yarn build
+      - step:
+          name: Deploy GFW develop branch to dev environment
+          deployment: test
+          image: atlassian/pipelines-awscli
+          artifacts:
+            - build/**
+          script:
+            - cd build
+            - aws s3 sync . s3://forest-watcher-web-client-dev
+      - step:
+          name: Deploy GFW develop branch to staging environment
+          deployment: staging
+          trigger: manual
+          image: atlassian/pipelines-awscli
+          artifacts:
+            - build/**
+          script:
+            - cd build
+            - aws s3 sync . s3://forest-watcher-web-client-staging
+  custom:
+    "deploy-develop":
+        - step:
+            name: Install JS dependencies & build
+            image: node:8.11.2
+            caches:
+              - node
+            artifacts:
+              - build/**
+            script:
+              - yarn install
+              - yarn build
+        - step:
+            name: Deploy GFW develop branch to dev environment
+            deployment: test
+            image: atlassian/pipelines-awscli
+            artifacts:
+              - build/**
+            script:
+              - cd build
+              - aws s3 sync . s3://forest-watcher-web-client-dev
+    "deploy-staging":
+        - step:
+            name: Install JS dependencies & build
+            image: node:8.11.2
+            caches:
+              - node
+            artifacts:
+              - build/**
+            script:
+              - yarn install
+              - yarn build
+        - step:
+            name: Deploy GFW develop branch to staging environment
+            deployment: test
+            image: atlassian/pipelines-awscli
+            artifacts:
+              - build/**
+            script:
+              - cd build
+              - aws s3 sync . s3://forest-watcher-web-client-staging
