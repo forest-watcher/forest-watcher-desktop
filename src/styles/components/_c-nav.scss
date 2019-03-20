@@ -8,7 +8,7 @@
   .nav-link, .nav-menu, .nav-logo {
     height: $nav-height;
 
-    a {
+    a, button {
       display: flex;
       align-items: center;
       font-size: $font-size-small;
@@ -22,7 +22,7 @@
 
   .nav-menu,
   .nav-logo {
-    > a {
+    > button, > a {
       color: $theme-accent;
       padding: 19px 0;
 

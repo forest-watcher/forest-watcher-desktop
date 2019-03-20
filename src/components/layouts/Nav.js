@@ -76,7 +76,7 @@ class Nav extends React.Component {
 
               {this.props.loggedIn &&
                 <li className="nav-menu">
-                  <a onClick={this.props.logout}><FormattedMessage id="app.logout" /></a>
+                  <button onClick={this.props.logout}><FormattedMessage id="app.logout" /></button>
                 </li>
               }
             </ul>
