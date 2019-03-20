@@ -94,7 +94,7 @@ class Landing extends React.Component {
                 <a className='button-android-image' href="https://play.google.com/store/apps/details?id=com.forestwatcher"><span className="sr-only"><FormattedMessage className="sr-only" id="app.googlePlay" /></span></a>
               </div>
               <span className="text"><FormattedMessage id="app.or" />&nbsp;
-                <a className='text -green' target="_blank" href={DOWNLOAD_APK_LINK}>
+                <a className='text -green' target="_blank" rel="noopener noreferrer" href={DOWNLOAD_APK_LINK}>
                   <FormattedMessage id="app.download" /> .apk (v{DOWNLOAD_APK_VERSION})
                 </a>
               </span>
