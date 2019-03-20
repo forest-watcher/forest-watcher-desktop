@@ -14,6 +14,7 @@ import { FormattedMessage, injectIntl } from 'react-intl';
 import CountrySearch from '../../components/country-search/CountrySearchContainer';
 import LayersSelector from '../../components/layers-selector/LayersSelectorContainer';
 import union from '@turf/union';
+import { required } from '../../constants/validation-rules'
 
 class AreasManage extends React.Component {
 
@@ -214,7 +215,7 @@ class AreasManage extends React.Component {
                     name="name"
                     value={this.form.name}
                     placeholder={this.props.intl.formatMessage({ id: 'areas.nameAreaPlaceholder' })}
-                    validations={['required']}
+                    validations={[required]}
                     disabled={this.props.saving || this.props.loading}
                   />
                 </div>

@@ -1,36 +1,48 @@
 import React from 'react';
 import validator from 'validator';
+import * as responses from './validation-responses'
 
-const required = {
-  rule: value => (value ? value.toString().trim() : ''),
-  hint: () => <span className="form-error -required">Required</span>
+const required = (value) => {
+  if (!value.toString().trim().length) {
+    return responses.required
+  }
 };
 
-const email = {
-  rule: value => validator.isEmail(value),
-  hint: () => <span className="form-error -email">Email not valid</span>
+const email = (value) => {
+  if (!validator.isEmail(value)) {
+    return responses.email
+  }
 };
 
-const url = {
-  rule: value => validator.isURL(value),
-  hint: () => <span className="form-error -url">Url not valid</span>
+const url = (value) => {
+  if (!validator.isURL(value)) {
+    return responses.url
+  }
 };
 
-const passwordConfirmation = {
-  rule: (value, components) => value === components.password.state.value,
-  hint: () => <span className="form-error -password-confirmation">Passwords don't match</span>
+const passwordConfirmation = (value, components) => {
+  if (value !== components.password.state.value) {
+    return responses.passwordConfirmation
+  }
 };
 
-const urlTile = {
-  hint: value => <span className="form-error is-visible">Text is not a URL tile layer</span>,
-  rule: (value) => {
-    if (!value) return false;
-    const parts = value.split('/{z}/{x}/{y}');
-    if (parts.length !== 2) return false;
-    const isUrl = validator.isURL(parts[0]);
-    const isImage = (parts[1].startsWith('.') && validator.isAlphanumeric(parts[1].slice(1)));
-    const noExtension = parts[1] === '';
-    return (isUrl && (isImage || noExtension));
+const urlTile = (value) => {
+  if (!value) {
+    return responses.urlTile
+  }
+
+  const parts = value.split('/{z}/{x}/{y}');
+
+  if (parts.length !== 2) {
+    return responses.urlTile
+  }
+
+  const isUrl = validator.isURL(parts[0]);
+  const isImage = (parts[1].startsWith('.') && validator.isAlphanumeric(parts[1].slice(1)));
+  const noExtension = parts[1] === '';
+
+  if (!(isUrl && (isImage || noExtension))) {
+    return responses.urlTile
   }
 };
 
