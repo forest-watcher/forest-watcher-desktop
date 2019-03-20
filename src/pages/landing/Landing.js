@@ -90,8 +90,8 @@ class Landing extends React.Component {
               <h1><FormattedMessage id="app.name" /></h1>
               <h2><FormattedMessage id="app.description" /></h2>
               <div className='build-buttons'>
-                <a className='button-ios-image' href="https://itunes.apple.com/us/app/forest-watcher/id1277787116"></a>
-                <a className='button-android-image' href="https://play.google.com/store/apps/details?id=com.forestwatcher"></a>
+                <a className='button-ios-image' href="https://itunes.apple.com/us/app/forest-watcher/id1277787116"><span className="sr-only"><FormattedMessage  id="app.iOSAppStore" /></span></a>
+                <a className='button-android-image' href="https://play.google.com/store/apps/details?id=com.forestwatcher"><span className="sr-only"><FormattedMessage className="sr-only" id="app.googlePlay" /></span></a>
               </div>
               <span className="text"><FormattedMessage id="app.or" />&nbsp;
                 <a className='text -green' target="_blank" href={DOWNLOAD_APK_LINK}>

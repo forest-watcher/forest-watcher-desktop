@@ -14,6 +14,8 @@
     "app.login": "Log in",
     "app.goToApp": "Go to App",
     "app.setupEmail": "Setup your email",
+    "app.iOSAppStore": "Download on the App Store",
+    "app.googlePlay": "Get it on Google play",
     "common.create": "Create",
     "common.edit": "Edit",
     "common.add": "Add",
