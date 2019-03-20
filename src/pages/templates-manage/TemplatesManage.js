@@ -12,7 +12,7 @@ import { setLanguages, syncLanguagesWithDefaultLanguage } from '../../helpers/la
 import { Link } from 'react-router-dom';
 import { toastr } from 'react-redux-toastr';
 import QuestionCard from '../../components/question-card/QuestionCard';
-import { CSSTransitionGroup } from 'react-transition-group';
+import { TransitionGroup, CSSTransition } from 'react-transition-group';
 import { QUESTION } from '../../constants/templates';
 import Switch from 'react-toggle-switch'
 
@@ -247,28 +247,29 @@ class TemplatesManage extends React.Component {
                       </div>
                     </div>
                       {this.state.questions &&
-                        <CSSTransitionGroup
-                          transitionName="example"
-                          transitionEnterTimeout={500}
-                          transitionLeaveTimeout={500}
-                        >
+                        <TransitionGroup>
                           { this.state.questions.map((question, index) =>
-                            <QuestionCard
+                            <CSSTransition
                               key={index}
-                              questionNum={index + 1}
-                              question={question}
-                              template={this.state}
-                              syncStateWithProps={this.handleQuestionEdit}
-                              questionOptions={questionOptions}
-                              defaultLanguage={this.state.defaultLanguage}
-                              deleteQuestion={this.handleQuestionDelete}
-                              status={this.state.status}
-                              canEdit={canEdit}
-                              canManage={canManage}
-                              mode={mode}
-                            />
+                              classNames="fade"
+                              timeout={{ enter: 500, exit: 500 }}
+                            >
+                              <QuestionCard
+                                questionNum={index + 1}
+                                question={question}
+                                template={this.state}
+                                syncStateWithProps={this.handleQuestionEdit}
+                                questionOptions={questionOptions}
+                                defaultLanguage={this.state.defaultLanguage}
+                                deleteQuestion={this.handleQuestionDelete}
+                                status={this.state.status}
+                                canEdit={canEdit}
+                                canManage={canManage}
+                                mode={mode}
+                              />
+                            </CSSTransition>
                           )}
-                        </CSSTransitionGroup>
+                        </TransitionGroup>
                       }
                   </div>
                 </div>
