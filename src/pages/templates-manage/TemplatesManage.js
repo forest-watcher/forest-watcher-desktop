@@ -199,12 +199,13 @@ class TemplatesManage extends React.Component {
                       <label className="text -gray"><FormattedMessage id={"templates.assignArea"} />:</label>
                       <Select
                         name="areas-select"
-                        className="c-select"
+                        className="c-select u-w-100"
+                        classNamePrefix="Select"
                         options={areasOptions}
                         value={this.state.areaOfInterest && areasOptions ? getSelectorValueFromArray(this.state.areaOfInterest, areasOptions) : null}
                         onChange={this.onAreaChange}
                         noResultsText={this.props.intl.formatMessage({ id: 'filters.noAreasAvailable' })}
-                        searchable={false}
+                        isSearchable={false}
                         disabled={isLoading}
                         arrowRenderer={() => <svg className="c-icon -x-small -gray"><use xlinkHref="#icon-arrow-down"></use></svg>}
                       />
@@ -215,13 +216,14 @@ class TemplatesManage extends React.Component {
                       <label className="text"><FormattedMessage id={"templates.defaultLanguage"} />:</label>
                       <Select
                         name="language-select"
-                        className="c-select"
+                        className="c-select u-w-100"
+                        classNamePrefix="Select"
                         options={localeOptions}
                         value={this.state.defaultLanguage ? getSelectorValueFromArray(this.state.defaultLanguage, localeOptions) : locale}
                         onChange={this.onLanguageChange}
                         noResultsText={this.props.intl.formatMessage({ id: 'filters.noLanguagesAvailable' })}
-                        searchable={true}
-                        clearable={false}
+                        isSearchable={true}
+                        isClearable={false}
                         disabled={isLoading || !modeCreate}
                         arrowRenderer={() => <svg className="c-icon -x-small -gray"><use xlinkHref="#icon-arrow-down"></use></svg>}
                       />

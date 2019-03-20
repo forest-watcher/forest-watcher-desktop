@@ -58,9 +58,10 @@
         .Select__value-container {
             padding-left: 15px;
             padding-right: 15px;
+            height: 100%;
         }
 
-        .Select-value-label {
+        .Select__single-value {
             height: 100%;
             display: flex;
             align-items: center;
