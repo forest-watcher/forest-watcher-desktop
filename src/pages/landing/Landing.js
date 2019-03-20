@@ -4,18 +4,9 @@ import { FormattedMessage } from 'react-intl';
 import { Link } from 'react-router-dom';
 import { GFW_ASSETS_PATH, DOWNLOAD_APK_LINK, DOWNLOAD_APK_VERSION } from '../../constants/landing';
 import SocialFooter from './SocialFooter';
-import Select, { components } from 'react-select';
-import Script from 'react-load-script'
-
-const DropdownIndicator = (props) => {
-  return components.DropdownIndicator && (
-    <components.DropdownIndicator {...props}>
-      <svg className="c-icon -x-small -gray">
-        <use xlinkHref="#icon-arrow-down"></use>
-      </svg>
-    </components.DropdownIndicator>
-  );
-};
+import Select from 'react-select';
+import Script from 'react-load-script';
+import DropdownIndicator from '../../components/ui/SelectDropdownIndicator'
 
 class Landing extends React.Component {
 

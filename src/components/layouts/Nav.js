@@ -2,18 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { NavLink } from 'react-router-dom';
 import Icon from '../ui/Icon';
-import Select, { components } from 'react-select';
+import DropdownIndicator from '../ui/SelectDropdownIndicator'
+import Select from 'react-select';
 import { FormattedMessage } from 'react-intl';
-
-const DropdownIndicator = (props) => {
-  return components.DropdownIndicator && (
-    <components.DropdownIndicator {...props}>
-      <svg className="c-icon -x-small -gray">
-        <use xlinkHref="#icon-arrow-down"></use>
-      </svg>
-    </components.DropdownIndicator>
-  );
-};
 
 class Nav extends React.Component {
   constructor(props) {
