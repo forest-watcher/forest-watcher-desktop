@@ -62,10 +62,9 @@ const mapStateToProps = ({ areas, templates, reports, user, teams }, { match, lo
   const team = teams.data && teams.data.attributes;
   let areasOptions = [];
   let answers = [];
-  let templateOptions = [];
+  let templateOptions = getTemplateOptions(templates);
   let answersFiltered = [];
   if (templateId !== 0 && reports.answers[templateId]) {
-    templateOptions = getTemplateOptions(templates);
     answers = getAnswersByTemplate(templateId, reports, areas, user.data, team);
     areasOptions = getDataAreas(answers, areas);
     answersFiltered = filterData(answers, searchParams);
