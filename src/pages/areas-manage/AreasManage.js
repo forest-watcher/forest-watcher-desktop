@@ -95,7 +95,7 @@ class AreasManage extends React.Component {
         const geojsonParsed = geojson.features.reduce(union);
 
         if (!checkArea(geojsonParsed)) {
-          toastr.error(this.props.intl.formatMessage({ id: 'areas.uploadedTooLarge' }), this.props.intl.formatMessage({ id: 'areas.uploadedTooLargeDesc' }));
+          toastr.error(this.props.intl.formatMessage({ id: 'areas.tooLarge' }), this.props.intl.formatMessage({ id: 'areas.uploadedTooLargeDesc' }));
         } else {
           if (geojsonParsed) {
             this.onDrawComplete(geojsonParsed);
