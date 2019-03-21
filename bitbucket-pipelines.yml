@@ -9,19 +9,21 @@ pipelines:
           artifacts:
             - build/**
           script:
+            - sh bitbucket-pipelines.sh test
             - yarn install
             - yarn test
             - yarn build
   branches:
     develop:
       - step:
-          name: Install JS dependencies & build
+          name: Install JS dependencies & build (develop)
           image: node:8.11.2
           caches:
             - node
           artifacts:
             - build/**
           script:
+            - sh bitbucket-pipelines.sh test
             - yarn install
             - yarn test
             - yarn build
@@ -35,9 +37,21 @@ pipelines:
             - cd build
             - aws s3 sync . s3://forest-watcher-web-client-dev
       - step:
-          name: Deploy GFW develop branch to staging environment
+          name: Install JS dependencies & build (staging)
+          image: node:8.11.2
           deployment: staging
           trigger: manual
+          caches:
+            - node
+          artifacts:
+            - build/**
+          script:
+            - sh bitbucket-pipelines.sh staging
+            - yarn install
+            - yarn test
+            - yarn build
+      - step:
+          name: Deploy GFW develop branch to staging environment
           image: atlassian/pipelines-awscli
           artifacts:
             - build/**
@@ -54,6 +68,7 @@ pipelines:
             artifacts:
               - build/**
             script:
+              - sh bitbucket-pipelines.sh test
               - yarn install
               - yarn test
               - yarn build
@@ -75,6 +90,7 @@ pipelines:
             artifacts:
               - build/**
             script:
+              - sh bitbucket-pipelines.sh staging
               - yarn install
               - yarn test
               - yarn build
