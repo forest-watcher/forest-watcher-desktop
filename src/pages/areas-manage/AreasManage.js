@@ -224,7 +224,9 @@ class AreasManage extends React.Component {
                 <button className="c-button -light" disabled={this.props.saving || this.props.loading}><FormattedMessage id="forms.cancel" /></button>
               </Link>
               <div className="horizontal-field">
-                <label className="c-button -light" htmlFor="shapefile"><FormattedMessage id="areas.uploadShapefile" /> </label>
+                <label className="c-button -light" htmlFor="shapefile">
+                  {this.state.isValidatingShapefile ? <FormattedMessage id="areas.uploadingShapefile" /> : <FormattedMessage id="areas.uploadShapefile" />}
+                </label>
                 <input
                   type="file"
                   id="shapefile"
