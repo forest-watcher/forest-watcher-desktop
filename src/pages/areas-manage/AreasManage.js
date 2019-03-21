@@ -15,7 +15,11 @@ import CountrySearch from '../../components/country-search/CountrySearchContaine
 import LayersSelector from '../../components/layers-selector/LayersSelectorContainer';
 import union from '@turf/union';
 import { required } from '../../constants/validation-rules'
+import withModal from '../../components/ui/withModal';
+import ShapefileInfo from '../../components/ui/ShapefileInfo';
+import Icon from '../../components/ui/Icon';
 
+const ShapefileInfoModal = withModal(ShapefileInfo);
 class AreasManage extends React.Component {
 
   constructor(props) {
@@ -33,7 +37,8 @@ class AreasManage extends React.Component {
         lng: 0,
         zoomControl: false,
         scrollWheelZoom: false
-      }
+      },
+      open: false
     }
   }
 
@@ -112,6 +117,15 @@ class AreasManage extends React.Component {
         geojson: null
       };
     }
+  }
+
+  onInfoClick = (e) => {
+    e.preventDefault();
+    this.setState({ open: true });
+  }
+
+  closeModal = () => {
+    this.setState({ open: false });
   }
 
   render() {
@@ -205,6 +219,9 @@ class AreasManage extends React.Component {
                   accept=".zip"
                   onChange={this.onShapefileChange}
                 />
+                <button className="info-button u-margin-left-small" onClick={this.onInfoClick}>
+                  <Icon className="-small" name="icon-info"/>
+                </button>
               </div>
               <div className="areas-inputs">
                 <div className="horizontal-field">
@@ -224,6 +241,18 @@ class AreasManage extends React.Component {
             </div>
           </div>
         </Form>
+        <ShapefileInfoModal
+          open={this.state.open}
+          close={this.closeModal}
+          title={this.props.intl.formatMessage({ id: 'areas.shapefileInfoTitle'})}
+          maxSize={this.props.intl.formatMessage({ id: 'areas.shapefileInfoMaxSize'})}
+          formats={this.props.intl.formatMessage({ id: 'areas.shapefileInfoFormats'})}
+          unzippedTitle={this.props.intl.formatMessage({ id: 'areas.shapefileInfoUnzippedTitle'})}
+          unzipped={this.props.intl.formatMessage({ id: 'areas.shapefileInfoUnzipped'})}
+          zippedTitle={this.props.intl.formatMessage({ id: 'areas.shapefileInfoUnzippedTitle'})}
+          zipped={this.props.intl.formatMessage({ id: 'areas.shapefileInfoZipped'})}
+          onAccept={this.closeModal}
+        />
       </div>
     );
   }
