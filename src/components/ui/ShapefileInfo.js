@@ -24,7 +24,7 @@ class ShapefileInfo extends PureComponent {
     const { title, maxSize, formats, unzippedTitle, unzipped, zippedTitle, zipped } = this.props;
     return (
       <div className="c-modal-content">
-        <div className="modal-content-content">
+        <div className="modal-content-inner">
           <h2 className="text -small-title -green">{title}</h2>
           <p className="text">{maxSize}</p>
           <p className="text">{formats}</p>

@@ -33,7 +33,7 @@ class Walkthrough extends PureComponent {
     const childContent = steps[currentStep].childContent;
     return (
       <div className="c-modal-content">
-        <div className="modal-content-content">
+        <div className="modal-content-inner">
           <h2 className="text -small-title -green">{title}</h2>
           <p className="text">{intro}</p>
           <ol className="modal-content-steps-index">
