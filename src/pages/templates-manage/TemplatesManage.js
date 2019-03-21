@@ -2,10 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import Hero from '../../components/layouts/Hero';
-import 'react-select/dist/react-select.css';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { Form, Button } from '../../components/form/Form';
-import { validation } from '../../helpers/validation'; // eslint-disable-line no-unused-vars
 import Select from 'react-select';
 import Loader from '../../components/ui/Loader';
 import FormFooter from '../../components/ui/FormFooter';
@@ -14,7 +12,7 @@ import { setLanguages, syncLanguagesWithDefaultLanguage } from '../../helpers/la
 import { Link } from 'react-router-dom';
 import { toastr } from 'react-redux-toastr';
 import QuestionCard from '../../components/question-card/QuestionCard';
-import { CSSTransitionGroup } from 'react-transition-group';
+import { TransitionGroup, CSSTransition } from 'react-transition-group';
 import { QUESTION } from '../../constants/templates';
 import Switch from 'react-toggle-switch'
 
@@ -201,12 +199,13 @@ class TemplatesManage extends React.Component {
                       <label className="text -gray"><FormattedMessage id={"templates.assignArea"} />:</label>
                       <Select
                         name="areas-select"
-                        className="c-select"
+                        className="c-select u-w-100"
+                        classNamePrefix="Select"
                         options={areasOptions}
                         value={this.state.areaOfInterest && areasOptions ? getSelectorValueFromArray(this.state.areaOfInterest, areasOptions) : null}
                         onChange={this.onAreaChange}
                         noResultsText={this.props.intl.formatMessage({ id: 'filters.noAreasAvailable' })}
-                        searchable={false}
+                        isSearchable={false}
                         disabled={isLoading}
                         arrowRenderer={() => <svg className="c-icon -x-small -gray"><use xlinkHref="#icon-arrow-down"></use></svg>}
                       />
@@ -217,13 +216,14 @@ class TemplatesManage extends React.Component {
                       <label className="text"><FormattedMessage id={"templates.defaultLanguage"} />:</label>
                       <Select
                         name="language-select"
-                        className="c-select"
+                        className="c-select u-w-100"
+                        classNamePrefix="Select"
                         options={localeOptions}
                         value={this.state.defaultLanguage ? getSelectorValueFromArray(this.state.defaultLanguage, localeOptions) : locale}
                         onChange={this.onLanguageChange}
                         noResultsText={this.props.intl.formatMessage({ id: 'filters.noLanguagesAvailable' })}
-                        searchable={true}
-                        clearable={false}
+                        isSearchable={true}
+                        isClearable={false}
                         disabled={isLoading || !modeCreate}
                         arrowRenderer={() => <svg className="c-icon -x-small -gray"><use xlinkHref="#icon-arrow-down"></use></svg>}
                       />
@@ -249,28 +249,29 @@ class TemplatesManage extends React.Component {
                       </div>
                     </div>
                       {this.state.questions &&
-                        <CSSTransitionGroup
-                          transitionName="example"
-                          transitionEnterTimeout={500}
-                          transitionLeaveTimeout={500}
-                        >
+                        <TransitionGroup>
                           { this.state.questions.map((question, index) =>
-                            <QuestionCard
+                            <CSSTransition
                               key={index}
-                              questionNum={index + 1}
-                              question={question}
-                              template={this.state}
-                              syncStateWithProps={this.handleQuestionEdit}
-                              questionOptions={questionOptions}
-                              defaultLanguage={this.state.defaultLanguage}
-                              deleteQuestion={this.handleQuestionDelete}
-                              status={this.state.status}
-                              canEdit={canEdit}
-                              canManage={canManage}
-                              mode={mode}
-                            />
+                              classNames="fade"
+                              timeout={{ enter: 500, exit: 500 }}
+                            >
+                              <QuestionCard
+                                questionNum={index + 1}
+                                question={question}
+                                template={this.state}
+                                syncStateWithProps={this.handleQuestionEdit}
+                                questionOptions={questionOptions}
+                                defaultLanguage={this.state.defaultLanguage}
+                                deleteQuestion={this.handleQuestionDelete}
+                                status={this.state.status}
+                                canEdit={canEdit}
+                                canManage={canManage}
+                                mode={mode}
+                              />
+                            </CSSTransition>
                           )}
-                        </CSSTransitionGroup>
+                        </TransitionGroup>
                       }
                   </div>
                 </div>

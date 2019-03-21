@@ -1,7 +1,11 @@
 import React from 'react';
-import Validation from 'react-validation';
 import ReactSelect from 'react-select';
 import { FormattedMessage } from 'react-intl';
+
+import Form from 'react-validation/build/form';
+import Button from 'react-validation/build/button';
+import TextareaComponent from 'react-validation/build/textarea';
+import InputComponent from 'react-validation/build/input';
 
 function withWrapper(Component) {
   return class FormWrapper extends React.Component {
@@ -17,10 +21,8 @@ function withWrapper(Component) {
   };
 }
 
-const Form = Validation.components.Form;
-const Button = Validation.components.Button;
-const Input = withWrapper(Validation.components.Input);
-const Textarea = withWrapper(Validation.components.Textarea);
+const Input = withWrapper(InputComponent);
+const Textarea = withWrapper(TextareaComponent);
 const Select = withWrapper(ReactSelect);
 const AsyncSelect = withWrapper(ReactSelect.Async);
 

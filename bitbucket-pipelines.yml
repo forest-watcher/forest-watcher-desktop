@@ -10,6 +10,7 @@ pipelines:
             - build/**
           script:
             - yarn install
+            - yarn test
             - yarn build
   branches:
     develop:
@@ -22,6 +23,7 @@ pipelines:
             - build/**
           script:
             - yarn install
+            - yarn test
             - yarn build
       - step:
           name: Deploy GFW develop branch to dev environment
@@ -53,6 +55,7 @@ pipelines:
               - build/**
             script:
               - yarn install
+              - yarn test
               - yarn build
         - step:
             name: Deploy GFW develop branch to dev environment
@@ -73,6 +76,7 @@ pipelines:
               - build/**
             script:
               - yarn install
+              - yarn test
               - yarn build
         - step:
             name: Deploy GFW develop branch to staging environment

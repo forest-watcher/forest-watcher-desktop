@@ -98,7 +98,7 @@
                 .more-info-select {
                     width: 160px;
                     margin-right: 15px;
-                }  
+                }
             }
 
             .child-input {
@@ -122,20 +122,20 @@
 
 
 // reaact transition effects
-.example-enter {
+.fade-enter {
   opacity: 0.01;
 }
 
-.example-enter.example-enter-active {
+.fade-enter.fade-enter-active {
   opacity: 1;
   transition: opacity 500ms ease-in;
 }
 
-.example-leave {
+.fade-exit {
   opacity: 1;
 }
 
-.example-leave.example-leave-active {
+.fade-exit.fade-exit-active {
   opacity: 0.01;
   transition: opacity 500ms ease-out;
 }

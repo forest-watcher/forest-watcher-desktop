@@ -23,7 +23,9 @@ export default function reducer(state = initialState, action) {
   switch (action.type) {
     case GET_TEAM: {
       const team = action.payload;
-      if (team) return Object.assign({}, state, { data: team });
+      if (team) {
+        return Object.assign({}, state, { data: team });
+      }
       return state;
     }
     case SAVE_TEAM: {
@@ -61,7 +63,9 @@ export function getTeam(userId) {
       }
     })
       .then((response) => {
-        if (response.ok) return response.json();
+        if (response.ok) {
+          return response.json();
+        }
         throw Error(response.statusText);
       })
       .then((response) => {
@@ -223,8 +227,8 @@ export function setSaving(value) {
 }
 
 export function sendNotifications() {
-  return { 
-    type: SEND_NOTIFICATIONS, 
-    payload: true 
+  return {
+    type: SEND_NOTIFICATIONS,
+    payload: true
   };
 }

@@ -7,6 +7,7 @@ import MembersManager from './MembersManager';
 import FormFooter from '../ui/FormFooter';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { MANAGER, USER, CONFIRMED_USER } from '../../constants/global';
+import { required } from '../../constants/validation-rules'
 
 class TeamsForm extends React.Component {
   constructor (props) {
@@ -117,7 +118,7 @@ class TeamsForm extends React.Component {
                     name="name"
                     value={this.form.name || ''}
                     placeholder={intl.formatMessage({ id: 'teams.teamName' })}
-                    validations={['required']}
+                    validations={[required]}
                   />
                 </div>
                 <div className="input-group">

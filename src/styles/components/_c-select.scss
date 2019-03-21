@@ -2,14 +2,11 @@
     height: 100%;
     z-index: 1000;
     font-family: $base-font-family;
+    width: 70px;
 
-    &:focus {
-        outline: none;
-    }
+    &.Select__multi {
 
-    &.Select--multi {
-
-      .Select-value {
+      .Select__value {
         display: flex;
         padding: 0 !important;
         margin-bottom: 4px;
@@ -35,56 +32,64 @@
       }
     }
 
-    &.is-pseudo-focused {
-        outline: none;
-        border: 0;
-    }
-
-    .Select-control {
+    .Select__control {
         height: 40px;
         background-color: $white;
         border: solid 1px #e6e6e6;
         border-radius: 4px;
         color: $theme-text;
         cursor: pointer;
+        display: flex;
 
-        &:focus {
-            outline: none;
-        }
+        &.Select__control--menu-is-open {
+              background-color: $white;
+              border-bottom-right-radius: 0;
+              border-bottom-left-radius: 0;
 
-        .Select-value {
-            padding-left: 15px;
-            padding-right: 15px;
+              .Select__single-value {
+                  color: $theme-text !important;
+              }
 
-            &:focus {
-                outline: none;
+            .c-icon {
+                transform: rotate(180deg);
             }
         }
 
-        .Select-value-label {
+        .Select__value-container {
+            padding-left: 15px;
+            padding-right: 15px;
+            height: 100%;
+        }
+
+        .Select__single-value {
             height: 100%;
             display: flex;
             align-items: center;
             font-size: $font-size-regular;
             color: $gray;
             letter-spacing: 0.1px;
+        }
 
-            &:focus {
-                outline: none;
+        .Select__indicator {
+            padding-right: 15px;
+            width: 25px;
+            padding-left: 0;
+            .c-icon {
+              margin-left: 0;
             }
         }
 
-        .Select-arrow-zone {
-            padding-right: 15px;
+        .Select__indicator-separator {
+          display: none;
         }
     }
 
-    .Select-placeholder {
+    .Select__placeholder {
         line-height: 40px;
         margin-right: 25px;
     }
 
-    .Select-menu-outer {
+    .Select__menu {
         border-radius: 0;
         border-bottom-right-radius: 2px;
         border-bottom-left-radius: 2px;
@@ -93,18 +98,18 @@
         border-top-color: solid 1px rgba(#979797, 0.5);
         box-shadow: 0 0 0;
 
-        .Select-option {
+        .Select__option {
             font-size: $font-size-regular;
             color: $theme-text !important;
             padding-top: 12px;
             padding-bottom: 12px;
 
-            &.is-focused {
+            &.Select__option--is-focused {
                 background-color: rgba($theme-accent, 0.3);
                 border-radius: 0;
             }
 
-            &.is-selected {
+            &.Select__option--is-selected {
                 background-color: rgba($theme-accent, 0.2);
                 border-radius: 0;
             }
@@ -113,14 +118,19 @@
 
     &.-dark {
 
-        .Select-control {
+        .Select__control {
             color: rgba($white, 0.5) !important;
             background-color: transparent;
             border-radius: 0;
             border: 0;
             height: 100%;
+            display: flex;
+            align-items: center;
+            font-size: $font-size-regular;
+            color: $gray;
+            letter-spacing: 0.1px;
 
-            .Select-value-label {
+            .Select__single-value {
                 color: rgba($white, 0.5) !important;
                 font-size: $font-size-small;
                 font-weight: $font-weight-bold;
@@ -131,7 +141,7 @@
             fill: rgba($white, 0.5);
         }
 
-        .Select-menu-outer {
+        .Select__menu {
             margin-top: 0;
             box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.5);
             padding-top: 8px;
@@ -144,26 +154,8 @@
         }
     }
 
-    &.is-open {
-        .Select-control {
-            background-color: $white;
-            border-bottom-right-radius: 0;
-            border-bottom-left-radius: 0;
-
-            .Select-value-label {
-                color: $theme-text !important;
-            }
-        }
-
-        .c-icon {
-            transform: rotate(180deg);
-            fill: $dark-gray;
-        }
-    }
-
     &.-map {
-
-        .Select-control {
+        .Select__control {
             color: $white !important;
             box-shadow: inset 0 0 2px 0 rgba(0, 0, 0, 0.2);
             background-color: rgba(#333333, 0.5);
@@ -171,19 +163,18 @@
             border: 0;
             height: 37px;
 
-            .Select-value-label {
+            .Select__single-value {
                 color: $white !important;
                 font-size: $font-size-small;
                 font-weight: $font-weight-bold;
             }
 
-            .Select-placeholder {
+            .Select__placeholder {
                 color: $white !important;
                 line-height: 37px;
-                padding-left: 15px;
             }
 
-            .Select-input {
+            .Select__input {
                 > input {
                     color: $white !important;
                     padding: 10px 0 10px 5px;

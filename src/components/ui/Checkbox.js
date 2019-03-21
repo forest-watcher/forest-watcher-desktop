@@ -7,7 +7,7 @@ function Checkbox({ id, callback, label, defaultChecked, checked , labelId, intl
   return (
     <div className={classnames(['c-checkbox', classNames])}>
       <div className="checkbox">
-        { typeof checked !== 'undefined' ? 
+        { typeof checked !== 'undefined' ?
           <input type="checkbox" id={id} onChange={callback} defaultChecked={defaultChecked} checked={checked} disabled={disabled}/>
           :
           <input type="checkbox" id={id} onChange={callback} defaultChecked={defaultChecked} disabled={disabled}/>
@@ -24,7 +24,7 @@ Checkbox.propTypes = {
   callback: PropTypes.func.isRequired,
   defaultChecked: PropTypes.bool,
   checked: PropTypes.bool,
-  label: PropTypes.string,
+  label: PropTypes.object,
   labelId: PropTypes.string
 };
 

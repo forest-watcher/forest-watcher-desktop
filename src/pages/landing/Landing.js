@@ -5,7 +5,8 @@ import { Link } from 'react-router-dom';
 import { GFW_ASSETS_PATH, DOWNLOAD_APK_LINK, DOWNLOAD_APK_VERSION } from '../../constants/landing';
 import SocialFooter from './SocialFooter';
 import Select from 'react-select';
-import Script from 'react-load-script'
+import Script from 'react-load-script';
+import DropdownIndicator from '../../components/ui/SelectDropdownIndicator'
 
 class Landing extends React.Component {
 
@@ -59,12 +60,12 @@ class Landing extends React.Component {
               <Select
                 name="locale-select"
                 className="c-select"
-                value={this.props.locale}
+                classNamePrefix="Select"
+                value={{value: this.props.locale, label: this.props.locale.toUpperCase()}}
                 options={this.languages}
                 onChange={this.handleLanguageChange}
-                clearable={false}
-                searchable={false}
-                arrowRenderer={() => <svg className="c-icon -x-small -gray"><use xlinkHref="#icon-arrow-down"></use></svg>}
+                isSearchable={false}
+                components={{ DropdownIndicator }}
               />
             </div>
           </div>}
@@ -80,11 +81,11 @@ class Landing extends React.Component {
               <h1><FormattedMessage id="app.name" /></h1>
               <h2><FormattedMessage id="app.description" /></h2>
               <div className='build-buttons'>
-                <a className='button-ios-image' href="https://itunes.apple.com/us/app/forest-watcher/id1277787116"></a>
-                <a className='button-android-image' href="https://play.google.com/store/apps/details?id=com.forestwatcher"></a>
+                <a className='button-ios-image' href="https://itunes.apple.com/us/app/forest-watcher/id1277787116"><span className="sr-only"><FormattedMessage  id="app.iOSAppStore" /></span></a>
+                <a className='button-android-image' href="https://play.google.com/store/apps/details?id=com.forestwatcher"><span className="sr-only"><FormattedMessage className="sr-only" id="app.googlePlay" /></span></a>
               </div>
               <span className="text"><FormattedMessage id="app.or" />&nbsp;
-                <a className='text -green' target="_blank" href={DOWNLOAD_APK_LINK}>
+                <a className='text -green' target="_blank" rel="noopener noreferrer" href={DOWNLOAD_APK_LINK}>
                   <FormattedMessage id="app.download" /> .apk (v{DOWNLOAD_APK_VERSION})
                 </a>
               </span>

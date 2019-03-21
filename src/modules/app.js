@@ -1,11 +1,13 @@
-// Actions
-export const USER_CHECKED = 'app/USER_CHECKED';
-export const SET_LOCALE = 'app/SET_LOCALE';
 import { getGeostore } from './geostores';
 import { getAreas } from './areas';
 import { getTemplates, getTemplate } from './templates';
 import { getTeam } from './teams';
 import { getUser } from './user';
+
+// Actions
+export const USER_CHECKED = 'app/USER_CHECKED';
+export const SET_LOCALE = 'app/SET_LOCALE';
+
 // Reducer
 const initialState = {
   userChecked: false,

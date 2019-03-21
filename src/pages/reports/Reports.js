@@ -13,9 +13,6 @@ import { injectIntl } from 'react-intl';
 import qs from 'query-string';
 import { TABLE_PAGE_SIZE } from '../../constants/global';
 
-import 'react-select/dist/react-select.css';
-
-
 class Reports extends React.Component {
   constructor() {
     super();

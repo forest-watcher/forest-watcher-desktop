@@ -3,7 +3,6 @@ import Hero from '../../components/layouts/Hero';
 import { Input, Button, Form } from '../../components/form/Form';
 import Map from '../../components/map/Map';
 import { Link } from 'react-router-dom';
-import { validation } from '../../helpers/validation'; // eslint-disable-line no-unused-vars
 import { checkArea } from '../../helpers/areas';
 import { toastr } from 'react-redux-toastr';
 import LocateUser from '../../components/ui/LocateUser';
@@ -15,6 +14,7 @@ import { FormattedMessage, injectIntl } from 'react-intl';
 import CountrySearch from '../../components/country-search/CountrySearchContainer';
 import LayersSelector from '../../components/layers-selector/LayersSelectorContainer';
 import union from '@turf/union';
+import { required } from '../../constants/validation-rules'
 
 class AreasManage extends React.Component {
 
@@ -215,7 +215,7 @@ class AreasManage extends React.Component {
                     name="name"
                     value={this.form.name}
                     placeholder={this.props.intl.formatMessage({ id: 'areas.nameAreaPlaceholder' })}
-                    validations={['required']}
+                    validations={[required]}
                     disabled={this.props.saving || this.props.loading}
                   />
                 </div>
