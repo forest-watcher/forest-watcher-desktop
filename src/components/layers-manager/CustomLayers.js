@@ -6,6 +6,7 @@ import { injectIntl } from 'react-intl';
 import withModal from '../ui/withModal';
 import Walkthrough from '../ui/Walkthrough';
 import Icon from '../ui/Icon';
+import { required } from '../../constants/validation-rules'
 
 import { customLayers as WALKTHROUGH_TEXTS } from '../../constants/walkthrough-texts';
 
@@ -57,7 +58,7 @@ class CustomLayers extends Component {
             name="title"
             value={form.title || ''}
             placeholder={intl.formatMessage({ id: 'settings.layerTitle' })}
-            validations={['required']}
+            validations={[required]}
           />
           <Input
             type="text"
@@ -66,7 +67,7 @@ class CustomLayers extends Component {
             name="tileurl"
             value={form.tileurl || ''}
             placeholder={intl.formatMessage({ id: 'settings.url' })}
-            validations={['required']}
+            validations={[required]}
           />
           <h4>{intl.formatMessage({ id: 'settings.description' })}</h4>
           <Textarea
