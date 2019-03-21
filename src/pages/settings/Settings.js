@@ -11,6 +11,7 @@ import Loader from '../../components/ui/Loader';
 import Tab from '../../components/ui/Tab';
 import Confirm from '../../components/ui/Confirm';
 import withModal from '../../components/ui/withModal';
+import { injectIntl } from 'react-intl';
 
 const ConfirmModal = withModal(Confirm);
 
@@ -124,8 +125,10 @@ class Settings extends React.Component {
               <Loader isLoading={saving} />
               <ConfirmModal
                 open={this.state.open}
-                title={'Are you sure?'}
-                subtext={'Continue without saving?'}
+                title={this.props.intl.formatMessage({ id: 'confirm.areYouSure'})}
+                subtext={this.props.intl.formatMessage({ id: 'confirm.continueNoSave'})}
+                cancelText={this.props.intl.formatMessage({ id: 'common.cancel'})}
+                confirmText={this.props.intl.formatMessage({ id: 'common.ok'})}
                 onCancel={this.closeModal}
                 close={this.closeModal}
                 onAccept={this.continueNav}
@@ -144,7 +147,8 @@ Settings.propTypes = {
   publicLayers: PropTypes.array.isRequired,
   teamLayers: PropTypes.array.isRequired,
   userLayers: PropTypes.array.isRequired,
-  userId: PropTypes.string.isRequired
+  userId: PropTypes.string.isRequired,
+  intl: PropTypes.object
 };
 
-export default Settings;
+export default injectIntl(Settings);
