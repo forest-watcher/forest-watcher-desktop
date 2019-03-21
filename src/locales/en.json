@@ -55,6 +55,8 @@
     "areas.intersectError": "You cannot create an area that intersects",
     "areas.tooLarge": "Area too large",
     "areas.tooLargeDesc": "Please draw a smaller area",
+    "areas.uploadedTooLarge": "Area too large",
+    "areas.uploadedTooLargeDesc": "The max area size is 1500 km². Please upload a shapefile that covers a smaller area",
     "areas.fileTooLarge": "File too large",
     "areas.fileTooLargeDesc": "Please upload a file smaller than 1MB",
     "areas.locateUserError": "Your location wasn't found",

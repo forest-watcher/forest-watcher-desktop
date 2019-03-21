@@ -86,20 +86,25 @@ class AreasManage extends React.Component {
   onShapefileChange = async (e) => {
     const shapeFile = e.target.files && e.target.files[0];
     const maxFileSize = 1000000 //1MB
-    
+
     if (e.target.files[0].size <= maxFileSize) {
       const geojson = await this.props.getGeoFromShape(shapeFile);
       if (geojson && geojson.features) {
         const geojsonParsed = geojson.features.reduce(union);
-        if (geojsonParsed) {
-          this.onDrawComplete(geojsonParsed);
-          const dotIndex = shapeFile.name.lastIndexOf('.') > -1
-            ? shapeFile.name.lastIndexOf('.')
-            : shapeFile.name.length;
-          const areaName = shapeFile.name.substr(0, dotIndex);
-          this.form.name = areaName;
-          // Force render to notify the draw control of the external geojson
-          this.forceUpdate();
+
+        if (!checkArea(geojsonParsed)) {
+          toastr.error(this.props.intl.formatMessage({ id: 'areas.uploadedTooLarge' }), this.props.intl.formatMessage({ id: 'areas.uploadedTooLargeDesc' }));
+        } else {
+          if (geojsonParsed) {
+            this.onDrawComplete(geojsonParsed);
+            const dotIndex = shapeFile.name.lastIndexOf('.') > -1
+              ? shapeFile.name.lastIndexOf('.')
+              : shapeFile.name.length;
+            const areaName = shapeFile.name.substr(0, dotIndex);
+            this.form.name = areaName;
+            // Force render to notify the draw control of the external geojson
+            this.forceUpdate();
+          }
         }
       }
     } else {
