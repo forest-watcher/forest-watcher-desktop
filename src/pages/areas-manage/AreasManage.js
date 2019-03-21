@@ -38,7 +38,8 @@ class AreasManage extends React.Component {
         zoomControl: false,
         scrollWheelZoom: false
       },
-      open: false
+      open: false,
+      isValidatingShapefile: false
     }
   }
 
@@ -84,6 +85,7 @@ class AreasManage extends React.Component {
   }
 
   onShapefileChange = async (e) => {
+    this.setState({ isValidatingShapefile: true });
     const shapeFile = e.target.files && e.target.files[0];
     const maxFileSize = 1000000 //1MB
 
@@ -110,7 +112,7 @@ class AreasManage extends React.Component {
     } else {
       toastr.error(this.props.intl.formatMessage({ id: 'areas.fileTooLarge' }), this.props.intl.formatMessage({ id: 'areas.fileTooLargeDesc' }));
     }
-
+    this.setState({ isValidatingShapefile: false });
   }
 
   onDrawComplete = (areaGeoJson) => {
@@ -230,6 +232,7 @@ class AreasManage extends React.Component {
                   className="file-hidden"
                   accept=".zip"
                   onChange={this.onShapefileChange}
+                  disabled={this.state.isValidatingShapefile}
                 />
                 <button className="info-button u-margin-left-small" onClick={this.onInfoClick}>
                   <Icon className="-small" name="icon-info"/>
