@@ -231,7 +231,7 @@ class AreasManage extends React.Component {
                   id="shapefile"
                   name="shapefile"
                   className="file-hidden"
-                  accept=".zip"
+                  accept=".zip, .csv, .json, .geojson, .kml, .kmz"
                   onChange={this.onShapefileChange}
                   disabled={this.state.isValidatingShapefile}
                 />
@@ -265,7 +265,7 @@ class AreasManage extends React.Component {
           formats={this.props.intl.formatMessage({ id: 'areas.shapefileInfoFormats'})}
           unzippedTitle={this.props.intl.formatMessage({ id: 'areas.shapefileInfoUnzippedTitle'})}
           unzipped={this.props.intl.formatMessage({ id: 'areas.shapefileInfoUnzipped'})}
-          zippedTitle={this.props.intl.formatMessage({ id: 'areas.shapefileInfoUnzippedTitle'})}
+          zippedTitle={this.props.intl.formatMessage({ id: 'areas.shapefileInfoZippedTitle'})}
           zipped={this.props.intl.formatMessage({ id: 'areas.shapefileInfoZipped'})}
           onAccept={this.closeModal}
         />
