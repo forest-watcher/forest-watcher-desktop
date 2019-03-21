@@ -36,8 +36,8 @@ class Confirm extends PureComponent {
           <h2 className="text -small-title -green">{title}</h2>
           <p className="text">{subtext}</p>
           <div className="walkthrough-action">
-            <button className="c-button -small -right u-margin-right-tiny test-btn-confirm" onClick={this.onCancel}>{cancelText}</button>
-            <button className="c-button -small" onClick={this.onAccept}>{confirmText}</button>
+            <button className="c-button -small -right u-margin-right-tiny test-cancel-button" onClick={this.onCancel}>{cancelText}</button>
+            <button className="c-button -small test-confirm-button" onClick={this.onAccept}>{confirmText}</button>
           </div>
         </div>
       </div>
