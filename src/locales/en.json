@@ -34,7 +34,6 @@
     "areas.createArea": "Create an area",
     "areas.manageArea": "Manage area",
     "areas.uploadShapefile": "Upload shapefile",
-    "areas.uploadingShapefile": "Uploading...",
     "areas.cancel": "cancel",
     "areas.save": "save",
     "areas.upload": "upload an area",
