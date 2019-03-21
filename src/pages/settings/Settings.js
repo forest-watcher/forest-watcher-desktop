@@ -9,13 +9,19 @@ import LayersManager from '../../components/layers-manager/LayersManager';
 import LayersShow from '../../components/layers-show/LayersShow';
 import Loader from '../../components/ui/Loader';
 import Tab from '../../components/ui/Tab';
+import Confirm from '../../components/ui/Confirm';
+import withModal from '../../components/ui/withModal';
+
+const ConfirmModal = withModal(Confirm);
 
 class Settings extends React.Component {
   constructor() {
     super();
     this.firstLoad = true;
     this.state = {
-      tabIndex: 0
+      tabIndex: 0,
+      tempTabIndex: 0,
+      open: false
     }
   }
 
@@ -29,7 +35,22 @@ class Settings extends React.Component {
   }
 
   handleTabIndexChange = (tabIndex) => {
-    this.setState({ tabIndex });
+    if (this.props.editing) {
+      this.setState({ tempTabIndex: tabIndex });
+      this.setState({ open: true });
+    } else {
+      this.setState({ tabIndex });
+    }
+  }
+
+  closeModal = () => {
+    this.setState({ open: false });
+  }
+
+  continueNav = () => {
+    this.closeModal();
+    this.props.setEditing(false);
+    this.setState({ tabIndex: this.state.tempTabIndex });
   }
 
   render() {
@@ -101,6 +122,14 @@ class Settings extends React.Component {
                 </div>
               }
               <Loader isLoading={saving} />
+              <ConfirmModal
+                open={this.state.open}
+                title={'Are you sure?'}
+                subtext={'Continue without saving?'}
+                onCancel={this.closeModal}
+                close={this.closeModal}
+                onAccept={this.continueNav}
+              />
             </div>}
         </div>
       </div>
