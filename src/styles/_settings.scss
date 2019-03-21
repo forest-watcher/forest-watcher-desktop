@@ -44,3 +44,10 @@ $disabled-font-color: #999;
 
 // eases
 $ease-out-cubic: cubic-bezier(0.215, 0.610, 0.355, 1.000);
+
+// size settings
+$global-spacing-unit:       24px;
+$global-spacing-unit-tiny:  6px;
+$global-spacing-unit-small: 12px;
+$global-spacing-unit-large: 48px;
+$global-spacing-unit-huge:  96px;
