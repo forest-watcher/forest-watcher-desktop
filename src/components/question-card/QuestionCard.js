@@ -297,6 +297,7 @@ class QuestionCard extends React.Component {
                             name="type"
                             className="type-select"
                             options={questionOptions}
+                            value={questionOptions.find((option) => option.value === question.type)}
                             getOptionLabel={option => option.label}
                             getOptionValue={option => option.value}
                             onChange={this.onTypeChange}
