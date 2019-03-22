@@ -293,12 +293,12 @@ class QuestionCard extends React.Component {
                             onKeyPress={(e) => {if (e.which === 13) { e.preventDefault();}}} // Prevent send on press Enter
                             disabled={!canManage}
                         />
-
                         <Select
                             name="type"
                             className="type-select"
                             options={questionOptions}
-                            value={question.type}
+                            getOptionLabel={option => option.label}
+                            getOptionValue={option => option.value}
                             onChange={this.onTypeChange}
                             isSearchable={false}
                             isClearable={false}
