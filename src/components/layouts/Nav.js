@@ -5,6 +5,7 @@ import Icon from '../ui/Icon';
 import DropdownIndicator from '../ui/SelectDropdownIndicator'
 import Select from 'react-select';
 import { FormattedMessage } from 'react-intl';
+import ReactGA from 'react-ga';
 
 class Nav extends React.Component {
   constructor(props) {
@@ -47,7 +48,14 @@ class Nav extends React.Component {
                   <NavLink to="/settings" activeClassName="-active"><FormattedMessage id="settings.name" /></NavLink>
                 </li>
                 <li className={`nav-link ${user.data && user.data.email ? '-disabled' : ''}`}>
-                  <a href={setUpEmailLink}>{username}</a>
+                  <ReactGA.OutboundLink
+                    eventLabel="myGFW"
+                    to={setUpEmailLink}
+                    rel="noopener noreferrer"
+                    target="_blank"
+                    >
+                      {username}
+                  </ReactGA.OutboundLink>
                 </li>
               </ul>
             }
