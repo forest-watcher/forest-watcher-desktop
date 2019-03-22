@@ -31,11 +31,11 @@ class Confirm extends PureComponent {
   render() {
     const { title, subtext, cancelText, confirmText } = this.props;
     return (
-      <div className="c-walkthrough">
-        <div className="walkthrough-content">
+      <div className="c-modal-content">
+        <div className="modal-content-inner">
           <h2 className="text -small-title -green">{title}</h2>
           <p className="text">{subtext}</p>
-          <div className="walkthrough-action">
+          <div className="modal-content-action">
             <button className="c-button -small -right u-margin-right-tiny test-cancel-button" onClick={this.onCancel}>{cancelText}</button>
             <button className="c-button -small test-confirm-button" onClick={this.onAccept}>{confirmText}</button>
           </div>
