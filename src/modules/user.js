@@ -12,7 +12,9 @@ export const SET_USER_DATA = 'user/SET_USER_DATA';
 
 // Reducer
 const initialState = {
-  data: {},
+  data: {
+    id: null
+  },
   loggedIn: false,
   token: null
 };
@@ -111,11 +113,12 @@ export function getUser() {
         throw Error(response.statusText);
       })
       .then(({ data }) => {
-        const userData = data || {};
-        dispatch({
-          type: SET_USER_DATA,
-          payload: { ...userData.attributes, id: userData.id }
-        });
+        if (data) {
+          dispatch({
+            type: SET_USER_DATA,
+            payload: { ...data.attributes, id: data.id }
+          });
+        }
       })
       .catch((error) => {
         toastr.error('Error in user retrieval');
