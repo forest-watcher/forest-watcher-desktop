@@ -14,7 +14,7 @@ class TeamsForm extends React.Component {
     super(props);
     const selectedManagers = (props.team && props.team.attributes.managers) || [];
     this.state = {
-      selectedAreas: (props.team && props.team.attributes.areas.join()) || '',
+      selectedAreas: (props.team && props.team.attributes.areas) || [],
       selectedUsers: (props.team && props.team.attributes.users) || [],
       selectedConfirmedUsers: (props.team && props.team.attributes.confirmedUsers) || [],
       selectedManagers,
@@ -83,6 +83,13 @@ class TeamsForm extends React.Component {
     this.form = Object.assign({}, this.form, { [field]: value });
   }
 
+  getSelectedAreas = () => {
+    const { selectedAreas } = this.state
+    return this.props.areaValues.filter((area) => {
+      return this.state.selectedAreas.find((selected) => area.value === selected)
+    })
+  }
+
   updateSelectedMembers = (selectedMembers, role) => {
     switch (role) {
       case MANAGER:
@@ -124,12 +131,12 @@ class TeamsForm extends React.Component {
                 <div className="input-group">
                   <h3><label><FormattedMessage id={"teams.areas"} /></label></h3>
                   <Select
-                    multi
-                    simpleValue
-                    className="c-select"
+                    isMulti
+                    className="c-select u-w-100"
+                    classNamePrefix="Select"
                     name="areas-select"
                     options={areaValues}
-                    value={this.state.selectedAreas}
+                    value={this.getSelectedAreas()}
                     onChange={this.onAreaChange}
                     noResultsText={intl.formatMessage({ id: 'filters.noAreasAvailable' })}
                     searchable={false}
