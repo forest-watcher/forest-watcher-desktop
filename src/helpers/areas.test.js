@@ -2,29 +2,6 @@ import * as areas from './areas';
 
 const largeArea = {
   "type": "Feature",
-  "properties": {
-    "OBJECTID": 113,
-    "SHORT_NAME": "Torotorofotsy",
-    "FULL_NAME": "Aire Protégée de Torotorofotsy",
-    "PROVINCE": "Toamasina",
-    "R": "Alaotra Mangoro",
-    "DISTRICT": "Moramanga",
-    "HECTARES": 9764.4,
-    "SUP_DECR_H": 9764,
-    "STATUT_JUR": "Aire Protégée",
-    "CATEG_IUCN": "Non définie",
-    "Gestionnai": "Asity Madagascar",
-    "GEST_2": "Asity Madagascar",
-    "DAT_ST_DEF": "2015/05/05",
-    "STAT_DEF": "ns2015-808 du 5 mai 2015",
-    "DATE_CREAT": "2015/05/05",
-    "GOUVERNANC": "Cogestion de type collaboratif",
-    "TYPE_AP": "TERRESTRE",
-    "AREA_HA": 10898,
-    "Shape_Leng": 54893.1674235,
-    "Shape_Area": 108983821.394,
-    "CAT_UICN": "0"
-  },
   "geometry": {
     "type": "Polygon",
     "coordinates": [
@@ -1404,25 +1381,6 @@ const largeArea = {
 
 const correctAreaSize = {
   "type": "Feature",
-  "properties": {
-    "Location_N": "OhBoySoy",
-    "Company_ID": 17,
-    "Cadaster_I": "CAR_12361",
-    "Volume": 300,
-    "Owner_Name": "Uche",
-    "Owner_ID": "CPF",
-    "Facility_N": "Silo",
-    "Facility_E": "hello@ohboysoy.com",
-    "Company_Na": "PlusSoy",
-    "Company_Co": "Uche",
-    "Certificat": "AAPRESID; ISCC",
-    "Start_Date": "2012/03/30",
-    "End_Date": "2013/03/14",
-    "Time_Horiz": "1 year",
-    "TestA": "agu",
-    "TestB": "busu",
-    "TestC": "cheretu"
-  },
   "geometry": {
     "type": "Polygon",
     "coordinates": [
