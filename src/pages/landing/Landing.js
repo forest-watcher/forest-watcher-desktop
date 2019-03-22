@@ -7,6 +7,7 @@ import SocialFooter from './SocialFooter';
 import Select from 'react-select';
 import Script from 'react-load-script';
 import DropdownIndicator from '../../components/ui/SelectDropdownIndicator'
+import ReactGA from 'react-ga';
 
 class Landing extends React.Component {
 
@@ -85,9 +86,15 @@ class Landing extends React.Component {
                 <a className='button-android-image' href="https://play.google.com/store/apps/details?id=com.forestwatcher"><span className="sr-only"><FormattedMessage className="sr-only" id="app.googlePlay" /></span></a>
               </div>
               <span className="text"><FormattedMessage id="app.or" />&nbsp;
-                <a className='text -green' target="_blank" rel="noopener noreferrer" href={DOWNLOAD_APK_LINK}>
-                  <FormattedMessage id="app.download" /> .apk (v{DOWNLOAD_APK_VERSION})
-                </a>
+                <ReactGA.OutboundLink
+                  eventLabel="apkLink"
+                  to={DOWNLOAD_APK_LINK}
+                  rel="noopener noreferrer"
+                  target="_blank"
+                  className='text -green'
+                  >
+                    <FormattedMessage id="app.download" /> .apk (v{DOWNLOAD_APK_VERSION})
+                </ReactGA.OutboundLink>
               </span>
               <div className="description">
                 <FormattedMessage id="app.webDescription" />
