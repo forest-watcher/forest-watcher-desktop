@@ -42,7 +42,7 @@ describe ('ShapefileInfo Dialog', () => {
   it('calls the onAccept function', () => {
     const mock = jest.fn()
     act(() => {
-      ReactDOM.render(<ShapefileInfo title="Upload A Custom Data Set" maxSize="max size requirements" formats="The file must be one of the following:" unzippedTitle="Unzipped: " unzipped=".csv, .json, .geojson, .kml, .kmz" zippedTitle="Zipped: " zipped=".shp" onAccept={mock}/>, container);
+      ReactDOM.render(<ShapefileInfo title="Upload A Custom Data Set" maxSize="max size requirements" formats="The file must be one of the following:" unzippedTitle="Unzipped:" unzipped=".csv, .json, .geojson, .kml, .kmz" zippedTitle="Zipped:" zipped=".shp" onAccept={mock}/>, container);
     });
     const confirmBtn = container.querySelector('.test-confirm-button');
     act(() => {
