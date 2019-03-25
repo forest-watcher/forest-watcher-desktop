@@ -11,12 +11,17 @@ import { injectIntl } from 'react-intl';
 import { Link } from 'react-router-dom';
 import qs from 'query-string';
 import { TABLE_PAGE_SIZE } from '../../constants/global';
-
+import ReactGA from 'react-ga';
 
 class Templates extends React.Component {
 
   createTemplate = () => {
     const { history } = this.props;
+    ReactGA.event({
+      category: 'Templates',
+      action: 'Create new template'
+    });
+
     history.push('/templates/create');
   }
 

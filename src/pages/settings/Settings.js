@@ -12,6 +12,7 @@ import Tab from '../../components/ui/Tab';
 import Confirm from '../../components/ui/Confirm';
 import withModal from '../../components/ui/withModal';
 import { injectIntl } from 'react-intl';
+import ReactGA from 'react-ga';
 
 const ConfirmModal = withModal(Confirm);
 
@@ -54,6 +55,14 @@ class Settings extends React.Component {
     this.setState({ tabIndex: this.state.tempTabIndex });
   }
 
+  editSettings = () => {
+     this.props.setEditing(true)
+     ReactGA.event({
+       category: 'Settings',
+       action: 'Edit'
+     });
+  }
+
   render() {
     const {
       team,
@@ -69,7 +78,7 @@ class Settings extends React.Component {
 
     const renderHero = () => {
       const canEdit = !editing && (isManager || this.state.tabIndex === 1);
-      const action = (canEdit) ? {name: "common.edit", callback: () => this.props.setEditing(true)} : null;
+      const action = (canEdit) ? {name: "common.edit", callback: this.editSettings} : null;
       const tabStyle = !(canEdit) ? "-no-action" : "";
       return (
         <Hero

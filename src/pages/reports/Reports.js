@@ -12,6 +12,7 @@ import Loader from '../../components/ui/Loader';
 import { injectIntl } from 'react-intl';
 import qs from 'query-string';
 import { TABLE_PAGE_SIZE } from '../../constants/global';
+import ReactGA from 'react-ga';
 
 class Reports extends React.Component {
   constructor() {
@@ -69,6 +70,10 @@ class Reports extends React.Component {
 
   downloadReports = () => {
     this.props.downloadAnswers(this.props.match.params.templateId);
+    ReactGA.event({
+      category: 'Reports',
+      action: 'Download answers'
+    });
   }
 
   handlePageChange = (page) => {
