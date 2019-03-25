@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Hero from '../../components/layouts/Hero';
 import Article from '../../components/layouts/Article';
-import { Link } from 'react-router-dom';
 import GridGallery from '../../components/layouts/GridGallery';
 import AreaCard from '../../components/area-card/AreaCardContainer';
 import Icon from '../../components/ui/Icon';
