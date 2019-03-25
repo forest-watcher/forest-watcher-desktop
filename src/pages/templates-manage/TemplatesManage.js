@@ -15,6 +15,7 @@ import QuestionCard from '../../components/question-card/QuestionCard';
 import { TransitionGroup, CSSTransition } from 'react-transition-group';
 import { QUESTION } from '../../constants/templates';
 import Switch from 'react-toggle-switch'
+import ReactGA from 'react-ga';
 
 import 'react-toggle-switch/dist/css/switch.min.css';
 
@@ -88,8 +89,18 @@ class TemplatesManage extends React.Component {
     if (this.canSubmit) {
       const method = this.props.mode === 'manage' ? 'PATCH' : 'POST';
       this.props.saveTemplate(this.state, method, this.props.templateId);
+      ReactGA.event({
+        category: 'Templates',
+        action: 'Save',
+        label: 'Success'
+      });
     } else {
       toastr.error(this.props.intl.formatMessage({ id: 'templates.missingFields' }), this.props.intl.formatMessage({ id: 'templates.missingFieldsDetail' }));
+      ReactGA.event({
+        category: 'Templates',
+        action: 'Save',
+        label: 'Missing fields'
+      });
     }
     this.canSubmit = true;
   }

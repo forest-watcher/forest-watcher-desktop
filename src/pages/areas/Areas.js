@@ -9,6 +9,7 @@ import Icon from '../../components/ui/Icon';
 import { FormattedMessage } from 'react-intl';
 import Loader from '../../components/ui/Loader';
 import { trimQueryParams } from '../../helpers/login.js';
+import ReactGA from 'react-ga';
 
 class Areas extends React.Component {
 
@@ -21,12 +22,15 @@ class Areas extends React.Component {
   getAddArea = () => {
     if (this.props.loading) return null;
     return (
-      <Link to="/areas/create">
+      <ReactGA.OutboundLink
+        eventLabel="addArea"
+        to="/areas/create"
+        >
         <button className="c-add-card">
           <Icon name="icon-plus" className="-medium -green" />
             <span className="text -x-small-title -green"><FormattedMessage id="areas.addArea" /></span>
         </button>
-      </Link>
+      </ReactGA.OutboundLink>
     );
   }
 

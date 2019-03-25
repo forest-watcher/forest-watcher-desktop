@@ -18,6 +18,7 @@ import { required } from '../../constants/validation-rules'
 import withModal from '../../components/ui/withModal';
 import ShapefileInfo from '../../components/ui/ShapefileInfo';
 import Icon from '../../components/ui/Icon';
+import ReactGA from 'react-ga';
 
 const ShapefileInfoModal = withModal(ShapefileInfo);
 class AreasManage extends React.Component {
@@ -69,11 +70,26 @@ class AreasManage extends React.Component {
       if (checkArea(this.form.geojson)) {
         const method = this.props.mode === 'manage' ? 'PATCH' : 'POST';
         this.props.saveAreaWithGeostore(this.form, this.state.map._container, method);
+        ReactGA.event({
+          category: 'Create an area',
+          action: 'Save',
+          label: 'Success'
+        });
       } else {
         toastr.error(this.props.intl.formatMessage({ id: 'areas.tooLarge' }), this.props.intl.formatMessage({ id: 'areas.tooLargeDesc' }));
+        ReactGA.event({
+          category: 'Create an area',
+          action: 'Save',
+          label: 'Area too large'
+        });
       }
     } else {
       toastr.error(this.props.intl.formatMessage({ id: 'areas.missingValues' }), this.props.intl.formatMessage({ id: 'areas.missingValuesDesc' }));
+      ReactGA.event({
+        category: 'Create an area',
+        action: 'Save',
+        label: 'Missing details'
+      });
     }
   }
 
@@ -96,6 +112,11 @@ class AreasManage extends React.Component {
 
         if (!checkArea(geojsonParsed)) {
           toastr.error(this.props.intl.formatMessage({ id: 'areas.tooLarge' }), this.props.intl.formatMessage({ id: 'areas.uploadedTooLargeDesc' }));
+          ReactGA.event({
+            category: 'Create an area',
+            action: 'Upload shapefile',
+            label: 'Area too large'
+          });
         } else {
           if (geojsonParsed) {
             this.onDrawComplete(geojsonParsed);
@@ -106,11 +127,21 @@ class AreasManage extends React.Component {
             this.form.name = areaName;
             // Force render to notify the draw control of the external geojson
             this.forceUpdate();
+            ReactGA.event({
+              category: 'Create an area',
+              action: 'Upload shapefile',
+              label: 'Success'
+            });
           }
         }
       }
     } else {
       toastr.error(this.props.intl.formatMessage({ id: 'areas.fileTooLarge' }), this.props.intl.formatMessage({ id: 'areas.fileTooLargeDesc' }));
+      ReactGA.event({
+        category: 'Create an area',
+        action: 'Upload shapefile',
+        label: 'File too large'
+      });
     }
     this.setState({ isValidatingShapefile: false });
   }

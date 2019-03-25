@@ -10,6 +10,7 @@ import { toastr } from 'react-redux-toastr';
 import { injectIntl } from 'react-intl';
 import { MAX_NUMBER_OF_LAYERS } from '../../constants/global';
 import CustomLayers from './CustomLayers';
+import ReactGA from 'react-ga';
 
 class LayersForm extends React.Component {
   constructor(props) {
@@ -104,10 +105,20 @@ class LayersForm extends React.Component {
     } else { // Custom Layers
       if (Object.keys(this.formNode.getErrors()).length === 0) { // No validation errors
         if (this.addLayer(this.state.form, teamId, userLayerNames, teamLayerNames, userLayerLength, teamLayerLength, typeOfLayer)){
+          ReactGA.event({
+            category: 'Contextual layers',
+            action: 'Add custom layer',
+            label: 'Success'
+          });
           this.resetForm();
         }
       } else {
         toastr.error(this.props.intl.formatMessage({ id: 'settings.validationError' }));
+        ReactGA.event({
+          category: 'Contextual layers',
+          action: 'Add custom layer',
+          label: 'Validation error'
+        });
       }
     }
   }
@@ -187,4 +198,3 @@ LayersForm.propTypes = {
 };
 
 export default injectIntl(LayersForm);
-
