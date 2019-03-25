@@ -92,15 +92,15 @@ class TemplatesManage extends React.Component {
       this.props.saveTemplate(this.state, method, this.props.templateId);
       ReactGA.event({
         category: CATEGORY.TEMPLATES,
-        action: ACTION.SAVE,
-        label: 'Success'
+        action: ACTION.TEMPLATE_SAVE,
+        label: 'Template save success'
       });
     } else {
       toastr.error(this.props.intl.formatMessage({ id: 'templates.missingFields' }), this.props.intl.formatMessage({ id: 'templates.missingFieldsDetail' }));
       ReactGA.event({
         category: CATEGORY.TEMPLATES,
-        action: ACTION.SAVE,
-        label: 'Missing fields'
+        action: ACTION.TEMPLATE_SAVE,
+        label: 'Template save failed - Missing fields'
       });
     }
     this.canSubmit = true;

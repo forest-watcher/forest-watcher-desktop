@@ -103,7 +103,7 @@ class LayersForm extends React.Component {
           ReactGA.event({
             category: CATEGORY.CONTEXTUAL_LAYERS,
             action: ACTION.ADD_GFW_LAYER,
-            label: 'Success'
+            label: 'Add GFW Layer Success'
           });
         }
         return GFWLayer
@@ -115,7 +115,7 @@ class LayersForm extends React.Component {
           ReactGA.event({
             category: CATEGORY.CONTEXTUAL_LAYERS,
             action: ACTION.ADD_CUSTOM_LAYER,
-            label: 'Success'
+            label: 'Add custom layer success'
           });
           this.resetForm();
         }
@@ -124,7 +124,7 @@ class LayersForm extends React.Component {
         ReactGA.event({
           category: CATEGORY.CONTEXTUAL_LAYERS,
           action: ACTION.ADD_CUSTOM_LAYER,
-          label: 'Validation error'
+          label: 'Add custom layer - Validation error'
         });
       }
     }

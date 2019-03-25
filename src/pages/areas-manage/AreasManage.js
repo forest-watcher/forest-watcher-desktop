@@ -73,23 +73,23 @@ class AreasManage extends React.Component {
         this.props.saveAreaWithGeostore(this.form, this.state.map._container, method);
         ReactGA.event({
           category: CATEGORY.AREA_CREATION,
-          action: ACTION.SAVE,
-          label: 'Success'
+          action: ACTION.AREA_SAVE,
+          label: 'Area creation success'
         });
       } else {
         toastr.error(this.props.intl.formatMessage({ id: 'areas.tooLarge' }), this.props.intl.formatMessage({ id: 'areas.tooLargeDesc' }));
         ReactGA.event({
           category: CATEGORY.AREA_CREATION,
-          action: ACTION.SAVE,
-          label: 'Area too large'
+          action: ACTION.AREA_SAVE,
+          label: 'Area creation failed - Area too large'
         });
       }
     } else {
       toastr.error(this.props.intl.formatMessage({ id: 'areas.missingValues' }), this.props.intl.formatMessage({ id: 'areas.missingValuesDesc' }));
       ReactGA.event({
         category: CATEGORY.AREA_CREATION,
-        action: ACTION.SAVE,
-        label: 'Missing details'
+        action: ACTION.AREA_SAVE,
+        label: 'Area creation failed - Missing details'
       });
     }
   }
@@ -105,7 +105,7 @@ class AreasManage extends React.Component {
     ReactGA.event({
       category: CATEGORY.AREA_CREATION,
       action: ACTION.UPLOAD_SHAPEFILE,
-      label: 'Upload button clicked'
+      label: 'Upload shapefile button clicked'
     });
     this.setState({ isValidatingShapefile: true });
     const shapeFile = e.target.files && e.target.files[0];
@@ -121,7 +121,7 @@ class AreasManage extends React.Component {
           ReactGA.event({
             category: CATEGORY.AREA_CREATION,
             action: ACTION.UPLOAD_SHAPEFILE,
-            label: 'Area too large'
+            label: 'Shapefile upload failed - Area too large'
           });
         } else {
           if (geojsonParsed) {
@@ -136,7 +136,7 @@ class AreasManage extends React.Component {
             ReactGA.event({
               category: CATEGORY.AREA_CREATION,
               action: ACTION.UPLOAD_SHAPEFILE,
-              label: 'Success'
+              label: 'Shapefile upload success'
             });
           }
         }
@@ -146,7 +146,7 @@ class AreasManage extends React.Component {
       ReactGA.event({
         category: CATEGORY.AREA_CREATION,
         action: ACTION.UPLOAD_SHAPEFILE,
-        label: 'File too large'
+        label: 'Shapefile upload failed - File too large'
       });
     }
     this.setState({ isValidatingShapefile: false });

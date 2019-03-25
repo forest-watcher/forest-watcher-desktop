@@ -27,7 +27,7 @@ class MembersManager extends React.Component {
         ReactGA.event({
           category: CATEGORY.TEAM,
           action: ACTION.ADD_TEAM,
-          label: 'Invalid email'
+          label: 'Add team member failed - Invalid email'
         });
         return;
       }
@@ -41,7 +41,7 @@ class MembersManager extends React.Component {
         ReactGA.event({
           category: CATEGORY.TEAM,
           action: ACTION.ADD_TEAM,
-          label: 'Success'
+          label: 'Add team member success'
         });
       }
 
@@ -63,7 +63,7 @@ class MembersManager extends React.Component {
     ReactGA.event({
       category: CATEGORY.TEAM,
       action: ACTION.REMOVE_TEAM,
-      label: 'Success'
+      label: 'Delete team member success'
     });
   }
 

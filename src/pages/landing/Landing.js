@@ -87,7 +87,7 @@ class Landing extends React.Component {
               </div>
               <span className="text"><FormattedMessage id="app.or" />&nbsp;
                 <ReactGA.OutboundLink
-                  eventLabel="apkLink"
+                  eventLabel="Homepage - apk link"
                   to={DOWNLOAD_APK_LINK}
                   rel="noopener noreferrer"
                   target="_blank"

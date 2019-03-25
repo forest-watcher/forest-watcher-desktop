@@ -33,7 +33,7 @@ class AreaCard extends React.Component {
               }
             </div>
             <ReactGA.OutboundLink
-              eventLabel="showReport"
+              eventLabel="Area - show report"
               to={`/reports/${templates.ids[0] || null}?aoi=${area.id || null}`}
               className="text -x-small-title -green"
               >

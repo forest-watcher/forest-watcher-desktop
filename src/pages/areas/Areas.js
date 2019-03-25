@@ -22,7 +22,7 @@ class Areas extends React.Component {
     if (this.props.loading) return null;
     return (
       <ReactGA.OutboundLink
-        eventLabel="addArea"
+        eventLabel="Add new area"
         to="/areas/create"
         >
         <button className="c-add-card">

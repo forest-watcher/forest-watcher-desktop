@@ -60,7 +60,7 @@ class Settings extends React.Component {
      this.props.setEditing(true)
      ReactGA.event({
        category: CATEGORY.SETTINGS,
-       action: ACTION.EDIT
+       action: ACTION.EDIT_SETTINGS
      });
   }
 

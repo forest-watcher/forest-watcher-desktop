@@ -50,7 +50,7 @@ class Nav extends React.Component {
                 <li className={`nav-link ${user.data && user.data.email ? '-disabled' : ''}`}>
                 {setUpEmailLink ? (
                   <ReactGA.OutboundLink
-                    eventLabel="myGFW"
+                    eventLabel="navigation - myGFW"
                     to={setUpEmailLink}
                     rel="noopener noreferrer"
                     target="_blank"
