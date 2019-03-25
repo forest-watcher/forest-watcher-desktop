@@ -89,14 +89,13 @@ class TeamsForm extends React.Component {
 
   getSelectedAreas = () => {
     if (this.props.team) {
-      const selectedAreas = this.props.team.attributes.areas
+      const selectedAreas = this.props.team.attributes.areas;
       return this.props.areaValues.filter((area) => {
-        return selectedAreas.find((selected) => area.value === selected)
-      })
+        return selectedAreas.find((selected) => area.value === selected);
+      });
     }
 
-    return []
-
+    return [];
   }
 
   updateSelectedMembers = (selectedMembers, role) => {
