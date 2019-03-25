@@ -12,6 +12,7 @@ import Tab from '../../components/ui/Tab';
 import Confirm from '../../components/ui/Confirm';
 import withModal from '../../components/ui/withModal';
 import { injectIntl } from 'react-intl';
+import { CATEGORY, ACTION } from '../../constants/analytics';
 import ReactGA from 'react-ga';
 
 const ConfirmModal = withModal(Confirm);
@@ -58,8 +59,8 @@ class Settings extends React.Component {
   editSettings = () => {
      this.props.setEditing(true)
      ReactGA.event({
-       category: 'Settings',
-       action: 'Edit'
+       category: CATEGORY.SETTINGS,
+       action: ACTION.EDIT
      });
   }
 
