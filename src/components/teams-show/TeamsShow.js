@@ -19,7 +19,7 @@ function TeamsShow({ team, areas }) {
             {team && areas.map((area, i) => ( area && (
               <div className="area-item" key={i}>
                 <figure className="area-image" style={{ backgroundImage: `url(${area.attributes.image})`}}></figure>
-                <figcaption className="text -small-title">{area.attributes.name}</figcaption>
+                <figcaption className="text">{area.attributes.name}</figcaption>
               </div>
             )))}
           </div>
