@@ -42,6 +42,10 @@ class TeamsForm extends React.Component {
     }
   }
 
+  componentWillUnmount() {
+    this.props.setEditing(false);
+  }
+
   resetSelection(team) {
     this.setState({
       selectedAreas: team.attributes.areas.join(),
@@ -67,7 +71,7 @@ class TeamsForm extends React.Component {
     e.preventDefault();
     e.stopPropagation();
     this.resetSelection(this.props.team);
-    this.props.setEditing(false)
+    this.props.setEditing(false);
  }
 
   onInputChange = (e) => {
