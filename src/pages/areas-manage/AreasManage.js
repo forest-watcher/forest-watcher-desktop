@@ -101,6 +101,11 @@ class AreasManage extends React.Component {
   }
 
   onShapefileChange = async (e) => {
+    ReactGA.event({
+      category: 'Create an area',
+      action: 'Upload shapefile',
+      label: 'Upload button clicked'
+    });
     this.setState({ isValidatingShapefile: true });
     const shapeFile = e.target.files && e.target.files[0];
     const maxFileSize = 1000000 //1MB
