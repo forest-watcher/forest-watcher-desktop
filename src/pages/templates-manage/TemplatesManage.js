@@ -137,6 +137,13 @@ class TemplatesManage extends React.Component {
 
   toggleStatus = () => {
     const newStatus = this.state.status === 'published' ? 'unpublished' : 'published';
+    if (newStatus === 'published') {
+      ReactGA.event({
+        category: 'Templates',
+        action: 'Set as published',
+        label: `Published ${this.state.questions.length} questions`
+      });
+    }
     this.setState({ status: newStatus });
   }
 

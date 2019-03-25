@@ -98,6 +98,11 @@ class LayersForm extends React.Component {
           // Prevents the user from adding several layers on a batch that exceeds the limit
           teamId ? teamLayerLength += 1 : userLayerLength += 1;
           GFWLayer.enabled = false;
+          ReactGA.event({
+            category: 'Contextual layers',
+            action: 'Add GFW layers',
+            label: 'Success'
+          });
         }
         return GFWLayer
       });
