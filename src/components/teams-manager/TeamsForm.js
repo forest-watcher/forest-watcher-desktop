@@ -8,13 +8,14 @@ import FormFooter from '../ui/FormFooter';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { MANAGER, USER, CONFIRMED_USER } from '../../constants/global';
 import { required } from '../../constants/validation-rules'
+import DropdownIndicator from '../ui/SelectDropdownIndicator'
 
 class TeamsForm extends React.Component {
   constructor (props) {
     super(props);
     const selectedManagers = (props.team && props.team.attributes.managers) || [];
     this.state = {
-      selectedAreas: (props.team && props.team.attributes.areas.join()) || '',
+      selectedAreas: this.getSelectedAreas(),
       selectedUsers: (props.team && props.team.attributes.users) || [],
       selectedConfirmedUsers: (props.team && props.team.attributes.confirmedUsers) || [],
       selectedManagers,
@@ -39,6 +40,10 @@ class TeamsForm extends React.Component {
       this.updateForm(nextProps.team);
       if ( nextProps.team ) this.resetSelection(nextProps.team);
     }
+  }
+
+  componentWillUnmount() {
+    this.props.setEditing(false);
   }
 
   resetSelection(team) {
@@ -66,7 +71,7 @@ class TeamsForm extends React.Component {
     e.preventDefault();
     e.stopPropagation();
     this.resetSelection(this.props.team);
-    this.props.setEditing(false)
+    this.props.setEditing(false);
  }
 
   onInputChange = (e) => {
@@ -75,12 +80,26 @@ class TeamsForm extends React.Component {
 
   onAreaChange = (selected) => {
     this.setState({selectedAreas: selected});
-    const updatedAreas = selected.split(',');
+    const updatedAreas = []
+    for (let area in selected) {
+      updatedAreas.push(selected[area].value)
+    }
     this.form = Object.assign({}, this.form, { areas: updatedAreas });
   }
 
   handleFormUpdate = (field, value) => {
     this.form = Object.assign({}, this.form, { [field]: value });
+  }
+
+  getSelectedAreas = () => {
+    if (this.props.team) {
+      const selectedAreas = this.props.team.attributes.areas;
+      return this.props.areaValues.filter((area) => {
+        return selectedAreas.find((selected) => area.value === selected);
+      });
+    }
+
+    return [];
   }
 
   updateSelectedMembers = (selectedMembers, role) => {
@@ -124,16 +143,16 @@ class TeamsForm extends React.Component {
                 <div className="input-group">
                   <h3><label><FormattedMessage id={"teams.areas"} /></label></h3>
                   <Select
-                    multi
-                    simpleValue
-                    className="c-select"
+                    isMulti
+                    className="c-select u-w-100"
+                    classNamePrefix="Select"
                     name="areas-select"
                     options={areaValues}
                     value={this.state.selectedAreas}
                     onChange={this.onAreaChange}
                     noResultsText={intl.formatMessage({ id: 'filters.noAreasAvailable' })}
-                    searchable={false}
-                    arrowRenderer={() => <svg className="c-icon -x-small -gray"><use xlinkHref="#icon-arrow-down"></use></svg>}
+                    isSearchable={false}
+                    components={{ DropdownIndicator }}
                   />
                 </div>
               </div>
