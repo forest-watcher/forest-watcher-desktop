@@ -18,6 +18,8 @@ import { required } from '../../constants/validation-rules'
 import withModal from '../../components/ui/withModal';
 import ShapefileInfo from '../../components/ui/ShapefileInfo';
 import Icon from '../../components/ui/Icon';
+import { CATEGORY, ACTION } from '../../constants/analytics';
+import ReactGA from 'react-ga';
 
 const ShapefileInfoModal = withModal(ShapefileInfo);
 class AreasManage extends React.Component {
@@ -69,11 +71,26 @@ class AreasManage extends React.Component {
       if (checkArea(this.form.geojson)) {
         const method = this.props.mode === 'manage' ? 'PATCH' : 'POST';
         this.props.saveAreaWithGeostore(this.form, this.state.map._container, method);
+        ReactGA.event({
+          category: CATEGORY.AREA_CREATION,
+          action: ACTION.AREA_SAVE,
+          label: 'Area creation success'
+        });
       } else {
         toastr.error(this.props.intl.formatMessage({ id: 'areas.tooLarge' }), this.props.intl.formatMessage({ id: 'areas.tooLargeDesc' }));
+        ReactGA.event({
+          category: CATEGORY.AREA_CREATION,
+          action: ACTION.AREA_SAVE,
+          label: 'Area creation failed - Area too large'
+        });
       }
     } else {
       toastr.error(this.props.intl.formatMessage({ id: 'areas.missingValues' }), this.props.intl.formatMessage({ id: 'areas.missingValuesDesc' }));
+      ReactGA.event({
+        category: CATEGORY.AREA_CREATION,
+        action: ACTION.AREA_SAVE,
+        label: 'Area creation failed - Missing details'
+      });
     }
   }
 
@@ -85,6 +102,11 @@ class AreasManage extends React.Component {
   }
 
   onShapefileChange = async (e) => {
+    ReactGA.event({
+      category: CATEGORY.AREA_CREATION,
+      action: ACTION.UPLOAD_SHAPEFILE,
+      label: 'Upload shapefile button clicked'
+    });
     this.setState({ isValidatingShapefile: true });
     const shapeFile = e.target.files && e.target.files[0];
     const maxFileSize = 1000000 //1MB
@@ -96,6 +118,11 @@ class AreasManage extends React.Component {
 
         if (!checkArea(geojsonParsed)) {
           toastr.error(this.props.intl.formatMessage({ id: 'areas.tooLarge' }), this.props.intl.formatMessage({ id: 'areas.uploadedTooLargeDesc' }));
+          ReactGA.event({
+            category: CATEGORY.AREA_CREATION,
+            action: ACTION.UPLOAD_SHAPEFILE,
+            label: 'Shapefile upload failed - Area too large'
+          });
         } else {
           if (geojsonParsed) {
             this.onDrawComplete(geojsonParsed);
@@ -106,11 +133,21 @@ class AreasManage extends React.Component {
             this.form.name = areaName;
             // Force render to notify the draw control of the external geojson
             this.forceUpdate();
+            ReactGA.event({
+              category: CATEGORY.AREA_CREATION,
+              action: ACTION.UPLOAD_SHAPEFILE,
+              label: 'Shapefile upload success'
+            });
           }
         }
       }
     } else {
       toastr.error(this.props.intl.formatMessage({ id: 'areas.fileTooLarge' }), this.props.intl.formatMessage({ id: 'areas.fileTooLargeDesc' }));
+      ReactGA.event({
+        category: CATEGORY.AREA_CREATION,
+        action: ACTION.UPLOAD_SHAPEFILE,
+        label: 'Shapefile upload failed - File too large'
+      });
     }
     this.setState({ isValidatingShapefile: false });
   }

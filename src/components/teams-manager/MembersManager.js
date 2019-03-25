@@ -7,6 +7,8 @@ import { includes, validateEmail } from '../../helpers/utils';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { toastr } from 'react-redux-toastr';
 import { MANAGER, USER, CONFIRMED_USER } from '../../constants/global';
+import { CATEGORY, ACTION } from '../../constants/analytics';
+import ReactGA from 'react-ga';
 
 class MembersManager extends React.Component {
   constructor(props) {
@@ -22,6 +24,11 @@ class MembersManager extends React.Component {
     if (email){
       if (!validateEmail(email)) {
         toastr.error(this.props.intl.formatMessage({ id: 'teams.invalidEmail' }));
+        ReactGA.event({
+          category: CATEGORY.TEAM,
+          action: ACTION.ADD_TEAM,
+          label: 'Add team member failed - Invalid email'
+        });
         return;
       }
       const managerEmails = this.props.selectedManagers.map(m => m.email || m);
@@ -31,6 +38,11 @@ class MembersManager extends React.Component {
         existingUsers.push(email);
         this.setState({ emailToSearch: '' });
         this.props.updateSelectedMembers(existingUsers, USER);
+        ReactGA.event({
+          category: CATEGORY.TEAM,
+          action: ACTION.ADD_TEAM,
+          label: 'Add team member success'
+        });
       }
 
     }
@@ -48,6 +60,11 @@ class MembersManager extends React.Component {
     const selected = this.props[this.formatRole(role)];
     const updatedMembers = selected.filter(member => member.id !== deletedMember);
     this.props.updateSelectedMembers(updatedMembers, role);
+    ReactGA.event({
+      category: CATEGORY.TEAM,
+      action: ACTION.REMOVE_TEAM,
+      label: 'Delete team member success'
+    });
   }
 
   addMember = (member, role) => {
