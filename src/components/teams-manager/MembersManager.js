@@ -25,8 +25,8 @@ class MembersManager extends React.Component {
         toastr.error(this.props.intl.formatMessage({ id: 'teams.invalidEmail' }));
         ReactGA.event({
           category: 'Team',
-          action: 'Invalid email',
-          label: 'Success'
+          action: 'Add team member',
+          label: 'Invalid email'
         });
         return;
       }
