@@ -8,13 +8,14 @@ import FormFooter from '../ui/FormFooter';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { MANAGER, USER, CONFIRMED_USER } from '../../constants/global';
 import { required } from '../../constants/validation-rules'
+import DropdownIndicator from '../ui/SelectDropdownIndicator'
 
 class TeamsForm extends React.Component {
   constructor (props) {
     super(props);
     const selectedManagers = (props.team && props.team.attributes.managers) || [];
     this.state = {
-      selectedAreas: (props.team && props.team.attributes.areas) || [],
+      selectedAreas: this.getSelectedAreas(),
       selectedUsers: (props.team && props.team.attributes.users) || [],
       selectedConfirmedUsers: (props.team && props.team.attributes.confirmedUsers) || [],
       selectedManagers,
@@ -75,7 +76,10 @@ class TeamsForm extends React.Component {
 
   onAreaChange = (selected) => {
     this.setState({selectedAreas: selected});
-    const updatedAreas = selected.split(',');
+    const updatedAreas = []
+    for (let area in selected) {
+      updatedAreas.push(selected[area].value)
+    }
     this.form = Object.assign({}, this.form, { areas: updatedAreas });
   }
 
@@ -84,10 +88,15 @@ class TeamsForm extends React.Component {
   }
 
   getSelectedAreas = () => {
-    const { selectedAreas } = this.state
-    return this.props.areaValues.filter((area) => {
-      return this.state.selectedAreas.find((selected) => area.value === selected)
-    })
+    if (this.props.team) {
+      const selectedAreas = this.props.team.attributes.areas
+      return this.props.areaValues.filter((area) => {
+        return selectedAreas.find((selected) => area.value === selected)
+      })
+    }
+
+    return []
+
   }
 
   updateSelectedMembers = (selectedMembers, role) => {
@@ -136,11 +145,11 @@ class TeamsForm extends React.Component {
                     classNamePrefix="Select"
                     name="areas-select"
                     options={areaValues}
-                    value={this.getSelectedAreas()}
+                    value={this.state.selectedAreas}
                     onChange={this.onAreaChange}
                     noResultsText={intl.formatMessage({ id: 'filters.noAreasAvailable' })}
-                    searchable={false}
-                    arrowRenderer={() => <svg className="c-icon -x-small -gray"><use xlinkHref="#icon-arrow-down"></use></svg>}
+                    isSearchable={false}
+                    components={{ DropdownIndicator }}
                   />
                 </div>
               </div>

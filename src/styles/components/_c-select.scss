@@ -4,34 +4,6 @@
     font-family: $base-font-family;
     width: 70px;
 
-    &.Select__multi {
-
-      .Select__value {
-        display: flex;
-        padding: 0 !important;
-        margin-bottom: 4px;
-        background-color: $theme-accent-light;
-
-        .Select-value-label {
-          order: 1;
-        }
-
-        .Select-value-icon {
-          order: 2;
-          border-right: 0;
-          font-size: 1.5em;
-          color: $base-font-color;
-        }
-      }
-      .Select-multi-value-wrapper {
-        display: flex;
-      }
-
-      .Select-input {
-        display: none;
-      }
-    }
-
     .Select__control {
         height: 40px;
         background-color: $white;
@@ -59,6 +31,35 @@
             padding-left: 15px;
             padding-right: 15px;
             height: 100%;
+        }
+
+        .Select__multi-value {
+          display: flex;
+          padding: 0 !important;
+          background-color: $theme-accent-light;
+          height: 100%;
+          border: 1px solid $theme-accent;
+
+          .Select__multi-value__label {
+            border-right: 0;
+            font-size: 1em;
+            color: $base-font-color;
+            display: flex;
+            align-items: center;
+
+          }
+          .Select__multi-value__remove {
+            padding-top: 1px;
+          }
+        }
+        .Select__value-container--is-multi {
+          display: flex;
+          align-content: center;
+          padding: 5px 3px;
+        }
+
+        .Select-input {
+          display: none;
         }
 
         .Select__single-value {
