@@ -20,7 +20,7 @@ describe ('Confirm Dialog', () => {
     act(() => {
       ReactDOM.render(<Confirm title="Are You Sure?" subtext="subtext text" cancelText="cancelText" confirmText="confirmText"/>, container);
     });
-    const title = container.querySelector('h2');
+    const title = container.querySelector('.test-title');
     const subtext = container.querySelector('p');
     const confirmBtn = container.querySelector('.test-confirm-button');
     const cancelBtn = container.querySelector('.test-cancel-button');
@@ -56,4 +56,17 @@ describe ('Confirm Dialog', () => {
 
     expect(mock.mock.calls.length).toBe(1);
   });
+
+  it ('adds the optional item information property to the modal title', () => {
+    act(() => {
+      ReactDOM.render(<Confirm title="Delete area:" itemInformation="My Area Name" />, container);
+    });
+    const fullTitle = container.querySelector('h2');
+    const title = container.querySelector('.test-title');
+    const itemTitle = container.querySelector('.test-item-information');
+
+    expect(title.textContent).toBe('Delete area:');
+    expect(itemTitle.textContent).toBe('My Area Name');
+    expect(fullTitle.textContent).toBe('Delete area: My Area Name');
+  })
 });

@@ -34,7 +34,7 @@ class Confirm extends PureComponent {
     return (
       <div className="c-modal-content">
         <div className="modal-content-inner">
-          <h2 className="text -small-title -green">{title} {itemInformation}</h2>
+          <h2 className="text -small-title -green"><span className="test-title">{title}</span> <span className="test-item-information">{itemInformation}</span></h2>
           <p className="text">{subtext}</p>
           <div className="modal-content-action">
             <button className="c-button -small -right u-margin-right-tiny test-cancel-button" onClick={this.onCancel}>{cancelText}</button>
