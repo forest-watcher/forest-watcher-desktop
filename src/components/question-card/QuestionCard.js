@@ -292,6 +292,7 @@ class QuestionCard extends React.Component {
                             placeholder={this.props.intl.formatMessage({ id: 'templates.questionPlaceholder' })}
                             onKeyPress={(e) => {if (e.which === 13) { e.preventDefault();}}} // Prevent send on press Enter
                             disabled={!canManage}
+                            required
                         />
                         <Select
                             name="type"
@@ -318,6 +319,7 @@ class QuestionCard extends React.Component {
                                             placeholder={this.props.intl.formatMessage({ id: 'templates.optionPlaceholder' })}
                                             onChange={(e) => this.onQuestionOptionChange(e, index)}
                                             disabled={!canManage}
+                                            required
                                         />
                                         { canManage && (question.values[defaultLanguage].length > 1) &&
                                             <button className={"delete-button"} type="button"
@@ -372,6 +374,7 @@ class QuestionCard extends React.Component {
                                         placeholder={this.props.intl.formatMessage({ id: 'templates.childQuestionPlaceholder' })}
                                         onKeyPress={(e) => {if (e.which === 13) { e.preventDefault();}}} // Prevent send on press Enter
                                         disabled={!canManage}
+                                        required
                                     />
                                 }
                             </div>

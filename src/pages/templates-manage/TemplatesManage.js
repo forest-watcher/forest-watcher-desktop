@@ -245,6 +245,7 @@ class TemplatesManage extends React.Component {
                           placeholder={this.props.intl.formatMessage({ id: 'templates.title' })}
                           onKeyPress={(e) => {if (e.which === 13) { e.preventDefault();}}} // Prevent send on press Enter
                           disabled={isLoading}
+                          required
                         />
                       </div>
                     </div>
