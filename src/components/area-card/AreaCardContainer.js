@@ -1,6 +1,5 @@
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { FormattedMessage, injectIntl } from 'react-intl';
 import AreaCard from './AreaCard';
 import { deleteArea } from '../../modules/areas';
 

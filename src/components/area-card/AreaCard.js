@@ -12,7 +12,7 @@ const ConfirmModal = withModal(Confirm);
 
 class AreaCard extends React.Component {
   constructor (props) {
-    super(props);
+    super();
     this.state = {
       open: false
     };
@@ -33,7 +33,7 @@ class AreaCard extends React.Component {
   }
 
   render() {
-    const { area, templates, user, intl } = this.props;
+    const { area, templates, user } = this.props;
     return (
       <div className="c-area-card">
         <div className="area-content">
