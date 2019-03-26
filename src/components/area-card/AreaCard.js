@@ -3,17 +3,37 @@ import PropTypes from 'prop-types';
 import Icon from '../ui/Icon';
 import { Link } from 'react-router-dom';
 import { FormattedMessage } from 'react-intl';
+import Confirm from '../../components/ui/Confirm';
+import withModal from '../../components/ui/withModal';
+import { injectIntl } from 'react-intl';
 import ReactGA from 'react-ga';
 
+const ConfirmModal = withModal(Confirm);
+
 class AreaCard extends React.Component {
+  constructor (props) {
+    super(props);
+    this.state = {
+      open: false
+    };
+  }
 
   handleAreaDelete = () => {
+    this.setState({ open: false });
     const { area, deleteArea } = this.props;
     deleteArea(area.id);
   }
 
+  openModal = () => {
+    this.setState({ open: true });
+  }
+
+  closeModal = () => {
+    this.setState({ open: false });
+  }
+
   render() {
-    const { area, templates, user } = this.props;
+    const { area, templates, user, intl } = this.props;
     return (
       <div className="c-area-card">
         <div className="area-content">
@@ -26,9 +46,24 @@ class AreaCard extends React.Component {
                   <Link className="c-button -circle -transparent" to={`/areas/${area.id}`}>
                     <Icon className="-small -gray" name="icon-edit"/>
                   </Link>
-                  <button className="c-button -circle -transparent" onClick={this.handleAreaDelete}>
+                  <button className="c-button -circle -transparent" onClick={this.openModal}>
                     <Icon className="-small -gray" name="icon-delete" />
                   </button>
+
+                  <ConfirmModal
+                    open={this.state.open}
+                    subtext="subtext"
+                    cancelText="cancelText"
+                    confirmText="confirmText"
+                    title={this.props.intl.formatMessage({ id: 'confirm.areYouSureDelete'})}
+                    itemInformation={area.name}
+                    subtext={this.props.intl.formatMessage({ id: 'confirm.deleteInformation'})}
+                    cancelText={this.props.intl.formatMessage({ id: 'common.cancel'})}
+                    confirmText={this.props.intl.formatMessage({ id: 'common.delete'})}
+                    onCancel={this.closeModal}
+                    close={this.closeModal}
+                    onAccept={this.handleAreaDelete}
+                  />
                 </div>
               }
             </div>
@@ -48,7 +83,8 @@ class AreaCard extends React.Component {
 
 AreaCard.propTypes = {
   area: PropTypes.object.isRequired,
-  deleteArea: PropTypes.func.isRequired
+  deleteArea: PropTypes.func.isRequired,
+  intl: PropTypes.object
 };
 
-export default AreaCard;
+export default injectIntl(AreaCard);
