@@ -5,6 +5,7 @@ export const MAP_CONFIG = {
   minZoom: 2,
   initialZoom: 3,
   basemap: `https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}`,
+  borders: `https://services.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}`,
   center: [51.505, -0.09],
   attribution: '| Tiles © Esri — Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community',
   zoomControl: false
