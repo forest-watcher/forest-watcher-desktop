@@ -58,7 +58,13 @@ class MembersManager extends React.Component {
 
   deleteMember = (deletedMember, role) => {
     const selected = this.props[this.formatRole(role)];
-    const updatedMembers = selected.filter(member => member.id !== deletedMember);
+    const updatedMembers = selected.filter((member) => {
+      if (role === USER) {
+        return member !== deletedMember;
+      } else {
+        return member.id !== deletedMember;
+      }
+    });
     this.props.updateSelectedMembers(updatedMembers, role);
     ReactGA.event({
       category: CATEGORY.TEAM,
