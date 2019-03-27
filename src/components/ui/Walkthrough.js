@@ -56,7 +56,7 @@ class Walkthrough extends PureComponent {
             </li>
             {childContent &&
               <ul>
-                <li className="text">
+                <li className="text test-current-step-child">
                   {childContent}
                 </li>
               </ul>

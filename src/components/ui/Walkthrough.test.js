@@ -39,7 +39,6 @@ describe ('Walkthough Dialog', () => {
   });
 
   it('should update the currentStep content', () => {
-
     act(() => {
       ReactDOM.render(<Walkthough title="title text" intro="intro text" steps={[{"content":"Content 1."},{"content":"Content 2"},{"content":"Content 3","childContent":"Child content"},{"content":"Content 4"}]} />, container);
     });
@@ -58,7 +57,23 @@ describe ('Walkthough Dialog', () => {
       stepButtonTwo.dispatchEvent(new MouseEvent('click', {bubbles: true}));
     });
     expect(step.textContent).toBe('Content 3');
+  });
 
+  it('should render the current steps child content', () => {
+    act(() => {
+      ReactDOM.render(<Walkthough title="title text" intro="intro text" steps={[{"content":"Content 1."},{"content":"Content 2"},{"content":"Content 3","childContent":"Child content"},{"content":"Content 4"}]} />, container);
+    });
+
+    const stepButton = container.querySelectorAll('.test-step-button')[2]
+
+    act(() => {
+      stepButton.dispatchEvent(new MouseEvent('click', {bubbles: true}));
+    });
+    const step = container.querySelector('.test-current-step');
+    const stepChild = container.querySelector('.test-current-step-child');
+
+    expect(step.textContent).toBe('Content 3');
+    expect(stepChild.textContent).toBe('Child content');
   });
 
   it('calls the onAccept function', () => {
