@@ -34,7 +34,7 @@ class Nav extends React.Component {
           </h1>
           <div className="nav-section">
             {this.props.loggedIn &&
-              <ul className="nav-subsection">
+              <ul className="nav-subsection -links">
                 <li className="nav-link">
                   <NavLink to="/areas" activeClassName="-active"><FormattedMessage id="areas.name" /></NavLink>
                 </li>
