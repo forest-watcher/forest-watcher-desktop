@@ -188,10 +188,13 @@ class QuestionCard extends React.Component {
         const firstQuestion = this.props.template.questions.filter((tempQuestion) => {
             return tempQuestion.name !== this.question.name && CONDITIONAL_QUESTION_TYPES.indexOf(tempQuestion.type) > -1;
         });
-        conditions[0] = {
-            name: firstQuestion[0].name,
-            value: 0
-        }
+
+        firstQuestion.forEach(function(entry) {
+            conditions.push({
+              name: entry.name,
+              value: entry.order
+            })
+        });
 
         this.question = {
             ...this.question,
@@ -250,10 +253,14 @@ class QuestionCard extends React.Component {
         const tempFiltered = conditionalQuestionsFiltered.filter((tempQuestion) => {
             return tempQuestion.name !== question.name;
         });
-        conditionsQuestions[0] = {
-            option: tempFiltered[0].name,
-            label: tempFiltered[0].label[template.defaultLanguage]
-        }
+
+        tempFiltered.forEach(function(entry) {
+            conditionsQuestions.push({
+              option: entry.name,
+              label: entry.label[template.defaultLanguage]
+            })
+        });
+
         const tempQuestionIndex = filterBy(template.questions, 'name', question.conditions[0].name);
         conditionsAnswers = template.questions[tempQuestionIndex[0].order].values[template.defaultLanguage].map((tempAnswers) => {
             return {
