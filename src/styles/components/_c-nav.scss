@@ -4,6 +4,13 @@
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
+  overflow-y: scroll;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+      width: 0;
+      height: 0;
+  }
 
   .nav-link, .nav-menu, .nav-logo {
     height: $nav-height;
