@@ -26,6 +26,8 @@
 
     .area-item {
       padding: 10px;
+      width: 33.333%;
+      text-align: center;
 
       .area-image {
         background-size: cover;
@@ -34,11 +36,13 @@
         border-radius: 3px;
         background-color: $medium-gray;
         margin-bottom: 10px;
+        margin-left: auto;
+        margin-right: auto;
         width: 80px;
         height: 60px;
       }
       figcaption {
-        max-width: 80px;
+        word-wrap: break-word;
       }
     }
 

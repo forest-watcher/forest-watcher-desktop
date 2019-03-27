@@ -38,10 +38,24 @@
 
   .nav-section {
     display: flex;
+    flex: 1 1 0%;
+    width: 80%;
 
     .nav-subsection {
       display: flex;
       align-items: center;
+
+      &.-links {
+        padding-left: 22px;
+        flex-shrink: 1;
+        overflow-y: scroll;
+        scrollbar-width: none;
+
+        &::-webkit-scrollbar {
+            width: 0;
+            height: 0;
+        }
+      }
 
       &.-settings {
         border-left: 1px solid $border-gray;

@@ -273,7 +273,7 @@ class AreasManage extends React.Component {
                   disabled={this.state.isValidatingShapefile}
                 />
                 <button className="info-button u-margin-left-small" onClick={this.onInfoClick}>
-                  <Icon className="-small" name="icon-info"/>
+                  <Icon className="-medium" name="icon-info"/>
                 </button>
               </div>
               <div className="areas-inputs">
