@@ -1,13 +1,19 @@
 .c-modal-content {
+  min-width: 300px;
 
   .modal-content-inner {
-    > * {
-      margin: 32px 0 0;
+    // > * {
+    //   margin: 32px 0 0;
+    //
+    //   &:first-child {
+    //     margin: 0;
+    //   }
+    // }
+  }
 
-      &:first-child {
-        margin: 0;
-      }
-    }
+  .modal-content-header {
+    font-weight: 700;
+    border-bottom: 2px solid $theme-accent;
   }
 
   .modal-content-steps-index {
@@ -82,6 +88,11 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-top: 58px;
+
+    .c-button {
+      flex: 1 1 50%;
+      max-width: 200px;
+      display: block;
+    }
   }
 }
