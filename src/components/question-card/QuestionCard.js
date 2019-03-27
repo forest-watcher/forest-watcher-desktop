@@ -189,10 +189,10 @@ class QuestionCard extends React.Component {
             return tempQuestion.name !== this.question.name && CONDITIONAL_QUESTION_TYPES.indexOf(tempQuestion.type) > -1;
         });
 
-        conditionalQuestionList.forEach(function(entry) {
+        conditionalQuestionList.forEach(function(question) {
             conditions.push({
-              name: entry.name,
-              value: entry.order
+              name: question.name,
+              value: question.order
             })
         });
 
@@ -254,10 +254,10 @@ class QuestionCard extends React.Component {
             return tempQuestion.name !== question.name;
         });
 
-        childQuestionList.forEach(function(entry) {
+        childQuestionList.forEach(function(question) {
             conditionsQuestions.push({
-              option: entry.name,
-              label: entry.label[template.defaultLanguage]
+              option: question.name,
+              label: question.label[template.defaultLanguage]
             })
         });
 
