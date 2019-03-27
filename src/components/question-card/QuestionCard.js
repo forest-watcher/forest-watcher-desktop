@@ -185,11 +185,11 @@ class QuestionCard extends React.Component {
         }
     } else {
         let conditions = [];
-        const firstQuestion = this.props.template.questions.filter((tempQuestion) => {
+        const conditionalQuestionList = this.props.template.questions.filter((tempQuestion) => {
             return tempQuestion.name !== this.question.name && CONDITIONAL_QUESTION_TYPES.indexOf(tempQuestion.type) > -1;
         });
 
-        firstQuestion.forEach(function(entry) {
+        conditionalQuestionList.forEach(function(entry) {
             conditions.push({
               name: entry.name,
               value: entry.order
@@ -250,11 +250,11 @@ class QuestionCard extends React.Component {
     let conditionsQuestions = [];
     let conditionsAnswers = [];
     if (question.conditions.length) {
-        const tempFiltered = conditionalQuestionsFiltered.filter((tempQuestion) => {
+        const childQuestionList = conditionalQuestionsFiltered.filter((tempQuestion) => {
             return tempQuestion.name !== question.name;
         });
 
-        tempFiltered.forEach(function(entry) {
+        childQuestionList.forEach(function(entry) {
             conditionsQuestions.push({
               option: entry.name,
               label: entry.label[template.defaultLanguage]
