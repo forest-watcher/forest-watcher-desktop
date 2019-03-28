@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import GooglePlacesAutocomplete from 'react-google-places-autocomplete';
 import isValidCoordinates from 'is-valid-coordinates'
 import { GOOGLE_PLACES_API_KEY } from '../../constants/global'
+import CountrySearch from '../country-search/CountrySearchContainer';
 import Icon from './Icon';
 
 export default class LocationSearchInput extends React.Component {
@@ -74,16 +75,17 @@ export default class LocationSearchInput extends React.Component {
     }
     return (
       <div className="c-location-search">
-        <button className="button -map" type="button" onClick={this.toggleMenu}>
-          <Icon name="icon-location" className="-small" />
-        </button>
         {this.state.open &&
-        <div className="c-location-search-menu">
+        <div className="c-location-search-menu u-padding-tiny u-margin-right-tiny">
           <GooglePlacesAutocomplete
             onSelect={this.handleSelect}
           />
-          <div className="c-latlong-search u-margin-top-small">
-            <p className="u-color-light">Search by Latitude and Longitude</p>
+          <CountrySearch
+            map={this.props.map}
+            onZoomChange={this.props.onZoomChange}
+          />
+          <div className="c-latlong-search u-margin-top-tiny">
+            <p className="u-margin-bottom-tiny">Search by Latitude and Longitude</p>
             <input
               type="number"
               name="lat"
@@ -99,6 +101,9 @@ export default class LocationSearchInput extends React.Component {
               placeholder="Longitude"/>
           </div>
         </div>}
+        <button className="button -map" type="button" onClick={this.toggleMenu}>
+          <Icon name={this.state.open ? "icon-close-no-background" : "icon-search"} className="-small" />
+        </button>
       </div>
     );
   };
@@ -106,5 +111,7 @@ export default class LocationSearchInput extends React.Component {
 
 LocationSearchInput.propTypes = {
   onLocationChanged: PropTypes.func.isRequired,
-  onLatLngChanged: PropTypes.func.isRequired
+  onLatLngChanged: PropTypes.func.isRequired,
+  map: PropTypes.object.isRequired,
+  onZoomChange: PropTypes.func.isRequired
 };

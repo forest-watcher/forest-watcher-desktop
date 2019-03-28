@@ -40,7 +40,7 @@ class CountrySearch extends React.Component {
   render() {
     const { countriesOptions } = this.props;
     return (
-      <div className="c-country-search">
+      <div className="c-country-search u-margin-bottom-tiny">
           <Select
             name="country-select"
             className="c-select -map u-w-100"

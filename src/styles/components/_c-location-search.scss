@@ -4,29 +4,41 @@
   right: 120px;
   z-index: 1000;
   display: flex;
-  flex-direction: column;
-  align-items: flex-end;
+  align-items: flex-start;
   .c-location-search-menu {
     display: flex;
     flex-direction: column;
-    width: 250px;
+    width: 260px;
+    background: $theme-base;
+    border-radius: 2px;
     button {
       &.-map {
         width: 37px;
       }
     }
-    input {
+    input, .Select__control {
       box-shadow: rgba(0, 0, 0, 0.2) 0px 0px 2px 0px inset;
-      background-color: rgba(51, 51, 51, 0.5);
+      background-color: $theme-secondary !important;
       border-radius: 2px;
       border: 0px;
       height: 40px;
       color: $white;
       width: 100%;
-      padding: 2px 15px;
       &::placeholder {
         color: $white
       }
+    }
+    input {
+      padding: 2px 16px;
+    }
+    .google-places-autocomplete__suggestions-container {
+      z-index: 1001;
+    }
+    .google-places-autocomplete {
+      margin-bottom: 6px;
+    }
+    .Select__menu {
+      z-index: 9999 !important;
     }
   }
 }
