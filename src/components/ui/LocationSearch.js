@@ -10,10 +10,18 @@ export default class LocationSearchInput extends React.Component {
     super(props);
     this.state = {
       lat: '',
-      lng: ''
+      lng: '',
+      open: false
     };
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleSelect = this.handleSelect.bind(this);
+    this.toggleMenu = this.toggleMenu.bind(this);
+  };
+
+  toggleMenu() {
+    this.setState({
+      open: !this.state.open
+    });
   };
 
   handleInputChange(event) {
@@ -28,7 +36,7 @@ export default class LocationSearchInput extends React.Component {
       this.waitForCoordChange = true;
       setTimeout(() => {
         if (isValidCoordinates(parseInt(this.state.lng, 10), parseInt(this.state.lat, 10))) {
-          this.props.onLatLngChanged(this.state);
+          this.props.onLatLngChanged({lat: this.state.lat, lng: this.state.lng});
         }
         this.waitForCoordChange = false;
       }, 1000);
@@ -66,9 +74,10 @@ export default class LocationSearchInput extends React.Component {
     }
     return (
       <div className="c-location-search">
-        <button className="button -map" type="button" onClick={this.setLocation}>
+        <button className="button -map" type="button" onClick={this.toggleMenu}>
           <Icon name="icon-location" className="-small" />
         </button>
+        {this.state.open &&
         <div className="c-location-search-menu">
           <GooglePlacesAutocomplete
             onSelect={this.handleSelect}
@@ -89,7 +98,7 @@ export default class LocationSearchInput extends React.Component {
               onChange={this.handleInputChange}
               placeholder="Longitude"/>
           </div>
-        </div>
+        </div>}
       </div>
     );
   };
