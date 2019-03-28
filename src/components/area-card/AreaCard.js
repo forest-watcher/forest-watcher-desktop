@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import Icon from '../ui/Icon';
 import { Link } from 'react-router-dom';
 import { FormattedMessage } from 'react-intl';
+import ReactGA from 'react-ga';
 
 class AreaCard extends React.Component {
 
@@ -31,7 +32,13 @@ class AreaCard extends React.Component {
                 </div>
               }
             </div>
-            <Link className="text -x-small-title -green" to={`/reports/${templates.ids[0] || null}?aoi=${area.id || null}`}><FormattedMessage id="areas.reportsBtn" /></Link>
+            <ReactGA.OutboundLink
+              eventLabel="Area - show report"
+              to={`/reports/${templates.ids[0] || null}?aoi=${area.id || null}`}
+              className="text -x-small-title -green"
+              >
+                <FormattedMessage id="areas.reportsBtn" />
+            </ReactGA.OutboundLink>
           </div>
         </div>
       </div>

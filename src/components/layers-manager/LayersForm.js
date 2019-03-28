@@ -10,6 +10,9 @@ import { toastr } from 'react-redux-toastr';
 import { injectIntl } from 'react-intl';
 import { MAX_NUMBER_OF_LAYERS } from '../../constants/global';
 import CustomLayers from './CustomLayers';
+import { CATEGORY, ACTION } from '../../constants/analytics';
+
+import ReactGA from 'react-ga';
 
 class LayersForm extends React.Component {
   constructor(props) {
@@ -97,6 +100,11 @@ class LayersForm extends React.Component {
           // Prevents the user from adding several layers on a batch that exceeds the limit
           teamId ? teamLayerLength += 1 : userLayerLength += 1;
           GFWLayer.enabled = false;
+          ReactGA.event({
+            category: CATEGORY.CONTEXTUAL_LAYERS,
+            action: ACTION.ADD_GFW_LAYER,
+            label: 'Add GFW Layer Success'
+          });
         }
         return GFWLayer
       });
@@ -104,10 +112,20 @@ class LayersForm extends React.Component {
     } else { // Custom Layers
       if (Object.keys(this.formNode.getErrors()).length === 0) { // No validation errors
         if (this.addLayer(this.state.form, teamId, userLayerNames, teamLayerNames, userLayerLength, teamLayerLength, typeOfLayer)){
+          ReactGA.event({
+            category: CATEGORY.CONTEXTUAL_LAYERS,
+            action: ACTION.ADD_CUSTOM_LAYER,
+            label: 'Add custom layer success'
+          });
           this.resetForm();
         }
       } else {
         toastr.error(this.props.intl.formatMessage({ id: 'settings.validationError' }));
+        ReactGA.event({
+          category: CATEGORY.CONTEXTUAL_LAYERS,
+          action: ACTION.ADD_CUSTOM_LAYER,
+          label: 'Add custom layer - Validation error'
+        });
       }
     }
   }
@@ -187,4 +205,3 @@ LayersForm.propTypes = {
 };
 
 export default injectIntl(LayersForm);
-

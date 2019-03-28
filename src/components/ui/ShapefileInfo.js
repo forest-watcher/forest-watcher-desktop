@@ -23,23 +23,23 @@ class ShapefileInfo extends PureComponent {
   render() {
     const { title, maxSize, formats, unzippedTitle, unzipped, zippedTitle, zipped } = this.props;
     return (
-      <div className="c-walkthrough">
-        <div className="walkthrough-content">
+      <div className="c-modal-content">
+        <div className="modal-content-inner">
           <h2 className="text -small-title -green">{title}</h2>
-          <p className="text">{maxSize}</p>
-          <p className="text">{formats}</p>
+          <p className="text test-max-size">{maxSize}</p>
+          <p className="text test-formats">{formats}</p>
 
-          <ul className="walkthrough-steps-content">
-            <li className="walkthrough-steps-content-item text">
-              <p className="text"><span className="u-bold">{unzippedTitle}</span> {unzipped}</p>
+          <ul className="modal-content-steps-content">
+            <li className="modal-content-steps-content-item text">
+              <p className="text test-unzipped"><span className="u-bold test-unzipped-title">{unzippedTitle}</span> {unzipped}</p>
             </li>
-            <li className="walkthrough-steps-content-item text">
-              <p className="text"><span className="u-bold">{zippedTitle}</span> {zipped}</p>
+            <li className="modal-content-steps-content-item text">
+              <p className="text test-zipped"><span className="u-bold test-zipped-title">{zippedTitle}</span> {zipped}</p>
             </li>
           </ul>
 
-          <div className="walkthrough-action">
-            <button className="c-button" onClick={this.onAccept}>ok</button>
+          <div className="modal-content-action">
+            <button className="c-button test-confirm-button" onClick={this.onAccept}>ok</button>
           </div>
         </div>
       </div>

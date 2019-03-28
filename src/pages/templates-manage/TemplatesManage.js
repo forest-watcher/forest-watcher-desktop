@@ -16,6 +16,9 @@ import { TransitionGroup, CSSTransition } from 'react-transition-group';
 import { QUESTION } from '../../constants/templates';
 import Switch from 'react-toggle-switch'
 import DropdownIndicator from '../../components/ui/SelectDropdownIndicator'
+import { CATEGORY, ACTION } from '../../constants/analytics';
+import ReactGA from 'react-ga';
+
 import 'react-toggle-switch/dist/css/switch.min.css';
 
 class TemplatesManage extends React.Component {
@@ -88,8 +91,18 @@ class TemplatesManage extends React.Component {
     if (this.canSubmit) {
       const method = this.props.mode === 'manage' ? 'PATCH' : 'POST';
       this.props.saveTemplate(this.state, method, this.props.templateId);
+      ReactGA.event({
+        category: CATEGORY.TEMPLATES,
+        action: ACTION.TEMPLATE_SAVE,
+        label: 'Template save success'
+      });
     } else {
       toastr.error(this.props.intl.formatMessage({ id: 'templates.missingFields' }), this.props.intl.formatMessage({ id: 'templates.missingFieldsDetail' }));
+      ReactGA.event({
+        category: CATEGORY.TEMPLATES,
+        action: ACTION.TEMPLATE_SAVE,
+        label: 'Template save failed - Missing fields'
+      });
     }
     this.canSubmit = true;
   }
@@ -126,6 +139,13 @@ class TemplatesManage extends React.Component {
 
   toggleStatus = () => {
     const newStatus = this.state.status === 'published' ? 'unpublished' : 'published';
+    if (newStatus === 'published') {
+      ReactGA.event({
+        category: CATEGORY.TEMPLATES,
+        action: ACTION.PUBLISH_TEMPLATE,
+        label: `Published ${this.state.questions.length} questions`
+      });
+    }
     this.setState({ status: newStatus });
   }
 

@@ -1,6 +1,6 @@
-.c-walkthrough {
+.c-modal-content {
 
-  .walkthrough-content {
+  .modal-content-inner {
     > * {
       margin: 32px 0 0;
 
@@ -10,10 +10,10 @@
     }
   }
 
-  .walkthrough-steps-index {
+  .modal-content-steps-index {
     display: flex;
 
-    .walkthrough-steps-index-item {
+    .modal-content-steps-index-item {
       position: relative;
       opacity: 0.5;
       margin: 0 32px 0 0;
@@ -49,10 +49,10 @@
     }
   }
 
-  .walkthrough-steps-content {
+  .modal-content-steps-content {
     display: block;
 
-    .walkthrough-steps-content-item {
+    .modal-content-steps-content-item {
       position: relative;
       padding: 0 0 0 20px;
       min-height: 50px;
@@ -78,7 +78,7 @@
     }
   }
 
-  .walkthrough-action {
+  .modal-content-action {
     display: flex;
     justify-content: center;
     align-items: center;

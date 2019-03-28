@@ -32,16 +32,16 @@ class Walkthrough extends PureComponent {
     const content = steps[currentStep].content;
     const childContent = steps[currentStep].childContent;
     return (
-      <div className="c-walkthrough">
-        <div className="walkthrough-content">
+      <div className="c-modal-content">
+        <div className="modal-content-inner">
           <h2 className="text -small-title -green">{title}</h2>
           <p className="text">{intro}</p>
-          <ol className="walkthrough-steps-index">
+          <ol className="modal-content-steps-index">
             {
               steps.map((step, index) => (
                 <li
                   key={`step-index-${index}`}
-                  className={cx(['walkthrough-steps-index-item', 'text', '-question-number', { '-active': index === currentStep }])}
+                  className={cx(['modal-content-steps-index-item', 'text', '-question-number', { '-active': index === currentStep }])}
                 >
                   <button onClick={(e) => this.setCurrentStep(e, index)}>
                     {`0${index + 1}.`}
@@ -50,8 +50,8 @@ class Walkthrough extends PureComponent {
               ))
             }
           </ol>
-          <ul className="walkthrough-steps-content">
-            <li className="walkthrough-steps-content-item text">
+          <ul className="modal-content-steps-content">
+            <li className="modal-content-steps-content-item text">
               {content}
             </li>
             {childContent &&
@@ -62,7 +62,7 @@ class Walkthrough extends PureComponent {
               </ul>
             }
           </ul>
-          <div className="walkthrough-action">
+          <div className="modal-content-action">
             <button className="c-button" onClick={this.onAccept}>ok</button>
           </div>
         </div>
