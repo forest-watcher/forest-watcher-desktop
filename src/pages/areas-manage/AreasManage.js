@@ -9,6 +9,7 @@ import LocateUser from '../../components/ui/LocateUser';
 import ZoomControl from '../../components/ui/ZoomControl';
 import DrawControl from '../../components/draw-control/DrawControlContainer';
 import Attribution from '../../components/ui/Attribution';
+import LocationSearch from '../../components/ui/LocationSearch';
 import Loader from '../../components/ui/Loader';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import CountrySearch from '../../components/country-search/CountrySearchContainer';
@@ -206,6 +207,25 @@ class AreasManage extends React.Component {
                     mapConfig: {
                       ...this.state.mapConfig,
                       zoom
+                    }
+                  });
+                }}
+              />
+              <LocationSearch
+                onLocationChanged={ (location) => {
+                  this.state.map.fitBounds([
+                   [location.geometry.viewport.getSouthWest().lat(),
+                    location.geometry.viewport.getSouthWest().lng()],
+                   [location.geometry.viewport.getNorthEast().lat(),
+                    location.geometry.viewport.getNorthEast().lng()]
+                  ]);
+                }}
+                onLatLngChanged={ (latLng) => {
+                  this.state.map.panTo([latLng.lat, latLng.lng])
+                  this.setState({
+                    mapConfig: {
+                      ...this.state.mapConfig,
+                      zoom: 15
                     }
                   });
                 }}
