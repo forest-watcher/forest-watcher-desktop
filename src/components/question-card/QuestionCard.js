@@ -9,7 +9,7 @@ import Checkbox from '../ui/Checkbox';
 import { CHILD_QUESTION, CONDITIONAL_QUESTION_TYPES } from '../../constants/templates';
 import { filterBy } from '../../helpers/filters';
 import Switch from 'react-toggle-switch'
-
+import DropdownIndicator from '../ui/SelectDropdownIndicator'
 
 class QuestionCard extends React.Component {
   constructor (props) {
@@ -312,7 +312,7 @@ class QuestionCard extends React.Component {
                             isSearchable={false}
                             isClearable={false}
                             isDisabled={!canManage}
-                            arrowRenderer={() => <svg className="c-icon -x-small -gray"><use xlinkHref="#icon-arrow-down"></use></svg>}
+                            components={{ DropdownIndicator }}
                         />
                         <div className="question-options">
                             { isConditional &&
@@ -366,7 +366,7 @@ class QuestionCard extends React.Component {
                                         isClearable={false}
                                         placeholder={this.props.intl.formatMessage({ id: 'templates.selectCondition' })}
                                         noResultsText={this.props.intl.formatMessage({ id: 'templates.noConditions' })}
-                                        arrowRenderer={() => <svg className="c-icon -x-small -gray"><use xlinkHref="#icon-arrow-down"></use></svg>}
+                                        components={{ DropdownIndicator }}
                                         isDisabled={!canManage || !question.childQuestions.length}
                                     />
                                     <label className="text">{this.props.intl.formatMessage({ id: 'templates.moreInfoSecond' })}</label>
@@ -426,7 +426,7 @@ class QuestionCard extends React.Component {
                         isSearchable={false}
                         isClearable={false}
                         placeholder={this.props.intl.formatMessage({ id: 'templates.selectQuestion' })}
-                        arrowRenderer={() => <svg className="c-icon -x-small -gray"><use xlinkHref="#icon-arrow-down"></use></svg>}
+                        components={{ DropdownIndicator }}
                         isDisabled={!canManage || !question.conditions.length}
                     />
                     <label className="text">{this.props.intl.formatMessage({ id: 'templates.is' })}</label>
@@ -439,7 +439,7 @@ class QuestionCard extends React.Component {
                         isSearchable={false}
                         isClearable={false}
                         placeholder={this.props.intl.formatMessage({ id: 'templates.selectOption' })}
-                        arrowRenderer={() => <svg className="c-icon -x-small -gray"><use xlinkHref="#icon-arrow-down"></use></svg>}
+                        components={{ DropdownIndicator }}
                         isDisabled={!canManage || !question.conditions.length}
                     />
                 </div>

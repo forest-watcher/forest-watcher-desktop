@@ -15,7 +15,7 @@ import QuestionCard from '../../components/question-card/QuestionCard';
 import { TransitionGroup, CSSTransition } from 'react-transition-group';
 import { QUESTION } from '../../constants/templates';
 import Switch from 'react-toggle-switch'
-
+import DropdownIndicator from '../../components/ui/SelectDropdownIndicator'
 import 'react-toggle-switch/dist/css/switch.min.css';
 
 class TemplatesManage extends React.Component {
@@ -207,7 +207,7 @@ class TemplatesManage extends React.Component {
                         noResultsText={this.props.intl.formatMessage({ id: 'filters.noAreasAvailable' })}
                         isSearchable={false}
                         disabled={isLoading}
-                        arrowRenderer={() => <svg className="c-icon -x-small -gray"><use xlinkHref="#icon-arrow-down"></use></svg>}
+                        components={{ DropdownIndicator }}
                       />
                     </div>
                   </div>
@@ -225,7 +225,7 @@ class TemplatesManage extends React.Component {
                         isSearchable={true}
                         isClearable={false}
                         disabled={isLoading || !modeCreate}
-                        arrowRenderer={() => <svg className="c-icon -x-small -gray"><use xlinkHref="#icon-arrow-down"></use></svg>}
+                        components={{ DropdownIndicator }}
                       />
                     </div>
                   </div>
