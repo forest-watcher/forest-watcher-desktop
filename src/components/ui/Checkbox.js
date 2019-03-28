@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classnames from 'classnames';
 
-function Checkbox({ id, callback, label, defaultChecked, checked , labelId, intl, classNames, disabled }) {
+function Checkbox({ id, callback, label, defaultChecked, checked , labelId, classNames, disabled }) {
   return (
     <div className={classnames(['c-checkbox', classNames])}>
       <div className="checkbox">

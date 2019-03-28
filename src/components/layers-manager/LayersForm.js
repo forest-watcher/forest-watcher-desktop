@@ -202,7 +202,7 @@ LayersForm.propTypes = {
   GFWLayers: PropTypes.array.isRequired,
   team: PropTypes.object,
   createLayer: PropTypes.func.isRequired,
-  intl: PropTypes.object
+  intl: PropTypes.object.isRequired
 };
 
 export default injectIntl(LayersForm);
