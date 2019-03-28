@@ -52,8 +52,7 @@ class AreaCard extends React.Component {
 
                   <ConfirmModal
                     open={this.state.open}
-                    title={this.props.intl.formatMessage({ id: 'confirm.areYouSureDeleteArea'})}
-                    itemInformation={area.name}
+                    title={this.props.intl.formatMessage({ id: 'confirm.areYouSureDeleteArea'}) + ' ' + area.name}
                     subtext={this.props.intl.formatMessage({ id: 'confirm.deleteAreaInformation'})}
                     cancelText={this.props.intl.formatMessage({ id: 'common.cancel'})}
                     confirmText={this.props.intl.formatMessage({ id: 'common.delete'})}

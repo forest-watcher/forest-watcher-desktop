@@ -6,7 +6,6 @@ class Confirm extends PureComponent {
   static propTypes = {
     title: PropTypes.string.isRequired,
     subtext: PropTypes.string,
-    itemInformation: PropTypes.string,
     onAccept: PropTypes.func,
     onCancel: PropTypes.func,
     cancelText: PropTypes.string,
@@ -30,11 +29,11 @@ class Confirm extends PureComponent {
   }
 
   render() {
-    const { title, subtext, cancelText, confirmText, itemInformation } = this.props;
+    const { title, subtext, cancelText, confirmText } = this.props;
     return (
       <div className="c-modal-content">
         <div className="modal-content-inner">
-          <h2 className="modal-content-header u-padding-bottom-small u-margin-bottom text -small-title -green"><span className="test-title">{title}</span> <span className="test-item-information">{itemInformation}</span></h2>
+          <h2 className="modal-content-header u-padding-bottom-small u-margin-bottom text -small-title -green test-title">{title}</h2>
           <p className="text u-padding-bottom-small">{subtext}</p>
           <div className="modal-content-action u-margin-top-large">
             <button className="c-button -small u-text-center u-margin-right-tiny test-cancel-button" onClick={this.onCancel}>{cancelText}</button>
