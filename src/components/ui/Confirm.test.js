@@ -20,7 +20,7 @@ describe ('Confirm Dialog', () => {
     act(() => {
       ReactDOM.render(<Confirm title="Are You Sure?" subtext="subtext text" cancelText="cancelText" confirmText="confirmText"/>, container);
     });
-    const title = container.querySelector('h2');
+    const title = container.querySelector('.test-title');
     const subtext = container.querySelector('p');
     const confirmBtn = container.querySelector('.test-confirm-button');
     const cancelBtn = container.querySelector('.test-cancel-button');
