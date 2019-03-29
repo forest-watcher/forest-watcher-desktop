@@ -183,7 +183,7 @@ class LayersForm extends React.Component {
             { this.props.team &&
               <Checkbox
                 id={'gfw-teams-add'}
-                labelId={ 'settings.addToTeam' }
+                labelId={this.props.intl.formatMessage({ id: 'settings.addToTeam'})}
                 callback={() => this.setState({teamMode: !this.state.teamMode})}
               />
             }
@@ -201,7 +201,8 @@ LayersForm.propTypes = {
   publicLayers: PropTypes.array.isRequired,
   GFWLayers: PropTypes.array.isRequired,
   team: PropTypes.object,
-  createLayer: PropTypes.func.isRequired
+  createLayer: PropTypes.func.isRequired,
+  intl: PropTypes.object.isRequired
 };
 
 export default injectIntl(LayersForm);

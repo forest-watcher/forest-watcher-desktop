@@ -452,7 +452,8 @@ class QuestionCard extends React.Component {
 QuestionCard.propTypes = {
     question: PropTypes.object.isRequired,
     questionNum: PropTypes.number.isRequired,
-    defaultLanguage: PropTypes.string
+    defaultLanguage: PropTypes.string,
+    intl: PropTypes.object
 };
 
 export default injectIntl(QuestionCard);

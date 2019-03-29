@@ -34,16 +34,16 @@ class Walkthrough extends PureComponent {
     return (
       <div className="c-modal-content">
         <div className="modal-content-inner">
-          <h2 className="modal-content-header u-padding-bottom-small u-margin-bottom text -small-title -green">{title}</h2>
-          <p className="text u-padding-bottom">{intro}</p>
-          <ol className="modal-content-steps-index">
+          <h2 className="modal-content-header u-padding-bottom-small u-margin-bottom text -small-title -green test-walkthough-title">{title}</h2>
+          <p className="text u-padding-bottom test-walkthough-intro">{intro}</p>
+          <ol className="modal-content-steps-index test-walkthough-step-number">
             {
               steps.map((step, index) => (
                 <li
                   key={`step-index-${index}`}
-                  className={cx(['modal-content-steps-index-item', 'u-margin-bottom', 'text', '-question-number', { '-active': index === currentStep }])}
+                  className={cx(['modal-content-steps-index-item', 'u-margin-bottom', 'text', '-question-number', 'test-walkthough-steps', { '-active': index === currentStep }])}
                 >
-                  <button className="u-padding-bottom-small" onClick={(e) => this.setCurrentStep(e, index)}>
+                  <button className="u-padding-bottom-small test-step-button" onClick={(e) => this.setCurrentStep(e, index)}>
                     {`0${index + 1}.`}
                   </button>
                 </li>
@@ -51,19 +51,19 @@ class Walkthrough extends PureComponent {
             }
           </ol>
           <ul className="modal-content-steps-content">
-            <li className="modal-content-steps-content-item text  u-padding-bottom-small">
+            <li className="modal-content-steps-content-item text test-current-step u-padding-bottom-small">
               {content}
             </li>
             {childContent &&
               <ul>
-                <li className="text  u-padding-bottom-small">
+                <li className="text test-current-step-child u-padding-bottom-small">
                   {childContent}
                 </li>
               </ul>
             }
           </ul>
           <div className="modal-content-action u-margin-top-large">
-            <button className="c-button u-text-center" onClick={this.onAccept}>ok</button>
+            <button className="c-button test-confirm-button u-text-center" onClick={this.onAccept}>ok</button>
           </div>
         </div>
       </div>

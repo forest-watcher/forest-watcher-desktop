@@ -6,7 +6,7 @@ function Loader(props) {
     <div>
       {props.isLoading &&
         <div className="c-loader">
-          <div className="c-loading-spinner"></div>
+          <div className="c-loading-spinner test-loader-spinner"></div>
         </div>
       }
     </div>
