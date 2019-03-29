@@ -25,9 +25,9 @@ class ShapefileInfo extends PureComponent {
     return (
       <div className="c-modal-content">
         <div className="modal-content-inner">
-          <h2 className="text -small-title -green">{title}</h2>
-          <p className="text test-max-size">{maxSize}</p>
-          <p className="text test-formats">{formats}</p>
+          <h2 className="modal-content-header u-padding-bottom-small u-margin-bottom text -small-title -green">{title}</h2>
+          <p className="text test-max-size u-padding-bottom-small">{maxSize}</p>
+          <p className="text test-formats u-padding-bottom-small">{formats}</p>
 
           <ul className="modal-content-steps-content">
             <li className="modal-content-steps-content-item text">
@@ -38,8 +38,8 @@ class ShapefileInfo extends PureComponent {
             </li>
           </ul>
 
-          <div className="modal-content-action">
-            <button className="c-button test-confirm-button" onClick={this.onAccept}>ok</button>
+          <div className="modal-content-action u-margin-top-large">
+            <button className="c-button test-confirm-button u-text-center" onClick={this.onAccept}>ok</button>
           </div>
         </div>
       </div>
