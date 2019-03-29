@@ -200,6 +200,7 @@ class AreasManage extends React.Component {
                 map={this.state.map}
               />
               <LocationSearch
+                latLongLabel={this.props.intl.formatMessage({ id: 'areas.locationSearch'})}
                 onLocationChanged={ (location) => {
                   this.state.map.fitBounds([
                    [location.geometry.viewport.getSouthWest().lat(),
