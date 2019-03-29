@@ -209,13 +209,15 @@ class AreasManage extends React.Component {
                   ]);
                 }}
                 onLatLngChanged={ (latLng) => {
-                  this.state.map.panTo([latLng.lat, latLng.lng])
                   this.setState({
                     mapConfig: {
                       ...this.state.mapConfig,
+                      lat: latLng.lat,
+                      lng: latLng.lng,
                       zoom: 15
                     }
                   });
+                  this.state.map.setView([latLng.lat, latLng.lng], 15);
                 }}
                 map={this.state.map}
                 onZoomChange={ (zoom) => {
