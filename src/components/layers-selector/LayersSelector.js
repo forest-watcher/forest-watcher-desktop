@@ -44,7 +44,7 @@ class LayersSelector extends React.Component {
     const { layersOptions, intl } = this.props;
     const options = layersOptions.map(option => ({ value: option.option, label: this.getLayerName(option.label) }));
     return (
-      <div className="c-layers-selector">
+      <div className="c-layers-selector u-margin-bottom-tiny">
         <Select
           name="layers-select"
           className="c-select -map u-w-100"

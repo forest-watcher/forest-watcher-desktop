@@ -9,16 +9,16 @@ import LocateUser from '../../components/ui/LocateUser';
 import ZoomControl from '../../components/ui/ZoomControl';
 import DrawControl from '../../components/draw-control/DrawControlContainer';
 import Attribution from '../../components/ui/Attribution';
+import LocationSearch from '../../components/ui/LocationSearch';
 import Loader from '../../components/ui/Loader';
 import { FormattedMessage, injectIntl } from 'react-intl';
-import CountrySearch from '../../components/country-search/CountrySearchContainer';
-import LayersSelector from '../../components/layers-selector/LayersSelectorContainer';
 import union from '@turf/union';
 import { required } from '../../constants/validation-rules'
 import withModal from '../../components/ui/withModal';
 import ShapefileInfo from '../../components/ui/ShapefileInfo';
 import Icon from '../../components/ui/Icon';
 import { CATEGORY, ACTION } from '../../constants/analytics';
+import LayersSelector from '../../components/layers-selector/LayersSelectorContainer';
 import ReactGA from 'react-ga';
 
 const ShapefileInfoModal = withModal(ShapefileInfo);
@@ -199,7 +199,27 @@ class AreasManage extends React.Component {
               <LayersSelector
                 map={this.state.map}
               />
-              <CountrySearch
+              <LocationSearch
+                intl={this.props.intl}
+                onLocationChanged={ (location) => {
+                  this.state.map.fitBounds([
+                   [location.geometry.viewport.getSouthWest().lat(),
+                    location.geometry.viewport.getSouthWest().lng()],
+                   [location.geometry.viewport.getNorthEast().lat(),
+                    location.geometry.viewport.getNorthEast().lng()]
+                  ]);
+                }}
+                onLatLngChanged={ (latLng) => {
+                  this.setState({
+                    mapConfig: {
+                      ...this.state.mapConfig,
+                      lat: latLng.lat,
+                      lng: latLng.lng,
+                      zoom: 15
+                    }
+                  });
+                  this.state.map.setView([latLng.lat, latLng.lng], 15);
+                }}
                 map={this.state.map}
                 onZoomChange={ (zoom) => {
                   this.setState({
