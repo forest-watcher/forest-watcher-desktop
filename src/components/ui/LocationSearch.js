@@ -92,7 +92,7 @@ export default class LocationSearchInput extends React.Component {
           />
           <div className="c-latlong-search u-margin-top-tiny">
             <p className="u-margin-bottom-tiny">{intl.formatMessage({ id: 'areas.locationSearch'})}</p>
-            <label htmlFor="lat" class="u-visually-hidden">{intl.formatMessage({ id: 'areas.latitude'})}</label>
+            <label htmlFor="lat" className="u-visually-hidden">{intl.formatMessage({ id: 'areas.latitude'})}</label>
             <input
               type="number"
               name="lat"
@@ -101,7 +101,7 @@ export default class LocationSearchInput extends React.Component {
               onChange={this.handleInputChange}
               placeholder={intl.formatMessage({ id: 'areas.latitude'})}
               className="u-margin-bottom-tiny"/>
-            <label htmlFor="lng" class="u-visually-hidden">{intl.formatMessage({ id: 'areas.longitude'})}</label>
+            <label htmlFor="lng" className="u-visually-hidden">{intl.formatMessage({ id: 'areas.longitude'})}</label>
             <input
               type="number"
               name="lng"
