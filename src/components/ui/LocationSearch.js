@@ -8,7 +8,7 @@ import Icon from './Icon';
 
 export default class LocationSearchInput extends React.Component {
   static propTypes = {
-    latLongLabel: PropTypes.string.isRequired
+    intl: PropTypes.func.isRequired
   };
 
 
@@ -75,7 +75,7 @@ export default class LocationSearchInput extends React.Component {
   };
 
   render() {
-    const { latLongLabel } = this.props;
+    const { intl } = this.props;
     if (!window.google) {
       return null
     }
@@ -91,20 +91,24 @@ export default class LocationSearchInput extends React.Component {
             onZoomChange={this.props.onZoomChange}
           />
           <div className="c-latlong-search u-margin-top-tiny">
-            <p className="u-margin-bottom-tiny">{latLongLabel}</p>
+            <p className="u-margin-bottom-tiny">{intl.formatMessage({ id: 'areas.locationSearch'})}</p>
+            <label htmlFor="lat" class="u-visually-hidden">{intl.formatMessage({ id: 'areas.latitude'})}</label>
             <input
               type="number"
               name="lat"
+              id="lat"
               value={this.state.lat}
               onChange={this.handleInputChange}
-              placeholder="Latitude"
+              placeholder={intl.formatMessage({ id: 'areas.latitude'})}
               className="u-margin-bottom-tiny"/>
+            <label htmlFor="lng" class="u-visually-hidden">{intl.formatMessage({ id: 'areas.longitude'})}</label>
             <input
               type="number"
               name="lng"
+              id="lng"
               value={this.state.lng}
               onChange={this.handleInputChange}
-              placeholder="Longitude"/>
+              placeholder={intl.formatMessage({ id: 'areas.longitude'})}/>
           </div>
         </div>}
         <button className="button -map" type="button" onClick={this.toggleMenu}>

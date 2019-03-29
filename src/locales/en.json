@@ -70,6 +70,8 @@
     "areas.shapefileInfoUnzipped": ".csv, .json, .geojson, .kml, .kmz (.csv files must contain a geom column of shape data converted to well known text, WKT, format).",
     "areas.shapefileInfoZipped": ".shp (zipped shapefiles must include .shp, .shx, .dbf, and .prj files)",
     "areas.locationSearch": "Search by Latitude and Longitude",
+    "areas.latitude": "Latitude",
+    "areas.longitude": "Longitude",
     "templates.name": "templates",
     "templates.title": "Your Templates",
     "templates.subtitle": "Your templates",
