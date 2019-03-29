@@ -7,6 +7,11 @@ import CountrySearch from '../country-search/CountrySearchContainer';
 import Icon from './Icon';
 
 export default class LocationSearchInput extends React.Component {
+  static propTypes = {
+    latLongLabel: PropTypes.string.isRequired
+  };
+
+
   constructor(props) {
     super(props);
     this.state = {
@@ -70,6 +75,7 @@ export default class LocationSearchInput extends React.Component {
   };
 
   render() {
+    const { latLongLabel } = this.props;
     if (!window.google) {
       return null
     }
@@ -85,7 +91,7 @@ export default class LocationSearchInput extends React.Component {
             onZoomChange={this.props.onZoomChange}
           />
           <div className="c-latlong-search u-margin-top-tiny">
-            <p className="u-margin-bottom-tiny">Search by Latitude and Longitude</p>
+            <p className="u-margin-bottom-tiny">{latLongLabel}</p>
             <input
               type="number"
               name="lat"
