@@ -96,7 +96,7 @@ pipelines:
               - yarn build
         - step:
             name: Deploy GFW develop branch to staging environment
-            deployment: test
+            deployment: staging
             image: atlassian/pipelines-awscli
             artifacts:
               - build/**
