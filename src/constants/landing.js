@@ -1,4 +1,4 @@
-import { FACEBOOK_WIDGET_API, GOOGLE_PLUS_ONE_WIDGET_API, TWITTER_WIDGET_API } from './global';
+import { FACEBOOK_WIDGET_API, TWITTER_WIDGET_API } from './global';
 
 export const GFW_ASSETS_PATH = process.env.REACT_APP_GFW_ASSETS_PATH;
 
@@ -17,13 +17,6 @@ export const SOCIAL_FOOTER_SCRIPT = `
         js.src = "${FACEBOOK_WIDGET_API}";
         fjs.parentNode.insertBefore(js, fjs);
       }(document, 'script', 'facebook-jssdk'));
-
-      // Google Plus
-      (function() {
-        var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
-        po.src = '${GOOGLE_PLUS_ONE_WIDGET_API}';
-        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
-      })();
     `;
 
 export default {
