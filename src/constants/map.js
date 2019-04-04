@@ -50,13 +50,14 @@ export const DRAW_CONTROL = {
         showArea: true,
         metric: true,
         icon: new L.DivIcon({
-    			iconSize: new L.Point(12, 12),
-    			className: 'leaflet-div-icon leaflet-editing-icon'
-    		})
+          iconSize: new L.Point(12, 12),
+          className: 'leaflet-div-icon leaflet-editing-icon'
+        })
       },
       circle: false,
       rectangle: false,
-      marker: false
+      marker: false,
+      circlemarker: false
   },
   edit: {
       featureGroup: {},
@@ -72,7 +73,8 @@ export const DRAW_CONTROL_DISABLED = {
       polygon: false,
       circle: false,
       rectangle: false,
-      marker: false
+      marker: false,
+      circlemarker: false
   },
   edit: {
       featureGroup: {},
