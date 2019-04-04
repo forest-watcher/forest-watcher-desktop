@@ -1,4 +1,4 @@
-import { FACEBOOK_WIDGET_API, GOOGLE_PLUS_ONE_WIDGET_API, TWITTER_WIDGET_API } from './global';
+import { FACEBOOK_WIDGET_API, TWITTER_WIDGET_API } from './global';
 
 export const GFW_ASSETS_PATH = process.env.REACT_APP_GFW_ASSETS_PATH;
 
