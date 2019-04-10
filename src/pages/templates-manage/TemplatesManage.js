@@ -329,17 +329,17 @@ class TemplatesManage extends React.Component {
               <Link to="/templates">
                 <button className="c-button -light" disabled={isLoading}><FormattedMessage id="forms.cancel" /></button>
               </Link>
-                <div className="template-status">
-                  <span className="status-label text -x-small-title">{this.props.intl.formatMessage({ id: 'templates.statusUnpublished' })}</span>
-                  <Switch
-                    className="c-switcher"
-                    onClick={this.toggleStatus}
-                    on={this.state.status === 'published'}
-                    enabled={!isPublic && (!isLoading || canManage)}
-                  />
-                  <span className="status-label text -x-small-title">{this.props.intl.formatMessage({ id: 'templates.statusPublished' })}</span>
-                </div>
-                <button className="c-button" disabled={isLoading || isPublic || !canSave}><FormattedMessage id="forms.save" /></button>
+              <div className="template-status">
+                <span className="status-label text -x-small-title">{this.props.intl.formatMessage({ id: 'templates.statusUnpublished' })}</span>
+                <Switch
+                  className="c-switcher"
+                  onClick={this.toggleStatus}
+                  on={this.state.status === 'published'}
+                  enabled={!isPublic && (!isLoading || canManage)}
+                />
+                <span className="status-label text -x-small-title">{this.props.intl.formatMessage({ id: 'templates.statusPublished' })}</span>
+              </div>
+              <button className="c-button" disabled={isLoading || isPublic || !canSave}><FormattedMessage id="forms.save" /></button>
             </FormFooter>
           </Form>
         </div>
