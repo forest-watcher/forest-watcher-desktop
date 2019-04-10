@@ -226,7 +226,7 @@ class TemplatesManage extends React.Component {
                         onChange={this.onAreaChange}
                         noResultsText={this.props.intl.formatMessage({ id: 'filters.noAreasAvailable' })}
                         isSearchable={false}
-                        disabled={isLoading}
+                        isDisabled={isLoading}
                         components={{ DropdownIndicator }}
                       />
                     </div>
@@ -244,7 +244,7 @@ class TemplatesManage extends React.Component {
                         noResultsText={this.props.intl.formatMessage({ id: 'filters.noLanguagesAvailable' })}
                         isSearchable={true}
                         isClearable={false}
-                        disabled={isLoading || !modeCreate}
+                        isDisabled={isLoading || !modeCreate}
                         components={{ DropdownIndicator }}
                       />
                     </div>

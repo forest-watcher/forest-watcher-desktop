@@ -13,6 +13,10 @@
         cursor: pointer;
         display: flex;
 
+        &--is-disabled{
+          background-color: #f9f9f9;
+        }
+
         &.Select__control--menu-is-open {
               background-color: $white;
               border-bottom-right-radius: 0;
