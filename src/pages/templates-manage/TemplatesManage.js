@@ -16,7 +16,6 @@ import { TransitionGroup, CSSTransition } from 'react-transition-group';
 import { QUESTION } from '../../constants/templates';
 import Switch from 'react-toggle-switch'
 import DropdownIndicator from '../../components/ui/SelectDropdownIndicator'
-import Icon from '../../components/ui/Icon';
 import Banner from '../../components/ui/Banner';
 import { CATEGORY, ACTION } from '../../constants/analytics';
 import ReactGA from 'react-ga';

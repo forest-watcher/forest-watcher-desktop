@@ -13,7 +13,7 @@ class Banner extends PureComponent {
     return (
       <div className="c-banner c-banner--info">
         <Icon className="-small u-margin-right-small" name="icon-info"/>
-        <span>{title}</span>
+        <span className="test-banner-title">{title}</span>
       </div>
     );
   }
