@@ -21,6 +21,7 @@ export const CONFIRMED_USER = 'CONFIRMED_USER';
 export const MAX_NUMBER_OF_LAYERS = 2;
 export const TABLE_PAGE_SIZE = 8;
 export const MANAGER = 'MANAGER';
+export const MY_GFW_LINK = 'http://www.globalforestwatch.org/my_gfw';
 
 export const LAYERS_BLACKLIST = [6];
 
@@ -38,5 +39,6 @@ export default {
   TWITTER_WIDGET_API,
   FACEBOOK_WIDGET_API,
   GA_UA,
-  GOOGLE_PLACES_API_KEY
+  GOOGLE_PLACES_API_KEY,
+  MY_GFW_LINK
 };

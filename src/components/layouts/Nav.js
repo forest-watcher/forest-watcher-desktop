@@ -4,6 +4,7 @@ import { NavLink } from 'react-router-dom';
 import Icon from '../ui/Icon';
 import DropdownIndicator from '../ui/SelectDropdownIndicator'
 import Select from 'react-select';
+import { MY_GFW_LINK } from '../../constants/global';
 import { FormattedMessage } from 'react-intl';
 import ReactGA from 'react-ga';
 
@@ -22,7 +23,6 @@ class Nav extends React.Component {
   render() {
     const { user } = this.props;
     const username = (user.data && user.data.email) || <FormattedMessage id="app.setupEmail" />;
-    const setUpEmailLink = 'http://www.globalforestwatch.org/my_gfw';
     return (
       <div className="row column">
         <nav className="c-nav">
@@ -50,7 +50,7 @@ class Nav extends React.Component {
                 <li className={`nav-link ${user.data && user.data.email ? '-disabled' : ''}`}>
                   <ReactGA.OutboundLink
                     eventLabel="navigation - myGFW"
-                    to={setUpEmailLink}
+                    to={MY_GFW_LINK}
                     rel="noopener noreferrer"
                     target="_blank"
                     >
