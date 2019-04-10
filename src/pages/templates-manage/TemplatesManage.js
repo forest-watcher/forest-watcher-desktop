@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import Hero from '../../components/layouts/Hero';
 import { FormattedMessage, injectIntl } from 'react-intl';
-import { Form, Button } from '../../components/form/Form';
+import { Form } from '../../components/form/Form';
 import Select from 'react-select';
 import Loader from '../../components/ui/Loader';
 import FormFooter from '../../components/ui/FormFooter';
@@ -16,6 +16,7 @@ import { TransitionGroup, CSSTransition } from 'react-transition-group';
 import { QUESTION } from '../../constants/templates';
 import Switch from 'react-toggle-switch'
 import DropdownIndicator from '../../components/ui/SelectDropdownIndicator'
+import Icon from '../../components/ui/Icon';
 import { CATEGORY, ACTION } from '../../constants/analytics';
 import ReactGA from 'react-ga';
 
@@ -194,9 +195,10 @@ class TemplatesManage extends React.Component {
   ///////////////////////////////
   render() {
     const { areasOptions, localeOptions, questionOptions, loading, saving, deleting, mode, locale, user, template } = this.props;
-    const canEdit = ((template.answersCount === 0 || !template.answersCount) && (template.status === 'unpublished' || template.status === 'draft') && user.id === template.user) || mode === 'create' ? true : false;
+    const canEdit = ((template.answersCount === 0 || !template.answersCount) && (template.status === 'unpublished' || template.status === 'draft') && user.id === template.user && !template.public) || mode === 'create' ? true : false;
     const canManage = user.id === template.user || mode === 'create' ? true : false;
     const modeCreate = mode === 'create' ? true : false;
+    const isPublic = template.public;
     const canSave = this.state.questions.length && this.state.name[this.state.defaultLanguage] ? true : false;
     const isLoading = loading || saving || deleting ? true : false;
     return (
@@ -214,6 +216,14 @@ class TemplatesManage extends React.Component {
             <div className="c-form -templates">
               <div className="template-meta">
                 <div className="row">
+                  { isPublic &&
+                    <div className="column small-12 medium-10 large-8 medium-offset-1 large-offset-2">
+                      <div className="c-banner c-banner--info">
+                        <Icon className="-small u-margin-right-small" name="icon-info"/>
+                        <FormattedMessage id={"templates.cantEdit"} />
+                      </div>
+                    </div>
+                  }
                   <div className="column small-12 medium-5 medium-offset-1 large-4 large-offset-2">
                     <div className="input-group">
                       <label className="text -gray"><FormattedMessage id={"templates.assignArea"} />:</label>
@@ -226,7 +236,7 @@ class TemplatesManage extends React.Component {
                         onChange={this.onAreaChange}
                         noResultsText={this.props.intl.formatMessage({ id: 'filters.noAreasAvailable' })}
                         isSearchable={false}
-                        isDisabled={isLoading}
+                        isDisabled={isLoading || isPublic}
                         components={{ DropdownIndicator }}
                       />
                     </div>
@@ -244,7 +254,7 @@ class TemplatesManage extends React.Component {
                         noResultsText={this.props.intl.formatMessage({ id: 'filters.noLanguagesAvailable' })}
                         isSearchable={true}
                         isClearable={false}
-                        isDisabled={isLoading || !modeCreate}
+                        isDisabled={isLoading || !modeCreate || isPublic}
                         components={{ DropdownIndicator }}
                       />
                     </div>
@@ -264,7 +274,7 @@ class TemplatesManage extends React.Component {
                           value={this.state.name ? this.state.name[this.state.defaultLanguage] : ''}
                           placeholder={this.props.intl.formatMessage({ id: 'templates.title' })}
                           onKeyPress={(e) => {if (e.which === 13) { e.preventDefault();}}} // Prevent send on press Enter
-                          disabled={isLoading}
+                          disabled={isLoading || isPublic}
                           required
                         />
                       </div>
@@ -319,17 +329,17 @@ class TemplatesManage extends React.Component {
               <Link to="/templates">
                 <button className="c-button -light" disabled={isLoading}><FormattedMessage id="forms.cancel" /></button>
               </Link>
-              <div className="template-status">
-                <span className="status-label text -x-small-title">{this.props.intl.formatMessage({ id: 'templates.statusUnpublished' })}</span>
-                <Switch
-                  className="c-switcher"
-                  onClick={this.toggleStatus}
-                  on={this.state.status === 'published'}
-                  enabled={!isLoading || canManage}
-                />
-                <span className="status-label text -x-small-title">{this.props.intl.formatMessage({ id: 'templates.statusPublished' })}</span>
-              </div>
-              <Button className="c-button" disabled={isLoading || !canSave}><FormattedMessage id="forms.save" /></Button>
+                <div className="template-status">
+                  <span className="status-label text -x-small-title">{this.props.intl.formatMessage({ id: 'templates.statusUnpublished' })}</span>
+                  <Switch
+                    className="c-switcher"
+                    onClick={this.toggleStatus}
+                    on={this.state.status === 'published'}
+                    enabled={!isPublic && (!isLoading || canManage)}
+                  />
+                  <span className="status-label text -x-small-title">{this.props.intl.formatMessage({ id: 'templates.statusPublished' })}</span>
+                </div>
+                <button className="c-button" disabled={isLoading || isPublic || !canSave}><FormattedMessage id="forms.save" /></button>
             </FormFooter>
           </Form>
         </div>
