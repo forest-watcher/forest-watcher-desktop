@@ -6,7 +6,8 @@ import MemberList from './MemberList';
 import { includes, validateEmail } from '../../helpers/utils';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { toastr } from 'react-redux-toastr';
-import { MANAGER, USER, CONFIRMED_USER } from '../../constants/global';
+import { MANAGER, USER, CONFIRMED_USER, MY_GFW_LINK } from '../../constants/global';
+
 import { CATEGORY, ACTION } from '../../constants/analytics';
 import ReactGA from 'react-ga';
 
@@ -128,7 +129,7 @@ class MembersManager extends React.Component {
             *members must have a
             <a
               className="text -green"
-              href="http://www.globalforestwatch.org/my_gfw"
+              href={MY_GFW_LINK}
               target="_blank"
               rel="noopener noreferrer"
             >
