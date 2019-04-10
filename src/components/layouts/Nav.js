@@ -22,7 +22,7 @@ class Nav extends React.Component {
   render() {
     const { user } = this.props;
     const username = (user.data && user.data.email) || <FormattedMessage id="app.setupEmail" />;
-    const setUpEmailLink = (!user.data || !user.data.email) ? 'http://www.globalforestwatch.org/my_gfw' : undefined;
+    const setUpEmailLink = 'http://www.globalforestwatch.org/my_gfw';
     return (
       <div className="row column">
         <nav className="c-nav">
@@ -48,7 +48,6 @@ class Nav extends React.Component {
                   <NavLink to="/settings" activeClassName="-active"><FormattedMessage id="settings.name" /></NavLink>
                 </li>
                 <li className={`nav-link ${user.data && user.data.email ? '-disabled' : ''}`}>
-                {setUpEmailLink ? (
                   <ReactGA.OutboundLink
                     eventLabel="navigation - myGFW"
                     to={setUpEmailLink}
@@ -57,9 +56,6 @@ class Nav extends React.Component {
                     >
                       {username}
                   </ReactGA.OutboundLink>
-                ) : (
-                  <a href={setUpEmailLink}>{username}</a>
-                )}
                 </li>
               </ul>
             }
