@@ -17,6 +17,7 @@ import { QUESTION } from '../../constants/templates';
 import Switch from 'react-toggle-switch'
 import DropdownIndicator from '../../components/ui/SelectDropdownIndicator'
 import Icon from '../../components/ui/Icon';
+import Banner from '../../components/ui/Banner';
 import { CATEGORY, ACTION } from '../../constants/analytics';
 import ReactGA from 'react-ga';
 
@@ -218,10 +219,7 @@ class TemplatesManage extends React.Component {
                 <div className="row">
                   { isPublic &&
                     <div className="column small-12 medium-10 large-8 medium-offset-1 large-offset-2">
-                      <div className="c-banner c-banner--info">
-                        <Icon className="-small u-margin-right-small" name="icon-info"/>
-                        <FormattedMessage id={"templates.cantEdit"} />
-                      </div>
+                      <Banner title={this.props.intl.formatMessage({ id: 'templates.cantEdit'})}/>
                     </div>
                   }
                   <div className="column small-12 medium-5 medium-offset-1 large-4 large-offset-2">
