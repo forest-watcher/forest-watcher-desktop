@@ -59,7 +59,7 @@ class TeamsForm extends React.Component {
     e.preventDefault();
     const team = this.props.team;
     if ((!team && this.form.users.length > 0) ||
-         (team && (team.attributes.users !== this.form.users) && (team.attributes.users.lenght < this.form.users.lenght))) {
+         (team && (team.attributes.users !== this.form.users) && (team.attributes.users.length < this.form.users.length))) {
       this.props.sendNotifications();
     }
     if (this.form.name){
