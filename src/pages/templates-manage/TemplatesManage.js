@@ -279,29 +279,36 @@ class TemplatesManage extends React.Component {
                       </div>
                     </div>
                       {this.state.questions &&
-                        <TransitionGroup>
-                          { this.state.questions.map((question, index) =>
-                            <CSSTransition
-                              key={index}
-                              classNames="fade"
-                              timeout={{ enter: 500, exit: 500 }}
-                            >
-                              <QuestionCard
-                                questionNum={index + 1}
-                                question={question}
-                                template={this.state}
-                                syncStateWithProps={this.handleQuestionEdit}
-                                questionOptions={questionOptions}
-                                defaultLanguage={this.state.defaultLanguage}
-                                deleteQuestion={this.handleQuestionDelete}
-                                status={this.state.status}
-                                canEdit={canEdit}
-                                canManage={canManage}
-                                mode={mode}
-                              />
-                            </CSSTransition>
-                          )}
-                        </TransitionGroup>
+                        <div>
+                          { !userCannotEditTemplate && !modeCreate &&
+                            <div className="u-margin-bottom">
+                              <Banner title={this.props.intl.formatMessage({ id: 'templates.cantEditQuestions'})}/>
+                            </div>
+                          }
+                          <TransitionGroup>
+                            { this.state.questions.map((question, index) =>
+                              <CSSTransition
+                                key={index}
+                                classNames="fade"
+                                timeout={{ enter: 500, exit: 500 }}
+                              >
+                                <QuestionCard
+                                  questionNum={index + 1}
+                                  question={question}
+                                  template={this.state}
+                                  syncStateWithProps={this.handleQuestionEdit}
+                                  questionOptions={questionOptions}
+                                  defaultLanguage={this.state.defaultLanguage}
+                                  deleteQuestion={this.handleQuestionDelete}
+                                  status={this.state.status}
+                                  canEdit={canEdit}
+                                  canManage={canManage}
+                                  mode={mode}
+                                />
+                              </CSSTransition>
+                            )}
+                          </TransitionGroup>
+                        </div>
                       }
                   </div>
                 </div>

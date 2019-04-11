@@ -236,7 +236,7 @@ class QuestionCard extends React.Component {
   // time to render -> just like bender
   ///////////////////////////////
   render() {
-    const { template, question, questionOptions, questionNum, defaultLanguage, deleteQuestion, canManage } = this.props;
+    const { template, question, questionOptions, questionNum, defaultLanguage, deleteQuestion, canManage, mode } = this.props;
 
     // rendering variables
     const isConditional = CONDITIONAL_QUESTION_TYPES.indexOf(question.type) > -1 ? true : false;
@@ -284,6 +284,9 @@ class QuestionCard extends React.Component {
     // permissions bools that are dependant on locale state
     const conditionalQuestionCount = filterBy(conditionalQuestionsFiltered, 'type', CONDITIONAL_QUESTION_TYPES).length;
     const canSetConditional = template.questions.length && conditionalQuestionCount > 0 ? true : false;
+    // do not allow questions to be edited unless template is in create mode due to API issues
+    // todo: remove this once API has been updated to support editing questions
+    const modeCreate = mode === 'create' ? true : false;
     // finally we can render all that fancy stuff
     return (
         <section className="c-question-card">
@@ -298,7 +301,7 @@ class QuestionCard extends React.Component {
                             value={question.label[defaultLanguage] || ''}
                             placeholder={this.props.intl.formatMessage({ id: 'templates.questionPlaceholder' })}
                             onKeyPress={(e) => {if (e.which === 13) { e.preventDefault();}}} // Prevent send on press Enter
-                            disabled={!canManage}
+                            disabled={!canManage || !modeCreate}
                             required
                         />
                         <Select
@@ -311,7 +314,7 @@ class QuestionCard extends React.Component {
                             onChange={this.onTypeChange}
                             isSearchable={false}
                             isClearable={false}
-                            isDisabled={!canManage}
+                            isDisabled={!canManage || !modeCreate}
                             components={{ DropdownIndicator }}
                         />
                         <div className="question-options">
@@ -325,11 +328,11 @@ class QuestionCard extends React.Component {
                                             onKeyPress={(e) => {if (e.which === 13) { e.preventDefault();}}} // Prevent send on press Enter
                                             placeholder={this.props.intl.formatMessage({ id: 'templates.optionPlaceholder' })}
                                             onChange={(e) => this.onQuestionOptionChange(e, index)}
-                                            disabled={!canManage}
+                                            disabled={!canManage || !modeCreate}
                                             required
                                         />
                                         { canManage && (question.values[defaultLanguage].length > 1) &&
-                                            <button className={"delete-button"} type="button"
+                                            <button className={"delete-button"} type="button" disabled={!modeCreate}
                                                 onClick={() => { this.deleteOption(index) }}>
                                                 <Icon className="-small -theme-gray" name="icon-more"/>
                                             </button>
@@ -342,6 +345,7 @@ class QuestionCard extends React.Component {
                                     className={"c-button add-option-button"}
                                     type="button"
                                     onClick={this.onQuestionOptionAdd}
+                                    disabled={!modeCreate}
                                 >
                                     <FormattedMessage id={"templates.addOption"} />
                                 </button>
@@ -353,7 +357,7 @@ class QuestionCard extends React.Component {
                                         id={`${questionNum}-more-info`}
                                         callback={() => this.handleChangeMoreInfo(questionNum)}
                                         defaultChecked={question.childQuestions.length > 0}
-                                        disabled={!canManage}
+                                        disabled={!canManage || !modeCreate}
                                     />
                                     <label className="text">{this.props.intl.formatMessage({ id: 'templates.moreInfoFirst' })}</label>
                                     <Select
@@ -367,7 +371,7 @@ class QuestionCard extends React.Component {
                                         placeholder={this.props.intl.formatMessage({ id: 'templates.selectCondition' })}
                                         noResultsText={this.props.intl.formatMessage({ id: 'templates.noConditions' })}
                                         components={{ DropdownIndicator }}
-                                        isDisabled={!canManage || !question.childQuestions.length}
+                                        isDisabled={!canManage || !question.childQuestions.length || !modeCreate}
                                     />
                                     <label className="text">{this.props.intl.formatMessage({ id: 'templates.moreInfoSecond' })}</label>
                                 </div>
@@ -380,7 +384,7 @@ class QuestionCard extends React.Component {
                                         value={question.childQuestions[0].label[defaultLanguage] || ''}
                                         placeholder={this.props.intl.formatMessage({ id: 'templates.childQuestionPlaceholder' })}
                                         onKeyPress={(e) => {if (e.which === 13) { e.preventDefault();}}} // Prevent send on press Enter
-                                        disabled={!canManage}
+                                        disabled={!canManage || !modeCreate}
                                         required
                                     />
                                 }
@@ -394,7 +398,7 @@ class QuestionCard extends React.Component {
                             className={"delete-button"}
                             type="button"
                             onClick={() => { deleteQuestion(questionNum)} }
-                            disabled={!canManage}
+                            disabled={!canManage || !modeCreate}
                         >
                             <Icon className="-small -gray" name="icon-delete"/>
                         </button>
@@ -404,7 +408,7 @@ class QuestionCard extends React.Component {
                         className="c-switcher required"
                         onClick={this.toggleRequired}
                         on={question.required}
-                        enabled={canManage}
+                        enabled={canManage && modeCreate}
                     />
                 </div>
             </div>
@@ -414,7 +418,7 @@ class QuestionCard extends React.Component {
                         id={`${questionNum}-only-show`}
                         callback={() => this.handleChangeOnlyShow(questionNum)}
                         checked={question.conditions.length > 0}
-                        disabled={!canManage}
+                        disabled={!canManage || !modeCreate}
                     />
                     <label className="text">{this.props.intl.formatMessage({ id: 'templates.onlyShow' })}</label>
                     <Select
@@ -427,7 +431,7 @@ class QuestionCard extends React.Component {
                         isClearable={false}
                         placeholder={this.props.intl.formatMessage({ id: 'templates.selectQuestion' })}
                         components={{ DropdownIndicator }}
-                        isDisabled={!canManage || !question.conditions.length}
+                        isDisabled={!canManage || !question.conditions.length || !modeCreate}
                     />
                     <label className="text">{this.props.intl.formatMessage({ id: 'templates.is' })}</label>
                     <Select
@@ -440,7 +444,7 @@ class QuestionCard extends React.Component {
                         isClearable={false}
                         placeholder={this.props.intl.formatMessage({ id: 'templates.selectOption' })}
                         components={{ DropdownIndicator }}
-                        isDisabled={!canManage || !question.conditions.length}
+                        isDisabled={!canManage || !question.conditions.length || !modeCreate}
                     />
                 </div>
             }

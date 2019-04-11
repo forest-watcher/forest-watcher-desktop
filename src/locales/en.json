@@ -77,6 +77,7 @@
     "templates.title": "Your Templates",
     "templates.subtitle": "Your templates",
     "templates.cantEdit": "You cannot edit this template.",
+    "templates.cantEditQuestions": "You cannot edit the following questions.",
     "reports.name": "Reports",
     "reports.title": "Your Reports",
     "reports.downloadBtn": "Download reports",
