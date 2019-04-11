@@ -199,6 +199,7 @@ class TemplatesManage extends React.Component {
     const canManage = user.id === template.user || mode === 'create' ? true : false;
     const modeCreate = mode === 'create' ? true : false;
     const isPublic = template.public;
+    const userCannotEditTemplate = isPublic || !canManage;
     const canSave = this.state.questions.length && this.state.name[this.state.defaultLanguage] ? true : false;
     const isLoading = loading || saving || deleting ? true : false;
     return (
@@ -216,11 +217,12 @@ class TemplatesManage extends React.Component {
             <div className="c-form -templates">
               <div className="template-meta">
                 <div className="row">
-                  { isPublic &&
+                  { userCannotEditTemplate &&
                     <div className="column small-12 medium-10 large-8 medium-offset-1 large-offset-2">
                       <Banner title={this.props.intl.formatMessage({ id: 'templates.cantEdit'})}/>
                     </div>
                   }
+
                   <div className="column small-12 medium-5 medium-offset-1 large-4 large-offset-2">
                     <div className="input-group">
                       <label className="text -gray"><FormattedMessage id={"templates.assignArea"} />:</label>
@@ -233,7 +235,7 @@ class TemplatesManage extends React.Component {
                         onChange={this.onAreaChange}
                         noResultsText={this.props.intl.formatMessage({ id: 'filters.noAreasAvailable' })}
                         isSearchable={false}
-                        isDisabled={isLoading || isPublic}
+                        isDisabled={isLoading || userCannotEditTemplate}
                         components={{ DropdownIndicator }}
                       />
                     </div>
@@ -251,7 +253,7 @@ class TemplatesManage extends React.Component {
                         noResultsText={this.props.intl.formatMessage({ id: 'filters.noLanguagesAvailable' })}
                         isSearchable={true}
                         isClearable={false}
-                        isDisabled={isLoading || !modeCreate || isPublic}
+                        isDisabled={isLoading || !modeCreate || userCannotEditTemplate}
                         components={{ DropdownIndicator }}
                       />
                     </div>
@@ -271,7 +273,7 @@ class TemplatesManage extends React.Component {
                           value={this.state.name ? this.state.name[this.state.defaultLanguage] : ''}
                           placeholder={this.props.intl.formatMessage({ id: 'templates.title' })}
                           onKeyPress={(e) => {if (e.which === 13) { e.preventDefault();}}} // Prevent send on press Enter
-                          disabled={isLoading || isPublic}
+                          disabled={isLoading || userCannotEditTemplate}
                           required
                         />
                       </div>
@@ -332,11 +334,11 @@ class TemplatesManage extends React.Component {
                   className="c-switcher"
                   onClick={this.toggleStatus}
                   on={this.state.status === 'published'}
-                  enabled={!isPublic && (!isLoading || canManage)}
+                  enabled={!isPublic && canManage && !isLoading}
                 />
                 <span className="status-label text -x-small-title">{this.props.intl.formatMessage({ id: 'templates.statusPublished' })}</span>
               </div>
-              <button className="c-button" disabled={isLoading || isPublic || !canSave}><FormattedMessage id="forms.save" /></button>
+              <button className="c-button" disabled={isLoading || userCannotEditTemplate || !canSave}><FormattedMessage id="forms.save" /></button>
             </FormFooter>
           </Form>
         </div>
