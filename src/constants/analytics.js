@@ -15,6 +15,7 @@ export const ACTION = {
   PUBLISH_TEMPLATE: 'Set as published',
   DOWNLOAD_REPORT_DATA: 'Download report answers',
   EDIT: 'Edit',
+  EDIT_SETTINGS: 'Edit settings',
   ADD_TEAM: 'Add team member',
   REMOVE_TEAM: 'Delete team member',
   ADD_GFW_LAYER: 'Add GFW layers',
