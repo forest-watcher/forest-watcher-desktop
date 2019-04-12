@@ -1,12 +1,10 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Input, Textarea } from '../form/Form';
 import { injectIntl } from 'react-intl';
 
 import withModal from '../ui/withModal';
 import Walkthrough from '../ui/Walkthrough';
 import Icon from '../ui/Icon';
-import { required } from '../../constants/validation-rules'
 
 import { customLayers as WALKTHROUGH_TEXTS } from '../../constants/walkthrough-texts';
 
@@ -51,32 +49,31 @@ class CustomLayers extends Component {
           <Icon className="-small" name="icon-info"/>
         </button>
         <div className="c-form">
-          <Input
+          <input
             type="text"
-            className="-question"
+            className="-question u-margin-bottom"
             onChange={onInputChange}
             name="title"
             value={form.title || ''}
             placeholder={intl.formatMessage({ id: 'settings.layerTitle' })}
-            validations={[required]}
+            required
           />
-          <Input
-            type="text"
-            className="-question"
+          <input
+            type="url"
+            className="-question u-margin-bottom"
             onChange={onInputChange}
             name="tileurl"
             value={form.tileurl || ''}
+            required
             placeholder={intl.formatMessage({ id: 'settings.url' })}
-            validations={[required]}
           />
           <h4>{intl.formatMessage({ id: 'settings.description' })}</h4>
-          <Textarea
+          <textarea
             type="text"
             onChange={onInputChange}
             name="style"
             value={form.style || ''}
             placeholder={intl.formatMessage({ id: 'settings.description' })}
-            validations={[]}
           />
         </div>
         <WalkthroughModal

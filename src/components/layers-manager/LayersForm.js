@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import { FormattedMessage } from 'react-intl';
-import { Form } from '../form/Form';
 import Tab from '../ui/Tab';
 import { includes } from '../../helpers/utils';
 import Checkbox from '../ui/Checkbox';
@@ -110,7 +109,6 @@ class LayersForm extends React.Component {
       });
       this.setState({ GFWLayers: resetedLayers });
     } else { // Custom Layers
-      if (Object.keys(this.formNode.getErrors()).length === 0) { // No validation errors
         if (this.addLayer(this.state.form, teamId, userLayerNames, teamLayerNames, userLayerLength, teamLayerLength, typeOfLayer)){
           ReactGA.event({
             category: CATEGORY.CONTEXTUAL_LAYERS,
@@ -118,15 +116,14 @@ class LayersForm extends React.Component {
             label: 'Add custom layer success'
           });
           this.resetForm();
+        } else {
+          toastr.error(this.props.intl.formatMessage({ id: 'settings.validationError' }));
+          ReactGA.event({
+            category: CATEGORY.CONTEXTUAL_LAYERS,
+            action: ACTION.ADD_CUSTOM_LAYER,
+            label: 'Add custom layer - Validation error'
+          });
         }
-      } else {
-        toastr.error(this.props.intl.formatMessage({ id: 'settings.validationError' }));
-        ReactGA.event({
-          category: CATEGORY.CONTEXTUAL_LAYERS,
-          action: ACTION.ADD_CUSTOM_LAYER,
-          label: 'Add custom layer - Validation error'
-        });
-      }
     }
   }
 
@@ -162,7 +159,7 @@ class LayersForm extends React.Component {
             handleTabIndexChange={this.handleTabIndexChange}
           />
         </div>
-        <Form onSubmit={(e) => this.addLayers(e)} ref={ f => this.formNode = f }>
+        <form onSubmit={(e) => this.addLayers(e)} ref={ f => this.formNode = f }>
             {this.state.tabIndex === 0 ?
               this.state.GFWLayers && this.state.GFWLayers.map((GFWlayer, i) =>
                 <Checkbox
@@ -189,7 +186,7 @@ class LayersForm extends React.Component {
             }
             <button className="c-button -light -right" ><FormattedMessage id="common.add"/></button>
           </div>
-        </Form>
+        </form>
       </div>
     );
   }
