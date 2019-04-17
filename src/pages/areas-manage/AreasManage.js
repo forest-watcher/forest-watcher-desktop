@@ -296,7 +296,7 @@ class AreasManage extends React.Component {
                   <Icon className="-medium" name="icon-info"/>
                 </button>
               </div>
-              <div className="areas-inputs">
+              <div className="areas-inputs u-p-relative">
                 <div className="horizontal-field">
                   <label className="text -x-small-title"><FormattedMessage id="areas.nameArea" />: </label>
                   <Input
