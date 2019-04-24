@@ -13,8 +13,8 @@ import pt from 'react-intl/locale-data/pt';
 import translations from '../../locales/index.js';
 import { DEFAULT_LANGUAGE, GA_UA } from '../../constants/global';
 import ReactGA from 'react-ga';
-
-addLocaleData([...en, ...es, ...fr, ...id, ...pt]);
+import 'react-redux-toastr/lib/css/react-redux-toastr.min.css';
+import Nav from '../layouts/Nav';
 
 // Pages
 import Login from '../../pages/login/Login';
@@ -26,9 +26,9 @@ import Settings from '../../pages/settings/SettingsContainer';
 import Reports from '../../pages/reports/ReportsContainer';
 import Landing from '../../pages/landing/LandingContainer';
 
-import 'react-redux-toastr/lib/css/react-redux-toastr.min.css';
 
-import Nav from '../layouts/Nav';
+addLocaleData([...en, ...es, ...fr, ...id, ...pt]);
+
 
 class App extends React.Component {
 
@@ -88,7 +88,7 @@ class App extends React.Component {
   render() {
     const { match, user, userChecked, logout, locale, setLocale } = this.props;
     if (!userChecked) return null;
-    const queryParams = querystring.parse(location.search || '');
+    const queryParams = querystring.parse(window.location.search || '');
     const mergedMessages = Object.assign({}, translations[DEFAULT_LANGUAGE], translations[locale]);
     return (
       <IntlProvider
@@ -96,7 +96,7 @@ class App extends React.Component {
         messages={mergedMessages}
       >
         <div>
-          { ((user.loggedIn && location.pathname !== '/') || location.pathname === "/login") &&
+          { ((user.loggedIn && window.location.pathname !== '/') || window.location.pathname === "/login") &&
             <header className="l-header" role="banner">
             <Nav
               loggedIn={user.loggedIn}

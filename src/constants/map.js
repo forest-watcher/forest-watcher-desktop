@@ -5,6 +5,7 @@ export const MAP_CONFIG = {
   minZoom: 2,
   initialZoom: 3,
   basemap: `https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}`,
+  borders: `https://services.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}`,
   center: [51.505, -0.09],
   attribution: '| Tiles © Esri — Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community',
   zoomControl: false
@@ -49,13 +50,14 @@ export const DRAW_CONTROL = {
         showArea: true,
         metric: true,
         icon: new L.DivIcon({
-    			iconSize: new L.Point(12, 12),
-    			className: 'leaflet-div-icon leaflet-editing-icon'
-    		})
+          iconSize: new L.Point(12, 12),
+          className: 'leaflet-div-icon leaflet-editing-icon'
+        })
       },
       circle: false,
       rectangle: false,
-      marker: false
+      marker: false,
+      circlemarker: false
   },
   edit: {
       featureGroup: {},
@@ -71,7 +73,8 @@ export const DRAW_CONTROL_DISABLED = {
       polygon: false,
       circle: false,
       rectangle: false,
-      marker: false
+      marker: false,
+      circlemarker: false
   },
   edit: {
       featureGroup: {},

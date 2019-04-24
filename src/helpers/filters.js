@@ -18,13 +18,13 @@ const filterBy = (data, field, value) => {
 
 const filterData = (data, searchParams) => {
   const { aoi, date, searchValues } = searchParams;
-  if (aoi !== undefined){ 
+  if (aoi !== undefined) {
     data = filterBy(data, 'aoi', aoi);
   }
-  if (searchValues !== undefined){ 
+  if (searchValues !== undefined) {
     data = filterBy(data, 'search', searchValues);
   }
-  if (date !== undefined){ 
+  if (date !== undefined) {
     data = filterBy(data, 'date', date);
   }
   return data;
@@ -34,6 +34,7 @@ const getSelectorValueFromArray = (value, data) => {
   const selected = data.filter((obj) => {
     return obj.option === value;
   });
+  selected[0].value = selected[0].option;
   return selected[0];
 }
 

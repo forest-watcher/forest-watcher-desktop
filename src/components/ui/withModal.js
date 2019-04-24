@@ -39,7 +39,7 @@ function withModal(WrappedComponent) {
           <div className="modal-container" onClick={this.stopPropagation}>
             <div className="modal-frame">
               <button className="modal-close-icon" onClick={close}>
-                <Icon name="icon-close" className="-small" />
+                <Icon name="icon-close" className="-medium" />
               </button>
               <div className="modal-content">
                 <WrappedComponent { ...props } />

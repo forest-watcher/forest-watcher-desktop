@@ -2,8 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { NavLink } from 'react-router-dom';
 import Icon from '../ui/Icon';
+import DropdownIndicator from '../ui/SelectDropdownIndicator'
 import Select from 'react-select';
+import { MY_GFW_LINK } from '../../constants/global';
 import { FormattedMessage } from 'react-intl';
+import ReactGA from 'react-ga';
 
 class Nav extends React.Component {
   constructor(props) {
@@ -20,7 +23,6 @@ class Nav extends React.Component {
   render() {
     const { user } = this.props;
     const username = (user.data && user.data.email) || <FormattedMessage id="app.setupEmail" />;
-    const setUpEmailLink = (!user.data || !user.data.email) ? 'http://www.globalforestwatch.org/my_gfw' : undefined;
     return (
       <div className="row column">
         <nav className="c-nav">
@@ -32,7 +34,7 @@ class Nav extends React.Component {
           </h1>
           <div className="nav-section">
             {this.props.loggedIn &&
-              <ul className="nav-subsection">
+              <ul className="nav-subsection -links">
                 <li className="nav-link">
                   <NavLink to="/areas" activeClassName="-active"><FormattedMessage id="areas.name" /></NavLink>
                 </li>
@@ -46,24 +48,34 @@ class Nav extends React.Component {
                   <NavLink to="/settings" activeClassName="-active"><FormattedMessage id="settings.name" /></NavLink>
                 </li>
                 <li className={`nav-link ${user.data && user.data.email ? '-disabled' : ''}`}>
-                  <a href={setUpEmailLink}>{username}</a>
+                  <ReactGA.OutboundLink
+                    eventLabel="navigation - myGFW"
+                    to={MY_GFW_LINK}
+                    rel="noopener noreferrer"
+                    target="_blank"
+                    >
+                      {username}
+                  </ReactGA.OutboundLink>
                 </li>
               </ul>
             }
             <ul className={this.props.loggedIn ? "nav-subsection -settings" : "nav-subsection"}>
-              <Select
-                name="locale-select"
-                className="c-select -dark"
-                value={this.props.locale}
-                options={this.languages}
-                onChange={this.handleLanguageChange}
-                clearable={false}
-                searchable={false}
-                arrowRenderer={() => <svg className="c-icon -x-small -gray"><use xlinkHref="#icon-arrow-down"></use></svg>}
-              />
+              <li className="nav-menu">
+                <Select
+                  name="locale-select"
+                  className="c-select -dark"
+                  classNamePrefix="Select"
+                  value={{value: this.props.locale, label: this.props.locale.toUpperCase()}}
+                  options={this.languages}
+                  onChange={this.handleLanguageChange}
+                  isSearchable={false}
+                  components={{ DropdownIndicator }}
+                />
+              </li>
+
               {this.props.loggedIn &&
                 <li className="nav-menu">
-                  <a onClick={this.props.logout}><FormattedMessage id="app.logout" /></a>
+                  <button onClick={this.props.logout}><FormattedMessage id="app.logout" /></button>
                 </li>
               }
             </ul>
@@ -73,6 +85,7 @@ class Nav extends React.Component {
     );
   }
 }
+
 
 Nav.propTypes = {
   loggedIn: PropTypes.bool.isRequired,

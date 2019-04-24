@@ -3,11 +3,12 @@ import PropTypes from 'prop-types';
 
 import Select from 'react-select';
 import { injectIntl } from 'react-intl';
+import DropdownIndicator from '../../components/ui/SelectDropdownIndicator'
 
 import qs from 'query-string';
 
 class TemplatesFilters extends React.Component {
-  
+
   redirectWith(searchParams){
     this.props.history.push({
       pathname: `/templates`,
@@ -16,8 +17,11 @@ class TemplatesFilters extends React.Component {
   }
 
   handleAreaChange = (selected) => {
-    const searchParams = Object.assign(this.props.searchParams, { page: 1}, { aoi: selected.value || undefined });
-    this.redirectWith(searchParams);
+    let aoi = undefined;
+    if (selected) {
+      aoi = selected.value || undefined;
+    }
+    this.redirectWith(Object.assign(this.props.searchParams, { page: 1}, { aoi }));
   }
 
   handleSearchChange = (event) => {
@@ -31,16 +35,18 @@ class TemplatesFilters extends React.Component {
       <div className="row filter-bar">
         <div className="column small-12 medium-3 medium-offset-6">
           <Select
-            className="c-select"
+            className="c-select u-w-100"
+            classNamePrefix="Select"
             name="area-filter"
-            value={this.props.searchParams.aoi || null}
+            value={areasOptions.find((option) => option.value === this.props.searchParams.aoi)}
             options={areasOptions}
             onChange={this.handleAreaChange}
             resetValue={{value: '', label: ''}}
-            searchable={false}
+            isSearchable={false}
+            isClearable={true}
             placeholder={this.props.intl.formatMessage({ id: 'filters.area' })}
             noResultsText={this.props.intl.formatMessage({ id: 'filters.noAreasAvailable' })}
-            arrowRenderer={() => <svg className="c-icon -x-small -gray"><use xlinkHref="#icon-arrow-down"></use></svg>}
+            components={{ DropdownIndicator }}
           />
         </div>
         <div className="column small-3">
@@ -51,7 +57,7 @@ class TemplatesFilters extends React.Component {
             value={this.props.searchParams.searchValues || ''}
             name="search-bar"
             placeholder={this.props.intl.formatMessage({ id: 'filters.search' })}
-          />   
+          />
         </div>
       </div>
     );

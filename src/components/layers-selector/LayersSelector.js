@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { injectIntl, FormattedMessage } from 'react-intl';
 import Select from 'react-select';
 import L from 'leaflet';
-
+import DropdownIndicator from '../../components/ui/SelectDropdownIndicator'
 
 class LayersSelector extends React.Component {
   constructor (props) {
@@ -28,9 +28,11 @@ class LayersSelector extends React.Component {
   }
 
   onChange = (selected) => {
-    if (this.state.mapLayer) this.props.map.removeLayer(this.state.mapLayer);
+    if (this.state.mapLayer) {
+      this.props.map.removeLayer(this.state.mapLayer);
+    }
     if (selected) {
-      const { map, layers: { [selected.option]: layer }} = this.props;
+      const { map, layers: { [selected.value]: layer }} = this.props;
       const mapLayer = L.tileLayer(layer.attributes.url).addTo(map);
       this.setState({ layerOption: selected, mapLayer });
     } else {
@@ -40,19 +42,20 @@ class LayersSelector extends React.Component {
 
   render() {
     const { layersOptions, intl } = this.props;
-    const options = layersOptions.map(option => ({ ...option, label: this.getLayerName(option.label) }));
+    const options = layersOptions.map(option => ({ value: option.option, label: this.getLayerName(option.label) }));
     return (
-      <div className="c-layers-selector">
+      <div className="c-layers-selector u-margin-bottom-tiny">
         <Select
           name="layers-select"
-          className="c-select -map"
+          className="c-select -map u-w-100"
+          classNamePrefix="Select"
           options={options}
           value={this.state.layerOption}
           onChange={this.onChange}
           placeholder={intl.formatMessage({ id: 'areas.layersPlaceholder' })}
-          searchable={false}
-          clearable={true}
-          arrowRenderer={() => <svg className="c-icon -x-small -gray"><use xlinkHref="#icon-arrow-down"></use></svg>}
+          isSearchable={false}
+          isClearable={true}
+          components={{ DropdownIndicator }}
         />
       </div>
     );

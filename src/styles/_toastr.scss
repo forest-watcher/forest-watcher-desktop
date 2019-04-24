@@ -4,7 +4,7 @@
     border-radius: 3px;
 	  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.1);
 
-    .toastr-middle-container {
+    .rrt-middle-container {
       padding: 0;
       display: flex;
       flex-direction: column;
@@ -14,7 +14,7 @@
       margin-left: 75px;
     }
 
-    .toastr-right-container {
+    .rrt-right-container {
 
       button {
         font-size: 8px;
@@ -32,7 +32,7 @@
       }
     }
 
-    &.success {
+    &.rrt-success {
       background-color: $theme-accent;
     }
   }

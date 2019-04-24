@@ -6,7 +6,10 @@ import MemberList from './MemberList';
 import { includes, validateEmail } from '../../helpers/utils';
 import { FormattedMessage, injectIntl } from 'react-intl';
 import { toastr } from 'react-redux-toastr';
-import { MANAGER, USER, CONFIRMED_USER } from '../../constants/global';
+import { MANAGER, USER, CONFIRMED_USER, MY_GFW_LINK } from '../../constants/global';
+
+import { CATEGORY, ACTION } from '../../constants/analytics';
+import ReactGA from 'react-ga';
 
 class MembersManager extends React.Component {
   constructor(props) {
@@ -22,6 +25,11 @@ class MembersManager extends React.Component {
     if (email){
       if (!validateEmail(email)) {
         toastr.error(this.props.intl.formatMessage({ id: 'teams.invalidEmail' }));
+        ReactGA.event({
+          category: CATEGORY.TEAM,
+          action: ACTION.ADD_TEAM,
+          label: 'Add team member failed - Invalid email'
+        });
         return;
       }
       const managerEmails = this.props.selectedManagers.map(m => m.email || m);
@@ -31,6 +39,11 @@ class MembersManager extends React.Component {
         existingUsers.push(email);
         this.setState({ emailToSearch: '' });
         this.props.updateSelectedMembers(existingUsers, USER);
+        ReactGA.event({
+          category: CATEGORY.TEAM,
+          action: ACTION.ADD_TEAM,
+          label: 'Add team member success'
+        });
       }
 
     }
@@ -46,8 +59,19 @@ class MembersManager extends React.Component {
 
   deleteMember = (deletedMember, role) => {
     const selected = this.props[this.formatRole(role)];
-    const updatedMembers = selected.filter(member => member.id !== deletedMember);
+    const updatedMembers = selected.filter((member) => {
+      if (role === USER) {
+        return member !== deletedMember;
+      } else {
+        return member.id !== deletedMember;
+      }
+    });
     this.props.updateSelectedMembers(updatedMembers, role);
+    ReactGA.event({
+      category: CATEGORY.TEAM,
+      action: ACTION.REMOVE_TEAM,
+      label: 'Delete team member success'
+    });
   }
 
   addMember = (member, role) => {
@@ -105,7 +129,7 @@ class MembersManager extends React.Component {
             *members must have a
             <a
               className="text -green"
-              href="http://www.globalforestwatch.org/my_gfw"
+              href={MY_GFW_LINK}
               target="_blank"
               rel="noopener noreferrer"
             >
