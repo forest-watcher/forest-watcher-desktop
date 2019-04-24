@@ -23,7 +23,7 @@ export default class LocateUser extends React.Component {
   render() {
     return (
       <div className="c-locate-user">
-        <button className="button" type="button" onClick={this.setLocation}>
+        <button className="button -map" type="button" onClick={this.setLocation}>
           <Icon name="icon-location" className="-small" />
         </button>
       </div>

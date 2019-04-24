@@ -51,6 +51,9 @@ class Map extends React.Component {
     this.tileLayer = L.tileLayer(MAP_CONFIG.basemap, {})
                       .addTo(this.map)
                       .setZIndex(0);
+    this.borderLayer = L.tileLayer(MAP_CONFIG.borders, {})
+                      .addTo(this.map)
+                      .setZIndex(1);
   }
 
   // MAP FUNCTONS

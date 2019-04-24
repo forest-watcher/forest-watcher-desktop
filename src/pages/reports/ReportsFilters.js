@@ -8,6 +8,7 @@ import moment from 'moment';
 import { injectIntl } from 'react-intl';
 
 import 'react-datepicker/dist/react-datepicker.css';
+import DropdownIndicator from '../../components/ui/SelectDropdownIndicator'
 
 import qs from 'query-string';
 
@@ -27,8 +28,11 @@ class ReportsFilters extends React.Component {
   }
 
   handleAreaChange = (selected) => {
-    const searchParams = Object.assign(this.props.searchParams, { page: 1}, { aoi: selected.value || undefined });
-    this.redirectWith(searchParams);
+    let aoi = undefined;
+    if (selected) {
+      aoi = selected.value || undefined;
+    }
+    this.redirectWith(Object.assign(this.props.searchParams, { page: 1}, { aoi }));
   }
 
   handleSearchChange = (event) => {
@@ -49,29 +53,32 @@ class ReportsFilters extends React.Component {
         <div className="column small-12 medium-3">
           <Select
             name="template-select"
-            className="c-select"
-            value={this.props.match.params.templateId || 0}
+            className="c-select u-w-100"
+            classNamePrefix="Select"
+            value={templateOptions.find((option) => option.value === this.props.match.params.templateId)}
             options={templateOptions}
             onChange={this.handleTemplateChange}
-            clearable={false}
-            searchable={false}
+            isClearable={false}
+            isSearchable={false}
             placeholder={this.props.intl.formatMessage({ id: 'filters.templates' })}
             noResultsText={this.props.intl.formatMessage({ id: 'filters.noTemplatesAvailable' })}
-            arrowRenderer={() => <svg className="c-icon -x-small -gray"><use xlinkHref="#icon-arrow-down"></use></svg>}
+            components={{ DropdownIndicator }}
           />
         </div>
         <div className="column small-12 medium-3">
           <Select
-            className="c-select"
+            className="c-select u-w-100"
             name="area-filter"
-            value={this.props.searchParams.aoi || null}
+            classNamePrefix="Select"
+            value={areasOptions.find((option) => option.value === this.props.searchParams.aoi)}
             options={areasOptions}
             onChange={this.handleAreaChange}
             resetValue={{value: '', label: ''}}
-            searchable={false}
+            isSearchable={false}
+            isClearable={true}
             placeholder={this.props.intl.formatMessage({ id: 'filters.area' })}
             noResultsText={this.props.intl.formatMessage({ id: 'filters.noAreasAvailable' })}
-            arrowRenderer={() => <svg className="c-icon -x-small -gray"><use xlinkHref="#icon-arrow-down"></use></svg>}
+            components={{ DropdownIndicator }}
           />
         </div>
         <div className="column small-12 medium-3">

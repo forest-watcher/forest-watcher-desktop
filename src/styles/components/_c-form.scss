@@ -27,6 +27,17 @@
     }
   }
 
+  &.-nav {
+    .form-error {
+      position: absolute;
+      margin-top: 0;
+      padding-left: 5px;
+      right: 0;
+      top: 50%;
+      transform: translate(100%, -50%);
+    }
+  }
+
   .form-error {
     display: block;
     margin-top: 6px;

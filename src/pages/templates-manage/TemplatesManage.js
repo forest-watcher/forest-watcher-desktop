@@ -2,10 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import Hero from '../../components/layouts/Hero';
-import 'react-select/dist/react-select.css';
 import { FormattedMessage, injectIntl } from 'react-intl';
-import { Form, Button } from '../../components/form/Form';
-import { validation } from '../../helpers/validation'; // eslint-disable-line no-unused-vars
+import { Form } from '../../components/form/Form';
 import Select from 'react-select';
 import Loader from '../../components/ui/Loader';
 import FormFooter from '../../components/ui/FormFooter';
@@ -14,9 +12,13 @@ import { setLanguages, syncLanguagesWithDefaultLanguage } from '../../helpers/la
 import { Link } from 'react-router-dom';
 import { toastr } from 'react-redux-toastr';
 import QuestionCard from '../../components/question-card/QuestionCard';
-import { CSSTransitionGroup } from 'react-transition-group';
+import { TransitionGroup, CSSTransition } from 'react-transition-group';
 import { QUESTION } from '../../constants/templates';
 import Switch from 'react-toggle-switch'
+import DropdownIndicator from '../../components/ui/SelectDropdownIndicator'
+import Banner from '../../components/ui/Banner';
+import { CATEGORY, ACTION } from '../../constants/analytics';
+import ReactGA from 'react-ga';
 
 import 'react-toggle-switch/dist/css/switch.min.css';
 
@@ -90,8 +92,18 @@ class TemplatesManage extends React.Component {
     if (this.canSubmit) {
       const method = this.props.mode === 'manage' ? 'PATCH' : 'POST';
       this.props.saveTemplate(this.state, method, this.props.templateId);
+      ReactGA.event({
+        category: CATEGORY.TEMPLATES,
+        action: ACTION.TEMPLATE_SAVE,
+        label: 'Template save success'
+      });
     } else {
       toastr.error(this.props.intl.formatMessage({ id: 'templates.missingFields' }), this.props.intl.formatMessage({ id: 'templates.missingFieldsDetail' }));
+      ReactGA.event({
+        category: CATEGORY.TEMPLATES,
+        action: ACTION.TEMPLATE_SAVE,
+        label: 'Template save failed - Missing fields'
+      });
     }
     this.canSubmit = true;
   }
@@ -128,6 +140,13 @@ class TemplatesManage extends React.Component {
 
   toggleStatus = () => {
     const newStatus = this.state.status === 'published' ? 'unpublished' : 'published';
+    if (newStatus === 'published') {
+      ReactGA.event({
+        category: CATEGORY.TEMPLATES,
+        action: ACTION.PUBLISH_TEMPLATE,
+        label: `Published ${this.state.questions.length} questions`
+      });
+    }
     this.setState({ status: newStatus });
   }
 
@@ -176,9 +195,11 @@ class TemplatesManage extends React.Component {
   ///////////////////////////////
   render() {
     const { areasOptions, localeOptions, questionOptions, loading, saving, deleting, mode, locale, user, template } = this.props;
-    const canEdit = ((template.answersCount === 0 || !template.answersCount) && (template.status === 'unpublished' || template.status === 'draft') && user.id === template.user) || mode === 'create' ? true : false;
+    const canEdit = ((template.answersCount === 0 || !template.answersCount) && (template.status === 'unpublished' || template.status === 'draft') && user.id === template.user && !template.public) || mode === 'create' ? true : false;
     const canManage = user.id === template.user || mode === 'create' ? true : false;
     const modeCreate = mode === 'create' ? true : false;
+    const isPublic = template.public;
+    const userCannotEditTemplate = isPublic || !canManage;
     const canSave = this.state.questions.length && this.state.name[this.state.defaultLanguage] ? true : false;
     const isLoading = loading || saving || deleting ? true : false;
     return (
@@ -196,19 +217,26 @@ class TemplatesManage extends React.Component {
             <div className="c-form -templates">
               <div className="template-meta">
                 <div className="row">
+                  { userCannotEditTemplate &&
+                    <div className="column small-12 medium-10 large-8 medium-offset-1 large-offset-2">
+                      <Banner title={this.props.intl.formatMessage({ id: 'templates.cantEdit'})}/>
+                    </div>
+                  }
+
                   <div className="column small-12 medium-5 medium-offset-1 large-4 large-offset-2">
                     <div className="input-group">
                       <label className="text -gray"><FormattedMessage id={"templates.assignArea"} />:</label>
                       <Select
                         name="areas-select"
-                        className="c-select"
+                        className="c-select u-w-100"
+                        classNamePrefix="Select"
                         options={areasOptions}
                         value={this.state.areaOfInterest && areasOptions ? getSelectorValueFromArray(this.state.areaOfInterest, areasOptions) : null}
                         onChange={this.onAreaChange}
                         noResultsText={this.props.intl.formatMessage({ id: 'filters.noAreasAvailable' })}
-                        searchable={false}
-                        disabled={isLoading}
-                        arrowRenderer={() => <svg className="c-icon -x-small -gray"><use xlinkHref="#icon-arrow-down"></use></svg>}
+                        isSearchable={false}
+                        isDisabled={isLoading || userCannotEditTemplate}
+                        components={{ DropdownIndicator }}
                       />
                     </div>
                   </div>
@@ -217,15 +245,16 @@ class TemplatesManage extends React.Component {
                       <label className="text"><FormattedMessage id={"templates.defaultLanguage"} />:</label>
                       <Select
                         name="language-select"
-                        className="c-select"
+                        className="c-select u-w-100"
+                        classNamePrefix="Select"
                         options={localeOptions}
                         value={this.state.defaultLanguage ? getSelectorValueFromArray(this.state.defaultLanguage, localeOptions) : locale}
                         onChange={this.onLanguageChange}
                         noResultsText={this.props.intl.formatMessage({ id: 'filters.noLanguagesAvailable' })}
-                        searchable={true}
-                        clearable={false}
-                        disabled={isLoading || !modeCreate}
-                        arrowRenderer={() => <svg className="c-icon -x-small -gray"><use xlinkHref="#icon-arrow-down"></use></svg>}
+                        isSearchable={true}
+                        isClearable={false}
+                        isDisabled={isLoading || !modeCreate || userCannotEditTemplate}
+                        components={{ DropdownIndicator }}
                       />
                     </div>
                   </div>
@@ -244,33 +273,42 @@ class TemplatesManage extends React.Component {
                           value={this.state.name ? this.state.name[this.state.defaultLanguage] : ''}
                           placeholder={this.props.intl.formatMessage({ id: 'templates.title' })}
                           onKeyPress={(e) => {if (e.which === 13) { e.preventDefault();}}} // Prevent send on press Enter
-                          disabled={isLoading}
+                          disabled={isLoading || userCannotEditTemplate}
+                          required
                         />
                       </div>
                     </div>
                       {this.state.questions &&
-                        <CSSTransitionGroup
-                          transitionName="example"
-                          transitionEnterTimeout={500}
-                          transitionLeaveTimeout={500}
-                        >
-                          { this.state.questions.map((question, index) =>
-                            <QuestionCard
-                              key={index}
-                              questionNum={index + 1}
-                              question={question}
-                              template={this.state}
-                              syncStateWithProps={this.handleQuestionEdit}
-                              questionOptions={questionOptions}
-                              defaultLanguage={this.state.defaultLanguage}
-                              deleteQuestion={this.handleQuestionDelete}
-                              status={this.state.status}
-                              canEdit={canEdit}
-                              canManage={canManage}
-                              mode={mode}
-                            />
-                          )}
-                        </CSSTransitionGroup>
+                        <div>
+                          { !userCannotEditTemplate && !modeCreate &&
+                            <div className="u-margin-bottom">
+                              <Banner title={this.props.intl.formatMessage({ id: 'templates.cantEditQuestions'})}/>
+                            </div>
+                          }
+                          <TransitionGroup>
+                            { this.state.questions.map((question, index) =>
+                              <CSSTransition
+                                key={index}
+                                classNames="fade"
+                                timeout={{ enter: 500, exit: 500 }}
+                              >
+                                <QuestionCard
+                                  questionNum={index + 1}
+                                  question={question}
+                                  template={this.state}
+                                  syncStateWithProps={this.handleQuestionEdit}
+                                  questionOptions={questionOptions}
+                                  defaultLanguage={this.state.defaultLanguage}
+                                  deleteQuestion={this.handleQuestionDelete}
+                                  status={this.state.status}
+                                  canEdit={canEdit}
+                                  canManage={canManage}
+                                  mode={mode}
+                                />
+                              </CSSTransition>
+                            )}
+                          </TransitionGroup>
+                        </div>
                       }
                   </div>
                 </div>
@@ -303,11 +341,11 @@ class TemplatesManage extends React.Component {
                   className="c-switcher"
                   onClick={this.toggleStatus}
                   on={this.state.status === 'published'}
-                  enabled={!isLoading || canManage}
+                  enabled={!isPublic && canManage && !isLoading}
                 />
                 <span className="status-label text -x-small-title">{this.props.intl.formatMessage({ id: 'templates.statusPublished' })}</span>
               </div>
-              <Button className="c-button" disabled={isLoading || !canSave}><FormattedMessage id="forms.save" /></Button>
+              <button className="c-button" disabled={isLoading || userCannotEditTemplate || !canSave}><FormattedMessage id="forms.save" /></button>
             </FormFooter>
           </Form>
         </div>

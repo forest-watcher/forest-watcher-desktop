@@ -3,19 +3,25 @@ import Hero from '../../components/layouts/Hero';
 import { Input, Button, Form } from '../../components/form/Form';
 import Map from '../../components/map/Map';
 import { Link } from 'react-router-dom';
-import { validation } from '../../helpers/validation'; // eslint-disable-line no-unused-vars
 import { checkArea } from '../../helpers/areas';
 import { toastr } from 'react-redux-toastr';
 import LocateUser from '../../components/ui/LocateUser';
 import ZoomControl from '../../components/ui/ZoomControl';
 import DrawControl from '../../components/draw-control/DrawControlContainer';
 import Attribution from '../../components/ui/Attribution';
+import LocationSearch from '../../components/ui/LocationSearch';
 import Loader from '../../components/ui/Loader';
 import { FormattedMessage, injectIntl } from 'react-intl';
-import CountrySearch from '../../components/country-search/CountrySearchContainer';
-import LayersSelector from '../../components/layers-selector/LayersSelectorContainer';
 import union from '@turf/union';
+import { required } from '../../constants/validation-rules'
+import withModal from '../../components/ui/withModal';
+import ShapefileInfo from '../../components/ui/ShapefileInfo';
+import Icon from '../../components/ui/Icon';
+import { CATEGORY, ACTION } from '../../constants/analytics';
+import LayersSelector from '../../components/layers-selector/LayersSelectorContainer';
+import ReactGA from 'react-ga';
 
+const ShapefileInfoModal = withModal(ShapefileInfo);
 class AreasManage extends React.Component {
 
   constructor(props) {
@@ -33,7 +39,9 @@ class AreasManage extends React.Component {
         lng: 0,
         zoomControl: false,
         scrollWheelZoom: false
-      }
+      },
+      open: false,
+      isValidatingShapefile: false
     }
   }
 
@@ -63,11 +71,26 @@ class AreasManage extends React.Component {
       if (checkArea(this.form.geojson)) {
         const method = this.props.mode === 'manage' ? 'PATCH' : 'POST';
         this.props.saveAreaWithGeostore(this.form, this.state.map._container, method);
+        ReactGA.event({
+          category: CATEGORY.AREA_CREATION,
+          action: ACTION.AREA_SAVE,
+          label: 'Area creation success'
+        });
       } else {
         toastr.error(this.props.intl.formatMessage({ id: 'areas.tooLarge' }), this.props.intl.formatMessage({ id: 'areas.tooLargeDesc' }));
+        ReactGA.event({
+          category: CATEGORY.AREA_CREATION,
+          action: ACTION.AREA_SAVE,
+          label: 'Area creation failed - Area too large'
+        });
       }
     } else {
       toastr.error(this.props.intl.formatMessage({ id: 'areas.missingValues' }), this.props.intl.formatMessage({ id: 'areas.missingValuesDesc' }));
+      ReactGA.event({
+        category: CATEGORY.AREA_CREATION,
+        action: ACTION.AREA_SAVE,
+        label: 'Area creation failed - Missing details'
+      });
     }
   }
 
@@ -79,21 +102,54 @@ class AreasManage extends React.Component {
   }
 
   onShapefileChange = async (e) => {
+    ReactGA.event({
+      category: CATEGORY.AREA_CREATION,
+      action: ACTION.UPLOAD_SHAPEFILE,
+      label: 'Upload shapefile button clicked'
+    });
+    this.setState({ isValidatingShapefile: true });
     const shapeFile = e.target.files && e.target.files[0];
-    const geojson = await this.props.getGeoFromShape(shapeFile);
-    if (geojson && geojson.features) {
-      const geojsonParsed = geojson.features.reduce(union);
-      if (geojsonParsed) {
-        this.onDrawComplete(geojsonParsed);
-        const dotIndex = shapeFile.name.lastIndexOf('.') > -1
-          ? shapeFile.name.lastIndexOf('.')
-          : shapeFile.name.length;
-        const areaName = shapeFile.name.substr(0, dotIndex);
-        this.form.name = areaName;
-        // Force render to notify the draw control of the external geojson
-        this.forceUpdate();
+    const maxFileSize = 1000000 //1MB
+
+    if (e.target.files[0].size <= maxFileSize) {
+      const geojson = await this.props.getGeoFromShape(shapeFile);
+      if (geojson && geojson.features) {
+        const geojsonParsed = geojson.features.reduce(union);
+
+        if (!checkArea(geojsonParsed)) {
+          toastr.error(this.props.intl.formatMessage({ id: 'areas.tooLarge' }), this.props.intl.formatMessage({ id: 'areas.uploadedTooLargeDesc' }));
+          ReactGA.event({
+            category: CATEGORY.AREA_CREATION,
+            action: ACTION.UPLOAD_SHAPEFILE,
+            label: 'Shapefile upload failed - Area too large'
+          });
+        } else {
+          if (geojsonParsed) {
+            this.onDrawComplete(geojsonParsed);
+            const dotIndex = shapeFile.name.lastIndexOf('.') > -1
+              ? shapeFile.name.lastIndexOf('.')
+              : shapeFile.name.length;
+            const areaName = shapeFile.name.substr(0, dotIndex);
+            this.form.name = areaName;
+            // Force render to notify the draw control of the external geojson
+            this.forceUpdate();
+            ReactGA.event({
+              category: CATEGORY.AREA_CREATION,
+              action: ACTION.UPLOAD_SHAPEFILE,
+              label: 'Shapefile upload success'
+            });
+          }
+        }
       }
+    } else {
+      toastr.error(this.props.intl.formatMessage({ id: 'areas.fileTooLarge' }), this.props.intl.formatMessage({ id: 'areas.fileTooLargeDesc' }));
+      ReactGA.event({
+        category: CATEGORY.AREA_CREATION,
+        action: ACTION.UPLOAD_SHAPEFILE,
+        label: 'Shapefile upload failed - File too large'
+      });
     }
+    this.setState({ isValidatingShapefile: false });
   }
 
   onDrawComplete = (areaGeoJson) => {
@@ -114,12 +170,22 @@ class AreasManage extends React.Component {
     }
   }
 
+  onInfoClick = (e) => {
+    e.preventDefault();
+    this.setState({ open: true });
+  }
+
+  closeModal = () => {
+    this.setState({ open: false });
+  }
+
   render() {
     return (
       <div>
         <Hero
           title={this.props.mode === 'manage' ? "areas.manageArea" : "areas.createArea"}
         />
+        <Loader isLoading={this.state.isValidatingShapefile} />
         <Form onSubmit={this.onSubmit}>
           <div className="l-map">
             <Map
@@ -133,7 +199,27 @@ class AreasManage extends React.Component {
               <LayersSelector
                 map={this.state.map}
               />
-              <CountrySearch
+              <LocationSearch
+                intl={this.props.intl}
+                onLocationChanged={ (location) => {
+                  this.state.map.fitBounds([
+                   [location.geometry.viewport.getSouthWest().lat(),
+                    location.geometry.viewport.getSouthWest().lng()],
+                   [location.geometry.viewport.getNorthEast().lat(),
+                    location.geometry.viewport.getNorthEast().lng()]
+                  ]);
+                }}
+                onLatLngChanged={ (latLng) => {
+                  this.setState({
+                    mapConfig: {
+                      ...this.state.mapConfig,
+                      lat: latLng.lat,
+                      lng: latLng.lng,
+                      zoom: 15
+                    }
+                  });
+                  this.state.map.setView([latLng.lat, latLng.lng], 15);
+                }}
                 map={this.state.map}
                 onZoomChange={ (zoom) => {
                   this.setState({
@@ -196,17 +282,21 @@ class AreasManage extends React.Component {
                 <button className="c-button -light" disabled={this.props.saving || this.props.loading}><FormattedMessage id="forms.cancel" /></button>
               </Link>
               <div className="horizontal-field">
-                <label className="c-button -light" htmlFor="shapefile"><FormattedMessage id="areas.uploadShapefile" /> </label>
+                <label className="c-button -light" htmlFor="shapefile"><FormattedMessage id="areas.uploadShapefile" /></label>
                 <input
                   type="file"
                   id="shapefile"
                   name="shapefile"
                   className="file-hidden"
-                  accept=".zip"
+                  accept=".zip, .csv, .json, .geojson, .kml, .kmz"
                   onChange={this.onShapefileChange}
+                  disabled={this.state.isValidatingShapefile}
                 />
+                <button className="info-button u-margin-left-small" onClick={this.onInfoClick}>
+                  <Icon className="-medium" name="icon-info"/>
+                </button>
               </div>
-              <div className="areas-inputs">
+              <div className="areas-inputs u-p-relative">
                 <div className="horizontal-field">
                   <label className="text -x-small-title"><FormattedMessage id="areas.nameArea" />: </label>
                   <Input
@@ -215,7 +305,7 @@ class AreasManage extends React.Component {
                     name="name"
                     value={this.form.name}
                     placeholder={this.props.intl.formatMessage({ id: 'areas.nameAreaPlaceholder' })}
-                    validations={['required']}
+                    validations={[required]}
                     disabled={this.props.saving || this.props.loading}
                   />
                 </div>
@@ -224,6 +314,18 @@ class AreasManage extends React.Component {
             </div>
           </div>
         </Form>
+        <ShapefileInfoModal
+          open={this.state.open}
+          close={this.closeModal}
+          title={this.props.intl.formatMessage({ id: 'areas.shapefileInfoTitle'})}
+          maxSize={this.props.intl.formatMessage({ id: 'areas.shapefileInfoMaxSize'})}
+          formats={this.props.intl.formatMessage({ id: 'areas.shapefileInfoFormats'})}
+          unzippedTitle={this.props.intl.formatMessage({ id: 'areas.shapefileInfoUnzippedTitle'})}
+          unzipped={this.props.intl.formatMessage({ id: 'areas.shapefileInfoUnzipped'})}
+          zippedTitle={this.props.intl.formatMessage({ id: 'areas.shapefileInfoZippedTitle'})}
+          zipped={this.props.intl.formatMessage({ id: 'areas.shapefileInfoZipped'})}
+          onAccept={this.closeModal}
+        />
       </div>
     );
   }
