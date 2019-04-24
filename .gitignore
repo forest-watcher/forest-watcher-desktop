@@ -18,6 +18,3 @@ yarn-error.log*
 
 # compiled
 index.css
-
-# 3SC specific ci
-bitbucket-pipelines*
