@@ -9,6 +9,10 @@
     background: $theme-accent;
   }
 
+  &.disabled {
+    opacity: 0.5;
+  }
+
   .switch-toggle {
     width: 18px;
     height: 18px;

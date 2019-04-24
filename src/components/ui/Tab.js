@@ -9,13 +9,13 @@ function Tab({ options, selectedIndex, handleTabIndexChange, pill, style }) {
     <div className={ tabClass }>
       <div className="nav-tab">
         {options.map((option, i) => (
-          <a 
-            key={i} 
-            className={selectedIndex === i ? "-active" : ""} 
+          <button
+            key={i}
+            className={selectedIndex === i ? "-active" : ""}
             onClick={() => handleTabIndexChange(i)}
           >
             <FormattedMessage id={option}/>
-          </a>
+          </button>
         ))}
       </div>
     </div>

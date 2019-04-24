@@ -23,7 +23,6 @@ class SocialFooter extends React.Component {
             <div className="c-social__buttons">
               <div id="fb-root" />
               <a href="http://twitter.com/share" rel="noreferrer noopener" target="_blank" className="twitter-share-button" data-url="http://www.globalforestwatch.org/" data-text="Global Forest Watch">Tweet</a>
-              <div className="g-plusone" data-size="medium" data-href="http://www.globalforestwatch.org/" />
               <div className="fb-like" data-href="http://www.globalforestwatch.org/" data-layout="button_count" data-action="like" data-show-faces="false" data-share="false" />
             </div>
           </div>

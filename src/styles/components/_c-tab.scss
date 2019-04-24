@@ -10,11 +10,11 @@
   .nav-tab {
     display: flex;
     flex-direction: row;
-    
-    a {
+
+    a, button {
       padding-left: 30px;
       color: $disabled-font-color;
-      
+
       &::after {
         margin-top: 10px;
         display: block;

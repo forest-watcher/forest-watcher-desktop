@@ -2,14 +2,23 @@ import React from 'react';
 import { render } from 'react-dom';
 import { createStore, combineReducers, applyMiddleware, compose } from 'redux';
 import { Provider } from 'react-redux';
-import createHistory from 'history/createBrowserHistory';
+import { createBrowserHistory } from 'history';
 import thunk from 'redux-thunk';
 import { persistStore, autoRehydrate } from 'redux-persist';
+import * as Sentry from '@sentry/browser';
+import { SENTRY_DSN, ENVIRONMENT } from './constants/global';
 
 import * as reducers from './modules';
 import Routes from './routes';
 
 import './index.css';
+
+/** Initialise Sentry */
+if (ENVIRONMENT !== 'development') {
+  Sentry.init({
+   dsn: SENTRY_DSN
+  });
+}
 
 /**
  * Reducers
@@ -21,7 +30,7 @@ const reducer = combineReducers({
 });
 
 // Create a history of your choosing (we're using a browser history in this case)
-const history = createHistory();
+const history = createBrowserHistory();
 
 const store = createStore(
   reducer,
@@ -31,7 +40,7 @@ const store = createStore(
     /* Redux dev tool, install chrome extension in
      * https://chrome.google.com/webstore/detail/redux-devtools/lmhkpmbekcpmknklioeibfkpmmfibljd?hl=en */
     typeof window === 'object' &&
-      typeof window.devToolsExtension !== 'undefined' ? window.devToolsExtension() : f => f
+      typeof window.__REDUX_DEVTOOLS_EXTENSION__ !== 'undefined' ? window.__REDUX_DEVTOOLS_EXTENSION__() : f => f
   )
 );
 

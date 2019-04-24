@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import { FormattedMessage } from 'react-intl';
-import { Form } from '../form/Form';
 import Tab from '../ui/Tab';
 import { includes } from '../../helpers/utils';
 import Checkbox from '../ui/Checkbox';
@@ -10,6 +9,9 @@ import { toastr } from 'react-redux-toastr';
 import { injectIntl } from 'react-intl';
 import { MAX_NUMBER_OF_LAYERS } from '../../constants/global';
 import CustomLayers from './CustomLayers';
+import { CATEGORY, ACTION } from '../../constants/analytics';
+
+import ReactGA from 'react-ga';
 
 class LayersForm extends React.Component {
   constructor(props) {
@@ -97,18 +99,31 @@ class LayersForm extends React.Component {
           // Prevents the user from adding several layers on a batch that exceeds the limit
           teamId ? teamLayerLength += 1 : userLayerLength += 1;
           GFWLayer.enabled = false;
+          ReactGA.event({
+            category: CATEGORY.CONTEXTUAL_LAYERS,
+            action: ACTION.ADD_GFW_LAYER,
+            label: 'Add GFW Layer Success'
+          });
         }
         return GFWLayer
       });
       this.setState({ GFWLayers: resetedLayers });
     } else { // Custom Layers
-      if (Object.keys(this.formNode.getErrors()).length === 0) { // No validation errors
         if (this.addLayer(this.state.form, teamId, userLayerNames, teamLayerNames, userLayerLength, teamLayerLength, typeOfLayer)){
+          ReactGA.event({
+            category: CATEGORY.CONTEXTUAL_LAYERS,
+            action: ACTION.ADD_CUSTOM_LAYER,
+            label: 'Add custom layer success'
+          });
           this.resetForm();
+        } else {
+          toastr.error(this.props.intl.formatMessage({ id: 'settings.validationError' }));
+          ReactGA.event({
+            category: CATEGORY.CONTEXTUAL_LAYERS,
+            action: ACTION.ADD_CUSTOM_LAYER,
+            label: 'Add custom layer - Validation error'
+          });
         }
-      } else {
-        toastr.error(this.props.intl.formatMessage({ id: 'settings.validationError' }));
-      }
     }
   }
 
@@ -144,7 +159,7 @@ class LayersForm extends React.Component {
             handleTabIndexChange={this.handleTabIndexChange}
           />
         </div>
-        <Form onSubmit={(e) => this.addLayers(e)} ref={ f => this.formNode = f }>
+        <form onSubmit={(e) => this.addLayers(e)} ref={ f => this.formNode = f }>
             {this.state.tabIndex === 0 ?
               this.state.GFWLayers && this.state.GFWLayers.map((GFWlayer, i) =>
                 <Checkbox
@@ -165,13 +180,13 @@ class LayersForm extends React.Component {
             { this.props.team &&
               <Checkbox
                 id={'gfw-teams-add'}
-                labelId={ 'settings.addToTeam' }
+                labelId={this.props.intl.formatMessage({ id: 'settings.addToTeam'})}
                 callback={() => this.setState({teamMode: !this.state.teamMode})}
               />
             }
             <button className="c-button -light -right" ><FormattedMessage id="common.add"/></button>
           </div>
-        </Form>
+        </form>
       </div>
     );
   }
@@ -183,8 +198,8 @@ LayersForm.propTypes = {
   publicLayers: PropTypes.array.isRequired,
   GFWLayers: PropTypes.array.isRequired,
   team: PropTypes.object,
-  createLayer: PropTypes.func.isRequired
+  createLayer: PropTypes.func.isRequired,
+  intl: PropTypes.object.isRequired
 };
 
 export default injectIntl(LayersForm);
-
