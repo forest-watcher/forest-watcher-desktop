@@ -3,7 +3,7 @@ pipelines:
     '**': # This runs as default for any branch not elsewhere defined
       - step:
           name: Install JS dependencies & build
-          image: node:8.11.2
+          image: node:12.13.0
           caches:
             - node
           artifacts:
@@ -17,7 +17,7 @@ pipelines:
     develop:
       - step:
           name: Install JS dependencies & build (develop)
-          image: node:8.11.2
+          image: node:12.13.0
           caches:
             - node
           artifacts:
@@ -38,7 +38,7 @@ pipelines:
             - aws s3 sync . s3://forest-watcher-web-client-dev
       - step:
           name: Install JS dependencies & build (staging)
-          image: node:8.11.2
+          image: node:12.13.0
           deployment: staging
           trigger: manual
           caches:
@@ -62,7 +62,7 @@ pipelines:
     "deploy-develop":
         - step:
             name: Install JS dependencies & build
-            image: node:8.11.2
+            image: node:12.13.0
             caches:
               - node
             artifacts:
@@ -84,7 +84,7 @@ pipelines:
     "deploy-staging":
         - step:
             name: Install JS dependencies & build
-            image: node:8.11.2
+            image: node:12.13.0
             caches:
               - node
             artifacts:
