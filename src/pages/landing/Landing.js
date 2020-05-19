@@ -21,9 +21,6 @@ class Landing extends React.Component {
     this.languages = props.translations && Object.keys(props.translations).map((lang) => (
       { value: lang, label: lang.toUpperCase() }
     ));
-    this.state = {
-      contactOpen: false
-    };
   }
 
   componentWillUnmount(){
