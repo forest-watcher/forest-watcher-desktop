@@ -73,7 +73,7 @@ class Landing extends React.Component {
               </Link>
               <div className="landing-links">
                 <a
-                  href="https://bit.ly/ForestWatcherApp"
+                  href="https://www.wri.org/blog/2017/09/forest-watcher-brings-data-straight-environmental-defenders"
                   className="text -green"
                   target="_blank"
                   rel="noopener noreferrer"
