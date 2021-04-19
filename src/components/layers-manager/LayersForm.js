@@ -154,7 +154,7 @@ class LayersForm extends React.Component {
         <div className="form-header">
           <h3><FormattedMessage id={"settings.contextualLayers"} /></h3>
           <Tab
-            options={["settings.gfwLayers", "settings.customLayers"]}
+            options={["settings.gfwLayers"]}
             selectedIndex={this.state.tabIndex}
             handleTabIndexChange={this.handleTabIndexChange}
           />
