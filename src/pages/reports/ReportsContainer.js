@@ -29,7 +29,8 @@ const getAnswersByTemplate = (templateId, reports, areas, user, team) => {
     const reportUser = {
       userId: report.user,
       userName: report.username
-    }
+    };
+
     return {
       id: reportData[reportId].id,
       date: report.createdAt,
@@ -39,8 +40,8 @@ const getAnswersByTemplate = (templateId, reports, areas, user, team) => {
       alertType: report.layer,
       aoiName: areas.data[areaId] ? areas.data[areaId].attributes.name : report.areaOfInterestName,
       reportName: report.reportName,
-      reportedPosition: getLatLng([report.clickedPosition[0].lat, report.clickedPosition[0].lon])
-    }
+      reportedPosition: report.clickedPosition.length > 0 ? getLatLng([report.clickedPosition[0].lat, report.clickedPosition[0].lon]) : ''
+    };
   });
   return answers;
 }
