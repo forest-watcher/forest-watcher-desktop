@@ -46,6 +46,7 @@
     "redux-persist": "4.10.2",
     "redux-thunk": "^2.3.0",
     "validator": "^10.11.0",
+    "whatwg-fetch": "^3.0.0",
     "yarn": "^1.13.0"
   },
   "devDependencies": {
