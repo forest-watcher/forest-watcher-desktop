@@ -7,7 +7,6 @@ import thunk from 'redux-thunk';
 import { persistStore, autoRehydrate } from 'redux-persist';
 import * as Sentry from '@sentry/browser';
 import { SENTRY_DSN, ENVIRONMENT } from './constants/global';
-import 'whatwg-fetch';
 
 import * as reducers from './modules';
 import Routes from './routes';
