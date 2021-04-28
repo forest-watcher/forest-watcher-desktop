@@ -47,7 +47,7 @@ class Nav extends React.Component {
                 <li className="nav-link">
                   <NavLink to="/settings" activeClassName="-active"><FormattedMessage id="settings.name" /></NavLink>
                 </li>
-                <li className={`nav-link ${user.data && user.data.email ? '-disabled' : ''}`}>
+                <li className="nav-link">
                   <ReactGA.OutboundLink
                     eventLabel="navigation - myGFW"
                     to={MY_GFW_LINK}
