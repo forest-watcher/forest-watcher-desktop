@@ -2,8 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Icon from './Icon';
 import { toastr } from 'react-redux-toastr';
+import { injectIntl } from 'react-intl';
 
-export default class LocateUser extends React.Component {
+class LocateUser extends React.Component {
 
   setLocation = () => {
     this.props.setLoading(true);
@@ -17,6 +18,7 @@ export default class LocateUser extends React.Component {
       })
       .on('locationerror', (e) => {
         toastr.error(this.props.intl.formatMessage({ id: 'areas.locateUserError' }));
+        this.props.setLoading(false);
       });
   }
 
@@ -34,3 +36,5 @@ export default class LocateUser extends React.Component {
 LocateUser.propTypes = {
   map: PropTypes.object
 };
+
+export default injectIntl(LocateUser);
