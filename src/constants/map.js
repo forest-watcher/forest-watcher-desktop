@@ -84,7 +84,7 @@ export const DRAW_CONTROL_DISABLED = {
 };
 
 export const AREAS = {
-  maxSize: 1500000000 // square meters
-}
+  maxSize: 20000000000 // square meters
+};
 
 export default { MAP_CONFIG, BLOB_CONFIG, POLYGON_STYLES, POLYGON_STYLES_ERROR, DRAW_CONTROL, DRAW_CONTROL_DISABLED, AREAS };
