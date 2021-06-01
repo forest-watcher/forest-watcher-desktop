@@ -93,7 +93,13 @@ export function confirmUser(token) {
 }
 
 export function logout() {
-  return (dispatch) => {
+  const url = `${API_BASE_URL}/auth/logout`;
+  return (dispatch, state) => {
+    fetch(url, {
+      headers: {
+        Authorization: `Bearer ${state().user.token}`
+      }
+    });
     dispatch({
       type: LOGOUT
     });
