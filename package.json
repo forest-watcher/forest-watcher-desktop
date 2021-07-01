@@ -1,9 +1,6 @@
 {
   "name": "forest-watcher-web",
   "version": "1.1.2",
-  "engines": {
-    "node": "12.13.0"
-  },
   "private": true,
   "dependencies": {
     "@mapbox/geojson-area": "^0.2.2",
@@ -45,8 +42,7 @@
     "redux": "^4.0.1",
     "redux-persist": "4.10.2",
     "redux-thunk": "^2.3.0",
-    "validator": "^10.11.0",
-    "yarn": "^1.13.0"
+    "validator": "^10.11.0"
   },
   "devDependencies": {
     "eslint-plugin-babel": "^5.3.0",
@@ -57,7 +53,7 @@
     "lint-staged": "^8.1.5",
     "node-sass": "^4.12.0",
     "npm-run-all": "^4.1.5",
-    "react-scripts": "2.1.8"
+    "react-scripts": "4.0.3"
   },
   "scripts": {
     "start": "npm-run-all -p start:css start:js",
