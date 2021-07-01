@@ -11,7 +11,7 @@ import { SENTRY_DSN, ENVIRONMENT } from './constants/global';
 import * as reducers from './modules';
 import Routes from './routes';
 
-import './index.css';
+import './index.scss';
 
 /** Initialise Sentry */
 if (ENVIRONMENT !== 'development') {
