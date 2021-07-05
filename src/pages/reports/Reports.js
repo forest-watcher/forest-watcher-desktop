@@ -23,19 +23,19 @@ class Reports extends Component {
       {
         Header: <FormattedMessage id="reports.reportPosition" />,
         accessor: 'reportedPosition',
-        Cell: props => <span style={{ 'wordWrap': 'break-word', 'whiteSpace': 'normal' }} title={props.value}>{props.value}</span>
+        Cell: props => <span className="u-text-break-word" title={props.value}>{props.value}</span>
       },{
         Header: <FormattedMessage id="reports.userPosition" />,
         accessor: 'latLong',
-        Cell: props => <span style={{ 'wordWrap': 'break-word', 'whiteSpace': 'normal' }} title={props.value}>{props.value}</span>
+        Cell: props => <span className="u-text-break-word" title={props.value}>{props.value}</span>
       },{
         Header: <FormattedMessage id="reports.reportName" />,
         accessor: 'reportName',
-        Cell: props => <span style={{ 'wordWrap': 'break-word', 'whiteSpace': 'normal' }} title={props.value}>{props.value}</span>
+        Cell: props => <span className="u-text-break-word" title={props.value}>{props.value}</span>
       },{
         Header: <FormattedMessage id="reports.areaOfInterest" />,
         accessor: 'aoiName',
-        Cell: props => <span style={{ 'wordWrap': 'break-word', 'whiteSpace': 'normal' }} title={props.value}>{props.value}</span>
+        Cell: props => <span className="u-text-break-word" title={props.value}>{props.value}</span>
       },{
         Header: <FormattedMessage id="reports.alertType" />,
         accessor: 'alertType',
@@ -44,7 +44,7 @@ class Reports extends Component {
           // Fallback onto actual alert type value if getReportAlertsByName comes back with nothing.
           const alertTypes = useMemo(() => getReportAlertsByName(props.original.reportName), [props.original.reportName]);
           return (
-            <span style={{ 'wordWrap': 'break-word', 'whiteSpace': 'normal' }}>
+            <span className="u-text-break-word">
               {alertTypes.length ?
                 <ul>
                   {alertTypes.map(alert => <li key={alert.id}>{this.props.intl.formatMessage({ id: `layers.${alert.id}` })}</li>)}
