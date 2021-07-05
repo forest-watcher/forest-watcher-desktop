@@ -84,11 +84,11 @@
           }
         }
         .button-ios-image {
-          background-image: url(/images/app-store@2x.png);
+          background-image: url("../../assets/images/app-store@2x.png");
         }
 
         .button-android-image {
-          background-image: url(/images/google-play@2x.png);
+          background-image: url("../../assets/images/google-play@2x.png");
           margin-left: 0;
           margin-top: 12px;
 
@@ -169,7 +169,7 @@
         display: flex;
         align-items: flex-end;
         justify-content: center;
-        background-image: url(/images/phone@2x.png);
+        background-image: url(../../assets/images/phone@2x.png);
         background-size: contain;
         background-repeat: no-repeat;
         width: 100%;
