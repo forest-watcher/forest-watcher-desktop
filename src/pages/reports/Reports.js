@@ -40,7 +40,7 @@ class Reports extends Component {
         Header: <FormattedMessage id="reports.alertType" />,
         accessor: 'alertType',
         Cell: props => {
-          // Fetch the alert type from the report name (current BED implementation does not have newer alert types)
+          // Fetch the alert type from the report name (current BED implementation does not have newer alert types and does not accept multiple alerts)
           // Fallback onto actual alert type value if getReportAlertsByName comes back with nothing.
           const alertTypes = useMemo(() => getReportAlertsByName(props.original.reportName), [props.original.reportName]);
           return (
