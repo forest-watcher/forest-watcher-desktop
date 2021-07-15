@@ -199,7 +199,7 @@
     "layers.woodFiber": "Fibra de madeira",
     "layers.mining": "Mineração",
     "layers.umd_as_it_happens": "Desflorestamento (GLAD)",
-    "layers.gfw_radd_alerts": "Deforestation (RADD)",
-    "layers.glad_sentinel_2": "Deforestation (GLAD-S2)",
+    "layers.wur_radd_alerts": "Desmatamento (RADD)",
+    "layers.glad_sentinel_2": "Desmatamento (GLAD-S2)",
     "layers.viirs": "Incêndios (VIIRS)"
 }

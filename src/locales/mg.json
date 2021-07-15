@@ -199,7 +199,7 @@
     "layers.woodFiber": "Wood Fiber",
     "layers.mining": "Fitrandrahana Harena an-kibon’ny tany",
     "layers.umd_as_it_happens": "Fandripahana ala (GLAD)",
-    "layers.gfw_radd_alerts": "Deforestation (RADD)",
+    "layers.wur_radd_alerts": "Deforestation (RADD)",
     "layers.glad_sentinel_2": "Deforestation (GLAD-S2)",
     "layers.viirs": "Doro tanety (VIIRS)"
 }

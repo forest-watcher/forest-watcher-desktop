@@ -7,8 +7,8 @@ const alertTypes = {
     id: "glad_sentinel_2",
     reportNameId: "GLADSTWO" // Must match regex for report names: [A-Z]
   },
-  gfw_radd_alerts: {
-    id: "gfw_radd_alerts",
+  wur_radd_alerts: {
+    id: "wur_radd_alerts",
     reportNameId: "RADD" // Must match regex for report names: [A-Z]
   },
   viirs: {
