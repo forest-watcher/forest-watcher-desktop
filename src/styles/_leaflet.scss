@@ -28,7 +28,7 @@
 
     .leaflet-draw-draw-polygon {
       padding: 8px;
-      background-image: url(/images/draw_new.png) !important;
+      background-image: url(../assets/images/draw_new.png) !important;
       background-position: center !important;
       background-size: contain !important;
       background-repeat: no-repeat !important;
@@ -60,7 +60,7 @@
 
 .leaflet-draw-edit-edit {
   padding: 10px;
-  background-image: url(/images/edit.png) !important;
+  background-image: url(../assets/images/edit.png) !important;
   background-position: center !important;
   background-size: contain !important;
   background-repeat: no-repeat !important;
@@ -69,7 +69,7 @@
 
 .leaflet-draw-edit-remove {
   padding: 10px;
-  background-image: url(/images/delete.png) !important;
+  background-image: url(../assets/images/delete.png) !important;
   background-position: center !important;
   background-size: contain !important;
   background-repeat: no-repeat !important;
