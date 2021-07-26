@@ -1,41 +1,60 @@
-import React from 'react';
+import { useMemo, Component } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment'
-import { DEFAULT_FORMAT } from '../../constants/global';
+import { DEFAULT_FORMAT } from 'constants/global';
 
-import Article from '../../components/layouts/Article';
-import Hero from '../../components/layouts/Hero';
+import Article from 'components/layouts/Article';
+import Hero from 'components/layouts/Hero';
 import ReactTable from 'react-table'
 import { FormattedMessage } from 'react-intl';
 import ReportsFilters from './ReportsFiltersContainer';
-import Loader from '../../components/ui/Loader';
+import Loader from 'components/ui/Loader';
 import { injectIntl } from 'react-intl';
 import qs from 'query-string';
-import { TABLE_PAGE_SIZE } from '../../constants/global';
-import { CATEGORY, ACTION } from '../../constants/analytics';
+import { TABLE_PAGE_SIZE } from 'constants/global';
+import { CATEGORY, ACTION } from 'constants/analytics';
 import ReactGA from 'react-ga';
+import { getReportAlertsByName } from 'helpers/reports';
 
-class Reports extends React.Component {
+class Reports extends Component {
   constructor() {
     super();
     this.columns = [
       {
         Header: <FormattedMessage id="reports.reportPosition" />,
-        accessor: 'reportedPosition'
+        accessor: 'reportedPosition',
+        Cell: props => <span className="u-text-break-word" title={props.value}>{props.value}</span>
       },{
         Header: <FormattedMessage id="reports.userPosition" />,
-        accessor: 'latLong'
+        accessor: 'latLong',
+        Cell: props => <span className="u-text-break-word" title={props.value}>{props.value}</span>
       },{
         Header: <FormattedMessage id="reports.reportName" />,
         accessor: 'reportName',
-        Cell: props => <span style={{ 'wordWrap': 'break-word', 'whiteSpace': 'normal' }} title={props.value}>{props.value}</span>
+        Cell: props => <span className="u-text-break-word" title={props.value}>{props.value}</span>
       },{
         Header: <FormattedMessage id="reports.areaOfInterest" />,
-        accessor: 'aoiName'
+        accessor: 'aoiName',
+        Cell: props => <span className="u-text-break-word" title={props.value}>{props.value}</span>
       },{
         Header: <FormattedMessage id="reports.alertType" />,
         accessor: 'alertType',
-        Cell: props => <span>{this.props.intl.formatMessage({ id: `layers.${props.value}` })}</span>
+        Cell: props => {
+          // Fetch the alert type from the report name (current BED implementation does not have newer alert types and does not accept multiple alerts)
+          // Fallback onto actual alert type value if getReportAlertsByName comes back with nothing.
+          const alertTypes = useMemo(() => getReportAlertsByName(props.original.reportName), [props.original.reportName]);
+          return (
+            <span className="u-text-break-word">
+              {alertTypes.length ?
+                <ul>
+                  {alertTypes.map(alert => <li key={alert.id}>{this.props.intl.formatMessage({ id: `layers.${alert.id}` })}</li>)}
+                </ul>
+                :
+                this.props.intl.formatMessage({ id: `layers.${props.value}` })
+              }
+            </span>
+          );
+        }
       },{
         Header: <FormattedMessage id="reports.date" />,
         accessor: 'date',
