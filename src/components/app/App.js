@@ -1,6 +1,5 @@
 import React from "react";
 import PropTypes from "prop-types";
-import {  Redirect } from "react-router-dom";
 import querystring from "query-string";
 import ReduxToastr from "react-redux-toastr";
 import { IntlProvider } from "react-intl";
@@ -17,17 +16,15 @@ import "react-redux-toastr/lib/css/react-redux-toastr.min.css";
 import Nav from "../layouts/Nav";
 import Landing from "../../pages/landing/LandingContainer";
 
-
 // Pages
 import Routes from "../../routes";
-
 
 addLocaleData([...en, ...es, ...fr, ...id, ...pt]);
 
 class App extends React.Component {
   componentWillMount() {
     // eslint-disable-next-line no-console
-    console.log(this.props)
+    console.log(this.props);
     this.props.checkLogged(this.props.location.search);
     ReactGA.initialize(GA_UA); //Unique Google Analytics tracking number
   }
@@ -80,7 +77,12 @@ class App extends React.Component {
             </header>
           )}
           <main role="main" className="l-main">
-            <Routes match={match} user={user} location={location} defaultComponent={()=> <Landing locale={locale} setLocale={setLocale} translations={translations} />}/>
+            <Routes
+              match={match}
+              user={user}
+              location={location}
+              defaultComponent={() => <Landing locale={locale} setLocale={setLocale} translations={translations} />}
+            />
             <ReduxToastr position="bottom-right" transitionIn="fadeIn" transitionOut="fadeOut" />
           </main>
         </div>

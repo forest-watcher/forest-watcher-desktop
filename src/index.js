@@ -6,7 +6,7 @@ import { createBrowserHistory } from "history";
 import thunk from "redux-thunk";
 import { persistStore, autoRehydrate } from "redux-persist";
 import * as Sentry from "@sentry/browser";
-import { BrowserRouter as Router} from "react-router-dom";
+import { BrowserRouter as Router } from "react-router-dom";
 import { SENTRY_DSN, ENVIRONMENT } from "./constants/global";
 import App from "components/app/AppContainer";
 

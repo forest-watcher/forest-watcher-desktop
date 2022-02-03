@@ -1,9 +1,9 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React from "react";
+import PropTypes from "prop-types";
 
 function Icon({ name, className }) {
   return (
-    <svg className={`c-icon ${className || ''}`}>
+    <svg className={`c-icon ${className || ""}`}>
       <use xlinkHref={`#${name}`} />
     </svg>
   );

@@ -1,14 +1,13 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React from "react";
+import PropTypes from "prop-types";
 
-import { FormattedMessage } from 'react-intl';
-import Icon from '../ui/Icon';
+import { FormattedMessage } from "react-intl";
+import Icon from "../ui/Icon";
 
 class LayersShow extends React.Component {
-
   getLayerName(name) {
     if (name.match(/^layers\./) !== null) {
-      return (<FormattedMessage id={name}/>)
+      return <FormattedMessage id={name} />;
     }
     return name;
   }
@@ -20,28 +19,29 @@ class LayersShow extends React.Component {
         <div className="layers-title">
           <FormattedMessage id={`settings.${layerType}Layers`} />
         </div>
-        { layers.map((layer, i) => (
+        {layers.map((layer, i) => (
           <div key={i} className="list-row">
             <div className="layer-name">{this.getLayerName(layer.attributes.name)}</div>
-            { layer.attributes.enabled && <Icon className="-small -green" name="icon-checkmark"/> }
+            {layer.attributes.enabled && <Icon className="-small -green" name="icon-checkmark" />}
           </div>
-          ))
-        }
+        ))}
       </div>
-    )
+    );
 
     return (
       <div className="c-layers-show">
         <div className="row">
           <div className="small-12 medium-6 columns">
             <div className="list-row list-header">
-              <h3><FormattedMessage id={"settings.selectedLayers"} /></h3>
+              <h3>
+                <FormattedMessage id={"settings.selectedLayers"} />
+              </h3>
               <FormattedMessage id={"settings.enabled"} />
             </div>
             <div className="layers-list">
-              { isManager && renderLayers('public', publicLayers) }
-              { renderLayers('team', teamLayers) }
-              { renderLayers('user', userLayers) }
+              {isManager && renderLayers("public", publicLayers)}
+              {renderLayers("team", teamLayers)}
+              {renderLayers("user", userLayers)}
             </div>
           </div>
         </div>

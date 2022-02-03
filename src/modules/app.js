@@ -1,17 +1,17 @@
-import { getGeostore } from './geostores';
-import { getAreas } from './areas';
-import { getTemplates, getTemplate } from './templates';
-import { getTeam } from './teams';
-import { getUser } from './user';
+import { getGeostore } from "./geostores";
+import { getAreas } from "./areas";
+import { getTemplates, getTemplate } from "./templates";
+import { getTeam } from "./teams";
+import { getUser } from "./user";
 
 // Actions
-export const USER_CHECKED = 'app/USER_CHECKED';
-export const SET_LOCALE = 'app/SET_LOCALE';
+export const USER_CHECKED = "app/USER_CHECKED";
+export const SET_LOCALE = "app/SET_LOCALE";
 
 // Reducer
 const initialState = {
   userChecked: false,
-  locale: 'en'
+  locale: "en"
 };
 
 export default function reducer(state = initialState, action) {
@@ -37,7 +37,7 @@ export function syncApp() {
     let teamTemplateIds = [];
     const areasIds = state().areas.ids;
     const areas = state().areas.data;
-    areasIds.forEach((id) => {
+    areasIds.forEach(id => {
       areaPromises.push(dispatch(getGeostore(areas[id].attributes.geostore)));
       if (areas[id].attributes.templateId) {
         teamTemplateIds.push(areas[id].attributes.templateId);
@@ -51,7 +51,7 @@ export function syncApp() {
     // fetch any missing team templates
     let templatePromises = [];
     const templateIds = state().templates.ids;
-    teamTemplateIds.forEach((id) => {
+    teamTemplateIds.forEach(id => {
       if (templateIds.indexOf(id) === -1) {
         templatePromises.push(dispatch(getTemplate(id)));
       }

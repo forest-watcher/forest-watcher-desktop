@@ -1,14 +1,13 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import L from 'leaflet';
-import { Draw, Control } from 'leaflet-draw'; // eslint-disable-line no-unused-vars
-import { DRAW_CONTROL, DRAW_CONTROL_DISABLED, POLYGON_STYLES, POLYGON_STYLES_ERROR } from '../../constants/map';
-import { checkArea } from '../../helpers/areas';
-import 'leaflet-draw/dist/leaflet.draw.css';
-import { injectIntl } from 'react-intl';
+import React from "react";
+import PropTypes from "prop-types";
+import L from "leaflet";
+import { Draw, Control } from "leaflet-draw"; // eslint-disable-line no-unused-vars
+import { DRAW_CONTROL, DRAW_CONTROL_DISABLED, POLYGON_STYLES, POLYGON_STYLES_ERROR } from "../../constants/map";
+import { checkArea } from "../../helpers/areas";
+import "leaflet-draw/dist/leaflet.draw.css";
+import { injectIntl } from "react-intl";
 
 class DrawControl extends React.Component {
-
   /* Component lifecycle */
   componentWillReceiveProps(nextProps) {
     if (this.props.map !== nextProps.map) {
@@ -31,7 +30,7 @@ class DrawControl extends React.Component {
   setLayers = () => {
     this.featureGroup = new L.FeatureGroup();
     this.map.addLayer(this.featureGroup);
-  }
+  };
 
   setFeatures = () => {
     L.geoJson(this.props.geojson, {
@@ -48,11 +47,11 @@ class DrawControl extends React.Component {
         this.props.onZoomChange && this.props.onZoomChange(this.map.getBoundsZoom(layer.getBounds()));
       }
     });
-  }
+  };
 
   setDrawing = () => {
-    const DRAW_CONFIG = {...DRAW_CONTROL};
-    DRAW_CONFIG.draw.polygon.drawError.message = this.props.intl.formatMessage({ id: 'areas.drawError' });
+    const DRAW_CONFIG = { ...DRAW_CONTROL };
+    DRAW_CONFIG.draw.polygon.drawError.message = this.props.intl.formatMessage({ id: "areas.drawError" });
     const drawControl = Object.assign(DRAW_CONFIG, {
       edit: {
         featureGroup: this.featureGroup,
@@ -69,57 +68,56 @@ class DrawControl extends React.Component {
     this.drawControl = new L.Control.Draw(drawControl);
     this.drawControlDisabled = new L.Control.Draw(drawControlDisabled);
 
-    if (this.props.mode === 'manage') {
+    if (this.props.mode === "manage") {
       this.drawControlDisabled.addTo(this.map);
     } else {
       this.drawControl.addTo(this.map);
     }
 
     // DRAW LISTENERS
-    this.map.on(L.Draw.Event.CREATED, (e) => {
+    this.map.on(L.Draw.Event.CREATED, e => {
       this.onDrawEventComplete(e);
     });
 
-    this.map.on(L.Draw.Event.EDITSTART, (e) => {
+    this.map.on(L.Draw.Event.EDITSTART, e => {
       this.setFeatures();
       this.props.setEditing(true);
     });
 
-    this.map.on(L.Draw.Event.EDITED, (e) => {
+    this.map.on(L.Draw.Event.EDITED, e => {
       this.onDrawEventEdit(e);
     });
 
-    this.map.on(L.Draw.Event.EDITSTOP, (e) => {
+    this.map.on(L.Draw.Event.EDITSTOP, e => {
       this.props.setEditing(false);
     });
 
-    this.map.on(L.Draw.Event.DELETESTART, (e) => {
+    this.map.on(L.Draw.Event.DELETESTART, e => {
       this.setFeatures();
       this.props.setEditing(true);
     });
 
-    this.map.on(L.Draw.Event.DELETED, (e) => {
+    this.map.on(L.Draw.Event.DELETED, e => {
       this.onDrawEventDelete(e);
     });
 
-    this.map.on(L.Draw.Event.DELETESTOP, (e) => {
+    this.map.on(L.Draw.Event.DELETESTOP, e => {
       this.props.setEditing(false);
     });
-  }
+  };
 
   enableDrawing = () => {
     this.map.removeControl(this.drawControlDisabled);
     this.drawControl.addTo(this.map);
-  }
+  };
 
   disableDrawing = () => {
     this.map.removeControl(this.drawControl);
     this.drawControlDisabled.addTo(this.map);
-  }
-
+  };
 
   // EVENT LISTENERS
-  onDrawEventComplete = (e) => {
+  onDrawEventComplete = e => {
     const layer = e.layer;
     const geoJsonLayer = layer.toGeoJSON();
     if (!checkArea(geoJsonLayer)) {
@@ -130,9 +128,9 @@ class DrawControl extends React.Component {
     this.map.fitBounds(layer.getBounds());
     this.props.onZoomChange && this.props.onZoomChange(this.map.getBoundsZoom(layer.getBounds()));
     this.disableDrawing();
-  }
+  };
 
-  onDrawEventEdit = (e) => {
+  onDrawEventEdit = e => {
     const layers = e.layers;
     layers.eachLayer(layer => {
       const geoJsonLayer = layer.toGeoJSON();
@@ -140,16 +138,16 @@ class DrawControl extends React.Component {
       this.props.onDrawComplete && this.props.onDrawComplete(geoJsonLayer);
       // this.map.fitBounds(layer.getBounds());
     });
-  }
+  };
 
-  onDrawEventDelete = (e) => {
+  onDrawEventDelete = e => {
     const layer = e.layer;
     this.featureGroup.removeLayer(layer);
     this.props.onDrawComplete && this.props.onDrawDelete();
     if (this.featureGroup.getLayers().length === 0) {
       this.enableDrawing();
     }
-  }
+  };
 
   render() {
     return null;
