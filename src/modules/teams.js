@@ -1,4 +1,3 @@
-import { unique } from "../helpers/utils";
 import { toastr } from "react-redux-toastr";
 import { teamService } from "services/teams";
 // Actions
@@ -79,17 +78,6 @@ export function getTeam(userId) {
       });
   };
 }
-
-const getBody = (team, locale) => {
-  return JSON.stringify({
-    name: team.name,
-    managers: team.managers.filter(unique),
-    confirmedUsers: team.confirmedUsers.filter(unique),
-    users: team.users.filter(unique),
-    areas: team.areas,
-    locale: locale
-  });
-};
 
 export function createTeam(team) {
   return (dispatch, state) => {
