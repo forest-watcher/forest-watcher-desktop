@@ -1,5 +1,6 @@
 import normalize from "json-api-normalizer";
-import { CARTO_URL, CARTO_TABLE, API_BASE_URL } from "../constants/global";
+import { layerService } from "services/layer";
+import { CARTO_URL, CARTO_TABLE } from "../constants/global";
 import { LAYERS_BLACKLIST } from "../constants/global";
 // Actions
 const GET_GFW_LAYERS = "layers/GET_GFW_LAYERS";
@@ -95,33 +96,16 @@ export function getGFWLayers() {
   };
 }
 
-const parseLayer = function (layer) {
-  return {
-    name: layer.title,
-    url: layer.tileurl
-  };
-};
-
 export function createLayer(layer, teamId) {
-  let url = `${API_BASE_URL}/v1/contextual-layer`;
-  if (teamId) url = `${url}/team/${teamId}`;
   return (dispatch, state) => {
     dispatch({
       type: SET_LOADING,
       payload: true
     });
-    fetch(url, {
-      headers: {
-        Authorization: `Bearer ${state().user.token}`,
-        "Content-Type": "application/json"
-      },
-      method: "POST",
-      body: JSON.stringify(parseLayer(layer))
-    })
-      .then(response => {
-        if (response.ok) return response.json();
-        throw Error(response.statusText);
-      })
+
+    layerService.setToken(state().user.token);
+    return layerService
+      .createLayer(layer, teamId)
       .then(async data => {
         const normalized = normalize(data);
         dispatch({
@@ -144,24 +128,15 @@ export function createLayer(layer, teamId) {
 }
 
 export function toggleLayer(layer, value) {
-  let url = `${API_BASE_URL}/v1/contextual-layer/${layer.id}`;
   return (dispatch, state) => {
     dispatch({
       type: SET_LOADING,
       payload: true
     });
-    fetch(url, {
-      headers: {
-        Authorization: `Bearer ${state().user.token}`,
-        "Content-Type": "application/json"
-      },
-      method: "PATCH",
-      body: JSON.stringify({ enabled: value })
-    })
-      .then(response => {
-        if (response.ok) return response.json();
-        throw Error(response.statusText);
-      })
+
+    layerService.setToken(state().user.token);
+    return layerService
+      .toggleLayer(layer.id, value)
       .then(async data => {
         const normalized = normalize(data);
         dispatch({
@@ -184,18 +159,15 @@ export function toggleLayer(layer, value) {
 }
 
 export function deleteLayer(layer) {
-  let url = `${API_BASE_URL}/v1/contextual-layer/${layer.id}`;
   return (dispatch, state) => {
     dispatch({
       type: SET_LOADING,
       payload: true
     });
-    fetch(url, {
-      headers: {
-        Authorization: `Bearer ${state().user.token}`
-      },
-      method: "DELETE"
-    })
+
+    layerService.setToken(state().user.token);
+    return layerService
+      .deleteLayer(layer.id)
       .then(response => {
         if (!response.ok) throw Error(response.statusText);
       })
@@ -220,22 +192,15 @@ export function deleteLayer(layer) {
 }
 
 export function getLayers() {
-  let url = `${API_BASE_URL}/v1/contextual-layer`;
   return (dispatch, state) => {
     dispatch({
       type: SET_LOADING,
       payload: true
     });
-    fetch(url, {
-      headers: {
-        Authorization: `Bearer ${state().user.token}`,
-        "Content-Type": "application/json"
-      }
-    })
-      .then(response => {
-        if (response.ok) return response.json();
-        throw Error(response.statusText);
-      })
+
+    layerService.setToken(state().user.token);
+    return layerService
+      .getLayers()
       .then(async data => {
         const normalized = normalize(data);
         dispatch({

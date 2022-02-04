@@ -1,7 +1,6 @@
-import { API_BASE_URL } from "../constants/global";
 import { unique } from "../helpers/utils";
 import { toastr } from "react-redux-toastr";
-
+import { teamService } from "services/teams";
 // Actions
 const GET_TEAM = "teams/GET_TEAM";
 const SAVE_TEAM = "teams/SAVE_TEAM";
@@ -55,19 +54,10 @@ export default function reducer(state = initialState, action) {
 // Action Creators
 
 export function getTeam(userId) {
-  const url = `${API_BASE_URL}/teams/user/${userId}`;
   return (dispatch, state) => {
-    return fetch(url, {
-      headers: {
-        Authorization: `Bearer ${state().user.token}`
-      }
-    })
-      .then(response => {
-        if (response.ok) {
-          return response.json();
-        }
-        throw Error(response.statusText);
-      })
+    teamService.setToken(state().user.token);
+    return teamService
+      .getTeam(userId)
       .then(response => {
         const team = response.data;
         dispatch({
@@ -102,24 +92,13 @@ const getBody = (team, locale) => {
 };
 
 export function createTeam(team) {
-  const url = `${API_BASE_URL}/teams/`;
   return (dispatch, state) => {
     dispatch({
       type: SET_SAVING,
       payload: true
     });
-    return fetch(url, {
-      headers: {
-        Authorization: `Bearer ${state().user.token}`,
-        "Content-Type": "application/json"
-      },
-      method: "POST",
-      body: getBody(team, state().app.locale)
-    })
-      .then(response => {
-        if (response.ok) return response.json();
-        throw Error(response.statusText);
-      })
+    return teamService
+      .saveTeam(team, state().app.locale)
       .then(response => {
         const team = response.data;
         dispatch({
@@ -151,24 +130,13 @@ export function createTeam(team) {
 }
 
 export function updateTeam(team, id) {
-  const url = `${API_BASE_URL}/teams/${id}`;
   return (dispatch, state) => {
     dispatch({
       type: SET_SAVING,
       payload: true
     });
-    return fetch(url, {
-      headers: {
-        Authorization: `Bearer ${state().user.token}`,
-        "Content-Type": "application/json"
-      },
-      method: "PATCH",
-      body: getBody(team, state().app.locale)
-    })
-      .then(response => {
-        if (response.ok) return response.json();
-        throw Error(response.statusText);
-      })
+    return teamService
+      .saveTeam(team, state().app.locale, id)
       .then(response => {
         const team = response.data;
         dispatch({

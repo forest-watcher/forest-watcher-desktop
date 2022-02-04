@@ -1,10 +1,9 @@
 import normalize from "json-api-normalizer";
-import { API_BASE_URL, CARTO_COUNTRIES } from "../constants/global";
-import { BLOB_CONFIG } from "../constants/map";
 import { saveGeostore } from "./geostores";
-import domtoimage from "dom-to-image";
 import { toastr } from "react-redux-toastr";
 import omit from "lodash/omit";
+import { areaService } from "services/area";
+import { utilsService } from "services/utils";
 
 // Actions
 const SET_AREA = "areas/SET_AREA";
@@ -69,21 +68,16 @@ export default function reducer(state = initialState, action) {
 
 // Action Creators
 export function getArea(id) {
-  const url = `${API_BASE_URL}/area/${id}`;
   return (dispatch, state) => {
     dispatch({
       type: SET_LOADING_AREAS,
       payload: true
     });
-    return fetch(url, {
-      headers: {
-        Authorization: `Bearer ${state().user.token}`
-      }
-    })
-      .then(response => {
-        if (response.ok) return response.json();
-        throw Error(response.statusText);
-      })
+
+    areaService.setToken(state().user.token);
+
+    return areaService
+      .getArea(id)
       .then(data => {
         const normalized = normalize(data);
         dispatch({
@@ -108,12 +102,9 @@ export function getArea(id) {
 
 export function deleteArea(areaId) {
   return (dispatch, state) => {
-    fetch(`${API_BASE_URL}/area/${areaId}`, {
-      headers: {
-        Authorization: `Bearer ${state().user.token}`
-      },
-      method: "DELETE"
-    })
+    areaService.setToken(state().user.token);
+    areaService
+      .deleteArea(areaId)
       .then(() => {
         dispatch({
           type: SET_AREA_DELETED,
@@ -127,21 +118,14 @@ export function deleteArea(areaId) {
 }
 
 export function getAreas() {
-  const url = `${API_BASE_URL}/area/fw`;
   return (dispatch, state) => {
     dispatch({
       type: SET_LOADING_AREAS,
       payload: true
     });
-    return fetch(url, {
-      headers: {
-        Authorization: `Bearer ${state().user.token}`
-      }
-    })
-      .then(response => {
-        if (response.ok) return response.json();
-        throw Error(response.statusText);
-      })
+    areaService.setToken(state().user.token);
+    return areaService
+      .getAreaFW()
       .then(data => {
         const normalized = normalize(data);
         dispatch({
@@ -165,13 +149,9 @@ export function getAreas() {
 }
 
 export function getCountries() {
-  const url = `${CARTO_COUNTRIES}`;
   return (dispatch, state) => {
-    return fetch(url)
-      .then(response => {
-        if (response.ok) return response.json();
-        throw Error(response.statusText);
-      })
+    return utilsService
+      .getCountries()
       .then(data => {
         dispatch({
           type: SET_COUNTRIES,
@@ -194,24 +174,9 @@ export function saveArea(area, node, method) {
         error: false
       }
     });
-    const url = method === "PATCH" ? `${API_BASE_URL}/area/${area.id}` : `${API_BASE_URL}/area`;
-    const body = new FormData();
-    const blob = await domtoimage.toBlob(node, BLOB_CONFIG);
-    body.append("name", area.name);
-    body.append("geostore", area.geostore);
-    const image = new File([blob], "png", { type: "image/png", name: encodeURIComponent(area.name) });
-    body.append("image", image);
-    fetch(url, {
-      headers: {
-        Authorization: `Bearer ${state().user.token}`
-      },
-      method: method,
-      body
-    })
-      .then(response => {
-        if (response.ok) return response.json();
-        throw Error(response.statusText);
-      })
+    areaService.setToken(state().user.token);
+    areaService
+      .saveArea(area, node, method)
       .then(data => {
         const normalized = normalize(data);
         dispatch({
