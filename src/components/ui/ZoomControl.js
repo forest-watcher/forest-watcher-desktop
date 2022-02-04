@@ -1,10 +1,9 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import classnames from 'classnames';
-import Icon from './Icon';
+import React from "react";
+import PropTypes from "prop-types";
+import classnames from "classnames";
+import Icon from "./Icon";
 
 export default class ZoomControl extends React.Component {
-
   /* Component lifecycle */
   shouldComponentUpdate(newProps) {
     return this.props.zoom !== newProps.zoom;
@@ -14,25 +13,25 @@ export default class ZoomControl extends React.Component {
     this.props.onZoomChange && this.props.onZoomChange(zoom);
   }
 
-  increaseZoom = (evt) => {
+  increaseZoom = evt => {
     evt.preventDefault();
     if (this.props.zoom === this.props.maxZoom) return;
     this.setZoom(this.props.zoom + 1);
-  }
+  };
 
-  decreaseZoom = (evt) => {
+  decreaseZoom = evt => {
     evt.preventDefault();
     if (this.props.zoom === this.props.minZoom) return;
     this.setZoom(this.props.zoom - 1);
-  }
+  };
 
   render() {
-    const zoomInClass = classnames('zoom-control-btn', {
-      '-disabled': this.props.zoom === this.props.maxZoom
+    const zoomInClass = classnames("zoom-control-btn", {
+      "-disabled": this.props.zoom === this.props.maxZoom
     });
 
-    const zoomOutClass = classnames('zoom-control-btn', {
-      '-disabled': this.props.zoom === this.props.minZoom
+    const zoomOutClass = classnames("zoom-control-btn", {
+      "-disabled": this.props.zoom === this.props.minZoom
     });
 
     return (

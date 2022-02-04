@@ -1,33 +1,36 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React from "react";
+import PropTypes from "prop-types";
 
-import Select from 'react-select';
-import { injectIntl } from 'react-intl';
-import DropdownIndicator from '../../components/ui/SelectDropdownIndicator'
+import Select from "react-select";
+import { injectIntl } from "react-intl";
+import DropdownIndicator from "../../components/ui/SelectDropdownIndicator";
 
-import qs from 'query-string';
+import qs from "query-string";
 
 class TemplatesFilters extends React.Component {
-
-  redirectWith(searchParams){
+  redirectWith(searchParams) {
     this.props.history.push({
       pathname: `/templates`,
       search: qs.stringify(searchParams)
     });
   }
 
-  handleAreaChange = (selected) => {
+  handleAreaChange = selected => {
     let aoi = undefined;
     if (selected) {
       aoi = selected.value || undefined;
     }
-    this.redirectWith(Object.assign(this.props.searchParams, { page: 1}, { aoi }));
-  }
+    this.redirectWith(Object.assign(this.props.searchParams, { page: 1 }, { aoi }));
+  };
 
-  handleSearchChange = (event) => {
-    const searchParams = Object.assign(this.props.searchParams, { page: 1}, { searchValues: event.target.value || undefined });
+  handleSearchChange = event => {
+    const searchParams = Object.assign(
+      this.props.searchParams,
+      { page: 1 },
+      { searchValues: event.target.value || undefined }
+    );
     this.redirectWith(searchParams);
-  }
+  };
 
   render() {
     const { areasOptions } = this.props;
@@ -38,14 +41,14 @@ class TemplatesFilters extends React.Component {
             className="c-select u-w-100"
             classNamePrefix="Select"
             name="area-filter"
-            value={areasOptions.find((option) => option.value === this.props.searchParams.aoi)}
+            value={areasOptions.find(option => option.value === this.props.searchParams.aoi)}
             options={areasOptions}
             onChange={this.handleAreaChange}
-            resetValue={{value: '', label: ''}}
+            resetValue={{ value: "", label: "" }}
             isSearchable={false}
             isClearable={true}
-            placeholder={this.props.intl.formatMessage({ id: 'filters.area' })}
-            noResultsText={this.props.intl.formatMessage({ id: 'filters.noAreasAvailable' })}
+            placeholder={this.props.intl.formatMessage({ id: "filters.area" })}
+            noResultsText={this.props.intl.formatMessage({ id: "filters.noAreasAvailable" })}
             components={{ DropdownIndicator }}
           />
         </div>
@@ -54,9 +57,9 @@ class TemplatesFilters extends React.Component {
             className="c-search"
             type="text"
             onChange={this.handleSearchChange}
-            value={this.props.searchParams.searchValues || ''}
+            value={this.props.searchParams.searchValues || ""}
             name="search-bar"
-            placeholder={this.props.intl.formatMessage({ id: 'filters.search' })}
+            placeholder={this.props.intl.formatMessage({ id: "filters.search" })}
           />
         </div>
       </div>

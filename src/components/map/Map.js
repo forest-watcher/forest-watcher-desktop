@@ -1,11 +1,10 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import L from 'leaflet';
-import 'leaflet/dist/leaflet.css';
-import { MAP_CONFIG } from '../../constants/map';
+import React from "react";
+import PropTypes from "prop-types";
+import L from "leaflet";
+import "leaflet/dist/leaflet.css";
+import { MAP_CONFIG } from "../../constants/map";
 
 class Map extends React.Component {
-
   componentDidMount() {
     this.initMap();
   }
@@ -21,7 +20,7 @@ class Map extends React.Component {
   }
 
   initMap = () => {
-    this.map = L.map('map', {
+    this.map = L.map("map", {
       minZoom: MAP_CONFIG.minZoom,
       zoom: this.props.mapConfig.zoom,
       center: MAP_CONFIG.center,
@@ -35,8 +34,7 @@ class Map extends React.Component {
     this.setBasemap();
 
     this.props.map(this.map);
-  }
-
+  };
 
   //SETTERS
   setAttribution() {
@@ -44,16 +42,12 @@ class Map extends React.Component {
   }
 
   setZoomControl() {
-    this.map.zoomControl && this.map.zoomControl.setPosition('topright');
+    this.map.zoomControl && this.map.zoomControl.setPosition("topright");
   }
 
   setBasemap() {
-    this.tileLayer = L.tileLayer(MAP_CONFIG.basemap, {})
-                      .addTo(this.map)
-                      .setZIndex(0);
-    this.borderLayer = L.tileLayer(MAP_CONFIG.borders, {})
-                      .addTo(this.map)
-                      .setZIndex(1);
+    this.tileLayer = L.tileLayer(MAP_CONFIG.basemap, {}).addTo(this.map).setZIndex(0);
+    this.borderLayer = L.tileLayer(MAP_CONFIG.borders, {}).addTo(this.map).setZIndex(1);
   }
 
   // MAP FUNCTONS
@@ -61,12 +55,9 @@ class Map extends React.Component {
     this.map.remove();
   }
 
-
   // RENDER
   render() {
-    return (
-      <div id="map" className="c-map"></div>
-    );
+    return <div id="map" className="c-map"></div>;
   }
 }
 

@@ -1,11 +1,11 @@
-import normalize from 'json-api-normalizer';
-import { API_BASE_URL } from '../constants/global';
-import { toastr } from 'react-redux-toastr';
+import normalize from "json-api-normalizer";
+import { API_BASE_URL } from "../constants/global";
+import { toastr } from "react-redux-toastr";
 
 // Actions
-const SET_GEOSTORE = 'geostores/SET_GEOSTORE';
-const SET_LOADING_GEOSTORE = 'geostores/SET_LOADING_GEOSTORE';
-const SET_SAVING_GEOSTORE = 'areas/SET_SAVING_GEOSTORE';
+const SET_GEOSTORE = "geostores/SET_GEOSTORE";
+const SET_LOADING_GEOSTORE = "geostores/SET_LOADING_GEOSTORE";
+const SET_SAVING_GEOSTORE = "areas/SET_SAVING_GEOSTORE";
 
 // Reducer
 const initialState = {
@@ -19,7 +19,7 @@ export default function reducer(state = initialState, action) {
   switch (action.type) {
     case SET_GEOSTORE: {
       const geostore = action.payload.geoStore;
-      if (state.ids.indexOf( ...Object.keys(geostore) ) > -1) {
+      if (state.ids.indexOf(...Object.keys(geostore)) > -1) {
         return {
           ...state,
           data: { ...state.data, ...geostore }
@@ -54,12 +54,12 @@ export function getGeostore(id) {
         Authorization: `Bearer ${state().user.token}`
       }
     })
-      .then((response) => {
+      .then(response => {
         if (response.ok) return response.json();
         throw Error(response.statusText);
       })
-      .then((data) => {
-      const normalized = normalize(data);
+      .then(data => {
+        const normalized = normalize(data);
         dispatch({
           type: SET_GEOSTORE,
           payload: normalized
@@ -69,8 +69,8 @@ export function getGeostore(id) {
           payload: false
         });
       })
-      .catch((error) => {
-        toastr.error('Unable to load geostore', error);
+      .catch(error => {
+        toastr.error("Unable to load geostore", error);
         dispatch({
           type: SET_LOADING_GEOSTORE,
           payload: false
@@ -84,7 +84,7 @@ export function saveGeostore(geojson) {
   const url = `${API_BASE_URL}/geostore`;
   const body = {
     geojson: geojson
-  }
+  };
   return (dispatch, state) => {
     dispatch({
       type: SET_SAVING_GEOSTORE,
@@ -93,16 +93,16 @@ export function saveGeostore(geojson) {
     return fetch(url, {
       headers: {
         Authorization: `Bearer ${state().user.token}`,
-        'Content-Type': 'application/json'
+        "Content-Type": "application/json"
       },
-      method: 'POST',
+      method: "POST",
       body: JSON.stringify(body)
     })
-    .then((response) => {
-      if (response.ok) return response.json();
-      throw Error(response.statusText);
-    })
-    .then((data) => {
+      .then(response => {
+        if (response.ok) return response.json();
+        throw Error(response.statusText);
+      })
+      .then(data => {
         const normalized = normalize(data);
         dispatch({
           type: SET_GEOSTORE,
@@ -114,7 +114,7 @@ export function saveGeostore(geojson) {
         });
         return normalized.geoStore;
       })
-      .catch((error) => {
+      .catch(error => {
         dispatch({
           type: SET_SAVING_GEOSTORE,
           payload: false
@@ -123,29 +123,28 @@ export function saveGeostore(geojson) {
   };
 }
 
-
 export function getGeoFromShape(shapefile) {
   return (dispatch, state) => {
     const url = `${API_BASE_URL}/ogr/convert`;
     const body = new FormData();
-    body.append('file', shapefile);
+    body.append("file", shapefile);
     return fetch(url, {
       headers: {
         Authorization: `Bearer ${state().user.token}`
       },
-      method: 'POST',
+      method: "POST",
       body
     })
-      .then((response) => {
+      .then(response => {
         if (response.ok) return response.json();
         throw Error(response.statusText);
       })
-      .then((data) => {
+      .then(data => {
         const geojson = data && data.data && data.data.attributes;
         return geojson;
       })
       .catch(() => {
-        toastr.error('Unable to load shapefile');
+        toastr.error("Unable to load shapefile");
       });
   };
 }

@@ -1,14 +1,14 @@
-import querystring from 'query-string';
-import { setUserChecked } from './app';
-import { API_BASE_URL } from '../constants/global';
-import { syncApp } from './app';
-import { getTeam } from './teams';
-import { toastr } from 'react-redux-toastr';
+import querystring from "query-string";
+import { setUserChecked } from "./app";
+import { API_BASE_URL } from "../constants/global";
+import { syncApp } from "./app";
+import { getTeam } from "./teams";
+import { toastr } from "react-redux-toastr";
 
 // Actions
-const CHECK_USER_LOGGED = 'user/CHECK_USER_LOGGED';
-export const LOGOUT = 'user/LOGOUT';
-export const SET_USER_DATA = 'user/SET_USER_DATA';
+const CHECK_USER_LOGGED = "user/CHECK_USER_LOGGED";
+export const LOGOUT = "user/LOGOUT";
+export const SET_USER_DATA = "user/SET_USER_DATA";
 
 // Reducer
 const initialState = {
@@ -45,11 +45,11 @@ export function checkLogged(tokenParam) {
         Authorization: auth
       }
     })
-      .then((response) => {
+      .then(response => {
         if (response.ok) return response.json();
         throw Error(response.statusText);
       })
-      .then(async (data) => {
+      .then(async data => {
         dispatch({
           type: CHECK_USER_LOGGED,
           payload: { data, token, loggedIn: true }
@@ -57,7 +57,7 @@ export function checkLogged(tokenParam) {
         dispatch(setUserChecked());
         dispatch(syncApp());
       })
-      .catch((error) => {
+      .catch(error => {
         if (user.loggedIn) {
           dispatch({
             type: LOGOUT
@@ -77,16 +77,16 @@ export function confirmUser(token) {
         Authorization: `Bearer ${state().user.token}`
       }
     })
-      .then((response) => {
+      .then(response => {
         if (response.ok) return response;
         throw Error(response.statusText);
       })
-      .then(async (data) => {
-        toastr.success('You have become a confirmed user');
+      .then(async data => {
+        toastr.success("You have become a confirmed user");
         dispatch(getTeam(state().user.data.id));
       })
-      .catch((error) => {
-        toastr.error('Error in confirmation');
+      .catch(error => {
+        toastr.error("Error in confirmation");
         console.warn(error);
       });
   };
@@ -114,7 +114,7 @@ export function getUser() {
         Authorization: `Bearer ${state().user.token}`
       }
     })
-      .then((response) => {
+      .then(response => {
         if (response.ok) return response.json();
         throw Error(response.statusText);
       })
@@ -126,8 +126,8 @@ export function getUser() {
           });
         }
       })
-      .catch((error) => {
-        toastr.error('Error in user retrieval');
+      .catch(error => {
+        toastr.error("Error in user retrieval");
         console.warn(error);
       });
   };

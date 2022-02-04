@@ -1,14 +1,12 @@
-import { connect } from 'react-redux';
-import { getReports, downloadAnswers } from '../../modules/reports';
+import { connect } from "react-redux";
+import { getReports, downloadAnswers } from "../../modules/reports";
 
-import { DEFAULT_LANGUAGE } from '../../constants/global';
-import qs from 'query-string';
-import Reports from './Reports';
-import { filterData, getDataAreas } from '../../helpers/filters';
+import { DEFAULT_LANGUAGE } from "../../constants/global";
+import qs from "query-string";
+import Reports from "./Reports";
+import { filterData, getDataAreas } from "../../helpers/filters";
 
-const getLatLng = coords => coords
-  .map(coord => parseFloat(coord).toFixed(6).toString())
-  .join(', ');
+const getLatLng = coords => coords.map(coord => parseFloat(coord).toFixed(6).toString()).join(", ");
 
 const getTeamUser = ({ userId, userName }, team) => {
   const user = userName || userId;
@@ -17,13 +15,13 @@ const getTeamUser = ({ userId, userName }, team) => {
   return member ? member.email : user;
 };
 
-const getUser = (reportUser, id, team) => (reportUser.userId === id ? 'me' : getTeamUser(reportUser, team));
+const getUser = (reportUser, id, team) => (reportUser.userId === id ? "me" : getTeamUser(reportUser, team));
 
 const getAnswersByTemplate = (templateId, reports, areas, user, team) => {
   const reportIds = reports.answers[templateId].ids;
   const reportData = reports.answers[templateId].data;
 
-  let answers = reportIds.map((reportId) => {
+  let answers = reportIds.map(reportId => {
     const report = reportData[reportId].attributes;
     const areaId = report.areaOfInterest;
     const reportUser = {
@@ -40,22 +38,24 @@ const getAnswersByTemplate = (templateId, reports, areas, user, team) => {
       alertType: report.layer,
       aoiName: areas.data[areaId] ? areas.data[areaId].attributes.name : report.areaOfInterestName,
       reportName: report.reportName,
-      reportedPosition: report.clickedPosition.length > 0 ? getLatLng([report.clickedPosition[0].lat, report.clickedPosition[0].lon]) : ''
+      reportedPosition:
+        report.clickedPosition.length > 0
+          ? getLatLng([report.clickedPosition[0].lat, report.clickedPosition[0].lon])
+          : ""
     };
   });
   return answers;
-}
+};
 
-const getTemplateOptions = (templates) => {
-  const templateOptions = Object.keys(templates.data).map((key) => (
-    { label: templates.data[key].attributes.name[DEFAULT_LANGUAGE] ?
-             templates.data[key].attributes.name[DEFAULT_LANGUAGE] :
-             templates.data[key].attributes.name[templates.data[key].attributes.defaultLanguage],
-      value: templates.data[key].id
-    }
-  ));
+const getTemplateOptions = templates => {
+  const templateOptions = Object.keys(templates.data).map(key => ({
+    label: templates.data[key].attributes.name[DEFAULT_LANGUAGE]
+      ? templates.data[key].attributes.name[DEFAULT_LANGUAGE]
+      : templates.data[key].attributes.name[templates.data[key].attributes.defaultLanguage],
+    value: templates.data[key].id
+  }));
   return templateOptions;
-}
+};
 
 const mapStateToProps = ({ areas, templates, reports, user, teams }, { match, location }) => {
   const searchParams = qs.parse(location.search);
@@ -84,13 +84,13 @@ const mapStateToProps = ({ areas, templates, reports, user, teams }, { match, lo
 
 function mapDispatchToProps(dispatch) {
   return {
-    getReports: (id) => {
+    getReports: id => {
       dispatch(getReports(id));
     },
-    downloadAnswers: (templateId) => {
+    downloadAnswers: templateId => {
       dispatch(downloadAnswers(templateId));
     }
-  }
+  };
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Reports);
