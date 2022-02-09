@@ -1,5 +1,5 @@
 import normalize from "json-api-normalizer";
-import { API_BASE_URL } from "../constants/global";
+import { reportService } from "services/reports";
 import { getAreas } from "./areas";
 
 // Actions
@@ -68,21 +68,15 @@ export default function reducer(state = initialState, action) {
 
 // Action Creators
 export function getTemplates() {
-  const url = `${API_BASE_URL}/reports`;
   return (dispatch, state) => {
     dispatch({
       type: SET_LOADING_TEMPLATES,
       payload: true
     });
-    return fetch(url, {
-      headers: {
-        Authorization: `Bearer ${state().user.token}`
-      }
-    })
-      .then(response => {
-        if (response.ok) return response.json();
-        throw Error(response.statusText);
-      })
+
+    reportService.setToken(state().user.token);
+    return reportService
+      .getTemplates()
       .then(data => {
         const normalized = normalize(data);
         dispatch({
@@ -105,21 +99,15 @@ export function getTemplates() {
 }
 
 export function getTemplate(templateId) {
-  const url = `${API_BASE_URL}/reports/${templateId}`;
   return (dispatch, state) => {
     dispatch({
       type: SET_LOADING_TEMPLATES,
       payload: true
     });
-    return fetch(url, {
-      headers: {
-        Authorization: `Bearer ${state().user.token}`
-      }
-    })
-      .then(response => {
-        if (response.ok) return response.json();
-        throw Error(response.statusText);
-      })
+
+    reportService.setToken(state().user.token);
+    return reportService
+      .getTemplate(templateId)
       .then(data => {
         const normalized = normalize(data);
         dispatch({
@@ -141,10 +129,8 @@ export function getTemplate(templateId) {
   };
 }
 
-// POST template
 export function saveTemplate(template, method, templateId) {
   return async (dispatch, state) => {
-    const url = method === "PATCH" ? `${API_BASE_URL}/reports/${templateId}` : `${API_BASE_URL}/reports`;
     dispatch({
       type: SET_SAVING_TEMPLATE,
       payload: {
@@ -152,18 +138,10 @@ export function saveTemplate(template, method, templateId) {
         error: false
       }
     });
-    fetch(url, {
-      headers: {
-        Authorization: `Bearer ${state().user.token}`,
-        "Content-Type": "application/json"
-      },
-      method: method,
-      body: JSON.stringify(template)
-    })
-      .then(response => {
-        if (response.ok) return response.json();
-        throw Error(response.statusText);
-      })
+
+    reportService.setToken(state().user.token);
+    return reportService
+      .saveTemplate(template, method, templateId)
       .then(data => {
         const normalized = normalize(data);
         dispatch(getAreas());
@@ -201,13 +179,8 @@ export function deleteTemplate(templateId, aois) {
         error: false
       }
     });
-    const aoisQuery = aois !== null ? `?aoi=${aois.toString()}` : "";
-    fetch(`${API_BASE_URL}/reports/${templateId}${aoisQuery}`, {
-      headers: {
-        Authorization: `Bearer ${state().user.token}`
-      },
-      method: "DELETE"
-    })
+    return reportService
+      .deleteTemplate(templateId, aois)
       .then(() => {
         dispatch({
           type: DELETE_TEMPLATE,

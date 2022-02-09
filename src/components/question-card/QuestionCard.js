@@ -267,8 +267,6 @@ class QuestionCard extends React.Component {
       );
     }
 
-    // console.log(question.name, question.conditions[0]);
-
     if (question.values && question.values[defaultLanguage]) {
       question.values[defaultLanguage].forEach(value => {
         conditionalOptions.push({

@@ -23,8 +23,6 @@ addLocaleData([...en, ...es, ...fr, ...id, ...pt]);
 
 class App extends React.Component {
   componentWillMount() {
-    // eslint-disable-next-line no-console
-    console.log(this.props);
     this.props.checkLogged(this.props.location.search);
     ReactGA.initialize(GA_UA); //Unique Google Analytics tracking number
   }

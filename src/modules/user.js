@@ -1,9 +1,10 @@
 import querystring from "query-string";
 import { setUserChecked } from "./app";
-import { API_BASE_URL } from "../constants/global";
 import { syncApp } from "./app";
 import { getTeam } from "./teams";
 import { toastr } from "react-redux-toastr";
+import { teamService } from "services/teams";
+import { userService } from "services/user";
 
 // Actions
 const CHECK_USER_LOGGED = "user/CHECK_USER_LOGGED";
@@ -34,21 +35,13 @@ export default function reducer(state = initialState, action) {
 
 // Action Creators
 export function checkLogged(tokenParam) {
-  const url = `${API_BASE_URL}/auth/check-logged`;
   return (dispatch, state) => {
-    const user = state().user;
     const queryParams = querystring.parse(tokenParam);
+    const user = state().user;
     const token = queryParams.token || user.token;
-    const auth = `Bearer ${token}`;
-    fetch(url, {
-      headers: {
-        Authorization: auth
-      }
-    })
-      .then(response => {
-        if (response.ok) return response.json();
-        throw Error(response.statusText);
-      })
+
+    return userService
+      .checkLogged(token)
       .then(async data => {
         dispatch({
           type: CHECK_USER_LOGGED,
@@ -70,17 +63,10 @@ export function checkLogged(tokenParam) {
 }
 
 export function confirmUser(token) {
-  const url = `${API_BASE_URL}/teams/confirm/${token}`;
   return (dispatch, state) => {
-    fetch(url, {
-      headers: {
-        Authorization: `Bearer ${state().user.token}`
-      }
-    })
-      .then(response => {
-        if (response.ok) return response;
-        throw Error(response.statusText);
-      })
+    teamService.setToken(state().user.token);
+    return teamService
+      .confirmTeamMember(token)
       .then(async data => {
         toastr.success("You have become a confirmed user");
         dispatch(getTeam(state().user.data.id));
@@ -93,13 +79,8 @@ export function confirmUser(token) {
 }
 
 export function logout() {
-  const url = `${API_BASE_URL}/auth/logout`;
   return (dispatch, state) => {
-    fetch(url, {
-      headers: {
-        Authorization: `Bearer ${state().user.token}`
-      }
-    });
+    userService.logout(state().user.token);
     dispatch({
       type: LOGOUT
     });
@@ -107,17 +88,9 @@ export function logout() {
 }
 
 export function getUser() {
-  const url = `${API_BASE_URL}/user`;
   return (dispatch, state) => {
-    fetch(url, {
-      headers: {
-        Authorization: `Bearer ${state().user.token}`
-      }
-    })
-      .then(response => {
-        if (response.ok) return response.json();
-        throw Error(response.statusText);
-      })
+    return userService
+      .getUser()
       .then(({ data }) => {
         if (data) {
           dispatch({

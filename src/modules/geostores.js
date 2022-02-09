@@ -1,6 +1,7 @@
 import normalize from "json-api-normalizer";
-import { API_BASE_URL } from "../constants/global";
 import { toastr } from "react-redux-toastr";
+import { geoStoreService } from "services/geostores";
+import { utilsService } from "services/utils";
 
 // Actions
 const SET_GEOSTORE = "geostores/SET_GEOSTORE";
@@ -43,21 +44,10 @@ export default function reducer(state = initialState, action) {
 
 // Action Creators
 export function getGeostore(id) {
-  const url = `${API_BASE_URL}/geostore/${id}`;
   return (dispatch, state) => {
-    dispatch({
-      type: SET_LOADING_GEOSTORE,
-      payload: true
-    });
-    fetch(url, {
-      headers: {
-        Authorization: `Bearer ${state().user.token}`
-      }
-    })
-      .then(response => {
-        if (response.ok) return response.json();
-        throw Error(response.statusText);
-      })
+    geoStoreService.setToken(state().user.token);
+    geoStoreService
+      .getGeostore(id)
       .then(data => {
         const normalized = normalize(data);
         dispatch({
@@ -81,27 +71,15 @@ export function getGeostore(id) {
 
 // POST geojson object
 export function saveGeostore(geojson) {
-  const url = `${API_BASE_URL}/geostore`;
-  const body = {
-    geojson: geojson
-  };
   return (dispatch, state) => {
     dispatch({
       type: SET_SAVING_GEOSTORE,
       payload: true
     });
-    return fetch(url, {
-      headers: {
-        Authorization: `Bearer ${state().user.token}`,
-        "Content-Type": "application/json"
-      },
-      method: "POST",
-      body: JSON.stringify(body)
-    })
-      .then(response => {
-        if (response.ok) return response.json();
-        throw Error(response.statusText);
-      })
+
+    geoStoreService.setToken(state().user.token);
+    return geoStoreService
+      .saveGeoStore(geojson)
       .then(data => {
         const normalized = normalize(data);
         dispatch({
@@ -124,21 +102,9 @@ export function saveGeostore(geojson) {
 }
 
 export function getGeoFromShape(shapefile) {
-  return (dispatch, state) => {
-    const url = `${API_BASE_URL}/ogr/convert`;
-    const body = new FormData();
-    body.append("file", shapefile);
-    return fetch(url, {
-      headers: {
-        Authorization: `Bearer ${state().user.token}`
-      },
-      method: "POST",
-      body
-    })
-      .then(response => {
-        if (response.ok) return response.json();
-        throw Error(response.statusText);
-      })
+  return (dispatch, state) =>
+    utilsService
+      .getGeoJSONFromShapeFile(state().user.token, shapefile)
       .then(data => {
         const geojson = data && data.data && data.data.attributes;
         return geojson;
@@ -146,5 +112,4 @@ export function getGeoFromShape(shapefile) {
       .catch(() => {
         toastr.error("Unable to load shapefile");
       });
-  };
 }
