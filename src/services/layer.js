@@ -44,4 +44,4 @@ export class LayerService extends BaseService {
   }
 }
 
-export const layerService = new LayerService(`${API_BASE_URL}/v1/contextual-layer`);
+export const layerService = new LayerService(`${API_BASE_URL}/contextual-layer`);
