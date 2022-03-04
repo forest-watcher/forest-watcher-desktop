@@ -1,5 +1,6 @@
 // env
-export const API_BASE_URL = process.env.REACT_APP_API_AUTH;
+export const API_BASE_URL = process.env.REACT_APP_API_URL;
+export const API_BASE_AUTH_URL = process.env.REACT_APP_API_AUTH_URL;
 export const CARTO_URL = process.env.REACT_APP_CARTO;
 export const CARTO_TABLE = process.env.REACT_APP_CARTO_TABLE;
 export const API_CALLBACK_URL = process.env.REACT_APP_API_AUTH_CALLBACK_URL;
