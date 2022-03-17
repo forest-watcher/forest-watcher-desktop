@@ -79,7 +79,7 @@ class Landing extends React.Component {
         <div className="row landing-content">
           <div className="column align-middle large-12 info-column gwf-grid-adjusted">
             <div className="main">
-              <h1><FormattedMessage id="app.name" /></h1>
+              <h1><FormattedMessage id="app.closedTitle" /></h1>
               <h2><FormattedMessage id="app.closed" /></h2>
             </div>
           </div>

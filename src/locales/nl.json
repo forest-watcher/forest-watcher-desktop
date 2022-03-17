@@ -16,6 +16,8 @@
     "app.setupEmail": "Setup your email",
     "app.iOSAppStore": "Download on the App Store",
     "app.googlePlay": "Get it on Google play",
+    "app.closed": "Adding and editing content in Forest Watcher is currently disabled while we perform maintenance to the application.",
+    "app.closedTitle": "Forest Watcher is currently disabled",
     "common.create": "Create",
     "common.edit": "Bewerken",
     "common.add": "Add",
