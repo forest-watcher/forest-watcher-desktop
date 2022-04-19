@@ -1,5 +1,5 @@
 import { CARTO_COUNTRIES } from "../constants/global";
-import { API_BASE_URL } from "../constants/global";
+import { API_BASE_URL_V1 } from "../constants/global";
 import { BaseService } from "./baseService";
 
 export class UtilsService extends BaseService {
@@ -9,7 +9,7 @@ export class UtilsService extends BaseService {
   }
 
   getGeoJSONFromShapeFile(token, shapefile) {
-    const url = `${API_BASE_URL}/ogr/convert`;
+    const url = `${API_BASE_URL_V1}/ogr/convert`;
     this.token = token;
 
     const body = new FormData();

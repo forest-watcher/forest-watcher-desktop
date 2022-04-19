@@ -1,5 +1,5 @@
 import { parseLayer } from "helpers/layer";
-import { API_BASE_URL } from "../constants/global";
+import { API_BASE_URL_V1 } from "../constants/global";
 import { BaseService } from "./baseService";
 
 export class LayerService extends BaseService {
@@ -44,4 +44,4 @@ export class LayerService extends BaseService {
   }
 }
 
-export const layerService = new LayerService(`${API_BASE_URL}/contextual-layer`);
+export const layerService = new LayerService(`${API_BASE_URL_V1}/contextual-layer`);

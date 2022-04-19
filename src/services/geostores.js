@@ -1,4 +1,4 @@
-import { API_BASE_URL } from "../constants/global";
+import { API_BASE_URL_V1 } from "../constants/global";
 import { BaseService } from "./baseService";
 
 export class GEOStoreService extends BaseService {
@@ -25,4 +25,4 @@ export class GEOStoreService extends BaseService {
   }
 }
 
-export const geoStoreService = new GEOStoreService(`${API_BASE_URL}/geostore`);
+export const geoStoreService = new GEOStoreService(`${API_BASE_URL_V1}/geostore`);
