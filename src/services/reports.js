@@ -1,4 +1,4 @@
-import { API_BASE_URL } from "../constants/global";
+import { API_BASE_URL_V1 } from "../constants/global";
 import { BaseService } from "./baseService";
 
 export class ReportService extends BaseService {
@@ -43,4 +43,4 @@ export class ReportService extends BaseService {
   }
 }
 
-export const reportService = new ReportService(`${API_BASE_URL}/reports`);
+export const reportService = new ReportService(`${API_BASE_URL_V1}/reports`);

@@ -1,4 +1,4 @@
-import { API_BASE_URL } from "../constants/global";
+import { API_BASE_URL_V1 } from "../constants/global";
 import { BLOB_CONFIG } from "../constants/map";
 import { BaseService } from "./baseService";
 import domtoimage from "dom-to-image";
@@ -37,4 +37,4 @@ export class AreaService extends BaseService {
   }
 }
 
-export const areaService = new AreaService(`${API_BASE_URL}/area`);
+export const areaService = new AreaService(`${API_BASE_URL_V1}/area`);

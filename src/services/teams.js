@@ -1,4 +1,4 @@
-import { API_BASE_URL } from "../constants/global";
+import { API_BASE_URL_V1 } from "../constants/global";
 import { BaseService } from "./baseService";
 import { unique } from "../helpers/utils";
 
@@ -35,4 +35,4 @@ export class TeamService extends BaseService {
   }
 }
 
-export const teamService = new TeamService(`${API_BASE_URL}/teams`);
+export const teamService = new TeamService(`${API_BASE_URL_V1}/teams`);
