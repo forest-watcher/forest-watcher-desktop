@@ -44,6 +44,7 @@ class MembersManager extends React.Component {
           action: ACTION.ADD_TEAM,
           label: "Add team member success"
         });
+        this.props.sendNotifications();
       }
     }
   };
