@@ -9,8 +9,7 @@ const reportNameRegex = /-([A-Z|]+)-REPORT--\d\d\d\d-\d\d-\d\dT\d\d:\d\d:\d\d/;
  * @param {string} reportName Name of the report
  * @returns {array} Alert types of the report
  */
- const getReportAlertsByName = (reportName = "") =>  {
-
+const getReportAlertsByName = (reportName = "") => {
   if (!reportName) {
     return [];
   }
@@ -22,7 +21,7 @@ const reportNameRegex = /-([A-Z|]+)-REPORT--\d\d\d\d-\d\d-\d\dT\d\d:\d\d:\d\d/;
   }
 
   // Split the match for alert types by the seperator (|)
-  const nameIds = result[1].split('|');
+  const nameIds = result[1].split("|");
 
   // Match the alert types reported with alertTypes
   return Object.values(alertTypes).filter(alert => nameIds.includes(alert.reportNameId));

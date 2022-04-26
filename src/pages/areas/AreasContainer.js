@@ -1,6 +1,6 @@
-import { connect } from 'react-redux';
+import { connect } from "react-redux";
 
-import Areas from './Areas';
+import Areas from "./Areas";
 
 const mapStateToProps = ({ areas, user, app }) => ({
   areasList: areas.ids,

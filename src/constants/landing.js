@@ -1,4 +1,4 @@
-import { FACEBOOK_WIDGET_API, TWITTER_WIDGET_API } from './global';
+import { FACEBOOK_WIDGET_API, TWITTER_WIDGET_API } from "./global";
 
 export const GFW_ASSETS_PATH = process.env.REACT_APP_GFW_ASSETS_PATH;
 
@@ -19,8 +19,10 @@ export const SOCIAL_FOOTER_SCRIPT = `
       }(document, 'script', 'facebook-jssdk'));
     `;
 
-export default {
+const Landing = {
   SOCIAL_FOOTER_SCRIPT,
   GFW_ASSETS_PATH,
   DOWNLOAD_APK_LINK
 };
+
+export default Landing;

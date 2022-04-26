@@ -1,12 +1,12 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import { injectIntl, FormattedMessage } from 'react-intl';
-import Select from 'react-select';
-import L from 'leaflet';
-import DropdownIndicator from '../../components/ui/SelectDropdownIndicator'
+import React from "react";
+import PropTypes from "prop-types";
+import { injectIntl, FormattedMessage } from "react-intl";
+import Select from "react-select";
+import L from "leaflet";
+import DropdownIndicator from "../../components/ui/SelectDropdownIndicator";
 
 class LayersSelector extends React.Component {
-  constructor (props) {
+  constructor(props) {
     super(props);
     this.state = {
       layerOption: null,
@@ -22,17 +22,20 @@ class LayersSelector extends React.Component {
 
   getLayerName(name) {
     if (name.match(/^layers\./) !== null) {
-      return (<FormattedMessage id={name}/>)
+      return <FormattedMessage id={name} />;
     }
     return name;
   }
 
-  onChange = (selected) => {
+  onChange = selected => {
     if (this.state.mapLayer) {
       this.props.map.removeLayer(this.state.mapLayer);
     }
     if (selected) {
-      const { map, layers: { [selected.value]: layer }} = this.props;
+      const {
+        map,
+        layers: { [selected.value]: layer }
+      } = this.props;
       const mapLayer = L.tileLayer(layer.attributes.url).addTo(map);
       this.setState({ layerOption: selected, mapLayer });
     } else {
@@ -52,7 +55,7 @@ class LayersSelector extends React.Component {
           options={options}
           value={this.state.layerOption}
           onChange={this.onChange}
-          placeholder={intl.formatMessage({ id: 'areas.layersPlaceholder' })}
+          placeholder={intl.formatMessage({ id: "areas.layersPlaceholder" })}
           isSearchable={false}
           isClearable={true}
           components={{ DropdownIndicator }}

@@ -1,14 +1,13 @@
-import { connect } from 'react-redux';
-import { setEditing } from '../../modules/areas';
+import { connect } from "react-redux";
+import { setEditing } from "../../modules/areas";
 
-import DrawControl from './DrawControl';
+import DrawControl from "./DrawControl";
 
-const mapStateToProps = () => ({
-});
+const mapStateToProps = () => ({});
 
 function mapDispatchToProps(dispatch) {
   return {
-    setEditing: (bool) => {
+    setEditing: bool => {
       dispatch(setEditing(bool));
     }
   };

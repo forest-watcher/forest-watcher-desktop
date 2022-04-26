@@ -1,6 +1,6 @@
-import { connect } from 'react-redux';
+import { connect } from "react-redux";
 
-import Landing from './Landing';
+import Landing from "./Landing";
 
 const mapStateToProps = ({ user }) => ({
   loggedIn: user.loggedIn

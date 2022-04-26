@@ -1,7 +1,7 @@
-import { connect } from 'react-redux';
-import { getReportAnswers } from '../../modules/reports';
+import { connect } from "react-redux";
+import { getReportAnswers } from "../../modules/reports";
 
-import AnswersDetail from './AnswersDetail';
+import AnswersDetail from "./AnswersDetail";
 
 const mapStateToProps = ({ reports }, ownProps) => {
   const { params } = ownProps.match || {};
@@ -17,7 +17,7 @@ const mapStateToProps = ({ reports }, ownProps) => {
 
 function mapDispatchToProps(dispatch) {
   return {
-    getReportAnswers: (reportId) => {
+    getReportAnswers: reportId => {
       dispatch(getReportAnswers(reportId));
     }
   };
