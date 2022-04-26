@@ -1,18 +1,16 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import { injectIntl } from 'react-intl';
+import React, { Component } from "react";
+import PropTypes from "prop-types";
+import { injectIntl } from "react-intl";
 
-import withModal from '../ui/withModal';
-import Walkthrough from '../ui/Walkthrough';
-import Icon from '../ui/Icon';
+import withModal from "../ui/withModal";
+import Walkthrough from "../ui/Walkthrough";
+import Icon from "../ui/Icon";
 
-import { customLayers as WALKTHROUGH_TEXTS } from '../../constants/walkthrough-texts';
+import { customLayers as WALKTHROUGH_TEXTS } from "../../constants/walkthrough-texts";
 
 const WalkthroughModal = withModal(Walkthrough);
 
-
 class CustomLayers extends Component {
-
   static propTypes = {
     form: PropTypes.object.isRequired,
     onInputChange: PropTypes.func.isRequired,
@@ -21,7 +19,7 @@ class CustomLayers extends Component {
 
   state = {
     open: false
-  }
+  };
 
   componentDidMount = () => {
     this.walkthroughTexts = WALKTHROUGH_TEXTS.map(step => {
@@ -30,23 +28,23 @@ class CustomLayers extends Component {
         childContent: step.childContent && this.props.intl.formatMessage({ id: step.childContent })
       };
     });
-  }
+  };
 
-  onInfoClick = (e) => {
+  onInfoClick = e => {
     e.preventDefault();
     this.setState({ open: true });
-  }
+  };
 
   closeModal = () => {
     this.setState({ open: false });
-  }
+  };
 
   render() {
     const { form, onInputChange, intl } = this.props;
     return (
       <div className="c-custom-layers">
         <button className="info-button" onClick={this.onInfoClick}>
-          <Icon className="-small" name="icon-info"/>
+          <Icon className="-small" name="icon-info" />
         </button>
         <div className="c-form">
           <input
@@ -54,8 +52,8 @@ class CustomLayers extends Component {
             className="-question u-margin-bottom"
             onChange={onInputChange}
             name="title"
-            value={form.title || ''}
-            placeholder={intl.formatMessage({ id: 'settings.layerTitle' })}
+            value={form.title || ""}
+            placeholder={intl.formatMessage({ id: "settings.layerTitle" })}
             required
           />
           <input
@@ -63,24 +61,24 @@ class CustomLayers extends Component {
             className="-question u-margin-bottom"
             onChange={onInputChange}
             name="tileurl"
-            value={form.tileurl || ''}
+            value={form.tileurl || ""}
             required
-            placeholder={intl.formatMessage({ id: 'settings.url' })}
+            placeholder={intl.formatMessage({ id: "settings.url" })}
           />
-          <h4>{intl.formatMessage({ id: 'settings.description' })}</h4>
+          <h4>{intl.formatMessage({ id: "settings.description" })}</h4>
           <textarea
             type="text"
             onChange={onInputChange}
             name="style"
-            value={form.style || ''}
-            placeholder={intl.formatMessage({ id: 'settings.description' })}
+            value={form.style || ""}
+            placeholder={intl.formatMessage({ id: "settings.description" })}
           />
         </div>
         <WalkthroughModal
           open={this.state.open}
           close={this.closeModal}
-          title={intl.formatMessage({ id: 'customLayers.title'})}
-          intro={intl.formatMessage({ id: 'customLayers.intro'})}
+          title={intl.formatMessage({ id: "customLayers.title" })}
+          intro={intl.formatMessage({ id: "customLayers.intro" })}
           steps={this.walkthroughTexts}
           onAccept={this.closeModal}
         />

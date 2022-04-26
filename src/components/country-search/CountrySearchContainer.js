@@ -1,10 +1,10 @@
-import { connect } from 'react-redux';
-import CountrySearch from './CountrySearch';
-import { getCountries } from '../../modules/areas';
+import { connect } from "react-redux";
+import CountrySearch from "./CountrySearch";
+import { getCountries } from "../../modules/areas";
 
-const mapCountriesToOptions = (countries) => {
+const mapCountriesToOptions = countries => {
   const countriesOptions = [];
-  countries.forEach((country) => {
+  countries.forEach(country => {
     if (JSON.parse(country.bbox)) {
       countriesOptions.push({
         option: country.iso,
@@ -13,12 +13,11 @@ const mapCountriesToOptions = (countries) => {
     }
   });
   return countriesOptions;
-}
+};
 
-
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
   const countriesOptions = mapCountriesToOptions(state.areas.countries);
-  return { 
+  return {
     countries: state.areas.countries,
     countriesOptions: countriesOptions
   };

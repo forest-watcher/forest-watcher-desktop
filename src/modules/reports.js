@@ -1,11 +1,11 @@
-import FileSaver from 'file-saver';
-import normalize from 'json-api-normalizer';
-import { API_BASE_URL } from '../constants/global';
-import { toastr } from 'react-redux-toastr';
+import FileSaver from "file-saver";
+import normalize from "json-api-normalizer";
+import { toastr } from "react-redux-toastr";
+import { reportService } from "services/reports";
 
 // Actions
-const GET_USER_ANSWERS = 'reports/GET_USER_ANSWERS';
-const SET_LOADING_REPORTS = 'reports/SET_LOADING_REPORTS';
+const GET_USER_ANSWERS = "reports/GET_USER_ANSWERS";
+const SET_LOADING_REPORTS = "reports/SET_LOADING_REPORTS";
 
 // Reducer
 const initialState = {
@@ -24,7 +24,7 @@ export default function reducer(state = initialState, action) {
           ids: [...Object.keys(answers)],
           data: { ...answers }
         }
-      }
+      };
       return { ...state, answers: updatedAnswers };
     }
     case SET_LOADING_REPORTS:
@@ -35,22 +35,16 @@ export default function reducer(state = initialState, action) {
 }
 
 export function getReports(reportId) {
-  const url = `${API_BASE_URL}/reports/${reportId}/answers`;
   return (dispatch, state) => {
     dispatch({
       type: SET_LOADING_REPORTS,
       payload: true
     });
-    fetch(url, {
-      headers: {
-        Authorization: `Bearer ${state().user.token}`
-      }
-    })
-      .then((response) => {
-        if (response.ok) return response.json();
-        throw Error(response.statusText);
-      })
-      .then((data) => {
+
+    reportService.setToken(state().user.token);
+    return reportService
+      .getAnswers(reportId)
+      .then(data => {
         const normalized = {
           reportId: reportId,
           data: normalize(data)
@@ -64,7 +58,7 @@ export function getReports(reportId) {
           payload: false
         });
       })
-      .catch((error) => {
+      .catch(error => {
         dispatch({
           type: SET_LOADING_REPORTS,
           payload: false
@@ -74,31 +68,24 @@ export function getReports(reportId) {
 }
 
 export function downloadAnswers(reportId) {
-  const url = `${API_BASE_URL}/reports/${reportId}/download-answers`;
   try {
     const isFileSaverSupported = !!new Blob();
     if (isFileSaverSupported) {
       return (dispatch, state) => {
-        fetch(url, {
-          headers: {
-            Authorization: `Bearer ${state().user.token}`
-          }
-        })
-          .then((response) => {
-            if (response.ok) return response.blob();
-            throw Error(response.statusText);
-          })
-          .then((data) => {
+        reportService.setToken(state().user.token);
+        return reportService
+          .downloadAnswers(reportId)
+          .then(data => {
             FileSaver.saveAs(data, `${reportId}-answers.csv`);
           })
-          .catch((error) => {
-            toastr.error('Unable to download reports', error);
+          .catch(error => {
+            toastr.error("Unable to download reports", error);
           });
       };
     }
     return null;
   } catch (e) {
-    console.warn('File download not supported');
+    console.warn("File download not supported");
     return null;
   }
 }

@@ -17,4 +17,4 @@ const alertTypes = {
   }
 };
 
-export {alertTypes};
+export { alertTypes };

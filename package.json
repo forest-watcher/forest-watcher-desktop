@@ -1,6 +1,6 @@
 {
   "name": "forest-watcher-web",
-  "version": "1.1.5",
+  "version": "1.1.6",
   "private": true,
   "dependencies": {
     "@mapbox/geojson-area": "^0.2.2",
@@ -44,14 +44,19 @@
     "validator": "^10.11.0"
   },
   "devDependencies": {
+    "@3sidedcube/prettier-config": "^1.0.0",
+    "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-babel": "^5.3.0",
     "eslint-plugin-import": "^2.16.0",
-    "eslint-plugin-react": "^7.12.4",
+    "eslint-plugin-prettier": "^4.0.0",
+    "eslint-plugin-react": "^7.28.0",
+    "eslint-plugin-react-hooks": "^4.3.0",
     "gh-pages": "^2.0.1",
     "husky": "^1.3.1",
     "lint-staged": "11.0.0",
     "node-sass": "6.0.1",
     "npm-run-all": "^4.1.5",
+    "prettier": "^2.5.1",
     "react-scripts": "4.0.3"
   },
   "scripts": {
@@ -59,15 +64,26 @@
     "build": "react-scripts build",
     "deploy": "npm run build&&gh-pages -d build",
     "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject",
     "lint-staged": "lint-staged",
+    "lint": "eslint --fix --ext .",
     "precommit": "npm run lint-staged",
     "transifex:push": "node transifex/transifex-push.js",
     "transifex:pull": "node transifex/transifex-pull.js"
   },
+  "prettier": "@3sidedcube/prettier-config",
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "plugin:jsx-a11y/recommended",
+      "plugin:prettier/recommended"
+    ],
+    "plugins": [
+      "jsx-a11y"
+    ]
+  },
   "homepage": ".",
   "lint-staged": {
-    "src/**/*.js": "eslint"
+    "src/**/*.js": "eslint --fix"
   },
   "browserslist": [
     ">0.2%",

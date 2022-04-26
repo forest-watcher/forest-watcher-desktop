@@ -1,20 +1,16 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import { FormattedMessage } from 'react-intl';
+import React from "react";
+import PropTypes from "prop-types";
+import { FormattedMessage } from "react-intl";
 
 function Tab({ options, selectedIndex, handleTabIndexChange, pill, style }) {
   let tabClass = pill ? "c-pill-tab" : "c-tab -right";
   if (style !== undefined) tabClass = `${tabClass} ${style}`;
   return (
-    <div className={ tabClass }>
+    <div className={tabClass}>
       <div className="nav-tab">
         {options.map((option, i) => (
-          <button
-            key={i}
-            className={selectedIndex === i ? "-active" : ""}
-            onClick={() => handleTabIndexChange(i)}
-          >
-            <FormattedMessage id={option}/>
+          <button key={i} className={selectedIndex === i ? "-active" : ""} onClick={() => handleTabIndexChange(i)}>
+            <FormattedMessage id={option} />
           </button>
         ))}
       </div>

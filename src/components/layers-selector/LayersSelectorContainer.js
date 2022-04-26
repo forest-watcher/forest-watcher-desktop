@@ -1,8 +1,8 @@
-import { connect } from 'react-redux';
-import { getLayers } from '../../modules/layers';
-import LayersSelector from './LayersSelector';
+import { connect } from "react-redux";
+import { getLayers } from "../../modules/layers";
+import LayersSelector from "./LayersSelector";
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
   const layersOptions = Object.values(state.layers.selectedLayers).map(layer => ({
     option: layer.id,
     label: layer.attributes.name

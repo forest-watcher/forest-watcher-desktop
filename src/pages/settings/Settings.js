@@ -1,19 +1,19 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React from "react";
+import PropTypes from "prop-types";
 
-import Hero from '../../components/layouts/Hero';
-import Article from '../../components/layouts/Article';
-import TeamsShow from '../../components/teams-show/TeamsShowContainer';
-import TeamsForm from '../../components/teams-manager/TeamsFormContainer';
-import LayersManager from '../../components/layers-manager/LayersManager';
-import LayersShow from '../../components/layers-show/LayersShow';
-import Loader from '../../components/ui/Loader';
-import Tab from '../../components/ui/Tab';
-import Confirm from '../../components/ui/Confirm';
-import withModal from '../../components/ui/withModal';
-import { injectIntl } from 'react-intl';
-import { CATEGORY, ACTION } from '../../constants/analytics';
-import ReactGA from 'react-ga';
+import Hero from "../../components/layouts/Hero";
+import Article from "../../components/layouts/Article";
+import TeamsShow from "../../components/teams-show/TeamsShowContainer";
+import TeamsForm from "../../components/teams-manager/TeamsFormContainer";
+import LayersManager from "../../components/layers-manager/LayersManager";
+import LayersShow from "../../components/layers-show/LayersShow";
+import Loader from "../../components/ui/Loader";
+import Tab from "../../components/ui/Tab";
+import Confirm from "../../components/ui/Confirm";
+import withModal from "../../components/ui/withModal";
+import { injectIntl } from "react-intl";
+import { CATEGORY, ACTION } from "../../constants/analytics";
+import ReactGA from "react-ga";
 
 const ConfirmModal = withModal(Confirm);
 
@@ -25,11 +25,11 @@ class Settings extends React.Component {
       tabIndex: 0,
       tempTabIndex: 0,
       open: false
-    }
+    };
   }
 
   componentWillMount() {
-    if (this.firstLoad){
+    if (this.firstLoad) {
       this.props.getTeam(this.props.userId);
       this.props.getGFWLayers();
       this.props.getLayers();
@@ -37,55 +37,42 @@ class Settings extends React.Component {
     }
   }
 
-  handleTabIndexChange = (tabIndex) => {
+  handleTabIndexChange = tabIndex => {
     if (this.props.editing) {
       this.setState({ tempTabIndex: tabIndex });
       this.setState({ open: true });
     } else {
       this.setState({ tabIndex });
     }
-  }
+  };
 
   closeModal = () => {
     this.setState({ open: false });
-  }
+  };
 
   continueNav = () => {
     this.closeModal();
     this.props.setEditing(false);
     this.setState({ tabIndex: this.state.tempTabIndex });
-  }
+  };
 
   editSettings = () => {
-     this.props.setEditing(true)
-     ReactGA.event({
-       category: CATEGORY.SETTINGS,
-       action: ACTION.EDIT_SETTINGS
-     });
-  }
+    this.props.setEditing(true);
+    ReactGA.event({
+      category: CATEGORY.SETTINGS,
+      action: ACTION.EDIT_SETTINGS
+    });
+  };
 
   render() {
-    const {
-      team,
-      editing,
-      loading,
-      saving,
-      isManager,
-      publicLayers,
-      teamLayers,
-      userLayers,
-      setEditing
-    } = this.props;
+    const { team, editing, loading, saving, isManager, publicLayers, teamLayers, userLayers, setEditing } = this.props;
 
     const renderHero = () => {
       const canEdit = !editing && (isManager || this.state.tabIndex === 1);
-      const action = (canEdit) ? {name: "common.edit", callback: this.editSettings} : null;
-      const tabStyle = !(canEdit) ? "-no-action" : "";
+      const action = canEdit ? { name: "common.edit", callback: this.editSettings } : null;
+      const tabStyle = !canEdit ? "-no-action" : "";
       return (
-        <Hero
-          title={"settings.name"}
-          action={action}
-        >
+        <Hero title={"settings.name"} action={action}>
           <Tab
             pill
             style={tabStyle}
@@ -94,33 +81,35 @@ class Settings extends React.Component {
             handleTabIndexChange={this.handleTabIndexChange}
           />
         </Hero>
-      )
-    }
+      );
+    };
 
     return (
       <div>
         {renderHero()}
         <div className="l-content">
-          {!loading &&
+          {!loading && (
             <div>
-              {(team && !editing) ?
+              {team && !editing ? (
                 <div className="settings-show">
                   <Article>
-                    { this.state.tabIndex === 0 ?
-                      <TeamsShow /> :
+                    {this.state.tabIndex === 0 ? (
+                      <TeamsShow />
+                    ) : (
                       <LayersShow
                         isManager={isManager}
                         publicLayers={publicLayers}
                         teamLayers={teamLayers}
                         userLayers={userLayers}
                       />
-                    }
+                    )}
                   </Article>
                 </div>
-                :
+              ) : (
                 <div className="settings-edit">
-                  { this.state.tabIndex === 0 ?
-                    <TeamsForm setEditing={setEditing} editing={editing} team={team}/> :
+                  {this.state.tabIndex === 0 ? (
+                    <TeamsForm setEditing={setEditing} editing={editing} team={team} />
+                  ) : (
                     <LayersManager
                       editing={editing}
                       setEditing={setEditing}
@@ -129,21 +118,22 @@ class Settings extends React.Component {
                       teamLayers={teamLayers}
                       userLayers={userLayers}
                     />
-                  }
+                  )}
                 </div>
-              }
+              )}
               <Loader isLoading={saving} />
               <ConfirmModal
                 open={this.state.open}
-                title={this.props.intl.formatMessage({ id: 'confirm.areYouSure'})}
-                subtext={this.props.intl.formatMessage({ id: 'confirm.continueNoSave'})}
-                cancelText={this.props.intl.formatMessage({ id: 'common.cancel'})}
-                confirmText={this.props.intl.formatMessage({ id: 'common.ok'})}
+                title={this.props.intl.formatMessage({ id: "confirm.areYouSure" })}
+                subtext={this.props.intl.formatMessage({ id: "confirm.continueNoSave" })}
+                cancelText={this.props.intl.formatMessage({ id: "common.cancel" })}
+                confirmText={this.props.intl.formatMessage({ id: "common.ok" })}
                 onCancel={this.closeModal}
                 close={this.closeModal}
                 onAccept={this.continueNav}
               />
-            </div>}
+            </div>
+          )}
         </div>
       </div>
     );

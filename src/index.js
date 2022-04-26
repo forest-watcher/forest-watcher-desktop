@@ -1,22 +1,22 @@
-import React from 'react';
-import { render } from 'react-dom';
-import { createStore, combineReducers, applyMiddleware, compose } from 'redux';
-import { Provider } from 'react-redux';
-import { createBrowserHistory } from 'history';
-import thunk from 'redux-thunk';
-import { persistStore, autoRehydrate } from 'redux-persist';
-import * as Sentry from '@sentry/browser';
-import { SENTRY_DSN, ENVIRONMENT } from './constants/global';
+import React from "react";
+import { render } from "react-dom";
+import { createStore, combineReducers, applyMiddleware, compose } from "redux";
+import { Provider } from "react-redux";
+import { createBrowserHistory } from "history";
+import thunk from "redux-thunk";
+import { persistStore, autoRehydrate } from "redux-persist";
+import * as Sentry from "@sentry/browser";
+import { BrowserRouter as Router } from "react-router-dom";
+import { SENTRY_DSN, ENVIRONMENT } from "./constants/global";
+import App from "components/app/AppContainer";
 
-import * as reducers from './modules';
-import Routes from './routes';
-
-import './index.scss';
+import * as reducers from "./modules";
+import "./index.scss";
 
 /** Initialise Sentry */
-if (ENVIRONMENT !== 'development') {
+if (ENVIRONMENT !== "development") {
   Sentry.init({
-   dsn: SENTRY_DSN
+    dsn: SENTRY_DSN
   });
 }
 
@@ -39,8 +39,9 @@ const store = createStore(
     autoRehydrate(),
     /* Redux dev tool, install chrome extension in
      * https://chrome.google.com/webstore/detail/redux-devtools/lmhkpmbekcpmknklioeibfkpmmfibljd?hl=en */
-    typeof window === 'object' &&
-      typeof window.__REDUX_DEVTOOLS_EXTENSION__ !== 'undefined' ? window.__REDUX_DEVTOOLS_EXTENSION__() : f => f
+    typeof window === "object" && typeof window.__REDUX_DEVTOOLS_EXTENSION__ !== "undefined"
+      ? window.__REDUX_DEVTOOLS_EXTENSION__()
+      : f => f
   )
 );
 
@@ -50,21 +51,22 @@ function dispatch(action) {
 }
 
 const persistConfig = {
-  whitelist: ['user', 'app']
+  whitelist: ["user", "app"]
 };
 
 function startApp() {
   render(
     <Provider store={store}>
-      <Routes />
+      <Router>
+        <App />
+      </Router>
     </Provider>,
-    document.getElementById('app')
+    document.getElementById("app")
   );
 }
 
 persistStore(store, persistConfig, () => {
   startApp();
 });
-
 
 export { store, history, dispatch };
