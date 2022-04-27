@@ -1,105 +1,46 @@
 pipelines:
+  definitions:
+    - step: &build
+        name: Build
+        image: node:16.14.0
+        deployment: test
+        caches:
+          - node
+        artifacts:
+          - build/**
+        script:
+          - yarn install
+          - yarn test
+          - yarn build
+    - step: &deploy_test
+        name: Deploy to develop
+        trigger: manual
+        image: atlassian/pipelines-awscli
+        artifacts:
+          - build/**
+        script:
+          - cd build
+          - aws s3 sync . s3://forest-watcher-web-client-dev
+          - aws cloudfront create-invalidation --distribution-id E3I4LK8QQA91ZN --paths "/*"
+    - step: &deploy_staging
+        name: Deploy to staging
+        trigger: manual
+        image: atlassian/pipelines-awscli
+        artifacts:
+          - build/**
+        script:
+          - cd build
+          - aws s3 sync . s3://forest-watcher-web-client-staging
+          - aws cloudfront create-invalidation --distribution-id E3UEJWTVPP1UFQ --paths "/*"
   pull-requests:
-    '**': # This runs as default for any branch not elsewhere defined
-      - step:
-          name: Install JS dependencies & build
-          image: node:12.13.0
-          caches:
-            - node
-          artifacts:
-            - build/**
-          script:
-            - sh bitbucket-pipelines.sh test
-            - yarn install
-            - yarn test
-            - yarn build
+    '**':
+      - step: *build
   branches:
     develop:
+      - step: *build
+      - step: *deploy_test
+    master:
       - step:
-          name: Install JS dependencies & build (develop)
-          image: node:12.13.0
-          caches:
-            - node
-          artifacts:
-            - build/**
-          script:
-            - sh bitbucket-pipelines.sh test
-            - yarn install
-            - yarn test
-            - yarn build
-      - step:
-          name: Deploy GFW develop branch to dev environment
-          deployment: test
-          image: atlassian/pipelines-awscli
-          artifacts:
-            - build/**
-          script:
-            - cd build
-            - aws s3 sync . s3://forest-watcher-web-client-dev
-      - step:
-          name: Install JS dependencies & build (staging)
-          image: node:12.13.0
+          <<: *build
           deployment: staging
-          trigger: manual
-          caches:
-            - node
-          artifacts:
-            - build/**
-          script:
-            - sh bitbucket-pipelines.sh staging
-            - yarn install
-            - yarn test
-            - yarn build
-      - step:
-          name: Deploy GFW develop branch to staging environment
-          image: atlassian/pipelines-awscli
-          artifacts:
-            - build/**
-          script:
-            - cd build
-            - aws s3 sync . s3://forest-watcher-web-client-staging
-  custom:
-    "deploy-develop":
-        - step:
-            name: Install JS dependencies & build
-            image: node:12.13.0
-            caches:
-              - node
-            artifacts:
-              - build/**
-            script:
-              - sh bitbucket-pipelines.sh test
-              - yarn install
-              - yarn test
-              - yarn build
-        - step:
-            name: Deploy GFW develop branch to dev environment
-            deployment: test
-            image: atlassian/pipelines-awscli
-            artifacts:
-              - build/**
-            script:
-              - cd build
-              - aws s3 sync . s3://forest-watcher-web-client-dev
-    "deploy-staging":
-        - step:
-            name: Install JS dependencies & build
-            image: node:12.13.0
-            caches:
-              - node
-            artifacts:
-              - build/**
-            script:
-              - sh bitbucket-pipelines.sh staging
-              - yarn install
-              - yarn test
-              - yarn build
-        - step:
-            name: Deploy GFW develop branch to staging environment
-            deployment: staging
-            image: atlassian/pipelines-awscli
-            artifacts:
-              - build/**
-            script:
-              - cd build
-              - aws s3 sync . s3://forest-watcher-web-client-staging
+      - step: *deploy_staging
