@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { FormattedMessage } from "react-intl";
 
 class Answers extends Component {
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     this.props.getReportAnswers(this.props.reportId);
   }
 

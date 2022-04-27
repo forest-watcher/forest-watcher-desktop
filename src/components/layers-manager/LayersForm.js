@@ -28,7 +28,7 @@ class LayersForm extends Component {
     };
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     if (this.props.GFWLayers !== nextProps.GFWLayers) {
       this.setState({
         GFWLayers: nextProps.GFWLayers

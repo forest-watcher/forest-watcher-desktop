@@ -44,7 +44,7 @@ class AreasManage extends Component {
     };
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     const { history } = this.props;
     if (!nextProps.editing && !this.props.editing && !nextProps.saving && !this.props.saving) {
       this.form = {

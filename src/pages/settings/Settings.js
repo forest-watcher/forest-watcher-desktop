@@ -28,7 +28,7 @@ class Settings extends Component {
     };
   }
 
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     if (this.firstLoad) {
       this.props.getTeam(this.props.userId);
       this.props.getGFWLayers();

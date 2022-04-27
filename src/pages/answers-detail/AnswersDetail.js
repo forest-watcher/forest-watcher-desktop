@@ -2,7 +2,7 @@ import { Component } from "react";
 import PropTypes from "prop-types";
 
 class AnswersDetail extends Component {
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     if (!this.props.answer) {
       this.props.getReportAnswers(this.props.reportId);
     }

@@ -22,7 +22,7 @@ import Routes from "../../routes";
 addLocaleData([...en, ...es, ...fr, ...id, ...pt]);
 
 class App extends Component {
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     this.props.checkLogged(this.props.location.search);
     ReactGA.initialize(GA_UA); //Unique Google Analytics tracking number
   }
@@ -32,7 +32,7 @@ class App extends Component {
     this.fireTracking(this.props.location);
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     const { location } = nextProps;
     const queryParams = querystring.parse(nextProps.location.search);
     const confirmToken = queryParams.confirmToken;

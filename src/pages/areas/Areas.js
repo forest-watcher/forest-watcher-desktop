@@ -11,7 +11,7 @@ import { trimQueryParams } from "../../helpers/login.js";
 import ReactGA from "react-ga";
 
 class Areas extends React.Component {
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     trimQueryParams(this.props);
   }
 
