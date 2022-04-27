@@ -1,4 +1,4 @@
-import { render } from "react-dom";
+import { createRoot } from "react-dom/client";
 import { createStore, combineReducers, applyMiddleware, compose } from "redux";
 import { Provider } from "react-redux";
 import { createBrowserHistory } from "history";
@@ -54,13 +54,14 @@ const persistConfig = {
 };
 
 function startApp() {
-  render(
+  const container = document.getElementById("app");
+  const root = createRoot(container); // createRoot(container!) if you use TypeScript
+  root.render(
     <Provider store={store}>
       <Router>
         <App />
       </Router>
-    </Provider>,
-    document.getElementById("app")
+    </Provider>
   );
 }
 
