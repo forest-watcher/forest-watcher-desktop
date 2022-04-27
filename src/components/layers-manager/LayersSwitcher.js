@@ -1,11 +1,11 @@
-import React from "react";
+import { Component } from "react";
 import PropTypes from "prop-types";
 
 import Icon from "../ui/Icon";
 import { FormattedMessage } from "react-intl";
 import Switch from "react-toggle-switch";
 
-class LayersSwitcher extends React.Component {
+class LayersSwitcher extends Component {
   toggleLayer = layer => {
     this.props.toggleLayer(layer, !layer.attributes.enabled);
   };

@@ -1,7 +1,7 @@
-import React from "react";
+import { Component } from "react";
 import PropTypes from "prop-types";
 
-class AnswersDetail extends React.Component {
+class AnswersDetail extends Component {
   componentWillMount() {
     if (!this.props.answer) {
       this.props.getReportAnswers(this.props.reportId);

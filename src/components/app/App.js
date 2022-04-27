@@ -1,4 +1,4 @@
-import React from "react";
+import { Component } from "react";
 import PropTypes from "prop-types";
 import querystring from "query-string";
 import ReduxToastr from "react-redux-toastr";
@@ -21,7 +21,7 @@ import Routes from "../../routes";
 
 addLocaleData([...en, ...es, ...fr, ...id, ...pt]);
 
-class App extends React.Component {
+class App extends Component {
   componentWillMount() {
     this.props.checkLogged(this.props.location.search);
     ReactGA.initialize(GA_UA); //Unique Google Analytics tracking number

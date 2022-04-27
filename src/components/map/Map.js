@@ -1,10 +1,10 @@
-import React from "react";
+import { Component } from "react";
 import PropTypes from "prop-types";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { MAP_CONFIG } from "../../constants/map";
 
-class Map extends React.Component {
+class Map extends Component {
   componentDidMount() {
     this.initMap();
   }

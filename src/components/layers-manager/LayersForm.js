@@ -1,4 +1,4 @@
-import React from "react";
+import { Component } from "react";
 import PropTypes from "prop-types";
 
 import { FormattedMessage } from "react-intl";
@@ -13,7 +13,7 @@ import { CATEGORY, ACTION } from "../../constants/analytics";
 
 import ReactGA from "react-ga";
 
-class LayersForm extends React.Component {
+class LayersForm extends Component {
   constructor(props) {
     super(props);
     this.state = {

@@ -1,9 +1,9 @@
-import React from "react";
+import { Component } from "react";
 import PropTypes from "prop-types";
 import classnames from "classnames";
 import Icon from "./Icon";
 
-export default class ZoomControl extends React.Component {
+export default class ZoomControl extends Component {
   /* Component lifecycle */
   shouldComponentUpdate(newProps) {
     return this.props.zoom !== newProps.zoom;

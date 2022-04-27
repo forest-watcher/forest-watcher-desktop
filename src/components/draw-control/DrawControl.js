@@ -1,4 +1,4 @@
-import React from "react";
+import { Component } from "react";
 import PropTypes from "prop-types";
 import L from "leaflet";
 import { Draw, Control } from "leaflet-draw"; // eslint-disable-line no-unused-vars
@@ -7,7 +7,7 @@ import { checkArea } from "../../helpers/areas";
 import "leaflet-draw/dist/leaflet.draw.css";
 import { injectIntl } from "react-intl";
 
-class DrawControl extends React.Component {
+class DrawControl extends Component {
   /* Component lifecycle */
   componentWillReceiveProps(nextProps) {
     if (this.props.map !== nextProps.map) {

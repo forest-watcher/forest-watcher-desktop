@@ -1,11 +1,11 @@
-import React from "react";
+import { Component } from "react";
 import PropTypes from "prop-types";
 import { injectIntl, FormattedMessage } from "react-intl";
 import Select from "react-select";
 import L from "leaflet";
 import DropdownIndicator from "../../components/ui/SelectDropdownIndicator";
 
-class LayersSelector extends React.Component {
+class LayersSelector extends Component {
   constructor(props) {
     super(props);
     this.state = {

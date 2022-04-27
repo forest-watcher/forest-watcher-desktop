@@ -1,4 +1,4 @@
-import React from "react";
+import { Component } from "react";
 import PropTypes from "prop-types";
 import { FormattedMessage, injectIntl } from "react-intl";
 import { prettyNum } from "../../helpers/utils";
@@ -11,7 +11,7 @@ import { filterBy } from "../../helpers/filters";
 import Switch from "react-toggle-switch";
 import DropdownIndicator from "../ui/SelectDropdownIndicator";
 
-class QuestionCard extends React.Component {
+class QuestionCard extends Component {
   constructor(props) {
     super(props);
     this.question = { ...props.question };
