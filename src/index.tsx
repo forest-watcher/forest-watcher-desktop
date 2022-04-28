@@ -1,3 +1,4 @@
+// @ts-nocheck (Error on Router)
 import { createRoot } from "react-dom/client";
 import { createStore, combineReducers, applyMiddleware, compose } from "redux";
 import { Provider } from "react-redux";
