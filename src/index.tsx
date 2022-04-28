@@ -1,3 +1,4 @@
+// @ts-nocheck (Error on Router)
 import { createRoot } from "react-dom/client";
 import { createStore, combineReducers, applyMiddleware, compose } from "redux";
 import { Provider } from "react-redux";
@@ -31,21 +32,10 @@ const reducer = combineReducers({
 // Create a history of your choosing (we're using a browser history in this case)
 const history = createBrowserHistory();
 
-const store = createStore(
-  reducer,
-  compose(
-    applyMiddleware(thunk),
-    autoRehydrate(),
-    /* Redux dev tool, install chrome extension in
-     * https://chrome.google.com/webstore/detail/redux-devtools/lmhkpmbekcpmknklioeibfkpmmfibljd?hl=en */
-    typeof window === "object" && typeof window.__REDUX_DEVTOOLS_EXTENSION__ !== "undefined"
-      ? window.__REDUX_DEVTOOLS_EXTENSION__()
-      : f => f
-  )
-);
+const store = createStore(reducer, compose(applyMiddleware(thunk), autoRehydrate()));
 
 // Export dispatch funcion for dispatching actions outside connect
-function dispatch(action) {
+function dispatch(action: any) {
   store.dispatch(action);
 }
 
@@ -55,7 +45,7 @@ const persistConfig = {
 
 function startApp() {
   const container = document.getElementById("app");
-  const root = createRoot(container); // createRoot(container!) if you use TypeScript
+  const root = createRoot(container!);
   root.render(
     <Provider store={store}>
       <Router>
