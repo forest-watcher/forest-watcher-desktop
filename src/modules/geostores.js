@@ -45,7 +45,7 @@ export default function reducer(state = initialState, action) {
 // Action Creators
 export function getGeostore(id) {
   return (dispatch, state) => {
-    geoStoreService.setToken(state().user.token);
+    geoStoreService.token = state().user.token;
     geoStoreService
       .getGeostore(id)
       .then(data => {
@@ -77,7 +77,7 @@ export function saveGeostore(geojson) {
       payload: true
     });
 
-    geoStoreService.setToken(state().user.token);
+    geoStoreService.token = state().user.token;
     return geoStoreService
       .saveGeoStore(geojson)
       .then(data => {

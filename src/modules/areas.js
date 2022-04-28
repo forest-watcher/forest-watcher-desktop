@@ -74,7 +74,7 @@ export function getArea(id) {
       payload: true
     });
 
-    areaService.setToken(state().user.token);
+    areaService.token = state().user.token;
 
     return areaService
       .getArea(id)
@@ -102,7 +102,7 @@ export function getArea(id) {
 
 export function deleteArea(areaId) {
   return (dispatch, state) => {
-    areaService.setToken(state().user.token);
+    areaService.token = state().user.token;
     areaService
       .deleteArea(areaId)
       .then(() => {
@@ -123,7 +123,7 @@ export function getAreas() {
       type: SET_LOADING_AREAS,
       payload: true
     });
-    areaService.setToken(state().user.token);
+    areaService.token = state().user.token;
     return areaService
       .getAreaFW()
       .then(data => {
@@ -174,7 +174,7 @@ export function saveArea(area, node, method) {
         error: false
       }
     });
-    areaService.setToken(state().user.token);
+    areaService.token = state().user.token;
     areaService
       .saveArea(area, node, method)
       .then(data => {

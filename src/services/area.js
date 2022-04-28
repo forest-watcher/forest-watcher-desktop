@@ -4,10 +4,6 @@ import { BaseService } from "./baseService";
 import domtoimage from "dom-to-image";
 
 export class AreaService extends BaseService {
-  setToken(token) {
-    this.token = token;
-  }
-
   async saveArea(area, node, method) {
     const url = method === "PATCH" ? `/${area.id}` : `/`;
     const blob = await domtoimage.toBlob(node, BLOB_CONFIG);

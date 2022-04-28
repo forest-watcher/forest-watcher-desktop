@@ -1,5 +1,5 @@
 import { toastr } from "react-redux-toastr";
-import { teamService } from "services/teams";
+import { Team, teamService } from "services/teams";
 // Actions
 const GET_TEAM = "teams/GET_TEAM";
 const SAVE_TEAM = "teams/SAVE_TEAM";
@@ -14,10 +14,11 @@ const initialState = {
   sendNotifications: false,
   editing: false,
   loading: true,
-  saving: false
+  saving: false,
+  teams: {}
 };
 
-export default function reducer(state = initialState, action) {
+export default function reducer(state = initialState, action: { type: string; payload?: any }) {
   switch (action.type) {
     case GET_TEAM: {
       const team = action.payload;
@@ -52,11 +53,11 @@ export default function reducer(state = initialState, action) {
 
 // Action Creators
 
-export function getTeam(userId) {
-  return (dispatch, state) => {
-    teamService.setToken(state().user.token);
+export function getTeamByUserId(userId: string) {
+  return (dispatch: any, state: any) => {
+    teamService.token = state().user.token;
     return teamService
-      .getTeam(userId)
+      .getTeamByUserId(userId)
       .then(response => {
         const team = response.data;
         dispatch({
@@ -79,8 +80,8 @@ export function getTeam(userId) {
   };
 }
 
-export function createTeam(team) {
-  return (dispatch, state) => {
+export function createTeam(team: Team) {
+  return (dispatch: any, state: any) => {
     dispatch({
       type: SET_SAVING,
       payload: true
@@ -97,9 +98,9 @@ export function createTeam(team) {
           type: SET_SAVING,
           payload: false
         });
-        dispatch(getTeam(state().user.data.id));
+        dispatch(getTeamByUserId(state().user.data.id));
         if (state().teams.sendNotifications) {
-          toastr.success("Request sent");
+          toastr.success("Request sent", "");
           dispatch({
             type: SEND_NOTIFICATIONS,
             payload: false
@@ -117,8 +118,8 @@ export function createTeam(team) {
   };
 }
 
-export function updateTeam(team, id) {
-  return (dispatch, state) => {
+export function updateTeam(team: Team, id: string) {
+  return (dispatch: any, state: any) => {
     dispatch({
       type: SET_SAVING,
       payload: true
@@ -135,13 +136,13 @@ export function updateTeam(team, id) {
           type: SET_SAVING,
           payload: false
         });
-        dispatch(getTeam(state().user.data.id));
+        dispatch(getTeamByUserId(state().user.data.id));
         dispatch({
           type: SET_EDITING,
           payload: false
         });
         if (state().teams.sendNotifications) {
-          toastr.success("Request sent");
+          toastr.success("Request sent", "");
           dispatch({
             type: SEND_NOTIFICATIONS,
             payload: false
@@ -159,21 +160,21 @@ export function updateTeam(team, id) {
   };
 }
 
-export function setEditing(value) {
+export function setEditing(value: boolean) {
   return {
     type: SET_EDITING,
     payload: value
   };
 }
 
-export function setLoading(value) {
+export function setLoading(value: boolean) {
   return {
     type: SET_LOADING,
     payload: value
   };
 }
 
-export function setSaving(value) {
+export function setSaving(value: boolean) {
   return {
     type: SET_SAVING,
     payload: value

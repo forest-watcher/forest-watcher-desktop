@@ -1,7 +1,7 @@
 import querystring from "query-string";
 import { setUserChecked } from "./app";
 import { syncApp } from "./app";
-import { getTeam } from "./teams";
+import { getTeamByUserId } from "./teams";
 import { toastr } from "react-redux-toastr";
 import { teamService } from "services/teams";
 import { userService } from "services/user";
@@ -64,12 +64,12 @@ export function checkLogged(tokenParam) {
 
 export function confirmUser(token) {
   return (dispatch, state) => {
-    teamService.setToken(state().user.token);
+    teamService.token = state().user.token;
     return teamService
       .confirmTeamMember(token)
       .then(async data => {
         toastr.success("You have become a confirmed user");
-        dispatch(getTeam(state().user.data.id));
+        dispatch(getTeamByUserId(state().user.data.id));
       })
       .catch(error => {
         toastr.error("Error in confirmation");

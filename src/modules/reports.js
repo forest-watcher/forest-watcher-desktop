@@ -41,7 +41,7 @@ export function getReports(reportId) {
       payload: true
     });
 
-    reportService.setToken(state().user.token);
+    reportService.token = state().user.token;
     return reportService
       .getAnswers(reportId)
       .then(data => {
@@ -72,7 +72,7 @@ export function downloadAnswers(reportId) {
     const isFileSaverSupported = !!new Blob();
     if (isFileSaverSupported) {
       return (dispatch, state) => {
-        reportService.setToken(state().user.token);
+        reportService.token = state().user.token;
         return reportService
           .downloadAnswers(reportId)
           .then(data => {

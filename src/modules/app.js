@@ -1,7 +1,7 @@
 import { getGeostore } from "./geostores";
 import { getAreas } from "./areas";
 import { getTemplates, getTemplate } from "./templates";
-import { getTeam } from "./teams";
+import { getTeamByUserId } from "./teams";
 import { getUser } from "./user";
 
 // Actions
@@ -31,7 +31,7 @@ export function syncApp() {
     // fetch all areas and their geostores
     const user = state().user.data;
     dispatch(getUser());
-    dispatch(getTeam(user.id));
+    dispatch(getTeamByUserId(user.id));
     await dispatch(getAreas());
     let areaPromises = [];
     let teamTemplateIds = [];
