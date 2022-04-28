@@ -1,4 +1,4 @@
-import React from "react";
+import * as React from "react";
 import PropTypes from "prop-types";
 import Hero from "../../components/layouts/Hero";
 import Article from "../../components/layouts/Article";

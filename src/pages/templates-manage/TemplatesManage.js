@@ -1,4 +1,4 @@
-import React from "react";
+import { Component } from "react";
 import PropTypes from "prop-types";
 
 import Hero from "../../components/layouts/Hero";
@@ -22,7 +22,7 @@ import ReactGA from "react-ga";
 
 import "react-toggle-switch/dist/css/switch.min.css";
 
-class TemplatesManage extends React.Component {
+class TemplatesManage extends Component {
   constructor(props) {
     super(props);
     this.state = {};

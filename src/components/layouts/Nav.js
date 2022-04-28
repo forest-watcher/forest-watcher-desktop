@@ -1,4 +1,4 @@
-import React from "react";
+import { Component } from "react";
 import PropTypes from "prop-types";
 import { NavLink } from "react-router-dom";
 import Icon from "../ui/Icon";
@@ -8,7 +8,7 @@ import { MY_GFW_LINK } from "../../constants/global";
 import { FormattedMessage } from "react-intl";
 import ReactGA from "react-ga";
 
-class Nav extends React.Component {
+class Nav extends Component {
   constructor(props) {
     super(props);
     this.languages = Object.keys(props.translations).map(lang => ({ value: lang, label: lang.toUpperCase() }));

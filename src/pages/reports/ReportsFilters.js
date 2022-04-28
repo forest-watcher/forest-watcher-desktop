@@ -1,4 +1,4 @@
-import React from "react";
+import { Component } from "react";
 import PropTypes from "prop-types";
 
 import Select from "react-select";
@@ -12,7 +12,7 @@ import DropdownIndicator from "../../components/ui/SelectDropdownIndicator";
 
 import qs from "query-string";
 
-class ReportsFilters extends React.Component {
+class ReportsFilters extends Component {
   redirectWith(searchParams) {
     this.props.history.push({
       pathname: `/reports/${this.props.match.params.templateId}`,

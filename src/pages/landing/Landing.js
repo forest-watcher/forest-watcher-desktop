@@ -1,4 +1,4 @@
-import React from "react";
+import { Component } from "react";
 import PropTypes from "prop-types";
 import { FormattedMessage } from "react-intl";
 import { Link } from "react-router-dom";
@@ -9,7 +9,7 @@ import Script from "react-load-script";
 import DropdownIndicator from "../../components/ui/SelectDropdownIndicator";
 import ReactGA from "react-ga";
 
-class Landing extends React.Component {
+class Landing extends Component {
   static propTypes = {
     locale: PropTypes.string,
     setLocale: PropTypes.func,

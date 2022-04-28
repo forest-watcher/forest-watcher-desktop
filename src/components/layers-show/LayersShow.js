@@ -1,10 +1,10 @@
-import React from "react";
+import { Component } from "react";
 import PropTypes from "prop-types";
 
 import { FormattedMessage } from "react-intl";
 import Icon from "../ui/Icon";
 
-class LayersShow extends React.Component {
+class LayersShow extends Component {
   getLayerName(name) {
     if (name.match(/^layers\./) !== null) {
       return <FormattedMessage id={name} />;

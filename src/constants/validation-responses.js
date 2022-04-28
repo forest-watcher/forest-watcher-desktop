@@ -1,5 +1,3 @@
-import React from "react";
-
 const required = <span className="form-error -required">Required</span>;
 
 const email = <span className="form-error -email">Email not valid</span>;

@@ -1,4 +1,4 @@
-import React from "react";
+import { Component } from "react";
 import Hero from "../../components/layouts/Hero";
 import { Input, Button, Form } from "../../components/form/Form";
 import Map from "../../components/map/Map";
@@ -22,7 +22,7 @@ import LayersSelector from "../../components/layers-selector/LayersSelectorConta
 import ReactGA from "react-ga";
 
 const ShapefileInfoModal = withModal(ShapefileInfo);
-class AreasManage extends React.Component {
+class AreasManage extends Component {
   constructor(props) {
     super(props);
     this.form = {

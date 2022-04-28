@@ -1,4 +1,4 @@
-import React from "react";
+import { Component } from "react";
 import PropTypes from "prop-types";
 
 import Hero from "../../components/layouts/Hero";
@@ -17,7 +17,7 @@ import ReactGA from "react-ga";
 
 const ConfirmModal = withModal(Confirm);
 
-class Settings extends React.Component {
+class Settings extends Component {
   constructor() {
     super();
     this.firstLoad = true;

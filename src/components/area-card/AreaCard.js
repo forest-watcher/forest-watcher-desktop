@@ -1,4 +1,4 @@
-import React from "react";
+import { Component } from "react";
 import PropTypes from "prop-types";
 import Icon from "../ui/Icon";
 import { Link } from "react-router-dom";
@@ -10,7 +10,7 @@ import ReactGA from "react-ga";
 
 const ConfirmModal = withModal(Confirm);
 
-class AreaCard extends React.Component {
+class AreaCard extends Component {
   constructor(props) {
     super();
     this.state = {
