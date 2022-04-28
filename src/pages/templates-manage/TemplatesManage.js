@@ -32,11 +32,11 @@ class TemplatesManage extends Component {
   ///////////////////////////////
   // life cycle
   ///////////////////////////////
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     if (this.props.template) this.setPropsToState(this.props);
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     const { history } = this.props;
     if (nextProps.template !== this.props.template && this.props.mode === "manage") this.setPropsToState(nextProps);
     if (this.props.saving && !nextProps.saving && !nextProps.error) {

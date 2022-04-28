@@ -19,7 +19,7 @@ class QuestionCard extends Component {
   }
 
   // life cycle
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     if (nextProps.question !== this.props.question) {
       this.question = { ...nextProps.question };
     }

@@ -93,7 +93,7 @@ class Reports extends Component {
     ];
   }
 
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     if (!this.props.match.params.templateId && this.props.templates.ids[0]) {
       this.props.history.replace(`/reports/${this.props.templates.ids[0]}`);
     }
@@ -105,7 +105,7 @@ class Reports extends Component {
     }
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     if (this.props.templates.ids.length !== nextProps.templates.ids.length && !nextProps.match.params.templateId) {
       this.props.history.push(`/reports/${nextProps.templates.ids[0]}`);
     }

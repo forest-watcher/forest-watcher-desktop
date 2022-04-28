@@ -13,7 +13,7 @@ class Map extends Component {
     this.remove();
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     if (this.props.mapConfig.zoom !== nextProps.mapConfig.zoom) {
       this.map.setZoom(nextProps.mapConfig.zoom);
     }

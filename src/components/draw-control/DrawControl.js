@@ -9,7 +9,7 @@ import { injectIntl } from "react-intl";
 
 class DrawControl extends Component {
   /* Component lifecycle */
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     if (this.props.map !== nextProps.map) {
       this.map = nextProps.map;
       this.setLayers();

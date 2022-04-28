@@ -35,7 +35,7 @@ class TeamsForm extends Component {
     this.form = Object.assign({}, this.form, updatedForm);
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     if (this.props.team !== nextProps.team) {
       this.updateForm(nextProps.team);
       if (nextProps.team) this.resetSelection(nextProps.team);

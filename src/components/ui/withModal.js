@@ -13,7 +13,7 @@ function withModal(WrappedComponent) {
       close: PropTypes.func.isRequired
     };
 
-    componentWillMount() {
+    UNSAFE_componentWillMount() {
       window.addEventListener("keyup", this.onKeyup);
     }
 
