@@ -30,7 +30,7 @@ class Settings extends Component {
 
   UNSAFE_componentWillMount() {
     if (this.firstLoad) {
-      this.props.getTeam(this.props.userId);
+      this.props.getTeamByUserId(this.props.userId);
       this.props.getGFWLayers();
       this.props.getLayers();
       this.firstLoad = false;
@@ -142,7 +142,7 @@ class Settings extends Component {
 
 Settings.propTypes = {
   team: PropTypes.object,
-  getTeam: PropTypes.func.isRequired,
+  getTeamByUserId: PropTypes.func.isRequired,
   isManager: PropTypes.bool,
   publicLayers: PropTypes.array.isRequired,
   teamLayers: PropTypes.array.isRequired,

@@ -2,10 +2,6 @@ import { API_BASE_URL_V1 } from "../constants/global";
 import { BaseService } from "./baseService";
 
 export class ReportService extends BaseService {
-  setToken(token) {
-    this.token = token;
-  }
-
   getAnswers(reportId) {
     return this.fetchJSON(`/${reportId}/answers`);
   }

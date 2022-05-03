@@ -1,6 +1,6 @@
 import { connect } from "react-redux";
 import Settings from "./Settings";
-import { getTeam, setEditing } from "../../modules/teams";
+import { getTeamByUserId, setEditing } from "../../modules/teams";
 import { getLayers, getGFWLayers } from "../../modules/layers";
 import { includes, filterEmpty } from "../../helpers/utils";
 
@@ -50,8 +50,8 @@ const mapStateToProps = ({ user, teams, areas, layers }) => {
 
 function mapDispatchToProps(dispatch) {
   return {
-    getTeam: userId => {
-      dispatch(getTeam(userId));
+    getTeamByUserId: userId => {
+      dispatch(getTeamByUserId(userId));
     },
     setEditing: value => {
       dispatch(setEditing(value));

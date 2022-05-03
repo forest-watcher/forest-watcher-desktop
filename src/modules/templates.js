@@ -74,7 +74,7 @@ export function getTemplates() {
       payload: true
     });
 
-    reportService.setToken(state().user.token);
+    reportService.token = state().user.token;
     return reportService
       .getTemplates()
       .then(data => {
@@ -105,7 +105,7 @@ export function getTemplate(templateId) {
       payload: true
     });
 
-    reportService.setToken(state().user.token);
+    reportService.token = state().user.token;
     return reportService
       .getTemplate(templateId)
       .then(data => {
@@ -139,7 +139,7 @@ export function saveTemplate(template, method, templateId) {
       }
     });
 
-    reportService.setToken(state().user.token);
+    reportService.token = state().user.token;
     return reportService
       .saveTemplate(template, method, templateId)
       .then(data => {
