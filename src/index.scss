@@ -1,6 +1,3 @@
-/* Fonts (go 1st) */
-@import "./styles/fonts";
-
 /* Lib */
 @import "./styles/lib/foundation";
 @import "./node_modules/react-redux-toastr/src/styles/index";
@@ -12,6 +9,7 @@
 @import "./styles/settings";
 @import "./styles/base";
 @import "./styles/texts";
+@import "./styles/settings/colours";
 
 /* Overides */
 @import "./styles/leaflet";
