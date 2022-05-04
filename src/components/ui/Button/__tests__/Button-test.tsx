@@ -17,7 +17,7 @@ it("Button should render properly", () => {
 });
 
 it("Button primary should render properly", () => {
-  const { container } = render(<Button variation="primary">Click me</Button>);
+  const { container } = render(<Button variant="primary">Click me</Button>);
 
   expect(container).toMatchInlineSnapshot(`
     <div>
@@ -32,7 +32,7 @@ it("Button primary should render properly", () => {
 });
 
 it("Button secondary should render properly", () => {
-  const { container } = render(<Button variation="secondary">Click me</Button>);
+  const { container } = render(<Button variant="secondary">Click me</Button>);
 
   expect(container).toMatchInlineSnapshot(`
     <div>
@@ -50,7 +50,7 @@ it("Button Clicks Correctly", async () => {
   const mockFunc = jest.fn();
 
   const { getByTestId } = render(
-    <Button variation="primary" onClick={mockFunc}>
+    <Button variant="primary" onClick={mockFunc}>
       Click me
     </Button>
   );

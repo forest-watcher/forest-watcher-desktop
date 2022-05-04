@@ -1,4 +1,85 @@
 .c-card {
+  background: $neutral-300;
+  border-radius: $global-spacing-1;
+  border: 2px solid rgba(85, 85, 85, 0.1);
+  display: inline-block;
+
+  &--large {
+    padding: $global-spacing-5;
+    max-width: 333px;
+    .c-card__image {
+      border-radius: $global-spacing-1;
+    }
+    .c-card__title {
+      font-weight: 400;
+      font-size: 18px;
+      line-height: 24px;
+      margin-top: $global-spacing-4;
+    }
+    .c-card__text {
+      font-weight: 400;
+      font-size: 16px;
+      line-height: 22px;
+      margin-top: $global-spacing-1;
+    }
+  }
+
+  &--small {
+    padding: $global-spacing-3;
+    max-width: 174px;
+    .c-card__title {
+      font-weight: 400;
+      font-size: 16px;
+      line-height: 22px;
+      margin-top: $global-spacing-2;
+    }
+    .c-card__text {
+      font-weight: 400;
+      font-size: 14px;
+      line-height: 21px;
+    }
+  }
+
+  &__title, &__text {
+    color: $neutral-700;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  &__content-flex {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: $global-spacing-1;
+  }
+
+  &__cta {
+    text-transform: uppercase;
+    color: $neutral-600;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: $global-spacing-1;
+  }
+
+  &__cta-image {
+    width: 16px;
+    height: 16px;
+  }
+}
+
+a.c-card {
+  outline: none;
+  &:hover, &:focus {
+    border-color: $primary-400;
+  }
+  &:active {
+    border-color: $primary-500;
+  }
+}
+
+.c-card__LEGACY {
   display: flex;
   justify-content: space-between;
   padding: 15px;
