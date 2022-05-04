@@ -16,7 +16,6 @@ pipelines:
           - node
         artifacts:
           - build/**
-          - node_modules/**
         script:
           - yarn build
     - step: &build_storybook
