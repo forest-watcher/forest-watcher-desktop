@@ -3,24 +3,26 @@ pipelines:
     - step: &install_and_test
         name: Install and run tests
         image: node:16.14.0
-        artifacts:
-          - node
         caches:
           - node
         script:
           - yarn install
           - yarn test
     - step: &build
-        name: Build
+        name: Build Project
         image: node:16.14.0
         deployment: test
+        caches:
+          - node
         artifacts:
           - build/**
         script:
           - yarn build
     - step: &build_storybook
-        name: Build
+        name: Build Storybook
         image: node:16.14.0
+        caches:
+          - node
         artifacts:
           - storybook-static/**
         script:
