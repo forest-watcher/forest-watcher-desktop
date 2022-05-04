@@ -1,7 +1,5 @@
 import { ComponentStory, ComponentMeta } from "@storybook/react";
-import { useForm, SubmitHandler } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
+import { useForm } from "react-hook-form";
 
 import Input from "components/ui/Form/Input";
 
@@ -11,15 +9,15 @@ export default {
   component: Input
 } as ComponentMeta<typeof Input>;
 
-type FormValues = {
-  exampleInput: string;
-};
+// WIP type FormValues = {
+//   exampleInput: string;
+// };
 
-const schema = yup
-  .object({
-    exampleInput: yup.string().required()
-  })
-  .required();
+// WIP const schema = yup
+//   .object({
+//     exampleInput: yup.string().required()
+//   })
+//   .required();
 
 // More on component templates: https://storybook.js.org/docs/react/writing-stories/introduction#using-args
 const InputTemplate: ComponentStory<typeof Input> = args => {
@@ -27,24 +25,23 @@ const InputTemplate: ComponentStory<typeof Input> = args => {
   return <Input {...args} registered={register("exampleInput", { required: true })} />;
 };
 
-const FormTemplate: ComponentStory<typeof Input> = args => {
-  const { register, handleSubmit, watch, formState } = useForm<FormValues>({
-    resolver: yupResolver(schema)
-  });
-  console.log(watch("exampleInput"), formState.errors);
-  const onSubmit: SubmitHandler<FormValues> = data => console.log(data);
+// WIP const FormTemplate: ComponentStory<typeof Input> = args => {
+//   const { register, handleSubmit, watch, formState } = useForm<FormValues>({
+//     resolver: yupResolver(schema)
+//   });
+//   const onSubmit: SubmitHandler<FormValues> = data => console.log(data);
 
-  return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <Input
-        {...args}
-        registered={register("exampleInput", { required: true })}
-        error={formState.errors.exampleInput}
-      />
-      <input type="submit" />
-    </form>
-  );
-};
+//   return (
+//     <form onSubmit={handleSubmit(onSubmit)}>
+//       <Input
+//         {...args}
+//         registered={register("exampleInput", { required: true })}
+//         error={formState.errors.exampleInput}
+//       />
+//       <input type="submit" />
+//     </form>
+//   );
+// };
 
 export const Standard = InputTemplate.bind({});
 Standard.args = {
