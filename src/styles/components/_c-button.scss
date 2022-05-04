@@ -1,15 +1,17 @@
 .c-button {
   display: flex;
+  flex-direction: row;
+  justify-content: center;
   align-items: center;
-  height: 40px;
-  padding: 0 30px;
-  border: 1px solid $theme-accent;
-  border-radius: 20px;
-  background: $theme-accent;
-  color: $white;
+  padding: 12px 40px; // TODO: Get spacings
+  border-radius: 24px;
+  color: $neutral-300;
+  box-sizing: border-box;
+
+  font-weight: 500;
   font-family: $base-font-family;
   font-size: $base-font-size;
-  font-weight: $font-weight-bold;
+
   cursor: pointer;
   outline: 0;
   text-transform: uppercase;
@@ -22,6 +24,34 @@
     }
   }
 
+  &--primary {
+    background-color: $primary-500;
+    box-shadow: 0 0 0 2px $primary-500;
+    &:hover, &:focus {
+      background-color: $primary-600;
+    }
+
+    &:active {
+      background-color: $primary-500;
+      box-shadow: 0 0 0 2px $primary-600;
+    }
+  }
+
+  &--secondary {
+    background-color: transparent;
+    box-shadow: 0 0 0 1px $primary-500;
+    color: $neutral-700;
+    &:hover, &:focus {
+      box-shadow: 0 0 0 2px $primary-500;
+    }
+
+    &:active {
+      box-shadow: 0 0 0 2px $primary-600;
+    }
+  }
+
+
+  // LEGACY FROM HERE
   &.-hero {
     border-color: $theme-accent;
     background: $theme-secondary;
