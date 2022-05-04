@@ -1,0 +1,16 @@
+.c-link {
+  font-weight: 500;
+  font-family: $base-font-family;
+  font-size: $base-font-size;
+  text-transform: uppercase;
+  text-decoration: underline;
+  color: $neutral-600;
+
+  &:hover, &:focus {
+    color: $primary-500
+  }
+
+  &:active {
+    color: $primary-600;
+  }
+}
