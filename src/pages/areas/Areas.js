@@ -10,36 +10,6 @@ import Loader from "../../components/ui/Loader";
 import { trimQueryParams } from "../../helpers/login.js";
 import ReactGA from "react-ga";
 
-import { useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
-import Input from "components/ui/Form/Input";
-
-const schema = yup
-  .object({
-    exampleInput: yup.string().required()
-  })
-  .required();
-
-const FormTemplate = args => {
-  const { register, handleSubmit, watch, formState } = useForm({
-    resolver: yupResolver(schema)
-  });
-  console.log(watch("exampleInput"), formState.errors);
-  const onSubmit = data => console.log(data);
-
-  return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <Input
-        {...args}
-        registered={register("exampleInput", { required: true })}
-        error={formState.errors.exampleInput}
-      />
-      <input type="submit" />
-    </form>
-  );
-};
-
 class Areas extends React.Component {
   UNSAFE_componentWillMount() {
     trimQueryParams(this.props);
@@ -75,15 +45,6 @@ class Areas extends React.Component {
             />
             <Loader isLoading={this.props.loading} />
           </Article>
-          <FormTemplate
-            id="text-input"
-            htmlInputProps={{
-              type: "text",
-              placeholder: "Enter text",
-              label: "Don't enter and click submit",
-              onChange: () => {}
-            }}
-          />
         </div>
       </div>
     );
