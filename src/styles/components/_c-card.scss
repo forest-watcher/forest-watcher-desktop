@@ -49,6 +49,23 @@
 
   &__content-flex {
     display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: $global-spacing-1;
+  }
+
+  &__cta {
+    text-transform: uppercase;
+    color: $neutral-600;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: $global-spacing-1;
+  }
+
+  &__cta-image {
+    width: 16px;
+    height: 16px;
   }
 }
 

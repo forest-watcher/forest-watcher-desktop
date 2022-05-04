@@ -58,7 +58,7 @@ const Cta: FC<ICtaProps> = props => {
 
   return (
     <p {...rest} className={classes}>
-      {iconSrc && <img role="presentation" alt="" className="c-card__cta-image" />}
+      {iconSrc && <img role="presentation" alt="" className="c-card__cta-image" src={iconSrc} />}
       <span>{children}</span>
     </p>
   );

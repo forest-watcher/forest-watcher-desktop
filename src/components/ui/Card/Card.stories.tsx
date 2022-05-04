@@ -2,6 +2,7 @@ import { ComponentStory, ComponentMeta } from "@storybook/react";
 
 import Card from "components/ui/Card/Card";
 import { BrowserRouter, Link } from "react-router-dom";
+import EditIcon from "assets/images/icons/Edit.svg";
 
 // More on default export: https://storybook.js.org/docs/react/writing-stories/introduction#default-export
 export default {
@@ -28,7 +29,7 @@ const LargeImageCardAsLinkTemplate: ComponentStory<typeof Card> = args => (
           <Card.Title>Area</Card.Title>
           <Card.Text>Some text</Card.Text>
         </div>
-        <Card.Cta iconSrc="https://picsum.photos/16">Manage</Card.Cta>
+        <Card.Cta iconSrc={EditIcon}>Manage</Card.Cta>
       </div>
     </Card>
   </BrowserRouter>
