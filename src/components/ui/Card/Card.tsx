@@ -1,7 +1,7 @@
 import React, { FC, HTMLAttributes, ImgHTMLAttributes } from "react";
 import classnames from "classnames";
 
-interface IProps extends HTMLAttributes<HTMLBaseElement>  {
+interface IProps extends HTMLAttributes<HTMLBaseElement> {
   size?: "small" | "large";
   as?: React.ElementType;
   [key: string]: any;
