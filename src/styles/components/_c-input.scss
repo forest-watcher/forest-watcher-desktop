@@ -1,0 +1,56 @@
+.c-input {
+  display: flex;
+  gap: $global-spacing-3;
+  &__input-wrapper {
+    position: relative;
+  }
+  &__label {
+    margin-top: $global-spacing-3;
+    font-weight: 500;
+    text-transform: uppercase;
+  }
+  &__input {
+    background-color: $neutral-300;
+    border: 1px solid $neutral-500;
+    box-sizing: border-box;
+    border-radius: 4px;
+    padding: $global-spacing-2 $global-spacing-4 $global-spacing-2 $global-spacing-4;
+    color: $neutral-700;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 22px;
+
+    &::placeholder {
+      color: $neutral-600;
+      font-weight: 400;
+    }
+
+    &:focus, &:active {
+      border-color: $primary-500;
+      caret-color: $primary-500;
+      outline: none;
+    }
+
+    &--error {
+      padding: $global-spacing-2 38px $global-spacing-2 $global-spacing-4;
+      border-color: $secondary-500;
+    }
+  }
+  &__error-icon {
+    position: absolute;
+    right: 10px;
+    top: $global-spacing-2;
+    width: $global-spacing-6;
+    height: $global-spacing-6;
+  }
+
+  &__error-message {
+    background-color: $neutral-400;
+    border-radius: 4px;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 22px;
+    padding: $global-spacing-2 $global-spacing-4;
+    margin-top: $global-spacing-2;
+  }
+}
