@@ -1,10 +1,12 @@
 import { RegisterOptions } from "react-hook-form";
 import { HTMLInputField } from "./htmlInput";
+import { SelectField } from "./select";
 
-export type Field = HTMLInputField;
+export type Field = HTMLInputField | SelectField;
 
 export enum FieldType {
-  Input = "input"
+  Input = "input",
+  Select = "select"
 }
 
 export interface FieldPropsBase {

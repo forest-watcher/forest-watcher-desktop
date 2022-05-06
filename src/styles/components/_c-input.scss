@@ -1,6 +1,12 @@
 .c-input {
   display: flex;
   gap: $global-spacing-3;
+  align-items: flex-start;
+
+  &--alt-label {
+    flex-direction: column;
+  }
+
   &__input-wrapper {
     position: relative;
   }
@@ -8,6 +14,9 @@
     margin-top: $global-spacing-3;
     font-weight: 500;
     text-transform: uppercase;
+    &--alt {
+      margin-top: 0;;
+    }
   }
   &__input {
     background-color: $neutral-300;
@@ -36,6 +45,65 @@
       border-color: $secondary-500;
     }
   }
+
+  &__select {
+    background: $neutral-300;
+    border: 1px solid $neutral-500;
+    border-radius: 4px;
+    font-family: $base-font-family;
+    min-width: 356px;
+    position: relative;
+    &--open {
+      border-radius: 4px 4px 0px 0px;
+      border-bottom: none;
+    }
+  }
+
+  &__select-button {
+    padding: $global-spacing-2 $global-spacing-4 $global-spacing-2 $global-spacing-4;
+    color: $neutral-700;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 22px;
+    display: flex;
+    align-items: center;
+    gap: $global-spacing-4;
+    font-family: $base-font-family;
+    width: 100%;
+  }
+
+  &__select-value {
+    flex-grow: 1;
+    text-align: left;
+  }
+
+  &__select-error-icon {
+    position: relative;
+    left: 8px;
+  }
+
+  &__select-list-box {
+    background: $neutral-300;
+    border-radius: 0px 0px 4px 4px;
+    position: absolute;
+    left: -1px;
+    right: -1px;
+    border: 1px solid $neutral-500;
+    border-top: 0px;
+  }
+
+  &__select-list-item {
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 22px;
+    padding: $global-spacing-2 $global-spacing-4;
+    cursor: pointer;
+    border-top: 1px solid $neutral-500;
+    &--is-active {
+      background-color: $primary-400;
+    }
+  }
+
   &__error-icon {
     position: absolute;
     right: 10px;
@@ -52,5 +120,12 @@
     line-height: 22px;
     padding: $global-spacing-2 $global-spacing-4;
     margin-top: $global-spacing-2;
+  }
+
+  &__select-indicator {
+    transition: transform 0.3s ease-in;
+    &--rotate {
+      transform: rotate(180deg);
+    }
   }
 }
