@@ -16,7 +16,14 @@ const Input = (props: Props) => {
   return (
     <div className="c-input">
       {htmlInputProps.label && (
-        <label htmlFor={id} className={classnames("c-input__label", `c-input__label--${htmlInputProps.type}`)}>
+        <label
+          htmlFor={id}
+          className={classnames(
+            "c-input__label",
+            `c-input__label--${htmlInputProps.type}`,
+            htmlInputProps.hiddenLabel && "u-visually-hidden"
+          )}
+        >
           {htmlInputProps.label}
         </label>
       )}
