@@ -1,0 +1,58 @@
+.c-chip {
+  display: inline-block;
+  padding: $global-spacing-1 $global-spacing-4; // TODO: Get spacings
+  border-radius: 24px;
+  color: $neutral-300;
+
+  font-weight: 400;
+  font-family: $base-font-family;
+  font-size: $base-font-size;
+  line-height: 21px;
+
+  outline: 0;
+  text-transform: uppercase;
+
+  &:disabled {
+    opacity: 0.5;
+
+    &:hover {
+      cursor: not-allowed;
+    }
+  }
+
+  &--is-selectable {
+    cursor: pointer;
+  }
+
+  &--primary {
+    background-color: $primary-500;
+    box-shadow: 0 0 0 2px $primary-500;
+    &.c-chip--is-selectable {
+      &:hover, &:focus {
+        background-color: $primary-600;
+      }
+
+      &:active {
+        background-color: $primary-500;
+        box-shadow: 0 0 0 2px $primary-600;
+      }
+    }
+
+  }
+
+  &--secondary {
+    background-color: transparent;
+    box-shadow: 0 0 0 1px $primary-500;
+    color: $neutral-700;
+    &.c-chip--is-selectable {
+      &:hover, &:focus {
+        box-shadow: 0 0 0 2px $primary-500;
+      }
+
+      &:active {
+        box-shadow: 0 0 0 2px $primary-600;
+      }
+    }
+  }
+
+}

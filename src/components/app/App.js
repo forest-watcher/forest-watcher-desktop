@@ -3,14 +3,8 @@ import PropTypes from "prop-types";
 import querystring from "query-string";
 import ReduxToastr from "react-redux-toastr";
 import { IntlProvider } from "react-intl";
-import { addLocaleData } from "react-intl";
-import en from "react-intl/locale-data/en";
-import es from "react-intl/locale-data/es";
-import fr from "react-intl/locale-data/fr";
-import id from "react-intl/locale-data/id";
-import pt from "react-intl/locale-data/pt";
-import translations from "../../locales/index.js";
-import { DEFAULT_LANGUAGE, GA_UA } from "../../constants/global";
+import translations from "locales/index.js";
+import { DEFAULT_LANGUAGE, GA_UA } from "constants/global";
 import ReactGA from "react-ga";
 import "react-redux-toastr/lib/css/react-redux-toastr.min.css";
 import Nav from "../layouts/Nav";
@@ -18,8 +12,6 @@ import Landing from "../../pages/landing/LandingContainer";
 
 // Pages
 import Routes from "../../routes";
-
-addLocaleData([...en, ...es, ...fr, ...id, ...pt]);
 
 class App extends Component {
   UNSAFE_componentWillMount() {
