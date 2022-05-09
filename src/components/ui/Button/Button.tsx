@@ -3,11 +3,12 @@ import classnames from "classnames";
 
 interface IProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: "primary" | "secondary";
+  isIcon?: Boolean;
 }
 
 const Button: FC<IProps> = props => {
-  const { className, children, variant = "primary", ...rest } = props;
-  const classes = classnames("c-button", `c-button--${variant}`, className);
+  const { className, children, variant = "primary", isIcon = false, ...rest } = props;
+  const classes = classnames("c-button", `c-button--${variant}`, isIcon && "c-button--is-icon", className);
 
   return (
     <button className={classes} data-testid="button" {...rest}>

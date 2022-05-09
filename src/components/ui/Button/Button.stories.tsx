@@ -1,4 +1,5 @@
 import { ComponentStory, ComponentMeta } from "@storybook/react";
+import ChevronRight from "assets/images/icons/ChevronRight.svg";
 
 import Button from "components/ui/Button/Button";
 
@@ -20,4 +21,17 @@ Primary.args = {
 export const Secondary = Template.bind({});
 Secondary.args = {
   variant: "secondary"
+};
+
+const IconTemplate: ComponentStory<typeof Button> = args => (
+  <Button {...args}>
+    <img src={ChevronRight} alt="" role="presentation" />
+  </Button>
+);
+
+export const Icon = IconTemplate.bind({});
+Icon.args = {
+  variant: "primary",
+  isIcon: true,
+  "aria-label": "Next"
 };

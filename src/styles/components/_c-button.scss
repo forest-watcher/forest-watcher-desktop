@@ -50,6 +50,11 @@
     }
   }
 
+  &--is-icon {
+    padding: $global-spacing-2;
+    border-radius: 50%;
+  }
+
 
   // LEGACY FROM HERE
   &.-hero {
