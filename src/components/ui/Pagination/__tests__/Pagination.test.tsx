@@ -1,7 +1,7 @@
 import { render } from "test-utils";
 import Pagination from "../Pagination";
-
-it("Chip should render properly", () => {
+// Todo - test functionality of pagination
+it("Pagination should render properly", () => {
   const { container } = render(<Pagination min={1} max={3} />);
 
   expect(container).toMatchInlineSnapshot(`

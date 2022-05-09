@@ -28,7 +28,6 @@ const Pagination: FC<IProps> = props => {
   const [current, setCurrent] = useState<number>(min);
 
   useEffect(() => {
-    console.log("setting value", current);
     if (onPageChange) {
       onPageChange(current);
     }
@@ -37,7 +36,7 @@ const Pagination: FC<IProps> = props => {
 
   const onSubmit: SubmitHandler<FormValues> = data => {
     const value = data[PAGINATION_FORM_FIELD];
-    console.log(value, max, min, value <= max, value >= min);
+
     if (!isNaN(value) && value <= max && value >= min) {
       setCurrent(value);
     } else {
