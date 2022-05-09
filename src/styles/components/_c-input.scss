@@ -57,6 +57,15 @@
       border-radius: 4px 4px 0px 0px;
       border-bottom: none;
     }
+    &--simple {
+      border: none;
+      min-width: 90px;
+      padding: 0px;
+      .c-input__select-value {
+        text-align: right;
+        text-transform: uppercase;
+      }
+    }
   }
 
   &__select-button {
@@ -70,6 +79,19 @@
     gap: $global-spacing-4;
     font-family: $base-font-family;
     width: 100%;
+    &--simple {
+      padding: 0;
+      gap: $global-spacing-1;
+      font-weight: 400;
+      font-size: 14px;
+      line-height: 14px;
+      color: $neutral-600;
+      .c-input__select-indicator {
+        path {
+          fill: $neutral-600;
+        }
+      }
+    }
   }
 
   &__select-value {
@@ -90,6 +112,7 @@
     right: -1px;
     border: 1px solid $neutral-500;
     border-top: 0px;
+    z-index: 1;
   }
 
   &__select-list-item {
@@ -101,6 +124,11 @@
     border-top: 1px solid $neutral-500;
     &--is-active {
       background-color: $primary-400;
+    }
+    &--simple {
+      font-size: 14px;
+      line-height: 14px;
+      padding: $global-spacing-2;
     }
   }
 

@@ -4,117 +4,65 @@
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
+  background-color: white;
+  gap: $global-spacing-10;
+  box-shadow: inset 0px -1px 0px $neutral-500;
 
-  .nav-link, .nav-menu, .nav-logo {
-    height: $nav-height;
-
-    a, button {
-      display: flex;
-      align-items: center;
-      font-size: $font-size-small;
-      font-weight: $font-weight-bold;
-      cursor: pointer;
-      position: relative;
-      padding: 19px 10px;
-      text-transform: uppercase;
+  &__logo {
+    img {
+      min-width: 97px;
     }
   }
-
-  .nav-menu,
-  .nav-logo {
-    > button, > a {
-      color: $theme-accent;
-      padding: 19px 0;
-
-      &:hover {
-        color: lighten($theme-accent, 10%);
-      }
-    }
-
-    svg {
-      margin-right: 5px;
-    }
-  }
-
-  .nav-section {
+  &__section {
     display: flex;
-    flex: 1 1 0%;
-    width: 80%;
-
-    .nav-subsection {
-      display: flex;
-      align-items: center;
-
-      &.-links {
-        padding-left: 22px;
-        flex-shrink: 1;
-        overflow-y: scroll;
-        scrollbar-width: none;
-
-        &::-webkit-scrollbar {
-            width: 0;
-            height: 0;
-        }
-      }
-
-      &.-settings {
-        border-left: 1px solid $border-gray;
-      }
-    }
-
-    .Select {
-      width: 70px;
-      margin-left: 30px;
+    flex-grow: 1;
+    justify-content: space-between;
+    height: 100%;
+    gap: 30px;
+  }
+  &__subsection {
+    display: flex;
+    gap: 30px;
+    align-items: center;
+    &--settings {
+      border-left: 1px solid $neutral-500;
+      padding-left: $global-spacing-5;
     }
   }
 
-  .nav-link {
-    padding-right: 35px;
+  &__link-wrapper {
+    height: 100%;
+  }
 
-    a {
-      color: rgba($white, 0.5);
+  &__link {
+    display: flex;
+    align-items: center;
+    height: 100%;
+    font-size: 14px;
+    text-transform: uppercase;
+    font-weight: 400;
+    color: $neutral-600;
+    border-bottom: 5px solid transparent;
+    padding-top: 5px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 
-      &::after {
-        display: block;
-        position: absolute;
-        content: '';
-        height: 2px;
-        width: 0;
-        bottom: 0;
-        left: 50%;
-        transform: translateX(-50%);
-        background-color: white;
-        transition: width .15s $ease-out-cubic;
-      }
-
-      &:hover {
-        &::after {
-          width: 100%;
-        }
-      }
-
-      &.-active {
-        color: $white;
-
-        &::after {
-          width: 100%;
-        }
-      }
+    &--active {
+      font-weight: 500;
+      border-bottom: 5px solid $primary-500 !important;
     }
 
-    &.-disabled {
-      a {
-        cursor: default;
-        &:hover {
-          &::after {
-            width: 0;
-          }
-        }
-      }
+    &:hover {
+      border-bottom: 5px solid $primary-400;
+    }
+
+    &:active {
+      border-bottom: 5px solid $primary-500;
     }
   }
 
-  .nav-menu {
-    padding-left: 30px;
+  &__link-profile-icon {
+    margin-right: $global-spacing-1;
   }
 }
