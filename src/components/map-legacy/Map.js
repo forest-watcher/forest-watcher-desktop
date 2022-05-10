@@ -57,7 +57,7 @@ class Map extends Component {
 
   // RENDER
   render() {
-    return <div id="map" className="c-map"></div>;
+    return <div id="map" className="c-map-legacy"></div>;
   }
 }
 

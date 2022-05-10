@@ -1,13 +1,12 @@
 import { connect } from "react-redux";
-import CountrySearch from "./CountrySearch";
-import { getCountries } from "../../modules/areas";
+import Controls from "./Controls";
+import { getCountries } from "modules/areas";
 
 const mapCountriesToOptions = countries => {
   const countriesOptions = [];
   countries.forEach(country => {
     if (JSON.parse(country.bbox)) {
       countriesOptions.push({
-        option: country.iso,
         label: country.name_engli,
         value: country.iso
       });
@@ -32,4 +31,4 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(CountrySearch);
+export default connect(mapStateToProps, mapDispatchToProps)(Controls);

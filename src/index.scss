@@ -1,6 +1,7 @@
 /* Lib */
 @import "./styles/lib/foundation";
 @import "./node_modules/react-redux-toastr/src/styles/index";
+@import 'mapbox-gl/dist/mapbox-gl.css';
 
 /* Reset */
 @import "./styles/reset";
@@ -47,6 +48,8 @@
 @import "./styles/components/c-checkbox";
 @import "./styles/components/c-member-list";
 @import "./styles/components/c-map";
+
+@import "./styles/components/c-map-legacy";
 @import "./styles/components/c-map-controls";
 @import "./styles/components/c-form";
 @import "./styles/components/c-form-footer";

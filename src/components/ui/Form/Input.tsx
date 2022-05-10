@@ -8,20 +8,20 @@ import { FieldError } from "./FieldError";
 export interface Props extends FieldPropsBase {
   htmlInputProps: InputProps;
   registered: UseFormRegisterReturn;
-  onChange: () => void;
+  onChange?: () => void;
 }
 
 const Input = (props: Props) => {
-  const { id, registered, className, htmlInputProps, error } = props;
+  const { id, registered, className, htmlInputProps, error, hideLabel = false } = props;
   return (
-    <div className="c-input">
+    <div className={classnames("c-input", className)}>
       {htmlInputProps.label && (
         <label
           htmlFor={id}
           className={classnames(
             "c-input__label",
             `c-input__label--${htmlInputProps.type}`,
-            htmlInputProps.hiddenLabel && "u-visually-hidden"
+            hideLabel && "u-visually-hidden"
           )}
         >
           {htmlInputProps.label}
@@ -33,14 +33,13 @@ const Input = (props: Props) => {
           {...registered}
           id={id}
           className={classnames(
-            className,
             "c-input__input",
             `c-input__input--${htmlInputProps.type}`,
             error && "c-input__input--error"
           )}
           ref={registered.ref}
           title={htmlInputProps.title}
-          onChangeCapture={() => props.onChange()}
+          onChangeCapture={() => props.onChange?.()}
           placeholder={htmlInputProps.placeholder}
           aria-invalid={error ? "true" : "false"}
           aria-errormessage={`${id}-error`}

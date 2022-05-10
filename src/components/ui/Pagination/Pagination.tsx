@@ -82,10 +82,10 @@ const Pagination: FC<IProps> = props => {
               defaultValue: min,
               placeholder: "",
               label: "Pagination",
-              hiddenLabel: true,
               inputMode: "numeric",
               pattern: "[0-9]*"
             }}
+            hideLabel
             onChange={() => {}}
           />
         </form>
