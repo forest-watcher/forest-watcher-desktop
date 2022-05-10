@@ -118,7 +118,7 @@ class Landing extends Component {
               <div className="description">
                 <FormattedMessage id="app.webDescription" />
               </div>
-              <Link className="login-button c-button" to={"/login"}>
+              <Link className="login-button c-button c-button--primary" to="/login">
                 <FormattedMessage id="app.accessWebApp" />
               </Link>
               <div className="landing-links">

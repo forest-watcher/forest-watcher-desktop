@@ -1,3 +1,4 @@
+import Button from "components/ui/Button/Button";
 import PropTypes from "prop-types";
 import { FormattedMessage } from "react-intl";
 
@@ -11,9 +12,9 @@ function Hero({ title, action, children }) {
           </h1>
           {children}
           {action && (
-            <button className="c-button -hero" onClick={action.callback}>
+            <Button onClick={action.callback}>
               <FormattedMessage id={action.name} />
-            </button>
+            </Button>
           )}
         </div>
       </div>

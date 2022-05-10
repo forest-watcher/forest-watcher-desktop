@@ -41,7 +41,7 @@ const Nav: FC<IProps> = props => {
     [intl, translations]
   );
 
-  const username = (user.data && user.data.email) || <FormattedMessage id="app.setupEmail" />;
+  const username = (user.data && user.data.name) || <FormattedMessage id="app.setupEmail" />;
 
   return (
     <div className="row column" {...rest}>
@@ -117,7 +117,8 @@ const Nav: FC<IProps> = props => {
                 target="_blank"
                 className="c-nav__link"
               >
-                <img src={ProfileIcon} alt="" role="presentation" className="c-nav__link-profile-icon" /> {username}
+                <img src={ProfileIcon} alt="" role="presentation" className="c-nav__link-profile-icon" />
+                <span className="c-nav__link-text">{username}</span>
               </ReactGA.OutboundLink>
             </li>
 

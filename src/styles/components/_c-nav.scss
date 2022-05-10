@@ -26,7 +26,7 @@
     align-items: center;
     &--settings {
       border-left: 1px solid $neutral-500;
-      padding-left: $global-spacing-5;
+      padding-left: $global-spacing-10;
     }
   }
 
@@ -44,10 +44,6 @@
     color: $neutral-600;
     border-bottom: 5px solid transparent;
     padding-top: 5px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-
     &--active {
       font-weight: 500;
       border-bottom: 5px solid $primary-500 !important;
@@ -60,6 +56,12 @@
     &:active {
       border-bottom: 5px solid $primary-500;
     }
+  }
+
+  &__link-text {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   &__link-profile-icon {
