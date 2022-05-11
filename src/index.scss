@@ -1,7 +1,8 @@
 /* Lib */
 @import "./styles/lib/foundation";
 @import "./node_modules/react-redux-toastr/src/styles/index";
-@import 'mapbox-gl/dist/mapbox-gl.css';
+@import "mapbox-gl/dist/mapbox-gl.css";
+@import "@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css";
 
 /* Reset */
 @import "./styles/reset";

@@ -53,6 +53,52 @@
     left: 0;
     top: 0;
     right: 0;
+    display: flex;
+    gap: $global-spacing-3;
+    align-items: center;
+  }
+
+  &__geocoder {
+    flex-grow: 1;
+  }
+
+  // Geocoder styling
+  .mapboxgl-ctrl-geocoder {
+    width: 100%;
+    box-shadow: none;
+    font-size: 14px;
+    line-height: 14px;
+    position: relative;
+    .mapboxgl-ctrl-geocoder--icon-search, .mapboxgl-ctrl-geocoder--icon-loading {
+      display: none !important;
+    }
+
+    .mapboxgl-ctrl-geocoder--pin-right {
+      position: absolute;
+      z-index: 1;
+      top: 3px;
+      right: 42px;
+    }
+
+    .mapboxgl-ctrl-geocoder--button {
+      background: transparent;
+    }
+
+    .suggestions {
+      border: 1px solid $neutral-500;
+      box-shadow: none;
+    }
+
+    &::after {
+      content: "";
+      display: block;
+      background-image: url("../../assets/images/icons/Search.svg");
+      width: 24px;
+      height: 24px;
+      right: $global-spacing-5;
+      top: $global-spacing-2;
+      position: absolute;
+    }
   }
 
   &__search-input {
@@ -60,12 +106,15 @@
     border-radius: 20px;
     color: $neutral-600;
     border: 0px;
-    padding: $global-spacing-3 $global-spacing-5;
+    padding: $global-spacing-3 68px $global-spacing-3 $global-spacing-5;
     font-weight: 500;
     font-size: 14px;
     line-height: 14px;
     text-transform: uppercase;
     font-family: $base-font-family;
+    width: 100%;
+    position: relative;
+
   }
 
   &__panel-input {
@@ -94,11 +143,15 @@
       background-color: $neutral-400;
     }
 
-    &--search {
+    &--single {
       background-color: $neutral-300;
       border-radius: 6px;
       border: 2px solid $neutral-400;
       box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.3);
+    }
+
+    &--no-shadow {
+      box-shadow: none;
     }
   }
 }

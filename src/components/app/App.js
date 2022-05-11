@@ -9,6 +9,7 @@ import ReactGA from "react-ga";
 import "react-redux-toastr/lib/css/react-redux-toastr.min.css";
 import Nav from "../layouts/Nav";
 import Landing from "../../pages/landing/LandingContainer";
+import "configureYup";
 
 // Pages
 import Routes from "../../routes";
@@ -51,6 +52,7 @@ class App extends Component {
     const { match, user, userChecked, logout, locale, setLocale, location } = this.props;
     if (!userChecked) return null;
     const mergedMessages = Object.assign({}, translations[DEFAULT_LANGUAGE], translations[locale]);
+
     return (
       <IntlProvider locale={locale} messages={mergedMessages}>
         <div>

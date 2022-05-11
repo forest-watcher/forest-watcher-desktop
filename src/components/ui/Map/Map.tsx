@@ -16,7 +16,6 @@ const Map: FC<IProps> = props => {
 
   const onMapLoad = (evt: MapboxEvent) => {
     evt.target.resize();
-    console.log(evt.target);
   };
 
   return (

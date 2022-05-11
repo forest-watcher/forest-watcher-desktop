@@ -4,6 +4,7 @@ import { IntlProvider } from "react-intl";
 import translations from "locales/index.js";
 import configureStore from "configureStore";
 import { Provider } from "react-redux";
+import "configureYup";
 
 export const parameters = {
   actions: { argTypesRegex: "^on[A-Z].*" },
