@@ -29,6 +29,8 @@
   "common.ok": "ok",
   "common.cancel": "Cancel",
   "common.delete": "Delete",
+  "common.next": "Next",
+  "common.previous": "Previous",
   "login.welcome": "Log in using one of following accounts:",
   "forms.required": "required",
   "forms.save": "save",
