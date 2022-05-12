@@ -8,5 +8,6 @@ module.exports = {
   env: (config) => ({
     ...config,
     REACT_APP_MAPBOX_ACCESS_TOKEN: process.env.STORYBOOK_MAPBOX_ACCESS_TOKEN,
+    REACT_APP_CARTO_COUNTRIES: process.env.STORYBOOK_CARTO_COUNTRIES
   })
 };
