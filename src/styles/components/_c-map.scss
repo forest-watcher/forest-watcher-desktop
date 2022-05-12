@@ -10,6 +10,7 @@
     bottom: 0;
     width: 100%;
   }
+
   &__controls {
     z-index: 2;
     position: absolute;
@@ -60,6 +61,12 @@
 
   &__geocoder {
     flex-grow: 1;
+  }
+
+  &__card-control {
+    position: absolute;
+    left: $global-spacing-10;
+    top: $global-spacing-10;
   }
 
   // Geocoder styling
