@@ -5,7 +5,6 @@ import Card from "components/ui/Card/Card";
 import Polygon from "./components/layers/Polygon";
 import Button from "components/ui/Button/Button";
 import { useState } from "react";
-import { ViewState } from "react-map-gl";
 
 const polygon = {
   type: "FeatureCollection",
