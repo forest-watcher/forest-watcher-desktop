@@ -8,10 +8,12 @@
     align-items: center;
   }
   &__input {
-    max-width: 48px;
-    padding: $global-spacing-2 0;
-    text-align: center;
-    border: 2px solid rgba(85, 85, 85, 0.1);
+    .c-input__input {
+      max-width: 48px;
+      padding: $global-spacing-2 0;
+      text-align: center;
+      border: 2px solid rgba(85, 85, 85, 0.1);
+    }
   }
   &__count {
     font-weight: 400;

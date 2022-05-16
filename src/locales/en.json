@@ -210,5 +210,17 @@
   "layers.viirs": "Fires (VIIRS)",
   "components.pagination.previousPage": "Previous Page",
   "components.pagination.nextPage": "Next Page",
-  "components.pagination.ofCount": "of {value}"
+  "components.pagination.ofCount": "of {value}",
+  "components.map.searchAddress": "Search Address",
+  "components.map.selectACountry": "Select A Country",
+  "components.map.searchACountry": "Search A Country",
+  "components.map.searchBy": "Search by Latitude and longitude",
+  "components.map.enterLat": "Enter Latitude",
+  "components.map.enterLng": "Enter Longitude",
+  "components.map.zoomIn": "Zoom In",
+  "components.map.zoomOut": "Zoom Out",
+  "errors.mixed.default": "Incorrect value",
+  "errors.mixed.notType": "Incorrect format, enter a {type}",
+  "errors.number.min": "This should be at least {min}",
+  "errors.number.max": "This should be less than {max}"
 }

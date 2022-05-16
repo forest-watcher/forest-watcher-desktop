@@ -26,7 +26,7 @@ it("Pagination should render properly", () => {
         >
           <form>
             <div
-              class="c-input"
+              class="c-input c-pagination__input"
             >
               <label
                 class="c-input__label c-input__label--text u-visually-hidden"
@@ -40,7 +40,7 @@ it("Pagination should render properly", () => {
                 <input
                   aria-errormessage="pagination-error"
                   aria-invalid="false"
-                  class="c-pagination__input c-input__input c-input__input--text"
+                  class="c-input__input c-input__input--text"
                   id="pagination"
                   inputmode="numeric"
                   label="Pagination"

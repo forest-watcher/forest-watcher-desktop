@@ -52,7 +52,9 @@ it("Select Input should render correctly", () => {
         >
           Hello
         </label>
-        <div>
+        <div
+          class="u-w-100"
+        >
           <div
             class="c-input__select"
           >
@@ -118,7 +120,9 @@ it("Select Input with an error should render correctly", () => {
         >
           Hello
         </label>
-        <div>
+        <div
+          class="u-w-100"
+        >
           <div
             class="c-input__select"
           >

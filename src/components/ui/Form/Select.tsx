@@ -12,11 +12,11 @@ export interface Props extends FieldPropsBase {
   registered: UseFormRegisterReturn;
   formHook: Pick<UseFormReturn, "watch" | "setValue" | "clearErrors">;
   onChange?: () => void;
-  isSimple: boolean;
+  isSimple?: boolean;
 }
 
 const Select = (props: Props) => {
-  const { selectProps, registered, error, id, formHook, isSimple } = props;
+  const { selectProps, registered, error, id, formHook, isSimple = false, hideLabel } = props;
   const [options, setOptions] = useState<Option[]>(selectProps.options || []);
   const value = formHook.watch(props.registered.name) || selectProps.defaultValue?.value;
 
@@ -51,13 +51,13 @@ const Select = (props: Props) => {
                 className={classnames(
                   "c-input__label c-input__label--select",
                   selectProps.alternateLabelStyle && "c-input__label--alt",
-                  isSimple && "u-visually-hidden"
+                  (isSimple || hideLabel) && "u-visually-hidden"
                 )}
               >
                 {selectProps.label}
               </Listbox.Label>
             )}
-            <div>
+            <div className="u-w-100">
               <div
                 className={classnames(
                   "c-input__select",
