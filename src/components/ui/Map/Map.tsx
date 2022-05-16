@@ -1,4 +1,4 @@
-import { FC, HTMLAttributes, useEffect, useState } from "react";
+import { FC, HTMLAttributes, useState } from "react";
 import classnames from "classnames";
 import ReactMap, { MapboxEvent } from "react-map-gl";
 import MapControls from "./components/ControlsContainer";
@@ -33,17 +33,13 @@ const addMapLabelImage = async (map: mapboxgl.Map) => {
 
   if (image) {
     map.addImage("label-background", image, {
-      // The two (blue) columns of pixels that can be stretched horizontally:
-      //   - the pixels between x: 25 and x: 55 can be stretched
-      //   - the pixels between x: 85 and x: 115 can be stretched.
+      // The pixels that can be stretched horizontally:
       // @ts-ignore
       stretchX: [[3, 30]],
-      // The one (red) row of pixels that can be stretched vertically:
-      //   - the pixels between y: 25 and y: 100 can be stretched
+      // The row of pixels that can be stretched vertically:
       stretchY: [[3, 30]],
       // This part of the image that can contain text ([x1, y1, x2, y2]):
       content: [5, 5, 28, 28],
-      // This is a high-dpi image:
       pixelRatio: 1
     });
   }
