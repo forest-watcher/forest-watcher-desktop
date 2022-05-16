@@ -52,7 +52,7 @@ class App extends Component {
     const { match, user, userChecked, logout, locale, setLocale, location } = this.props;
     if (!userChecked) return null;
     const mergedMessages = Object.assign({}, translations[DEFAULT_LANGUAGE], translations[locale]);
-
+    console.log(locale);
     return (
       <IntlProvider locale={locale} messages={mergedMessages}>
         <div>

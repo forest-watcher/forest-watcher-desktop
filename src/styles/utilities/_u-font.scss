@@ -10,3 +10,14 @@
   white-space: normal;
   word-wrap: break-word;
 }
+
+.u-text-700 {
+  font-family: $base-font-family;
+  font-weight: 300;
+  font-size: 36px;
+  line-height: 45px;
+}
+
+.u-text-neutral-300 {
+  color: $neutral-300;
+}

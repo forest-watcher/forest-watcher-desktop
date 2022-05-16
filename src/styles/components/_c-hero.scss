@@ -1,8 +1,8 @@
 .c-hero {
   background-color: $theme-secondary;
 
-  .hero-content {
-    height: $hero-height;
+  &__content {
+    padding: $global-spacing-7 0;
     display: flex;
     justify-content: space-between;
     align-items: center;

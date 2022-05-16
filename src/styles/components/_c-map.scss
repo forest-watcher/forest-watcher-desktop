@@ -4,6 +4,10 @@
   position: relative;
   z-index: 0;
 
+  &--within-hero {
+    height: 600px;
+  }
+
   .mapboxgl-map {
     position: absolute !important;
     top: 0;

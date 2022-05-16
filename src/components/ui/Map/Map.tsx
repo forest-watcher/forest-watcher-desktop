@@ -2,7 +2,7 @@ import { FC, HTMLAttributes, useState } from "react";
 import classnames from "classnames";
 import ReactMap, { MapboxEvent } from "react-map-gl";
 import MapControls from "./components/ControlsContainer";
-import mapboxgl from "mapbox-gl";
+import { Map as MapInstance } from "mapbox-gl";
 import labelBackgroundIcon from "assets/images/icons/MapLabelFrame.png";
 
 export interface IMapViewState {
@@ -14,9 +14,10 @@ export interface IMapViewState {
 interface IProps extends HTMLAttributes<HTMLElement> {
   mapViewState?: IMapViewState;
   setMapViewState?: (viewState: IMapViewState) => void;
+  onMapLoad?: (e: MapboxEvent) => void;
 }
 
-const loadMapImage = (map: mapboxgl.Map, url: string): Promise<HTMLImageElement | ImageBitmap | undefined> => {
+const loadMapImage = (map: MapInstance, url: string): Promise<HTMLImageElement | ImageBitmap | undefined> => {
   return new Promise((resolve, reject) => {
     map.loadImage(url, (error, image) => {
       if (error) {
@@ -28,7 +29,7 @@ const loadMapImage = (map: mapboxgl.Map, url: string): Promise<HTMLImageElement 
   });
 };
 
-const addMapLabelImage = async (map: mapboxgl.Map) => {
+const addMapLabelImage = async (map: MapInstance) => {
   const image = await loadMapImage(map, labelBackgroundIcon);
 
   if (image) {
@@ -55,15 +56,20 @@ const Map: FC<IProps> = props => {
       zoom: 3.5
     },
     setMapViewState,
+    onMapLoad,
     ...rest
   } = props;
   const classes = classnames("c-map", className);
 
   const [viewState, setViewState] = useState(mapViewState);
 
-  const onMapLoad = (evt: MapboxEvent) => {
+  const handleMapLoad = (evt: MapboxEvent) => {
     evt.target.resize();
     addMapLabelImage(evt.target);
+
+    if (onMapLoad) {
+      onMapLoad(evt);
+    }
   };
 
   const actualViewState = setMapViewState ? mapViewState : viewState;
@@ -74,7 +80,7 @@ const Map: FC<IProps> = props => {
         {...actualViewState}
         onMove={evt => (setMapViewState ? setMapViewState(evt.viewState) : setViewState(evt.viewState))}
         mapStyle="mapbox://styles/mapbox/satellite-streets-v11"
-        onLoad={onMapLoad}
+        onLoad={handleMapLoad}
       >
         <MapControls />
         {children}

@@ -38,7 +38,7 @@ export function syncApp() {
     const areasIds = state().areas.ids;
     const areas = state().areas.data;
     areasIds.forEach(id => {
-      areaPromises.push(dispatch(getGeostore(areas[id].attributes.geostore)));
+      areaPromises.push(dispatch(getGeostore(areas[id].attributes.geostore.id)));
       if (areas[id].attributes.templateId) {
         teamTemplateIds.push(areas[id].attributes.templateId);
       }
