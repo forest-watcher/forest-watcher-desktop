@@ -1,11 +1,20 @@
-import { FC, HTMLAttributes, useState } from "react";
+import { FC, HTMLAttributes, useEffect, useState } from "react";
 import classnames from "classnames";
 import ReactMap, { MapboxEvent } from "react-map-gl";
 import MapControls from "./components/ControlsContainer";
 import mapboxgl from "mapbox-gl";
 import labelBackgroundIcon from "assets/images/icons/MapLabelFrame.png";
 
-interface IProps extends HTMLAttributes<HTMLElement> {}
+export interface IMapViewState {
+  longitude: number;
+  latitude: number;
+  zoom: number;
+}
+
+interface IProps extends HTMLAttributes<HTMLElement> {
+  mapViewState?: IMapViewState;
+  setMapViewState?: (viewState: IMapViewState) => void;
+}
 
 const loadMapImage = (map: mapboxgl.Map, url: string): Promise<HTMLImageElement | ImageBitmap | undefined> => {
   return new Promise((resolve, reject) => {
@@ -41,25 +50,33 @@ const addMapLabelImage = async (map: mapboxgl.Map) => {
 };
 
 const Map: FC<IProps> = props => {
-  const { className, children, ...rest } = props;
+  const {
+    className,
+    children,
+    mapViewState = {
+      longitude: -100,
+      latitude: 40,
+      zoom: 3.5
+    },
+    setMapViewState,
+    ...rest
+  } = props;
   const classes = classnames("c-map", className);
 
-  const [viewState, setViewState] = useState({
-    longitude: -100,
-    latitude: 40,
-    zoom: 3.5
-  });
+  const [viewState, setViewState] = useState(mapViewState);
 
   const onMapLoad = (evt: MapboxEvent) => {
     evt.target.resize();
     addMapLabelImage(evt.target);
   };
 
+  const actualViewState = setMapViewState ? mapViewState : viewState;
+
   return (
     <div className={classes} data-testid="map-container" {...rest}>
       <ReactMap
-        {...viewState}
-        onMove={evt => setViewState(evt.viewState)}
+        {...actualViewState}
+        onMove={evt => (setMapViewState ? setMapViewState(evt.viewState) : setViewState(evt.viewState))}
         mapStyle="mapbox://styles/mapbox/satellite-streets-v11"
         onLoad={onMapLoad}
       >
