@@ -27,6 +27,7 @@ const Map: FC<IProps> = props => {
         onLoad={onMapLoad}
       >
         <MapControls />
+        {children}
       </ReactMap>
     </div>
   );
