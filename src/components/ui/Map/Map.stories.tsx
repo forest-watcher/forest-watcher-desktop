@@ -67,12 +67,14 @@ const Template: ComponentStory<typeof Map> = args => {
       <Polygon
         key="1"
         id="bournemouth"
+        label="Bournemouth"
         data={polygon as GeoJSON.FeatureCollection<GeoJSON.Geometry>}
         onClick={id => setSelected(id)}
       />
       <Polygon
         key="2"
         id="bournemouth2"
+        label="Bournemouth 2"
         data={polygon2 as GeoJSON.FeatureCollection<GeoJSON.Geometry>}
         onClick={id => setSelected(id)}
       />

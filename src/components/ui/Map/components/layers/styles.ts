@@ -33,3 +33,21 @@ export const polygonLineStyleHover = {
     "line-width": 5
   }
 };
+
+export const labelStyle = {
+  id: "labels",
+  type: "symbol",
+  source: "places",
+  minzoom: 10,
+  layout: {
+    "text-field": ["get", "description"],
+    "text-anchor": "center",
+    "text-justify": "auto",
+    "text-size": 18,
+    "icon-text-fit": "both",
+    "icon-image": "label-background"
+  },
+  paint: {
+    "text-color": "#555555"
+  }
+};
