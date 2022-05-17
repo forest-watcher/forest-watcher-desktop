@@ -1,5 +1,6 @@
 import { Map as MapInstance } from "mapbox-gl";
 import labelBackgroundIcon from "assets/images/icons/MapLabelFrame.png";
+import L from "leaflet";
 
 export const loadMapImage = (map: MapInstance, url: string): Promise<HTMLImageElement | ImageBitmap | undefined> => {
   return new Promise((resolve, reject) => {
@@ -28,4 +29,11 @@ export const addMapLabelImage = async (map: MapInstance) => {
       pixelRatio: 1
     });
   }
+};
+
+export const getBoundFromGeoJSON = (geoJSON: any, padding = [15, 15]) => {
+  const countryBounds = geoJSON.coordinates[0].map((pt: any) => [pt[1], pt[0]]);
+  // @ts-ignore
+  const bounds = L.latLngBounds(countryBounds, { padding });
+  return bounds;
 };
