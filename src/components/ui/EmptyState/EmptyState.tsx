@@ -8,11 +8,12 @@ interface IProps extends HTMLAttributes<HTMLElement> {
   text?: string;
   ctaText?: string;
   ctaTo?: string;
+  hasMargins?: boolean;
 }
 
 const EmptyState: FC<IProps> = props => {
-  const { className, children, iconUrl, title, text, ctaText, ctaTo, ...rest } = props;
-  const classes = classnames("c-empty-state", className);
+  const { className, children, iconUrl, title, text, ctaText, ctaTo, hasMargins = false, ...rest } = props;
+  const classes = classnames("c-empty-state", hasMargins && "c-empty-state--has-margins", className);
 
   return (
     <div className={classes} data-testid="button" {...rest}>

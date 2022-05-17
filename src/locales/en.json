@@ -80,6 +80,8 @@
   "areas.locationSearch": "Search by Latitude and Longitude",
   "areas.latitude": "Latitude",
   "areas.longitude": "Longitude",
+  "areas.empty.title": "No Areas Added",
+  "areas.empty.text": "Create an area to begin",
   "templates.name": "templates",
   "templates.title": "Your Templates",
   "templates.subtitle": "Your templates",
