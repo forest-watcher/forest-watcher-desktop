@@ -44,30 +44,36 @@ const Areas: FC<IProps> = props => {
   return (
     <div>
       <Hero title="areas.name" />
-      {!loading &&
-        (!areaMap || areaMap.length === 0 ? (
-          <div className="row column">
-            <EmptyState
-              title={intl.formatMessage({ id: "areas.empty.title" })}
-              text={intl.formatMessage({ id: "areas.empty.text" })}
-              ctaText={intl.formatMessage({ id: "areas.addArea" })}
-              ctaTo="/areas/create"
-              hasMargins
-            />
-          </div>
-        ) : (
-          <Map className="c-map--within-hero" onMapLoad={handleMapLoad}>
-            {areaMap.map(area => (
-              <Polygon
-                key={area.id}
-                id={area.id}
-                label={area.attributes.name}
-                data={area.attributes.geostore.geojson}
-              />
-            ))}
-          </Map>
-        ))}
-      <Loader isLoading={loading} />
+      {(!areaMap || areaMap.length === 0) && !loading ? (
+        <div className="row column">
+          <EmptyState
+            title={intl.formatMessage({ id: "areas.empty.title" })}
+            text={intl.formatMessage({ id: "areas.empty.text" })}
+            ctaText={intl.formatMessage({ id: "areas.addArea" })}
+            ctaTo="/areas/create"
+            hasMargins
+          />
+        </div>
+      ) : (
+        <>
+          {loading ? (
+            <div className="c-map c-map--within-hero">
+              <Loader isLoading />
+            </div>
+          ) : (
+            <Map className="c-map--within-hero" onMapLoad={handleMapLoad}>
+              {areaMap.map(area => (
+                <Polygon
+                  key={area.id}
+                  id={area.id}
+                  label={area.attributes.name}
+                  data={area.attributes.geostore.geojson}
+                />
+              ))}
+            </Map>
+          )}
+        </>
+      )}
       <div className="l-content">
         <Article title="areas.subtitle">
           <ReactGA.OutboundLink eventLabel="Add new area" to="/areas/create">
