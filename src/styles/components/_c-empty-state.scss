@@ -1,0 +1,29 @@
+.c-empty-state {
+  background: $neutral-300;
+  border: 2px solid rgba(85, 85, 85, 0.1);
+  border-radius: 4px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  padding: $global-spacing-10;
+  text-align: center;
+  &__icon {
+    max-width: 72px;
+    margin-bottom: $global-spacing-6;
+  }
+
+  &__title {
+    font-weight: 300;
+    font-size: 36px;
+    line-height: 45px;
+    margin-bottom: $global-spacing-4;
+  }
+
+  &__text {
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 24px;
+    margin-bottom: $global-spacing-15;
+  }
+}
