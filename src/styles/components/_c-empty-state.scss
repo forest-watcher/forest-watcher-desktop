@@ -8,6 +8,12 @@
   flex-direction: column;
   padding: $global-spacing-10;
   text-align: center;
+
+  &--has-margins {
+    margin-top: $global-spacing-20;
+    margin-bottom: $global-spacing-20;
+  }
+
   &__icon {
     max-width: 72px;
     margin-bottom: $global-spacing-6;

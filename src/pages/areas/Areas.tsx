@@ -7,8 +7,9 @@ import Polygon from "components/ui/Map/components/layers/Polygon";
 import { LngLatBoundsLike, MapboxEvent, Map as MapInstance } from "mapbox-gl";
 import * as turf from "@turf/turf";
 import Icon from "components/ui/Icon";
-import { FormattedMessage } from "react-intl";
+import { FormattedMessage, useIntl } from "react-intl";
 import ReactGA from "react-ga";
+import EmptyState from "components/ui/EmptyState/EmptyState";
 
 interface IProps {
   areasList: Array<any>;
@@ -18,6 +19,8 @@ interface IProps {
 const Areas: FC<IProps> = props => {
   const { areasList, loading } = props;
   const areaMap = useMemo(() => Object.values(areasList), [areasList]);
+  const intl = useIntl();
+
   const [mapRef, setMapRef] = useState<MapInstance | null>(null);
   const bbox = useMemo(() => {
     if (areaMap.length > 0) {
@@ -41,14 +44,38 @@ const Areas: FC<IProps> = props => {
   return (
     <div>
       <Hero title="areas.name" />
-      <Map className="c-map--within-hero" onMapLoad={handleMapLoad}>
-        {areaMap.map(area => (
-          <Polygon key={area.id} id={area.id} label={area.attributes.name} data={area.attributes.geostore.geojson} />
-        ))}
-      </Map>
+      {(!areaMap || areaMap.length === 0) && !loading ? (
+        <div className="row column">
+          <EmptyState
+            title={intl.formatMessage({ id: "areas.empty.title" })}
+            text={intl.formatMessage({ id: "areas.empty.text" })}
+            ctaText={intl.formatMessage({ id: "areas.addArea" })}
+            ctaTo="/areas/create"
+            hasMargins
+          />
+        </div>
+      ) : (
+        <>
+          {loading ? (
+            <div className="c-map c-map--within-hero">
+              <Loader isLoading />
+            </div>
+          ) : (
+            <Map className="c-map--within-hero" onMapLoad={handleMapLoad}>
+              {areaMap.map(area => (
+                <Polygon
+                  key={area.id}
+                  id={area.id}
+                  label={area.attributes.name}
+                  data={area.attributes.geostore.geojson}
+                />
+              ))}
+            </Map>
+          )}
+        </>
+      )}
       <div className="l-content">
         <Article title="areas.subtitle">
-          <Loader isLoading={loading} />
           <ReactGA.OutboundLink eventLabel="Add new area" to="/areas/create">
             <button className="c-add-card">
               <Icon name="icon-plus" className="-medium -green" />
