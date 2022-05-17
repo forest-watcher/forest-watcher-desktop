@@ -6,7 +6,6 @@ import { FC, useMemo, useEffect, useState } from "react";
 import Polygon from "components/ui/Map/components/layers/Polygon";
 import { LngLatBoundsLike, MapboxEvent, Map as MapInstance } from "mapbox-gl";
 import * as turf from "@turf/turf";
-import Icon from "components/ui/Icon";
 import { FormattedMessage, useIntl } from "react-intl";
 import ReactGA from "react-ga";
 import EmptyState from "components/ui/EmptyState/EmptyState";
