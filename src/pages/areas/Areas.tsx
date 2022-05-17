@@ -24,7 +24,6 @@ const Areas: FC<IProps> = props => {
   const [mapRef, setMapRef] = useState<MapInstance | null>(null);
   const bbox = useMemo(() => {
     if (areaMap.length > 0) {
-      // @ts-ignore
       const mapped = areaMap.map(area => area.attributes.geostore.geojson.features).flat();
       const features = turf.featureCollection(mapped);
       return turf.bbox(features);
