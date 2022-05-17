@@ -1,6 +1,9 @@
 .c-article {
-  h2 {
-    margin-bottom: 40px;
+  &__top-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: $global-spacing-10;
   }
 
   .section {

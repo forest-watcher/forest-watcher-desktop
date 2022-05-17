@@ -1,0 +1,15 @@
+.c-areas {
+  &__area-listing {
+    display: flex;
+    flex-wrap: wrap;
+    gap: $global-spacing-10;
+    justify-content: center;
+  }
+
+  &__item {
+    flex: 1 1 325px;
+    .c-card__image {
+      min-height: 200px;
+    }
+  }
+}

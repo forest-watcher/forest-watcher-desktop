@@ -10,6 +10,10 @@ import Icon from "components/ui/Icon";
 import { FormattedMessage, useIntl } from "react-intl";
 import ReactGA from "react-ga";
 import EmptyState from "components/ui/EmptyState/EmptyState";
+import PlusIcon from "assets/images/icons/PlusWhite.svg";
+import Card from "components/ui/Card/Card";
+import { Link } from "react-router-dom";
+import EditIcon from "assets/images/icons/Edit.svg";
 
 interface IProps {
   areasList: Array<any>;
@@ -42,7 +46,7 @@ const Areas: FC<IProps> = props => {
   };
 
   return (
-    <div>
+    <div className="c-areas">
       <Hero title="areas.name" />
       {(!areaMap || areaMap.length === 0) && !loading ? (
         <div className="row column">
@@ -74,17 +78,36 @@ const Areas: FC<IProps> = props => {
           )}
         </>
       )}
-      <div className="l-content">
-        <Article title="areas.subtitle">
-          <ReactGA.OutboundLink eventLabel="Add new area" to="/areas/create">
-            <button className="c-add-card">
-              <Icon name="icon-plus" className="-medium -green" />
-              <span className="text -x-small-title -green">
-                <FormattedMessage id="areas.addArea" />
-              </span>
-            </button>
-          </ReactGA.OutboundLink>
+
+      <div className="l-content l-content--neutral-400">
+        <Article
+          title="areas.subtitle"
+          actions={
+            <ReactGA.OutboundLink eventLabel="Add new area" to="/areas/create" className="c-button c-button--primary">
+              <img src={PlusIcon} alt="" role="presentation" className="c-button__inline-icon" />
+              <FormattedMessage id="areas.addArea" />
+            </ReactGA.OutboundLink>
+          }
+        >
+          <div className="c-areas__area-listing">
+            {areaMap.map(area => (
+              <Card size="large" as={Link} to={`/areas/${area.id}`} key={area.id} className="c-areas__item">
+                <Card.Image alt="" src={area.attributes.image} loading="lazy" />
+                <div className="c-card__content-flex">
+                  <div>
+                    <Card.Title className="u-margin-top-none">{area.attributes.name}</Card.Title>
+                  </div>
+                  <Card.Cta iconSrc={EditIcon}>
+                    <FormattedMessage id="common.manage" />
+                  </Card.Cta>
+                </div>
+              </Card>
+            ))}
+          </div>
         </Article>
+      </div>
+      <div className="l-content">
+        <Article title="areas.teamSubtitle"></Article>
       </div>
     </div>
   );
