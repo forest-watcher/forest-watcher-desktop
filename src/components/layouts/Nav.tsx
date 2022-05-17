@@ -29,7 +29,9 @@ const Nav: FC<IProps> = props => {
   const localeValue = watch("localeSelect");
 
   useEffect(() => {
-    setLocale(localeValue);
+    if (localeValue) {
+      setLocale(localeValue);
+    }
   }, [localeValue, setLocale]);
 
   const languages = useMemo(

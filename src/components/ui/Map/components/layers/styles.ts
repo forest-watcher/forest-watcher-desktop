@@ -38,7 +38,7 @@ export const labelStyle = {
   id: "labels",
   type: "symbol",
   source: "places",
-  minzoom: 10,
+  minzoom: 5,
   layout: {
     "text-field": ["get", "description"],
     "text-anchor": "center",

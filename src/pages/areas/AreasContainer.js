@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import Areas from "./Areas";
 
 const mapStateToProps = ({ areas, user, app }) => ({
-  areasList: areas.ids,
+  areasList: areas.data,
   loading: areas.loading,
   userChecked: app.userChecked
 });
