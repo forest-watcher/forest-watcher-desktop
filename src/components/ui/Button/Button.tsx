@@ -2,7 +2,7 @@ import { FC, ButtonHTMLAttributes } from "react";
 import classnames from "classnames";
 
 interface IProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: "primary" | "secondary";
+  variant?: "primary" | "secondary" | "secondary-light-text";
   isIcon?: Boolean;
 }
 
