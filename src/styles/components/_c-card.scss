@@ -45,6 +45,9 @@
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+  }
+
+  &__text {
     &:first-child {
       margin-top: 0;
     }
@@ -55,6 +58,10 @@
     justify-content: space-between;
     align-items: center;
     gap: $global-spacing-1;
+    margin-top: $global-spacing-4;
+    .c-card__title {
+      margin-top: 0px;
+    }
   }
 
   &__cta {

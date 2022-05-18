@@ -1,8 +1,12 @@
 .l-content {
-  padding-top: 40px;
-  padding-bottom: 40px;
+  padding-top: $global-spacing-20;
+  padding-bottom: $global-spacing-20;
   position: relative;
   min-height: 500px;
+
+  &--neutral-400 {
+    background-color: $neutral-400;
+  }
 
   .filter-bar {
     padding-bottom: 30px;
