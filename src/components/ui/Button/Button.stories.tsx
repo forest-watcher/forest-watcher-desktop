@@ -23,6 +23,15 @@ Secondary.args = {
   variant: "secondary"
 };
 
+export const SecondaryLightText = Template.bind({});
+SecondaryLightText.args = {
+  variant: "secondary-light-text"
+};
+
+SecondaryLightText.parameters = {
+  backgrounds: { default: "dark" }
+};
+
 const IconTemplate: ComponentStory<typeof Button> = args => (
   <Button {...args}>
     <img src={ChevronRight} alt="" role="presentation" />
