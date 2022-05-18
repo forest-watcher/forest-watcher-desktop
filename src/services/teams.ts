@@ -1,7 +1,7 @@
 import { API_BASE_URL_V1, API_BASE_URL_V3 } from "../constants/global";
 import { BaseService } from "./baseService";
 import { unique } from "../helpers/utils";
-import { components } from "interfaces/teams";
+import { components, paths } from "interfaces/teams";
 
 type TeamResponse = components["responses"]["Team"]["content"]["application/json"];
 export type Team = components["schemas"]["Team"];
@@ -39,7 +39,14 @@ export class Legacy_TeamService extends BaseService {
   }
 }
 
-export class TeamService extends BaseService {}
+export type TGetUserTeamsResponse =
+  paths["/v3/teams/user/{userId}"]["get"]["responses"]["200"]["content"]["application/json"];
+
+export class TeamService extends BaseService {
+  getUserTeams(userId: string): Promise<TGetUserTeamsResponse> {
+    return this.fetchJSON(`/user/${userId}`);
+  }
+}
 
 export const legacy_TeamService = new Legacy_TeamService(`${API_BASE_URL_V1}/teams`);
 
