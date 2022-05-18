@@ -43,8 +43,6 @@ const Nav: FC<IProps> = props => {
     [intl, translations]
   );
 
-  const username = (user.data && user.data.name) || <FormattedMessage id="app.setupEmail" />;
-
   return (
     <div className="row column" {...rest}>
       <nav className="c-nav">
@@ -56,7 +54,7 @@ const Nav: FC<IProps> = props => {
             </span>
           </NavLink>
         </h1>
-        <div className="c-nav__section">
+        <div className={classnames("c-nav__section", !loggedIn && "c-nav__section--no-grow")}>
           {loggedIn && (
             <ul className="c-nav__subsection c-nav__subsection--links">
               <li className="c-nav__link-wrapper">
@@ -86,18 +84,8 @@ const Nav: FC<IProps> = props => {
               </li>
             </ul>
           )}
-          <ul className={classnames("c-nav__subsection", loggedIn && "c-nav__subsection--settings")}>
+          <ul className="c-nav__subsection c-nav__subsection--settings">
             <li className="c-nav__menu">
-              {/* <LegacySelect
-                name="locale-select"
-                className="c-select -dark"
-                classNamePrefix="Select"
-                value={{ value: locale, label: locale.toUpperCase() }}
-                options={languages}
-                onChange={handleLanguageChange}
-                isSearchable={false}
-                components={{ DropdownIndicator }}
-              /> */}
               <Select
                 id="locale-select"
                 registered={register("localeSelect")}
@@ -111,25 +99,27 @@ const Nav: FC<IProps> = props => {
                 }}
               />
             </li>
-            <li className="c-nav__link-wrapper">
-              <ReactGA.OutboundLink
-                eventLabel="navigation - myGFW"
-                to={MY_GFW_LINK}
-                rel="noopener noreferrer"
-                target="_blank"
-                className="c-nav__link"
-              >
-                <img src={ProfileIcon} alt="" role="presentation" className="c-nav__link-profile-icon" />
-                <span className="c-nav__link-text">{username}</span>
-              </ReactGA.OutboundLink>
-            </li>
 
             {loggedIn && (
-              <li className="c-nav__link-wrapper">
-                <button onClick={logout} className="c-nav__link">
-                  <FormattedMessage id="app.logout" />
-                </button>
-              </li>
+              <>
+                <li className="c-nav__link-wrapper">
+                  <ReactGA.OutboundLink
+                    eventLabel="navigation - myGFW"
+                    to={MY_GFW_LINK}
+                    rel="noopener noreferrer"
+                    target="_blank"
+                    className="c-nav__link"
+                  >
+                    <img src={ProfileIcon} alt="" role="presentation" className="c-nav__link-profile-icon" />
+                    <span className="c-nav__link-text">{user?.data?.name}</span>
+                  </ReactGA.OutboundLink>
+                </li>
+                <li className="c-nav__link-wrapper">
+                  <button onClick={logout} className="c-nav__link">
+                    <FormattedMessage id="app.logout" />
+                  </button>
+                </li>
+              </>
             )}
           </ul>
         </div>

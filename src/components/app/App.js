@@ -56,18 +56,17 @@ class App extends Component {
     return (
       <IntlProvider locale={locale} messages={mergedMessages}>
         <div>
-          {((user.loggedIn && window.location.pathname !== "/") || window.location.pathname === "/login") && (
-            <header className="l-header" role="banner">
-              <Nav
-                loggedIn={user.loggedIn}
-                logout={logout}
-                locale={locale}
-                setLocale={setLocale}
-                translations={translations}
-                user={user}
-              />
-            </header>
-          )}
+          <header className="l-header" role="banner">
+            <Nav
+              loggedIn={user.loggedIn}
+              logout={logout}
+              locale={locale}
+              setLocale={setLocale}
+              translations={translations}
+              user={user}
+            />
+          </header>
+
           <main role="main" className="l-main">
             <Routes
               match={match}
