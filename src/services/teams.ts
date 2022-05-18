@@ -39,8 +39,8 @@ export class Legacy_TeamService extends BaseService {
   }
 }
 
-export class TeamServiceV3 extends BaseService {}
+export class TeamService extends BaseService {}
 
 export const legacy_TeamService = new Legacy_TeamService(`${API_BASE_URL_V1}/teams`);
 
-export const teamServiceV3 = new TeamServiceV3(`${API_BASE_URL_V3}/teams`);
+export const teamService = new TeamService(`${API_BASE_URL_V3}/teams`);
