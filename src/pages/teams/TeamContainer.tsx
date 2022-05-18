@@ -1,9 +1,21 @@
-import { connect } from "react-redux";
-import { RootState, AppDispatch } from "index";
+import { connect, ConnectedProps } from "react-redux";
+import { RootState } from "index";
 import Teams from "./Teams";
+import { getUserTeams } from "modules/gfwTeams";
+import { getUser } from "../../modules/user";
 
-const mapStateToProps = (store: RootState) => ({});
+const mapStateToProps = ({ gfwTeams, user }: RootState) => ({
+  teams: gfwTeams?.data,
+  userId: user.data?.id
+});
 
-const mapDispatchToProps = (dispatch: AppDispatch) => ({});
+const mapDispatchToProps = {
+  getUserTeams,
+  getUser
+};
 
-export default connect(mapStateToProps, mapDispatchToProps)(Teams);
+const connector = connect(mapStateToProps, mapDispatchToProps);
+
+export type TPropsFromRedux = ConnectedProps<typeof connector>;
+
+export default connector(Teams);

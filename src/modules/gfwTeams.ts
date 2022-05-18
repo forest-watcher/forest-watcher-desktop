@@ -15,9 +15,7 @@ const initialState: TState = {
 export default function reducer(state = initialState, action: { type: string; payload?: any }) {
   switch (action.type) {
     case GET_USER_TEAMS: {
-      state.data = action.payload;
-
-      break;
+      return Object.assign({}, state, { data: action.payload });
     }
     default:
       return state;
@@ -25,8 +23,8 @@ export default function reducer(state = initialState, action: { type: string; pa
 }
 
 // Actions
-export const getUserTeams = (userId: string) => (dispatch: AppDispatch, state: RootState) => {
-  teamService.token = state.user.token;
+export const getUserTeams = (userId: string) => (dispatch: AppDispatch, getState: () => RootState) => {
+  teamService.token = getState().user.token;
 
   teamService
     .getUserTeams(userId)
