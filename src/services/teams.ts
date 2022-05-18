@@ -1,4 +1,4 @@
-import { API_BASE_URL_V1 } from "../constants/global";
+import { API_BASE_URL_V1, API_BASE_URL_V3 } from "../constants/global";
 import { BaseService } from "./baseService";
 import { unique } from "../helpers/utils";
 import { components } from "interfaces/teams";
@@ -6,7 +6,7 @@ import { components } from "interfaces/teams";
 type TeamResponse = components["responses"]["Team"]["content"]["application/json"];
 export type Team = components["schemas"]["Team"];
 
-export class TeamService extends BaseService {
+export class Legacy_TeamService extends BaseService {
   saveTeam(team: Team, locale: any, teamId?: string) {
     const body = JSON.stringify({
       name: team.name,
@@ -39,4 +39,8 @@ export class TeamService extends BaseService {
   }
 }
 
-export const teamService = new TeamService(`${API_BASE_URL_V1}/teams`);
+export class TeamServiceV3 extends BaseService {}
+
+export const legacy_TeamService = new Legacy_TeamService(`${API_BASE_URL_V1}/teams`);
+
+export const teamServiceV3 = new TeamServiceV3(`${API_BASE_URL_V3}/teams`);
