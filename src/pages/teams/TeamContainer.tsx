@@ -5,7 +5,7 @@ import { getUserTeams } from "modules/gfwTeams";
 import { getUser } from "../../modules/user";
 
 const mapStateToProps = ({ gfwTeams, user }: RootState) => ({
-  teams: gfwTeams?.data,
+  teams: gfwTeams.data,
   userId: user.data?.id
 });
 
