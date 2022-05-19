@@ -1,7 +1,7 @@
 import { FC } from "react";
 import styles from "./teams.module.scss";
 import { TGFWTeamsState } from "modules/gfwTeams";
-import TeamCard from "./TeamCard";
+import TeamCard from "./team-card/TeamCardContainer";
 
 interface IProps {
   teams: TGFWTeamsState["data"];

@@ -1,14 +1,17 @@
 import { FC } from "react";
 import { Link } from "react-router-dom";
-import styles from "./teams.module.scss";
-import Card from "../ui/Card/Card";
+import styles from "../teams.module.scss";
+import Card from "../../ui/Card/Card";
 import EditIcon from "assets/images/icons/Edit.svg";
 import { FormattedMessage } from "react-intl";
 import { TGFWTeamsState } from "modules/gfwTeams";
+import { TPropsFromRedux } from "./TeamCardContainer";
 
-interface IProps {
+export interface IOwnProps {
   team: TGFWTeamsState["data"][number];
 }
+
+type IProps = TPropsFromRedux & IOwnProps;
 
 const TeamCard: FC<IProps> = props => {
   const { team } = props;
