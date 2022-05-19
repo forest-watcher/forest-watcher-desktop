@@ -4,10 +4,10 @@
  */
 
 export interface paths {
-  "/teams": {
+  "/v1/teams": {
     post: operations["post-team"];
   };
-  "/teams/{id}": {
+  "/v1/teams/{id}": {
     get: operations["get-team"];
     delete: operations["delete-team"];
     patch: operations["patch-team"];
@@ -18,7 +18,7 @@ export interface paths {
       };
     };
   };
-  "/teams/user/{userId}": {
+  "/v1/teams/user/{userId}": {
     /** Retrieve team by given user id */
     get: operations["get-team-by-user-id"];
     parameters: {
@@ -27,7 +27,7 @@ export interface paths {
       };
     };
   };
-  "/teams/confirm/{token}": {
+  "/v1/teams/confirm/{token}": {
     /**
      * Confirms the user is within the team with the id given in the JWT token.
      * If not then the user is added to that team and if needed remove from an existing team.
@@ -40,24 +40,186 @@ export interface paths {
       };
     };
   };
-  "/fw_teams/healthcheck": {
+  "/v1/fw_teams/healthcheck": {
     get: operations["get-fw_teams-healthcheck"];
+  };
+  "/v3/teams": {
+    /** Create a team, the authenticated user will be created as the 'Administrator' of the team. */
+    post: operations["post-v3-teams"];
+    parameters: {};
+  };
+  "/v3/teams/{teamId}": {
+    /**
+     * Get a team by a team id.
+     *
+     * The authenticated user must be a member of the team.
+     */
+    get: operations["get-v3-teams-teamId"];
+    /**
+     * Delete a team, the authenticated user must be the "Administrator" of the team.
+     *
+     * When a team is delete all the members of the team will be removed from the TeamUserRelation model.
+     */
+    delete: operations["delete-v3-teams-teamId"];
+    /** Update a team, the authenticated user must be the "Administrator" or a "Manager" of the team. */
+    patch: operations["patch-v3-teams-teamId"];
+    parameters: {
+      path: {
+        teamId: string;
+      };
+    };
+  };
+  "/v3/teams/myinvites": {
+    /** Get all the teams the authenticated user is invited to. */
+    get: operations["get-v3-teams-myinvites"];
+    parameters: {};
+  };
+  "/v3/teams/user/{userId}": {
+    /** Get all the teams a user is a member of. */
+    get: operations["get-v3-teams-by-userid"];
+    parameters: {
+      path: {
+        userId: string;
+      };
+    };
+  };
+  "/v3/teams/{teamId}/users": {
+    /**
+     * Get all memebers of a team, the authenticated user must be a member of the team.
+     *
+     * If the authenticated user is an "administrator" or a "manager" of the team they will be able to see each user's `status`, otherwise this key will be hidden.
+     */
+    get: operations["get-v3-team-users"];
+    /**
+     * Add multiple members to a team, when the user is added an invite will be sent to their email. Their `status` will be set to `invited`.
+     *
+     * The authenticated user has to be either the "administrator" or a "manager" of the team.
+     */
+    post: operations["post-v3-teams-users"];
+    parameters: {
+      path: {
+        teamId: string;
+      };
+    };
+  };
+  "/v3/teams/{teamId}/users/{teamUserId}": {
+    /**
+     * Delete a team member.
+     *
+     * Cannot delete the "administrator"\
+     * Cannot delete self, instead leave the team by `/v3/teams/{teamId}/users/{userId}/leave`
+     *
+     * The authenticated user has to be either the "administrator" or a "manager" of the team.
+     */
+    delete: operations["delete-v3-teams-teamId-users-teamUserId"];
+    /**
+     * Update a team member's role.
+     *
+     * Cannot change a member's role to "administrator"\
+     * An administrator's role can't be changed
+     *
+     * The authenticated user has to be either the "administrator" or a "manager" of the team.
+     */
+    patch: operations["patch-v3-teams-teamId-users-teamUserId"];
+    parameters: {
+      path: {
+        teamId: string;
+        teamUserId: string;
+      };
+    };
+  };
+  "/v3/teams/{teamId}/users/{userId}/accept": {
+    /**
+     * Allows user to accept their invitation to a team.
+     *
+     * The authenticated user's id must match the param's id.
+     *
+     * The memeber's `status` will be updated to `confirmed`.
+     */
+    patch: operations["v3-get-teams-teamId-users-userId-accept"];
+    parameters: {
+      path: {
+        teamId: string;
+        userId: string;
+      };
+    };
+  };
+  "/v3/teams/{teamId}/users/{userId}/decline": {
+    /**
+     * Allows user to decline their invitation to a team.
+     *
+     * The authenticated user's id must match the param's `userId`.
+     *
+     * The memeber's `status` will be updated to `declined`.
+     */
+    patch: operations["v3-get-teams-teamId-users-userId-decline"];
+    parameters: {
+      path: {
+        teamId: string;
+        userId: string;
+      };
+    };
+  };
+  "/v3/teams/{teamId}/users/{userId}/leave": {
+    /**
+     * Allows user to leave a team.
+     *
+     * The authenticated user's id must match the param's `userId`.
+     *
+     * If the authenticated user is the "administrator" then they can't leave the team.
+     *
+     * The memeber's `role` will be updated to `left`.
+     */
+    patch: operations["v3-get-teams-teamId-users-userId-leave"];
+    parameters: {
+      path: {
+        teamId: string;
+        userId: string;
+      };
+    };
   };
 }
 
 export interface components {
   schemas: {
-    /** Team */
+    /**
+     * Team
+     * @description **Deprecated**
+     */
     Team: {
       name?: string;
-      managers?: unknown[];
-      users?: unknown[];
-      sentInvitations?: unknown[];
+      managers?: {
+        id?: string;
+        email?: string;
+      }[];
+      users?: string[];
+      /** @deprecated */
+      sentInvitations?: string[];
       areas?: unknown[];
       layers?: unknown[];
-      confirmedUsers?: unknown[];
+      confirmedUsers?: {
+        id?: string;
+        email?: string;
+      }[];
       /** Format: date-time */
       createdAt: string;
+    };
+    /** GFW Team */
+    GFWTeam: {
+      name: string;
+      /** Format: date-time */
+      createdAt: string;
+    };
+    /** TeamUserRelation */
+    TeamUserRelation: {
+      teamId: string;
+      userId?: string;
+      /** Format: email */
+      email: string;
+      /** @enum {string} */
+      role: "administrator" | "manager" | "monitor" | "left";
+      /** @enum {string} */
+      status: "confirmed" | "invited" | "declined";
     };
   };
   responses: {
@@ -106,11 +268,69 @@ export interface components {
         };
       };
     };
+    /** Example response */
+    "Teams-v3": {
+      content: {
+        "application/json": {
+          data?: {
+            id?: string;
+            type?: string;
+            attrbiutes?: components["schemas"]["GFWTeam"];
+          }[];
+        };
+      };
+    };
+    /** Example response */
+    "Team-v3": {
+      content: {
+        "application/json": {
+          data?: {
+            type?: string;
+            id?: string;
+            attributes?: components["schemas"]["GFWTeam"];
+          };
+        };
+      };
+    };
+    /** Example response */
+    TeamUserRelation: {
+      content: {
+        "application/json": {
+          data: {
+            id: string;
+            type: string;
+            attributes: components["schemas"]["TeamUserRelation"];
+          };
+        };
+      };
+    };
+    /** Example response */
+    TeamUserRelations: {
+      content: {
+        "application/json": {
+          data?: {
+            id?: string;
+            type?: string;
+            attributes?: components["schemas"]["TeamUserRelation"];
+          }[];
+        };
+      };
+    };
   };
   requestBodies: {
     Team: {
       content: {
         "application/json": components["schemas"]["Team"];
+      };
+    };
+    "Team-v3": {
+      content: {
+        "application/json": components["schemas"]["GFWTeam"];
+      };
+    };
+    TeamUserRelation: {
+      content: {
+        "application/json": components["schemas"]["TeamUserRelation"][];
       };
     };
   };
@@ -207,6 +427,278 @@ export interface operations {
   "get-fw_teams-healthcheck": {
     responses: {
       200: components["responses"]["Healthcheck"];
+    };
+  };
+  /** Create a team, the authenticated user will be created as the 'Administrator' of the team. */
+  "post-v3-teams": {
+    parameters: {};
+    responses: {
+      200: components["responses"]["Team-v3"];
+      400: components["responses"]["Error"];
+      401: components["responses"]["Error"];
+    };
+    requestBody: components["requestBodies"]["Team-v3"];
+  };
+  /**
+   * Get a team by a team id.
+   *
+   * The authenticated user must be a member of the team.
+   */
+  "get-v3-teams-teamId": {
+    parameters: {
+      path: {
+        teamId: string;
+      };
+    };
+    responses: {
+      200: components["responses"]["Team-v3"];
+      401: components["responses"]["Error"];
+      404: components["responses"]["Error"];
+    };
+  };
+  /**
+   * Delete a team, the authenticated user must be the "Administrator" of the team.
+   *
+   * When a team is delete all the members of the team will be removed from the TeamUserRelation model.
+   */
+  "delete-v3-teams-teamId": {
+    parameters: {
+      path: {
+        teamId: string;
+      };
+    };
+    responses: {
+      /** OK */
+      200: unknown;
+      401: components["responses"]["Error"];
+      404: components["responses"]["Error"];
+    };
+  };
+  /** Update a team, the authenticated user must be the "Administrator" or a "Manager" of the team. */
+  "patch-v3-teams-teamId": {
+    parameters: {
+      path: {
+        teamId: string;
+      };
+    };
+    responses: {
+      200: components["responses"]["Team-v3"];
+      400: components["responses"]["Error"];
+      401: components["responses"]["Error"];
+      404: components["responses"]["Error"];
+    };
+    requestBody: components["requestBodies"]["Team-v3"];
+  };
+  /** Get all the teams the authenticated user is invited to. */
+  "get-v3-teams-myinvites": {
+    parameters: {};
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/json": {
+            data: {
+              id: string;
+              type: string;
+              attributes: {
+                name: string;
+                /** @enum {string} */
+                userRole: "administrator" | "manager" | "monitor" | "left";
+                /** Format: date-time */
+                createdAt: string;
+              };
+            }[];
+          };
+        };
+      };
+      401: components["responses"]["Error"];
+    };
+  };
+  /** Get all the teams a user is a member of. */
+  "get-v3-teams-by-userid": {
+    parameters: {
+      path: {
+        userId: string;
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/json": {
+            data: {
+              id: string;
+              type: string;
+              attributes: {
+                name: string;
+                /** @enum {string} */
+                userRole: "administrator" | "manager" | "monitor" | "left";
+                /** Format: date-time */
+                createdAt: string;
+              };
+            }[];
+          };
+        };
+      };
+      401: components["responses"]["Error"];
+    };
+  };
+  /**
+   * Get all memebers of a team, the authenticated user must be a member of the team.
+   *
+   * If the authenticated user is an "administrator" or a "manager" of the team they will be able to see each user's `status`, otherwise this key will be hidden.
+   */
+  "get-v3-team-users": {
+    parameters: {
+      path: {
+        teamId: string;
+      };
+    };
+    responses: {
+      200: components["responses"]["TeamUserRelations"];
+      401: components["responses"]["Error"];
+    };
+  };
+  /**
+   * Add multiple members to a team, when the user is added an invite will be sent to their email. Their `status` will be set to `invited`.
+   *
+   * The authenticated user has to be either the "administrator" or a "manager" of the team.
+   */
+  "post-v3-teams-users": {
+    parameters: {
+      path: {
+        teamId: string;
+      };
+    };
+    responses: {
+      200: components["responses"]["TeamUserRelations"];
+      400: components["responses"]["Error"];
+      401: components["responses"]["Error"];
+      404: components["responses"]["Error"];
+    };
+    requestBody: {
+      content: {
+        "application/json": {
+          users?: {
+            email?: string;
+            /** @enum {string} */
+            role?: "manager" | "monitor";
+          }[];
+        };
+      };
+    };
+  };
+  /**
+   * Delete a team member.
+   *
+   * Cannot delete the "administrator"\
+   * Cannot delete self, instead leave the team by `/v3/teams/{teamId}/users/{userId}/leave`
+   *
+   * The authenticated user has to be either the "administrator" or a "manager" of the team.
+   */
+  "delete-v3-teams-teamId-users-teamUserId": {
+    parameters: {
+      path: {
+        teamId: string;
+        teamUserId: string;
+      };
+    };
+    responses: {
+      200: components["responses"]["TeamUserRelation"];
+      400: components["responses"]["Error"];
+      401: components["responses"]["Error"];
+    };
+  };
+  /**
+   * Update a team member's role.
+   *
+   * Cannot change a member's role to "administrator"\
+   * An administrator's role can't be changed
+   *
+   * The authenticated user has to be either the "administrator" or a "manager" of the team.
+   */
+  "patch-v3-teams-teamId-users-teamUserId": {
+    parameters: {
+      path: {
+        teamId: string;
+        teamUserId: string;
+      };
+    };
+    responses: {
+      200: components["responses"]["TeamUserRelation"];
+      400: components["responses"]["Error"];
+      401: components["responses"]["Error"];
+      404: components["responses"]["Error"];
+    };
+    requestBody: {
+      content: {
+        "application/json": {
+          /** @enum {string} */
+          role?: "manager" | "monitor";
+        };
+      };
+    };
+  };
+  /**
+   * Allows user to accept their invitation to a team.
+   *
+   * The authenticated user's id must match the param's id.
+   *
+   * The memeber's `status` will be updated to `confirmed`.
+   */
+  "v3-get-teams-teamId-users-userId-accept": {
+    parameters: {
+      path: {
+        teamId: string;
+        userId: string;
+      };
+    };
+    responses: {
+      200: components["responses"]["TeamUserRelation"];
+      401: components["responses"]["Error"];
+      404: components["responses"]["Error"];
+    };
+  };
+  /**
+   * Allows user to decline their invitation to a team.
+   *
+   * The authenticated user's id must match the param's `userId`.
+   *
+   * The memeber's `status` will be updated to `declined`.
+   */
+  "v3-get-teams-teamId-users-userId-decline": {
+    parameters: {
+      path: {
+        teamId: string;
+        userId: string;
+      };
+    };
+    responses: {
+      200: components["responses"]["TeamUserRelation"];
+      401: components["responses"]["Error"];
+      404: components["responses"]["Error"];
+    };
+  };
+  /**
+   * Allows user to leave a team.
+   *
+   * The authenticated user's id must match the param's `userId`.
+   *
+   * If the authenticated user is the "administrator" then they can't leave the team.
+   *
+   * The memeber's `role` will be updated to `left`.
+   */
+  "v3-get-teams-teamId-users-userId-leave": {
+    parameters: {
+      path: {
+        teamId: string;
+        userId: string;
+      };
+    };
+    responses: {
+      200: components["responses"]["TeamUserRelation"];
+      401: components["responses"]["Error"];
+      404: components["responses"]["Error"];
     };
   };
 }

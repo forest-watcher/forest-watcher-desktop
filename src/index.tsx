@@ -22,7 +22,10 @@ const history = createBrowserHistory();
 // Redux store
 const store = configureStore();
 
-// Export dispatch funcion for dispatching actions outside connect
+export type RootState = ReturnType<typeof store.getState>;
+export type AppDispatch = typeof store.dispatch;
+
+// Export dispatch function for dispatching actions outside connect
 function dispatch(action: any) {
   store.dispatch(action);
 }

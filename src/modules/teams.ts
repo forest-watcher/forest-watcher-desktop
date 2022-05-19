@@ -1,5 +1,5 @@
 import { toastr } from "react-redux-toastr";
-import { Team, teamService } from "services/teams";
+import { Team, legacy_TeamService } from "services/teams";
 // Actions
 const GET_TEAM = "teams/GET_TEAM";
 const SAVE_TEAM = "teams/SAVE_TEAM";
@@ -55,8 +55,8 @@ export default function reducer(state = initialState, action: { type: string; pa
 
 export function getTeamByUserId(userId: string) {
   return (dispatch: any, state: any) => {
-    teamService.token = state().user.token;
-    return teamService
+    legacy_TeamService.token = state().user.token;
+    return legacy_TeamService
       .getTeamByUserId(userId)
       .then(response => {
         const team = response.data;
@@ -86,7 +86,7 @@ export function createTeam(team: Team) {
       type: SET_SAVING,
       payload: true
     });
-    return teamService
+    return legacy_TeamService
       .saveTeam(team, state().app.locale)
       .then(response => {
         const team = response.data;
@@ -124,7 +124,7 @@ export function updateTeam(team: Team, id: string) {
       type: SET_SAVING,
       payload: true
     });
-    return teamService
+    return legacy_TeamService
       .saveTeam(team, state().app.locale, id)
       .then(response => {
         const team = response.data;
