@@ -16,8 +16,8 @@ const TeamsListing: FC<IProps> = props => {
   return (
     <div className={styles["c-teams__listing"]}>
       {teams.map(team => (
-        <div className={styles["c-teams__grid-item"]}>
-          <Card size="large" as={Link} to={`/teams/${team.id}`} key={team.id} className={styles["c-teams__card"]}>
+        <div className={styles["c-teams__grid-item"]} key={team.id}>
+          <Card size="large" as={Link} to={`/teams/${team.id}`} className={styles["c-teams__card"]}>
             <div className="c-card__content-flex">
               <div>
                 <Card.Title className="u-margin-top-none">{team.attributes.name}</Card.Title>
