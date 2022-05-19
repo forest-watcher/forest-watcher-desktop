@@ -61,7 +61,7 @@ export const getTeamMembers = (teamId: string) => (dispatch: AppDispatch, getSta
     .getTeamMembers(teamId)
     .then(({ data }) =>
       dispatch({
-        type: GET_USER_TEAMS,
+        type: GET_TEAM_MEMBERS,
         payload: {
           teamId: teamId,
           members: data

@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, useEffect, useMemo } from "react";
 import { Link } from "react-router-dom";
 import styles from "../teams.module.scss";
 import Card from "../../ui/Card/Card";
@@ -14,14 +14,34 @@ export interface IOwnProps {
 type IProps = TPropsFromRedux & IOwnProps;
 
 const TeamCard: FC<IProps> = props => {
-  const { team } = props;
+  const { team, getTeamMembers, teamMembers } = props;
+
+  useEffect(() => getTeamMembers(), [getTeamMembers]);
+
+  const [manages, monitors] = useMemo(
+    () =>
+      teamMembers.reduce<[typeof teamMembers, typeof teamMembers]>(
+        (acc, teamMember) => {
+          if (teamMember.attributes?.role === "administrator" || teamMember.attributes?.role === "manager") {
+            acc[0].push(teamMember);
+          } else {
+            acc[1].push(teamMember);
+          }
+          return acc;
+        },
+        [[], []]
+      ),
+    [teamMembers]
+  );
 
   return (
     <Card size="large" as={Link} to={`/teams/${team.id}`} className={styles["c-teams__card"]}>
-      <div className="c-card__content-flex">
+      <div className="c-card__content-flex u-margin-top-none">
         <div>
           <Card.Title className="u-margin-top-none">{team.attributes.name}</Card.Title>
         </div>
+        <code>{JSON.stringify(manages)}</code>
+        <code>{JSON.stringify(monitors)}</code>
         <Card.Cta iconSrc={EditIcon}>
           <FormattedMessage id="common.manage" />
         </Card.Cta>
