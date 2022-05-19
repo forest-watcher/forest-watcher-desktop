@@ -4,13 +4,13 @@ import { TGetUserTeamsResponse } from "services/teams";
 
 const GET_USER_TEAMS = "gfwTeams/GET_USER_TEAMS";
 
-type TState = {
+export type TGFWTeamsState = {
   data: TGetUserTeamsResponse["data"];
 };
 
-export type TReducerActions = { type: typeof GET_USER_TEAMS; teams: TState["data"] };
+export type TReducerActions = { type: typeof GET_USER_TEAMS; teams: TGFWTeamsState["data"] };
 
-const initialState: TState = {
+const initialState: TGFWTeamsState = {
   data: []
 };
 

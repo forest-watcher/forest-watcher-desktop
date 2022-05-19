@@ -5,6 +5,7 @@ import Article from "components/layouts/Article";
 import ReactGA from "react-ga";
 import PlusIcon from "assets/images/icons/PlusWhite.svg";
 import { FormattedMessage } from "react-intl";
+import TeamsListing from "components/teams-listing/TeamsListing";
 
 interface IProps extends TPropsFromRedux {}
 
@@ -36,7 +37,7 @@ const Teams: FC<IProps> = props => {
   );
 
   return (
-    <div className="c-teams">
+    <div>
       <Hero title="teams.name" />
       <div className="l-content">
         <Article
@@ -49,12 +50,12 @@ const Teams: FC<IProps> = props => {
             </ReactGA.OutboundLink>
           }
         >
-          <code>{JSON.stringify(managedTeams)}</code>
+          <TeamsListing teams={managedTeams} />
         </Article>
       </div>
       <div className="l-content l-content--neutral-400">
         <Article title="teams.joinedByMe" titleValues={{ num: joinedTeams.length.toString() }}>
-          <code>{JSON.stringify(joinedTeams)}</code>
+          <TeamsListing teams={joinedTeams} />
         </Article>
       </div>
     </div>
