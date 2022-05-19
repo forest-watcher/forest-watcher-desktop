@@ -3,4 +3,9 @@
   background-color: $neutral-300;
   border-bottom: none;
   box-shadow: inset 0px -1px 0px #DCDCDC;
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  z-index: 1000;
 }

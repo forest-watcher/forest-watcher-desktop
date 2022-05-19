@@ -2,4 +2,5 @@
   min-height: calc(100% - #{$nav-height});
   background-color: $neutral-300;
   overflow: visible;
+  margin-top: $nav-height;
 }
