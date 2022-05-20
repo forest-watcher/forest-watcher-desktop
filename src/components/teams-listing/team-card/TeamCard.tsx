@@ -20,9 +20,12 @@ const TeamCard: FC<IProps> = props => {
     () =>
       teamMembers.reduce<[typeof teamMembers, typeof teamMembers]>(
         (acc, teamMember) => {
-          if (teamMember.attributes.role === "administrator" || teamMember.attributes.role === "manager") {
+          if (
+            (teamMember.attributes.role === "administrator" || teamMember.attributes.role === "manager") &&
+            teamMember.attributes.userId
+          ) {
             acc[0].push(teamMember);
-          } else {
+          } else if (teamMember.attributes.userId) {
             acc[1].push(teamMember);
           }
           return acc;
@@ -45,22 +48,16 @@ const TeamCard: FC<IProps> = props => {
 
       <Card size="large" className={"c-teams__card c-teams--nested-card"}>
         <div>
-          <h3 className="c-teams__sub-title">Managers</h3>
-          <p>
-            {manages
-              .filter(i => i.attributes.userId)
-              .map(i => i.attributes.userId)
-              .join(", ")}
-          </p>
+          <h3 className="c-teams__sub-title">
+            <FormattedMessage id="teams.managers" values={{ num: manages.length }} />
+          </h3>
+          <p>{manages.map(i => i.attributes.userId).join(", ")}</p>
         </div>
         <div>
-          <h3 className="c-teams__sub-title">Monitors</h3>
-          <p>
-            {monitors
-              .filter(i => i.attributes.userId)
-              .map(i => i.attributes.userId)
-              .join(", ")}
-          </p>
+          <h3 className="c-teams__sub-title">
+            <FormattedMessage id="teams.monitors" values={{ num: monitors.length }} />
+          </h3>
+          <p>{monitors.map(i => i.attributes.userId).join(", ")}</p>
         </div>
       </Card>
     </Card>
