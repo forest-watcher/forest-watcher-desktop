@@ -20,7 +20,7 @@ const TeamCard: FC<IProps> = props => {
     () =>
       teamMembers.reduce<[typeof teamMembers, typeof teamMembers]>(
         (acc, teamMember) => {
-          if (teamMember.attributes?.role === "administrator" || teamMember.attributes?.role === "manager") {
+          if (teamMember.attributes.role === "administrator" || teamMember.attributes.role === "manager") {
             acc[0].push(teamMember);
           } else {
             acc[1].push(teamMember);
@@ -48,8 +48,8 @@ const TeamCard: FC<IProps> = props => {
           <h3 className="c-teams__sub-title">Managers</h3>
           <p>
             {manages
-              .filter(i => i.attributes?.userId)
-              .map(i => i.attributes?.userId)
+              .filter(i => i.attributes.userId)
+              .map(i => i.attributes.userId)
               .join(", ")}
           </p>
         </div>
@@ -57,8 +57,8 @@ const TeamCard: FC<IProps> = props => {
           <h3 className="c-teams__sub-title">Monitors</h3>
           <p>
             {monitors
-              .filter(i => i.attributes?.userId)
-              .map(i => i.attributes?.userId)
+              .filter(i => i.attributes.userId)
+              .map(i => i.attributes.userId)
               .join(", ")}
           </p>
         </div>

@@ -272,10 +272,10 @@ export interface components {
     "Teams-v3": {
       content: {
         "application/json": {
-          data?: {
-            id?: string;
-            type?: string;
-            attrbiutes?: components["schemas"]["GFWTeam"];
+          data: {
+            id: string;
+            type: string;
+            attrbiutes: components["schemas"]["GFWTeam"];
           }[];
         };
       };
@@ -284,10 +284,10 @@ export interface components {
     "Team-v3": {
       content: {
         "application/json": {
-          data?: {
-            type?: string;
-            id?: string;
-            attributes?: components["schemas"]["GFWTeam"];
+          data: {
+            type: string;
+            id: string;
+            attributes: components["schemas"]["GFWTeam"];
           };
         };
       };
@@ -308,10 +308,10 @@ export interface components {
     TeamUserRelations: {
       content: {
         "application/json": {
-          data?: {
-            id?: string;
-            type?: string;
-            attributes?: components["schemas"]["TeamUserRelation"];
+          data: {
+            id: string;
+            type: string;
+            attributes: components["schemas"]["TeamUserRelation"];
           }[];
         };
       };
