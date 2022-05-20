@@ -90,13 +90,13 @@ const Areas: FC<IProps> = props => {
         >
           <div className="c-areas__area-listing">
             {areaMap.map(area => (
-              <Card size="large" as={Link} to={`/areas/${area.id}`} key={area.id} className="c-areas__item">
+              <Card size="large" hoverState={true} key={area.id} className="c-areas__item">
                 <Card.Image alt="" src={area.attributes.image} loading="lazy" />
                 <div className="c-card__content-flex">
                   <div>
                     <Card.Title className="u-margin-top-none">{area.attributes.name}</Card.Title>
                   </div>
-                  <Card.Cta iconSrc={EditIcon}>
+                  <Card.Cta to={`/areas/${area.id}`} iconSrc={EditIcon}>
                     <FormattedMessage id="common.manage" />
                   </Card.Cta>
                 </div>

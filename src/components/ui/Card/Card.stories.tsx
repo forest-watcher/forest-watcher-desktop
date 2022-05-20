@@ -22,14 +22,16 @@ const LargeImageCardTemplate: ComponentStory<typeof Card> = args => (
 
 const LargeImageCardAsLinkTemplate: ComponentStory<typeof Card> = args => (
   <BrowserRouter>
-    <Card {...args} to="/">
+    <Card {...args}>
       <Card.Image alt="Placeholder picture" src="https://picsum.photos/293/160" />
       <div className="c-card__content-flex">
         <div>
           <Card.Title>Area</Card.Title>
           <Card.Text>Some text</Card.Text>
         </div>
-        <Card.Cta iconSrc={EditIcon}>Manage</Card.Cta>
+        <Card.Cta to="/" iconSrc={EditIcon}>
+          Manage
+        </Card.Cta>
       </div>
     </Card>
   </BrowserRouter>
@@ -51,7 +53,7 @@ LargeImageCard.args = {
 export const LargeImageCardAsLink = LargeImageCardAsLinkTemplate.bind({});
 LargeImageCardAsLink.args = {
   size: "large",
-  as: Link
+  hoverState: true
 };
 
 export const SmallImageCard = SmallImageCardTemplate.bind({});
