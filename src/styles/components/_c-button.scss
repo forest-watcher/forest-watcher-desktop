@@ -37,7 +37,7 @@
     }
   }
 
-  &--secondary {
+  &--secondary, &--secondary-light-text {
     background-color: transparent;
     box-shadow: 0 0 0 1px $primary-500;
     color: $neutral-700;
@@ -48,6 +48,10 @@
     &:active {
       box-shadow: 0 0 0 2px $primary-600;
     }
+  }
+
+  &--secondary-light-text {
+    color: $neutral-300;
   }
 
   &--is-icon {

@@ -22,14 +22,16 @@ const LargeImageCardTemplate: ComponentStory<typeof Card> = args => (
 
 const LargeImageCardAsLinkTemplate: ComponentStory<typeof Card> = args => (
   <BrowserRouter>
-    <Card {...args} to="/">
+    <Card {...args}>
       <Card.Image alt="Placeholder picture" src="https://picsum.photos/293/160" />
       <div className="c-card__content-flex">
         <div>
           <Card.Title>Area</Card.Title>
           <Card.Text>Some text</Card.Text>
         </div>
-        <Card.Cta iconSrc={EditIcon}>Manage</Card.Cta>
+        <Card.Cta to="/" iconSrc={EditIcon}>
+          Manage
+        </Card.Cta>
       </div>
     </Card>
   </BrowserRouter>
@@ -43,6 +45,34 @@ const SmallImageCardTemplate: ComponentStory<typeof Card> = args => (
   </Card>
 );
 
+const NestedCardTemplate: ComponentStory<typeof Card> = args => (
+  <BrowserRouter>
+    <Card {...args}>
+      <div className="c-card__content-flex">
+        <div>
+          <Card.Title>Team</Card.Title>
+          <Card.Text>Some text</Card.Text>
+        </div>
+        <Card.Cta to="/" iconSrc={EditIcon}>
+          Manage Team
+        </Card.Cta>
+      </div>
+      {/* NESTED CARD */}
+      <Card {...args}>
+        <div className="c-card__content-flex">
+          <div>
+            <Card.Title>Area</Card.Title>
+            <Card.Text>Some text</Card.Text>
+          </div>
+          <Card.Cta to="/" iconSrc={EditIcon}>
+            Manage Area
+          </Card.Cta>
+        </div>
+      </Card>
+    </Card>
+  </BrowserRouter>
+);
+
 export const LargeImageCard = LargeImageCardTemplate.bind({});
 LargeImageCard.args = {
   size: "large"
@@ -50,11 +80,15 @@ LargeImageCard.args = {
 
 export const LargeImageCardAsLink = LargeImageCardAsLinkTemplate.bind({});
 LargeImageCardAsLink.args = {
-  size: "large",
-  as: Link
+  size: "large"
 };
 
 export const SmallImageCard = SmallImageCardTemplate.bind({});
 SmallImageCardTemplate.args = {
   size: "small"
+};
+
+export const NestedCard = NestedCardTemplate.bind({});
+NestedCard.args = {
+  size: "large"
 };
