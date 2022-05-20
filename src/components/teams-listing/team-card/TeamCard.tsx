@@ -1,5 +1,4 @@
 import { FC, useEffect, useMemo } from "react";
-import { Link } from "react-router-dom";
 import styles from "../teams.module.scss";
 import Card from "../../ui/Card/Card";
 import EditIcon from "assets/images/icons/Edit.svg";
@@ -35,17 +34,34 @@ const TeamCard: FC<IProps> = props => {
   );
 
   return (
-    <Card size="large" as={Link} to={`/teams/${team.id}`} className={styles["c-teams__card"]}>
+    <Card size="large" className={styles["c-teams__card"]}>
       <div className="c-card__content-flex u-margin-top-none">
         <div>
           <Card.Title className="u-margin-top-none">{team.attributes.name}</Card.Title>
         </div>
-        <code>{JSON.stringify(manages)}</code>
-        <code>{JSON.stringify(monitors)}</code>
-        <Card.Cta iconSrc={EditIcon}>
+        <Card.Cta to={`/teams/${team.id}`} iconSrc={EditIcon}>
           <FormattedMessage id="common.manage" />
         </Card.Cta>
       </div>
+
+      <Card size="large" className={styles["c-teams__card"]}>
+        <div>
+          <h3>Managers</h3>
+          <p>
+            {manages
+              .filter(i => i.attributes?.userId)
+              .map(i => i.attributes?.userId)
+              .join(", ")}
+          </p>
+          <h3>Monitors</h3>
+          <p>
+            {monitors
+              .filter(i => i.attributes?.userId)
+              .map(i => i.attributes?.userId)
+              .join(", ")}
+          </p>
+        </div>
+      </Card>
     </Card>
   );
 };
