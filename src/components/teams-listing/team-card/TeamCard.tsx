@@ -1,5 +1,4 @@
 import { FC, useEffect, useMemo } from "react";
-import styles from "../teams.module.scss";
 import Card from "../../ui/Card/Card";
 import EditIcon from "assets/images/icons/Edit.svg";
 import { FormattedMessage } from "react-intl";
@@ -34,8 +33,8 @@ const TeamCard: FC<IProps> = props => {
   );
 
   return (
-    <Card size="large" className={styles["c-teams__card"]}>
-      <div className="c-card__content-flex u-margin-top-none">
+    <Card size="large" className="c-teams__card">
+      <div className="c-teams__title">
         <div>
           <Card.Title className="u-margin-top-none">{team.attributes.name}</Card.Title>
         </div>
@@ -44,16 +43,18 @@ const TeamCard: FC<IProps> = props => {
         </Card.Cta>
       </div>
 
-      <Card size="large" className={styles["c-teams__card"]}>
+      <Card size="large" className={"c-teams__card c-teams--nested-card"}>
         <div>
-          <h3>Managers</h3>
+          <h3 className="c-teams__sub-title">Managers</h3>
           <p>
             {manages
               .filter(i => i.attributes?.userId)
               .map(i => i.attributes?.userId)
               .join(", ")}
           </p>
-          <h3>Monitors</h3>
+        </div>
+        <div>
+          <h3 className="c-teams__sub-title">Monitors</h3>
           <p>
             {monitors
               .filter(i => i.attributes?.userId)

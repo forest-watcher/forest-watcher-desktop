@@ -1,0 +1,42 @@
+.c-teams {
+  &__card {
+    width: 100%;
+
+    > *:not(:first-child) {
+      margin-top: 12px;
+    }
+  }
+
+  &--nested-card {
+    padding: 16px;
+
+    > *:not(:first-child) {
+      margin-top: 16px;
+    }
+
+    h3 {
+      color: #333333;
+      font-weight: 500;
+      font-size: 14px;
+      line-height: 14px;
+      padding: 0;
+      margin-bottom: 6px;
+    }
+
+    p {
+      color: #666666;
+      font-weight: 400;
+      font-size: 16px;
+      line-height: 22px;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
+    }
+  }
+
+  &__title {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 6px;
+  }
+}
