@@ -4,7 +4,6 @@ import classnames from "classnames";
 
 interface IProps extends HTMLAttributes<HTMLDivElement> {
   size?: "small" | "large";
-  hoverState?: boolean;
   [key: string]: any;
 }
 
@@ -27,8 +26,8 @@ interface ICardComposition {
 }
 
 const Card: FC<IProps> & ICardComposition = props => {
-  const { className, children, size = "large", hoverState = false, ...rest } = props;
-  const classes = classnames("c-card", `c-card--${size}`, hoverState && "c-card--hover", className);
+  const { className, children, size = "large", ...rest } = props;
+  const classes = classnames("c-card", `c-card--${size}`, className);
 
   return (
     <div className={classes} data-testid="card" {...rest}>

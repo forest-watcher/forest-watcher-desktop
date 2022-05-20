@@ -11,7 +11,6 @@ import ReactGA from "react-ga";
 import EmptyState from "components/ui/EmptyState/EmptyState";
 import PlusIcon from "assets/images/icons/PlusWhite.svg";
 import Card from "components/ui/Card/Card";
-import { Link } from "react-router-dom";
 import EditIcon from "assets/images/icons/Edit.svg";
 
 interface IProps {
@@ -90,7 +89,7 @@ const Areas: FC<IProps> = props => {
         >
           <div className="c-areas__area-listing">
             {areaMap.map(area => (
-              <Card size="large" hoverState={true} key={area.id} className="c-areas__item">
+              <Card size="large" key={area.id} className="c-areas__item">
                 <Card.Image alt="" src={area.attributes.image} loading="lazy" />
                 <div className="c-card__content-flex">
                   <div>

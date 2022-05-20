@@ -1,19 +1,13 @@
-.c-card {
-  background: $neutral-300;
-  border-radius: $global-spacing-1;
-  border: 2px solid rgba(85, 85, 85, 0.1);
-  display: inline-block;
+$c-card-border-width:   2px;
+$c-card-border-radius:  $global-spacing-1;
 
-  &--hover {
-    position: relative;
-    outline: none;
-    &:hover, &:focus {
-      border-color: $primary-400;
-    }
-    &:active {
-      border-color: $primary-500;
-    }
-  }
+.c-card {
+  position: relative;
+  outline: none;
+  display: inline-block;
+  background: $neutral-300;
+  border-radius: $c-card-border-radius;
+  border: $c-card-border-width solid rgba(85, 85, 85, 0.1);
 
   &--large {
     padding: $global-spacing-5;
@@ -71,7 +65,7 @@
     gap: $global-spacing-1;
     margin-top: $global-spacing-4;
     .c-card__title {
-      margin-top: 0px;
+      margin-top: 0;
     }
   }
 
@@ -86,11 +80,21 @@
     &:after {
       content: "";
       position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
+      top: -$c-card-border-width;
+      left: -$c-card-border-width;
+      width: calc(100% + #{$c-card-border-width * 2});
+      height: calc(100% + #{$c-card-border-width * 2});
+      border: $c-card-border-width solid transparent;
+      border-radius: $c-card-border-radius;
       z-index: 1;
+    }
+
+    &:hover:after, &:focus:after {
+      border-color: $primary-400;
+    }
+
+    &:active:after {
+      border-color: $primary-500;
     }
   }
 
