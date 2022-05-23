@@ -1,9 +1,9 @@
 import React, { FC, HTMLAttributes, ImgHTMLAttributes } from "react";
+import { Link, LinkProps } from "react-router-dom";
 import classnames from "classnames";
 
-interface IProps extends HTMLAttributes<HTMLBaseElement> {
+interface IProps extends HTMLAttributes<HTMLDivElement> {
   size?: "small" | "large";
-  as?: React.ElementType;
   [key: string]: any;
 }
 
@@ -11,7 +11,7 @@ interface ITitleProps extends React.HTMLAttributes<HTMLHeadingElement> {
   HeadingLevel?: "h1" | "h2" | "h3" | "h5" | "h6";
 }
 
-interface ICtaProps extends React.HTMLAttributes<HTMLParagraphElement> {
+interface ICtaProps extends LinkProps {
   iconSrc?: string;
 }
 
@@ -26,14 +26,13 @@ interface ICardComposition {
 }
 
 const Card: FC<IProps> & ICardComposition = props => {
-  const { className, children, as = "div", size = "large", ...rest } = props;
-  const Element = as;
+  const { className, children, size = "large", ...rest } = props;
   const classes = classnames("c-card", `c-card--${size}`, className);
 
   return (
-    <Element className={classes} data-testid="card" {...rest}>
+    <div className={classes} data-testid="card" {...rest}>
       {children}
-    </Element>
+    </div>
   );
 };
 
@@ -57,10 +56,10 @@ const Cta: FC<ICtaProps> = props => {
   const classes = classnames("c-card__cta", className);
 
   return (
-    <p {...rest} className={classes}>
+    <Link {...rest} className={classes}>
       {iconSrc && <img role="presentation" alt="" className="c-card__cta-image" src={iconSrc} />}
       <span>{children}</span>
-    </p>
+    </Link>
   );
 };
 
