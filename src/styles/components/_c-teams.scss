@@ -1,4 +1,25 @@
 .c-teams {
+  &__listing {
+    display: flex;
+    margin-top: -40px;
+    margin-left: -20px;
+    margin-right: -20px;
+    flex-wrap: wrap;
+  }
+
+  &__grid-item {
+    flex: 0 0 100%;
+    margin-top: 40px;
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+
+  @include after(md) {
+    &__grid-item {
+      flex: 0 0 33.33%
+    }
+  }
+
   &__card {
     width: 100%;
 
