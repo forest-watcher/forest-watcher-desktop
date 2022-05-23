@@ -1,5 +1,4 @@
 import { FC } from "react";
-import styles from "./teams.module.scss";
 import { TGFWTeamsState } from "modules/gfwTeams";
 import TeamCard from "./team-card/TeamCardContainer";
 
@@ -11,9 +10,9 @@ const TeamsListing: FC<IProps> = props => {
   const { teams } = props;
 
   return (
-    <div className={styles["c-teams__listing"]}>
+    <div className="c-teams__listing">
       {teams.map(team => (
-        <div className={styles["c-teams__grid-item"]} key={team.id}>
+        <div className="c-teams__grid-item" key={team.id}>
           <TeamCard team={team} />
         </div>
       ))}

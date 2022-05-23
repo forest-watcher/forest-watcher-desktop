@@ -3,6 +3,7 @@
 @import "./node_modules/react-redux-toastr/src/styles/index";
 @import "mapbox-gl/dist/mapbox-gl.css";
 @import "@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css";
+@import "src/styles/utilities/u-breakpoints";
 
 /* Reset */
 @import "./styles/reset";
@@ -46,7 +47,7 @@
 @import "./styles/components/c-layers-show";
 @import "./styles/components/c-add-card";
 @import "./styles/components/c-card";
-@import "./styles/components/c-team-card";
+@import "styles/components/c-teams";
 @import "./styles/components/c-tab";
 @import "./styles/components/c-checkbox";
 @import "./styles/components/c-member-list";
