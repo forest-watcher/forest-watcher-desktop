@@ -44,19 +44,22 @@ const Teams: FC<IProps> = props => {
       <Hero title="teams.name" />
       {myInvites.length > 0 && (
         <div className="l-team-invitations l-content--neutral-400">
-          <div className="row l-team-invitations__row">
-            <FormattedMessage id="teams.invitation.banner" values={{ num: myInvites.length }}>
-              {txt => <span className="l-team-invitations__title">{txt}</span>}
-            </FormattedMessage>
+          <div className="row column">
+            <div className="row l-team-invitations__row">
+              <FormattedMessage id="teams.invitation.banner" values={{ num: myInvites.length }}>
+                {txt => <span className="l-team-invitations__title">{txt}</span>}
+              </FormattedMessage>
 
-            <Button variant="primary">
-              <FormattedMessage id="teams.invitation.accept" />
-            </Button>
+              <Button variant="primary">
+                <FormattedMessage id="teams.invitation.accept" />
+              </Button>
+            </div>
           </div>
         </div>
       )}
-      <div className="l-content">
+      <div className="l-content c-teams">
         <Article
+          className="c-teams__heading"
           title="teams.managedByMe"
           titleValues={{ num: managedTeams.length.toString() }}
           actions={
@@ -69,8 +72,12 @@ const Teams: FC<IProps> = props => {
           <TeamsListing teams={managedTeams} />
         </Article>
       </div>
-      <div className="l-content l-content--neutral-400">
-        <Article title="teams.joinedByMe" titleValues={{ num: joinedTeams.length.toString() }}>
+      <div className="l-content l-content--neutral-400 c-teams">
+        <Article
+          className="c-teams__heading"
+          title="teams.joinedByMe"
+          titleValues={{ num: joinedTeams.length.toString() }}
+        >
           <TeamsListing teams={joinedTeams} />
         </Article>
       </div>
