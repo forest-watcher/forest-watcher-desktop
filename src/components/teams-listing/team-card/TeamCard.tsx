@@ -12,9 +12,12 @@ export interface IOwnProps {
 type IProps = TPropsFromRedux & IOwnProps;
 
 const TeamCard: FC<IProps> = props => {
-  const { team, getTeamMembers, teamMembers } = props;
+  const { team, getTeamMembers, teamMembers, getTeamAreas, teamAreas } = props;
 
-  useEffect(() => getTeamMembers(), [getTeamMembers]);
+  useEffect(() => {
+    getTeamMembers();
+    getTeamAreas();
+  }, [getTeamMembers, getTeamAreas]);
 
   const [manages, monitors] = useMemo(
     () =>
@@ -58,6 +61,20 @@ const TeamCard: FC<IProps> = props => {
             <FormattedMessage id="teams.monitors" values={{ num: monitors.length }} />
           </h3>
           <p>{monitors.map(i => i.attributes.userId).join(", ")}</p>
+        </div>
+      </Card>
+
+      <Card size="large" className={"c-teams__card c-teams--nested-card"}>
+        <div className="flex-container align-justify">
+          <div className="c-teams__area-text">
+            <h3 className="c-teams__sub-title">
+              <FormattedMessage id="teams.summary.areas" />
+            </h3>
+            <p>{teamAreas.join(", ")}</p>
+          </div>
+          <Card.Cta to={"/areas"} iconSrc={EditIcon}>
+            <FormattedMessage id="common.manage" />
+          </Card.Cta>
         </div>
       </Card>
     </Card>
