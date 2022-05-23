@@ -7,15 +7,14 @@ import PlusIcon from "assets/images/icons/PlusWhite.svg";
 import { FormattedMessage } from "react-intl";
 import TeamsListing from "components/teams-listing/TeamsListing";
 import Button from "../../components/ui/Button/Button";
+import useGetUserId from "hooks/useGetUserId";
 
 interface IProps extends TPropsFromRedux {}
 
 const Teams: FC<IProps> = props => {
-  const { userId, teams, myInvites, getUserTeams, getUser, getMyTeamInvites } = props;
+  const { teams, myInvites, getUserTeams, getMyTeamInvites } = props;
 
-  if (!userId) {
-    getUser();
-  }
+  const userId = useGetUserId();
 
   useEffect(() => {
     if (userId) {
