@@ -27,7 +27,7 @@ const mockTeamMembers: ITeamCardProps["teamMembers"] = [
     type: "teamUser",
     id: "1234",
     attributes: {
-      teamId: "62837ffb79c763190b04bd7c",
+      teamId: "1234",
       email: "user+gfw@test.com",
       status: "invited",
       role: "monitor"
