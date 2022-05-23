@@ -9,7 +9,7 @@ export interface IOwnProps {
   team: TGFWTeamsState["data"][number];
 }
 
-type IProps = TPropsFromRedux & IOwnProps;
+export type IProps = TPropsFromRedux & IOwnProps;
 
 const TeamCard: FC<IProps> = props => {
   const { team, getTeamMembers, teamMembers, getTeamAreas, teamAreas } = props;
