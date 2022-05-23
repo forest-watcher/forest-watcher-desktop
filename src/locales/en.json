@@ -32,6 +32,8 @@
   "common.next": "Next",
   "common.previous": "Previous",
   "common.manage": "Manage",
+  "common.manage.team": "Manage Team",
+  "common.manage.area": "Manage Area",
   "login.welcome": "Log in using one of following accounts:",
   "forms.required": "required",
   "forms.save": "save",

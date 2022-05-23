@@ -45,7 +45,7 @@ const TeamCard: FC<IProps> = props => {
           <Card.Title className="u-margin-top-none">{team.attributes.name}</Card.Title>
         </div>
         <Card.Cta to={`/teams/${team.id}`} iconSrc={EditIcon}>
-          <FormattedMessage id="common.manage" />
+          <FormattedMessage id="common.manage.team" />
         </Card.Cta>
       </div>
 
@@ -73,7 +73,7 @@ const TeamCard: FC<IProps> = props => {
             <p>{teamAreas.join(", ")}</p>
           </div>
           <Card.Cta to={"/areas"} iconSrc={EditIcon}>
-            <FormattedMessage id="common.manage" />
+            <FormattedMessage id="common.manage.area" />
           </Card.Cta>
         </div>
       </Card>
