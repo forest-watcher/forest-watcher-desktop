@@ -6,19 +6,23 @@ import ReactGA from "react-ga";
 import PlusIcon from "assets/images/icons/PlusWhite.svg";
 import { FormattedMessage } from "react-intl";
 import TeamsListing from "components/teams-listing/TeamsListing";
+import Button from "../../components/ui/Button/Button";
 
 interface IProps extends TPropsFromRedux {}
 
 const Teams: FC<IProps> = props => {
-  const { teams, getUserTeams, userId, getUser } = props;
+  const { userId, teams, myInvites, getUserTeams, getUser, getMyTeamInvites } = props;
 
   if (!userId) {
     getUser();
   }
 
   useEffect(() => {
-    if (userId) getUserTeams(userId);
-  }, [getUserTeams, userId]);
+    if (userId) {
+      getUserTeams(userId);
+      getMyTeamInvites();
+    }
+  }, [getUserTeams, getMyTeamInvites, userId]);
 
   const [managedTeams, joinedTeams] = useMemo(
     () =>
@@ -39,6 +43,19 @@ const Teams: FC<IProps> = props => {
   return (
     <div>
       <Hero title="teams.name" />
+      {myInvites.length > 0 && (
+        <div className="l-team-invitations l-content--neutral-400">
+          <div className="row l-team-invitations__row">
+            <FormattedMessage id="teams.invitation.banner" values={{ num: myInvites.length }}>
+              {txt => <span className="l-team-invitations__title">{txt}</span>}
+            </FormattedMessage>
+
+            <Button variant="primary">
+              <FormattedMessage id="teams.invitation.accept" />
+            </Button>
+          </div>
+        </div>
+      )}
       <div className="l-content">
         <Article
           title="teams.managedByMe"

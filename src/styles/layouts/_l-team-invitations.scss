@@ -1,0 +1,13 @@
+.l-team-invitations {
+  padding: 20px 0;
+
+  &__row {
+    justify-content: space-between;
+  }
+
+  &__title {
+    font-size: 24px;
+    line-height: 36px;
+    color: #555555;
+  }
+}

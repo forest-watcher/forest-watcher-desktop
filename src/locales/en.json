@@ -118,6 +118,8 @@
   "teams.joinedByMe": "Joined By Me ({num})",
   "teams.managers": "{num} Managers:",
   "teams.monitors": "{num} Monitors:",
+  "teams.invitation.banner": "You have {num, plural, one {# invitation} other {# invitations}} to join a team",
+  "teams.invitation.accept": "Accept Invitation",
   "teams.create": "Create New team",
   "teams.edit": "Edit team",
   "teams.teamName": "Team name",
