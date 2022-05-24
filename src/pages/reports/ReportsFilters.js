@@ -97,8 +97,8 @@ class ReportsFilters extends React.Component {
         <div className="column small-12 medium-3">
           <div className="c-date-picker">
             <DatePicker
-              dateFormat={DEFAULT_FORMAT}
-              selected={this.props.searchParams.date && moment(this.props.searchParams.date, DEFAULT_FORMAT)}
+              dateFormat={"dd/MM/yyyy"}
+              selected={this.props.searchParams.date && moment(this.props.searchParams.date, DEFAULT_FORMAT).toDate()}
               onChange={this.handleDateChange}
               isClearable={true}
               placeholderText={this.props.intl.formatMessage({ id: "filters.date" })}
