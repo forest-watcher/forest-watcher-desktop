@@ -2,7 +2,7 @@ import classNames from "classnames";
 import Button from "components/ui/Button/Button";
 import kebabIcon from "assets/images/icons/kebab.svg";
 import ContextMenu from "../ContextMenu/ContextMenu";
-import { useCallback, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 
 interface IProps<T> {
   rows: T[];
@@ -14,6 +14,7 @@ interface IProps<T> {
 const DataTable = <T extends { [key: string]: string }>(props: IProps<T>) => {
   const { rows, columnOrder, className, rowActions } = props;
   const [activeContextMenu, setActiveContextMenu] = useState<number | undefined>(undefined);
+  const rowEls = useRef<{ [key: number]: HTMLTableRowElement | null }>({});
 
   const openContextMenu = (rowId: number) => {
     setActiveContextMenu(rowId);
@@ -36,30 +37,43 @@ const DataTable = <T extends { [key: string]: string }>(props: IProps<T>) => {
       </thead>
 
       <tbody>
-        {rows.map((row, rowId) => (
-          <tr className="c-data-table__row">
-            {columnOrder.map(column => (
-              <td>{row[column]}</td>
-            ))}
+        {rows.map((row, rowId) => {
+          let rowPosition = undefined;
+          if (rowEls.current[rowId]) {
+            rowPosition = rowEls.current[rowId]!.getBoundingClientRect();
+          }
 
-            {rowActions && (
-              <td>
-                <Button aria-label="Next" isIcon variant="primary" onClick={() => openContextMenu(rowId)}>
-                  <img alt="" role="presentation" src={kebabIcon} />
-                </Button>
+          const contextMenuPosition = {
+            x: rowPosition ? rowPosition.x + rowPosition.width : 0,
+            y: rowPosition ? rowPosition.y + rowPosition.height : 0
+          };
 
-                <ContextMenu
-                  open={activeContextMenu === rowId}
-                  onClose={closeContextMenu}
-                  menuItems={rowActions.map(rowAction => ({
-                    name: rowAction.name,
-                    onClick: () => rowAction.callback(row)
-                  }))}
-                />
-              </td>
-            )}
-          </tr>
-        ))}
+          return (
+            <tr ref={element => (rowEls.current[rowId] = element)} className="c-data-table__row">
+              {columnOrder.map(column => (
+                <td>{row[column]}</td>
+              ))}
+
+              {rowActions && (
+                <td>
+                  <Button aria-label="Next" isIcon variant="primary" onClick={() => openContextMenu(rowId)}>
+                    <img alt="" role="presentation" src={kebabIcon} />
+                  </Button>
+
+                  <ContextMenu
+                    open={activeContextMenu === rowId}
+                    position={contextMenuPosition}
+                    onClose={closeContextMenu}
+                    menuItems={rowActions.map(rowAction => ({
+                      name: rowAction.name,
+                      onClick: () => rowAction.callback(row)
+                    }))}
+                  />
+                </td>
+              )}
+            </tr>
+          );
+        })}
       </tbody>
     </table>
   );

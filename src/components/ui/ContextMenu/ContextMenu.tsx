@@ -1,14 +1,17 @@
 import { FC, useEffect, useRef } from "react";
+import classNames from "classnames";
 import ReactDOM from "react-dom";
 
 interface IProps {
+  className?: string;
   open: boolean;
   onClose: () => void;
   menuItems: { name: string; onClick: () => void }[];
+  position: { x: number; y: number };
 }
 
 const ContextMenu: FC<IProps> = props => {
-  const { open, onClose, menuItems } = props;
+  const { className, open, onClose, menuItems, position } = props;
   const el = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -26,7 +29,7 @@ const ContextMenu: FC<IProps> = props => {
 
   return open
     ? ReactDOM.createPortal(
-        <div style={{ background: "#000000" }} ref={el}>
+        <div className={classNames("c-context-menu", className)} style={{ top: position.y, left: position.x }} ref={el}>
           {menuItems.map(menuItem => (
             <div onClick={menuItem.onClick}>{menuItem.name}</div>
           ))}
