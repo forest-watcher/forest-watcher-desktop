@@ -120,7 +120,7 @@
   "teams.joinedByMe": "Joined By Me ({num})",
   "teams.managers": "{num} Managers:",
   "teams.monitors": "{num} Monitors:",
-  "teams.summary.areas": "Areas",
+  "teams.summary.areas": "Areas:",
   "teams.invitation.banner": "You have {num, plural, one {# invitation} other {# invitations}} to join a team",
   "teams.invitation.accept": "Accept Invitation",
   "teams.create": "Create New team",

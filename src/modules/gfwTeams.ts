@@ -12,7 +12,7 @@ const GET_TEAM_AREAS = "gfwTeams/GET_TEAM_AREAS";
 export type TGFWTeamsState = {
   data: TGetUserTeamsResponse["data"];
   members: { [teamId: string]: TGetTeamMembersResponse["data"] };
-  areas: { [teamId: string]: TGetAreasByTeamId["data"] };
+  areas: { [teamId: string]: any }; // ToDo: Change any to TGetAreasByTeamId["data"] when docs are upto date!
   myInvites: TGetMyTeamInvites["data"];
 };
 
@@ -20,7 +20,8 @@ export type TReducerActions =
   | { type: typeof GET_USER_TEAMS; payload: { teams: TGFWTeamsState["data"] } }
   | { type: typeof GET_TEAM_MEMBERS; payload: { teamId: string; members: TGFWTeamsState["members"][string] } }
   | { type: typeof GET_MY_TEAM_INVITES; payload: { myInvites: TGFWTeamsState["data"] } }
-  | { type: typeof GET_TEAM_AREAS; payload: { teamId: string; areas: TGetAreasByTeamId["data"] } };
+  // ToDo: Change any to TGetAreasByTeamId["data"] when docs are upto date!
+  | { type: typeof GET_TEAM_AREAS; payload: { teamId: string; areas: any } };
 
 const initialState: TGFWTeamsState = {
   data: [],
