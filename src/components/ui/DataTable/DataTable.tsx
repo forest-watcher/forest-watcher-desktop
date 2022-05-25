@@ -48,7 +48,14 @@ const DataTable = <T extends { [key: string]: string }>(props: IProps<T>) => {
                   <img alt="" role="presentation" src={kebabIcon} />
                 </Button>
 
-                <ContextMenu open={activeContextMenu === rowId} onClose={closeContextMenu} />
+                <ContextMenu
+                  open={activeContextMenu === rowId}
+                  onClose={closeContextMenu}
+                  menuItems={rowActions.map(rowAction => ({
+                    name: rowAction.name,
+                    onClick: () => rowAction.callback(row)
+                  }))}
+                />
               </td>
             )}
           </tr>
