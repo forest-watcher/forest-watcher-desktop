@@ -2,7 +2,6 @@ import { teamService } from "services/teams";
 import { apiService } from "../services/api";
 import { RootState, AppDispatch } from "index";
 import type { TGetUserTeamsResponse, TGetTeamMembersResponse, TGetMyTeamInvites } from "services/teams";
-import type { TGetAreasByTeamId } from "services/api";
 
 const GET_USER_TEAMS = "gfwTeams/GET_USER_TEAMS";
 const GET_TEAM_MEMBERS = "gfwTeams/GET_TEAM_MEMBERS";
