@@ -42,9 +42,22 @@ export class Legacy_TeamService extends BaseService {
 export type TGetUserTeamsResponse =
   paths["/v3/teams/user/{userId}"]["get"]["responses"]["200"]["content"]["application/json"];
 
+export type TGetTeamMembersResponse =
+  paths["/v3/teams/{teamId}/users"]["get"]["responses"]["200"]["content"]["application/json"];
+
+export type TGetMyTeamInvites = paths["/v3/teams/myinvites"]["get"]["responses"]["200"]["content"]["application/json"];
+
 export class TeamService extends BaseService {
   getUserTeams(userId: string): Promise<TGetUserTeamsResponse> {
     return this.fetchJSON(`/user/${userId}`);
+  }
+
+  getTeamMembers(teamId: string): Promise<TGetTeamMembersResponse> {
+    return this.fetchJSON(`/${teamId}/users`);
+  }
+
+  getMyTeamInvites(): Promise<TGetMyTeamInvites> {
+    return this.fetchJSON("/myinvites");
   }
 }
 

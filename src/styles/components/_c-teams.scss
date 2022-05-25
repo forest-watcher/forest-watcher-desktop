@@ -1,0 +1,64 @@
+.c-teams {
+  &__listing {
+    display: flex;
+    margin-top: -40px;
+    margin-left: -20px;
+    margin-right: -20px;
+    flex-wrap: wrap;
+  }
+
+  &__grid-item {
+    flex: 0 0 100%;
+    margin-top: 40px;
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+
+  @include after(md) {
+    &__grid-item {
+      flex: 0 0 33.33%
+    }
+  }
+
+  &__card {
+    width: 100%;
+
+    > *:not(:first-child) {
+      margin-top: 12px;
+    }
+  }
+
+  &--nested-card {
+    padding: 16px;
+
+    > *:not(:first-child) {
+      margin-top: 16px;
+    }
+
+    h3 {
+      color: #333333;
+      font-weight: 500;
+      font-size: 14px;
+      line-height: 14px;
+      padding: 0;
+      margin-bottom: 6px;
+      text-transform: uppercase;
+    }
+
+    p {
+      color: #666666;
+      font-weight: 400;
+      font-size: 16px;
+      line-height: 22px;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
+    }
+  }
+
+  &__title {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 6px;
+  }
+}
