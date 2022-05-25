@@ -1,4 +1,13 @@
 .c-teams {
+  padding-top: 60px;
+  min-height: unset;
+
+  &__heading {
+    > .c-article__top-row {
+      margin-bottom: 28px;
+    }
+  }
+
   &__listing {
     display: flex;
     margin-top: -40px;
@@ -22,6 +31,7 @@
 
   &__card {
     width: 100%;
+    padding: 27px 24px 24px;
 
     > *:not(:first-child) {
       margin-top: 12px;
