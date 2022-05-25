@@ -4,7 +4,7 @@ import { BaseService } from "./baseService";
 import domtoimage from "dom-to-image";
 import { operations } from "interfaces/api";
 
-type AreasResponse = operations["get-v3-forest-watcher-areas"]["responses"]["200"]["content"]["application/json"];
+type AreasResponse = operations["get-v3-forest-watcher-area"]["responses"]["200"]["content"]["application/json"];
 
 export class AreaService extends BaseService {
   async saveArea(area: any, node: any, method: any) {

@@ -6,7 +6,7 @@
 export interface paths {
   "/v1/forest-watcher/area": {
     /** Retrieve areas for the logged in user */
-    get: operations["get-all-user-areas"];
+    get: operations["get-user-areas"];
     /** Create a new area for the logged in user */
     post: operations["post-user-area"];
     parameters: {};
@@ -16,16 +16,16 @@ export interface paths {
     parameters: {};
   };
   "/v3/fw_api/healthcheck": {
-    get: operations["get-v3-fw_api-healthcheck"];
+    get: operations["get-fw_api-healthcheck"];
     parameters: {};
   };
   "/v3/forest-watcher/area": {
     /** Retrieve areas for the logged in user */
-    get: operations["get-v3-forest-watcher-areas"];
+    get: operations["get-v3-forest-watcher-area"];
   };
   "/v3/forest-watcher/area/{areaId}": {
-    /** Retrieve an area for the logged in user */
-    get: operations["get-v3-forest-watcher-area"];
+    /** Retrieve an area for the logged in user. Area object contains geostore, associated report templates and associated teams. */
+    get: operations["get-v3-forest-watcher-area-areaid"];
     /** Delete an area which the logged in user has either created, or is associated with a team they are manager of */
     delete: operations["delete-v3-forest-watcher-area-areaId"];
     parameters: {
@@ -34,9 +34,18 @@ export interface paths {
       };
     };
   };
+  "/v3/forest-watcher/area/teamAreas/{teamId}": {
+    /** Return an array of area Ids that are associated with the supplied team id */
+    get: operations["get-v3-forest-watcher-area-teamAreas"];
+    parameters: {
+      path: {
+        teamId: string;
+      };
+    };
+  };
   "/v3/forest-watcher/area/areaTeams/{areaId}": {
     /** Retrieve areas for the logged in user */
-    get: operations["get-v3-forest-watcher-areas-by-logged-user"];
+    get: operations["get-v3-forest-watcher-area-areaTeams"];
     parameters: {
       path: {
         areaId: string;
@@ -84,7 +93,7 @@ export interface components {
 
 export interface operations {
   /** Retrieve areas for the logged in user */
-  "get-all-user-areas": {
+  "get-user-areas": {
     parameters: {};
     responses: {
       /** OK */
@@ -108,14 +117,8 @@ export interface operations {
       200: components["responses"]["Healthcheck"];
     };
   };
-  "get-v3-fw_api-healthcheck": {
-    parameters: {};
-    responses: {
-      200: components["responses"]["Healthcheck"];
-    };
-  };
   /** Retrieve areas for the logged in user */
-  "get-v3-forest-watcher-areas": {
+  "get-v3-forest-watcher-area": {
     responses: {
       /** OK */
       200: {
@@ -237,8 +240,8 @@ export interface operations {
       404: components["responses"]["Error"];
     };
   };
-  /** Retrieve an area for the logged in user */
-  "get-v3-forest-watcher-area": {
+  /** Retrieve an area for the logged in user. Area object contains geostore, associated report templates and associated teams. */
+  "get-v3-forest-watcher-area-areaid": {
     parameters: {
       path: {
         areaId: string;
@@ -379,8 +382,33 @@ export interface operations {
       401: unknown;
     };
   };
+  /** Return an array of area Ids that are associated with the supplied team id */
+  "get-v3-forest-watcher-area-teamAreas": {
+    parameters: {
+      path: {
+        teamId: string;
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/json": {
+            data: string[];
+          };
+        };
+      };
+      401: components["responses"]["Error"];
+      404: components["responses"]["Error"];
+      "": {
+        content: {
+          "application/json": { [key: string]: unknown };
+        };
+      };
+    };
+  };
   /** Retrieve areas for the logged in user */
-  "get-v3-forest-watcher-areas-by-logged-user": {
+  "get-v3-forest-watcher-area-areaTeams": {
     parameters: {
       path: {
         areaId: string;

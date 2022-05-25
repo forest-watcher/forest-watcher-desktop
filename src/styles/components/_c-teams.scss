@@ -31,6 +31,7 @@
 
   &__card {
     width: 100%;
+    height: 100%;
     padding: 27px 24px 24px;
 
     > *:not(:first-child) {
@@ -38,8 +39,16 @@
     }
   }
 
+  // The flex column will "grow" as far as it can before it bunches up with the CTA button
+  // Meaning text that overflows will ellipsis as expected
+  &__area-text {
+    flex: 1 0 0px;
+    width: 0px;
+  }
+
   &--nested-card {
     padding: 16px;
+    height: auto;
 
     > *:not(:first-child) {
       margin-top: 16px;
@@ -51,15 +60,15 @@
       font-size: 14px;
       line-height: 14px;
       padding: 0;
-      margin-bottom: 6px;
       text-transform: uppercase;
     }
 
-    p {
+    p:not(:empty) {
       color: #666666;
       font-weight: 400;
       font-size: 16px;
       line-height: 22px;
+      margin-top: 6px;
       white-space: nowrap;
       text-overflow: ellipsis;
       overflow: hidden;
