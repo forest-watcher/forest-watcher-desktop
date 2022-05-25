@@ -1,0 +1,30 @@
+.c-data-table {
+  &__header {
+    background-color: #f7f7f7;
+  }
+
+  &__row {
+    border-bottom: 2px solid #F2F2F2;
+  }
+
+  th, td {
+    text-align: left;
+  }
+
+  th {
+    font-size: 14px;
+    line-height: 14px;
+    font-weight: 500;
+    padding: 23px 24px;
+    text-transform: uppercase;
+    color: #333333;
+  }
+
+  td {
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 22px;
+    padding: 12px 24px 14px;
+    color: #1A1A19;
+  }
+}
