@@ -1,14 +1,16 @@
 import classNames from "classnames";
+import Button from "components/ui/Button/Button";
+import kebabIcon from "assets/images/icons/kebab.svg";
 
 interface IProps<T> {
   rows: T[];
   columnOrder: (keyof T)[];
-  rowActions?: [{ name: string; callback: (row: T) => void }];
-  className: string;
+  rowActions?: { name: string; callback: (row: T) => void }[];
+  className?: string;
 }
 
 const DataTable = <T extends { [key: string]: string }>(props: IProps<T>) => {
-  const { rows, columnOrder, className } = props;
+  const { rows, columnOrder, className, rowActions } = props;
 
   return (
     <table className={classNames("c-data-table", className)}>
@@ -17,6 +19,8 @@ const DataTable = <T extends { [key: string]: string }>(props: IProps<T>) => {
           {columnOrder.map(column => (
             <th>{column.toString()}</th>
           ))}
+
+          {rowActions && <th></th>}
         </tr>
       </thead>
 
@@ -26,6 +30,14 @@ const DataTable = <T extends { [key: string]: string }>(props: IProps<T>) => {
             {columnOrder.map(column => (
               <td>{row[column]}</td>
             ))}
+
+            {rowActions && (
+              <td>
+                <Button aria-label="Next" isIcon variant="primary">
+                  <img alt="" role="presentation" src={kebabIcon} />
+                </Button>
+              </td>
+            )}
           </tr>
         ))}
       </tbody>

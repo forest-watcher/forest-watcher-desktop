@@ -35,3 +35,18 @@ FullWidth.args = {
   ...Standard.args,
   className: "u-w-100"
 };
+
+export const WithActions = Template.bind({});
+WithActions.args = {
+  ...Standard.args,
+  rowActions: [
+    {
+      name: "Edit",
+      callback: () => {}
+    },
+    {
+      name: "Delete",
+      callback: () => {}
+    }
+  ]
+};
