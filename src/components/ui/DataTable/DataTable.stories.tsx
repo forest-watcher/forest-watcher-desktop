@@ -29,3 +29,9 @@ Standard.args = {
   ],
   columnOrder: ["name", "email"]
 };
+
+export const FullWidth = Template.bind({});
+FullWidth.args = {
+  ...Standard.args,
+  className: "u-w-100"
+};
