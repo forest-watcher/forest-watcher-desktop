@@ -10,12 +10,14 @@ import { userService } from "services/user";
 const CHECK_USER_LOGGED = "user/CHECK_USER_LOGGED";
 export const LOGOUT = "user/LOGOUT";
 export const SET_USER_DATA = "user/SET_USER_DATA";
+const SET_FETCHING = "user/SET_FETCHING";
 
 // Reducer
 const initialState = {
   data: {
     id: null
   },
+  fetching: false,
   loggedIn: false,
   token: null
 };
@@ -23,11 +25,13 @@ const initialState = {
 export default function reducer(state = initialState, action) {
   switch (action.type) {
     case SET_USER_DATA:
-      return { ...state, data: action.payload };
+      return { ...state, data: action.payload, fetching: false };
     case CHECK_USER_LOGGED:
-      return Object.assign({}, state, { ...action.payload });
+      return Object.assign({}, state, { fetching: false, ...action.payload });
     case LOGOUT:
       return initialState;
+    case SET_FETCHING:
+      return { ...state, fetching: true };
     default:
       return state;
   }
@@ -89,6 +93,10 @@ export function logout() {
 
 export function getUser() {
   return (dispatch, state) => {
+    dispatch({
+      type: SET_FETCHING
+    });
+
     return userService
       .getUser()
       .then(({ data }) => {
