@@ -1,6 +1,8 @@
 import classNames from "classnames";
 import Button from "components/ui/Button/Button";
 import kebabIcon from "assets/images/icons/kebab.svg";
+import ContextMenu from "../ContextMenu/ContextMenu";
+import { useCallback, useState } from "react";
 
 interface IProps<T> {
   rows: T[];
@@ -11,6 +13,15 @@ interface IProps<T> {
 
 const DataTable = <T extends { [key: string]: string }>(props: IProps<T>) => {
   const { rows, columnOrder, className, rowActions } = props;
+  const [activeContextMenu, setActiveContextMenu] = useState<number | undefined>(undefined);
+
+  const openContextMenu = (rowId: number) => {
+    setActiveContextMenu(rowId);
+  };
+
+  const closeContextMenu = useCallback(() => {
+    setActiveContextMenu(undefined);
+  }, [setActiveContextMenu]);
 
   return (
     <table className={classNames("c-data-table", className)}>
@@ -25,7 +36,7 @@ const DataTable = <T extends { [key: string]: string }>(props: IProps<T>) => {
       </thead>
 
       <tbody>
-        {rows.map(row => (
+        {rows.map((row, rowId) => (
           <tr className="c-data-table__row">
             {columnOrder.map(column => (
               <td>{row[column]}</td>
@@ -33,9 +44,11 @@ const DataTable = <T extends { [key: string]: string }>(props: IProps<T>) => {
 
             {rowActions && (
               <td>
-                <Button aria-label="Next" isIcon variant="primary">
+                <Button aria-label="Next" isIcon variant="primary" onClick={() => openContextMenu(rowId)}>
                   <img alt="" role="presentation" src={kebabIcon} />
                 </Button>
+
+                <ContextMenu open={activeContextMenu === rowId} onClose={closeContextMenu} />
               </td>
             )}
           </tr>
