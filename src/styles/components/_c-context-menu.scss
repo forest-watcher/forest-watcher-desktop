@@ -2,8 +2,8 @@
   position: absolute;
   background-color: #ffffff;
   min-width: 160px;
-  transform: translateX(-100%);
-  animation: context-menu-appear 0.08s linear;
+  // To override default styles
+  border: 0;
 
   &__item {
     font-weight: 400;
@@ -21,16 +21,5 @@
     &:hover {
       background-color: #E3ECC6;
     }
-  }
-}
-
-@keyframes context-menu-appear {
-  0% {
-    opacity: 0.8;
-    transform: translateX(-100%) scale(0.8);
-  }
-  100% {
-    opacity: 1;
-    transform: translateX(-100%) scale(1);
   }
 }
