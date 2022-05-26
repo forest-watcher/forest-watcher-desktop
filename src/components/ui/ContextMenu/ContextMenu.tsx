@@ -31,7 +31,9 @@ const ContextMenu: FC<IProps> = props => {
     ? ReactDOM.createPortal(
         <div className={classNames("c-context-menu", className)} style={{ top: position.y, left: position.x }} ref={el}>
           {menuItems.map(menuItem => (
-            <div onClick={menuItem.onClick}>{menuItem.name}</div>
+            <div className="c-context-menu__item" onClick={menuItem.onClick}>
+              <span>{menuItem.name}</span>
+            </div>
           ))}
         </div>,
         document.body
