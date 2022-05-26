@@ -6,9 +6,7 @@ export default {
   component: DataTable
 } as ComponentMeta<typeof DataTable>;
 
-const Template: ComponentStory<typeof DataTable> = args => {
-  return <DataTable {...args} />;
-};
+const Template: ComponentStory<typeof DataTable> = args => <DataTable {...args} />;
 
 export const Standard = Template.bind({});
 Standard.args = {
