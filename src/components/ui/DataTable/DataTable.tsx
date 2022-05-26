@@ -35,10 +35,10 @@ const DataTable = <T extends { [key: string]: string }>(props: IProps<T>) => {
             ))}
 
             {rowActions && (
-              <td>
+              <td className="c-data-table__action-cell">
                 <ContextMenu
                   menuButton={
-                    <Button aria-label="Next" isIcon variant="primary">
+                    <Button aria-label="Open Row Actions" className="c-data-table__action-btn" variant="blank">
                       <img alt="" role="presentation" src={kebabIcon} />
                     </Button>
                   }

@@ -1,5 +1,6 @@
 import { ComponentStory, ComponentMeta } from "@storybook/react";
 import ChevronRight from "assets/images/icons/ChevronRight.svg";
+import KebabIcon from "assets/images/icons/kebab.svg";
 
 import Button from "components/ui/Button/Button";
 
@@ -43,4 +44,11 @@ Icon.args = {
   variant: "primary",
   isIcon: true,
   "aria-label": "Next"
+};
+
+export const Blank = Template.bind({});
+Blank.args = {
+  variant: "blank",
+  isIcon: true,
+  "aria-label": "Open Menu"
 };

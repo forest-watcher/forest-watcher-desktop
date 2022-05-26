@@ -1,4 +1,6 @@
 .c-data-table {
+  $this: &;
+
   &__header {
     background-color: #f7f7f7;
   }
@@ -9,6 +11,7 @@
 
   th, td {
     text-align: left;
+    vertical-align: middle;
   }
 
   th {
@@ -26,5 +29,14 @@
     line-height: 22px;
     padding: 12px 24px 14px;
     color: #1A1A19;
+  }
+
+  td#{$this}__action-cell {
+    padding: 0;
+    text-align: right;
+  }
+
+  &__action-btn {
+    padding: 0 24px;
   }
 }

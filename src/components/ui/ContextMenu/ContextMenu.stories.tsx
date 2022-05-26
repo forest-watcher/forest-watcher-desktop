@@ -13,7 +13,7 @@ const Template: ComponentStory<typeof ContextMenu> = args => <ContextMenu {...ar
 export const Standard = Template.bind({});
 Standard.args = {
   menuButton: (
-    <Button aria-label="Next" isIcon variant="primary">
+    <Button aria-label="Open Menu" isIcon={true} variant="blank">
       <img alt="" role="presentation" src={kebabIcon} />
     </Button>
   ),

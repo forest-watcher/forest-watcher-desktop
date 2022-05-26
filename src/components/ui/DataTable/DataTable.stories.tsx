@@ -31,7 +31,7 @@ FullWidth.args = {
 
 export const WithActions = Template.bind({});
 WithActions.args = {
-  ...Standard.args,
+  ...FullWidth.args,
   rowActions: [
     {
       name: "Edit",
