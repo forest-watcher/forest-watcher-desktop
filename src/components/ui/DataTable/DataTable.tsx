@@ -3,7 +3,7 @@ import Button from "components/ui/Button/Button";
 import kebabIcon from "assets/images/icons/kebab.svg";
 import ContextMenu, { IProps as IContextMenuProps } from "components/ui/ContextMenu/ContextMenu";
 
-interface IProps<T> {
+export interface IProps<T> {
   rows: T[];
   columnOrder: (keyof T)[];
   rowActions?: (Omit<IContextMenuProps["menuItems"][number], "onClick"> & {

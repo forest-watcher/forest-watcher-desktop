@@ -1,14 +1,23 @@
-import DataTable from "./DataTable";
+import DataTable, { IProps as IDataTableProps } from "./DataTable";
 import { ComponentMeta, ComponentStory } from "@storybook/react";
+import { FC } from "react";
 
 export default {
   title: "UI/DataTable",
   component: DataTable
 } as ComponentMeta<typeof DataTable>;
 
-const Template: ComponentStory<typeof DataTable> = args => <DataTable {...args} />;
+type TDataTableRows = {
+  name: string;
+  email: string;
+};
 
-export const Standard = Template.bind({});
+const Template =
+  <T extends { [key: string]: string }>(): ComponentStory<FC<IDataTableProps<T>>> =>
+  args =>
+    <DataTable<T> {...args} />;
+
+export const Standard = Template<TDataTableRows>().bind({});
 Standard.args = {
   rows: [
     {
@@ -23,13 +32,13 @@ Standard.args = {
   columnOrder: ["name", "email"]
 };
 
-export const FullWidth = Template.bind({});
+export const FullWidth = Template<TDataTableRows>().bind({});
 FullWidth.args = {
   ...Standard.args,
   className: "u-w-100"
 };
 
-export const WithActions = Template.bind({});
+export const WithActions = Template<TDataTableRows>().bind({});
 WithActions.args = {
   ...FullWidth.args,
   rowActions: [
