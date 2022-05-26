@@ -1,12 +1,14 @@
 import classNames from "classnames";
 import Button from "components/ui/Button/Button";
 import kebabIcon from "assets/images/icons/kebab.svg";
-import { Menu as ContextMenu, MenuItem, MenuButton } from "@szhsin/react-menu";
+import ContextMenu, { IProps as IContextMenuProps } from "components/ui/ContextMenu/ContextMenu";
 
 interface IProps<T> {
   rows: T[];
   columnOrder: (keyof T)[];
-  rowActions?: { name: string; callback: (row: T) => void }[];
+  rowActions?: (Omit<IContextMenuProps["menuItems"][number], "onClick"> & {
+    onClick: (row: T, value?: string) => void;
+  })[];
   className?: string;
 }
 
@@ -35,25 +37,18 @@ const DataTable = <T extends { [key: string]: string }>(props: IProps<T>) => {
             {rowActions && (
               <td>
                 <ContextMenu
-                  menuClassName="c-context-menu"
-                  portal={true}
                   menuButton={
-                    <MenuButton>
-                      <Button aria-label="Next" isIcon variant="primary">
-                        <img alt="" role="presentation" src={kebabIcon} />
-                      </Button>
-                    </MenuButton>
+                    <Button aria-label="Next" isIcon variant="primary">
+                      <img alt="" role="presentation" src={kebabIcon} />
+                    </Button>
                   }
-                  transition
                   align="end"
                   offsetY={12}
-                >
-                  {rowActions.map(rowAction => (
-                    <MenuItem className="c-context-menu__item" onClick={() => rowAction.callback(row)}>
-                      {rowAction.name}
-                    </MenuItem>
-                  ))}
-                </ContextMenu>
+                  menuItems={rowActions.map(({ onClick, ...menuItem }) => ({
+                    onClick: e => onClick(row, e.value),
+                    ...menuItem
+                  }))}
+                />
               </td>
             )}
           </tr>

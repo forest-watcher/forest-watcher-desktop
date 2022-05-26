@@ -37,11 +37,11 @@ WithActions.args = {
   rowActions: [
     {
       name: "Edit",
-      callback: () => {}
+      onClick: () => {}
     },
     {
       name: "Delete",
-      callback: () => {}
+      onClick: () => {}
     }
   ]
 };
