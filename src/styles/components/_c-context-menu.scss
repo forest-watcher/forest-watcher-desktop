@@ -1,4 +1,6 @@
 .c-context-menu {
+  $this: &;
+
   position: absolute;
   background-color: #ffffff;
   min-width: 160px;
@@ -20,6 +22,24 @@
 
     &:hover {
       background-color: #E3ECC6;
+    }
+  }
+
+  &--hover {
+    display: none;
+  }
+
+  &__toggle {
+    padding: 8px;
+
+    &:hover {
+      #{$this}__icon {
+        display: none;
+      }
+
+      #{$this}--hover {
+        display: block;
+      }
     }
   }
 }

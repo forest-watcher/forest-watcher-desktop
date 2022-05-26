@@ -1,6 +1,4 @@
 import classNames from "classnames";
-import Button from "components/ui/Button/Button";
-import kebabIcon from "assets/images/icons/kebab.svg";
 import ContextMenu, { IProps as IContextMenuProps } from "components/ui/ContextMenu/ContextMenu";
 
 export interface IProps<T> {
@@ -37,13 +35,8 @@ const DataTable = <T extends { [key: string]: string }>(props: IProps<T>) => {
             {rowActions && (
               <td className="c-data-table__action-cell">
                 <ContextMenu
-                  menuButton={
-                    <Button aria-label="Open Row Actions" className="c-data-table__action-btn" variant="blank">
-                      <img alt="" role="presentation" src={kebabIcon} />
-                    </Button>
-                  }
                   align="end"
-                  offsetY={12}
+                  offsetY={8}
                   menuItems={rowActions.map(({ onClick, ...menuItem }) => ({
                     onClick: e => onClick(row, e.value),
                     ...menuItem
