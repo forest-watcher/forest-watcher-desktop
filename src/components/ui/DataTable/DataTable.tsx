@@ -35,6 +35,7 @@ const DataTable = <T extends { [key: string]: string }>(props: IProps<T>) => {
             {rowActions && (
               <td className="c-data-table__action-cell">
                 <ContextMenu
+                  toggleClassName="c-data-table__action-toggle"
                   align="end"
                   offsetY={8}
                   menuItems={rowActions.map(({ onClick, ...menuItem }) => ({
