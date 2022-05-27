@@ -1,5 +1,5 @@
 import DataTable, { IProps as IDataTableProps } from "../DataTable";
-import { render as utilRender } from "../../../../test-utils";
+import { fireEvent, render as utilRender, waitFor } from "../../../../test-utils";
 
 type TDataTableRows = {
   name: string;
@@ -279,5 +279,36 @@ describe("DataTable Component", () => {
         </table>
       </div>
     `);
+  });
+
+  it("should fire the mocked onClick handler when a row action is clicked", async () => {
+    const rowActions = [
+      {
+        name: "Edit",
+        value: "edit",
+        onClick: jest.fn()
+      },
+      {
+        name: "Delete",
+        value: "delete",
+        onClick: jest.fn()
+      }
+    ];
+
+    const { getAllByTestId, findAllByRole, getByText } = render({
+      rowActions
+    });
+
+    // Open Context Menu
+    fireEvent.click(getAllByTestId("menuToggle")[0]);
+    const [contextMenu] = await findAllByRole("menu");
+    await waitFor(() => expect(contextMenu.classList.contains("szh-menu--state-open")).toBe(true));
+
+    // Click a row action
+    const menuItem = getByText(rowActions[0].name);
+    fireEvent.click(menuItem);
+
+    expect(rowActions[0].onClick).toHaveBeenCalled();
+    expect(rowActions[0].onClick).toHaveBeenCalledWith(mockRowData[0], "edit");
   });
 });
