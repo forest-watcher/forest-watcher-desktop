@@ -19,7 +19,11 @@ type IProps = IOwnProps & TPropsFromRedux;
 
 const columnOrder: TTeamsDetailDataTableColumns[] = [
   { key: "userId", name: "teams.details.table.header.name" },
-  { key: "email", name: "teams.details.table.header.user" },
+  { key: "email", name: "teams.details.table.header.user" }
+];
+
+const columnOrderWithStatus: TTeamsDetailDataTableColumns[] = [
+  ...columnOrder,
   { key: "status", name: "teams.details.table.header.status" }
 ];
 
