@@ -17,8 +17,8 @@ const DataTable = <T extends { [key: string]: string }>(props: IProps<T>) => {
     <table className={classNames("c-data-table", className)}>
       <thead className="c-data-table__header">
         <tr>
-          {columnOrder.map(column => (
-            <th>{column.toString()}</th>
+          {columnOrder.map((column, id) => (
+            <th key={id}>{column.toString()}</th>
           ))}
 
           {rowActions && <th></th>}
@@ -26,10 +26,10 @@ const DataTable = <T extends { [key: string]: string }>(props: IProps<T>) => {
       </thead>
 
       <tbody>
-        {rows.map(row => (
-          <tr className="c-data-table__row">
-            {columnOrder.map(column => (
-              <td>{row[column]}</td>
+        {rows.map((row, id) => (
+          <tr key={id} className="c-data-table__row">
+            {columnOrder.map((column, id) => (
+              <td key={id}>{row[column]}</td>
             ))}
 
             {rowActions && (
