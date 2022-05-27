@@ -1,14 +1,13 @@
-import React, { FC, ReactNode } from "react";
+import React, { FC } from "react";
 import { Menu, MenuButton, MenuItem } from "@szhsin/react-menu";
 import type { MenuProps, MenuItemProps } from "@szhsin/react-menu";
 import classnames from "classnames";
 import KebabIcon from "assets/images/icons/kebab.svg";
 import KebabIconHover from "assets/images/icons/kebab-hover.svg";
-import Button from "../Button/Button";
 
 export interface IProps extends Partial<Omit<Omit<MenuProps, "menuButton">, "menuClassName">> {
   className?: string;
-  menuButton?: ReactNode;
+  toggleClassName?: string;
   menuItems: {
     className?: string;
     name: string;
@@ -17,34 +16,22 @@ export interface IProps extends Partial<Omit<Omit<MenuProps, "menuButton">, "men
   }[];
 }
 
-interface IContextMenuToggleProps extends React.HTMLAttributes<HTMLButtonElement> {}
-
-interface ICardComposition {
-  Toggle: FC<IContextMenuToggleProps>;
-}
-
-const ContextMenuToggle: FC<IContextMenuToggleProps> = props => {
-  const { className, ...rest } = props;
-
-  return (
-    <Button
-      className={classnames("c-context-menu__toggle", className)}
-      variant="blank"
-      aria-label="Open Menu"
-      {...rest}
-    >
-      <img className="c-context-menu__icon" alt="" role="presentation" src={KebabIcon} />
-      <img className="c-context-menu__icon c-context-menu--hover" alt="" role="presentation" src={KebabIconHover} />
-    </Button>
-  );
-};
-const ContextMenu: FC<IProps> & ICardComposition = props => {
-  const { className, menuButton = <ContextMenuToggle />, menuItems, transition = true, portal = true, ...rest } = props;
+const ContextMenu: FC<IProps> = props => {
+  const { className, toggleClassName, menuItems, transition = true, portal = true, ...rest } = props;
 
   return (
     <Menu
       menuClassName={classnames("c-context-menu", className)}
-      menuButton={<MenuButton>{menuButton}</MenuButton>}
+      menuButton={
+        <MenuButton
+          className={classnames("c-button", "c-context-menu__toggle", toggleClassName)}
+          aria-label="Open Menu"
+          {...rest}
+        >
+          <img className="c-context-menu__icon" alt="" role="presentation" src={KebabIcon} />
+          <img className="c-context-menu__icon c-context-menu--hover" alt="" role="presentation" src={KebabIconHover} />
+        </MenuButton>
+      }
       portal={portal}
       transition={transition}
       {...rest}
@@ -57,7 +44,5 @@ const ContextMenu: FC<IProps> & ICardComposition = props => {
     </Menu>
   );
 };
-
-ContextMenu.Toggle = ContextMenuToggle;
 
 export default ContextMenu;

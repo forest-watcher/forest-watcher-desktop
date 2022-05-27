@@ -30,9 +30,10 @@
   }
 
   &__toggle {
-    padding: 8px;
+    padding: 8px 34px 8px 8px;
+    margin-left: auto;
 
-    &:hover {
+    &:hover, &.szh-menu-button--open {
       #{$this}__icon {
         display: none;
       }
