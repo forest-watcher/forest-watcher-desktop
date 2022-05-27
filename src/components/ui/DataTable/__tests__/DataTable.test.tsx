@@ -21,7 +21,10 @@ describe("DataTable Component", () => {
   let columnOrder: IDataTableProps<TDataTableRows>["columnOrder"];
 
   beforeEach(() => {
-    columnOrder = ["name", "email"];
+    columnOrder = [
+      { key: "name", name: "name" },
+      { key: "email", name: "email" }
+    ];
   });
 
   const render = (args?: Omit<Omit<IDataTableProps<TDataTableRows>, "rows">, "columnOrder">) =>
@@ -75,7 +78,10 @@ describe("DataTable Component", () => {
   });
 
   it("should change the order of the columns", () => {
-    columnOrder = ["email", "name"];
+    columnOrder = [
+      { key: "email", name: "email" },
+      { key: "name", name: "name" }
+    ];
 
     const { container } = render();
 
@@ -127,11 +133,11 @@ describe("DataTable Component", () => {
     const { container } = render({
       rowActions: [
         {
-          name: "Edit",
+          name: "common.edit",
           onClick: () => {}
         },
         {
-          name: "Delete",
+          name: "common.delete",
           onClick: () => {}
         }
       ]

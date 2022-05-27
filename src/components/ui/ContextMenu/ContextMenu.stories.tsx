@@ -11,8 +11,8 @@ const Template: ComponentStory<typeof ContextMenu> = args => <ContextMenu {...ar
 export const Standard = Template.bind({});
 Standard.args = {
   menuItems: [
-    { name: "Foo", onClick: () => {} },
-    { name: "Bar", onClick: () => {} }
+    { name: "common.edit", onClick: () => {} },
+    { name: "common.delete", onClick: () => {} }
   ],
   offsetY: 8
 };

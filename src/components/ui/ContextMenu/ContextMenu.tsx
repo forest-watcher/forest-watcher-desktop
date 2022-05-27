@@ -4,6 +4,7 @@ import type { MenuProps, MenuItemProps } from "@szhsin/react-menu";
 import classnames from "classnames";
 import KebabIcon from "assets/images/icons/kebab.svg";
 import KebabIconHover from "assets/images/icons/kebab-hover.svg";
+import { FormattedMessage } from "react-intl";
 
 export interface IProps extends Partial<Omit<Omit<MenuProps, "menuButton">, "menuClassName">> {
   className?: string;
@@ -38,7 +39,7 @@ const ContextMenu: FC<IProps> = props => {
     >
       {menuItems.map(({ className, name, ...rest }) => (
         <MenuItem key={name} className={classnames("c-context-menu__item", className)} {...rest}>
-          {name}
+          <FormattedMessage id={name} />
         </MenuItem>
       ))}
     </Menu>

@@ -29,7 +29,10 @@ Standard.args = {
       email: "bar@user.com"
     }
   ],
-  columnOrder: ["name", "email"]
+  columnOrder: [
+    { key: "name", name: "teams.teamName" },
+    { key: "email", name: "teams.findByEmail" }
+  ]
 };
 
 export const FullWidth = Template<TDataTableRows>().bind({});
@@ -43,11 +46,11 @@ WithActions.args = {
   ...FullWidth.args,
   rowActions: [
     {
-      name: "Edit",
+      name: "common.edit",
       onClick: () => {}
     },
     {
-      name: "Delete",
+      name: "common.delete",
       onClick: () => {}
     }
   ]

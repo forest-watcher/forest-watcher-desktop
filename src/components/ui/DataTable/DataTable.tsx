@@ -1,9 +1,11 @@
 import classNames from "classnames";
 import ContextMenu, { IProps as IContextMenuProps } from "components/ui/ContextMenu/ContextMenu";
+import { FormattedMessage } from "react-intl";
+import React from "react";
 
 export interface IProps<T> {
   rows: T[];
-  columnOrder: (keyof T)[];
+  columnOrder: { key: keyof T; name: string }[];
   rowActions?: (Omit<IContextMenuProps["menuItems"][number], "onClick"> & {
     onClick: (row: T, value?: string) => void;
   })[];
@@ -17,8 +19,10 @@ const DataTable = <T extends { [key: string]: string }>(props: IProps<T>) => {
     <table className={classNames("c-data-table", className)}>
       <thead className="c-data-table__header">
         <tr>
-          {columnOrder.map((column, id) => (
-            <th key={id}>{column.toString()}</th>
+          {columnOrder.map(column => (
+            <th key={column.key.toString()}>
+              <FormattedMessage id={column.name} />
+            </th>
           ))}
 
           {rowActions && <th></th>}
@@ -28,8 +32,8 @@ const DataTable = <T extends { [key: string]: string }>(props: IProps<T>) => {
       <tbody>
         {rows.map(row => (
           <tr key={row.name} className="c-data-table__row">
-            {columnOrder.map((column, id) => (
-              <td key={id}>{row[column]}</td>
+            {columnOrder.map(column => (
+              <td key={column.key.toString()}>{row[column.key]}</td>
             ))}
 
             {rowActions && (
