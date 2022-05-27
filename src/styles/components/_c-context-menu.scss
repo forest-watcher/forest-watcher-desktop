@@ -2,7 +2,7 @@
   $this: &;
 
   position: absolute;
-  background-color: #ffffff;
+  background-color: $neutral-300;
   min-width: 160px;
   // To override default styles
   border: 0;
@@ -11,9 +11,9 @@
     font-weight: 400;
     font-size: 16px;
     line-height: 22px;
-    color: #555555;
+    color: $neutral-600;
     padding: 10px 16px 8px;
-    border: 1px solid #DCDCDC;
+    border: 1px solid $neutral-500;
     cursor: pointer;
 
     &:not(:first-child) {
@@ -21,7 +21,7 @@
     }
 
     &:hover {
-      background-color: #E3ECC6;
+      background-color: $primary-400;
     }
   }
 

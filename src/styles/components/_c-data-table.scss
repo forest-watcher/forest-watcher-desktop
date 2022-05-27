@@ -6,7 +6,7 @@
   }
 
   &__row {
-    border-bottom: 2px solid #F2F2F2;
+    border-bottom: 2px solid $neutral-400;
   }
 
   th, td {
@@ -20,7 +20,7 @@
     font-weight: 500;
     padding: 23px 24px;
     text-transform: uppercase;
-    color: #333333;
+    color: $neutral-700;
   }
 
   td {
@@ -28,7 +28,7 @@
     font-size: 16px;
     line-height: 22px;
     padding: 12px 24px 14px;
-    color: #1A1A19;
+    color: $neutral-7000;
   }
 
   td#{$this}__action-cell {
