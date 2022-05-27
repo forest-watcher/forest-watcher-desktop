@@ -62,18 +62,18 @@ const TeamDetail: FC<IProps> = props => {
             className="u-w-100"
             rows={manages.map(m => m.attributes)}
             columnOrder={[
-              { key: "userId", name: "userId" },
-              { key: "email", name: "email" },
-              { key: "status", name: "status" }
+              { key: "userId", name: "teams.details.table.header.name" },
+              { key: "email", name: "teams.details.table.header.user" },
+              { key: "status", name: "teams.details.table.header.status" }
             ]}
             rowActions={[
               {
-                name: "makeMonitor",
+                name: "teams.details.table.actions.monitor",
                 value: "makeMonitor",
                 onClick: () => {}
               },
               {
-                name: "removeFromTeam",
+                name: "teams.details.table.actions.remove",
                 value: "removeFromTeam",
                 onClick: () => {}
               }
@@ -91,18 +91,18 @@ const TeamDetail: FC<IProps> = props => {
             className="u-w-100"
             rows={monitors.map(m => m.attributes)}
             columnOrder={[
-              { key: "userId", name: "userId" },
-              { key: "email", name: "email" },
-              { key: "status", name: "status" }
+              { key: "userId", name: "teams.details.table.header.name" },
+              { key: "email", name: "teams.details.table.header.user" },
+              { key: "status", name: "teams.details.table.header.status" }
             ]}
             rowActions={[
               {
-                name: "makeManager",
+                name: "teams.details.table.actions.manager",
                 value: "makeManager",
                 onClick: () => {}
               },
               {
-                name: "removeFromTeam",
+                name: "teams.details.table.actions.remove",
                 value: "removeFromTeam",
                 onClick: () => {}
               }
