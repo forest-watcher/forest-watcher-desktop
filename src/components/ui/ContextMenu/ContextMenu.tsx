@@ -26,7 +26,7 @@ const ContextMenu: FC<IProps> = props => {
         <MenuButton
           className={classnames("c-button", "c-context-menu__toggle", toggleClassName)}
           aria-label="Open Menu"
-          {...rest}
+          data-testid="menuToggle"
         >
           <img className="c-context-menu__icon" alt="" role="presentation" src={KebabIcon} />
           <img className="c-context-menu__icon c-context-menu--hover" alt="" role="presentation" src={KebabIconHover} />
@@ -37,7 +37,7 @@ const ContextMenu: FC<IProps> = props => {
       {...rest}
     >
       {menuItems.map(({ className, name, ...rest }) => (
-        <MenuItem className={classnames("c-context-menu__item", className)} {...rest}>
+        <MenuItem key={name} className={classnames("c-context-menu__item", className)} {...rest}>
           {name}
         </MenuItem>
       ))}

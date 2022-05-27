@@ -169,12 +169,11 @@ describe("DataTable Component", () => {
                 class="c-data-table__action-cell"
               >
                 <button
-                  align="end"
                   aria-expanded="false"
                   aria-haspopup="true"
                   aria-label="Open Menu"
                   class="szh-menu-button c-button c-context-menu__toggle c-data-table__action-toggle"
-                  offsety="8"
+                  data-testid="menuToggle"
                   type="button"
                 >
                   <img
@@ -205,12 +204,11 @@ describe("DataTable Component", () => {
                 class="c-data-table__action-cell"
               >
                 <button
-                  align="end"
                   aria-expanded="false"
                   aria-haspopup="true"
                   aria-label="Open Menu"
                   class="szh-menu-button c-button c-context-menu__toggle c-data-table__action-toggle"
-                  offsety="8"
+                  data-testid="menuToggle"
                   type="button"
                 >
                   <img
@@ -236,13 +234,13 @@ describe("DataTable Component", () => {
 
   it("should render extra classNames correctly", () => {
     const { container } = render({
-      className: "u-w-100"
+      className: "myClassName"
     });
 
     expect(container).toMatchInlineSnapshot(`
       <div>
         <table
-          class="c-data-table u-w-100"
+          class="c-data-table myClassName"
         >
           <thead
             class="c-data-table__header"
