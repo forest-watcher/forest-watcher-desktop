@@ -45,10 +45,3 @@ Icon.args = {
   isIcon: true,
   "aria-label": "Next"
 };
-
-export const Blank = Template.bind({});
-Blank.args = {
-  variant: "blank",
-  isIcon: true,
-  "aria-label": "Open Menu"
-};
