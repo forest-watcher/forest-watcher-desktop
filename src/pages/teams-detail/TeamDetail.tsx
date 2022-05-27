@@ -6,6 +6,8 @@ import Hero from "components/layouts/Hero";
 import Article from "components/layouts/Article";
 import DataTable from "components/ui/DataTable/DataTable";
 import type { TTeamDetailDataTable, TTeamsDetailDataTableColumns } from "./types";
+import Button from "../../components/ui/Button/Button";
+import { FormattedMessage } from "react-intl";
 
 type TParams = {
   teamId: string;
@@ -58,13 +60,19 @@ const TeamDetail: FC<IProps> = props => {
       <Hero
         title="teams.details.name"
         titleValues={{ name: team.attributes.name }}
-        action={{ name: "teams.details.delete", callback: deleteTeam }}
+        action={{ name: "teams.details.delete", variant: "secondary-light-text", callback: deleteTeam }}
+        backLink={{ name: "teams.details.back", to: "/teams" }}
       />
       <div className="l-content c-teams-details">
         <Article
           className="c-teams-details__heading"
           title="teams.details.managers"
           titleValues={{ num: manages.length }}
+          actions={
+            <Button variant="primary">
+              <FormattedMessage id="teams.details.add.managers" />
+            </Button>
+          }
         >
           <DataTable<TTeamDetailDataTable>
             className="u-w-100"
@@ -79,6 +87,11 @@ const TeamDetail: FC<IProps> = props => {
           className="c-teams-details__heading"
           title="teams.details.monitors"
           titleValues={{ num: monitors.length }}
+          actions={
+            <Button variant="primary">
+              <FormattedMessage id="teams.details.add.monitors" />
+            </Button>
+          }
         >
           <DataTable<TTeamDetailDataTable>
             className="u-w-100"
