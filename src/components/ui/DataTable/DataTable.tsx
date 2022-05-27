@@ -26,8 +26,8 @@ const DataTable = <T extends { [key: string]: string }>(props: IProps<T>) => {
       </thead>
 
       <tbody>
-        {rows.map((row, id) => (
-          <tr key={id} className="c-data-table__row">
+        {rows.map(row => (
+          <tr key={row.name} className="c-data-table__row">
             {columnOrder.map((column, id) => (
               <td key={id}>{row[column]}</td>
             ))}
