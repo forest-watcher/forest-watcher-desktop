@@ -1,8 +1,9 @@
 import { FC, useMemo } from "react";
 import { RouteComponentProps } from "react-router-dom";
 import { TPropsFromRedux } from "./TeamDetailContainer";
-import Hero from "../../components/layouts/Hero";
-import Article from "../../components/layouts/Article";
+import Hero from "components/layouts/Hero";
+import Article from "components/layouts/Article";
+import DataTable from "components/ui/DataTable/DataTable";
 
 type TParams = {
   teamId: string;
@@ -57,7 +58,27 @@ const TeamDetail: FC<IProps> = props => {
           title="teams.details.managers"
           titleValues={{ num: manages.length }}
         >
-          <div>{JSON.stringify(manages)}</div>
+          <DataTable<typeof manages[number]["attributes"]>
+            className="u-w-100"
+            rows={manages.map(m => m.attributes)}
+            columnOrder={[
+              { key: "userId", name: "userId" },
+              { key: "email", name: "email" },
+              { key: "status", name: "status" }
+            ]}
+            rowActions={[
+              {
+                name: "makeMonitor",
+                value: "makeMonitor",
+                onClick: () => {}
+              },
+              {
+                name: "removeFromTeam",
+                value: "removeFromTeam",
+                onClick: () => {}
+              }
+            ]}
+          />
         </Article>
       </div>
       <div className="l-content c-teams-details">
@@ -66,7 +87,27 @@ const TeamDetail: FC<IProps> = props => {
           title="teams.details.monitors"
           titleValues={{ num: monitors.length }}
         >
-          <div>{JSON.stringify(monitors)}</div>
+          <DataTable<typeof monitors[number]["attributes"]>
+            className="u-w-100"
+            rows={monitors.map(m => m.attributes)}
+            columnOrder={[
+              { key: "userId", name: "userId" },
+              { key: "email", name: "email" },
+              { key: "status", name: "status" }
+            ]}
+            rowActions={[
+              {
+                name: "makeManager",
+                value: "makeManager",
+                onClick: () => {}
+              },
+              {
+                name: "removeFromTeam",
+                value: "removeFromTeam",
+                onClick: () => {}
+              }
+            ]}
+          />
         </Article>
       </div>
     </>
