@@ -1,9 +1,11 @@
 import { FC, useMemo } from "react";
 import { RouteComponentProps } from "react-router-dom";
 import { TPropsFromRedux } from "./TeamDetailContainer";
+import { makeManager, makeMonitor, removeMember } from "./actions";
 import Hero from "components/layouts/Hero";
 import Article from "components/layouts/Article";
 import DataTable from "components/ui/DataTable/DataTable";
+import type { TTeamDetailDataTable, TTeamsDetailDataTableColumns } from "./types";
 
 type TParams = {
   teamId: string;
@@ -12,6 +14,12 @@ type TParams = {
 export interface IOwnProps extends RouteComponentProps<TParams> {}
 
 type IProps = IOwnProps & TPropsFromRedux;
+
+const columnOrder: TTeamsDetailDataTableColumns[] = [
+  { key: "userId", name: "teams.details.table.header.name" },
+  { key: "email", name: "teams.details.table.header.user" },
+  { key: "status", name: "teams.details.table.header.status" }
+];
 
 const TeamDetail: FC<IProps> = props => {
   const { team, teamMembers } = props;
@@ -58,26 +66,11 @@ const TeamDetail: FC<IProps> = props => {
           title="teams.details.managers"
           titleValues={{ num: manages.length }}
         >
-          <DataTable<typeof manages[number]["attributes"]>
+          <DataTable<TTeamDetailDataTable>
             className="u-w-100"
             rows={manages.map(m => m.attributes)}
-            columnOrder={[
-              { key: "userId", name: "teams.details.table.header.name" },
-              { key: "email", name: "teams.details.table.header.user" },
-              { key: "status", name: "teams.details.table.header.status" }
-            ]}
-            rowActions={[
-              {
-                name: "teams.details.table.actions.monitor",
-                value: "makeMonitor",
-                onClick: () => {}
-              },
-              {
-                name: "teams.details.table.actions.remove",
-                value: "removeFromTeam",
-                onClick: () => {}
-              }
-            ]}
+            columnOrder={columnOrder}
+            rowActions={[makeMonitor, removeMember]}
           />
         </Article>
       </div>
@@ -87,26 +80,11 @@ const TeamDetail: FC<IProps> = props => {
           title="teams.details.monitors"
           titleValues={{ num: monitors.length }}
         >
-          <DataTable<typeof monitors[number]["attributes"]>
+          <DataTable<TTeamDetailDataTable>
             className="u-w-100"
             rows={monitors.map(m => m.attributes)}
-            columnOrder={[
-              { key: "userId", name: "teams.details.table.header.name" },
-              { key: "email", name: "teams.details.table.header.user" },
-              { key: "status", name: "teams.details.table.header.status" }
-            ]}
-            rowActions={[
-              {
-                name: "teams.details.table.actions.manager",
-                value: "makeManager",
-                onClick: () => {}
-              },
-              {
-                name: "teams.details.table.actions.remove",
-                value: "removeFromTeam",
-                onClick: () => {}
-              }
-            ]}
+            columnOrder={columnOrder}
+            rowActions={[makeManager, removeMember]}
           />
         </Article>
       </div>
