@@ -2,6 +2,7 @@ import { teamService } from "services/teams";
 import { apiService } from "../services/api";
 import { RootState, AppDispatch } from "index";
 import type { TGetUserTeamsResponse, TGetTeamMembersResponse, TGetMyTeamInvites } from "services/teams";
+import { toastr } from "react-redux-toastr";
 
 const GET_USER_TEAMS = "gfwTeams/GET_USER_TEAMS";
 const GET_TEAM_MEMBERS = "gfwTeams/GET_TEAM_MEMBERS";
@@ -70,6 +71,7 @@ export const getUserTeams = (userId: string) => (dispatch: AppDispatch, getState
       })
     )
     .catch(error => {
+      toastr.error("Unable to load Teams", error);
       console.warn("error", error);
     });
 };
@@ -89,6 +91,7 @@ export const getTeamMembers = (teamId: string) => (dispatch: AppDispatch, getSta
       })
     )
     .catch(error => {
+      toastr.error("Unable to find Team Members", error);
       console.warn("error", error);
     });
 };
@@ -107,6 +110,7 @@ export const getMyTeamInvites = () => (dispatch: AppDispatch, getState: () => Ro
       })
     )
     .catch(error => {
+      toastr.error("Unable to find Team Invites", error);
       console.warn("error", error);
     });
 };
