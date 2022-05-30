@@ -175,6 +175,7 @@ export const getTeamAreas = (teamId: string) => (dispatch: AppDispatch, getState
       })
     )
     .catch(error => {
+      toastr.error("Unable to find Team Areas", error);
       console.warn("error", error);
     })
     .finally(() => {
