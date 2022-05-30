@@ -1,4 +1,4 @@
-import { FC, useMemo } from "react";
+import { FC, useEffect, useMemo, useState } from "react";
 import { RouteComponentProps } from "react-router-dom";
 import { TPropsFromRedux } from "./TeamDetailContainer";
 import { makeManager, makeMonitor, removeMember } from "./actions";
@@ -6,9 +6,11 @@ import Hero from "components/layouts/Hero";
 import Article from "components/layouts/Article";
 import DataTable from "components/ui/DataTable/DataTable";
 import type { TTeamDetailDataTable, TTeamsDetailDataTableColumns } from "./types";
-import Button from "../../components/ui/Button/Button";
+import Button from "components/ui/Button/Button";
 import { FormattedMessage } from "react-intl";
 import PlusIcon from "assets/images/icons/PlusWhite.svg";
+import useGetUserId from "hooks/useGetUserId";
+import Loader from "components/ui/Loader";
 
 type TParams = {
   teamId: string;
@@ -29,7 +31,26 @@ const columnOrderWithStatus: TTeamsDetailDataTableColumns[] = [
 ];
 
 const TeamDetail: FC<IProps> = props => {
-  const { team, teamMembers, userIsManager } = props;
+  const { team, teamMembers, getUserTeams, getTeamMembers, userIsManager, numOfActiveFetches, match } = props;
+  const { teamId } = match.params;
+  const [fetched, setFetched] = useState<boolean>(false);
+
+  const userId = useGetUserId();
+
+  useEffect(() => {
+    if (numOfActiveFetches === 0 && !team && fetched) {
+      // ToDo: redirect and show notification toast
+      console.log("REDIRECT");
+    }
+  }, [fetched, team, numOfActiveFetches]);
+
+  useEffect(() => {
+    if (!team) {
+      getUserTeams(userId);
+      getTeamMembers(teamId);
+      setFetched(true);
+    }
+  }, [getTeamMembers, teamId, userId, team, getUserTeams]);
 
   // ToDo: Create a util for this
   const [manages, monitors] = useMemo(
@@ -59,13 +80,13 @@ const TeamDetail: FC<IProps> = props => {
     // ToDo
   };
 
-  // ToDo: On initial load team and members won't have been fetched
-  if (!team || !teamMembers) {
-    return <div>Loading...</div>;
+  if (!team) {
+    return <Loader isLoading />;
   }
 
   return (
     <>
+      <Loader isLoading={numOfActiveFetches > 0} />
       <Hero
         title="teams.details.name"
         titleValues={{ name: team.attributes.name }}
