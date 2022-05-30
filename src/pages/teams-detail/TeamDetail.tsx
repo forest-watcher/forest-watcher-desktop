@@ -8,6 +8,7 @@ import DataTable from "components/ui/DataTable/DataTable";
 import type { TTeamDetailDataTable, TTeamsDetailDataTableColumns } from "./types";
 import Button from "../../components/ui/Button/Button";
 import { FormattedMessage } from "react-intl";
+import PlusIcon from "assets/images/icons/PlusWhite.svg";
 
 type TParams = {
   teamId: string;
@@ -74,6 +75,7 @@ const TeamDetail: FC<IProps> = props => {
           titleValues={{ num: manages.length }}
           actions={
             <Button variant="primary">
+              <img className="c-button__inline-icon" src={PlusIcon} alt="" role="presentation" />
               <FormattedMessage id="teams.details.add.managers" />
             </Button>
           }
@@ -93,6 +95,7 @@ const TeamDetail: FC<IProps> = props => {
           titleValues={{ num: monitors.length }}
           actions={
             <Button variant="primary">
+              <img className="c-button__inline-icon" src={PlusIcon} alt="" role="presentation" />
               <FormattedMessage id="teams.details.add.monitors" />
             </Button>
           }
