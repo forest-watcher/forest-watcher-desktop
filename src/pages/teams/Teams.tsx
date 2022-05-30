@@ -2,6 +2,7 @@ import { FC, useEffect, useMemo } from "react";
 import { TPropsFromRedux } from "./TeamsContainer";
 import Hero from "components/layouts/Hero";
 import Article from "components/layouts/Article";
+import Loader from "components/ui/Loader";
 import ReactGA from "react-ga";
 import PlusIcon from "assets/images/icons/PlusWhite.svg";
 import { FormattedMessage } from "react-intl";
@@ -12,7 +13,7 @@ import useGetUserId from "hooks/useGetUserId";
 interface IProps extends TPropsFromRedux {}
 
 const Teams: FC<IProps> = props => {
-  const { teams, myInvites, getUserTeams, getMyTeamInvites } = props;
+  const { teams, myInvites, getUserTeams, getMyTeamInvites, numOfActiveFetches } = props;
 
   const userId = useGetUserId();
 
@@ -42,6 +43,7 @@ const Teams: FC<IProps> = props => {
   return (
     <div>
       <Hero title="teams.name" />
+      <Loader isLoading={numOfActiveFetches > 0} />
       {myInvites.length > 0 && (
         <div className="l-team-invitations l-content--neutral-400">
           <div className="row column">
