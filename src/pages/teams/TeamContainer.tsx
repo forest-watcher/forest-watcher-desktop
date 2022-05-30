@@ -5,7 +5,8 @@ import { getUserTeams, getMyTeamInvites } from "modules/gfwTeams";
 
 const mapStateToProps = ({ gfwTeams }: RootState) => ({
   teams: gfwTeams.data,
-  myInvites: gfwTeams.myInvites
+  myInvites: gfwTeams.myInvites,
+  numOfActiveFetches: gfwTeams.numOfActiveFetches
 });
 
 const mapDispatchToProps = {
