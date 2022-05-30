@@ -1,5 +1,6 @@
 import { FC, useEffect, useMemo, useState } from "react";
-import { RouteComponentProps } from "react-router-dom";
+import { RouteComponentProps, useHistory } from "react-router-dom";
+import { toastr } from "react-redux-toastr";
 import { TPropsFromRedux } from "./TeamDetailContainer";
 import { makeManager, makeMonitor, removeMember } from "./actions";
 import Hero from "components/layouts/Hero";
@@ -34,15 +35,16 @@ const TeamDetail: FC<IProps> = props => {
   const { team, teamMembers, getUserTeams, getTeamMembers, userIsManager, numOfActiveFetches, match } = props;
   const { teamId } = match.params;
   const [fetched, setFetched] = useState<boolean>(false);
+  const history = useHistory();
 
   const userId = useGetUserId();
 
   useEffect(() => {
     if (numOfActiveFetches === 0 && !team && fetched) {
-      // ToDo: redirect and show notification toast
-      console.log("REDIRECT");
+      toastr.warning("Could not find Team", "The team is no longer be available");
+      history.push("/teams");
     }
-  }, [fetched, team, numOfActiveFetches]);
+  }, [teamId, history, fetched, team, numOfActiveFetches]);
 
   useEffect(() => {
     if (!team) {
