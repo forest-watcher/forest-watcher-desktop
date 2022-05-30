@@ -8,7 +8,7 @@ import Article from "components/layouts/Article";
 import DataTable from "components/ui/DataTable/DataTable";
 import type { TTeamDetailDataTable, TTeamsDetailDataTableColumns } from "./types";
 import Button from "components/ui/Button/Button";
-import { FormattedMessage } from "react-intl";
+import { FormattedMessage, useIntl } from "react-intl";
 import PlusIcon from "assets/images/icons/PlusWhite.svg";
 import useGetUserId from "hooks/useGetUserId";
 import Loader from "components/ui/Loader";
@@ -36,15 +36,16 @@ const TeamDetail: FC<IProps> = props => {
   const { teamId } = match.params;
   const [fetched, setFetched] = useState<boolean>(false);
   const history = useHistory();
+  const intl = useIntl();
 
   const userId = useGetUserId();
 
   useEffect(() => {
     if (numOfActiveFetches === 0 && !team && fetched) {
-      toastr.warning("Could not find Team", "The team is no longer be available");
+      toastr.warning(intl.formatMessage({ id: "errors.team.detail" }), "");
       history.push("/teams");
     }
-  }, [teamId, history, fetched, team, numOfActiveFetches]);
+  }, [intl, teamId, history, fetched, team, numOfActiveFetches]);
 
   useEffect(() => {
     if (!team) {
