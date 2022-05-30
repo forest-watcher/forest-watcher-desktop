@@ -3,12 +3,19 @@ import ContextMenu, { IProps as IContextMenuProps } from "components/ui/ContextM
 import { FormattedMessage } from "react-intl";
 import React from "react";
 
+export interface IRowAction<T> extends Omit<IContextMenuProps["menuItems"][number], "onClick"> {
+  onClick: (row: T, value?: string) => void;
+}
+
+export interface IColumnOrder<T> {
+  key: keyof T;
+  name: string;
+}
+
 export interface IProps<T> {
   rows: T[];
-  columnOrder: { key: keyof T; name: string }[];
-  rowActions?: (Omit<IContextMenuProps["menuItems"][number], "onClick"> & {
-    onClick: (row: T, value?: string) => void;
-  })[];
+  columnOrder: IColumnOrder<T>[];
+  rowActions?: IRowAction<T>[];
   className?: string;
 }
 

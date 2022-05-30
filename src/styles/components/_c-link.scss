@@ -13,4 +13,19 @@
   &:active {
     color: $primary-600;
   }
+
+  &--hero {
+    display: flex;
+    align-items: center;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 22px;
+    color: $primary-500;
+    text-transform: none;
+    text-decoration: none;
+
+    > img {
+      margin-right: 8px;
+    }
+  }
 }

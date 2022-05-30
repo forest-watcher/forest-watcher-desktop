@@ -1,8 +1,14 @@
 import { FC, useMemo } from "react";
 import { RouteComponentProps } from "react-router-dom";
 import { TPropsFromRedux } from "./TeamDetailContainer";
-import Hero from "../../components/layouts/Hero";
-import Article from "../../components/layouts/Article";
+import { makeManager, makeMonitor, removeMember } from "./actions";
+import Hero from "components/layouts/Hero";
+import Article from "components/layouts/Article";
+import DataTable from "components/ui/DataTable/DataTable";
+import type { TTeamDetailDataTable, TTeamsDetailDataTableColumns } from "./types";
+import Button from "../../components/ui/Button/Button";
+import { FormattedMessage } from "react-intl";
+import PlusIcon from "assets/images/icons/PlusWhite.svg";
 
 type TParams = {
   teamId: string;
@@ -12,8 +18,18 @@ export interface IOwnProps extends RouteComponentProps<TParams> {}
 
 type IProps = IOwnProps & TPropsFromRedux;
 
+const columnOrder: TTeamsDetailDataTableColumns[] = [
+  { key: "userId", name: "teams.details.table.header.name" },
+  { key: "email", name: "teams.details.table.header.user" }
+];
+
+const columnOrderWithStatus: TTeamsDetailDataTableColumns[] = [
+  ...columnOrder,
+  { key: "status", name: "teams.details.table.header.status" }
+];
+
 const TeamDetail: FC<IProps> = props => {
-  const { team, teamMembers } = props;
+  const { team, teamMembers, userIsManager } = props;
 
   // ToDo: Create a util for this
   const [manages, monitors] = useMemo(
@@ -49,15 +65,27 @@ const TeamDetail: FC<IProps> = props => {
       <Hero
         title="teams.details.name"
         titleValues={{ name: team.attributes.name }}
-        action={{ name: "teams.details.delete", callback: deleteTeam }}
+        action={{ name: "teams.details.delete", variant: "secondary-light-text", callback: deleteTeam }}
+        backLink={{ name: "teams.details.back", to: "/teams" }}
       />
       <div className="l-content c-teams-details">
         <Article
           className="c-teams-details__heading"
           title="teams.details.managers"
           titleValues={{ num: manages.length }}
+          actions={
+            <Button variant="primary">
+              <img className="c-button__inline-icon" src={PlusIcon} alt="" role="presentation" />
+              <FormattedMessage id="teams.details.add.managers" />
+            </Button>
+          }
         >
-          <div>{JSON.stringify(manages)}</div>
+          <DataTable<TTeamDetailDataTable>
+            className="u-w-100"
+            rows={manages.map(m => m.attributes)}
+            columnOrder={userIsManager ? columnOrderWithStatus : columnOrder}
+            rowActions={[makeMonitor, removeMember]}
+          />
         </Article>
       </div>
       <div className="l-content c-teams-details">
@@ -65,8 +93,19 @@ const TeamDetail: FC<IProps> = props => {
           className="c-teams-details__heading"
           title="teams.details.monitors"
           titleValues={{ num: monitors.length }}
+          actions={
+            <Button variant="primary">
+              <img className="c-button__inline-icon" src={PlusIcon} alt="" role="presentation" />
+              <FormattedMessage id="teams.details.add.monitors" />
+            </Button>
+          }
         >
-          <div>{JSON.stringify(monitors)}</div>
+          <DataTable<TTeamDetailDataTable>
+            className="u-w-100"
+            rows={monitors.map(m => m.attributes)}
+            columnOrder={userIsManager ? columnOrderWithStatus : columnOrder}
+            rowActions={[makeManager, removeMember]}
+          />
         </Article>
       </div>
     </>

@@ -2,10 +2,17 @@ import { connect, ConnectedProps } from "react-redux";
 import { RootState } from "index";
 import TeamDetail, { IOwnProps } from "./TeamDetail";
 
-const mapStateToProps = ({ gfwTeams }: RootState, ownProps: IOwnProps) => ({
-  team: gfwTeams.data.find(team => team.id === ownProps.match.params.teamId),
-  teamMembers: gfwTeams.members[ownProps.match.params.teamId]
-});
+const mapStateToProps = ({ gfwTeams, user }: RootState, ownProps: IOwnProps) => {
+  let userMember = gfwTeams.members[ownProps.match.params.teamId]?.find(
+    member => member.attributes.userId === user.data.id
+  );
+
+  return {
+    team: gfwTeams.data.find(team => team.id === ownProps.match.params.teamId),
+    teamMembers: gfwTeams.members[ownProps.match.params.teamId],
+    userIsManager: userMember?.attributes.role === "administrator" || userMember?.attributes.role === "manager"
+  };
+};
 
 const mapDispatchToProps = {};
 
