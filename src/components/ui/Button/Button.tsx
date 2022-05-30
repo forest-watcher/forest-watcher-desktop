@@ -1,8 +1,10 @@
 import { FC, ButtonHTMLAttributes } from "react";
 import classnames from "classnames";
 
+export type IButtonVariants = "primary" | "secondary" | "secondary-light-text";
+
 interface IProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: "primary" | "secondary" | "secondary-light-text";
+  variant?: IButtonVariants;
   isIcon?: Boolean;
 }
 

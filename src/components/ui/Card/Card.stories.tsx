@@ -1,7 +1,7 @@
 import { ComponentStory, ComponentMeta } from "@storybook/react";
 
 import Card from "components/ui/Card/Card";
-import { BrowserRouter, Link } from "react-router-dom";
+import { BrowserRouter } from "react-router-dom";
 import EditIcon from "assets/images/icons/Edit.svg";
 
 // More on default export: https://storybook.js.org/docs/react/writing-stories/introduction#default-export
