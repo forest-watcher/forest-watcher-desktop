@@ -3,6 +3,7 @@ import { FC, MouseEventHandler } from "react";
 import classnames from "classnames";
 import { Link } from "react-router-dom";
 import { FormattedMessage } from "react-intl";
+import ChevronRight from "../../assets/images/icons/ChevronRightBrandGreen.svg";
 
 interface IProps {
   title: string;
@@ -27,7 +28,8 @@ const Hero: FC<IProps> = ({ title, titleValues, action, backLink, children }) =>
       <div className="row column">
         {backLink && (
           <div className="c-hero__content">
-            <Link to={backLink.to} className={classnames("c-link", backLink.className)}>
+            <Link to={backLink.to} className={classnames("c-link", "c-link--hero", backLink.className)}>
+              <img src={ChevronRight} alt="" role="presentation" />
               <FormattedMessage id={backLink.name} values={backLink.values} />
             </Link>
           </div>
