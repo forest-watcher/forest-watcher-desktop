@@ -28,7 +28,7 @@ const columnOrderWithStatus: TTeamsDetailDataTableColumns[] = [
 ];
 
 const TeamDetail: FC<IProps> = props => {
-  const { team, teamMembers } = props;
+  const { team, teamMembers, userIsManager } = props;
 
   // ToDo: Create a util for this
   const [manages, monitors] = useMemo(
@@ -81,7 +81,7 @@ const TeamDetail: FC<IProps> = props => {
           <DataTable<TTeamDetailDataTable>
             className="u-w-100"
             rows={manages.map(m => m.attributes)}
-            columnOrder={columnOrder}
+            columnOrder={userIsManager ? columnOrderWithStatus : columnOrder}
             rowActions={[makeMonitor, removeMember]}
           />
         </Article>
@@ -100,7 +100,7 @@ const TeamDetail: FC<IProps> = props => {
           <DataTable<TTeamDetailDataTable>
             className="u-w-100"
             rows={monitors.map(m => m.attributes)}
-            columnOrder={columnOrder}
+            columnOrder={userIsManager ? columnOrderWithStatus : columnOrder}
             rowActions={[makeManager, removeMember]}
           />
         </Article>
