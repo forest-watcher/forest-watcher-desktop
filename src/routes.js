@@ -6,7 +6,8 @@ import Areas from "./pages/areas/AreasContainer";
 import AreasManage from "./pages/areas-manage/AreasManageContainer";
 import Templates from "./pages/templates/TemplatesContainer";
 import TemplatesManage from "./pages/templates-manage/TemplatesManageContainer";
-import Teams from "./pages/teams/TeamContainer";
+import Teams from "./pages/teams/TeamsContainer";
+import TeamDetail from "./pages/teams-detail/TeamDetailContainer";
 import Settings from "./pages/settings/SettingsContainer";
 import Reports from "./pages/reports/ReportsContainer";
 import Login from "./pages/login/Login";
@@ -51,6 +52,7 @@ const Routes = props => {
           <Route exact path={`${match.url}reports`} component={Reports} />
           <Route path={`${match.url}reports/:templateId`} component={Reports} />
           <Route exact path={`${match.url}teams`} component={Teams} />
+          <Route exact path={`${match.url}teams/:teamId`} component={TeamDetail} />
           <Route exact path={`${match.url}settings`} component={Settings} />
         </Switch>
       ) : (

@@ -4,6 +4,7 @@ import { FormattedMessage } from "react-intl";
 
 interface IProps {
   title: string;
+  titleValues?: { [key: string]: string | number };
   action?: {
     name: string;
     callback: MouseEventHandler<HTMLButtonElement>;
@@ -11,13 +12,13 @@ interface IProps {
   children?: HTMLCollection;
 }
 
-const Hero: FC<IProps> = ({ title, action, children }) => {
+const Hero: FC<IProps> = ({ title, titleValues, action, children }) => {
   return (
     <aside className="c-hero">
       <div className="row column">
         <div className="c-hero__content">
           <h1 className="u-text-700 u-text-neutral-300">
-            <FormattedMessage id={title} />
+            <FormattedMessage id={title} values={titleValues} />
           </h1>
           <>{children}</>
           {action && (

@@ -4,7 +4,7 @@ import { FormattedMessage } from "react-intl";
 
 interface IProps extends HTMLAttributes<HTMLDivElement> {
   title?: string;
-  titleValues?: { [key: string]: string };
+  titleValues?: { [key: string]: string | number };
   actions?: ReactNode;
 }
 
