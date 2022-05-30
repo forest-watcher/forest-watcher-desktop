@@ -10,7 +10,7 @@ const Template: ComponentStory<typeof Modal> = args => <Modal {...args} />;
 
 export const Standard = Template.bind({});
 Standard.args = {
-  open: true,
+  isOpen: true,
   onClose: () => {},
   title: "common.create",
   children: <p>Example Create Modal</p>,

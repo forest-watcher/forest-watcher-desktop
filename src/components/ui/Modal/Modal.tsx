@@ -5,7 +5,7 @@ import Button, { IButtonVariants } from "components/ui/Button/Button";
 import CloseIcon from "assets/images/icons/CloseLg.svg";
 
 export interface IProps {
-  open: boolean;
+  isOpen: boolean;
   onClose: () => void;
   title: string;
   actions?: {
@@ -17,10 +17,10 @@ export interface IProps {
 }
 
 const Modal: FC<PropsWithChildren<IProps>> = props => {
-  const { open, onClose, title, actions, children } = props;
+  const { isOpen, onClose, title, actions, children } = props;
 
   return (
-    <Dialog className="c-modal-dialog__container" open={open} onClose={onClose}>
+    <Dialog className="c-modal-dialog__container" open={isOpen} onClose={onClose}>
       <div className="c-modal-dialog__backdrop" aria-hidden="true" />
 
       <Dialog.Panel className="c-modal-dialog">
