@@ -55,7 +55,7 @@
     }
 
     h3 {
-      color: #333333;
+      color: $neutral-700;
       font-weight: 500;
       font-size: 14px;
       line-height: 14px;
@@ -64,7 +64,7 @@
     }
 
     p:not(:empty) {
-      color: #666666;
+      color: $neutral-600;
       font-weight: 400;
       font-size: 16px;
       line-height: 22px;
