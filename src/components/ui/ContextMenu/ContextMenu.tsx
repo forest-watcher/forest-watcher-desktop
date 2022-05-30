@@ -4,7 +4,7 @@ import type { MenuProps, MenuItemProps } from "@szhsin/react-menu";
 import classnames from "classnames";
 import KebabIcon from "assets/images/icons/kebab.svg";
 import KebabIconHover from "assets/images/icons/kebab-hover.svg";
-import { FormattedMessage } from "react-intl";
+import { FormattedMessage, useIntl } from "react-intl";
 
 export interface IProps extends Partial<Omit<Omit<MenuProps, "menuButton">, "menuClassName">> {
   className?: string;
@@ -19,6 +19,7 @@ export interface IProps extends Partial<Omit<Omit<MenuProps, "menuButton">, "men
 
 const ContextMenu: FC<IProps> = props => {
   const { className, toggleClassName, menuItems, transition = true, portal = true, ...rest } = props;
+  const intl = useIntl();
 
   return (
     <Menu
@@ -26,7 +27,7 @@ const ContextMenu: FC<IProps> = props => {
       menuButton={
         <MenuButton
           className={classnames("c-button", "c-context-menu__toggle", toggleClassName)}
-          aria-label="Open Menu"
+          aria-label={intl.formatMessage({ id: "common.open.menu" })}
           data-testid="menuToggle"
         >
           <img className="c-context-menu__icon" alt="" role="presentation" src={KebabIcon} />
