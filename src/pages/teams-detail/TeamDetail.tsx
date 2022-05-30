@@ -51,6 +51,10 @@ const TeamDetail: FC<IProps> = props => {
     [teamMembers]
   );
 
+  const editTeam = () => {
+    // ToDo
+  };
+
   const deleteTeam = () => {
     // ToDo
   };
@@ -67,7 +71,11 @@ const TeamDetail: FC<IProps> = props => {
         titleValues={{ name: team.attributes.name }}
         action={{ name: "teams.details.delete", variant: "secondary-light-text", callback: deleteTeam }}
         backLink={{ name: "teams.details.back", to: "/teams" }}
-      />
+      >
+        <Button className="c-teams-details__edit-btn" variant="primary" onClick={editTeam}>
+          <FormattedMessage id="teams.details.edit" />
+        </Button>
+      </Hero>
       <div className="l-content c-teams-details">
         <Article
           className="c-teams-details__heading"
