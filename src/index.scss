@@ -3,6 +3,8 @@
 @import "./node_modules/react-redux-toastr/src/styles/index";
 @import "mapbox-gl/dist/mapbox-gl.css";
 @import "@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css";
+@import "@szhsin/react-menu/dist/core.css";
+@import "@szhsin/react-menu/dist/transitions/slide.css";
 @import "src/styles/utilities/u-breakpoints";
 
 /* Reset */
@@ -82,6 +84,8 @@
 @import "./styles/components/c-timeframe";
 @import "./styles/components/c-empty-state";
 @import "./styles/components/c-areas";
+@import "./styles/components/c-context-menu";
+@import "./styles/components/c-data-table";
 
 /* Utilities */
 @import "./styles/utilities/u-display";

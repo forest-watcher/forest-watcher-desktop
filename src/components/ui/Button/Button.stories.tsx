@@ -1,5 +1,6 @@
 import { ComponentStory, ComponentMeta } from "@storybook/react";
 import ChevronRight from "assets/images/icons/ChevronRight.svg";
+import KebabIcon from "assets/images/icons/kebab.svg";
 
 import Button from "components/ui/Button/Button";
 
