@@ -22,12 +22,14 @@ const AreYouSure: FC<IProps> = props => {
         { name: "common.leave.page", variant: "secondary", onClick: yesCallBack }
       ]}
     >
-      <p>
-        <FormattedMessage id="common.unsaved.changes.desc.1" />
-      </p>
-      <p>
-        <FormattedMessage id="common.unsaved.changes.desc.2" />
-      </p>
+      <div className="c-are-you-sure-modal">
+        <p>
+          <FormattedMessage id="common.unsaved.changes.desc.1" />
+        </p>
+        <p>
+          <FormattedMessage id="common.unsaved.changes.desc.2" />
+        </p>
+      </div>
     </Modal>
   );
 };
