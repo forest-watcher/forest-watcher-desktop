@@ -14,7 +14,6 @@ interface ICreateTeamForm {
 const CreateTeamModal: FC<IProps> = props => {
   const { history } = props;
   const { register, handleSubmit } = useForm<ICreateTeamForm>();
-  const isOpen = true;
 
   const close = () => {
     history.push("/teams");
@@ -27,7 +26,7 @@ const CreateTeamModal: FC<IProps> = props => {
 
   return (
     <Modal
-      isOpen={isOpen}
+      isOpen={true}
       onClose={close}
       title="teams.create"
       actions={[
