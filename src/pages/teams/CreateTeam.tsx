@@ -14,7 +14,11 @@ interface ICreateTeamForm {
 
 const CreateTeamModal: FC<IProps> = props => {
   const { history } = props;
-  const { register, handleSubmit } = useForm<ICreateTeamForm>();
+  const {
+    register,
+    handleSubmit,
+    formState: { isDirty }
+  } = useForm<ICreateTeamForm>();
   const [isClosing, setIsClosing] = useState(false);
 
   const close = () => {
@@ -22,7 +26,11 @@ const CreateTeamModal: FC<IProps> = props => {
   };
 
   const handleCloseRequest = () => {
-    setIsClosing(true);
+    if (isDirty) {
+      setIsClosing(true);
+    } else {
+      close();
+    }
   };
 
   const onSubmit: SubmitHandler<ICreateTeamForm> = async data => {
