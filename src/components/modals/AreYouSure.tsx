@@ -14,7 +14,9 @@ const AreYouSure: FC<IProps> = props => {
   return (
     <Modal
       isOpen={isOpen}
+      dismissible={false}
       title="common.unsaved.changes"
+      onClose={yesCallBack}
       actions={[
         { name: "common.stay", onClick: noCallBack },
         { name: "common.leave.page", variant: "secondary", onClick: yesCallBack }
