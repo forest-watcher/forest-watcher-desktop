@@ -123,12 +123,14 @@ const TeamDetail: FC<IProps> = props => {
             )
           }
         >
-          <DataTable<TTeamDetailDataTable>
-            className="u-w-100"
-            rows={manages.map(m => m.attributes)}
-            columnOrder={userIsManager ? columnOrderWithStatus : columnOrder}
-            rowActions={userIsManager ? [makeMonitor, removeMember] : undefined}
-          />
+          <div className="u-responsive-table">
+            <DataTable<TTeamDetailDataTable>
+              className="u-w-100"
+              rows={manages.map(m => m.attributes)}
+              columnOrder={userIsManager ? columnOrderWithStatus : columnOrder}
+              rowActions={userIsManager ? [makeMonitor, removeMember] : undefined}
+            />
+          </div>
         </Article>
       </div>
       <div className="l-content c-teams-details">
@@ -145,12 +147,14 @@ const TeamDetail: FC<IProps> = props => {
             )
           }
         >
-          <DataTable<TTeamDetailDataTable>
-            className="u-w-100"
-            rows={monitors.map(m => m.attributes)}
-            columnOrder={userIsManager ? columnOrderWithStatus : columnOrder}
-            rowActions={userIsManager ? [makeManager, removeMember] : undefined}
-          />
+          <div className="u-responsive-table">
+            <DataTable<TTeamDetailDataTable>
+              className="u-w-100"
+              rows={monitors.map(m => m.attributes)}
+              columnOrder={userIsManager ? columnOrderWithStatus : columnOrder}
+              rowActions={userIsManager ? [makeManager, removeMember] : undefined}
+            />
+          </div>
         </Article>
       </div>
     </>
