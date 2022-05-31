@@ -20,9 +20,9 @@ const CreateTeamModal: FC<IProps> = props => {
     history.push("/teams");
   };
 
-  const createTeam: SubmitHandler<ICreateTeamForm> = async data => {
-    const newTeam = await teamService.createTeam(data);
-    console.log(newTeam);
+  const onSubmit: SubmitHandler<ICreateTeamForm> = async data => {
+    const { data: newTeam } = await teamService.createTeam(data);
+    history.push(`/teams/${newTeam.id}`);
   };
 
   return (
@@ -33,12 +33,12 @@ const CreateTeamModal: FC<IProps> = props => {
       actions={[
         {
           name: "teams.create.save",
-          onClick: handleSubmit(createTeam)
+          onClick: handleSubmit(onSubmit)
         },
         { name: "common.cancel", variant: "secondary", onClick: close }
       ]}
     >
-      <form onSubmit={handleSubmit(createTeam)}>
+      <form onSubmit={handleSubmit(onSubmit)}>
         <Input
           htmlInputProps={{
             label: "Team Name",

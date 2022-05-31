@@ -48,7 +48,7 @@ export type TGetTeamMembersResponse =
 
 export type TGetMyTeamInvites = paths["/v3/teams/myinvites"]["get"]["responses"]["200"]["content"]["application/json"];
 export type TPostTeamResponse = paths["/v3/teams"]["post"]["responses"]["200"]["content"]["application/json"];
-export type TPostTeamBody = paths["/v3/teams"]["post"]["requestBody"]["content"]["application/json"];
+export type TPostTeamBody = Omit<paths["/v3/teams"]["post"]["requestBody"]["content"]["application/json"], "createdAt">;
 
 export class TeamService extends BaseService {
   getUserTeams(userId: string): Promise<TGetUserTeamsResponse> {
@@ -64,7 +64,7 @@ export class TeamService extends BaseService {
   }
 
   // ToDo: Docs shouldn't include createdAt as a required request object!
-  createTeam(body: Omit<TPostTeamBody, "createdAt">): Promise<TPostTeamResponse> {
+  createTeam(body: TPostTeamBody): Promise<TPostTeamResponse> {
     this.token = store.getState().user.token;
 
     return this.fetchJSON("/", {
