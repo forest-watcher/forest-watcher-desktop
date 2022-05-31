@@ -41,6 +41,9 @@ const TeamDetail: FC<IProps> = props => {
   const userId = useGetUserId();
 
   useEffect(() => {
+    // If the component has attempted to fetch the teams and the fetches have
+    // finished but the team was still not found, then redirect to the teams
+    // summary page.
     if (numOfActiveFetches === 0 && !team && fetched) {
       toastr.warning(intl.formatMessage({ id: "errors.team.detail" }), "");
       history.push("/teams");
