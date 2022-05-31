@@ -252,5 +252,6 @@
   "errors.mixed.default": "Incorrect value",
   "errors.mixed.notType": "Incorrect format, enter a {type}",
   "errors.number.min": "This should be at least {min}",
-  "errors.number.max": "This should be less than {max}"
+  "errors.number.max": "This should be less than {max}",
+  "errors.team.detail": "Could not find Team"
 }

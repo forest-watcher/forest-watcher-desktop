@@ -118,7 +118,6 @@ export const getTeamMembers = (teamId: string) => (dispatch: AppDispatch, getSta
       })
     )
     .catch(error => {
-      toastr.error("Unable to find Team Members", error);
       console.warn("error", error);
     })
     .finally(() => {
@@ -175,7 +174,6 @@ export const getTeamAreas = (teamId: string) => (dispatch: AppDispatch, getState
       })
     )
     .catch(error => {
-      toastr.error("Unable to find Team Areas", error);
       console.warn("error", error);
     })
     .finally(() => {

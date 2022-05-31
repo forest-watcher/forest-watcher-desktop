@@ -1,6 +1,7 @@
 import { connect, ConnectedProps } from "react-redux";
 import { RootState } from "index";
 import TeamDetail, { IOwnProps } from "./TeamDetail";
+import { getTeamMembers, getUserTeams } from "../../modules/gfwTeams";
 
 const mapStateToProps = ({ gfwTeams, user }: RootState, ownProps: IOwnProps) => {
   let userMember = gfwTeams.members[ownProps.match.params.teamId]?.find(
@@ -9,12 +10,16 @@ const mapStateToProps = ({ gfwTeams, user }: RootState, ownProps: IOwnProps) => 
 
   return {
     team: gfwTeams.data.find(team => team.id === ownProps.match.params.teamId),
-    teamMembers: gfwTeams.members[ownProps.match.params.teamId],
-    userIsManager: userMember?.attributes.role === "administrator" || userMember?.attributes.role === "manager"
+    teamMembers: gfwTeams.members[ownProps.match.params.teamId] || [],
+    userIsManager: userMember?.attributes.role === "administrator" || userMember?.attributes.role === "manager",
+    numOfActiveFetches: gfwTeams.numOfActiveFetches
   };
 };
 
-const mapDispatchToProps = {};
+const mapDispatchToProps = {
+  getUserTeams,
+  getTeamMembers
+};
 
 const connector = connect(mapStateToProps, mapDispatchToProps);
 
