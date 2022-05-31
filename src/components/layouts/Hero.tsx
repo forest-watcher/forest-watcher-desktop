@@ -1,5 +1,5 @@
 import Button, { IProps as IButtonProps } from "components/ui/Button/Button";
-import { FC, MouseEventHandler } from "react";
+import { FC, MouseEventHandler, PropsWithChildren, ReactNode } from "react";
 import classnames from "classnames";
 import { Link } from "react-router-dom";
 import { FormattedMessage } from "react-intl";
@@ -19,10 +19,9 @@ interface IProps {
     to: string;
     values?: { [key: string]: string | number };
   };
-  children?: HTMLCollection;
 }
 
-const Hero: FC<IProps> = ({ title, titleValues, action, backLink, children }) => {
+const Hero: FC<PropsWithChildren<IProps>> = ({ title, titleValues, action, backLink, children }) => {
   return (
     <aside className="c-hero">
       <div className="row column">

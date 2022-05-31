@@ -51,6 +51,10 @@ const TeamDetail: FC<IProps> = props => {
     [teamMembers]
   );
 
+  const editTeam = () => {
+    // ToDo
+  };
+
   const deleteTeam = () => {
     // ToDo
   };
@@ -65,26 +69,38 @@ const TeamDetail: FC<IProps> = props => {
       <Hero
         title="teams.details.name"
         titleValues={{ name: team.attributes.name }}
-        action={{ name: "teams.details.delete", variant: "secondary-light-text", callback: deleteTeam }}
+        action={
+          userIsManager
+            ? { name: "teams.details.delete", variant: "secondary-light-text", callback: deleteTeam }
+            : undefined
+        }
         backLink={{ name: "teams.details.back", to: "/teams" }}
-      />
+      >
+        {userIsManager && (
+          <Button className="c-teams-details__edit-btn" variant="primary" onClick={editTeam}>
+            <FormattedMessage id="teams.details.edit" />
+          </Button>
+        )}
+      </Hero>
       <div className="l-content c-teams-details">
         <Article
           className="c-teams-details__heading"
           title="teams.details.managers"
           titleValues={{ num: manages.length }}
           actions={
-            <Button variant="primary">
-              <img className="c-button__inline-icon" src={PlusIcon} alt="" role="presentation" />
-              <FormattedMessage id="teams.details.add.managers" />
-            </Button>
+            userIsManager && (
+              <Button variant="primary">
+                <img className="c-button__inline-icon" src={PlusIcon} alt="" role="presentation" />
+                <FormattedMessage id="teams.details.add.managers" />
+              </Button>
+            )
           }
         >
           <DataTable<TTeamDetailDataTable>
             className="u-w-100"
             rows={manages.map(m => m.attributes)}
             columnOrder={userIsManager ? columnOrderWithStatus : columnOrder}
-            rowActions={[makeMonitor, removeMember]}
+            rowActions={userIsManager ? [makeMonitor, removeMember] : undefined}
           />
         </Article>
       </div>
@@ -94,17 +110,19 @@ const TeamDetail: FC<IProps> = props => {
           title="teams.details.monitors"
           titleValues={{ num: monitors.length }}
           actions={
-            <Button variant="primary">
-              <img className="c-button__inline-icon" src={PlusIcon} alt="" role="presentation" />
-              <FormattedMessage id="teams.details.add.monitors" />
-            </Button>
+            userIsManager && (
+              <Button variant="primary">
+                <img className="c-button__inline-icon" src={PlusIcon} alt="" role="presentation" />
+                <FormattedMessage id="teams.details.add.monitors" />
+              </Button>
+            )
           }
         >
           <DataTable<TTeamDetailDataTable>
             className="u-w-100"
             rows={monitors.map(m => m.attributes)}
             columnOrder={userIsManager ? columnOrderWithStatus : columnOrder}
-            rowActions={[makeManager, removeMember]}
+            rowActions={userIsManager ? [makeManager, removeMember] : undefined}
           />
         </Article>
       </div>
