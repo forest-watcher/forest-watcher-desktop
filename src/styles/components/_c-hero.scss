@@ -2,9 +2,13 @@
   background-color: $theme-secondary;
 
   &__content {
-    padding: $global-spacing-7 0;
+    padding-top: $global-spacing-7;
     display: flex;
     justify-content: space-between;
     align-items: center;
+
+    &:last-child {
+      padding-bottom: $global-spacing-7;
+    }
   }
 }

@@ -73,7 +73,7 @@ const Nav: FC<IProps> = props => {
                 </NavLink>
               </li>
               <li className="c-nav__link-wrapper">
-                <NavLink to="/settings" className="c-nav__link" activeClassName="c-nav__link--active">
+                <NavLink to="/teams" className="c-nav__link" activeClassName="c-nav__link--active">
                   <FormattedMessage id="teams.name" />
                 </NavLink>
               </li>

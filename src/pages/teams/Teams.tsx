@@ -1,5 +1,5 @@
 import { FC, useEffect, useMemo } from "react";
-import { TPropsFromRedux } from "./TeamContainer";
+import { TPropsFromRedux } from "./TeamsContainer";
 import Hero from "components/layouts/Hero";
 import Article from "components/layouts/Article";
 import Loader from "components/ui/Loader";
