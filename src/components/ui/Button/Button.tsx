@@ -3,7 +3,7 @@ import classnames from "classnames";
 
 export type IButtonVariants = "primary" | "secondary" | "secondary-light-text";
 
-interface IProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+export interface IProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: IButtonVariants;
   isIcon?: Boolean;
 }

@@ -48,7 +48,7 @@ const Teams: FC<IProps> = props => {
       {myInvites.length > 0 && (
         <div className="l-team-invitations l-content--neutral-400">
           <div className="row column">
-            <div className="row l-team-invitations__row">
+            <div className="l-team-invitations__row">
               <FormattedMessage id="teams.invitation.banner" values={{ num: myInvites.length }}>
                 {txt => <span className="l-team-invitations__title">{txt}</span>}
               </FormattedMessage>

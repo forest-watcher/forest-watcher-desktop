@@ -1,0 +1,22 @@
+.c-teams-details {
+  min-height: unset;
+  padding-top: 38px;
+  padding-bottom: 28px;
+
+  &__heading {
+    > .c-article__top-row {
+      margin-bottom: 28px;
+    }
+
+    .c-article__title {
+      font-weight: 400;
+      font-size: 24px;
+      line-height: 36px;
+    }
+  }
+
+  &__edit-btn {
+    margin-left: auto;
+    margin-right: 8px;
+  }
+}
