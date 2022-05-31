@@ -9,6 +9,7 @@ import TeamsListing from "components/teams-listing/TeamsListing";
 import Button from "components/ui/Button/Button";
 import useGetUserId from "hooks/useGetUserId";
 import CreateTeam from "./CreateTeam";
+import PlusIcon from "assets/images/icons/PlusWhite.svg";
 
 interface IProps extends TPropsFromRedux, RouteComponentProps {}
 
@@ -66,7 +67,10 @@ const Teams: FC<IProps> = props => {
           titleValues={{ num: managedTeams.length.toString() }}
           actions={
             <Link to={`${match.path}/create`}>
-              <Button variant="primary">Create</Button>
+              <Button variant="primary">
+                <img src={PlusIcon} alt="" role="presentation" className="c-button__inline-icon" />
+                <FormattedMessage id="teams.create" />
+              </Button>
             </Link>
           }
         >

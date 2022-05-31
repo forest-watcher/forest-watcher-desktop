@@ -11,7 +11,7 @@ export interface IProps {
   actions?: {
     name: string;
     values?: { [key: string]: string };
-    variant: IButtonVariants;
+    variant?: IButtonVariants;
     onClick: () => void;
   }[];
 }
