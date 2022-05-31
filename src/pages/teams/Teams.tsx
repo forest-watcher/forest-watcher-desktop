@@ -1,19 +1,19 @@
 import { FC, useEffect, useMemo } from "react";
+import { Switch, Route, RouteComponentProps, Link } from "react-router-dom";
 import { TPropsFromRedux } from "./TeamContainer";
 import Hero from "components/layouts/Hero";
 import Article from "components/layouts/Article";
 import Loader from "components/ui/Loader";
-import ReactGA from "react-ga";
-import PlusIcon from "assets/images/icons/PlusWhite.svg";
 import { FormattedMessage } from "react-intl";
 import TeamsListing from "components/teams-listing/TeamsListing";
-import Button from "../../components/ui/Button/Button";
+import Button from "components/ui/Button/Button";
 import useGetUserId from "hooks/useGetUserId";
+import CreateTeam from "./CreateTeam";
 
-interface IProps extends TPropsFromRedux {}
+interface IProps extends TPropsFromRedux, RouteComponentProps {}
 
 const Teams: FC<IProps> = props => {
-  const { teams, myInvites, getUserTeams, getMyTeamInvites, numOfActiveFetches } = props;
+  const { teams, myInvites, getUserTeams, getMyTeamInvites, numOfActiveFetches, match } = props;
 
   const userId = useGetUserId();
 
@@ -65,10 +65,9 @@ const Teams: FC<IProps> = props => {
           title="teams.managedByMe"
           titleValues={{ num: managedTeams.length.toString() }}
           actions={
-            <ReactGA.OutboundLink eventLabel="Add new team" to="/teams/create" className="c-button c-button--primary">
-              <img src={PlusIcon} alt="" role="presentation" className="c-button__inline-icon" />
-              <FormattedMessage id="teams.create" />
-            </ReactGA.OutboundLink>
+            <Link to={`${match.path}/create`}>
+              <Button variant="primary">Create</Button>
+            </Link>
           }
         >
           <TeamsListing teams={managedTeams} />
@@ -83,6 +82,10 @@ const Teams: FC<IProps> = props => {
           <TeamsListing teams={joinedTeams} />
         </Article>
       </div>
+
+      <Switch>
+        <Route exact path={`${match.path}/create`} component={CreateTeam} />
+      </Switch>
     </div>
   );
 };
