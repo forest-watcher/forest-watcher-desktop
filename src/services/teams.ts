@@ -2,6 +2,7 @@ import { API_BASE_URL_V1, API_BASE_URL_V3 } from "../constants/global";
 import { BaseService } from "./baseService";
 import { unique } from "../helpers/utils";
 import { components, paths } from "interfaces/teams";
+import { store } from "index";
 
 type TeamResponse = components["responses"]["Team"]["content"]["application/json"];
 export type Team = components["schemas"]["Team"];
@@ -46,6 +47,8 @@ export type TGetTeamMembersResponse =
   paths["/v3/teams/{teamId}/users"]["get"]["responses"]["200"]["content"]["application/json"];
 
 export type TGetMyTeamInvites = paths["/v3/teams/myinvites"]["get"]["responses"]["200"]["content"]["application/json"];
+export type TPostTeamResponse = paths["/v3/teams"]["post"]["responses"]["200"]["content"]["application/json"];
+export type TPostTeamBody = paths["/v3/teams"]["post"]["requestBody"]["content"]["application/json"];
 
 export class TeamService extends BaseService {
   getUserTeams(userId: string): Promise<TGetUserTeamsResponse> {
@@ -58,6 +61,19 @@ export class TeamService extends BaseService {
 
   getMyTeamInvites(): Promise<TGetMyTeamInvites> {
     return this.fetchJSON("/myinvites");
+  }
+
+  // ToDo: Docs shouldn't include createdAt as a required request object!
+  createTeam(body: Omit<TPostTeamBody, "createdAt">): Promise<TPostTeamResponse> {
+    this.token = store.getState().user.token;
+
+    return this.fetchJSON("/", {
+      headers: {
+        "Content-Type": "application/json"
+      },
+      method: "POST",
+      body: JSON.stringify(body)
+    });
   }
 }
 

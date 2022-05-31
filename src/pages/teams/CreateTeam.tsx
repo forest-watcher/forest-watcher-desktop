@@ -3,11 +3,12 @@ import Modal from "components/ui/Modal/Modal";
 import Input from "components/ui/Form/Input";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { RouteComponentProps } from "react-router-dom";
+import { teamService } from "services/teams";
 
 interface IProps extends RouteComponentProps {}
 
 interface ICreateTeamForm {
-  teamName: String;
+  name: string;
 }
 
 const CreateTeamModal: FC<IProps> = props => {
@@ -19,8 +20,9 @@ const CreateTeamModal: FC<IProps> = props => {
     history.push("/teams");
   };
 
-  const createTeam: SubmitHandler<ICreateTeamForm> = data => {
-    console.log(data);
+  const createTeam: SubmitHandler<ICreateTeamForm> = async data => {
+    const newTeam = await teamService.createTeam(data);
+    console.log(newTeam);
   };
 
   return (
@@ -44,7 +46,7 @@ const CreateTeamModal: FC<IProps> = props => {
             type: "text"
           }}
           id="team-name-input"
-          registered={register("teamName", { required: true })}
+          registered={register("name", { required: true })}
         />
       </form>
     </Modal>
