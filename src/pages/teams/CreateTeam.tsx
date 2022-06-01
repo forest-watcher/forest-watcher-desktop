@@ -5,6 +5,9 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import { useHistory } from "react-router-dom";
 import { teamService } from "services/teams";
 import AreYouSure from "components/modals/AreYouSure";
+import Loader from "../../components/ui/Loader";
+import { toastr } from "react-redux-toastr";
+import { useIntl } from "react-intl";
 
 interface IProps {
   isOpen: boolean;
@@ -16,6 +19,7 @@ interface ICreateTeamForm {
 
 const CreateTeamModal: FC<IProps> = props => {
   const { isOpen = false } = props;
+  const intl = useIntl();
   const history = useHistory();
   const {
     register,
@@ -24,9 +28,11 @@ const CreateTeamModal: FC<IProps> = props => {
     formState: { isDirty }
   } = useForm<ICreateTeamForm>();
   const [isClosing, setIsClosing] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     setIsClosing(false);
+    setIsLoading(false);
     reset();
   }, [isOpen, reset]);
 
@@ -43,8 +49,15 @@ const CreateTeamModal: FC<IProps> = props => {
   };
 
   const onSubmit: SubmitHandler<ICreateTeamForm> = async data => {
-    const { data: newTeam } = await teamService.createTeam(data);
-    history.push(`/teams/${newTeam.id}`);
+    setIsLoading(true);
+    try {
+      const { data: newTeam } = await teamService.createTeam(data);
+      history.push(`/teams/${newTeam.id}`);
+    } catch (e) {
+      toastr.error(intl.formatMessage({ id: "teams.create.error" }), "");
+      console.error(e);
+    }
+    setIsLoading(false);
   };
 
   return (
@@ -61,6 +74,7 @@ const CreateTeamModal: FC<IProps> = props => {
           { name: "common.cancel", variant: "secondary", onClick: handleCloseRequest }
         ]}
       >
+        <Loader isLoading={isLoading} />
         <form className="c-modal-form" onSubmit={handleSubmit(onSubmit)}>
           <Input
             htmlInputProps={{

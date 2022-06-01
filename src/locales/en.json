@@ -145,6 +145,7 @@
   "teams.invitation.accept": "Accept Invitation",
   "teams.create": "Create New team",
   "teams.create.save": "Create team",
+  "teams.create.error": "Unable to create Team",
   "teams.edit": "Edit team",
   "teams.teamName": "Team name",
   "teams.areas": "Associated areas of interest",
