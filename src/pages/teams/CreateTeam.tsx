@@ -1,4 +1,4 @@
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import Modal from "components/ui/Modal/Modal";
 import Input from "components/ui/Form/Input";
 import { useForm, SubmitHandler } from "react-hook-form";
@@ -6,20 +6,29 @@ import { useHistory } from "react-router-dom";
 import { teamService } from "services/teams";
 import AreYouSure from "components/modals/AreYouSure";
 
-interface IProps {}
+interface IProps {
+  isOpen: boolean;
+}
 
 interface ICreateTeamForm {
   name: string;
 }
 
 const CreateTeamModal: FC<IProps> = props => {
+  const { isOpen = false } = props;
   const history = useHistory();
   const {
     register,
     handleSubmit,
+    reset,
     formState: { isDirty }
   } = useForm<ICreateTeamForm>();
   const [isClosing, setIsClosing] = useState(false);
+
+  useEffect(() => {
+    setIsClosing(false);
+    reset();
+  }, [isOpen, reset]);
 
   const close = () => {
     history.push("/teams");
@@ -41,7 +50,7 @@ const CreateTeamModal: FC<IProps> = props => {
   return (
     <>
       <Modal
-        isOpen={!isClosing}
+        isOpen={isOpen && !isClosing}
         onClose={handleCloseRequest}
         title="teams.create"
         actions={[
@@ -65,7 +74,7 @@ const CreateTeamModal: FC<IProps> = props => {
         </form>
       </Modal>
 
-      <AreYouSure isOpen={isClosing} yesCallBack={close} noCallBack={() => setIsClosing(false)} />
+      <AreYouSure isOpen={isOpen && isClosing} yesCallBack={close} noCallBack={() => setIsClosing(false)} />
     </>
   );
 };

@@ -89,7 +89,7 @@ const Teams: FC<IProps> = props => {
         </Article>
       </div>
 
-      {isCreateModal && <CreateTeam />}
+      <CreateTeam isOpen={isCreateModal} />
     </div>
   );
 };
