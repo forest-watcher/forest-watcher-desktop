@@ -146,6 +146,7 @@
   "teams.create": "Create New team",
   "teams.create.save": "Create team",
   "teams.create.error": "Unable to create Team",
+  "teams.create.error.name.minLength": "Team name must be at least 3 characters long",
   "teams.edit": "Edit team",
   "teams.teamName": "Team name",
   "teams.areas": "Associated areas of interest",

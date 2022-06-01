@@ -25,7 +25,7 @@ const CreateTeamModal: FC<IProps> = props => {
     register,
     handleSubmit,
     reset,
-    formState: { isDirty }
+    formState: { isDirty, errors }
   } = useForm<ICreateTeamForm>();
   const [isClosing, setIsClosing] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -77,13 +77,18 @@ const CreateTeamModal: FC<IProps> = props => {
         <Loader isLoading={isLoading} />
         <form className="c-modal-form" onSubmit={handleSubmit(onSubmit)}>
           <Input
+            error={
+              errors?.name?.type === "minLength" && {
+                message: intl.formatMessage({ id: "teams.create.error.name.minLength" })
+              }
+            }
             htmlInputProps={{
               label: "Team Name",
               placeholder: "Enter Team Name",
               type: "text"
             }}
             id="team-name-input"
-            registered={register("name", { required: true })}
+            registered={register("name", { required: true, minLength: 3 })}
           />
         </form>
       </Modal>
