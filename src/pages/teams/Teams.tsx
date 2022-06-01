@@ -12,11 +12,11 @@ import CreateTeam from "./CreateTeam";
 import PlusIcon from "assets/images/icons/PlusWhite.svg";
 
 interface IProps extends TPropsFromRedux, RouteComponentProps {
-  isCreateModal: boolean;
+  isCreatingTeam: boolean;
 }
 
 const Teams: FC<IProps> = props => {
-  const { teams, myInvites, getUserTeams, getMyTeamInvites, numOfActiveFetches, isCreateModal = false, match } = props;
+  const { teams, myInvites, getUserTeams, getMyTeamInvites, numOfActiveFetches, isCreatingTeam = false, match } = props;
 
   const userId = useGetUserId();
 
@@ -89,7 +89,7 @@ const Teams: FC<IProps> = props => {
         </Article>
       </div>
 
-      <CreateTeam isOpen={isCreateModal} />
+      <CreateTeam isOpen={isCreatingTeam} />
     </div>
   );
 };

@@ -22,7 +22,7 @@ const UnsavedChanges: FC<IProps> = props => {
         { name: "common.leave.page", variant: "secondary", onClick: leaveCallBack }
       ]}
     >
-      <div className="c-are-you-sure-modal">
+      <div className="c-unsaved-changes-modal">
         <p>
           <FormattedMessage id="common.unsaved.changes.desc.1" />
         </p>
