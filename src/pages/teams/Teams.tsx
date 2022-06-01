@@ -1,5 +1,5 @@
 import { FC, useEffect, useMemo } from "react";
-import { Switch, Route, RouteComponentProps, Link } from "react-router-dom";
+import { RouteComponentProps, Link } from "react-router-dom";
 import { TPropsFromRedux } from "./TeamsContainer";
 import Hero from "components/layouts/Hero";
 import Article from "components/layouts/Article";
@@ -11,10 +11,12 @@ import useGetUserId from "hooks/useGetUserId";
 import CreateTeam from "./CreateTeam";
 import PlusIcon from "assets/images/icons/PlusWhite.svg";
 
-interface IProps extends TPropsFromRedux, RouteComponentProps {}
+interface IProps extends TPropsFromRedux, RouteComponentProps {
+  isCreateModal: boolean;
+}
 
 const Teams: FC<IProps> = props => {
-  const { teams, myInvites, getUserTeams, getMyTeamInvites, numOfActiveFetches, match } = props;
+  const { teams, myInvites, getUserTeams, getMyTeamInvites, numOfActiveFetches, isCreateModal = false, match } = props;
 
   const userId = useGetUserId();
 
@@ -87,9 +89,7 @@ const Teams: FC<IProps> = props => {
         </Article>
       </div>
 
-      <Switch>
-        <Route exact path={`${match.path}/create`} component={CreateTeam} />
-      </Switch>
+      {isCreateModal && <CreateTeam />}
     </div>
   );
 };

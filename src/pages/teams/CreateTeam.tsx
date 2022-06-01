@@ -1,19 +1,19 @@
-import { FC, useReducer, useState } from "react";
+import { FC, useState } from "react";
 import Modal from "components/ui/Modal/Modal";
 import Input from "components/ui/Form/Input";
 import { useForm, SubmitHandler } from "react-hook-form";
-import { RouteComponentProps } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import { teamService } from "services/teams";
 import AreYouSure from "components/modals/AreYouSure";
 
-interface IProps extends RouteComponentProps {}
+interface IProps {}
 
 interface ICreateTeamForm {
   name: string;
 }
 
 const CreateTeamModal: FC<IProps> = props => {
-  const { history } = props;
+  const history = useHistory();
   const {
     register,
     handleSubmit,
