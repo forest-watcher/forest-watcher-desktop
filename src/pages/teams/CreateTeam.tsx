@@ -4,7 +4,7 @@ import Input from "components/ui/Form/Input";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { useHistory } from "react-router-dom";
 import { teamService } from "services/teams";
-import AreYouSure from "components/modals/AreYouSure";
+import UnsavedChanges from "components/modals/UnsavedChanges";
 import Loader from "../../components/ui/Loader";
 import { toastr } from "react-redux-toastr";
 import { useIntl } from "react-intl";
@@ -93,7 +93,7 @@ const CreateTeamModal: FC<IProps> = props => {
         </form>
       </Modal>
 
-      <AreYouSure isOpen={isOpen && isClosing} yesCallBack={close} noCallBack={() => setIsClosing(false)} />
+      <UnsavedChanges isOpen={isOpen && isClosing} yesCallBack={close} noCallBack={() => setIsClosing(false)} />
     </>
   );
 };

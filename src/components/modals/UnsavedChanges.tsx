@@ -8,7 +8,7 @@ interface IProps {
   noCallBack: () => void;
 }
 
-const AreYouSure: FC<IProps> = props => {
+const UnsavedChanges: FC<IProps> = props => {
   const { isOpen, yesCallBack, noCallBack } = props;
 
   return (
@@ -34,4 +34,4 @@ const AreYouSure: FC<IProps> = props => {
   );
 };
 
-export default AreYouSure;
+export default UnsavedChanges;
