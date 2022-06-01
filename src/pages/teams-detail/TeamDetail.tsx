@@ -12,12 +12,15 @@ import { FormattedMessage, useIntl } from "react-intl";
 import PlusIcon from "assets/images/icons/PlusWhite.svg";
 import useGetUserId from "hooks/useGetUserId";
 import Loader from "components/ui/Loader";
+import DeleteTeam from "./actions/DeleteTeam";
 
 type TParams = {
   teamId: string;
 };
 
-export interface IOwnProps extends RouteComponentProps<TParams> {}
+export interface IOwnProps extends RouteComponentProps<TParams> {
+  isDeletingTeam: boolean;
+}
 
 type IProps = IOwnProps & TPropsFromRedux;
 
@@ -32,7 +35,16 @@ const columnOrderWithStatus: TTeamsDetailDataTableColumns[] = [
 ];
 
 const TeamDetail: FC<IProps> = props => {
-  const { team, teamMembers, getUserTeams, getTeamMembers, userIsManager, numOfActiveFetches, match } = props;
+  const {
+    team,
+    teamMembers,
+    getUserTeams,
+    getTeamMembers,
+    userIsManager,
+    numOfActiveFetches,
+    isDeletingTeam = false,
+    match
+  } = props;
   const { teamId } = match.params;
   const [fetched, setFetched] = useState<boolean>(false);
   const history = useHistory();
@@ -84,6 +96,7 @@ const TeamDetail: FC<IProps> = props => {
 
   const deleteTeam = () => {
     // ToDo
+    history.push(`${match.url}/delete`);
   };
 
   if (!team) {
@@ -157,6 +170,8 @@ const TeamDetail: FC<IProps> = props => {
           </div>
         </Article>
       </div>
+
+      <DeleteTeam isOpen={isDeletingTeam} />
     </>
   );
 };

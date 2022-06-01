@@ -54,6 +54,11 @@ const Routes = props => {
           <Route exact path={`${match.url}teams`} component={Teams} />
           <Route exact path={`${match.url}teams/create`} render={args => <Teams isCreatingTeam {...args} />} />
           <Route exact path={`${match.url}teams/:teamId`} component={TeamDetail} />
+          <Route
+            exact
+            path={`${match.url}teams/:teamId/delete`}
+            render={args => <TeamDetail isDeletingTeam {...args} />}
+          />
           <Route exact path={`${match.url}settings`} component={Settings} />
         </Switch>
       ) : (
