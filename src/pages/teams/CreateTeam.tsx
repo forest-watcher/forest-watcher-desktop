@@ -52,7 +52,7 @@ const CreateTeamModal: FC<IProps> = props => {
           { name: "common.cancel", variant: "secondary", onClick: handleCloseRequest }
         ]}
       >
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <form className="c-modal-form" onSubmit={handleSubmit(onSubmit)}>
           <Input
             htmlInputProps={{
               label: "Team Name",
