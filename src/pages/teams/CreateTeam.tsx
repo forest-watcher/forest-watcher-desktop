@@ -93,7 +93,7 @@ const CreateTeamModal: FC<IProps> = props => {
         </form>
       </Modal>
 
-      <UnsavedChanges isOpen={isOpen && isClosing} yesCallBack={close} noCallBack={() => setIsClosing(false)} />
+      <UnsavedChanges isOpen={isOpen && isClosing} leaveCallBack={close} stayCallBack={() => setIsClosing(false)} />
     </>
   );
 };

@@ -4,22 +4,22 @@ import { FormattedMessage } from "react-intl";
 
 interface IProps {
   isOpen: boolean;
-  yesCallBack: () => void;
-  noCallBack: () => void;
+  leaveCallBack: () => void;
+  stayCallBack: () => void;
 }
 
 const UnsavedChanges: FC<IProps> = props => {
-  const { isOpen, yesCallBack, noCallBack } = props;
+  const { isOpen, leaveCallBack, stayCallBack } = props;
 
   return (
     <Modal
       isOpen={isOpen}
       dismissible={false}
       title="common.unsaved.changes"
-      onClose={yesCallBack}
+      onClose={leaveCallBack}
       actions={[
-        { name: "common.stay", onClick: noCallBack },
-        { name: "common.leave.page", variant: "secondary", onClick: yesCallBack }
+        { name: "common.stay", onClick: stayCallBack },
+        { name: "common.leave.page", variant: "secondary", onClick: leaveCallBack }
       ]}
     >
       <div className="c-are-you-sure-modal">
