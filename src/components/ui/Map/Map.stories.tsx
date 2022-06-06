@@ -120,7 +120,9 @@ const EditTemplate: ComponentStory<typeof Map> = args => {
 
 export const Standard = MultipleTemplate.bind({});
 // More on args: https://storybook.js.org/docs/react/writing-stories/args
-Standard.args = {};
+Standard.args = {
+  onMapEdit: undefined
+};
 
 export const EditMap = EditTemplate.bind({});
 // More on args: https://storybook.js.org/docs/react/writing-stories/args
