@@ -3,6 +3,8 @@
 @import "./node_modules/react-redux-toastr/src/styles/index";
 @import "mapbox-gl/dist/mapbox-gl.css";
 @import "@mapbox/mapbox-gl-geocoder/dist/mapbox-gl-geocoder.css";
+@import "@szhsin/react-menu/dist/core.css";
+@import "@szhsin/react-menu/dist/transitions/slide.css";
 @import "src/styles/utilities/u-breakpoints";
 
 /* Reset */
@@ -48,6 +50,7 @@
 @import "./styles/components/c-add-card";
 @import "./styles/components/c-card";
 @import "styles/components/c-teams";
+@import "./styles/components/c-teams-detail";
 @import "./styles/components/c-tab";
 @import "./styles/components/c-checkbox";
 @import "./styles/components/c-member-list";
@@ -82,6 +85,8 @@
 @import "./styles/components/c-timeframe";
 @import "./styles/components/c-empty-state";
 @import "./styles/components/c-areas";
+@import "./styles/components/c-context-menu";
+@import "./styles/components/c-data-table";
 
 /* Utilities */
 @import "./styles/utilities/u-display";
@@ -89,3 +94,4 @@
 @import "./styles/utilities/u-font";
 @import "./styles/utilities/u-spacings";
 @import "./styles/utilities/u-position";
+@import "./styles/utilities/u-responsive-table";

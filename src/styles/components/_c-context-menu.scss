@@ -1,0 +1,45 @@
+.c-context-menu {
+  $this: &;
+
+  position: absolute;
+  background-color: $neutral-300;
+  min-width: 160px;
+  // To override default styles
+  border: 0;
+
+  &__item {
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 22px;
+    color: $neutral-600;
+    padding: 10px 16px 8px;
+    border: 1px solid $neutral-500;
+    cursor: pointer;
+
+    &:not(:first-child) {
+      margin-top: -1px;
+    }
+
+    &:hover {
+      background-color: $primary-400;
+    }
+  }
+
+  &--hover {
+    display: none;
+  }
+
+  &__toggle {
+    padding: 8px;
+
+    &:hover, &.szh-menu-button--open {
+      #{$this}__icon {
+        display: none;
+      }
+
+      #{$this}--hover {
+        display: block;
+      }
+    }
+  }
+}
