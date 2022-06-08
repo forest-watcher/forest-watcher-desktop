@@ -171,7 +171,7 @@ const TeamDetail: FC<IProps> = props => {
         </Article>
       </div>
 
-      <DeleteTeam isOpen={isDeletingTeam} />
+      <DeleteTeam isOpen={isDeletingTeam} teamId={teamId} />
     </>
   );
 };
