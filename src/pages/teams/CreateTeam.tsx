@@ -11,6 +11,7 @@ import { useIntl } from "react-intl";
 
 interface IProps {
   isOpen: boolean;
+  currentName?: string;
 }
 
 interface ICreateTeamForm {
@@ -18,7 +19,7 @@ interface ICreateTeamForm {
 }
 
 const CreateTeamModal: FC<IProps> = props => {
-  const { isOpen = false } = props;
+  const { isOpen = false, currentName } = props;
   const intl = useIntl();
   const history = useHistory();
   const {
@@ -85,7 +86,8 @@ const CreateTeamModal: FC<IProps> = props => {
             htmlInputProps={{
               label: "Team Name",
               placeholder: "Enter Team Name",
-              type: "text"
+              type: "text",
+              defaultValue: currentName
             }}
             id="team-name-input"
             registered={register("name", { required: true, minLength: 3 })}
