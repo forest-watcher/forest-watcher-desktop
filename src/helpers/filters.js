@@ -1,4 +1,7 @@
 // filter data by a field and its desired value
+import moment from "moment";
+import { DEFAULT_FORMAT } from "constants/global";
+
 const filterBy = (data, field, value) => {
   if (field === "search") {
     return data.filter(item => {
@@ -11,6 +14,14 @@ const filterBy = (data, field, value) => {
     });
   } else if (Array.isArray(value)) {
     return data.filter(item => value.indexOf(item[field]) > -1);
+  } else if (field === "date") {
+    return data.filter(item => {
+      const itemDate = moment(item[field]);
+
+      // dayOfYear: 1 to 366
+      // year: xxxx
+      return itemDate.dayOfYear() === value.dayOfYear() && itemDate.year() === value.year();
+    });
   } else {
     return data.filter(item => item[field] === value);
   }
@@ -25,7 +36,7 @@ const filterData = (data, searchParams) => {
     data = filterBy(data, "search", searchValues);
   }
   if (date !== undefined) {
-    data = filterBy(data, "date", date);
+    data = filterBy(data, "date", moment(date, DEFAULT_FORMAT));
   }
   return data;
 };
