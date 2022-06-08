@@ -9,9 +9,11 @@ interface IProps {
 const DeleteTeam: FC<IProps> = props => {
   const { isOpen } = props;
   const history = useHistory();
+  const { pathname } = useLocation();
 
   const close = () => {
-    history.goBack();
+    // Removes the /delete part of the URL, keeping the /teams/:teamId
+    history.push(pathname.replace(/\/delete\/?/g, ""));
   };
 
   const deleteTeam = () => {};
