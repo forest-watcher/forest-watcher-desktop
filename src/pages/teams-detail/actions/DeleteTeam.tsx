@@ -3,7 +3,7 @@ import Modal from "components/ui/Modal/Modal";
 import { useHistory } from "react-router-dom";
 import { teamService } from "services/teams";
 import { toastr } from "react-redux-toastr";
-import Loader from "../../../components/ui/Loader";
+import Loader from "components/ui/Loader";
 import { useIntl } from "react-intl";
 
 interface IProps {
