@@ -48,8 +48,15 @@ export type TGetTeamMembersResponse =
 
 export type TGetMyTeamInvites = paths["/v3/teams/myinvites"]["get"]["responses"]["200"]["content"]["application/json"];
 export type TPostTeamResponse = paths["/v3/teams"]["post"]["responses"]["200"]["content"]["application/json"];
+export type TPatchTeamResponse =
+  paths["/v3/teams/{teamId}"]["patch"]["responses"]["200"]["content"]["application/json"];
 // ToDo: Docs shouldn't include createdAt as a required request object!
 export type TPostTeamBody = Omit<paths["/v3/teams"]["post"]["requestBody"]["content"]["application/json"], "createdAt">;
+// ToDo: Docs shouldn't include createdAt as a required request object!
+export type TPatchTeamBody = Omit<
+  paths["/v3/teams/{teamId}"]["patch"]["requestBody"]["content"]["application/json"],
+  "createdAt"
+>;
 export type TDeleteTeamResponse = paths["/v3/teams/{teamId}"]["delete"]["responses"]["200"];
 
 export class TeamService extends BaseService {
@@ -73,6 +80,18 @@ export class TeamService extends BaseService {
         "Content-Type": "application/json"
       },
       method: "POST",
+      body: JSON.stringify(body)
+    });
+  }
+
+  updateTeam(teamId: string, body: TPatchTeamBody): Promise<TPatchTeamResponse> {
+    this.token = store.getState().user.token;
+
+    return this.fetchJSON(`/${teamId}`, {
+      headers: {
+        "Content-Type": "application/json"
+      },
+      method: "PATCH",
       body: JSON.stringify(body)
     });
   }
