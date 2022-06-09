@@ -15,7 +15,7 @@ import Loader from "components/ui/Loader";
 import EditTeam from "./actions/EditTeam";
 import DeleteTeam from "./actions/DeleteTeam";
 
-type TParams = {
+export type TParams = {
   teamId: string;
 };
 

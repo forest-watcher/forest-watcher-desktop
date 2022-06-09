@@ -1,17 +1,16 @@
 import { useEffect, useState } from "react";
-import { RegisterOptions, UnpackNestedValue } from "react-hook-form";
+import { RegisterOptions, UnpackNestedValue, FieldPath } from "react-hook-form";
 import Modal from "components/ui/Modal/Modal";
 import Input, { Props as IInputProps } from "components/ui/Form/Input";
 import { useForm, SubmitHandler } from "react-hook-form";
 import UnsavedChanges from "components/modals/UnsavedChanges";
 import Loader from "components/ui/Loader";
 
-type TInput<T> = Omit<IInputProps, "registered"> & {
-  formatErrors: (error: any) => any; // ToDo
+export type TInput<T> = Omit<IInputProps, "registered"> & {
+  formatErrors?: (error: any) => any; // ToDo
   registerProps: {
-    // ToDo: name of Input? type 'path' in react-hook-form
-    name: string;
-    options: RegisterOptions<T>;
+    name: FieldPath<T>;
+    options: RegisterOptions<T, FieldPath<T>>;
   };
 };
 
@@ -63,10 +62,7 @@ const FormModal = <T,>(props: IProps<T>) => {
         onClose={handleCloseRequest}
         title={modalTitle}
         actions={[
-          {
-            name: submitBtnName,
-            onClick: handleSubmit(onSubmit)
-          },
+          { name: submitBtnName, onClick: handleSubmit(onSubmit) },
           { name: cancelBtnName, variant: "secondary", onClick: handleCloseRequest }
         ]}
       >
@@ -75,7 +71,7 @@ const FormModal = <T,>(props: IProps<T>) => {
           {inputs.map(({ formatErrors, registerProps, ...rest }) => (
             <Input
               {...rest}
-              error={formatErrors(errors)}
+              error={formatErrors && formatErrors(errors)}
               registered={register(registerProps.name, registerProps.options)}
             />
           ))}
