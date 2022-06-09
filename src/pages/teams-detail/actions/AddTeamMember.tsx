@@ -10,7 +10,7 @@ import { getTeamMembers } from "modules/gfwTeams";
 import { toastr } from "react-redux-toastr";
 import { UnpackNestedValue } from "react-hook-form";
 import { useAppDispatch } from "hooks/useRedux";
-import { TErrorResponse } from "../../../constants/api";
+import { TErrorResponse } from "constants/api";
 
 type TParams = TTeamDetailParams & {
   memberRole: "manager" | "monitor";
@@ -39,6 +39,7 @@ const AddTeamMemberModal: FC<IProps> = props => {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
+    // In case the URL ends in anything else: /teams/:teamId/add/:memberRole
     if (isOpen && memberRole && memberRole !== "manager" && memberRole !== "monitor") {
       history.push(`/teams/${teamId}`);
     }
@@ -89,7 +90,8 @@ const AddTeamMemberModal: FC<IProps> = props => {
           registerProps: {
             name: "email",
             options: { required: true }
-          }
+          },
+          formatErrors: errors => errors.email
         }
       ]}
       useFormProps={{ resolver: yupResolver(addTeamMemberSchema) }}
