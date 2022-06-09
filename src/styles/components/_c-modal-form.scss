@@ -1,0 +1,8 @@
+.c-modal-form {
+  .c-input {
+    justify-content: space-between;
+    &__input-wrapper {
+      flex: 0 1 50%;
+    }
+  }
+}
