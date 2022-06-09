@@ -39,7 +39,7 @@ const MapEditControls: FC<IProps> = props => {
       .filter(el => el !== undefined);
 
     if (ids && ids.length > 0) {
-      // @ts-ignore
+      // @ts-ignore Incorrectly typed package.
       draw.changeMode(draw.modes.DIRECT_SELECT, { featureId: ids[0] });
       setCanEdit(false);
       setCanDraw(false);
@@ -71,7 +71,7 @@ const MapEditControls: FC<IProps> = props => {
       setCanDelete(isSelected);
       if (isSelected && draw.getMode() === "simple_select") {
         // Go straight into direct select
-        // @ts-ignore
+        // @ts-ignore Incorrectly typed package.
         draw.changeMode(draw.modes.DIRECT_SELECT, { featureId: e.features[0].id });
       }
     });

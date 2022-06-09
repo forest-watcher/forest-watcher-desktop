@@ -1,7 +1,7 @@
 import { FC, ButtonHTMLAttributes } from "react";
 import classnames from "classnames";
 
-export type IButtonVariants = "primary" | "secondary" | "secondary-light-text" | "";
+export type IButtonVariants = "primary" | "secondary" | "secondary-light-text" | "default";
 
 export interface IProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: IButtonVariants;
@@ -9,7 +9,7 @@ export interface IProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 const Button: FC<IProps> = props => {
-  const { className, children, variant = "", isIcon = false, ...rest } = props;
+  const { className, children, variant = "primary", isIcon = false, ...rest } = props;
   const classes = classnames("c-button", `c-button--${variant}`, isIcon && "c-button--is-icon", className);
 
   return (

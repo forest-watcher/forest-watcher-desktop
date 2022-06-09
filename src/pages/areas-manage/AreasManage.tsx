@@ -11,7 +11,7 @@ import Input from "components/ui/Form/Input";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import Button from "components/ui/Button/Button";
+import Button, { IButtonVariants } from "components/ui/Button/Button";
 import { toastr } from "react-redux-toastr";
 import { CATEGORY, ACTION } from "constants/analytics";
 import { checkArea } from "helpers/areas";
@@ -171,7 +171,7 @@ const Areas: FC<IProps> = ({ mode, geojson, getGeoFromShape, setSaving, saveArea
       <div className="row column">
         <div className="c-area-manage__actions">
           <div className="c-area-manage__shapefile">
-            <label className="c-button" htmlFor="shapefile">
+            <label className="c-button c-button--default" htmlFor="shapefile">
               <FormattedMessage id={isValidatingShapefile ? "common.loading" : "areas.uploadShapefile"} />
             </label>
             <input
