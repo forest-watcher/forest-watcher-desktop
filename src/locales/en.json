@@ -151,6 +151,7 @@
   "teams.create.error.name.minLength": "Team name must be at least 3 characters long",
   "teams.edit": "Edit team",
   "teams.edit.save": "Save Team",
+  "teams.edit.error": "Unable to Edit Team",
   "teams.delete.success": "Team Deleted",
   "teams.delete.error": "Unable to delete Team",
   "teams.teamName": "Team name",
