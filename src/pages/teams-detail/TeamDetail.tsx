@@ -2,7 +2,7 @@ import { FC, useEffect, useMemo, useState } from "react";
 import { RouteComponentProps, useHistory } from "react-router-dom";
 import { toastr } from "react-redux-toastr";
 import { TPropsFromRedux } from "./TeamDetailContainer";
-import { makeManager, makeMonitor, removeMember } from "./actions";
+import { removeMember } from "./actions";
 import Hero from "components/layouts/Hero";
 import Article from "components/layouts/Article";
 import DataTable from "components/ui/DataTable/DataTable";
@@ -14,7 +14,9 @@ import useGetUserId from "hooks/useGetUserId";
 import Loader from "components/ui/Loader";
 import EditTeam from "./actions/EditTeam";
 import AddTeamMember from "./actions/AddTeamMember";
+import EditTeamMember from "./actions/EditTeamMember";
 import DeleteTeam from "./actions/DeleteTeam";
+import { TTeamsDetailDataTableAction } from "./types";
 
 export type TParams = {
   teamId: string;
@@ -22,6 +24,7 @@ export type TParams = {
 
 export interface IOwnProps extends RouteComponentProps<TParams> {
   isAddingTeamMember?: boolean;
+  isEditingTeamMember?: boolean;
   isEditingTeam?: boolean;
   isDeletingTeam?: boolean;
 }
@@ -47,6 +50,7 @@ const TeamDetail: FC<IProps> = props => {
     userIsManager,
     numOfActiveFetches,
     isAddingTeamMember = false,
+    isEditingTeamMember = false,
     isEditingTeam = false,
     isDeletingTeam = false,
     match
@@ -112,6 +116,22 @@ const TeamDetail: FC<IProps> = props => {
     history.push(`${match.url}/delete`);
   };
 
+  const makeManager: TTeamsDetailDataTableAction = {
+    name: "teams.details.table.actions.manager",
+    value: "makeManager",
+    onClick: memberRow => {
+      history.push(`${match.url}/edit/${memberRow.id}/manager`);
+    }
+  };
+
+  const makeMonitor: TTeamsDetailDataTableAction = {
+    name: "teams.details.table.actions.monitor",
+    value: "makeMonitor",
+    onClick: memberRow => {
+      history.push(`${match.url}/edit/${memberRow.id}/monitor`);
+    }
+  };
+
   if (!team) {
     return <Loader isLoading />;
   }
@@ -152,7 +172,10 @@ const TeamDetail: FC<IProps> = props => {
           <div className="u-responsive-table">
             <DataTable<TTeamDetailDataTable>
               className="u-w-100"
-              rows={manages.map(m => m.attributes)}
+              rows={manages.map(m => ({
+                ...m.attributes,
+                id: m.id
+              }))}
               columnOrder={userIsManager ? columnOrderWithStatus : columnOrder}
               rowActions={userIsManager ? [makeMonitor, removeMember] : undefined}
             />
@@ -176,7 +199,10 @@ const TeamDetail: FC<IProps> = props => {
           <div className="u-responsive-table">
             <DataTable<TTeamDetailDataTable>
               className="u-w-100"
-              rows={monitors.map(m => m.attributes)}
+              rows={monitors.map(m => ({
+                ...m.attributes,
+                id: m.id
+              }))}
               columnOrder={userIsManager ? columnOrderWithStatus : columnOrder}
               rowActions={userIsManager ? [makeManager, removeMember] : undefined}
             />
@@ -185,7 +211,7 @@ const TeamDetail: FC<IProps> = props => {
       </div>
 
       <AddTeamMember isOpen={isAddingTeamMember} />
-
+      <EditTeamMember isOpen={isEditingTeamMember} />
       <EditTeam isOpen={isEditingTeam} currentName={team.attributes.name} />
       <DeleteTeam isOpen={isDeletingTeam} teamId={teamId} />
     </>
