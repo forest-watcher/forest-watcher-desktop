@@ -44,8 +44,8 @@ const CreateTeamModal: FC<IProps> = props => {
         {
           id: "team-name-input",
           htmlInputProps: {
-            label: "Team Name",
-            placeholder: "Enter Team Name",
+            label: intl.formatMessage({ id: "teams.field.name" }),
+            placeholder: intl.formatMessage({ id: "teams.field.name.placeholder" }),
             type: "text"
           },
           formatErrors: errors =>
