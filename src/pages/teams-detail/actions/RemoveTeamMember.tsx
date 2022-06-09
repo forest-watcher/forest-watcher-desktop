@@ -1,4 +1,4 @@
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import Modal from "components/ui/Modal/Modal";
 import Loader from "components/ui/Loader";
 import { useHistory, useParams } from "react-router-dom";
@@ -7,7 +7,7 @@ import { teamService } from "services/teams";
 import { getTeamMembers } from "../../../modules/gfwTeams";
 import { toastr } from "react-redux-toastr";
 import { TErrorResponse } from "../../../constants/api";
-import { useAppDispatch } from "../../../hooks/useRedux";
+import { useAppDispatch, useAppSelector } from "../../../hooks/useRedux";
 import { useIntl } from "react-intl";
 
 type TParams = TTeamDetailParams & {
@@ -24,7 +24,15 @@ const RemoveTeamMemberModal: FC<IProps> = props => {
   const history = useHistory();
   const intl = useIntl();
   const dispatch = useAppDispatch();
+  const members = useAppSelector(state => state.gfwTeams.members[teamId]);
   const [isRemoving, setIsRemoving] = useState(false);
+
+  useEffect(() => {
+    // Close the modal if the member id isn't present on team
+    if (isOpen && members && !members.some(m => m.id === memberId)) {
+      history.push(`/teams/${teamId}`);
+    }
+  }, [history, isOpen, memberId, members, teamId]);
 
   const close = () => {
     history.push(`/teams/${teamId}`);

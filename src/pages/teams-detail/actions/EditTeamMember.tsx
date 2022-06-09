@@ -6,7 +6,7 @@ import { useHistory, useParams } from "react-router-dom";
 import { teamService } from "services/teams";
 import { toastr } from "react-redux-toastr";
 import { useIntl } from "react-intl";
-import { useAppDispatch } from "hooks/useRedux";
+import { useAppDispatch, useAppSelector } from "hooks/useRedux";
 import { getTeamMembers } from "modules/gfwTeams";
 import { TErrorResponse } from "constants/api";
 
@@ -24,6 +24,7 @@ const EditMemberRoleModal: FC<IProps> = props => {
   const { teamId, memberRole, memberId } = useParams<TParams>();
   const intl = useIntl();
   const dispatch = useAppDispatch();
+  const members = useAppSelector(state => state.gfwTeams.members[teamId]);
   const history = useHistory();
   const [isSave, setIsSaving] = useState(false);
 
@@ -32,7 +33,11 @@ const EditMemberRoleModal: FC<IProps> = props => {
     if (isOpen && memberRole && memberRole !== "manager" && memberRole !== "monitor") {
       history.push(`/teams/${teamId}`);
     }
-  }, [history, memberRole, isOpen, teamId]);
+    // Close the modal if the member id isn't present on team
+    if (isOpen && members && !members.some(m => m.id === memberId)) {
+      history.push(`/teams/${teamId}`);
+    }
+  }, [history, memberRole, isOpen, teamId, members, memberId]);
 
   const close = () => {
     history.push(`/teams/${teamId}`);
