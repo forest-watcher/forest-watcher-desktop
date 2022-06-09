@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
-import { RegisterOptions, UnpackNestedValue, FieldPath } from "react-hook-form";
 import Modal from "components/ui/Modal/Modal";
 import Input, { Props as IInputProps } from "components/ui/Form/Input";
-import { useForm, SubmitHandler } from "react-hook-form";
+import { useForm, SubmitHandler, RegisterOptions, UnpackNestedValue, FieldPath } from "react-hook-form";
 import UnsavedChanges from "components/modals/UnsavedChanges";
 import Loader from "components/ui/Loader";
 
@@ -16,7 +15,7 @@ export type TInput<T> = Omit<IInputProps, "registered"> & {
 
 interface IProps<T> {
   isOpen: boolean;
-  inputs: TInput<T>[]; // ToDo
+  inputs: TInput<T>[];
   onClose: () => void;
   onSave: (data: UnpackNestedValue<T>) => Promise<void>;
   modalTitle: string;
@@ -24,6 +23,35 @@ interface IProps<T> {
   cancelBtnName?: string;
 }
 
+/**
+ * FormModal - A reusable FormModal component
+ * The Modal can be dismissed and a warning is
+ * shown to the user if their data will be lost
+ *
+ * Example:
+ *  type TFormFields = { name: string };
+ *
+ *  <FormModal<TFormFields>
+ *     isOpen={isOpen}
+ *     onClose={onClose}
+ *     onSave={(data: { name: string }) => { ...Save Logic }}
+ *     modalTitle="intl.string"
+ *     submitBtnName="intl.string"
+ *     inputs={[
+ *       {
+ *         id: "name-input",
+ *         htmlInputProps: {
+ *           SEE `components/ui/Form/Input`
+ *         },
+ *         registerProps: {
+ *           name: "name",
+ *           options: { required: true }
+ *           SEE https://react-hook-form.com/api/useform/register
+ *         }
+ *       }
+ *     ]}
+ *   />
+ */
 const FormModal = <T,>(props: IProps<T>) => {
   const { isOpen = false, inputs, onClose, onSave, modalTitle, submitBtnName, cancelBtnName = "common.cancel" } = props;
   const {
