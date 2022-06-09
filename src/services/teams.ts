@@ -50,6 +50,7 @@ export type TGetMyTeamInvites = paths["/v3/teams/myinvites"]["get"]["responses"]
 export type TPostTeamResponse = paths["/v3/teams"]["post"]["responses"]["200"]["content"]["application/json"];
 // ToDo: Docs shouldn't include createdAt as a required request object!
 export type TPostTeamBody = Omit<paths["/v3/teams"]["post"]["requestBody"]["content"]["application/json"], "createdAt">;
+export type TDeleteTeamResponse = paths["/v3/teams/{teamId}"]["delete"]["responses"]["200"];
 
 export class TeamService extends BaseService {
   getUserTeams(userId: string): Promise<TGetUserTeamsResponse> {
@@ -73,6 +74,14 @@ export class TeamService extends BaseService {
       },
       method: "POST",
       body: JSON.stringify(body)
+    });
+  }
+
+  deleteTeam(teamId: string): Promise<TDeleteTeamResponse> {
+    this.token = store.getState().user.token;
+
+    return this.fetch(`/${teamId}`, {
+      method: "DELETE"
     });
   }
 }
