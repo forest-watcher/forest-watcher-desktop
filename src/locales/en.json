@@ -149,6 +149,7 @@
   "teams.remove.member": "Remove Team Member",
   "teams.remove.member.success": "Member Removed",
   "teams.remove.member.error": "Unable to remove Member",
+  "teams.member.invalid": "Could not find Team Member",
   "teams.summary.areas": "Areas:",
   "teams.invitation.banner": "You have {num, plural, one {# invitation} other {# invitations}} to join a team",
   "teams.invitation.accept": "Accept Invitation",

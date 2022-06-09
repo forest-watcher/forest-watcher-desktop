@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from "react";
+import { FC, useCallback, useEffect, useState } from "react";
 import Modal from "components/ui/Modal/Modal";
 import Loader from "components/ui/Loader";
 import { TParams as TTeamDetailParams } from "../TeamDetail";
@@ -28,20 +28,21 @@ const EditMemberRoleModal: FC<IProps> = props => {
   const history = useHistory();
   const [isSave, setIsSaving] = useState(false);
 
+  const close = useCallback(() => {
+    history.push(`/teams/${teamId}`);
+  }, [history, teamId]);
+
   useEffect(() => {
     // In case the URL ends in anything else: /teams/:teamId/edit/:memberId/:memberRole
     if (isOpen && memberRole && memberRole !== "manager" && memberRole !== "monitor") {
-      history.push(`/teams/${teamId}`);
+      close();
     }
     // Close the modal if the member id isn't present on team
     if (isOpen && members && !members.some(m => m.id === memberId)) {
-      history.push(`/teams/${teamId}`);
+      toastr.warning(intl.formatMessage({ id: "teams.member.invalid" }), "");
+      close();
     }
-  }, [history, memberRole, isOpen, teamId, members, memberId]);
-
-  const close = () => {
-    history.push(`/teams/${teamId}`);
-  };
+  }, [history, memberRole, isOpen, teamId, members, memberId, close, intl]);
 
   const editTeamMember = async () => {
     setIsSaving(true);

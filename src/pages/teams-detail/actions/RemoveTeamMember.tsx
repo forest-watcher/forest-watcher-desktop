@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from "react";
+import { FC, useCallback, useEffect, useState } from "react";
 import Modal from "components/ui/Modal/Modal";
 import Loader from "components/ui/Loader";
 import { useHistory, useParams } from "react-router-dom";
@@ -27,16 +27,17 @@ const RemoveTeamMemberModal: FC<IProps> = props => {
   const members = useAppSelector(state => state.gfwTeams.members[teamId]);
   const [isRemoving, setIsRemoving] = useState(false);
 
+  const close = useCallback(() => {
+    history.push(`/teams/${teamId}`);
+  }, [history, teamId]);
+
   useEffect(() => {
     // Close the modal if the member id isn't present on team
     if (isOpen && members && !members.some(m => m.id === memberId)) {
-      history.push(`/teams/${teamId}`);
+      toastr.warning(intl.formatMessage({ id: "teams.member.invalid" }), "");
+      close();
     }
-  }, [history, isOpen, memberId, members, teamId]);
-
-  const close = () => {
-    history.push(`/teams/${teamId}`);
-  };
+  }, [close, history, intl, isOpen, memberId, members, teamId]);
 
   const removeTeamMember = async () => {
     setIsRemoving(true);
