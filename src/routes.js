@@ -56,6 +56,11 @@ const Routes = props => {
           <Route exact path={`${match.url}teams/:teamId`} component={TeamDetail} />
           <Route
             exact
+            path={`${match.url}teams/:teamId/edit`}
+            render={args => <TeamDetail isEditingTeam {...args} />}
+          />
+          <Route
+            exact
             path={`${match.url}teams/:teamId/delete`}
             render={args => <TeamDetail isDeletingTeam {...args} />}
           />

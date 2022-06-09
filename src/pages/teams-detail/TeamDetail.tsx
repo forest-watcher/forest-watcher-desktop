@@ -12,14 +12,16 @@ import { FormattedMessage, useIntl } from "react-intl";
 import PlusIcon from "assets/images/icons/PlusWhite.svg";
 import useGetUserId from "hooks/useGetUserId";
 import Loader from "components/ui/Loader";
+import EditTeam from "./actions/EditTeam";
 import DeleteTeam from "./actions/DeleteTeam";
 
-type TParams = {
+export type TParams = {
   teamId: string;
 };
 
 export interface IOwnProps extends RouteComponentProps<TParams> {
-  isDeletingTeam: boolean;
+  isEditingTeam?: boolean;
+  isDeletingTeam?: boolean;
 }
 
 type IProps = IOwnProps & TPropsFromRedux;
@@ -42,6 +44,7 @@ const TeamDetail: FC<IProps> = props => {
     getTeamMembers,
     userIsManager,
     numOfActiveFetches,
+    isEditingTeam = false,
     isDeletingTeam = false,
     match
   } = props;
@@ -91,11 +94,10 @@ const TeamDetail: FC<IProps> = props => {
   );
 
   const editTeam = () => {
-    // ToDo
+    history.push(`${match.url}/edit`);
   };
 
   const deleteTeam = () => {
-    // ToDo
     history.push(`${match.url}/delete`);
   };
 
@@ -171,6 +173,7 @@ const TeamDetail: FC<IProps> = props => {
         </Article>
       </div>
 
+      <EditTeam isOpen={isEditingTeam} currentName={team.attributes.name} />
       <DeleteTeam isOpen={isDeletingTeam} teamId={teamId} />
     </>
   );
