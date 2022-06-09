@@ -144,6 +144,8 @@
   "teams.monitors": "{num, plural, one {# Monitor} other {# Monitors}}:",
   "teams.change.member.to.manager": "Change Member to Manager",
   "teams.change.member.to.monitor": "Change Member to Monitor",
+  "teams.change.member.success": "Member Updated",
+  "teams.change.member.success.error": "Unable to update Member",
   "teams.summary.areas": "Areas:",
   "teams.invitation.banner": "You have {num, plural, one {# invitation} other {# invitations}} to join a team",
   "teams.invitation.accept": "Accept Invitation",

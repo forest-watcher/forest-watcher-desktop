@@ -63,6 +63,12 @@ export type TPostTeamMembersBody =
 export type TPostTeamMembersResponse =
   paths["/v3/teams/{teamId}/users"]["post"]["responses"]["200"]["content"]["application/json"];
 
+export type TPatchTeamMembersParams = paths["/v3/teams/{teamId}/users/{teamUserId}"]["patch"]["parameters"]["path"];
+export type TPatchTeamMembersBody =
+  paths["/v3/teams/{teamId}/users/{teamUserId}"]["patch"]["requestBody"]["content"]["application/json"];
+export type TPatchTeamMembersResponse =
+  paths["/v3/teams/{teamId}/users/{teamUserId}"]["patch"]["responses"]["200"]["content"]["application/json"];
+
 export class TeamService extends BaseService {
   getUserTeams(userId: string): Promise<TGetUserTeamsResponse> {
     return this.fetchJSON(`/user/${userId}`);
@@ -116,6 +122,18 @@ export class TeamService extends BaseService {
         "Content-Type": "application/json"
       },
       method: "POST",
+      body: JSON.stringify(body)
+    });
+  }
+
+  updateTeamMember(params: TPatchTeamMembersParams, body: TPatchTeamMembersBody): Promise<TPatchTeamMembersResponse> {
+    this.token = store.getState().user.token;
+
+    return this.fetchJSON(`/${params.teamId}/users/${params.teamUserId}`, {
+      headers: {
+        "Content-Type": "application/json"
+      },
+      method: "PATCH",
       body: JSON.stringify(body)
     });
   }

@@ -3,6 +3,12 @@ import Modal from "components/ui/Modal/Modal";
 import Loader from "components/ui/Loader";
 import { TParams as TTeamDetailParams } from "../TeamDetail";
 import { useHistory, useParams } from "react-router-dom";
+import { teamService } from "services/teams";
+import { toastr } from "react-redux-toastr";
+import { useIntl } from "react-intl";
+import { useAppDispatch } from "hooks/useRedux";
+import { getTeamMembers } from "modules/gfwTeams";
+import { TErrorResponse } from "constants/api";
 
 type TParams = TTeamDetailParams & {
   memberRole: "manager" | "monitor";
@@ -16,6 +22,8 @@ interface IProps {
 const EditMemberRoleModal: FC<IProps> = props => {
   const { isOpen } = props;
   const { teamId, memberRole, memberId } = useParams<TParams>();
+  const intl = useIntl();
+  const dispatch = useAppDispatch();
   const history = useHistory();
   const [isSave, setIsSaving] = useState(false);
 
@@ -30,9 +38,22 @@ const EditMemberRoleModal: FC<IProps> = props => {
     history.push(`/teams/${teamId}`);
   };
 
-  const editTeamMember = () => {
+  const editTeamMember = async () => {
     setIsSaving(true);
-    close();
+    try {
+      await teamService.updateTeamMember({ teamId, teamUserId: memberId }, { role: memberRole });
+      // Refetch the Team members
+      dispatch(getTeamMembers(teamId));
+      history.push(`/teams/${teamId}`);
+      toastr.success(intl.formatMessage({ id: "teams.change.member.success" }), "");
+    } catch (e: any) {
+      const error = JSON.parse(e.message) as TErrorResponse;
+      toastr.error(
+        intl.formatMessage({ id: "teams.change.member.success.error" }),
+        error?.errors?.length ? error.errors[0].detail : ""
+      );
+      console.error(e);
+    }
     setIsSaving(false);
   };
 
