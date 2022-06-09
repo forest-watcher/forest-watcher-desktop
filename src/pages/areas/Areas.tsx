@@ -13,6 +13,7 @@ import PlusIcon from "assets/images/icons/PlusWhite.svg";
 import Card from "components/ui/Card/Card";
 import EditIcon from "assets/images/icons/Edit.svg";
 import { TPropsFromRedux } from "./AreasContainer";
+import { goToGeojson } from "helpers/map";
 
 interface IProps extends TPropsFromRedux {}
 
@@ -22,20 +23,19 @@ const Areas: FC<IProps> = props => {
   const intl = useIntl();
 
   const [mapRef, setMapRef] = useState<MapInstance | null>(null);
-  const bbox = useMemo(() => {
+  const features = useMemo(() => {
     if (areaMap.length > 0) {
       const mapped = areaMap.map((area: any) => area.attributes.geostore.geojson.features).flat();
-      const features = turf.featureCollection(mapped);
-      return turf.bbox(features);
+      return turf.featureCollection(mapped);
     }
-    return [];
+    return null;
   }, [areaMap]);
 
   useEffect(() => {
-    if (mapRef && bbox.length > 0) {
-      mapRef.fitBounds(bbox as LngLatBoundsLike);
+    if (features) {
+      goToGeojson(mapRef, features);
     }
-  }, [bbox, mapRef]);
+  }, [features, mapRef]);
 
   const handleMapLoad = (evt: MapboxEvent) => {
     setMapRef(evt.target);

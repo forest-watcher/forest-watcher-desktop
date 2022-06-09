@@ -1,6 +1,7 @@
-import { Map as MapInstance } from "mapbox-gl";
+import { Map as MapInstance, LngLatBoundsLike } from "mapbox-gl";
 import labelBackgroundIcon from "assets/images/icons/MapLabelFrame.png";
 import L from "leaflet";
+import * as turf from "@turf/turf";
 
 export const loadMapImage = (map: MapInstance, url: string): Promise<HTMLImageElement | ImageBitmap | undefined> => {
   return new Promise((resolve, reject) => {
@@ -36,4 +37,11 @@ export const getBoundFromGeoJSON = (geoJSON: any, padding = [15, 15]) => {
   // @ts-ignore
   const bounds = L.latLngBounds(countryBounds, { padding });
   return bounds;
+};
+
+export const goToGeojson = (map: MapInstance | null, geojson: any) => {
+  const bbox = turf.bbox(geojson);
+  if (map && bbox.length > 0) {
+    map.fitBounds(bbox as LngLatBoundsLike, { padding: 40 });
+  }
 };

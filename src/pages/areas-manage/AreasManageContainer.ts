@@ -14,10 +14,8 @@ interface IMatchParams extends RouteComponentProps<MatchParams> {}
 
 const readGeojson = (state: RootState, areaId?: string) => {
   const area = areaId ? state.areas.data[areaId] : null;
-  const geostoreId = area ? area.attributes.geostore : null;
-  // @ts-ignore
-  const geostore = state.geostores.data[geostoreId] || null;
-  const geojson = geostore ? geostore.attributes.geojson.features[0] : null;
+
+  const geojson = area ? area.attributes.geostore.geojson : null;
   if (geojson) geojson.properties = {};
   return geojson;
 };

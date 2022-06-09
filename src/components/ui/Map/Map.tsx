@@ -5,7 +5,7 @@ import { Map as MapInstance } from "mapbox-gl";
 import MapboxDraw from "@mapbox/mapbox-gl-draw";
 import MapControls from "./components/ControlsContainer";
 import MapEditControls from "./components/EditControls";
-import { addMapLabelImage } from "helpers/map";
+import { addMapLabelImage, goToGeojson } from "helpers/map";
 import { editStyles } from "./components/layers/styles";
 import { FeatureCollection } from "geojson";
 
@@ -62,6 +62,7 @@ const Map: FC<IProps> = props => {
       // We are in edit mode, add geojson to edit
       drawRef.add(geojsonToEdit);
       setAddedGeoJson(true);
+      goToGeojson(mapRef, geojsonToEdit);
     }
   }, [onMapEdit, mapRef, geojsonToEdit, drawRef, addedGeoJson]);
 
