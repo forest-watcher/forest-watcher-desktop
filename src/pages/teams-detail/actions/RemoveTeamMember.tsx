@@ -4,10 +4,10 @@ import Loader from "components/ui/Loader";
 import { useHistory, useParams } from "react-router-dom";
 import { TParams as TTeamDetailParams } from "../TeamDetail";
 import { teamService } from "services/teams";
-import { getTeamMembers } from "../../../modules/gfwTeams";
+import { getTeamMembers } from "modules/gfwTeams";
 import { toastr } from "react-redux-toastr";
-import { TErrorResponse } from "../../../constants/api";
-import { useAppDispatch, useAppSelector } from "../../../hooks/useRedux";
+import { TErrorResponse } from "constants/api";
+import { useAppDispatch, useAppSelector } from "hooks/useRedux";
 import { useIntl } from "react-intl";
 
 type TParams = TTeamDetailParams & {
