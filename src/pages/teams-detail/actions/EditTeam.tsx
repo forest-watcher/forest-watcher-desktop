@@ -3,6 +3,10 @@ import FormModal from "components/modals/FormModal";
 import { useHistory, useParams } from "react-router-dom";
 import { TParams } from "../TeamDetail";
 
+type TEditTeamForm = {
+  name: string;
+};
+
 interface IProps {
   isOpen: boolean;
   currentName: string;
@@ -23,7 +27,7 @@ const EditTeamModal: FC<IProps> = props => {
   };
 
   return (
-    <FormModal<{ name: string }>
+    <FormModal<TEditTeamForm>
       isOpen={isOpen}
       onClose={onClose}
       onSave={onSave}
