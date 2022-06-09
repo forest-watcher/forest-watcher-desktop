@@ -1,4 +1,4 @@
-import { FC, HTMLAttributes, useEffect, useState } from "react";
+import { FC, HTMLAttributes, useCallback, useEffect, useState } from "react";
 import classnames from "classnames";
 import DrawIcon from "assets/images/icons/DrawPolygon.svg";
 import EditIcon from "assets/images/icons/EditPolygon.svg";
@@ -6,19 +6,25 @@ import DeleteIcon from "assets/images/icons/Delete.svg";
 import { FormattedMessage } from "react-intl";
 import MapboxDraw from "@mapbox/mapbox-gl-draw";
 import { Map as MapInstance } from "mapbox-gl";
+import { FeatureCollection } from "geojson";
 
 interface IProps extends HTMLAttributes<HTMLElement> {
   draw: MapboxDraw;
   map: MapInstance;
+  onUpdate?: (ev: FeatureCollection) => void;
 }
 
 const MapEditControls: FC<IProps> = props => {
-  const { className, draw, map, ...rest } = props;
+  const { className, draw, map, onUpdate, ...rest } = props;
   const classes = classnames("c-map__controls c-map__controls--edit", className);
 
   const [canEdit, setCanEdit] = useState(true);
   const [canDraw, setCanDraw] = useState(true);
   const [canDelete, setCanDelete] = useState(false);
+
+  const onEditUpdate = useCallback(() => {
+    onUpdate?.(draw.getAll());
+  }, [draw, onUpdate]);
 
   const handleDraw = () => {
     // @ts-ignore
@@ -34,7 +40,7 @@ const MapEditControls: FC<IProps> = props => {
 
     if (ids && ids.length > 0) {
       // @ts-ignore
-      draw.changeMode(draw.modes.SIMPLE_SELECT, { featureIds: ids as Array<string> });
+      draw.changeMode(draw.modes.DIRECT_SELECT, { featureId: ids[0] });
       setCanEdit(false);
       setCanDraw(false);
       setCanDelete(true);
@@ -47,6 +53,7 @@ const MapEditControls: FC<IProps> = props => {
     setCanDelete(false);
     setCanEdit(true);
     setCanDraw(true);
+    onEditUpdate();
   };
 
   useEffect(() => {
@@ -62,8 +69,16 @@ const MapEditControls: FC<IProps> = props => {
       setCanEdit(!isSelected);
       setCanDraw(!isSelected);
       setCanDelete(isSelected);
+      if (isSelected && draw.getMode() === "simple_select") {
+        // Go straight into direct select
+        // @ts-ignore
+        draw.changeMode(draw.modes.DIRECT_SELECT, { featureId: e.features[0].id });
+      }
     });
-  }, [map]);
+
+    map.on("draw.update", onEditUpdate);
+    map.on("draw.create", onEditUpdate);
+  }, [draw, map, onEditUpdate]);
 
   return (
     <div className={classes} {...rest}>

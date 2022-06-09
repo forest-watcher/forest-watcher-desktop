@@ -128,5 +128,5 @@ export const EditMap = EditTemplate.bind({});
 // More on args: https://storybook.js.org/docs/react/writing-stories/args
 EditMap.args = {
   onMapEdit: () => {},
-  polygonToEdit: polygon as GeoJSON.FeatureCollection<GeoJSON.Geometry>
+  geojsonToEdit: polygon as GeoJSON.FeatureCollection<GeoJSON.Geometry>
 };

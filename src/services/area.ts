@@ -7,7 +7,7 @@ import { operations } from "interfaces/api";
 type AreasResponse = operations["get-v3-forest-watcher-area"]["responses"]["200"]["content"]["application/json"];
 
 export class AreaService extends BaseService {
-  async saveArea(area: any, node: any, method: any) {
+  async saveArea(area: any, node: HTMLElement, method: string) {
     const url = method === "PATCH" ? `/${area.id}` : `/`;
     const blob = await domtoimage.toBlob(node, BLOB_CONFIG);
     // @ts-ignore

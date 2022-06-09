@@ -7,10 +7,14 @@
   border-radius: 24px;
   color: $neutral-300;
   box-sizing: border-box;
+  border: 0px;
 
   font-weight: 500;
   font-family: $base-font-family;
   font-size: $base-font-size;
+  min-height: 40px;
+
+  background-color: $neutral-600;
 
   cursor: pointer;
   outline: 0;
@@ -57,6 +61,9 @@
   &--is-icon {
     padding: $global-spacing-2;
     border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
   }
 
   &__inline-icon {

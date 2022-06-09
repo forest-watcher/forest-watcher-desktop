@@ -7,6 +7,7 @@ import MapControls from "./components/ControlsContainer";
 import MapEditControls from "./components/EditControls";
 import { addMapLabelImage } from "helpers/map";
 import { editStyles } from "./components/layers/styles";
+import { FeatureCollection } from "geojson";
 
 export interface IMapViewState {
   longitude: number;
@@ -18,8 +19,9 @@ interface IProps extends HTMLAttributes<HTMLElement> {
   mapViewState?: IMapViewState;
   setMapViewState?: (viewState: IMapViewState) => void;
   onMapLoad?: (e: MapboxEvent) => void;
-  onMapEdit?: () => void;
-  polygonToEdit?: GeoJSON.FeatureCollection<GeoJSON.Geometry>;
+  onDrawLoad?: (e: MapboxDraw) => void;
+  onMapEdit?: (e: FeatureCollection) => void;
+  geojsonToEdit?: GeoJSON.FeatureCollection<GeoJSON.Geometry>;
 }
 
 const Map: FC<IProps> = props => {
@@ -34,7 +36,8 @@ const Map: FC<IProps> = props => {
     setMapViewState,
     onMapLoad,
     onMapEdit,
-    polygonToEdit,
+    geojsonToEdit,
+    onDrawLoad,
     ...rest
   } = props;
   const classes = classnames("c-map", className);
@@ -42,20 +45,25 @@ const Map: FC<IProps> = props => {
   const [viewState, setViewState] = useState(mapViewState);
   const [mapRef, setMapRef] = useState<MapInstance | null>(null);
   const [drawRef, setDrawRef] = useState<MapboxDraw | null>(null);
+  const [addedGeoJson, setAddedGeoJson] = useState(false);
 
   useEffect(() => {
-    if (onMapEdit && mapRef) {
-      // We are in edit mode, setup edit.
+    if (onMapEdit && mapRef && !drawRef) {
+      // We are in edit mode, setup edit controls.
       const draw = new MapboxDraw({ styles: editStyles });
       setDrawRef(draw);
       mapRef.addControl(draw, "bottom-right");
-
-      if (polygonToEdit) {
-        draw.add(polygonToEdit);
-        // draw.changeMode("simple_select", { featureIds: ids });
-      }
+      onDrawLoad?.(draw);
     }
-  }, [onMapEdit, mapRef, polygonToEdit]);
+  }, [onMapEdit, mapRef, drawRef, onDrawLoad]);
+
+  useEffect(() => {
+    if (onMapEdit && mapRef && drawRef && geojsonToEdit && !addedGeoJson) {
+      // We are in edit mode, add geojson to edit
+      drawRef.add(geojsonToEdit);
+      setAddedGeoJson(true);
+    }
+  }, [onMapEdit, mapRef, geojsonToEdit, drawRef, addedGeoJson]);
 
   const handleMapLoad = (evt: MapboxEvent) => {
     evt.target.resize();
@@ -75,7 +83,7 @@ const Map: FC<IProps> = props => {
         onLoad={handleMapLoad}
       >
         <MapControls />
-        {drawRef && mapRef && <MapEditControls draw={drawRef} map={mapRef} />}
+        {drawRef && mapRef && <MapEditControls draw={drawRef} map={mapRef} onUpdate={onMapEdit} />}
         {children}
       </ReactMap>
     </div>
