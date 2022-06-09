@@ -49,7 +49,7 @@ const EditMemberRoleModal: FC<IProps> = props => {
     } catch (e: any) {
       const error = JSON.parse(e.message) as TErrorResponse;
       toastr.error(
-        intl.formatMessage({ id: "teams.change.member.success.error" }),
+        intl.formatMessage({ id: "teams.change.member.error" }),
         error?.errors?.length ? error.errors[0].detail : ""
       );
       console.error(e);

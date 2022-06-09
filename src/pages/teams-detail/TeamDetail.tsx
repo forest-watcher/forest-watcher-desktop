@@ -2,7 +2,6 @@ import { FC, useEffect, useMemo, useState } from "react";
 import { RouteComponentProps, useHistory } from "react-router-dom";
 import { toastr } from "react-redux-toastr";
 import { TPropsFromRedux } from "./TeamDetailContainer";
-import { removeMember } from "./actions";
 import Hero from "components/layouts/Hero";
 import Article from "components/layouts/Article";
 import DataTable from "components/ui/DataTable/DataTable";
@@ -16,6 +15,7 @@ import EditTeam from "./actions/EditTeam";
 import AddTeamMember from "./actions/AddTeamMember";
 import EditTeamMember from "./actions/EditTeamMember";
 import DeleteTeam from "./actions/DeleteTeam";
+import RemoveTeamMember from "./actions/RemoveTeamMember";
 import { TTeamsDetailDataTableAction } from "./types";
 
 export type TParams = {
@@ -25,6 +25,7 @@ export type TParams = {
 export interface IOwnProps extends RouteComponentProps<TParams> {
   isAddingTeamMember?: boolean;
   isEditingTeamMember?: boolean;
+  isRemovingTeamMember?: boolean;
   isEditingTeam?: boolean;
   isDeletingTeam?: boolean;
 }
@@ -51,6 +52,7 @@ const TeamDetail: FC<IProps> = props => {
     numOfActiveFetches,
     isAddingTeamMember = false,
     isEditingTeamMember = false,
+    isRemovingTeamMember = false,
     isEditingTeam = false,
     isDeletingTeam = false,
     match
@@ -129,6 +131,14 @@ const TeamDetail: FC<IProps> = props => {
     value: "makeMonitor",
     onClick: memberRow => {
       history.push(`${match.url}/edit/${memberRow.id}/monitor`);
+    }
+  };
+
+  const removeMember: TTeamsDetailDataTableAction = {
+    name: "teams.details.table.actions.remove",
+    value: "removeFromTeam",
+    onClick: memberRow => {
+      history.push(`${match.url}/remove/${memberRow.id}`);
     }
   };
 
@@ -212,6 +222,7 @@ const TeamDetail: FC<IProps> = props => {
 
       <AddTeamMember isOpen={isAddingTeamMember} />
       <EditTeamMember isOpen={isEditingTeamMember} />
+      <RemoveTeamMember isOpen={isRemovingTeamMember} />
       <EditTeam isOpen={isEditingTeam} currentName={team.attributes.name} />
       <DeleteTeam isOpen={isDeletingTeam} teamId={teamId} />
     </>
