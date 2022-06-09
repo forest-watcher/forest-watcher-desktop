@@ -50,7 +50,7 @@ const EditMemberRoleModal: FC<IProps> = props => {
       await teamService.updateTeamMember({ teamId, teamUserId: memberId }, { role: memberRole });
       // Refetch the Team members
       dispatch(getTeamMembers(teamId));
-      history.push(`/teams/${teamId}`);
+      close();
       toastr.success(intl.formatMessage({ id: "teams.change.member.success" }), "");
     } catch (e: any) {
       const error = JSON.parse(e.message) as TErrorResponse;

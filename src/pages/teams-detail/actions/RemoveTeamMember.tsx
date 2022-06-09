@@ -45,7 +45,7 @@ const RemoveTeamMemberModal: FC<IProps> = props => {
       await teamService.removeTeamMember({ teamId, teamUserId: memberId });
       // Refetch the Team members
       dispatch(getTeamMembers(teamId));
-      history.push(`/teams/${teamId}`);
+      close();
       toastr.success(intl.formatMessage({ id: "teams.remove.member.success" }), "");
     } catch (e: any) {
       const error = JSON.parse(e.message) as TErrorResponse;
