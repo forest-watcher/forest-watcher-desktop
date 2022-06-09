@@ -13,6 +13,7 @@ import PlusIcon from "assets/images/icons/PlusWhite.svg";
 import useGetUserId from "hooks/useGetUserId";
 import Loader from "components/ui/Loader";
 import EditTeam from "./actions/EditTeam";
+import AddTeamMember from "./actions/AddTeamMember";
 import DeleteTeam from "./actions/DeleteTeam";
 
 export type TParams = {
@@ -20,6 +21,7 @@ export type TParams = {
 };
 
 export interface IOwnProps extends RouteComponentProps<TParams> {
+  isAddingTeamMember?: boolean;
   isEditingTeam?: boolean;
   isDeletingTeam?: boolean;
 }
@@ -44,6 +46,7 @@ const TeamDetail: FC<IProps> = props => {
     getTeamMembers,
     userIsManager,
     numOfActiveFetches,
+    isAddingTeamMember = false,
     isEditingTeam = false,
     isDeletingTeam = false,
     match
@@ -93,6 +96,14 @@ const TeamDetail: FC<IProps> = props => {
     [teamMembers]
   );
 
+  const addManager = () => {
+    history.push(`${match.url}/add/manager`);
+  };
+
+  const addMonitor = () => {
+    history.push(`${match.url}/add/monitor`);
+  };
+
   const editTeam = () => {
     history.push(`${match.url}/edit`);
   };
@@ -131,7 +142,7 @@ const TeamDetail: FC<IProps> = props => {
           titleValues={{ num: manages.length }}
           actions={
             userIsManager && (
-              <Button variant="primary">
+              <Button variant="primary" onClick={addManager}>
                 <img className="c-button__inline-icon" src={PlusIcon} alt="" role="presentation" />
                 <FormattedMessage id="teams.details.add.managers" />
               </Button>
@@ -155,7 +166,7 @@ const TeamDetail: FC<IProps> = props => {
           titleValues={{ num: monitors.length }}
           actions={
             userIsManager && (
-              <Button variant="primary">
+              <Button variant="primary" onClick={addMonitor}>
                 <img className="c-button__inline-icon" src={PlusIcon} alt="" role="presentation" />
                 <FormattedMessage id="teams.details.add.monitors" />
               </Button>
@@ -172,6 +183,8 @@ const TeamDetail: FC<IProps> = props => {
           </div>
         </Article>
       </div>
+
+      <AddTeamMember isOpen={isAddingTeamMember} />
 
       <EditTeam isOpen={isEditingTeam} currentName={team.attributes.name} />
       <DeleteTeam isOpen={isDeletingTeam} teamId={teamId} />
