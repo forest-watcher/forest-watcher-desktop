@@ -1,5 +1,5 @@
 import type { TTeamsDetailDataTableAction } from "../types";
-// import { store } from "index";
+// import { store } from "store";;
 
 export const makeManager: TTeamsDetailDataTableAction = {
   name: "teams.details.table.actions.manager",

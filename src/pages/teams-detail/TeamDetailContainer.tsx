@@ -1,5 +1,5 @@
 import { connect, ConnectedProps } from "react-redux";
-import { RootState } from "index";
+import { RootState } from "store";
 import TeamDetail, { IOwnProps } from "./TeamDetail";
 import { getTeamMembers, getUserTeams } from "../../modules/gfwTeams";
 

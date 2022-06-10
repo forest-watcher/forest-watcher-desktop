@@ -2,17 +2,17 @@
 import { FC } from "react";
 import { render as rtlRender } from "@testing-library/react";
 import { Provider } from "react-redux";
-import configureStore from "./configureStore";
 import { BrowserRouter as Router } from "react-router-dom";
 import { DEFAULT_LANGUAGE } from "constants/global";
 import { IntlProvider } from "react-intl";
 import translations from "locales/index.js";
+import store from "./store";
 
 interface WrapperProps {
   children?: React.ReactNode;
 }
 
-function render(ui: JSX.Element, { storeConfig = configureStore(), ...renderOptions } = {}) {
+function render(ui: JSX.Element, { storeConfig = store, ...renderOptions } = {}) {
   const Wrapper: FC<WrapperProps> = ({ children }) => {
     return (
       // @ts-ignore

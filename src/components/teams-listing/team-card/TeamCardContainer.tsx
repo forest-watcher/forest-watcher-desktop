@@ -1,6 +1,6 @@
 import { connect, ConnectedProps } from "react-redux";
 import { ThunkDispatch } from "redux-thunk";
-import { RootState } from "index";
+import { RootState } from "store";
 import TeamCard from "./TeamCard";
 import { getTeamMembers, getTeamAreas } from "modules/gfwTeams";
 import { IOwnProps } from "./TeamCard";
