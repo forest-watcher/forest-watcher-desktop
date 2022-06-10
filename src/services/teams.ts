@@ -2,7 +2,7 @@ import { API_BASE_URL_V1, API_BASE_URL_V3 } from "../constants/global";
 import { BaseService } from "./baseService";
 import { unique } from "../helpers/utils";
 import { components, paths } from "interfaces/teams";
-import { store } from "index";
+import store from "store";
 
 type TeamResponse = components["responses"]["Team"]["content"]["application/json"];
 export type Team = components["schemas"]["Team"];
