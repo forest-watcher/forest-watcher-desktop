@@ -10,12 +10,12 @@ export class AreaService extends BaseService {
   async saveArea(area: any, node: HTMLElement, method: string) {
     const url = method === "PATCH" ? `/${area.id}` : `/`;
     const blob = await domtoimage.toBlob(node, BLOB_CONFIG);
-    // @ts-ignore
-    const image = new File([blob], "png", { type: "image/png", name: encodeURIComponent(area.name) });
 
+    const image = new File([blob], `${encodeURIComponent(area.name)}.png`, { type: "image/png" });
     const body = new FormData();
     body.append("name", area.name);
     body.append("geostore", area.geostore);
+    body.append("geojson", JSON.stringify(area.geojson));
     body.append("image", image);
 
     return this.fetchJSON(url, {
