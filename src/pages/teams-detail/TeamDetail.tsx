@@ -43,6 +43,7 @@ const TeamDetail: FC<IProps> = props => {
     getUserTeams,
     getTeamMembers,
     userIsManager,
+    userIsAdmin,
     numOfActiveFetches,
     isEditingTeam = false,
     isDeletingTeam = false,
@@ -112,7 +113,7 @@ const TeamDetail: FC<IProps> = props => {
         title="teams.details.name"
         titleValues={{ name: team.attributes.name }}
         action={
-          userIsManager
+          userIsAdmin
             ? { name: "teams.details.delete", variant: "secondary-light-text", callback: deleteTeam }
             : undefined
         }
