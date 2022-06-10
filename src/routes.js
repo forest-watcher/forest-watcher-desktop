@@ -45,6 +45,7 @@ const Routes = props => {
         <Switch>
           <Route exact path={`${match.url}areas`} component={Areas} />
           <Route exact path={`${match.url}areas/create`} component={AreasManage} />
+          <Route exact path={`${match.url}areas/:areaId/edit`} component={AreasManage} />
           <Route exact path={`${match.url}areas/:areaId`} component={AreasManage} />
           <Route exact path={`${match.url}templates`} component={Templates} />
           <Route exact path={`${match.url}templates/create`} component={TemplatesManage} />
