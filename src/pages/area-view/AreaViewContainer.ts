@@ -1,5 +1,5 @@
 import { connect, ConnectedProps } from "react-redux";
-import { RootState } from "index";
+import { RootState } from "store";
 import { setLoading } from "modules/areas";
 import AreaView from "./AreaView";
 import { ThunkDispatch } from "redux-thunk";

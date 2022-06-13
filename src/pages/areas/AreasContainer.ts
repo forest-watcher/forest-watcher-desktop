@@ -1,5 +1,5 @@
 import { connect, ConnectedProps } from "react-redux";
-import { RootState } from "index";
+import { RootState } from "store";
 
 import Areas from "./Areas";
 

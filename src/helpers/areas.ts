@@ -1,5 +1,5 @@
 import { AREAS } from "../constants/map";
-import { RootState } from "index";
+import { RootState } from "store";
 
 const geojsonArea = require("@mapbox/geojson-area");
 
