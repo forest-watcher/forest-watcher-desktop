@@ -11,4 +11,9 @@
       padding-bottom: $global-spacing-7;
     }
   }
+
+  &__actions {
+    display: flex;
+    gap: $global-spacing-3;
+  }
 }

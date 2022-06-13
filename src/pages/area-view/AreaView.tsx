@@ -3,14 +3,16 @@ import Map from "components/ui/Map/Map";
 import { FC, useState, useEffect } from "react";
 import { MapboxEvent, Map as MapInstance } from "mapbox-gl";
 import { FormattedMessage, useIntl } from "react-intl";
-import { TPropsFromRedux } from "./AreasManageContainer";
+import { TPropsFromRedux } from "./AreaViewContainer";
 import { goToGeojson } from "helpers/map";
 import Loader from "components/ui/Loader";
 import Polygon from "components/ui/Map/components/layers/Polygon";
+import Button from "components/ui/Button/Button";
+import { Link } from "react-router-dom";
 
 interface IProps extends TPropsFromRedux {}
 
-const AreasManage: FC<IProps> = ({ geojson, area, loading }) => {
+const AreasView: FC<IProps> = ({ geojson, area, loading }) => {
   const [mapRef, setMapRef] = useState<MapInstance | null>(null);
 
   const intl = useIntl();
@@ -31,6 +33,26 @@ const AreasManage: FC<IProps> = ({ geojson, area, loading }) => {
         title="areas.manageAreaName"
         titleValues={{ name: area?.attributes.name }}
         backLink={{ name: "areas.back", to: "/areas" }}
+        actions={
+          area && (
+            <>
+              <Link to={`/areas/${area.id}/edit`} className="c-button c-button--primary">
+                <FormattedMessage id="common.edit" />
+              </Link>
+              <Button variant="secondary-light-text">
+                <FormattedMessage id="common.export" />
+              </Button>
+              <a
+                href={`${process.env.REACT_APP_FLAGSHIP_URL}/my-gfw/`}
+                target="_blank"
+                rel="noopenner noreferrer"
+                className="c-button c-button--secondary-light-text"
+              >
+                <FormattedMessage id="areas.viewInGfw" />
+              </a>
+            </>
+          )
+        }
       />
 
       {loading ? (
@@ -45,4 +67,4 @@ const AreasManage: FC<IProps> = ({ geojson, area, loading }) => {
     </div>
   );
 };
-export default AreasManage;
+export default AreasView;

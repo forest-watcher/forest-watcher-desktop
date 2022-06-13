@@ -3,7 +3,8 @@ import PropTypes from "prop-types";
 import querystring from "query-string";
 
 import Areas from "./pages/areas/AreasContainer";
-import AreasManage from "./pages/areas-manage/AreasManageContainer";
+import AreasManage from "./pages/area-view/AreaViewContainer";
+import AreaEdit from "./pages/area-edit/AreaEditContainer";
 import Templates from "./pages/templates/TemplatesContainer";
 import TemplatesManage from "./pages/templates-manage/TemplatesManageContainer";
 import Teams from "./pages/teams/TeamsContainer";
@@ -44,8 +45,8 @@ const Routes = props => {
       {user.loggedIn ? (
         <Switch>
           <Route exact path={`${match.url}areas`} component={Areas} />
-          <Route exact path={`${match.url}areas/create`} component={AreasManage} />
-          <Route exact path={`${match.url}areas/:areaId/edit`} component={AreasManage} />
+          <Route exact path={`${match.url}areas/create`} component={AreaEdit} />
+          <Route exact path={`${match.url}areas/:areaId/edit`} component={AreaEdit} />
           <Route exact path={`${match.url}areas/:areaId`} component={AreasManage} />
           <Route exact path={`${match.url}templates`} component={Templates} />
           <Route exact path={`${match.url}templates/create`} component={TemplatesManage} />

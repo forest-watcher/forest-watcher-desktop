@@ -1,7 +1,7 @@
 import { connect, ConnectedProps } from "react-redux";
 import { RootState } from "index";
 import { setLoading } from "modules/areas";
-import AreasManage from "./AreasManage";
+import AreaView from "./AreaView";
 import { ThunkDispatch } from "redux-thunk";
 import { RouteComponentProps } from "react-router-dom";
 import { readArea, readGeojson } from "helpers/areas";
@@ -30,4 +30,4 @@ const connector = connect(mapStateToProps, mapDispatchToProps);
 
 export type TPropsFromRedux = ConnectedProps<typeof connector>;
 
-export default connector(AreasManage);
+export default connector(AreaView);
