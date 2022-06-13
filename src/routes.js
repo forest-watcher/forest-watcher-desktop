@@ -11,7 +11,7 @@ import Teams from "./pages/teams/TeamsContainer";
 import TeamDetail from "./pages/teams-detail/TeamDetailContainer";
 import Settings from "./pages/settings/SettingsContainer";
 import Reports from "./pages/reports/ReportsContainer";
-import Login from "./pages/login/Login";
+import LegacyLogin from "./pages/login/Legacy_Login";
 
 const getLoginComponent = ({ user, location }) => {
   const search = location.search || "";
@@ -31,7 +31,7 @@ const getLoginComponent = ({ user, location }) => {
   } else if (user.loggedIn) {
     return <Redirect to="/areas" />;
   } else {
-    return <Login callbackUrl={callbackUrl} />;
+    return <LegacyLogin callbackUrl={callbackUrl} />;
   }
 };
 
