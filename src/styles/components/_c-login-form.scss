@@ -1,0 +1,17 @@
+.c-login-form {
+  text-align: center;
+
+  .c-input {
+    justify-content: flex-end;
+    margin-bottom: 40px;
+
+    &__input-wrapper {
+      width: 356px;
+    }
+  }
+
+  &__submit-btn {
+    display: inline-flex;
+    margin-top: 20px;
+  }
+}

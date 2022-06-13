@@ -12,6 +12,7 @@ import TeamDetail from "./pages/teams-detail/TeamDetailContainer";
 import Settings from "./pages/settings/SettingsContainer";
 import Reports from "./pages/reports/ReportsContainer";
 import Login from "./pages/login/Login";
+import SignUp from "./pages/login/SignUp";
 
 const getLoginComponent = ({ user, location }) => {
   const search = location.search || "";
@@ -44,6 +45,7 @@ const Routes = props => {
     <Switch>
       <Route exact path="/" render={defaultComponent} />
       <Route path={`${match.url}login`} render={() => getLoginComponent({ user, location })} />
+      <Route exact path={`${match.url}sign-up`} component={SignUp} />
       {user.loggedIn ? (
         <Switch>
           <Route exact path={`${match.url}areas`} component={Areas} />

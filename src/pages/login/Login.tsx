@@ -1,5 +1,6 @@
 import { FC, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
+import { Link } from "react-router-dom";
 import { TLoginBody } from "services/user";
 import Input from "components/ui/Form/Input";
 import * as yup from "yup";
@@ -9,9 +10,9 @@ import Button from "components/ui/Button/Button";
 import { useAppDispatch } from "hooks/useRedux";
 import { loginUser } from "modules/user";
 import { userService } from "services/user";
-import Loader from "components/ui/Loader";
 import { toastr } from "react-redux-toastr";
 import { TErrorResponse } from "constants/api";
+import LoginLayout from "components/layouts/Login";
 
 type TLoginForm = TLoginBody;
 
@@ -53,9 +54,8 @@ const Login: FC<IProps> = () => {
   };
 
   return (
-    <>
-      <Loader isLoading={isLoading} />
-      <form onSubmit={handleSubmit(onSubmit)}>
+    <LoginLayout isLoading={isLoading} title="signIn.title" text="signIn.subTitle">
+      <form className="c-login-form" onSubmit={handleSubmit(onSubmit)}>
         <Input
           id="login-email"
           htmlInputProps={{
@@ -76,11 +76,12 @@ const Login: FC<IProps> = () => {
           error={errors.password}
           registered={register("password")}
         />
-        <Button type="submit">
+        <Button className="c-login-form__submit-btn" type="submit">
           <FormattedMessage id="signIn.input.submit" />
         </Button>
       </form>
-    </>
+      <Link to="/sign-up">Sign Up</Link>
+    </LoginLayout>
   );
 };
 
