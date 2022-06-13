@@ -1,7 +1,7 @@
 import { Component } from "react";
 import PropTypes from "prop-types";
 
-import Hero from "../../components/layouts/Hero";
+import Hero from "../../components/layouts/Hero/Hero";
 import Article from "../../components/layouts/Article";
 import TeamsShow from "../../components/teams-show/TeamsShowContainer";
 import TeamsForm from "../../components/teams-manager/TeamsFormContainer";

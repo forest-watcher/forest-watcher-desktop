@@ -1,7 +1,7 @@
 import { Component } from "react";
 import PropTypes from "prop-types";
 
-import Hero from "../../components/layouts/Hero";
+import Hero from "../../components/layouts/Hero/Hero";
 import Article from "../../components/layouts/Article";
 import ReactTable from "react-table";
 import { FormattedMessage } from "react-intl";
@@ -13,7 +13,6 @@ import qs from "query-string";
 import { TABLE_PAGE_SIZE } from "../../constants/global";
 import { CATEGORY, ACTION } from "../../constants/analytics";
 import ReactGA from "react-ga";
-import Button from "components/ui/Button/Button";
 
 class Templates extends Component {
   createTemplate = () => {

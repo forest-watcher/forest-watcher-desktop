@@ -1,8 +1,8 @@
-import Hero from "components/layouts/Hero";
+import Hero from "components/layouts/Hero/Hero";
 import Map from "components/ui/Map/Map";
 import { FC, useState, useEffect } from "react";
 import { MapboxEvent, Map as MapInstance } from "mapbox-gl";
-import { FormattedMessage, useIntl } from "react-intl";
+import { FormattedMessage } from "react-intl";
 import { TPropsFromRedux } from "./AreaViewContainer";
 import { goToGeojson } from "helpers/map";
 import Loader from "components/ui/Loader";
@@ -14,8 +14,6 @@ interface IProps extends TPropsFromRedux {}
 
 const AreasView: FC<IProps> = ({ geojson, area, loading }) => {
   const [mapRef, setMapRef] = useState<MapInstance | null>(null);
-
-  const intl = useIntl();
 
   const handleMapLoad = (e: MapboxEvent) => {
     setMapRef(e.target);
