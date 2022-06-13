@@ -9,6 +9,7 @@ import { TSignUpBody, userService } from "services/user";
 import { TErrorResponse } from "../../constants/api";
 import { toastr } from "react-redux-toastr";
 import LoginLayout from "components/layouts/Login";
+import { Link } from "react-router-dom";
 
 type TLoginForm = TSignUpBody;
 
@@ -61,6 +62,12 @@ const SignUp: FC<IProps> = () => {
           <FormattedMessage id="signUp.input.submit" />
         </Button>
       </form>
+      <p className="c-login-form__link c-login-form__link--larger-font">
+        <FormattedMessage id="signUp.link.already.joined" />
+        <Link className="u-margin-left-tiny" to="/login">
+          <FormattedMessage id="signUp.link.signIn" />
+        </Link>
+      </p>
     </LoginLayout>
   );
 };

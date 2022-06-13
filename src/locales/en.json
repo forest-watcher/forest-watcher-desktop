@@ -28,6 +28,8 @@
   "signIn.link.forgotten.password": "Forgot Password?",
   "signUp.title": "Sign Up",
   "signUp.subTitle": "Sign up to view, manage, and delete areas of interest.",
+  "signUp.link.signIn": "Sign In",
+  "signUp.link.already.joined": "Already joined?",
   "signIn.input.email": "Email",
   "signIn.input.email.placeholder": "Enter email",
   "signIn.input.password": "Password",
