@@ -14,7 +14,7 @@
   font-size: $base-font-size;
   min-height: 40px;
 
-  background-color: $neutral-600;
+  white-space: nowrap;
 
   cursor: pointer;
   outline: 0;
@@ -56,6 +56,10 @@
 
   &--secondary-light-text {
     color: $neutral-300;
+  }
+
+  &--deafault {
+    background-color: $neutral-600;
   }
 
   &--is-icon {
