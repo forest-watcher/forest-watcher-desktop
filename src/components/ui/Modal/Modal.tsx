@@ -44,7 +44,7 @@ const Modal: FC<PropsWithChildren<IProps>> = props => {
           {actions && (
             <div className="c-modal-dialog__actions">
               {actions.map(action => (
-                <Button onClick={action.onClick} variant={action.variant}>
+                <Button key={action.name} onClick={action.onClick} variant={action.variant}>
                   <FormattedMessage id={action.name} values={action.values} />
                 </Button>
               ))}
