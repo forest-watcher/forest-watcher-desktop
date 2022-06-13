@@ -36,6 +36,29 @@ const options: Option[] = [
   }
 ];
 
+const optionsWithSecondary: Option[] = [
+  {
+    label: "Cat",
+    secondaryLabel: "A furry creature",
+    value: "cat"
+  },
+  {
+    label: "Dog",
+    secondaryLabel: "Goes Woof",
+    value: "dog"
+  },
+  {
+    label: "Hamster",
+    secondaryLabel: "Pretty smol",
+    value: "hamster"
+  },
+  {
+    label: "Panda",
+    secondaryLabel: "The best",
+    value: "panda"
+  }
+];
+
 export const Standard = InputTemplate.bind({});
 Standard.args = {
   id: "text-input",
@@ -55,6 +78,19 @@ DefaultValue.args = {
     label: "Hello",
     defaultValue: options[0]
   }
+};
+
+export const SelectMultiple = InputTemplate.bind({});
+SelectMultiple.args = {
+  id: "text-input",
+  selectProps: {
+    placeholder: "Select something",
+    options: optionsWithSecondary,
+    label: "Hello",
+    defaultValue: [optionsWithSecondary[0], optionsWithSecondary[1]],
+    alternateLabelStyle: true
+  },
+  isMultiple: true
 };
 
 export const Error = InputTemplate.bind({});
