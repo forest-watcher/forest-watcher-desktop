@@ -1,6 +1,6 @@
 import { teamService } from "services/teams";
 import { apiService } from "../services/api";
-import { RootState, AppDispatch } from "index";
+import { RootState, AppDispatch } from "store";
 import type { TGetUserTeamsResponse, TGetTeamMembersResponse, TGetMyTeamInvites } from "services/teams";
 import { toastr } from "react-redux-toastr";
 

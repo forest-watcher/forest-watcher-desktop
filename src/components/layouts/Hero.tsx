@@ -34,7 +34,7 @@ const Hero: FC<PropsWithChildren<IProps>> = ({ title, titleValues, action, backL
           </div>
         )}
         <div className="c-hero__content">
-          <h1 className="u-text-700 u-text-neutral-300">
+          <h1 className="u-text-700 u-text-neutral-300 u-text-capitalize">
             <FormattedMessage id={title} values={titleValues} />
           </h1>
           <>{children}</>

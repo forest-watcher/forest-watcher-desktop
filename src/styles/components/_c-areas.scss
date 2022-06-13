@@ -13,3 +13,29 @@
     }
   }
 }
+
+.c-area-manage {
+  &__actions {
+    display: flex;
+    padding: $global-spacing-10 0;
+    gap: $global-spacing-10;
+  }
+
+  &__form {
+    display: flex;
+    flex: 1 1 auto;
+    justify-content: space-between;
+    align-items: baseline;
+  }
+
+  &__form-actions {
+    display: flex;
+    gap: $global-spacing-3;
+  }
+
+  &__shapefile {
+    display: flex;
+    gap: $global-spacing-3;
+    align-items: center;
+  }
+}

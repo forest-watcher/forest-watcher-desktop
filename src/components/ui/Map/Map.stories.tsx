@@ -59,7 +59,7 @@ export default {
 } as ComponentMeta<typeof Map>;
 
 // More on component templates: https://storybook.js.org/docs/react/writing-stories/introduction#using-args
-const Template: ComponentStory<typeof Map> = args => {
+const MultipleTemplate: ComponentStory<typeof Map> = args => {
   const [selected, setSelected] = useState<null | string>(null);
   const [mapViewState, setMapViewState] = useState<IMapViewState>({
     latitude: 50.71,
@@ -104,6 +104,29 @@ const Template: ComponentStory<typeof Map> = args => {
   );
 };
 
-export const Standard = Template.bind({});
+const EditTemplate: ComponentStory<typeof Map> = args => {
+  const [mapViewState, setMapViewState] = useState<IMapViewState>({
+    latitude: 50.72,
+    longitude: -1.89,
+    zoom: 12
+  });
+
+  return (
+    <>
+      <Map {...args} mapViewState={mapViewState} setMapViewState={setMapViewState}></Map>
+    </>
+  );
+};
+
+export const Standard = MultipleTemplate.bind({});
 // More on args: https://storybook.js.org/docs/react/writing-stories/args
-Standard.args = {};
+Standard.args = {
+  onMapEdit: undefined
+};
+
+export const EditMap = EditTemplate.bind({});
+// More on args: https://storybook.js.org/docs/react/writing-stories/args
+EditMap.args = {
+  onMapEdit: () => {},
+  geojsonToEdit: polygon as GeoJSON.FeatureCollection<GeoJSON.Geometry>
+};

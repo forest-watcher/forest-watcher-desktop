@@ -1,12 +1,11 @@
 import { FC, useEffect, useMemo, useState } from "react";
-import { RouteComponentProps, useHistory } from "react-router-dom";
+import { RouteComponentProps, useHistory, Link } from "react-router-dom";
 import { toastr } from "react-redux-toastr";
 import { TPropsFromRedux } from "./TeamDetailContainer";
 import Hero from "components/layouts/Hero";
 import Article from "components/layouts/Article";
 import DataTable from "components/ui/DataTable/DataTable";
 import type { TTeamDetailDataTable, TTeamsDetailDataTableColumns } from "./types";
-import Button from "components/ui/Button/Button";
 import { FormattedMessage, useIntl } from "react-intl";
 import PlusIcon from "assets/images/icons/PlusWhite.svg";
 import useGetUserId from "hooks/useGetUserId";
@@ -50,6 +49,7 @@ const TeamDetail: FC<IProps> = props => {
     getUserTeams,
     getTeamMembers,
     userIsManager,
+    userIsAdmin,
     numOfActiveFetches,
     isAddingTeamMember = false,
     isEditingTeamMember = false,
@@ -88,12 +88,9 @@ const TeamDetail: FC<IProps> = props => {
     () =>
       teamMembers.reduce<[typeof teamMembers, typeof teamMembers]>(
         (acc, teamMember) => {
-          if (
-            (teamMember.attributes.role === "administrator" || teamMember.attributes.role === "manager") &&
-            teamMember.attributes.userId
-          ) {
+          if (teamMember.attributes.role === "administrator" || teamMember.attributes.role === "manager") {
             acc[0].push(teamMember);
-          } else if (teamMember.attributes.userId) {
+          } else {
             acc[1].push(teamMember);
           }
           return acc;
@@ -126,18 +123,6 @@ const TeamDetail: FC<IProps> = props => {
       }),
     [intl]
   );
-
-  const addManager = () => {
-    history.push(`${match.url}/add/manager`);
-  };
-
-  const addMonitor = () => {
-    history.push(`${match.url}/add/monitor`);
-  };
-
-  const editTeam = () => {
-    history.push(`${match.url}/edit`);
-  };
 
   const deleteTeam = () => {
     history.push(`${match.url}/delete`);
@@ -178,16 +163,16 @@ const TeamDetail: FC<IProps> = props => {
         title="teams.details.name"
         titleValues={{ name: team.attributes.name }}
         action={
-          userIsManager
+          userIsAdmin
             ? { name: "teams.details.delete", variant: "secondary-light-text", callback: deleteTeam }
             : undefined
         }
         backLink={{ name: "teams.details.back", to: "/teams" }}
       >
         {userIsManager && (
-          <Button className="c-teams-details__edit-btn" variant="primary" onClick={editTeam}>
+          <Link to={`${match.url}/edit`} className="c-teams-details__edit-btn c-button c-button--primary">
             <FormattedMessage id="teams.details.edit" />
-          </Button>
+          </Link>
         )}
       </Hero>
       <div className="l-content c-teams-details">
@@ -197,10 +182,10 @@ const TeamDetail: FC<IProps> = props => {
           titleValues={{ num: manages.length }}
           actions={
             userIsManager && (
-              <Button variant="primary" onClick={addManager}>
+              <Link to={`${match.url}/add/manager`} className="c-button c-button--primary">
                 <img className="c-button__inline-icon" src={PlusIcon} alt="" role="presentation" />
                 <FormattedMessage id="teams.details.add.managers" />
-              </Button>
+              </Link>
             )
           }
         >
@@ -221,10 +206,10 @@ const TeamDetail: FC<IProps> = props => {
           titleValues={{ num: monitors.length }}
           actions={
             userIsManager && (
-              <Button variant="primary" onClick={addMonitor}>
+              <Link to={`${match.url}/add/monitor`} className="c-button c-button--primary">
                 <img className="c-button__inline-icon" src={PlusIcon} alt="" role="presentation" />
                 <FormattedMessage id="teams.details.add.monitors" />
-              </Button>
+              </Link>
             )
           }
         >
