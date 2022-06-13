@@ -44,6 +44,7 @@ const TeamDetail: FC<IProps> = props => {
     getUserTeams,
     getTeamMembers,
     userIsManager,
+    userIsAdmin,
     numOfActiveFetches,
     isAddingTeamMember = false,
     isEditingTeam = false,
@@ -80,12 +81,9 @@ const TeamDetail: FC<IProps> = props => {
     () =>
       teamMembers.reduce<[typeof teamMembers, typeof teamMembers]>(
         (acc, teamMember) => {
-          if (
-            (teamMember.attributes.role === "administrator" || teamMember.attributes.role === "manager") &&
-            teamMember.attributes.userId
-          ) {
+          if (teamMember.attributes.role === "administrator" || teamMember.attributes.role === "manager") {
             acc[0].push(teamMember);
-          } else if (teamMember.attributes.userId) {
+          } else {
             acc[1].push(teamMember);
           }
           return acc;
@@ -110,7 +108,7 @@ const TeamDetail: FC<IProps> = props => {
         title="teams.details.name"
         titleValues={{ name: team.attributes.name }}
         action={
-          userIsManager
+          userIsAdmin
             ? { name: "teams.details.delete", variant: "secondary-light-text", callback: deleteTeam }
             : undefined
         }

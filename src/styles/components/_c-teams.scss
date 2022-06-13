@@ -18,6 +18,7 @@
 
   &__grid-item {
     flex: 0 0 100%;
+    width: 100%;
     margin-top: 40px;
     padding-left: 20px;
     padding-right: 20px;
@@ -25,7 +26,8 @@
 
   @include after(md) {
     &__grid-item {
-      flex: 0 0 33.33%
+      flex: 0 0 33.33%;
+      width: 33.33%;
     }
   }
 
@@ -41,7 +43,7 @@
 
   // The flex column will "grow" as far as it can before it bunches up with the CTA button
   // Meaning text that overflows will ellipsis as expected
-  &__area-text {
+  &__area-text, &__title-text {
     flex: 1 0 0px;
     width: 0px;
   }

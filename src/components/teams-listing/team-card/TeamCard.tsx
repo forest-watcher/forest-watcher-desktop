@@ -41,7 +41,7 @@ const TeamCard: FC<IProps> = props => {
   return (
     <Card size="large" className="c-teams__card">
       <div className="c-teams__title">
-        <div>
+        <div className="c-teams__title-text">
           <Card.Title className="u-margin-top-none">{team.attributes.name}</Card.Title>
         </div>
         <Card.Cta to={`/teams/${team.id}`} iconSrc={EditIcon}>
