@@ -58,6 +58,10 @@ export type TPatchTeamBody = Omit<
   "createdAt"
 >;
 export type TDeleteTeamResponse = paths["/v3/teams/{teamId}"]["delete"]["responses"]["200"];
+export type TPostTeamMembersBody =
+  paths["/v3/teams/{teamId}/users"]["post"]["requestBody"]["content"]["application/json"];
+export type TPostTeamMembersResponse =
+  paths["/v3/teams/{teamId}/users"]["post"]["responses"]["200"]["content"]["application/json"];
 
 export class TeamService extends BaseService {
   getUserTeams(userId: string): Promise<TGetUserTeamsResponse> {
@@ -101,6 +105,18 @@ export class TeamService extends BaseService {
 
     return this.fetch(`/${teamId}`, {
       method: "DELETE"
+    });
+  }
+
+  addTeamMembers(teamId: string, body: TPostTeamMembersBody): Promise<TPostTeamMembersResponse> {
+    this.token = store.getState().user.token;
+
+    return this.fetchJSON(`/${teamId}/users`, {
+      headers: {
+        "Content-Type": "application/json"
+      },
+      method: "POST",
+      body: JSON.stringify(body)
     });
   }
 }

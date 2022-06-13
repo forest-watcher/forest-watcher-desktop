@@ -4,6 +4,7 @@ import Input, { Props as IInputProps } from "components/ui/Form/Input";
 import { useForm, SubmitHandler, RegisterOptions, UnpackNestedValue, FieldPath } from "react-hook-form";
 import UnsavedChanges from "components/modals/UnsavedChanges";
 import Loader from "components/ui/Loader";
+import { UseFormProps } from "react-hook-form/dist/types";
 
 export type TInput<T> = Omit<IInputProps, "registered"> & {
   formatErrors?: (error: any) => any; // ToDo
@@ -21,6 +22,7 @@ interface IProps<T> {
   modalTitle: string;
   submitBtnName: string;
   cancelBtnName?: string;
+  useFormProps?: UseFormProps<T>;
 }
 
 /**
@@ -53,13 +55,22 @@ interface IProps<T> {
  *   />
  */
 const FormModal = <T,>(props: IProps<T>) => {
-  const { isOpen = false, inputs, onClose, onSave, modalTitle, submitBtnName, cancelBtnName = "common.cancel" } = props;
+  const {
+    isOpen = false,
+    inputs,
+    useFormProps,
+    onClose,
+    onSave,
+    modalTitle,
+    submitBtnName,
+    cancelBtnName = "common.cancel"
+  } = props;
   const {
     register,
     handleSubmit,
     reset,
     formState: { isDirty, errors }
-  } = useForm<T>();
+  } = useForm<T>(useFormProps);
   const [isClosing, setIsClosing] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
