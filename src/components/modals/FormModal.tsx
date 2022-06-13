@@ -1,25 +1,31 @@
 import { useEffect, useState } from "react";
 import Modal from "components/ui/Modal/Modal";
 import Input, { Props as IInputProps } from "components/ui/Form/Input";
+import Select, { Props as ISelectProps } from "components/ui/Form/Select";
 import { useForm, SubmitHandler, RegisterOptions, UnpackNestedValue, FieldPath } from "react-hook-form";
 import UnsavedChanges from "components/modals/UnsavedChanges";
 import Loader from "components/ui/Loader";
 import { UseFormProps } from "react-hook-form/dist/types";
+import { FormattedMessage } from "react-intl";
 
-export type TInput<T> = Omit<IInputProps, "registered"> & {
+export interface IInputBase<T> {
   formatErrors?: (error: any) => any; // ToDo
   registerProps: {
     name: FieldPath<T>;
     options: RegisterOptions<T, FieldPath<T>>;
   };
-};
+}
+
+export type TInput<T> = Omit<IInputProps, "registered"> & IInputBase<T>;
+export type TSelect<T> = Omit<Omit<ISelectProps, "formHook">, "registered"> & IInputBase<T>;
 
 interface IProps<T> {
   isOpen: boolean;
-  inputs: TInput<T>[];
+  inputs: Array<TInput<T> | TSelect<T>>;
   onClose: () => void;
   onSave: (data: UnpackNestedValue<T>) => Promise<void>;
   modalTitle: string;
+  modalSubtitle?: string;
   submitBtnName: string;
   cancelBtnName?: string;
   useFormProps?: UseFormProps<T>;
@@ -63,14 +69,23 @@ const FormModal = <T,>(props: IProps<T>) => {
     onSave,
     modalTitle,
     submitBtnName,
-    cancelBtnName = "common.cancel"
+    cancelBtnName = "common.cancel",
+    modalSubtitle
   } = props;
+
+  const formhook = useForm<T>(useFormProps);
+
+  const isInput = (item: TInput<T> | TSelect<T>) => {
+    const input = item as TInput<T>;
+    return input.htmlInputProps !== undefined;
+  };
+
   const {
     register,
     handleSubmit,
     reset,
     formState: { isDirty, errors }
-  } = useForm<T>(useFormProps);
+  } = formhook;
   const [isClosing, setIsClosing] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -106,14 +121,40 @@ const FormModal = <T,>(props: IProps<T>) => {
         ]}
       >
         <Loader isLoading={isLoading} />
+        {modalSubtitle && (
+          <p className="c-modal-dialog__text ">
+            <FormattedMessage id={modalSubtitle} />
+          </p>
+        )}
         <form className="c-modal-form" onSubmit={handleSubmit(onSubmit)}>
-          {inputs.map(({ formatErrors, registerProps, ...rest }) => (
-            <Input
-              {...rest}
-              error={formatErrors && formatErrors(errors)}
-              registered={register(registerProps.name, registerProps.options)}
-            />
-          ))}
+          {inputs.map(item => {
+            if (isInput(item)) {
+              const inputProps = item as TInput<T>;
+              const { formatErrors, registerProps, ...rest } = inputProps;
+
+              return (
+                <Input
+                  {...rest}
+                  error={formatErrors && formatErrors(errors)}
+                  registered={register(registerProps.name, registerProps.options)}
+                  key={item.id}
+                />
+              );
+            } else {
+              const inputProps = item as TSelect<T>;
+              const { formatErrors, registerProps, ...rest } = inputProps;
+
+              return (
+                <Select
+                  {...rest}
+                  error={formatErrors && formatErrors(errors)}
+                  registered={register(registerProps.name, registerProps.options)}
+                  formHook={formhook}
+                  key={item.id}
+                />
+              );
+            }
+          })}
         </form>
       </Modal>
 
