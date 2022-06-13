@@ -107,22 +107,25 @@ const TeamDetail: FC<IProps> = props => {
    * Map each member from the API to translated data table rows
    * @param members members from the API
    */
-  const mapMembersToRows = (members: TGFWTeamsState["members"][string]) =>
-    members.map<TTeamDetailDataTable>(member => {
-      let statusSuffix: typeof member.attributes.status | "administrator" | "left" = member.attributes.status;
-      if (member.attributes.role === "administrator") {
-        statusSuffix = "administrator";
-      } else if (member.attributes.role === "left") {
-        statusSuffix = "left";
-      }
+  const mapMembersToRows = useMemo(
+    () => (members: TGFWTeamsState["members"][string]) =>
+      members.map<TTeamDetailDataTable>(member => {
+        let statusSuffix: typeof member.attributes.status | "administrator" | "left" = member.attributes.status;
+        if (member.attributes.role === "administrator") {
+          statusSuffix = "administrator";
+        } else if (member.attributes.role === "left") {
+          statusSuffix = "left";
+        }
 
-      return {
-        id: member.id,
-        name: member.attributes.userId,
-        email: member.attributes.email,
-        status: intl.formatMessage({ id: `teams.details.table.status.${statusSuffix}` })
-      };
-    });
+        return {
+          id: member.id,
+          name: member.attributes.userId,
+          email: member.attributes.email,
+          status: intl.formatMessage({ id: `teams.details.table.status.${statusSuffix}` })
+        };
+      }),
+    [intl]
+  );
 
   const addManager = () => {
     history.push(`${match.url}/add/manager`);
