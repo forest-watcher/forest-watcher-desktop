@@ -4,7 +4,7 @@ import Loader from "components/ui/Loader";
 import Map from "components/ui/Map/Map";
 import { FC, useMemo, useEffect, useState } from "react";
 import Polygon from "components/ui/Map/components/layers/Polygon";
-import { LngLatBoundsLike, MapboxEvent, Map as MapInstance } from "mapbox-gl";
+import { MapboxEvent, Map as MapInstance } from "mapbox-gl";
 import * as turf from "@turf/turf";
 import { FormattedMessage, useIntl } from "react-intl";
 import ReactGA from "react-ga";
