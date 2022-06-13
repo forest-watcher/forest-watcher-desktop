@@ -1,5 +1,5 @@
 import { connect, ConnectedProps } from "react-redux";
-import { RootState } from "index";
+import { RootState } from "store";
 import { saveAreaWithGeostore, setSaving, setLoading } from "modules/areas";
 import { getGeoFromShape } from "modules/geostores";
 import AreasManage from "./AreasManage";
