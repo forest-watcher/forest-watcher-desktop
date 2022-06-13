@@ -1,8 +1,7 @@
 import Hero from "components/layouts/Hero";
 import Map from "components/ui/Map/Map";
-import { FC, useState, MouseEvent, ChangeEvent } from "react";
-import { LngLatBoundsLike, MapboxEvent, Map as MapInstance } from "mapbox-gl";
-import * as turf from "@turf/turf";
+import { FC, useState, MouseEvent, ChangeEvent, useEffect } from "react";
+import { MapboxEvent, Map as MapInstance } from "mapbox-gl";
 import { FormattedMessage, useIntl } from "react-intl";
 import ReactGA from "react-ga";
 import { TPropsFromRedux } from "./AreasManageContainer";
@@ -11,12 +10,14 @@ import Input from "components/ui/Form/Input";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import Button, { IButtonVariants } from "components/ui/Button/Button";
+import Button from "components/ui/Button/Button";
 import { toastr } from "react-redux-toastr";
 import { CATEGORY, ACTION } from "constants/analytics";
 import { checkArea } from "helpers/areas";
 import union from "@turf/union";
 import InfoIcon from "assets/images/icons/Info.svg";
+import { goToGeojson } from "helpers/map";
+import Loader from "components/ui/Loader";
 
 const areaTitleKeys = {
   manage: "areas.manageArea",
@@ -35,8 +36,16 @@ const schema = yup
   })
   .required();
 
-const Areas: FC<IProps> = ({ mode, geojson, getGeoFromShape, setSaving, saveAreaWithGeostore }) => {
-  const { register, handleSubmit, watch, formState, reset } = useForm<FormValues>({
+const AreasManage: FC<IProps> = ({
+  mode,
+  geojson,
+  getGeoFromShape,
+  setSaving,
+  saveAreaWithGeostore,
+  area,
+  loading
+}) => {
+  const { register, handleSubmit, watch, formState, reset, setValue } = useForm<FormValues>({
     resolver: yupResolver(schema)
   });
   const { name } = watch();
@@ -44,6 +53,12 @@ const Areas: FC<IProps> = ({ mode, geojson, getGeoFromShape, setSaving, saveArea
   const [isValidatingShapefile, setIsValidatingShapefile] = useState(false);
   const [mapRef, setMapRef] = useState<MapInstance | null>(null);
   const [drawRef, setDrawRef] = useState<MapboxDraw | null>(null);
+
+  useEffect(() => {
+    if (area?.attributes?.name) {
+      setValue("name", area.attributes.name);
+    }
+  }, [area?.attributes?.name, setValue]);
 
   const onSubmit: SubmitHandler<FormValues> = data => {
     if (mapRef && updatedGeojson) {
@@ -78,9 +93,13 @@ const Areas: FC<IProps> = ({ mode, geojson, getGeoFromShape, setSaving, saveArea
   const handleResetForm = (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     reset();
+    if (area?.attributes?.name) {
+      setValue("name", area.attributes.name);
+    }
     drawRef?.deleteAll();
     if (geojson) {
       drawRef?.add(geojson);
+      goToGeojson(mapRef, geojson);
     }
     handleMapEdit(geojson);
   };
@@ -90,10 +109,7 @@ const Areas: FC<IProps> = ({ mode, geojson, getGeoFromShape, setSaving, saveArea
       drawRef.add(e);
       const featureCollection = drawRef.getAll();
       handleMapEdit(featureCollection);
-      const bbox = turf.bbox(featureCollection);
-      if (mapRef && bbox.length > 0) {
-        mapRef.fitBounds(bbox as LngLatBoundsLike);
-      }
+      goToGeojson(mapRef, featureCollection);
     }
   };
 
@@ -160,13 +176,19 @@ const Areas: FC<IProps> = ({ mode, geojson, getGeoFromShape, setSaving, saveArea
     <div className="c-area-manage">
       <Hero title={areaTitleKeys[mode as keyof typeof areaTitleKeys]} backLink={{ name: "areas.back", to: "/areas" }} />
 
-      <Map
-        className="c-map--within-hero"
-        onMapLoad={handleMapLoad}
-        onDrawLoad={handleDrawLoad}
-        onMapEdit={handleMapEdit}
-        geojsonToEdit={geojson}
-      />
+      {loading ? (
+        <div className="c-map c-map--within-hero">
+          <Loader isLoading />
+        </div>
+      ) : (
+        <Map
+          className="c-map--within-hero"
+          onMapLoad={handleMapLoad}
+          onDrawLoad={handleDrawLoad}
+          onMapEdit={handleMapEdit}
+          geojsonToEdit={geojson}
+        />
+      )}
 
       <div className="row column">
         <div className="c-area-manage__actions">
@@ -211,4 +233,4 @@ const Areas: FC<IProps> = ({ mode, geojson, getGeoFromShape, setSaving, saveArea
     </div>
   );
 };
-export default Areas;
+export default AreasManage;
