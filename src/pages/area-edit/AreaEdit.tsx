@@ -4,7 +4,7 @@ import { FC, useState, MouseEvent, ChangeEvent, useEffect } from "react";
 import { MapboxEvent, Map as MapInstance } from "mapbox-gl";
 import { FormattedMessage, useIntl } from "react-intl";
 import ReactGA from "react-ga";
-import { TPropsFromRedux } from "./AreasManageContainer";
+import { TPropsFromRedux } from "./AreaEditContainer";
 import { FeatureCollection } from "geojson";
 import Input from "components/ui/Form/Input";
 import { useForm, SubmitHandler } from "react-hook-form";
@@ -36,15 +36,7 @@ const schema = yup
   })
   .required();
 
-const AreasManage: FC<IProps> = ({
-  mode,
-  geojson,
-  getGeoFromShape,
-  setSaving,
-  saveAreaWithGeostore,
-  area,
-  loading
-}) => {
+const AreaEdit: FC<IProps> = ({ mode, geojson, getGeoFromShape, setSaving, saveAreaWithGeostore, area, loading }) => {
   const { register, handleSubmit, watch, formState, reset, setValue } = useForm<FormValues>({
     resolver: yupResolver(schema)
   });
@@ -173,7 +165,7 @@ const AreasManage: FC<IProps> = ({
   };
 
   return (
-    <div className="c-area-manage">
+    <div className="c-area-edit">
       <Hero title={areaTitleKeys[mode as keyof typeof areaTitleKeys]} backLink={{ name: "areas.back", to: "/areas" }} />
 
       {loading ? (
@@ -191,8 +183,8 @@ const AreasManage: FC<IProps> = ({
       )}
 
       <div className="row column">
-        <div className="c-area-manage__actions">
-          <div className="c-area-manage__shapefile">
+        <div className="c-area-edit__actions">
+          <div className="c-area-edit__shapefile">
             <label className="c-button c-button--default" htmlFor="shapefile">
               <FormattedMessage id={isValidatingShapefile ? "common.loading" : "areas.uploadShapefile"} />
             </label>
@@ -209,7 +201,7 @@ const AreasManage: FC<IProps> = ({
               <img src={InfoIcon} alt="" role="presentation" />
             </Button>
           </div>
-          <form onSubmit={handleSubmit(onSubmit)} className="c-area-manage__form">
+          <form onSubmit={handleSubmit(onSubmit)} className="c-area-edit__form">
             <Input
               id="area-name"
               registered={register("name", { required: true })}
@@ -221,7 +213,7 @@ const AreasManage: FC<IProps> = ({
                 onChange: () => {}
               }}
             />
-            <div className="c-area-manage__form-actions">
+            <div className="c-area-edit__form-actions">
               <Button disabled={!changesValid} variant="secondary" onClick={handleResetForm}>
                 <FormattedMessage id="common.cancel" />
               </Button>
@@ -233,4 +225,4 @@ const AreasManage: FC<IProps> = ({
     </div>
   );
 };
-export default AreasManage;
+export default AreaEdit;

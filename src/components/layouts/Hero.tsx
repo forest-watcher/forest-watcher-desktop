@@ -1,5 +1,5 @@
 import Button, { IProps as IButtonProps } from "components/ui/Button/Button";
-import { FC, MouseEventHandler, PropsWithChildren } from "react";
+import { FC, MouseEventHandler, PropsWithChildren, ReactElement } from "react";
 import classnames from "classnames";
 import { Link } from "react-router-dom";
 import { FormattedMessage } from "react-intl";
@@ -13,6 +13,7 @@ interface IProps {
     variant?: IButtonProps["variant"];
     callback: MouseEventHandler<HTMLButtonElement>;
   };
+  actions?: ReactElement;
   backLink?: {
     className?: string;
     name: string;
@@ -21,7 +22,7 @@ interface IProps {
   };
 }
 
-const Hero: FC<PropsWithChildren<IProps>> = ({ title, titleValues, action, backLink, children }) => {
+const Hero: FC<PropsWithChildren<IProps>> = ({ title, titleValues, action, backLink, children, actions }) => {
   return (
     <aside className="c-hero">
       <div className="row column">
@@ -34,7 +35,7 @@ const Hero: FC<PropsWithChildren<IProps>> = ({ title, titleValues, action, backL
           </div>
         )}
         <div className="c-hero__content">
-          <h1 className="u-text-700 u-text-neutral-300 u-text-capitalize">
+          <h1 className="u-text-700 u-text-neutral-300 u-text-capitalize u-text-ellipsis">
             <FormattedMessage id={title} values={titleValues} />
           </h1>
           <>{children}</>
@@ -43,6 +44,7 @@ const Hero: FC<PropsWithChildren<IProps>> = ({ title, titleValues, action, backL
               <FormattedMessage id={action.name} />
             </Button>
           )}
+          {actions && <div className="c-hero__actions">{actions}</div>}
         </div>
       </div>
     </aside>
