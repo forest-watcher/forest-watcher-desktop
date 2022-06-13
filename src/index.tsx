@@ -1,3 +1,4 @@
+import store from "store";
 // @ts-nocheck (Error on Router)
 import { createRoot } from "react-dom/client";
 import { Provider } from "react-redux";
@@ -8,7 +9,6 @@ import { BrowserRouter as Router } from "react-router-dom";
 import { SENTRY_DSN, ENVIRONMENT } from "./constants/global";
 import App from "components/app/AppContainer";
 import "./index.scss";
-import configureStore from "configureStore";
 
 /** Initialise Sentry */
 if (ENVIRONMENT !== "development") {
@@ -18,12 +18,6 @@ if (ENVIRONMENT !== "development") {
 }
 // Create a history of your choosing (we're using a browser history in this case)
 const history = createBrowserHistory();
-
-// Redux store
-const store = configureStore();
-
-export type RootState = ReturnType<typeof store.getState>;
-export type AppDispatch = typeof store.dispatch;
 
 // Export dispatch function for dispatching actions outside connect
 function dispatch(action: any) {

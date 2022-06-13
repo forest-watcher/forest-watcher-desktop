@@ -2,7 +2,7 @@ import { API_BASE_URL_V1, API_BASE_URL_V3 } from "../constants/global";
 import { BaseService } from "./baseService";
 import { unique } from "../helpers/utils";
 import { components, paths } from "interfaces/teams";
-import { store } from "index";
+import store from "store";
 
 type TeamResponse = components["responses"]["Team"]["content"]["application/json"];
 export type Team = components["schemas"]["Team"];
@@ -48,9 +48,20 @@ export type TGetTeamMembersResponse =
 
 export type TGetMyTeamInvites = paths["/v3/teams/myinvites"]["get"]["responses"]["200"]["content"]["application/json"];
 export type TPostTeamResponse = paths["/v3/teams"]["post"]["responses"]["200"]["content"]["application/json"];
+export type TPatchTeamResponse =
+  paths["/v3/teams/{teamId}"]["patch"]["responses"]["200"]["content"]["application/json"];
 // ToDo: Docs shouldn't include createdAt as a required request object!
 export type TPostTeamBody = Omit<paths["/v3/teams"]["post"]["requestBody"]["content"]["application/json"], "createdAt">;
+// ToDo: Docs shouldn't include createdAt as a required request object!
+export type TPatchTeamBody = Omit<
+  paths["/v3/teams/{teamId}"]["patch"]["requestBody"]["content"]["application/json"],
+  "createdAt"
+>;
 export type TDeleteTeamResponse = paths["/v3/teams/{teamId}"]["delete"]["responses"]["200"];
+export type TPostTeamMembersBody =
+  paths["/v3/teams/{teamId}/users"]["post"]["requestBody"]["content"]["application/json"];
+export type TPostTeamMembersResponse =
+  paths["/v3/teams/{teamId}/users"]["post"]["responses"]["200"]["content"]["application/json"];
 
 export class TeamService extends BaseService {
   getUserTeams(userId: string): Promise<TGetUserTeamsResponse> {
@@ -77,11 +88,35 @@ export class TeamService extends BaseService {
     });
   }
 
+  updateTeam(teamId: string, body: TPatchTeamBody): Promise<TPatchTeamResponse> {
+    this.token = store.getState().user.token;
+
+    return this.fetchJSON(`/${teamId}`, {
+      headers: {
+        "Content-Type": "application/json"
+      },
+      method: "PATCH",
+      body: JSON.stringify(body)
+    });
+  }
+
   deleteTeam(teamId: string): Promise<TDeleteTeamResponse> {
     this.token = store.getState().user.token;
 
     return this.fetch(`/${teamId}`, {
       method: "DELETE"
+    });
+  }
+
+  addTeamMembers(teamId: string, body: TPostTeamMembersBody): Promise<TPostTeamMembersResponse> {
+    this.token = store.getState().user.token;
+
+    return this.fetchJSON(`/${teamId}/users`, {
+      headers: {
+        "Content-Type": "application/json"
+      },
+      method: "POST",
+      body: JSON.stringify(body)
     });
   }
 }

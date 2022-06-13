@@ -8,7 +8,7 @@ import { FormattedMessage } from "react-intl";
 import TeamsListing from "components/teams-listing/TeamsListing";
 import Button from "components/ui/Button/Button";
 import useGetUserId from "hooks/useGetUserId";
-import CreateTeam from "./CreateTeam";
+import CreateTeam from "./actions/CreateTeam";
 import PlusIcon from "assets/images/icons/PlusWhite.svg";
 
 interface IProps extends TPropsFromRedux, RouteComponentProps {
