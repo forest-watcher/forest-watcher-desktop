@@ -1,15 +1,17 @@
 import { FC, useEffect, useMemo } from "react";
 import { RouteComponentProps, Link } from "react-router-dom";
 import { TPropsFromRedux } from "./TeamsContainer";
+import EmptyState from "components/ui/EmptyState/EmptyState";
 import Hero from "components/layouts/Hero";
 import Article from "components/layouts/Article";
 import Loader from "components/ui/Loader";
-import { FormattedMessage } from "react-intl";
+import { FormattedMessage, useIntl } from "react-intl";
 import TeamsListing from "components/teams-listing/TeamsListing";
 import Button from "components/ui/Button/Button";
 import useGetUserId from "hooks/useGetUserId";
 import CreateTeam from "./actions/CreateTeam";
 import PlusIcon from "assets/images/icons/PlusWhite.svg";
+import EmptyStateIcon from "assets/images/icons/EmptyTeams.svg";
 
 interface IProps extends TPropsFromRedux, RouteComponentProps {
   isCreatingTeam: boolean;
@@ -18,6 +20,7 @@ interface IProps extends TPropsFromRedux, RouteComponentProps {
 const Teams: FC<IProps> = props => {
   const { teams, myInvites, getUserTeams, getMyTeamInvites, numOfActiveFetches, isCreatingTeam = false, match } = props;
 
+  const intl = useIntl();
   const userId = useGetUserId();
 
   useEffect(() => {
@@ -62,32 +65,48 @@ const Teams: FC<IProps> = props => {
           </div>
         </div>
       )}
-      <div className="l-content c-teams">
-        <Article
-          className="c-teams__heading"
-          title="teams.managedByMe"
-          titleValues={{ num: managedTeams.length.toString() }}
-          actions={
-            <Link to={`${match.path}/create`}>
-              <Button variant="primary">
-                <img src={PlusIcon} alt="" role="presentation" className="c-button__inline-icon" />
-                <FormattedMessage id="teams.create" />
-              </Button>
-            </Link>
-          }
-        >
-          <TeamsListing teams={managedTeams} />
-        </Article>
-      </div>
-      <div className="l-content l-content--neutral-400 c-teams">
-        <Article
-          className="c-teams__heading"
-          title="teams.joinedByMe"
-          titleValues={{ num: joinedTeams.length.toString() }}
-        >
-          <TeamsListing teams={joinedTeams} />
-        </Article>
-      </div>
+      {!managedTeams.length && !joinedTeams.length ? (
+        <div className="l-content l-content--neutral-400">
+          <div className="row column">
+            <EmptyState
+              iconUrl={EmptyStateIcon}
+              title={intl.formatMessage({ id: "teams.empty.state.title" })}
+              text={intl.formatMessage({ id: "teams.empty.state.subTitle" })}
+              ctaText={intl.formatMessage({ id: "teams.create" })}
+              ctaTo={`${match.path}/create`}
+            />
+          </div>
+        </div>
+      ) : (
+        <>
+          <div className="l-content c-teams">
+            <Article
+              className="c-teams__heading"
+              title="teams.managedByMe"
+              titleValues={{ num: managedTeams.length.toString() }}
+              actions={
+                <Link to={`${match.path}/create`}>
+                  <Button variant="primary">
+                    <img src={PlusIcon} alt="" role="presentation" className="c-button__inline-icon" />
+                    <FormattedMessage id="teams.create" />
+                  </Button>
+                </Link>
+              }
+            >
+              <TeamsListing teams={managedTeams} />
+            </Article>
+          </div>
+          <div className="l-content l-content--neutral-400 c-teams">
+            <Article
+              className="c-teams__heading"
+              title="teams.joinedByMe"
+              titleValues={{ num: joinedTeams.length.toString() }}
+            >
+              <TeamsListing teams={joinedTeams} />
+            </Article>
+          </div>
+        </>
+      )}
 
       <CreateTeam isOpen={isCreatingTeam} />
     </div>

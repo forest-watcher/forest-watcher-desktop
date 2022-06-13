@@ -168,6 +168,8 @@
   "teams.invalidEmail": "Email is invalid",
   "teams.add.manager": "Add Manager",
   "teams.add.monitor": "Add Monitor",
+  "teams.empty.state.title": "No Teams Added",
+  "teams.empty.state.subTitle": "Create a Team",
   "layers.name": "Layers",
   "reports.noReportsFound": "No reports found",
   "table.next": "next",
