@@ -12,11 +12,9 @@ import EmptyState from "components/ui/EmptyState/EmptyState";
 import PlusIcon from "assets/images/icons/PlusWhite.svg";
 import Card from "components/ui/Card/Card";
 import EditIcon from "assets/images/icons/Edit.svg";
+import { TPropsFromRedux } from "./AreasContainer";
 
-interface IProps {
-  areasList: Array<any>;
-  loading: boolean;
-}
+interface IProps extends TPropsFromRedux {}
 
 const Areas: FC<IProps> = props => {
   const { areasList, loading } = props;
@@ -26,7 +24,7 @@ const Areas: FC<IProps> = props => {
   const [mapRef, setMapRef] = useState<MapInstance | null>(null);
   const bbox = useMemo(() => {
     if (areaMap.length > 0) {
-      const mapped = areaMap.map(area => area.attributes.geostore.geojson.features).flat();
+      const mapped = areaMap.map((area: any) => area.attributes.geostore.geojson.features).flat();
       const features = turf.featureCollection(mapped);
       return turf.bbox(features);
     }
@@ -64,7 +62,7 @@ const Areas: FC<IProps> = props => {
             </div>
           ) : (
             <Map className="c-map--within-hero" onMapLoad={handleMapLoad}>
-              {areaMap.map(area => (
+              {areaMap.map((area: any) => (
                 <Polygon
                   key={area.id}
                   id={area.id}
@@ -88,7 +86,7 @@ const Areas: FC<IProps> = props => {
           }
         >
           <div className="c-areas__area-listing">
-            {areaMap.map(area => (
+            {areaMap.map((area: any) => (
               <Card size="large" key={area.id} className="c-areas__item">
                 <Card.Image alt="" src={area.attributes.image} loading="lazy" />
                 <div className="c-card__content-flex">
