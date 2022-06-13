@@ -12,6 +12,7 @@ const CHECK_USER_LOGGED = "user/CHECK_USER_LOGGED";
 export const LOGOUT = "user/LOGOUT";
 export const SET_USER_DATA = "user/SET_USER_DATA";
 const SET_FETCHING = "user/SET_FETCHING";
+const SET_USER_TOKEN = "user/SET_USER_TOKEN";
 
 // Reducer
 const initialState = {
@@ -27,7 +28,8 @@ export type TReducerActions =
   | { type: typeof CHECK_USER_LOGGED; payload: any }
   | { type: typeof LOGOUT; payload: any }
   | { type: typeof SET_USER_DATA; payload: any }
-  | { type: typeof SET_FETCHING; payload: any };
+  | { type: typeof SET_FETCHING; payload: any }
+  | { type: typeof SET_USER_TOKEN; payload: { token: string } };
 
 export default function reducer(state = initialState, action: TReducerActions) {
   switch (action.type) {
@@ -39,13 +41,15 @@ export default function reducer(state = initialState, action: TReducerActions) {
       return initialState;
     case SET_FETCHING:
       return { ...state, fetching: true };
+    case SET_USER_TOKEN:
+      return { ...state, token: action.payload.token };
     default:
       return state;
   }
 }
 
 // Action Creators
-export function checkLogged(tokenParam: string) {
+export function checkLogged(tokenParam: string = "") {
   return (dispatch: AppDispatch, getState: () => RootState) => {
     const queryParams = querystring.parse(tokenParam);
     const user = getState().user;
@@ -120,3 +124,11 @@ export function getUser() {
       });
   };
 }
+
+export const loginUser = (token: string) => (dispatch: AppDispatch, getState: () => RootState) => {
+  dispatch({
+    type: SET_USER_TOKEN,
+    payload: { token }
+  });
+  dispatch(checkLogged());
+};

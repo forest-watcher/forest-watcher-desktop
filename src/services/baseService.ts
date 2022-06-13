@@ -12,8 +12,8 @@ export class BaseService {
     return await fetch(`${this.baseUrl}${url}`, {
       ...config,
       headers: {
-        ...headers,
-        Authorization: `Bearer ${this.token}`
+        Authorization: `Bearer ${this.token}`,
+        ...headers
       }
     });
   };
