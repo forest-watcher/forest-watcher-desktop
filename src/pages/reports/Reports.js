@@ -15,6 +15,7 @@ import { TABLE_PAGE_SIZE } from "constants/global";
 import { CATEGORY, ACTION } from "constants/analytics";
 import ReactGA from "react-ga";
 import { getReportAlertsByName } from "helpers/reports";
+import Button from "components/ui/Button/Button";
 
 class Reports extends Component {
   constructor() {
@@ -140,7 +141,13 @@ class Reports extends Component {
       <div>
         <Hero
           title="reports.title"
-          action={answers.length ? { name: "reports.downloadAnswers", callback: this.downloadReports } : null}
+          actions={
+            answers.length && (
+              <Button onClick={this.downloadReports}>
+                <FormattedMessage id="reports.downloadAnswers" />
+              </Button>
+            )
+          }
         />
         <div className="l-content">
           <Article>

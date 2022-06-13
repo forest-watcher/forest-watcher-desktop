@@ -93,10 +93,6 @@ const TeamDetail: FC<IProps> = props => {
     [teamMembers]
   );
 
-  const deleteTeam = () => {
-    history.push(`${match.url}/delete`);
-  };
-
   if (!team) {
     return <Loader isLoading />;
   }
@@ -107,19 +103,22 @@ const TeamDetail: FC<IProps> = props => {
       <Hero
         title="teams.details.name"
         titleValues={{ name: team.attributes.name }}
-        action={
-          userIsAdmin
-            ? { name: "teams.details.delete", variant: "secondary-light-text", callback: deleteTeam }
-            : undefined
+        actions={
+          <>
+            {userIsManager && (
+              <Link to={`${match.url}/edit`} className="c-teams-details__edit-btn c-button c-button--primary">
+                <FormattedMessage id="teams.details.edit" />
+              </Link>
+            )}
+            {userIsAdmin && (
+              <Link to={`${match.url}/delete`} className="c-button c-button--secondary-light-text">
+                <FormattedMessage id="teams.details.delete" />
+              </Link>
+            )}
+          </>
         }
         backLink={{ name: "teams.details.back", to: "/teams" }}
-      >
-        {userIsManager && (
-          <Link to={`${match.url}/edit`} className="c-teams-details__edit-btn c-button c-button--primary">
-            <FormattedMessage id="teams.details.edit" />
-          </Link>
-        )}
-      </Hero>
+      />
       <div className="l-content c-teams-details">
         <Article
           className="c-teams-details__heading"

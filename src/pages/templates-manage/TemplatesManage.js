@@ -21,6 +21,7 @@ import { CATEGORY, ACTION } from "../../constants/analytics";
 import ReactGA from "react-ga";
 
 import "react-toggle-switch/dist/css/switch.min.css";
+import Button from "components/ui/Button/Button";
 
 class TemplatesManage extends Component {
   constructor(props) {
@@ -212,7 +213,14 @@ class TemplatesManage extends Component {
       <div>
         <Hero
           title={mode === "manage" ? "templates.manage" : "templates.create"}
-          action={canEdit && mode === "manage" ? { name: "templates.delete", callback: this.deleteTemplate } : null}
+          actions={
+            canEdit &&
+            mode === "manage" && (
+              <Button onClick={this.deleteTemplate}>
+                <FormattedMessage id="templates.delete" />
+              </Button>
+            )
+          }
         />
         <div className="l-template">
           <Loader isLoading={isLoading} />
@@ -336,9 +344,9 @@ class TemplatesManage extends Component {
                 <div className="row">
                   <div className="column small-12 medium-10 medium-offset-1 large-8 large-offset-2">
                     <div className="add-button">
-                      <button className="c-button" onClick={this.handleQuestionAdd} disabled={isLoading}>
+                      <Button onClick={this.handleQuestionAdd} disabled={isLoading}>
                         <FormattedMessage id="templates.addQuestion" />
-                      </button>
+                      </Button>
                     </div>
                   </div>
                 </div>
@@ -346,9 +354,9 @@ class TemplatesManage extends Component {
             </div>
             <FormFooter>
               <Link to="/templates">
-                <button className="c-button -light" disabled={isLoading}>
+                <Button variant="secondary" disabled={isLoading}>
                   <FormattedMessage id="forms.cancel" />
-                </button>
+                </Button>
               </Link>
               <div className="template-status">
                 <span className="status-label text -x-small-title">
@@ -364,9 +372,9 @@ class TemplatesManage extends Component {
                   {this.props.intl.formatMessage({ id: "templates.statusPublished" })}
                 </span>
               </div>
-              <button className="c-button" disabled={isLoading || userCannotEditTemplate || !canSave}>
+              <Button disabled={isLoading || userCannotEditTemplate || !canSave}>
                 <FormattedMessage id="forms.save" />
-              </button>
+              </Button>
             </FormFooter>
           </Form>
         </div>
