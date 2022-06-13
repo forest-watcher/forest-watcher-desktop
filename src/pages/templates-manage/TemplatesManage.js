@@ -1,7 +1,7 @@
 import { Component } from "react";
 import PropTypes from "prop-types";
 
-import Hero from "../../components/layouts/Hero/Hero";
+import Hero from "components/layouts/Hero/Hero";
 import { FormattedMessage, injectIntl } from "react-intl";
 import { Form } from "../../components/form/Form";
 import Select from "react-select";
