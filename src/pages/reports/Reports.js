@@ -4,7 +4,7 @@ import moment from "moment";
 import { DEFAULT_FORMAT } from "constants/global";
 
 import Article from "components/layouts/Article";
-import Hero from "components/layouts/Hero";
+import Hero from "components/layouts/Hero/Hero";
 import ReactTable from "react-table";
 import { FormattedMessage } from "react-intl";
 import ReportsFilters from "./ReportsFiltersContainer";

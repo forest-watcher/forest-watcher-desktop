@@ -79,7 +79,9 @@ describe("TeamCard", () => {
           <div
             class="c-teams__title"
           >
-            <div>
+            <div
+              class="c-teams__title-text"
+            >
               <h2
                 class="c-card__title u-margin-top-none"
               >

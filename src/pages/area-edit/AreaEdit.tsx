@@ -1,4 +1,4 @@
-import Hero from "components/layouts/Hero";
+import Hero from "components/layouts/Hero/Hero";
 import Map from "components/ui/Map/Map";
 import { FC, useState, MouseEvent, ChangeEvent, useEffect } from "react";
 import { MapboxEvent, Map as MapInstance } from "mapbox-gl";

@@ -1,5 +1,5 @@
 import { Component } from "react";
-import Hero from "../../components/layouts/Hero";
+import Hero from "components/layouts/Hero/Hero";
 import { Input, Button, Form } from "../../components/form/Form";
 import Map from "../../components/map-legacy/Map";
 import { Link } from "react-router-dom";

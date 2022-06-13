@@ -3,7 +3,7 @@ import { RouteComponentProps, useHistory, Link } from "react-router-dom";
 import { toastr } from "react-redux-toastr";
 import { TPropsFromRedux } from "./TeamDetailContainer";
 import { makeManager, makeMonitor, removeMember } from "./actions";
-import Hero from "components/layouts/Hero";
+import Hero from "components/layouts/Hero/Hero";
 import Article from "components/layouts/Article";
 import DataTable from "components/ui/DataTable/DataTable";
 import type { TTeamDetailDataTable, TTeamsDetailDataTableColumns } from "./types";
