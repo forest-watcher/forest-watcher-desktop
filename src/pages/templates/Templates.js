@@ -13,16 +13,14 @@ import qs from "query-string";
 import { TABLE_PAGE_SIZE } from "../../constants/global";
 import { CATEGORY, ACTION } from "../../constants/analytics";
 import ReactGA from "react-ga";
+import Button from "components/ui/Button/Button";
 
 class Templates extends Component {
   createTemplate = () => {
-    const { history } = this.props;
     ReactGA.event({
       category: CATEGORY.TEMPLATES,
       action: ACTION.NEW_TEMPLATE
     });
-
-    history.push("/templates/create");
   };
 
   handlePageChange = page => {
@@ -78,7 +76,14 @@ class Templates extends Component {
     const isLoading = this.props.loadingTemplates || this.props.loadingReports;
     return (
       <div>
-        <Hero title="templates.title" action={{ name: "templates.create", callback: this.createTemplate }} />
+        <Hero
+          title="templates.title"
+          actions={
+            <Link onClick={this.createTemplate} to="/templates/create" className="c-button c-button--primary">
+              <FormattedMessage id="templates.create" />
+            </Link>
+          }
+        />
         <div className="l-content">
           <Article>
             <TemplatesFilters areasOptions={this.props.areasOptions} />
