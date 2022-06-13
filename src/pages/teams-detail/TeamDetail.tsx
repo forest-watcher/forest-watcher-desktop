@@ -81,12 +81,9 @@ const TeamDetail: FC<IProps> = props => {
     () =>
       teamMembers.reduce<[typeof teamMembers, typeof teamMembers]>(
         (acc, teamMember) => {
-          if (
-            (teamMember.attributes.role === "administrator" || teamMember.attributes.role === "manager") &&
-            teamMember.attributes.userId
-          ) {
+          if (teamMember.attributes.role === "administrator" || teamMember.attributes.role === "manager") {
             acc[0].push(teamMember);
-          } else if (teamMember.attributes.userId) {
+          } else {
             acc[1].push(teamMember);
           }
           return acc;
