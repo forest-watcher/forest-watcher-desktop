@@ -31,7 +31,7 @@ const Login: FC<IProps> = () => {
     register,
     handleSubmit,
     reset,
-    formState: { errors }
+    formState: { isDirty, errors }
   } = useForm<TLoginForm>({ resolver: yupResolver(loginSchema) });
   const intl = useIntl();
   const dispatch = useAppDispatch();
@@ -76,11 +76,21 @@ const Login: FC<IProps> = () => {
           error={errors.password}
           registered={register("password")}
         />
-        <Button className="c-login-form__submit-btn" type="submit">
+        <Button disabled={!isDirty} className="c-login-form__submit-btn" type="submit">
           <FormattedMessage id="signIn.input.submit" />
         </Button>
       </form>
-      <Link to="/sign-up">Sign Up</Link>
+      <p className="c-login-form__link">
+        <Link to="/forgotten-password">
+          <FormattedMessage id="signIn.link.forgotten.password" />
+        </Link>
+      </p>
+      <p className="c-login-form__link c-login-form__link--larger-font">
+        <FormattedMessage id="signIn.not.a.member" />
+        <Link className="u-margin-left-tiny" to="/sign-up">
+          <FormattedMessage id="signIn.link.signUp" />
+        </Link>
+      </p>
     </LoginLayout>
   );
 };

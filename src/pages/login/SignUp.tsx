@@ -26,7 +26,7 @@ const SignUp: FC<IProps> = () => {
     register,
     handleSubmit,
     reset,
-    formState: { errors }
+    formState: { isDirty, errors }
   } = useForm<TLoginForm>({ resolver: yupResolver(signUpSchema) });
   const intl = useIntl();
   const [isLoading, setIsLoading] = useState(false);
@@ -57,7 +57,7 @@ const SignUp: FC<IProps> = () => {
           error={errors.email}
           registered={register("email")}
         />
-        <Button className="c-login-form__submit-btn" type="submit">
+        <Button disabled={!isDirty} className="c-login-form__submit-btn" type="submit">
           <FormattedMessage id="signUp.input.submit" />
         </Button>
       </form>
