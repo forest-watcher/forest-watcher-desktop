@@ -51,7 +51,7 @@ const DataTable = <T extends { [key: string]: string }>(props: IProps<T>) => {
                 <ContextMenu
                   toggleClassName="c-data-table__action-toggle"
                   align="end"
-                  offsetY={8}
+                  offsetY={5}
                   menuItems={rowActions.map(({ onClick = () => {}, href, value, ...menuItem }) => ({
                     onClick: e => onClick(row, e.value),
                     href: typeof href === "function" ? href(row, value) : href,

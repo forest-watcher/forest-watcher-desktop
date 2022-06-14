@@ -8,7 +8,7 @@ import { getTeamMembers } from "modules/gfwTeams";
 import { toastr } from "react-redux-toastr";
 import { TErrorResponse } from "constants/api";
 import { useAppDispatch, useAppSelector } from "hooks/useRedux";
-import { useIntl } from "react-intl";
+import { FormattedMessage, useIntl } from "react-intl";
 
 type TParams = TTeamDetailParams & {
   memberId: string;
@@ -70,6 +70,9 @@ const RemoveTeamMemberModal: FC<IProps> = props => {
       ]}
     >
       <Loader isLoading={isRemoving} />
+      <p>
+        <FormattedMessage id="teams.remove.body" />
+      </p>
     </Modal>
   );
 };

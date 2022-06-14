@@ -60,6 +60,7 @@ $c-modal-transition-duration: 300ms;
     font-weight: 400;
     font-size: 24px;
     line-height: 36px;
+    color: $neutral-700;
 
     display: flex;
     justify-content: space-between;
@@ -72,6 +73,13 @@ $c-modal-transition-duration: 300ms;
     padding-bottom: 32px;
     border-bottom: 2px solid $neutral-400;
     overflow-y: auto;
+
+    p {
+      color: $neutral-700;
+      font-size: 18px;
+      line-height: 24px;
+      margin-bottom: 24px;
+    }
   }
 
   &__actions {
@@ -79,14 +87,5 @@ $c-modal-transition-duration: 300ms;
     flex-direction: row-reverse;
     justify-content: space-between;
     padding: 40px 60px;
-  }
-}
-
-.c-unsaved-changes-modal {
-  p {
-    color: $neutral-700;
-    font-size: 18px;
-    line-height: 24px;
-    margin-bottom: 24px;
   }
 }
