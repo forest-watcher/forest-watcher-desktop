@@ -2,7 +2,7 @@ import "../src/index.scss";
 import { DEFAULT_LANGUAGE } from "constants/global";
 import { IntlProvider } from "react-intl";
 import translations from "locales/index.js";
-import configureStore from "configureStore";
+import store from "store";
 import { Provider } from "react-redux";
 import "configureYup";
 
@@ -18,8 +18,6 @@ export const parameters = {
 
 export const decorators = [
   (Story) => {
-    const store = configureStore();
-
     return (
     <Provider store={store}>
       <IntlProvider locale={DEFAULT_LANGUAGE} messages={translations[DEFAULT_LANGUAGE]}>

@@ -2,7 +2,7 @@ import { FC, useEffect, useMemo } from "react";
 import { RouteComponentProps, Link } from "react-router-dom";
 import { TPropsFromRedux } from "./TeamsContainer";
 import EmptyState from "components/ui/EmptyState/EmptyState";
-import Hero from "components/layouts/Hero";
+import Hero from "components/layouts/Hero/Hero";
 import Article from "components/layouts/Article";
 import Loader from "components/ui/Loader";
 import { FormattedMessage, useIntl } from "react-intl";

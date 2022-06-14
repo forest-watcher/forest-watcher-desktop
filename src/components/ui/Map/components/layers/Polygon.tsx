@@ -54,7 +54,7 @@ const Polygon: FC<IProps> = ({ id, data, onClick, label }) => {
 
       if (features && features[0]?.source === id) {
         if (zoomLevel < 10) {
-          map.fitBounds(bounds as LngLatBoundsLike);
+          map.fitBounds(bounds as LngLatBoundsLike, { padding: 40 });
         }
         onClick?.(id);
       }

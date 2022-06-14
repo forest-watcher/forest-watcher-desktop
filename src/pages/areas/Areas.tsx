@@ -1,4 +1,4 @@
-import Hero from "components/layouts/Hero";
+import Hero from "components/layouts/Hero/Hero";
 import Article from "components/layouts/Article";
 import Loader from "components/ui/Loader";
 import Map from "components/ui/Map/Map";

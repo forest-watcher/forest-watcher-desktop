@@ -24,7 +24,7 @@ export const CONFIRMED_USER = "CONFIRMED_USER";
 export const MAX_NUMBER_OF_LAYERS = 2;
 export const TABLE_PAGE_SIZE = 8;
 export const MANAGER = "MANAGER";
-export const MY_GFW_LINK = "https://www.globalforestwatch.org/my-gfw";
+export const MY_GFW_LINK = `${process.env.REACT_APP_FLAGSHIP_URL}/my-gfw/`;
 
 export const LAYERS_BLACKLIST = [6];
 
