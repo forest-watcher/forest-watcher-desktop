@@ -9,10 +9,19 @@ import { UnpackNestedValue } from "react-hook-form";
 import { useAppDispatch } from "hooks/useRedux";
 import { getUserTeams } from "modules/gfwTeams";
 import useGetUserId from "hooks/useGetUserId";
+import * as yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup/dist/yup";
 
 type TEditTeamForm = {
   name: string;
 };
+
+const editTeamSchema = yup
+  .object()
+  .shape({
+    name: yup.string().min(3)
+  })
+  .required();
 
 interface IProps {
   isOpen: boolean;
@@ -36,6 +45,7 @@ const EditTeamModal: FC<IProps> = props => {
       await teamService.updateTeam(teamId, data);
       // Refetch the User Teams
       dispatch(getUserTeams(userId));
+      toastr.success(intl.formatMessage({ id: "teams.edit.success" }), "");
       onClose();
     } catch (e) {
       toastr.error(intl.formatMessage({ id: "teams.edit.error" }), "");
@@ -50,6 +60,7 @@ const EditTeamModal: FC<IProps> = props => {
       onSave={onSave}
       modalTitle="teams.details.edit"
       submitBtnName="teams.edit.save"
+      useFormProps={{ resolver: yupResolver(editTeamSchema) }}
       inputs={[
         {
           id: "team-name-input",
@@ -62,7 +73,8 @@ const EditTeamModal: FC<IProps> = props => {
           registerProps: {
             name: "name",
             options: { required: true, minLength: 3 }
-          }
+          },
+          formatErrors: errors => errors.name
         }
       ]}
     />

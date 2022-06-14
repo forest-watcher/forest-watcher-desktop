@@ -61,6 +61,7 @@ const AddTeamMemberModal: FC<IProps> = props => {
       });
       // Refetch the Team members
       dispatch(getTeamMembers(teamId));
+      toastr.success(intl.formatMessage({ id: "teams.details.add.member.success" }), "");
       onClose();
     } catch (e: any) {
       const error = JSON.parse(e.message) as TErrorResponse;
