@@ -32,8 +32,6 @@ const getLoginComponent = ({ user, location }) => {
   } else if (user.loggedIn) {
     return <Redirect to="/areas" />;
   } else {
-    // return <LegacyLogin callbackUrl={callbackUrl} />;
-
     return <Login />;
   }
 };
