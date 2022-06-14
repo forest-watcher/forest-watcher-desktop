@@ -20,7 +20,7 @@ function LoginButton({ socialNetwork, callbackUrl }) {
   );
 }
 
-function Login({ callbackUrl }) {
+function Legacy_Login({ callbackUrl }) {
   return (
     <div className="c-login row">
       <div className="column small-12">
@@ -47,4 +47,4 @@ LoginButton.propTypes = {
   socialNetwork: PropTypes.string
 };
 
-export default Login;
+export default Legacy_Login;
