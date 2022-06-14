@@ -1,4 +1,4 @@
-import { FC, useEffect, useMemo, useState } from "react";
+import { FC, useCallback, useEffect, useMemo, useState } from "react";
 import { RouteComponentProps, useHistory, Link } from "react-router-dom";
 import { toastr } from "react-redux-toastr";
 import { TPropsFromRedux } from "./TeamDetailContainer";
@@ -104,8 +104,8 @@ const TeamDetail: FC<IProps> = props => {
    * Map each member from the API to translated data table rows
    * @param members members from the API
    */
-  const mapMembersToRows = useMemo(
-    () => (members: TGFWTeamsState["members"][string]) =>
+  const mapMembersToRows = useCallback(
+    (members: TGFWTeamsState["members"][string]) =>
       members.map<TTeamDetailDataTable>(member => {
         let statusSuffix: typeof member.attributes.status | "administrator" | "left" = member.attributes.status;
         if (member.attributes.role === "administrator") {
@@ -123,6 +123,13 @@ const TeamDetail: FC<IProps> = props => {
       }),
     [intl]
   );
+
+  const [managerRows, monitorRows] = useMemo(
+    () => [mapMembersToRows(manages), mapMembersToRows(monitors)],
+    [mapMembersToRows, manages, monitors]
+  );
+
+  console.log(managerRows, monitorRows);
 
   const makeManager: TTeamsDetailDataTableAction = {
     name: "teams.details.table.actions.manager",
@@ -184,8 +191,9 @@ const TeamDetail: FC<IProps> = props => {
         >
           <div className="u-responsive-table">
             <DataTable<TTeamDetailDataTable>
+              isPaginated
               className="u-w-100"
-              rows={mapMembersToRows(manages)}
+              rows={managerRows}
               columnOrder={userIsManager ? columnOrderWithStatus : columnOrder}
               rowActions={userIsManager ? [makeMonitor, removeMember] : undefined}
             />
@@ -208,8 +216,9 @@ const TeamDetail: FC<IProps> = props => {
         >
           <div className="u-responsive-table">
             <DataTable<TTeamDetailDataTable>
+              isPaginated
               className="u-w-100"
-              rows={mapMembersToRows(monitors)}
+              rows={monitorRows}
               columnOrder={userIsManager ? columnOrderWithStatus : columnOrder}
               rowActions={userIsManager ? [makeManager, removeMember] : undefined}
             />

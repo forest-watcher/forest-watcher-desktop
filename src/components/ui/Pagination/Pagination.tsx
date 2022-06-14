@@ -52,7 +52,7 @@ const Pagination: FC<IProps> = props => {
     }
   };
 
-  const handlePrveious = (e: MouseEvent<HTMLButtonElement>) => {
+  const handlePrevious = (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     if (current > min) {
       setCurrent(v => v - 1);
@@ -64,7 +64,7 @@ const Pagination: FC<IProps> = props => {
       <Button
         aria-label={intl.formatMessage({ id: "components.pagination.previousPage" })}
         isIcon
-        onClick={handlePrveious}
+        onClick={handlePrevious}
         disabled={current === min}
       >
         <img src={ChevronLeft} alt="" role="presentation" />
