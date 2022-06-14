@@ -16,6 +16,7 @@ import EditTeamMember from "./actions/EditTeamMember";
 import DeleteTeam from "./actions/DeleteTeam";
 import RemoveTeamMember from "./actions/RemoveTeamMember";
 import { TTeamsDetailDataTableAction } from "./types";
+import { TGFWTeamsState } from "modules/gfwTeams";
 
 export type TParams = {
   teamId: string;
@@ -32,7 +33,7 @@ export interface IOwnProps extends RouteComponentProps<TParams> {
 type IProps = IOwnProps & TPropsFromRedux;
 
 const columnOrder: TTeamsDetailDataTableColumns[] = [
-  { key: "userId", name: "teams.details.table.header.name" },
+  { key: "name", name: "teams.details.table.header.name" },
   { key: "email", name: "teams.details.table.header.user" }
 ];
 
@@ -97,6 +98,30 @@ const TeamDetail: FC<IProps> = props => {
         [[], []]
       ),
     [teamMembers]
+  );
+
+  /**
+   * Map each member from the API to translated data table rows
+   * @param members members from the API
+   */
+  const mapMembersToRows = useMemo(
+    () => (members: TGFWTeamsState["members"][string]) =>
+      members.map<TTeamDetailDataTable>(member => {
+        let statusSuffix: typeof member.attributes.status | "administrator" | "left" = member.attributes.status;
+        if (member.attributes.role === "administrator") {
+          statusSuffix = "administrator";
+        } else if (member.attributes.role === "left") {
+          statusSuffix = "left";
+        }
+
+        return {
+          id: member.id,
+          name: member.attributes.userId,
+          email: member.attributes.email,
+          status: intl.formatMessage({ id: `teams.details.table.status.${statusSuffix}` })
+        };
+      }),
+    [intl]
   );
 
   const deleteTeam = () => {
@@ -167,10 +192,7 @@ const TeamDetail: FC<IProps> = props => {
           <div className="u-responsive-table">
             <DataTable<TTeamDetailDataTable>
               className="u-w-100"
-              rows={manages.map(m => ({
-                ...m.attributes,
-                id: m.id
-              }))}
+              rows={mapMembersToRows(manages)}
               columnOrder={userIsManager ? columnOrderWithStatus : columnOrder}
               rowActions={userIsManager ? [makeMonitor, removeMember] : undefined}
             />
@@ -194,10 +216,7 @@ const TeamDetail: FC<IProps> = props => {
           <div className="u-responsive-table">
             <DataTable<TTeamDetailDataTable>
               className="u-w-100"
-              rows={monitors.map(m => ({
-                ...m.attributes,
-                id: m.id
-              }))}
+              rows={mapMembersToRows(monitors)}
               columnOrder={userIsManager ? columnOrderWithStatus : columnOrder}
               rowActions={userIsManager ? [makeManager, removeMember] : undefined}
             />
