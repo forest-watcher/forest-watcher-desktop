@@ -6,10 +6,10 @@ import { FormattedMessage, useIntl } from "react-intl";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup/dist/yup";
 import { TSignUpBody, userService } from "services/user";
-import { TErrorResponse } from "../../constants/api";
+import { TErrorResponse } from "constants/api";
 import { toastr } from "react-redux-toastr";
 import LoginLayout from "components/layouts/Login";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 
 type TLoginForm = TSignUpBody;
 
@@ -30,12 +30,18 @@ const SignUp: FC<IProps> = () => {
     formState: { isDirty, errors }
   } = useForm<TLoginForm>({ resolver: yupResolver(signUpSchema) });
   const intl = useIntl();
+  const history = useHistory();
   const [isLoading, setIsLoading] = useState(false);
 
   const onSubmit: SubmitHandler<TLoginForm> = async data => {
     setIsLoading(true);
     try {
       await userService.signUp(data);
+      history.push("/login");
+      toastr.success(
+        intl.formatMessage({ id: "signUp.success.message" }),
+        intl.formatMessage({ id: "signUp.success.message.extra" })
+      );
     } catch (e: any) {
       const error = JSON.parse(e.message) as TErrorResponse;
       toastr.error(intl.formatMessage({ id: "signUp.error" }), error?.errors?.length ? error.errors[0].detail : "");

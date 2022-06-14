@@ -45,7 +45,7 @@ const Routes = props => {
     <Switch>
       <Route exact path="/" render={defaultComponent} />
       <Route path={`${match.url}login`} render={() => getLoginComponent({ user, location })} />
-      <Route exact path={`${match.url}sign-up`} component={SignUp} />
+      {!user.loggedIn && <Route exact path={`${match.url}sign-up`} component={SignUp} />}
       {user.loggedIn ? (
         <Switch>
           <Route exact path={`${match.url}areas`} component={Areas} />

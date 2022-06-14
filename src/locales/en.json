@@ -39,6 +39,8 @@
   "signIn.input.submit": "Sign In",
   "signUp.input.submit": "Sign Up",
   "signIn.error": "Sign in failed",
+  "signUp.success.message": "Thank you for registering",
+  "signUp.success.message.extra": "Please check your emails and confirm your account",
   "signUp.error": "Sign up failed",
   "common.create": "Create",
   "common.edit": "Edit",
