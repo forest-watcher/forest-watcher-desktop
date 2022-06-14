@@ -5,6 +5,8 @@ import React from "react";
 
 export interface IRowAction<T> extends Omit<Omit<IContextMenuProps["menuItems"][number], "onClick">, "href"> {
   onClick?: (row: T, value?: string) => void;
+  // For dynamic links, set href as a function, this will pass the row and
+  // value information each time to generate the link
   href?: string | ((row: T, value?: string) => string);
 }
 
