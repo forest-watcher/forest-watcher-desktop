@@ -5,7 +5,6 @@ import Chip from "./Chip";
 interface IProps extends HTMLAttributes<HTMLElement> {}
 
 const RadioChipGroup: FC<IProps> = props => {
-
   const [plan, setPlan] = useState("email");
 
   return (
