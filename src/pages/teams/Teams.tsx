@@ -65,7 +65,10 @@ const Teams: FC<IProps> = props => {
           </div>
         </div>
       )}
-      {!managedTeams.length && !joinedTeams.length ? (
+      {/* No teams are in state but fetches are being made - show nothing to the user */}
+      {/* No teams are in state and fetches have finished  - show empty state to the user */}
+      {/* Teams are in state                               - show the teams to the user */}
+      {!teams.length && numOfActiveFetches > 0 ? null : !teams.length && numOfActiveFetches === 0 ? (
         <div className="l-content l-content--neutral-400">
           <div className="row column">
             <EmptyState
