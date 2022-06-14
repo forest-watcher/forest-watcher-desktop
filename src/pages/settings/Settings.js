@@ -1,7 +1,7 @@
 import { Component } from "react";
 import PropTypes from "prop-types";
 
-import Hero from "../../components/layouts/Hero";
+import Hero from "components/layouts/Hero/Hero";
 import Article from "../../components/layouts/Article";
 import TeamsShow from "../../components/teams-show/TeamsShowContainer";
 import TeamsForm from "../../components/teams-manager/TeamsFormContainer";
@@ -14,6 +14,8 @@ import withModal from "../../components/ui/withModal";
 import { injectIntl } from "react-intl";
 import { CATEGORY, ACTION } from "../../constants/analytics";
 import ReactGA from "react-ga";
+import { FormattedMessage } from "react-intl";
+import Button from "components/ui/Button/Button";
 
 const ConfirmModal = withModal(Confirm);
 
@@ -69,10 +71,18 @@ class Settings extends Component {
 
     const renderHero = () => {
       const canEdit = !editing && (isManager || this.state.tabIndex === 1);
-      const action = canEdit ? { name: "common.edit", callback: this.editSettings } : null;
       const tabStyle = !canEdit ? "-no-action" : "";
       return (
-        <Hero title={"settings.name"} action={action}>
+        <Hero
+          title={"settings.name"}
+          actions={
+            canEdit && (
+              <Button onClick={this.editSettings}>
+                <FormattedMessage id="common.edit" />
+              </Button>
+            )
+          }
+        >
           <Tab
             pill
             style={tabStyle}

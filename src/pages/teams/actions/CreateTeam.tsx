@@ -5,10 +5,19 @@ import { useHistory } from "react-router-dom";
 import { teamService } from "services/teams";
 import { toastr } from "react-redux-toastr";
 import { useIntl } from "react-intl";
+import * as yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup/dist/yup";
 
 type TCreateTeamForm = {
   name: string;
 };
+
+const createTeamSchema = yup
+  .object()
+  .shape({
+    name: yup.string().min(3)
+  })
+  .required();
 
 interface IProps {
   isOpen: boolean;
@@ -27,6 +36,7 @@ const CreateTeamModal: FC<IProps> = props => {
     try {
       const { data: newTeam } = await teamService.createTeam(data);
       history.push(`/teams/${newTeam.id}`);
+      toastr.success(intl.formatMessage({ id: "teams.create.success" }), "");
     } catch (e) {
       toastr.error(intl.formatMessage({ id: "teams.create.error" }), "");
       console.error(e);
@@ -40,6 +50,7 @@ const CreateTeamModal: FC<IProps> = props => {
       onSave={onSave}
       modalTitle="teams.create"
       submitBtnName="teams.create.save"
+      useFormProps={{ resolver: yupResolver(createTeamSchema) }}
       inputs={[
         {
           id: "team-name-input",
@@ -48,14 +59,11 @@ const CreateTeamModal: FC<IProps> = props => {
             placeholder: intl.formatMessage({ id: "teams.field.name.placeholder" }),
             type: "text"
           },
-          formatErrors: errors =>
-            errors?.name?.type === "minLength" && {
-              message: intl.formatMessage({ id: "teams.create.error.name.minLength" })
-            },
           registerProps: {
             name: "name",
-            options: { required: true, minLength: 3 }
-          }
+            options: { required: true }
+          },
+          formatErrors: errors => errors.name
         }
       ]}
     />

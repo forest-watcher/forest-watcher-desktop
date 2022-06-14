@@ -1,18 +1,12 @@
-import Button, { IProps as IButtonProps } from "components/ui/Button/Button";
-import { FC, MouseEventHandler, PropsWithChildren, ReactElement } from "react";
+import { FC, PropsWithChildren, ReactElement } from "react";
 import classnames from "classnames";
 import { Link } from "react-router-dom";
 import { FormattedMessage } from "react-intl";
-import ChevronRight from "../../assets/images/icons/ChevronRightBrandGreen.svg";
+import ChevronRight from "assets/images/icons/ChevronRightBrandGreen.svg";
 
 interface IProps {
   title: string;
   titleValues?: { [key: string]: string | number };
-  action?: {
-    name: string;
-    variant?: IButtonProps["variant"];
-    callback: MouseEventHandler<HTMLButtonElement>;
-  };
   actions?: ReactElement;
   backLink?: {
     className?: string;
@@ -22,7 +16,7 @@ interface IProps {
   };
 }
 
-const Hero: FC<PropsWithChildren<IProps>> = ({ title, titleValues, action, backLink, children, actions }) => {
+const Hero: FC<PropsWithChildren<IProps>> = ({ title, titleValues, backLink, children, actions }) => {
   return (
     <aside className="c-hero">
       <div className="row column">
@@ -39,11 +33,6 @@ const Hero: FC<PropsWithChildren<IProps>> = ({ title, titleValues, action, backL
             <FormattedMessage id={title} values={titleValues} />
           </h1>
           <>{children}</>
-          {action && (
-            <Button variant={action.variant} onClick={action.callback}>
-              <FormattedMessage id={action.name} />
-            </Button>
-          )}
           {actions && <div className="c-hero__actions">{actions}</div>}
         </div>
       </div>
