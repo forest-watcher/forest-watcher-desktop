@@ -71,7 +71,7 @@ const TeamCard: FC<IProps> = props => {
               <FormattedMessage id="teams.summary.areas" />
             </h3>
             {/* ToDo: Change any to TGetAreasByTeamId["data"] when docs are upto date! */}
-            <p>{teamAreas.map((i: any) => i.attributes.name).join(", ")}</p>
+            <p>{teamAreas.join(", ")}</p>
           </div>
           <Card.Cta to={"/areas"} iconSrc={EditIcon}>
             <FormattedMessage id="common.manage.area" />
