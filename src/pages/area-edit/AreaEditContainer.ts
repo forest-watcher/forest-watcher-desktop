@@ -2,27 +2,16 @@ import { connect, ConnectedProps } from "react-redux";
 import { RootState } from "store";
 import { saveAreaWithGeostore, setSaving, setLoading } from "modules/areas";
 import { getGeoFromShape } from "modules/geostores";
-import AreasManage from "./AreasManage";
+import AreaEdit from "./AreaEdit";
 import { ThunkDispatch } from "redux-thunk";
 import { RouteComponentProps } from "react-router-dom";
+import { readArea, readGeojson } from "helpers/areas";
 
 interface MatchParams {
   areaId?: string;
 }
 
 interface IMatchParams extends RouteComponentProps<MatchParams> {}
-
-const readGeojson = (state: RootState, areaId?: string) => {
-  const area = areaId ? state.areas.data[areaId] : null;
-
-  const geojson = area ? area.attributes.geostore.geojson : null;
-  if (geojson) geojson.properties = {};
-  return geojson;
-};
-
-const readArea = (state: RootState, areaId?: string) => {
-  return areaId ? state.areas.data[areaId] : null;
-};
 
 const mapStateToProps = (state: RootState, { match }: IMatchParams) => ({
   mode: match.params.areaId ? "manage" : "create",
@@ -54,4 +43,4 @@ const connector = connect(mapStateToProps, mapDispatchToProps);
 
 export type TPropsFromRedux = ConnectedProps<typeof connector>;
 
-export default connector(AreasManage);
+export default connector(AreaEdit);

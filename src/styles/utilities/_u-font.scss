@@ -33,3 +33,9 @@
 .u-text-capitalize {
   text-transform: capitalize;
 }
+
+.u-text-ellipsis {
+  white-space: nowrap;
+  overflow-x: hidden;
+  text-overflow: ellipsis;
+}

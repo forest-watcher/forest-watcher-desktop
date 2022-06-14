@@ -6,6 +6,8 @@ import { SelectProps, Option } from "types/select";
 import errorIcon from "assets/images/icons/Error.svg";
 import { FieldError } from "./FieldError";
 import { Listbox } from "@headlessui/react";
+import RadioOff from "assets/images/icons/RadioOff.svg";
+import RadioOn from "assets/images/icons/RadioOn.svg";
 
 export interface Props extends FieldPropsBase {
   selectProps: SelectProps;
@@ -13,12 +15,37 @@ export interface Props extends FieldPropsBase {
   formHook: Pick<UseFormReturn, "watch" | "setValue" | "clearErrors">;
   onChange?: () => void;
   isSimple?: boolean;
+  isMultiple?: boolean;
 }
 
+const getSelectedItems = (isMultiple: boolean, value: any, options: Option[]) => {
+  if (!isMultiple) {
+    return value ? options.find(opt => opt.value === value) : null;
+  }
+
+  return options.filter(opt => value.find((item: string) => item === opt.value));
+};
+
 const Select = (props: Props) => {
-  const { selectProps, registered, error, id, formHook, isSimple = false, hideLabel } = props;
+  const { selectProps, registered, error, id, formHook, isSimple = false, hideLabel, isMultiple = false } = props;
   const [options, setOptions] = useState<Option[]>(selectProps.options || []);
-  const value = formHook.watch(props.registered.name) || selectProps.defaultValue?.value;
+
+  const value =
+    formHook.watch(props.registered.name) ||
+    (Array.isArray(selectProps.defaultValue)
+      ? selectProps.defaultValue.map(item => item.value)
+      : selectProps.defaultValue?.value);
+
+  const selectedItems = getSelectedItems(isMultiple, value, options);
+
+  const label = isMultiple
+    ? options
+        .filter(opt => value.find((item: string) => item === opt.value))
+        .map(item => item.label)
+        .join(", ")
+    : value
+    ? options.find(opt => opt.value === value)?.label
+    : null;
 
   const fetchOptions = useCallback(async () => {
     if (!!selectProps.asyncFetchOptions) {
@@ -28,12 +55,17 @@ const Select = (props: Props) => {
   }, [selectProps.asyncFetchOptions]);
 
   const onChange = (v: any) => {
-    if (v.value) {
+    if (isMultiple) {
+      props.formHook.setValue(
+        registered.name,
+        v.map((item: Option) => item.value)
+      );
+    } else if (v.value) {
       props.formHook.setValue(registered.name, v?.value);
-      props.formHook.clearErrors(registered.name);
-      if (props.onChange) {
-        props.onChange();
-      }
+    }
+    props.formHook.clearErrors(registered.name);
+    if (props.onChange) {
+      props.onChange();
     }
   };
 
@@ -43,7 +75,7 @@ const Select = (props: Props) => {
 
   return (
     <div className={classnames("c-input", selectProps.alternateLabelStyle && "c-input--alt-label")}>
-      <Listbox value={value ? options.find(opt => opt.value === value) : null} onChange={onChange}>
+      <Listbox value={selectedItems} onChange={onChange} multiple={isMultiple}>
         {({ open }) => (
           <>
             {selectProps.label && (
@@ -62,7 +94,8 @@ const Select = (props: Props) => {
                 className={classnames(
                   "c-input__select",
                   open && "c-input__select--open",
-                  isSimple && "c-input__select--simple"
+                  isSimple && "c-input__select--simple",
+                  isMultiple && "c-input__select--multiple"
                 )}
               >
                 <Listbox.Button
@@ -71,12 +104,11 @@ const Select = (props: Props) => {
                     !value && "c-input__select-button--has-placeholder",
                     open && "c-input__select-button--open",
                     error && "c-input__select-button--invalid",
-                    isSimple && "c-input__select-button--simple"
+                    isSimple && "c-input__select-button--simple",
+                    isMultiple && "u-visually-hidden"
                   )}
                 >
-                  <span className="c-input__select-value">
-                    {value ? options.find(opt => opt.value === value)?.label : selectProps.placeholder}
-                  </span>
+                  <span className="c-input__select-value">{label ? label : selectProps.placeholder}</span>
                   {error ? (
                     <img alt="" role="presentation" src={errorIcon} className="c-input__select-error-icon" />
                   ) : isSimple ? (
@@ -119,6 +151,7 @@ const Select = (props: Props) => {
                 </Listbox.Button>
                 <Listbox.Options
                   className={classnames("c-input__select-list-box", isSimple && "c-input__select-list-box--simple")}
+                  static={isMultiple}
                 >
                   {options.map(option => (
                     <Listbox.Option as={Fragment} key={option.value} value={option}>
@@ -131,7 +164,18 @@ const Select = (props: Props) => {
                             isSimple && "c-input__select-list-item--simple"
                           )}
                         >
-                          {option.label}
+                          <span className="c-input__select-list-item-label">{option.label}</span>
+                          {option.secondaryLabel && (
+                            <span className="c-input__select-list-item-secondary-label">{option.secondaryLabel}</span>
+                          )}
+                          {isMultiple && (
+                            <img
+                              src={selected ? RadioOn : RadioOff}
+                              role="presentation"
+                              alt=""
+                              className="c-input__select-list-item-radio"
+                            />
+                          )}
                         </li>
                       )}
                     </Listbox.Option>

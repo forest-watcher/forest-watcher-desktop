@@ -57,7 +57,6 @@ export type TPatchTeamBody = Omit<
   paths["/v3/teams/{teamId}"]["patch"]["requestBody"]["content"]["application/json"],
   "createdAt"
 >;
-export type TDeleteTeamResponse = paths["/v3/teams/{teamId}"]["delete"]["responses"]["200"];
 export type TPostTeamMembersBody =
   paths["/v3/teams/{teamId}/users"]["post"]["requestBody"]["content"]["application/json"];
 export type TPostTeamMembersResponse =
@@ -110,12 +109,14 @@ export class TeamService extends BaseService {
     });
   }
 
-  deleteTeam(teamId: string): Promise<TDeleteTeamResponse> {
+  async deleteTeam(teamId: string): Promise<void> {
     this.token = store.getState().user.token;
 
-    return this.fetch(`/${teamId}`, {
+    const response = await this.fetch(`/${teamId}`, {
       method: "DELETE"
     });
+
+    if (!response.ok) throw Error(await response.text());
   }
 
   addTeamMembers(teamId: string, body: TPostTeamMembersBody): Promise<TPostTeamMembersResponse> {
