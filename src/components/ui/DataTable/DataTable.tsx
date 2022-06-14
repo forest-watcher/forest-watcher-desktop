@@ -55,6 +55,7 @@ const DataTable = <T extends { [key: string]: string }>(props: IProps<T>) => {
                   menuItems={rowActions.map(({ onClick = () => {}, href, value, ...menuItem }) => ({
                     onClick: e => onClick(row, e.value),
                     href: typeof href === "function" ? href(row, value) : href,
+                    value,
                     ...menuItem
                   }))}
                 />
