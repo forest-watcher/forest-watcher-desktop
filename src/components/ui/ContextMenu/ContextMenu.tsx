@@ -1,4 +1,5 @@
 import React, { FC } from "react";
+import { Link } from "react-router-dom";
 import { Menu, MenuButton, MenuItem } from "@szhsin/react-menu";
 import type { MenuProps, MenuItemProps } from "@szhsin/react-menu";
 import classnames from "classnames";
@@ -9,12 +10,7 @@ import { FormattedMessage, useIntl } from "react-intl";
 export interface IProps extends Partial<Omit<Omit<MenuProps, "menuButton">, "menuClassName">> {
   className?: string;
   toggleClassName?: string;
-  menuItems: {
-    className?: string;
-    name: string;
-    value?: string;
-    onClick: MenuItemProps["onClick"];
-  }[];
+  menuItems: (MenuItemProps & { name: string })[];
 }
 
 const ContextMenu: FC<IProps> = props => {
@@ -38,11 +34,25 @@ const ContextMenu: FC<IProps> = props => {
       transition={transition}
       {...rest}
     >
-      {menuItems.map(({ className, name, ...rest }) => (
-        <MenuItem key={name} className={classnames("c-context-menu__item", className)} {...rest}>
-          <FormattedMessage id={name} />
-        </MenuItem>
-      ))}
+      {menuItems.map(({ className, name, href, ...rest }) => {
+        const menuItemClassName = classnames("c-context-menu__item", className);
+
+        return (
+          <MenuItem key={name} className={!href ? menuItemClassName : undefined} {...rest}>
+            <FormattedMessage id={name}>
+              {txt =>
+                href ? (
+                  <Link className={menuItemClassName} to={href}>
+                    {txt}
+                  </Link>
+                ) : (
+                  <>{txt}</>
+                )
+              }
+            </FormattedMessage>
+          </MenuItem>
+        );
+      })}
     </Menu>
   );
 };

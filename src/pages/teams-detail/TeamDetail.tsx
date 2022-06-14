@@ -127,25 +127,19 @@ const TeamDetail: FC<IProps> = props => {
   const makeManager: TTeamsDetailDataTableAction = {
     name: "teams.details.table.actions.manager",
     value: "makeManager",
-    onClick: memberRow => {
-      history.push(`${match.url}/edit/${memberRow.id}/manager`);
-    }
+    href: memberRow => `${match.url}/edit/${memberRow.id}/manager`
   };
 
   const makeMonitor: TTeamsDetailDataTableAction = {
     name: "teams.details.table.actions.monitor",
     value: "makeMonitor",
-    onClick: memberRow => {
-      history.push(`${match.url}/edit/${memberRow.id}/monitor`);
-    }
+    href: memberRow => `${match.url}/edit/${memberRow.id}/monitor`
   };
 
   const removeMember: TTeamsDetailDataTableAction = {
     name: "teams.details.table.actions.remove",
     value: "removeFromTeam",
-    onClick: memberRow => {
-      history.push(`${match.url}/remove/${memberRow.id}`);
-    }
+    href: memberRow => `${match.url}/remove/${memberRow.id}`
   };
 
   if (!team) {
