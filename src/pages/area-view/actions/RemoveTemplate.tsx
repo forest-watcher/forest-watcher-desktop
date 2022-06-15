@@ -1,13 +1,11 @@
-import { FC, useCallback, useEffect, useState } from "react";
+import { FC, useCallback, useState } from "react";
 import Modal from "components/ui/Modal/Modal";
 import Loader from "components/ui/Loader";
 import { useHistory, useParams } from "react-router-dom";
 import { TParams as TAreaDetailParams } from "../AreaView";
-import { teamService } from "services/teams";
-import { getTeamMembers } from "modules/gfwTeams";
 import { toastr } from "react-redux-toastr";
 import { TErrorResponse } from "constants/api";
-import { useAppDispatch, useAppSelector } from "hooks/useRedux";
+import { useAppDispatch } from "hooks/useRedux";
 import { FormattedMessage, useIntl } from "react-intl";
 import { areaService } from "services/area";
 import { getAreas } from "modules/areas";
