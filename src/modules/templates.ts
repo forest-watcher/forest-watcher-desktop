@@ -236,12 +236,3 @@ export function deleteTemplate(templateId: string, aois: string[]) {
       });
   };
 }
-
-// export function setSaving(payload) {
-//   return dispatch => {
-//     dispatch({
-//       type: SET_SAVING_TEMPLATE,
-//       payload: payload
-//     });
-//   };
-// }
