@@ -22,6 +22,13 @@ export interface paths {
   "/v3/forest-watcher/area": {
     /** Retrieve areas for the logged in user */
     get: operations["get-v3-forest-watcher-area"];
+    /** Create a new area */
+    post: operations["post-v3-forest-watcher-area"];
+  };
+  "/v3/forest-watcher/area/teams": {
+    /** Retrieve a user's areas for the logged in user and also areas associated with their teams */
+    get: operations["get-v3-forest-watcher-area-teams"];
+    parameters: {};
   };
   "/v3/forest-watcher/area/{areaId}": {
     /** Retrieve an area for the logged in user. Area object contains geostore, associated report templates and associated teams. */
@@ -64,10 +71,48 @@ export interface paths {
       };
     };
   };
+  "/v3/forest-watcher/area/{areaId}/team/{teamId}": {
+    /** Link a team to an area */
+    post: operations["post-v3-forest-watcher-area-areaId-team-teamId"];
+    /** Remove a team from an area */
+    delete: operations["delete-v3-forest-watcher-area-areaId-team-teamId"];
+    parameters: {
+      path: {
+        areaId: string;
+        teamId: string;
+      };
+    };
+  };
 }
 
 export interface components {
-  schemas: {};
+  schemas: {
+    Area: {
+      name: string;
+      application: string;
+      geostore: string;
+      userId: string;
+      createdAt: string;
+      updatedAt: string;
+      image: string;
+      datasets: { [key: string]: unknown }[];
+      use: { [key: string]: unknown };
+      env: string;
+      iso: { [key: string]: unknown };
+      admin: { [key: string]: unknown };
+      tags: { [key: string]: unknown }[];
+      status: string;
+      public: boolean;
+      fireAlerts: boolean;
+      deforestationAlerts: boolean;
+      webhookUrl: string;
+      monthlySummary: boolean;
+      subscriptionId: string;
+      email: string;
+      language: string;
+      confirmed: boolean;
+    };
+  };
   responses: {
     /** Error Response */
     Error: {
@@ -85,6 +130,23 @@ export interface components {
       content: {
         "application/json": {
           uptime?: number;
+        };
+      };
+    };
+    /** Example response */
+    "Basic-area": {
+      content: {
+        "application/json": {
+          id?: string;
+          type?: string;
+          attributes?: components["schemas"]["Area"];
+        }[];
+        "application/xml": {
+          data?: {
+            id?: string;
+            type?: string;
+            attributes?: components["schemas"]["Area"];
+          }[];
         };
       };
     };
@@ -233,6 +295,150 @@ export interface operations {
                 id: string;
               }[];
             };
+            ""?: string;
+          };
+        };
+      };
+      401: components["responses"]["Error"];
+      404: components["responses"]["Error"];
+    };
+  };
+  /** Create a new area */
+  "post-v3-forest-watcher-area": {
+    responses: {
+      /** OK */
+      200: unknown;
+      401: components["responses"]["Error"];
+      404: components["responses"]["Error"];
+    };
+    /**
+     * {
+     * }
+     */
+    requestBody: {
+      content: {
+        "application/json": components["schemas"]["Area"];
+      };
+    };
+  };
+  /** Retrieve a user's areas for the logged in user and also areas associated with their teams */
+  "get-v3-forest-watcher-area-teams": {
+    parameters: {};
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/json": {
+            type: string;
+            id: string;
+            attributes: {
+              name: string;
+              application: string;
+              geostore: {
+                geojson: {
+                  crs: { [key: string]: unknown };
+                  type: string;
+                  features: {
+                    geometry?: {
+                      coordinates: {
+                        "0"?: {
+                          "0"?: { [key: string]: unknown }[];
+                          "1"?: { [key: string]: unknown }[];
+                          "2"?: { [key: string]: unknown }[];
+                          "3"?: { [key: string]: unknown }[];
+                          "4"?: { [key: string]: unknown }[];
+                          "5"?: { [key: string]: unknown }[];
+                          "6"?: { [key: string]: unknown }[];
+                        }[];
+                      }[];
+                      type: string;
+                    };
+                    type: string;
+                  }[];
+                };
+                hash: string;
+                provider: { [key: string]: unknown };
+                areaHa: number;
+                bbox: { [key: string]: unknown }[];
+                lock: boolean;
+                info: {
+                  use: { [key: string]: unknown };
+                };
+                id: string;
+              };
+              userId: string;
+              createdAt: string;
+              updatedAt: string;
+              image: string;
+              env: string;
+              datasets: {
+                slug: string;
+                name: string;
+                active: boolean;
+                startDate: string;
+                endDate: string;
+              }[];
+              use: { [key: string]: unknown };
+              iso: { [key: string]: unknown };
+              templateId: string;
+              coverage: { [key: string]: unknown }[];
+              reportTemplate: {
+                name?: {
+                  en: string;
+                  es: string;
+                  fr: string;
+                  id: string;
+                  pt: string;
+                };
+                languages?: { [key: string]: unknown }[];
+                defaultLanguage: string;
+                user: string;
+                answersCount: number;
+                questions?: {
+                  type: string;
+                  name: string;
+                  Id: string;
+                  conditions?: { [key: string]: unknown }[];
+                  childQuestions?: { [key: string]: unknown }[];
+                  order: number;
+                  required: boolean;
+                  values?: {
+                    pt: {
+                      value: number;
+                      label: string;
+                    }[];
+                    id: {
+                      value: number;
+                      label: string;
+                    }[];
+                    fr: {
+                      value: number;
+                      label: string;
+                    }[];
+                    es: {
+                      value: number;
+                      label: string;
+                    }[];
+                    en: {
+                      value: number;
+                      label: string;
+                    }[];
+                  };
+                  label?: {
+                    pt: string;
+                    fr: string;
+                    id: string;
+                    es: string;
+                    en: string;
+                  };
+                }[];
+                createdAt: string;
+                public: boolean;
+                status: string;
+                id: string;
+              }[];
+            };
+            ""?: string;
           };
         };
       };
@@ -390,14 +596,7 @@ export interface operations {
       };
     };
     responses: {
-      /** OK */
-      200: {
-        content: {
-          "application/json": {
-            data: string[];
-          };
-        };
-      };
+      200: components["responses"]["Basic-area"];
       401: components["responses"]["Error"];
       404: components["responses"]["Error"];
       "": {
@@ -562,6 +761,38 @@ export interface operations {
       path: {
         areaId: string;
         templateId: string;
+      };
+    };
+    responses: {
+      /** OK */
+      200: unknown;
+      /** Unauthorized */
+      401: unknown;
+      /** Not Found */
+      404: unknown;
+    };
+  };
+  /** Link a team to an area */
+  "post-v3-forest-watcher-area-areaId-team-teamId": {
+    parameters: {
+      path: {
+        areaId: string;
+        teamId: string;
+      };
+    };
+    responses: {
+      /** OK */
+      200: unknown;
+      401: components["responses"]["Error"];
+      404: components["responses"]["Error"];
+    };
+  };
+  /** Remove a team from an area */
+  "delete-v3-forest-watcher-area-areaId-team-teamId": {
+    parameters: {
+      path: {
+        areaId: string;
+        teamId: string;
       };
     };
     responses: {
