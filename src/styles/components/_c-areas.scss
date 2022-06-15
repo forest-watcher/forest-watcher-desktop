@@ -9,7 +9,10 @@
   &__item {
     flex: 1 1 325px;
     .c-card__image {
-      min-height: 200px;
+      max-height: 200px;
+      height: 100%;
+      width: 100%;
+      object-fit: cover;
     }
   }
 }
