@@ -15,7 +15,8 @@ interface IMatchParams extends RouteComponentProps<MatchParams> {}
 const mapStateToProps = (state: RootState, { match }: IMatchParams) => ({
   loading: state.areas.loading,
   geojson: readGeojson(state, match.params.areaId),
-  area: readArea(state, match.params.areaId)
+  area: readArea(state, match.params.areaId),
+  templates: state.templates.templates
 });
 
 function mapDispatchToProps(dispatch: ThunkDispatch<RootState, null, any>) {

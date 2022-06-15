@@ -19,7 +19,7 @@ export type TParams = {
   areaId: string;
 };
 
-const AreasView: FC<IProps & RouteComponentProps<TParams>> = ({ geojson, area, loading, match }) => {
+const AreasView: FC<IProps & RouteComponentProps<TParams>> = ({ geojson, area, loading, templates, match }) => {
   const [mapRef, setMapRef] = useState<MapInstance | null>(null);
   let { path, url } = useRouteMatch();
 
@@ -38,10 +38,10 @@ const AreasView: FC<IProps & RouteComponentProps<TParams>> = ({ geojson, area, l
       <div className="c-area-manage">
         <Hero
           title="areas.manageAreaName"
-          titleValues={{ name: area?.attributes.name }}
+          titleValues={{ name: area?.attributes.name ?? "" }}
           backLink={{ name: "areas.back", to: "/areas" }}
           actions={
-            area && (
+            area ? (
               <>
                 <Link to={`${url}/edit`} className="c-button c-button--primary">
                   <FormattedMessage id="common.edit" />
@@ -58,6 +58,8 @@ const AreasView: FC<IProps & RouteComponentProps<TParams>> = ({ geojson, area, l
                   <FormattedMessage id="areas.viewInGfw" />
                 </a>
               </>
+            ) : (
+              <></>
             )
           }
         />
@@ -74,7 +76,7 @@ const AreasView: FC<IProps & RouteComponentProps<TParams>> = ({ geojson, area, l
         <div className="l-content">
           <Article
             title="areas.details.templates"
-            titleValues={{ num: 5 }}
+            titleValues={{ num: area?.attributes.reportTemplate.length ?? 0 }}
             actions={
               <Link to={`${url}/add/template`} className="c-button c-button--primary">
                 <img className="c-button__inline-icon" src={PlusIcon} alt="" role="presentation" />
@@ -89,13 +91,19 @@ const AreasView: FC<IProps & RouteComponentProps<TParams>> = ({ geojson, area, l
               columnOrder={userIsManager ? columnOrderWithStatus : columnOrder}
               rowActions={userIsManager ? [makeMonitor, removeMember] : undefined}
             /> */}
+              <ul>
+                {area?.attributes.reportTemplate.map(template => (
+                  // @ts-ignore defaultLanguage does not have correct type
+                  <li key={template.id}>{template?.name?.[template.defaultLanguage]}</li>
+                ))}
+              </ul>
             </div>
           </Article>
         </div>
       </div>
       <Switch>
         <Route path={`${path}/add/template`}>
-          <AddTemplateModal />
+          <AddTemplateModal templates={templates} />
         </Route>
       </Switch>
     </>

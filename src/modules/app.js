@@ -1,6 +1,6 @@
 import { getGeostore } from "./geostores";
 import { getAreas } from "./areas";
-import { getTemplates, getTemplate } from "./templates";
+import { getTemplate, getTemplates } from "./templates";
 import { getTeamByUserId } from "./teams";
 import { getUser } from "./user";
 

@@ -3,8 +3,10 @@ import { BLOB_CONFIG } from "../constants/map";
 import { BaseService } from "./baseService";
 import domtoimage from "dom-to-image";
 import { operations } from "interfaces/api";
+import store from "store";
 
-type AreasResponse = operations["get-v3-forest-watcher-area"]["responses"]["200"]["content"]["application/json"];
+export type TAreasResponse =
+  operations["get-v3-forest-watcher-area"]["responses"]["200"]["content"]["application/json"];
 
 export class AreaService extends BaseService {
   async saveArea(area: any, node: HTMLElement, method: string) {
@@ -28,12 +30,19 @@ export class AreaService extends BaseService {
     return this.fetchJSON(`/${id}`);
   }
 
-  getAreaFW(): Promise<AreasResponse> {
+  getAreaFW(): Promise<TAreasResponse> {
     return this.fetchJSON("/");
   }
 
   deleteArea(id: string) {
     return this.fetch(`/${id}`, { method: "DELETE" });
+  }
+
+  addTemplatesToAreas(areaId: string, templateIds: string[]) {
+    this.token = store.getState().user.token;
+    const promises = templateIds.map(id => this.fetchJSON(`/${areaId}/template/${id}`, { method: "POST" }));
+
+    return Promise.all(promises);
   }
 }
 
