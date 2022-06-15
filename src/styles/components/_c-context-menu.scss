@@ -7,7 +7,12 @@
   // To override default styles
   border: 0;
 
+  .szh-menu__item:not(:first-child) {
+    margin-top: -1px;
+  }
+
   &__item {
+    display: block;
     font-weight: 400;
     font-size: 16px;
     line-height: 22px;
@@ -15,10 +20,6 @@
     padding: 10px 16px 8px;
     border: 1px solid $neutral-500;
     cursor: pointer;
-
-    &:not(:first-child) {
-      margin-top: -1px;
-    }
 
     &:hover {
       background-color: $primary-400;

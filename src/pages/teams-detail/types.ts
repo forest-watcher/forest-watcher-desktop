@@ -1,7 +1,11 @@
-import type { TGFWTeamsState } from "modules/gfwTeams";
 import { IRowAction, IColumnOrder } from "components/ui/DataTable/DataTable";
 
-export type TTeamDetailDataTable = TGFWTeamsState["members"][string][number]["attributes"];
+export type TTeamDetailDataTable = {
+  id: string;
+  name?: string;
+  email: string;
+  status: string;
+};
 
 export type TTeamsDetailDataTableAction = IRowAction<TTeamDetailDataTable>;
 

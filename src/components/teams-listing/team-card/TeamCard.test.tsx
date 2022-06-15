@@ -46,11 +46,13 @@ const mockTeamMembers: ITeamCardProps["teamMembers"] = [
   }
 ];
 
-const mockTeamAreas = [
-  { type: "area", id: "6233708756b0c7001bf95232", attributes: { name: "Area #1" } },
-  { type: "area", id: "6233708756b0c7001bf95232", attributes: { name: "Area #2" } },
-  { type: "area", id: "6233708756b0c7001bf95232", attributes: { name: "Area #3" } }
-];
+// const mockTeamAreas = [
+//   { type: "area", id: "6233708756b0c7001bf95232", attributes: { name: "Area #1" } },
+//   { type: "area", id: "6233708756b0c7001bf95232", attributes: { name: "Area #2" } },
+//   { type: "area", id: "6233708756b0c7001bf95232", attributes: { name: "Area #3" } }
+// ];
+
+const mockTeamAreas = ["Area #1", "Area #2", "Area #3"];
 
 describe("TeamCard", () => {
   let getTeamMembers = jest.fn(),

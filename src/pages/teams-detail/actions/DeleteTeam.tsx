@@ -4,7 +4,8 @@ import { useHistory } from "react-router-dom";
 import { teamService } from "services/teams";
 import { toastr } from "react-redux-toastr";
 import Loader from "components/ui/Loader";
-import { useIntl } from "react-intl";
+import { FormattedMessage, useIntl } from "react-intl";
+import { TErrorResponse } from "../../../constants/api";
 
 interface IProps {
   isOpen: boolean;
@@ -27,8 +28,12 @@ const DeleteTeam: FC<IProps> = props => {
       await teamService.deleteTeam(teamId);
       history.push("/teams");
       toastr.success(intl.formatMessage({ id: "teams.delete.success" }), "");
-    } catch (e) {
-      toastr.error(intl.formatMessage({ id: "teams.delete.error" }), "");
+    } catch (e: any) {
+      const error = JSON.parse(e.message) as TErrorResponse;
+      toastr.error(
+        intl.formatMessage({ id: "teams.delete.error" }),
+        error?.errors?.length ? error.errors[0].detail : ""
+      );
       console.error(e);
     }
     setIsDeleting(false);
@@ -46,6 +51,9 @@ const DeleteTeam: FC<IProps> = props => {
       ]}
     >
       <Loader isLoading={isDeleting} />
+      <p>
+        <FormattedMessage id="teams.delete.body" />
+      </p>
     </Modal>
   );
 };

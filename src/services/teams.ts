@@ -57,11 +57,20 @@ export type TPatchTeamBody = Omit<
   paths["/v3/teams/{teamId}"]["patch"]["requestBody"]["content"]["application/json"],
   "createdAt"
 >;
-export type TDeleteTeamResponse = paths["/v3/teams/{teamId}"]["delete"]["responses"]["200"];
 export type TPostTeamMembersBody =
   paths["/v3/teams/{teamId}/users"]["post"]["requestBody"]["content"]["application/json"];
 export type TPostTeamMembersResponse =
   paths["/v3/teams/{teamId}/users"]["post"]["responses"]["200"]["content"]["application/json"];
+
+export type TPatchTeamMembersParams = paths["/v3/teams/{teamId}/users/{teamUserId}"]["patch"]["parameters"]["path"];
+export type TPatchTeamMembersBody =
+  paths["/v3/teams/{teamId}/users/{teamUserId}"]["patch"]["requestBody"]["content"]["application/json"];
+export type TPatchTeamMembersResponse =
+  paths["/v3/teams/{teamId}/users/{teamUserId}"]["patch"]["responses"]["200"]["content"]["application/json"];
+
+export type TDeleteTeamMembersParams = paths["/v3/teams/{teamId}/users/{teamUserId}"]["delete"]["parameters"]["path"];
+export type TDeleteTeamMembersResponse =
+  paths["/v3/teams/{teamId}/users/{teamUserId}"]["delete"]["responses"]["200"]["content"]["application/json"];
 
 export class TeamService extends BaseService {
   getUserTeams(userId: string): Promise<TGetUserTeamsResponse> {
@@ -100,12 +109,14 @@ export class TeamService extends BaseService {
     });
   }
 
-  deleteTeam(teamId: string): Promise<TDeleteTeamResponse> {
+  async deleteTeam(teamId: string): Promise<void> {
     this.token = store.getState().user.token;
 
-    return this.fetch(`/${teamId}`, {
+    const response = await this.fetch(`/${teamId}`, {
       method: "DELETE"
     });
+
+    if (!response.ok) throw Error(await response.text());
   }
 
   addTeamMembers(teamId: string, body: TPostTeamMembersBody): Promise<TPostTeamMembersResponse> {
@@ -117,6 +128,29 @@ export class TeamService extends BaseService {
       },
       method: "POST",
       body: JSON.stringify(body)
+    });
+  }
+
+  updateTeamMember(params: TPatchTeamMembersParams, body: TPatchTeamMembersBody): Promise<TPatchTeamMembersResponse> {
+    this.token = store.getState().user.token;
+
+    return this.fetchJSON(`/${params.teamId}/users/${params.teamUserId}`, {
+      headers: {
+        "Content-Type": "application/json"
+      },
+      method: "PATCH",
+      body: JSON.stringify(body)
+    });
+  }
+
+  removeTeamMember(params: TDeleteTeamMembersParams): Promise<TDeleteTeamMembersResponse> {
+    this.token = store.getState().user.token;
+
+    return this.fetchJSON(`/${params.teamId}/users/${params.teamUserId}`, {
+      headers: {
+        "Content-Type": "application/json"
+      },
+      method: "DELETE"
     });
   }
 }

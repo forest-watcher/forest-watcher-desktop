@@ -3,14 +3,16 @@ import { setUserChecked } from "./app";
 import { syncApp } from "./app";
 import { getTeamByUserId } from "./teams";
 import { toastr } from "react-redux-toastr";
-import { teamService } from "services/teams";
+import { legacy_TeamService } from "services/teams";
 import { userService } from "services/user";
+import { AppDispatch, RootState } from "../store";
 
 // Actions
 const CHECK_USER_LOGGED = "user/CHECK_USER_LOGGED";
 export const LOGOUT = "user/LOGOUT";
 export const SET_USER_DATA = "user/SET_USER_DATA";
 const SET_FETCHING = "user/SET_FETCHING";
+const SET_USER_TOKEN = "user/SET_USER_TOKEN";
 
 // Reducer
 const initialState = {
@@ -22,7 +24,14 @@ const initialState = {
   token: null
 };
 
-export default function reducer(state = initialState, action) {
+export type TReducerActions =
+  | { type: typeof CHECK_USER_LOGGED; payload: any }
+  | { type: typeof LOGOUT; payload: any }
+  | { type: typeof SET_USER_DATA; payload: any }
+  | { type: typeof SET_FETCHING; payload: any }
+  | { type: typeof SET_USER_TOKEN; payload: { token: string } };
+
+export default function reducer(state = initialState, action: TReducerActions) {
   switch (action.type) {
     case SET_USER_DATA:
       return { ...state, data: action.payload, fetching: false };
@@ -32,16 +41,18 @@ export default function reducer(state = initialState, action) {
       return initialState;
     case SET_FETCHING:
       return { ...state, fetching: true };
+    case SET_USER_TOKEN:
+      return { ...state, token: action.payload.token };
     default:
       return state;
   }
 }
 
 // Action Creators
-export function checkLogged(tokenParam) {
-  return (dispatch, state) => {
+export function checkLogged(tokenParam: string = "") {
+  return (dispatch: AppDispatch, getState: () => RootState) => {
     const queryParams = querystring.parse(tokenParam);
-    const user = state().user;
+    const user = getState().user;
     const token = queryParams.token || user.token;
 
     return userService
@@ -66,25 +77,25 @@ export function checkLogged(tokenParam) {
   };
 }
 
-export function confirmUser(token) {
-  return (dispatch, state) => {
-    teamService.token = state().user.token;
-    return teamService
+export function confirmUser(token: string) {
+  return (dispatch: AppDispatch, getState: () => RootState) => {
+    legacy_TeamService.token = getState().user.token;
+    return legacy_TeamService
       .confirmTeamMember(token)
       .then(async data => {
-        toastr.success("You have become a confirmed user");
-        dispatch(getTeamByUserId(state().user.data.id));
+        toastr.success("You have become a confirmed user", "");
+        dispatch(getTeamByUserId(getState().user.data.id));
       })
       .catch(error => {
-        toastr.error("Error in confirmation");
+        toastr.error("Error in confirmation", "");
         console.warn(error);
       });
   };
 }
 
 export function logout() {
-  return (dispatch, state) => {
-    userService.logout(state().user.token);
+  return (dispatch: AppDispatch, getState: () => RootState) => {
+    userService.logout(getState().user.token);
     dispatch({
       type: LOGOUT
     });
@@ -92,7 +103,7 @@ export function logout() {
 }
 
 export function getUser() {
-  return (dispatch, state) => {
+  return (dispatch: AppDispatch) => {
     dispatch({
       type: SET_FETCHING
     });
@@ -108,8 +119,16 @@ export function getUser() {
         }
       })
       .catch(error => {
-        toastr.error("Error in user retrieval");
+        toastr.error("Error in user retrieval", "");
         console.warn(error);
       });
   };
 }
+
+export const loginUser = (token: string) => (dispatch: AppDispatch, getState: () => RootState) => {
+  dispatch({
+    type: SET_USER_TOKEN,
+    payload: { token }
+  });
+  dispatch(checkLogged());
+};

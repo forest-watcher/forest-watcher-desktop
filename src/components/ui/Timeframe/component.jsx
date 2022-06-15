@@ -39,7 +39,7 @@ const TimeSlider = ({ dotSize = DOT_SIZE, selected = 0, periods = [], onChange }
       setInitialized(true);
       setPreviousOffset(offset);
     }
-  }, [offset, initialized, setAnim]);
+  }, [offset, initialized, setAnim, previousOffset]);
 
   return (
     <>

@@ -3,8 +3,11 @@ import ContextMenu, { IProps as IContextMenuProps } from "components/ui/ContextM
 import { FormattedMessage } from "react-intl";
 import React from "react";
 
-export interface IRowAction<T> extends Omit<IContextMenuProps["menuItems"][number], "onClick"> {
-  onClick: (row: T, value?: string) => void;
+export interface IRowAction<T> extends Omit<Omit<IContextMenuProps["menuItems"][number], "onClick">, "href"> {
+  onClick?: (row: T, value?: string) => void;
+  // For dynamic links, set href as a function, this will pass the row and
+  // value information each time to generate the link
+  href?: string | ((row: T, value?: string) => string);
 }
 
 export interface IColumnOrder<T> {
@@ -48,9 +51,11 @@ const DataTable = <T extends { [key: string]: string }>(props: IProps<T>) => {
                 <ContextMenu
                   toggleClassName="c-data-table__action-toggle"
                   align="end"
-                  offsetY={8}
-                  menuItems={rowActions.map(({ onClick, ...menuItem }) => ({
+                  offsetY={5}
+                  menuItems={rowActions.map(({ onClick = () => {}, href, value, ...menuItem }) => ({
                     onClick: e => onClick(row, e.value),
+                    href: typeof href === "function" ? href(row, value) : href,
+                    value,
                     ...menuItem
                   }))}
                 />

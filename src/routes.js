@@ -12,6 +12,7 @@ import TeamDetail from "./pages/teams-detail/TeamDetailContainer";
 import Settings from "./pages/settings/SettingsContainer";
 import Reports from "./pages/reports/ReportsContainer";
 import Login from "./pages/login/Login";
+import SignUp from "./pages/login/SignUp";
 
 const getLoginComponent = ({ user, location }) => {
   const search = location.search || "";
@@ -31,7 +32,7 @@ const getLoginComponent = ({ user, location }) => {
   } else if (user.loggedIn) {
     return <Redirect to="/areas" />;
   } else {
-    return <Login callbackUrl={callbackUrl} />;
+    return <Login />;
   }
 };
 
@@ -42,6 +43,7 @@ const Routes = props => {
     <Switch>
       <Route exact path="/" render={defaultComponent} />
       <Route path={`${match.url}login`} render={() => getLoginComponent({ user, location })} />
+      {!user.loggedIn && <Route exact path={`${match.url}sign-up`} component={SignUp} />}
       {user.loggedIn ? (
         <Switch>
           <Route exact path={`${match.url}areas`} component={Areas} />
@@ -70,6 +72,16 @@ const Routes = props => {
             exact
             path={`${match.url}teams/:teamId/add/:memberRole`}
             render={args => <TeamDetail isAddingTeamMember {...args} />}
+          />
+          <Route
+            exact
+            path={`${match.url}teams/:teamId/edit/:memberId/:memberRole`}
+            render={args => <TeamDetail isEditingTeamMember {...args} />}
+          />
+          <Route
+            exact
+            path={`${match.url}teams/:teamId/remove/:memberId`}
+            render={args => <TeamDetail isRemovingTeamMember {...args} />}
           />
           <Route exact path={`${match.url}settings`} component={Settings} />
         </Switch>
