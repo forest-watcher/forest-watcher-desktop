@@ -78,6 +78,8 @@
         border-radius: 0px;
         max-height: unset;
         overflow-y: visible;
+        max-width: 100%;
+        margin: 0 auto;
       }
       .c-input__select-list-item {
         padding: $global-spacing-7 $global-spacing-6;
