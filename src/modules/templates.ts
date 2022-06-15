@@ -47,9 +47,7 @@ export default function reducer(state = initialState, action: TReducerActions) {
   switch (action.type) {
     case SET_TEMPLATE: {
       const template = action.payload.reports;
-      const templateKeys = Object.keys(template);
-      console.log(templateKeys);
-      //@ts-ignore
+      //@ts-ignore - TODO: Figure out typescript error
       if (state.ids.indexOf(...Object.keys(template)) > -1) {
         return {
           ...state,
