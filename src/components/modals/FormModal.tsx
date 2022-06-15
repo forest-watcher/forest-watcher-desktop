@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import Modal from "components/ui/Modal/Modal";
 import Input, { Props as IInputProps } from "components/ui/Form/Input";
 import Select, { Props as ISelectProps } from "components/ui/Form/Select";
@@ -29,6 +29,7 @@ interface IProps<T> {
   submitBtnName: string;
   cancelBtnName?: string;
   useFormProps?: UseFormProps<T>;
+  actions?: ReactNode;
 }
 
 /**
@@ -70,7 +71,8 @@ const FormModal = <T,>(props: IProps<T>) => {
     modalTitle,
     submitBtnName,
     cancelBtnName = "common.cancel",
-    modalSubtitle
+    modalSubtitle,
+    actions
   } = props;
 
   const formhook = useForm<T>(useFormProps);
@@ -156,6 +158,7 @@ const FormModal = <T,>(props: IProps<T>) => {
             }
           })}
         </form>
+        {actions && <div className="c-modal-dialog__extra-actions">{actions}</div>}
       </Modal>
 
       <UnsavedChanges isOpen={isOpen && isClosing} leaveCallBack={onClose} stayCallBack={() => setIsClosing(false)} />

@@ -1,19 +1,15 @@
-import { FC, useEffect, useMemo } from "react";
+import { FC, useMemo } from "react";
 import FormModal from "components/modals/FormModal";
-import { useHistory, useParams } from "react-router-dom";
+import { Link, useHistory, useParams } from "react-router-dom";
 import { TParams } from "../AreaView";
-import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
-import { useIntl } from "react-intl";
-import { teamService } from "services/teams";
-import { getTeamMembers } from "modules/gfwTeams";
+import { FormattedMessage, useIntl } from "react-intl";
 import { toastr } from "react-redux-toastr";
 import { UnpackNestedValue } from "react-hook-form";
-import { useAppDispatch } from "hooks/useRedux";
-import { TErrorResponse } from "constants/api";
 import { TGetTemplates } from "services/reports";
 import { Option } from "types";
 import { areaService } from "services/area";
+import { useAppDispatch } from "hooks/useRedux";
+import { getAreas } from "modules/areas";
 
 interface IProps {
   templates: TGetTemplates["data"];
@@ -27,6 +23,7 @@ const AddTemplateModal: FC<IProps> = ({ templates }) => {
   const { areaId } = useParams<TParams>();
   const intl = useIntl();
   const history = useHistory();
+  const dispatch = useAppDispatch();
   const templateOptions = useMemo<Option[] | undefined>(
     () =>
       templates?.map(template => ({
@@ -45,6 +42,7 @@ const AddTemplateModal: FC<IProps> = ({ templates }) => {
     try {
       await areaService.addTemplatesToAreas(areaId, data.templates);
       toastr.success(intl.formatMessage({ id: "areas.details.templates.add.success" }), "");
+      dispatch(getAreas());
       onClose();
     } catch (e: any) {
       toastr.error(intl.formatMessage({ id: "areas.details.templates.add.error" }), "");
@@ -78,6 +76,11 @@ const AddTemplateModal: FC<IProps> = ({ templates }) => {
           formatErrors: errors => errors.email
         }
       ]}
+      actions={
+        <Link className="c-button c-button--primary" to="/templates/create">
+          <FormattedMessage id="templates.create" />
+        </Link>
+      }
     />
   );
 };

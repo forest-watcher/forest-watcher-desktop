@@ -13,6 +13,8 @@ import Article from "components/layouts/Article";
 import DataTable from "components/ui/DataTable/DataTable";
 import PlusIcon from "assets/images/icons/PlusWhite.svg";
 import AddTemplateModal from "./actions/AddTemplate";
+import { TTemplateDataTable, TTemplateDataTableAction } from "./types";
+import RemoveTemplateModal from "./actions/RemoveTemplate";
 
 interface IProps extends TPropsFromRedux {}
 export type TParams = {
@@ -29,9 +31,15 @@ const AreasView: FC<IProps & RouteComponentProps<TParams>> = ({ geojson, area, l
 
   useEffect(() => {
     if (geojson) {
-      goToGeojson(mapRef, geojson);
+      goToGeojson(mapRef, geojson, false);
     }
   }, [geojson, mapRef]);
+
+  const removeTemplate: TTemplateDataTableAction = {
+    name: "areas.details.templates.remove.title",
+    value: "remove",
+    href: template => `${match.url}/template/remove/${template.id}`
+  };
 
   return (
     <>
@@ -69,41 +77,50 @@ const AreasView: FC<IProps & RouteComponentProps<TParams>> = ({ geojson, area, l
             <Loader isLoading />
           </div>
         ) : (
-          <Map className="c-map--within-hero" onMapLoad={handleMapLoad}>
-            {area && <Polygon id={area.id} label={area.attributes.name} data={geojson} />}
-          </Map>
+          area && (
+            <Map className="c-map--within-hero" onMapLoad={handleMapLoad}>
+              <Polygon id={area.id} label={area.attributes.name} data={geojson} />
+            </Map>
+          )
         )}
         <div className="l-content">
           <Article
             title="areas.details.templates"
             titleValues={{ num: area?.attributes.reportTemplate.length ?? 0 }}
             actions={
-              <Link to={`${url}/add/template`} className="c-button c-button--primary">
+              <Link to={`${url}/template/add`} className="c-button c-button--primary">
                 <img className="c-button__inline-icon" src={PlusIcon} alt="" role="presentation" />
                 <FormattedMessage id="areas.details.templates.add.title" />
               </Link>
             }
           >
             <div className="u-responsive-table">
-              {/* <DataTable<TTeamDetailDataTable>
-              className="u-w-100"
-              rows={manages.map(m => m.attributes)}
-              columnOrder={userIsManager ? columnOrderWithStatus : columnOrder}
-              rowActions={userIsManager ? [makeMonitor, removeMember] : undefined}
-            /> */}
-              <ul>
-                {area?.attributes.reportTemplate.map(template => (
-                  // @ts-ignore defaultLanguage does not have correct type
-                  <li key={template.id}>{template?.name?.[template.defaultLanguage]}</li>
-                ))}
-              </ul>
+              <DataTable<TTemplateDataTable>
+                className="u-w-100"
+                rows={
+                  area?.attributes.reportTemplate.map(template => ({
+                    ...template,
+                    //@ts-ignore
+                    name: (template.name?.[template.defaultLanguage] as string) || "",
+                    openAssignments: 0
+                  })) ?? []
+                }
+                columnOrder={[
+                  { key: "name", name: "areas.details.table.header.name", rowHref: row => `/templates/${row.id}` },
+                  { key: "openAssignments", name: "areas.details.table.header.openAssignments" }
+                ]}
+                rowActions={[removeTemplate]}
+              />
             </div>
           </Article>
         </div>
       </div>
       <Switch>
-        <Route path={`${path}/add/template`}>
+        <Route path={`${path}/template/add`}>
           <AddTemplateModal templates={templates} />
+        </Route>
+        <Route path={`${path}/template/remove/:templateId`}>
+          <RemoveTemplateModal />
         </Route>
       </Switch>
     </>

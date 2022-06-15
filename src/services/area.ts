@@ -40,9 +40,14 @@ export class AreaService extends BaseService {
 
   addTemplatesToAreas(areaId: string, templateIds: string[]) {
     this.token = store.getState().user.token;
-    const promises = templateIds.map(id => this.fetchJSON(`/${areaId}/template/${id}`, { method: "POST" }));
+    const promises = templateIds.map(id => this.fetch(`/${areaId}/template/${id}`, { method: "POST" }));
 
     return Promise.all(promises);
+  }
+
+  unassignTemplateFromArea(areaId: string, templateId: string) {
+    this.token = store.getState().user.token;
+    return this.fetch(`/${areaId}/template/${templateId}`, { method: "DELETE" });
   }
 }
 

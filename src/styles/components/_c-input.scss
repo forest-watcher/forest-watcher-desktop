@@ -78,7 +78,7 @@
         border-radius: 0px;
         max-height: unset;
         overflow-y: visible;
-        max-width: 100%;
+        max-width: 99%;
         margin: 0 auto;
       }
       .c-input__select-list-item {
@@ -113,6 +113,10 @@
         line-height: 22px;
         display: block;
         margin-top: $global-spacing-3;
+      }
+
+      .c-input__select-list-box {
+        position: relative;
       }
     }
   }
