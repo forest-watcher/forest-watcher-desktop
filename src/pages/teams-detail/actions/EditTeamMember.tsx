@@ -5,7 +5,7 @@ import { TParams as TTeamDetailParams } from "../TeamDetail";
 import { useHistory, useParams } from "react-router-dom";
 import { teamService } from "services/teams";
 import { toastr } from "react-redux-toastr";
-import { useIntl } from "react-intl";
+import { FormattedMessage, useIntl } from "react-intl";
 import { useAppDispatch, useAppSelector } from "hooks/useRedux";
 import { getTeamMembers } from "modules/gfwTeams";
 import { TErrorResponse } from "constants/api";
@@ -75,6 +75,9 @@ const EditMemberRoleModal: FC<IProps> = props => {
       ]}
     >
       <Loader isLoading={isSave} />
+      <p>
+        <FormattedMessage id={`teams.change.member.to.${memberRole}.body`} />
+      </p>
     </Modal>
   );
 };

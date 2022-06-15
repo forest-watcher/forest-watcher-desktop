@@ -4,7 +4,7 @@ import { useHistory } from "react-router-dom";
 import { teamService } from "services/teams";
 import { toastr } from "react-redux-toastr";
 import Loader from "components/ui/Loader";
-import { useIntl } from "react-intl";
+import { FormattedMessage, useIntl } from "react-intl";
 import { TErrorResponse } from "../../../constants/api";
 
 interface IProps {
@@ -51,6 +51,9 @@ const DeleteTeam: FC<IProps> = props => {
       ]}
     >
       <Loader isLoading={isDeleting} />
+      <p>
+        <FormattedMessage id="teams.delete.body" />
+      </p>
     </Modal>
   );
 };
