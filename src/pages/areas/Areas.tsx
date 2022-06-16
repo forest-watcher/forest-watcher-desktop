@@ -14,12 +14,14 @@ import Card from "components/ui/Card/Card";
 import EditIcon from "assets/images/icons/Edit.svg";
 import { TPropsFromRedux } from "./AreasContainer";
 import { goToGeojson } from "helpers/map";
+import { TAreasResponse } from "services/area";
+import AreaCard from "components/area-card/AreaCard";
 
 interface IProps extends TPropsFromRedux {}
 
 const Areas: FC<IProps> = props => {
   const { areasList, loading } = props;
-  const areaMap = useMemo(() => Object.values(areasList), [areasList]);
+  const areaMap = useMemo<TAreasResponse[]>(() => Object.values(areasList), [areasList]);
   const intl = useIntl();
 
   const [mapRef, setMapRef] = useState<MapInstance | null>(null);
@@ -86,24 +88,20 @@ const Areas: FC<IProps> = props => {
           }
         >
           <div className="c-areas__area-listing">
-            {areaMap.map((area: any) => (
-              <Card size="large" key={area.id} className="c-areas__item">
-                <Card.Image alt="" src={area.attributes.image} loading="lazy" />
-                <div className="c-card__content-flex">
-                  <div>
-                    <Card.Title className="u-margin-top-none">{area.attributes.name}</Card.Title>
-                  </div>
-                  <Card.Cta to={`/areas/${area.id}`} iconSrc={EditIcon}>
-                    <FormattedMessage id="common.manage" />
-                  </Card.Cta>
-                </div>
-              </Card>
+            {areaMap.map((area: TAreasResponse) => (
+              <AreaCard area={area} key={area.id} className="c-areas__item" />
             ))}
           </div>
         </Article>
       </div>
       <div className="l-content">
-        <Article title="areas.teamSubtitle"></Article>
+        <Article title="areas.teamSubtitle">
+          <div className="c-areas__area-listing">
+            {areaMap.map((area: TAreasResponse) => (
+              <AreaCard area={area} key={area.id} className="c-areas__item" />
+            ))}
+          </div>
+        </Article>
       </div>
     </div>
   );
