@@ -5,7 +5,6 @@ import { TParams } from "../AreaView";
 import { FormattedMessage, useIntl } from "react-intl";
 import { toastr } from "react-redux-toastr";
 import { UnpackNestedValue } from "react-hook-form";
-import { TGetTemplates } from "services/reports";
 import { Option } from "types";
 import { areaService } from "services/area";
 import { useAppDispatch } from "hooks/useRedux";
