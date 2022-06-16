@@ -43,6 +43,20 @@ it("Chip secondary should render properly", () => {
   `);
 });
 
+it("Chip secondary light text should render properly", () => {
+  const { container } = render(<Chip variant="secondary-light-text">Click me</Chip>);
+
+  expect(container).toMatchInlineSnapshot(`
+    <div>
+      <span
+        class="c-chip c-chip--secondary-light-text"
+      >
+        Click me
+      </span>
+    </div>
+  `);
+});
+
 it("Chip selectable should render properly", () => {
   const { container } = render(
     <Chip variant="primary" isSelectable>
