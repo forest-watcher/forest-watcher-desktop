@@ -10,7 +10,7 @@ import TemplatesManage from "./pages/templates-manage/TemplatesManageContainer";
 import Teams from "./pages/teams/TeamsContainer";
 import TeamDetail from "./pages/teams-detail/TeamDetailContainer";
 import Settings from "./pages/settings/SettingsContainer";
-import Reports from "./pages/legacy_reports/ReportsContainer";
+import Reports from "./pages/reports/ReportsContainer";
 import Login from "./pages/login/Login";
 import SignUp from "./pages/login/SignUp";
 
