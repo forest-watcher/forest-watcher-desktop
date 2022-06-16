@@ -13,8 +13,9 @@ import Article from "components/layouts/Article";
 import DataTable from "components/ui/DataTable/DataTable";
 import PlusIcon from "assets/images/icons/PlusWhite.svg";
 import AddTemplateModal from "./actions/AddTemplate";
-import { TTemplateDataTable, TTemplateDataTableAction } from "./types";
+import { TTeamDataTable, TTeamDataTableAction, TTemplateDataTable, TTemplateDataTableAction } from "./types";
 import RemoveTemplateModal from "./actions/RemoveTemplate";
+import { areaService } from "services/area";
 
 interface IProps extends TPropsFromRedux {}
 export type TParams = {
@@ -40,6 +41,18 @@ const AreasView: FC<IProps & RouteComponentProps<TParams>> = ({ geojson, area, l
     value: "remove",
     href: template => `${match.url}/template/remove/${template.id}`
   };
+
+  const removeTeam: TTeamDataTableAction = {
+    name: "areas.details.teams.remove.title",
+    value: "remove",
+    href: template => `${match.url}/team/remove/${template.id}`
+  };
+
+  useEffect(() => {
+    if (area) {
+      areaService.getAreaTeams(area.id);
+    }
+  }, [area]);
 
   return (
     <>
@@ -83,7 +96,7 @@ const AreasView: FC<IProps & RouteComponentProps<TParams>> = ({ geojson, area, l
             </Map>
           )
         )}
-        <div className="l-content">
+        <div className="l-content u-h-min-unset">
           <Article
             title="areas.details.templates"
             titleValues={{ num: area?.attributes.reportTemplate.length ?? 0 }}
@@ -106,10 +119,47 @@ const AreasView: FC<IProps & RouteComponentProps<TParams>> = ({ geojson, area, l
                   })) ?? []
                 }
                 columnOrder={[
-                  { key: "name", name: "areas.details.table.header.name", rowHref: row => `/templates/${row.id}` },
-                  { key: "openAssignments", name: "areas.details.table.header.openAssignments" }
+                  {
+                    key: "name",
+                    name: "areas.details.templatesTable.header.name",
+                    rowHref: row => `/templates/${row.id}`
+                  },
+                  { key: "openAssignments", name: "areas.details.templatesTable.header.openAssignments" }
                 ]}
                 rowActions={[removeTemplate]}
+              />
+            </div>
+          </Article>
+        </div>
+        <div className="l-content u-padding-top-none u-h-min-unset">
+          <Article
+            title="areas.details.teams"
+            titleValues={{ num: area?.attributes.reportTemplate.length ?? 0 }}
+            actions={
+              <Link to={`${url}/teams/add`} className="c-button c-button--primary">
+                <img className="c-button__inline-icon" src={PlusIcon} alt="" role="presentation" />
+                <FormattedMessage id="areas.details.teams.add.title" />
+              </Link>
+            }
+          >
+            <div className="u-responsive-table">
+              <DataTable<TTeamDataTable>
+                className="u-w-100"
+                rows={
+                  area?.attributes.reportTemplate.map(template => ({
+                    ...template,
+                    //@ts-ignore
+                    name: (template.name?.[template.defaultLanguage] as string) || "",
+                    openAssignments: 0,
+                    reports: 0
+                  })) ?? []
+                }
+                columnOrder={[
+                  { key: "name", name: "areas.details.teamsTable.header.name", rowHref: row => `/team/${row.id}` },
+                  { key: "openAssignments", name: "areas.details.templatesTable.header.openAssignments" },
+                  { key: "reports", name: "areas.details.teamsTable.header.reports" }
+                ]}
+                rowActions={[removeTeam]}
               />
             </div>
           </Article>
@@ -120,6 +170,12 @@ const AreasView: FC<IProps & RouteComponentProps<TParams>> = ({ geojson, area, l
           <AddTemplateModal templates={templates} />
         </Route>
         <Route path={`${path}/template/remove/:templateId`}>
+          <RemoveTemplateModal />
+        </Route>
+        <Route path={`${path}/team/add`}>
+          <AddTemplateModal templates={templates} />
+        </Route>
+        <Route path={`${path}/team/remove/:teamId`}>
           <RemoveTemplateModal />
         </Route>
       </Switch>

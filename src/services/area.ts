@@ -49,6 +49,21 @@ export class AreaService extends BaseService {
     this.token = store.getState().user.token;
     return this.fetch(`/${areaId}/template/${templateId}`, { method: "DELETE" });
   }
+
+  getAreaTeamIds(areaId: string) {
+    this.token = store.getState().user.token;
+    return this.fetchJSON(`/areaTeams/${areaId}`);
+  }
+
+  async getAreaTeams(areaId: string) {
+    this.token = store.getState().user.token;
+    const resp = await this.getAreaTeamIds(areaId);
+    if (resp.data) {
+      console.log(resp);
+    }
+
+    return [];
+  }
 }
 
 export const areaService = new AreaService(`${API_BASE_URL_V3}/forest-watcher/area`);
