@@ -15,16 +15,28 @@ import PlusIcon from "assets/images/icons/PlusWhite.svg";
 import AddTemplateModal from "./actions/AddTemplate";
 import { TTeamDataTable, TTeamDataTableAction, TTemplateDataTable, TTemplateDataTableAction } from "./types";
 import RemoveTemplateModal from "./actions/RemoveTemplate";
-import { areaService } from "services/area";
+import useGetUserId from "hooks/useGetUserId";
+import AddTeamModal from "./actions/AddTeam";
 
 interface IProps extends TPropsFromRedux {}
 export type TParams = {
   areaId: string;
 };
 
-const AreasView: FC<IProps & RouteComponentProps<TParams>> = ({ geojson, area, loading, templates, match }) => {
+const AreasView: FC<IProps & RouteComponentProps<TParams>> = ({
+  geojson,
+  area,
+  loading,
+  templates,
+  match,
+  getUserTeams,
+  getAreaTeams,
+  areaTeams,
+  teams
+}) => {
   const [mapRef, setMapRef] = useState<MapInstance | null>(null);
   let { path, url } = useRouteMatch();
+  const userId = useGetUserId();
 
   const handleMapLoad = (e: MapboxEvent) => {
     setMapRef(e.target);
@@ -49,10 +61,12 @@ const AreasView: FC<IProps & RouteComponentProps<TParams>> = ({ geojson, area, l
   };
 
   useEffect(() => {
-    if (area) {
-      areaService.getAreaTeams(area.id);
+    if (area && userId) {
+      // areaService.getAreaTeams(area.id);
+      getAreaTeams(area.id);
+      getUserTeams(userId);
     }
-  }, [area]);
+  }, [area, userId, getUserTeams, getAreaTeams]);
 
   return (
     <>
@@ -134,9 +148,9 @@ const AreasView: FC<IProps & RouteComponentProps<TParams>> = ({ geojson, area, l
         <div className="l-content u-padding-top-none u-h-min-unset">
           <Article
             title="areas.details.teams"
-            titleValues={{ num: area?.attributes.reportTemplate.length ?? 0 }}
+            titleValues={{ num: areaTeams.length ?? 0 }}
             actions={
-              <Link to={`${url}/teams/add`} className="c-button c-button--primary">
+              <Link to={`${url}/team/add`} className="c-button c-button--primary">
                 <img className="c-button__inline-icon" src={PlusIcon} alt="" role="presentation" />
                 <FormattedMessage id="areas.details.teams.add.title" />
               </Link>
@@ -146,16 +160,16 @@ const AreasView: FC<IProps & RouteComponentProps<TParams>> = ({ geojson, area, l
               <DataTable<TTeamDataTable>
                 className="u-w-100"
                 rows={
-                  area?.attributes.reportTemplate.map(template => ({
-                    ...template,
+                  areaTeams.map(team => ({
+                    ...team.data,
                     //@ts-ignore
-                    name: (template.name?.[template.defaultLanguage] as string) || "",
+                    name: team.data.attributes.name || "",
                     openAssignments: 0,
                     reports: 0
                   })) ?? []
                 }
                 columnOrder={[
-                  { key: "name", name: "areas.details.teamsTable.header.name", rowHref: row => `/team/${row.id}` },
+                  { key: "name", name: "areas.details.teamsTable.header.name", rowHref: row => `/teams/${row.id}` },
                   { key: "openAssignments", name: "areas.details.templatesTable.header.openAssignments" },
                   { key: "reports", name: "areas.details.teamsTable.header.reports" }
                 ]}
@@ -173,7 +187,7 @@ const AreasView: FC<IProps & RouteComponentProps<TParams>> = ({ geojson, area, l
           <RemoveTemplateModal />
         </Route>
         <Route path={`${path}/team/add`}>
-          <AddTemplateModal templates={templates} />
+          <AddTeamModal teams={teams} />
         </Route>
         <Route path={`${path}/team/remove/:teamId`}>
           <RemoveTemplateModal />
