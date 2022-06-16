@@ -39,9 +39,9 @@ export const getBoundFromGeoJSON = (geoJSON: any, padding = [15, 15]) => {
   return bounds;
 };
 
-export const goToGeojson = (map: MapInstance | null, geojson: any) => {
+export const goToGeojson = (map: MapInstance | null, geojson: any, animate = true) => {
   const bbox = turf.bbox(geojson);
   if (map && bbox.length > 0) {
-    map.fitBounds(bbox as LngLatBoundsLike, { padding: 40 });
+    map.fitBounds(bbox as LngLatBoundsLike, { padding: 40, animate });
   }
 };

@@ -62,7 +62,7 @@ const Map: FC<IProps> = props => {
       // We are in edit mode, add geojson to edit
       drawRef.add(geojsonToEdit);
       setAddedGeoJson(true);
-      goToGeojson(mapRef, geojsonToEdit);
+      goToGeojson(mapRef, geojsonToEdit, false);
     }
   }, [onMapEdit, mapRef, geojsonToEdit, drawRef, addedGeoJson]);
 

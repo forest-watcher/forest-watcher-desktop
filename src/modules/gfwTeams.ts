@@ -164,6 +164,7 @@ export const getTeamAreas = (teamId: string) => (dispatch: AppDispatch, getState
 
   apiService
     .getAreasByTeamId(teamId)
+    // @ts-ignore -- Incorrect types, data should exist
     .then(({ data }) =>
       dispatch({
         type: GET_TEAM_AREAS,

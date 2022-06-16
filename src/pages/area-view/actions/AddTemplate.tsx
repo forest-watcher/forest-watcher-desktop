@@ -1,28 +1,38 @@
-import { FC, useEffect } from "react";
+import { FC, useMemo } from "react";
 import FormModal from "components/modals/FormModal";
-import { useHistory, useParams } from "react-router-dom";
+import { Link, useHistory, useParams } from "react-router-dom";
 import { TParams } from "../AreaView";
-import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
-import { useIntl } from "react-intl";
-import { teamService } from "services/teams";
-import { getTeamMembers } from "modules/gfwTeams";
+import { FormattedMessage, useIntl } from "react-intl";
 import { toastr } from "react-redux-toastr";
 import { UnpackNestedValue } from "react-hook-form";
+import { TGetTemplates } from "services/reports";
+import { Option } from "types";
+import { areaService } from "services/area";
 import { useAppDispatch } from "hooks/useRedux";
-import { TErrorResponse } from "constants/api";
+import { getAreas } from "modules/areas";
 
-interface IProps {}
+interface IProps {
+  templates: TGetTemplates["data"];
+}
 
 type TAddTemplateForm = {
-  templates: Array<string>;
+  templates: string[];
 };
 
-const AddTemplateModal: FC<IProps> = props => {
+const AddTemplateModal: FC<IProps> = ({ templates }) => {
   const { areaId } = useParams<TParams>();
   const intl = useIntl();
   const history = useHistory();
   const dispatch = useAppDispatch();
+  const templateOptions = useMemo<Option[] | undefined>(
+    () =>
+      templates?.map(template => ({
+        // @ts-ignore template.attributes.name has incorrect type
+        label: template.attributes.name[template.attributes.defaultLanguage],
+        value: template.id as string
+      })),
+    [templates]
+  );
 
   const onClose = () => {
     history.push(`/areas/${areaId}`);
@@ -30,24 +40,12 @@ const AddTemplateModal: FC<IProps> = props => {
 
   const onSave = async (data: UnpackNestedValue<TAddTemplateForm>) => {
     try {
-      // await teamService.addTeamMembers(teamId, {
-      //   users: [
-      //     {
-      //       email: data.email,
-      //       role: memberRole
-      //     }
-      //   ]
-      // });
-      // // Refetch the Team members
-      // dispatch(getTeamMembers(teamId));
-      console.log(data);
+      await areaService.addTemplatesToAreas(areaId, data.templates);
+      toastr.success(intl.formatMessage({ id: "areas.details.templates.add.success" }), "");
+      dispatch(getAreas());
       onClose();
     } catch (e: any) {
-      const error = JSON.parse(e.message) as TErrorResponse;
-      toastr.error(
-        intl.formatMessage({ id: "areas.details.templates.add.error" }),
-        error?.errors?.length ? error.errors[0].detail : ""
-      );
+      toastr.error(intl.formatMessage({ id: "areas.details.templates.add.error" }), "");
       console.error(e);
     }
   };
@@ -66,10 +64,7 @@ const AddTemplateModal: FC<IProps> = props => {
           selectProps: {
             label: intl.formatMessage({ id: "areas.details.templates.add.select" }),
             placeholder: intl.formatMessage({ id: "areas.details.templates.add.selectPlaceholder" }),
-            options: [
-              { label: "select me", secondaryLabel: "anotherone", value: "1" },
-              { label: "select me 2", secondaryLabel: "anotherone 2", value: "2" }
-            ],
+            options: templateOptions,
             defaultValue: []
           },
           hideLabel: true,
@@ -81,6 +76,11 @@ const AddTemplateModal: FC<IProps> = props => {
           formatErrors: errors => errors.email
         }
       ]}
+      actions={
+        <Link className="c-button c-button--primary" to="/templates/create">
+          <FormattedMessage id="templates.create" />
+        </Link>
+      }
     />
   );
 };

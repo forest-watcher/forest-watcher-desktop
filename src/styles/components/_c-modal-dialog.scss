@@ -89,6 +89,13 @@ $c-modal-transition-duration: 300ms;
     padding: 40px 60px;
   }
 
+  &__extra-actions {
+    display: flex;
+    justify-content: center;
+    gap: $global-spacing-3;
+    margin-top: $global-spacing-3;
+  }
+
   &__text {
     font-weight: 400;
     font-size: 18px;

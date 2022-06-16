@@ -24,7 +24,7 @@
     "file-saver": "^2.0.1",
     "history": "^5.3.0",
     "is-valid-coordinates": "^1.0.0",
-    "json-api-normalizer": "^0.4.14",
+    "json-api-normalizer": "^1.0.4",
     "leaflet": "1.4.0",
     "leaflet-draw": "^1.0.4",
     "leaflet-search": "^2.9.8",
@@ -108,6 +108,7 @@
     "transifex:pull": "node transifex/transifex-pull.js",
     "generate-interface:teams": "npx openapi-typescript https://raw.githubusercontent.com/wri/fw_teams/dev/docs/fw_teams.yaml --output ./src/interfaces/teams.ts",
     "generate-interface:api": "npx openapi-typescript https://raw.githubusercontent.com/wri/fw_api/dev/docs/fw_api.yaml --output ./src/interfaces/api.ts",
+    "generate-interface:forms": "npx openapi-typescript https://raw.githubusercontent.com/wri/fw_forms/dev/docs/fw_forms.yaml --output ./src/interfaces/forms.ts",
     "storybook": "start-storybook -p 6006 -s src/assets",
     "build-storybook": "build-storybook -s src/assets"
   },

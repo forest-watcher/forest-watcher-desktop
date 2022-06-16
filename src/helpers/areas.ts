@@ -1,5 +1,6 @@
 import { AREAS } from "../constants/map";
 import { RootState } from "store";
+import { TAreasResponse } from "services/area";
 
 const geojsonArea = require("@mapbox/geojson-area");
 
@@ -23,5 +24,5 @@ export const readGeojson = (state: RootState, areaId?: string) => {
 };
 
 export const readArea = (state: RootState, areaId?: string) => {
-  return areaId ? state.areas.data[areaId] : null;
+  return areaId ? (state.areas.data[areaId] as TAreasResponse) : null;
 };
