@@ -51,6 +51,11 @@ export class AreaService extends BaseService {
     return this.fetch(`/${areaId}/template/${templateId}`, { method: "DELETE" });
   }
 
+  unassignTeamFromArea(areaId: string, teamId: string) {
+    this.token = store.getState().user.token;
+    return this.fetch(`/${areaId}/team/${teamId}`, { method: "DELETE" });
+  }
+
   getAreaTeamIds(areaId: string) {
     this.token = store.getState().user.token;
     return this.fetchJSON(`/areaTeams/${areaId}`);

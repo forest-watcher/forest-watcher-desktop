@@ -17,6 +17,7 @@ import { TTeamDataTable, TTeamDataTableAction, TTemplateDataTable, TTemplateData
 import RemoveTemplateModal from "./actions/RemoveTemplate";
 import useGetUserId from "hooks/useGetUserId";
 import AddTeamModal from "./actions/AddTeam";
+import RemoveTeamModal from "./actions/RemoveTeam";
 
 interface IProps extends TPropsFromRedux {}
 export type TParams = {
@@ -190,7 +191,7 @@ const AreasView: FC<IProps & RouteComponentProps<TParams>> = ({
           <AddTeamModal teams={teams} />
         </Route>
         <Route path={`${path}/team/remove/:teamId`}>
-          <RemoveTemplateModal />
+          <RemoveTeamModal />
         </Route>
       </Switch>
     </>
