@@ -1,36 +1,47 @@
-import { FC, HTMLAttributes, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { RadioGroup } from "@headlessui/react";
 import Chip from "./Chip";
+import classnames from "classnames";
+import { FormattedMessage } from "react-intl";
 
-interface IProps extends HTMLAttributes<HTMLElement> {}
+interface IProps {
+  className?: string;
+  value?: string;
+  onChange: (v: string) => void;
+  options: {
+    className?: string;
+    value: string;
+    name: string;
+  }[];
+}
 
 const RadioChipGroup: FC<IProps> = props => {
-  const [plan, setPlan] = useState("email");
+  const { className, options, value = options[0].value, onChange } = props;
+  const [selectedValue, setSelectedValue] = useState(value);
+
+  useEffect(() => setSelectedValue(value), [value]);
+
+  const handleChange = (value: string) => {
+    onChange(value);
+    setSelectedValue(value);
+  };
 
   return (
-    <RadioGroup value={plan} onChange={setPlan} className="c-radio-chip-group">
+    <RadioGroup value={selectedValue} onChange={handleChange} className={classnames(className, "c-radio-chip-group")}>
       <RadioGroup.Label className="c-radio-chip-group__label">Select an export type</RadioGroup.Label>
-      <RadioGroup.Option value="email" className="c-radio-chip-group__item">
-        {({ checked }) => (
-          <Chip isSelectable variant={checked ? "primary" : "secondary"}>
-            Email
-          </Chip>
-        )}
-      </RadioGroup.Option>
-      <RadioGroup.Option value="Zip" className="c-radio-chip-group__item">
-        {({ checked }) => (
-          <Chip isSelectable variant={checked ? "primary" : "secondary"}>
-            Zip Download
-          </Chip>
-        )}
-      </RadioGroup.Option>
-      <RadioGroup.Option value="Pigeon" className="c-radio-chip-group__item">
-        {({ checked }) => (
-          <Chip isSelectable variant={checked ? "primary" : "secondary"}>
-            Carrier Pigeon
-          </Chip>
-        )}
-      </RadioGroup.Option>
+      {options.map(option => (
+        <RadioGroup.Option
+          key={option.value}
+          value={option.value}
+          className={classnames(option.className, "c-radio-chip-group__item")}
+        >
+          {({ checked }) => (
+            <Chip isSelectable variant={checked ? "primary" : "secondary"}>
+              <FormattedMessage id={option.name} />
+            </Chip>
+          )}
+        </RadioGroup.Option>
+      ))}
     </RadioGroup>
   );
 };
