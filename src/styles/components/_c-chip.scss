@@ -55,9 +55,43 @@
     }
   }
 
+  &--secondary-light-text {
+    background-color: transparent;
+    box-shadow: 0 0 0 1px $primary-500;
+    color: $neutral-300;
+    &.c-chip--is-selectable {
+      box-shadow: none;
+      &:hover, &:focus {
+        background-color: rgba($white, 0.05);
+      }
+
+      &:active, &.c-chip--is-selected {
+        background-color: $white;
+        color: #404040;
+      }
+    }
+  }
 }
 
 .c-radio-chip-group {
   display: flex;
+  flex-wrap: wrap;
   gap: $global-spacing-3;
+
+  &--grouped {
+    display: inline-flex;
+    flex-wrap: nowrap;
+    border: 1px solid #6D6D6D;
+    border-radius: 24px;
+    gap: 0;
+
+    .c-chip {
+      font-weight: 500;
+      padding: 13px 20px;
+    }
+  }
+
+  &__label {
+    flex: 0 0 100%;
+  }
 }
