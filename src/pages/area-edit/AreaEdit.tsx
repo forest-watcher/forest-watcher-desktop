@@ -91,7 +91,7 @@ const AreaEdit: FC<IProps> = ({ mode, geojson, getGeoFromShape, setSaving, saveA
     drawRef?.deleteAll();
     if (geojson) {
       drawRef?.add(geojson);
-      goToGeojson(mapRef, geojson);
+      goToGeojson(mapRef, geojson, false);
     }
     handleMapEdit(geojson);
   };

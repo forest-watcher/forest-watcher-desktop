@@ -12,7 +12,7 @@ import RadioOn from "assets/images/icons/RadioOn.svg";
 export interface Props extends FieldPropsBase {
   selectProps: SelectProps;
   registered: UseFormRegisterReturn;
-  formHook: Pick<UseFormReturn, "watch" | "setValue" | "clearErrors">;
+  formHook: UseFormReturn<any>;
   onChange?: () => void;
   isSimple?: boolean;
   isMultiple?: boolean;

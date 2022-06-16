@@ -78,6 +78,8 @@
         border-radius: 0px;
         max-height: unset;
         overflow-y: visible;
+        max-width: 99%;
+        margin: 0 auto;
       }
       .c-input__select-list-item {
         padding: $global-spacing-7 $global-spacing-6;
@@ -102,7 +104,6 @@
         font-size: 18px;
         line-height: 24px;
         display: block;
-        margin-bottom: $global-spacing-3;
       }
 
       .c-input__select-list-item-secondary-label {
@@ -111,6 +112,11 @@
         font-size: 16px;
         line-height: 22px;
         display: block;
+        margin-top: $global-spacing-3;
+      }
+
+      .c-input__select-list-box {
+        position: relative;
       }
     }
   }

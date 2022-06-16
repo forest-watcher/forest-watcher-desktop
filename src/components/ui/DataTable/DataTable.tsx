@@ -2,6 +2,7 @@ import classNames from "classnames";
 import ContextMenu, { IProps as IContextMenuProps } from "components/ui/ContextMenu/ContextMenu";
 import { FormattedMessage } from "react-intl";
 import React from "react";
+import { Link } from "react-router-dom";
 
 export interface IRowAction<T> extends Omit<Omit<IContextMenuProps["menuItems"][number], "onClick">, "href"> {
   onClick?: (row: T, value?: string) => void;
@@ -13,6 +14,7 @@ export interface IRowAction<T> extends Omit<Omit<IContextMenuProps["menuItems"][
 export interface IColumnOrder<T> {
   key: keyof T;
   name: string;
+  rowHref?: string | ((row: T, value?: string) => string);
 }
 
 export interface IProps<T> {
@@ -22,7 +24,7 @@ export interface IProps<T> {
   className?: string;
 }
 
-const DataTable = <T extends { [key: string]: string }>(props: IProps<T>) => {
+const DataTable = <T extends { [key: string]: string | number }>(props: IProps<T>) => {
   const { rows, columnOrder, className, rowActions } = props;
 
   return (
@@ -43,7 +45,21 @@ const DataTable = <T extends { [key: string]: string }>(props: IProps<T>) => {
         {rows.map((row, id) => (
           <tr key={id} className="c-data-table__row">
             {columnOrder.map(column => (
-              <td key={column.key.toString()}>{row[column.key]}</td>
+              <td key={column.key.toString()}>
+                {column.rowHref ? (
+                  <Link
+                    className="u-link-unstyled"
+                    to={typeof column.rowHref === "function" ? column.rowHref(row) : column.rowHref}
+                  >
+                    {row[column.key]}
+                    <svg className="c-icon -x-small -green -no-margin">
+                      <use xlinkHref="#icon-arrow-link"></use>
+                    </svg>
+                  </Link>
+                ) : (
+                  row[column.key]
+                )}
+              </td>
             ))}
 
             {rowActions && (
