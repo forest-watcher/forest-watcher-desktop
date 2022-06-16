@@ -58,7 +58,7 @@ const AreasView: FC<IProps & RouteComponentProps<TParams>> = ({ geojson, area, l
                   <FormattedMessage id="common.export" />
                 </Button>
                 <a
-                  href={`${process.env.REACT_APP_FLAGSHIP_URL}/my-gfw/`}
+                  href={`${process.env.REACT_APP_FLAGSHIP_URL}/map/aoi/${area.id}`}
                   target="_blank"
                   rel="noopenner noreferrer"
                   className="c-button c-button--secondary-light-text"
