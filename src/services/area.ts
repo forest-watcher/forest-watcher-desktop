@@ -8,6 +8,9 @@ import store from "store";
 export type TAreasResponse =
   operations["get-v3-forest-watcher-area"]["responses"]["200"]["content"]["application/json"];
 
+export type TTeamAreaResponse =
+  operations["get-v3-forest-watcher-area-teamAreas"]["responses"]["200"]["content"]["application/json"];
+
 export class AreaService extends BaseService {
   async saveArea(area: any, node: HTMLElement, method: string) {
     const url = method === "PATCH" ? `/${area.id}` : `/`;
@@ -28,6 +31,10 @@ export class AreaService extends BaseService {
 
   getArea(id: string) {
     return this.fetchJSON(`/${id}`);
+  }
+
+  getTeamArea(teamId: string): Promise<TTeamAreaResponse> {
+    return this.fetchJSON(`/teamAreas/${teamId}`);
   }
 
   getAreaFW(): Promise<TAreasResponse> {
