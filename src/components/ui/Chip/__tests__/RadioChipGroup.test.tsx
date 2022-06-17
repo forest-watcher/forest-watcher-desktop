@@ -209,8 +209,7 @@ describe("RadioChipGroup Component", () => {
 
     const zipChip = getAllByRole("radio")[1];
 
-    // @ts-ignore
-    expect(zipChip.attributes.getNamedItem("aria-checked").value).toBe("true");
+    expect(zipChip.attributes.getNamedItem("aria-checked")!.value).toBe("true");
   });
 
   it("should call onChange when radio option is changed", () => {
