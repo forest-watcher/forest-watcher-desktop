@@ -40,6 +40,8 @@ export class Legacy_TeamService extends BaseService {
   }
 }
 
+export type TGetTeamResponse = paths["/v3/teams/{teamId}"]["get"]["responses"]["200"]["content"]["application/json"];
+
 export type TGetUserTeamsResponse =
   paths["/v3/teams/user/{userId}"]["get"]["responses"]["200"]["content"]["application/json"];
 
@@ -95,6 +97,12 @@ export class TeamService extends BaseService {
       method: "POST",
       body: JSON.stringify(body)
     });
+  }
+
+  getTeam(teamId: string): Promise<TGetTeamResponse> {
+    this.token = store.getState().user.token;
+
+    return this.fetchJSON(`/${teamId}`);
   }
 
   updateTeam(teamId: string, body: TPatchTeamBody): Promise<TPatchTeamResponse> {

@@ -1,34 +1,61 @@
+// @ts-ignore - no types available
 import normalize from "json-api-normalizer";
 import { saveGeostore } from "./geostores";
 import { toastr } from "react-redux-toastr";
 import omit from "lodash/omit";
 import { areaService } from "services/area";
 import { utilsService } from "services/utils";
+import { AppDispatch, RootState } from "store";
+import { TGetTeamResponse } from "services/teams";
 
 // Actions
 const SET_AREA = "areas/SET_AREA";
 const SET_AREAS = "areas/SET_AREAS";
+const SET_AREA_TEAMS = "areas/SET_AREA_TEAMS";
 const SET_COUNTRIES = "areas/SET_COUNTRIES";
 const SET_LOADING_AREAS = "areas/SET_LOADING_AREAS";
 const SET_SAVING_AREA = "areas/SET_SAVING_AREA";
 const SET_EDITING_AREA = "areas/SET_EDITING_AREA";
 const SET_AREA_DELETED = "areas/SET_AREA_DELETED";
 
+export type TAreasState = {
+  ids: string[];
+  data: any;
+  countries: any[];
+  areaTeams: TGetTeamResponse[];
+  loading: boolean;
+  saving: boolean;
+  editing: boolean;
+  error: boolean;
+};
+
+export type TReducerActions =
+  | { type: typeof SET_AREA; payload: any }
+  | { type: typeof SET_AREAS; payload: any }
+  | { type: typeof SET_AREA_TEAMS; payload: { areaTeams: TAreasState["areaTeams"] } }
+  | { type: typeof SET_COUNTRIES; payload: any }
+  | { type: typeof SET_LOADING_AREAS; payload: any }
+  | { type: typeof SET_SAVING_AREA; payload: any }
+  | { type: typeof SET_EDITING_AREA; payload: any }
+  | { type: typeof SET_AREA_DELETED; payload: any };
+
 // Reducer
-const initialState = {
+const initialState: TAreasState = {
   ids: [],
   data: {},
   countries: [],
+  areaTeams: [],
   loading: true,
   saving: false,
   editing: false,
   error: false
 };
 
-export default function reducer(state = initialState, action) {
+export default function reducer(state = initialState, action: TReducerActions): TAreasState {
   switch (action.type) {
     case SET_AREA: {
       const area = action.payload.area;
+      //@ts-ignore - TODO: Figure out typescript error
       if (state.ids.indexOf(...Object.keys(area)) > -1) {
         return {
           ...state,
@@ -46,6 +73,9 @@ export default function reducer(state = initialState, action) {
       const { area: areas } = action.payload;
       if (areas) return Object.assign({}, state, { ids: Object.keys(areas), data: areas });
       return state;
+    }
+    case SET_AREA_TEAMS: {
+      return Object.assign({}, state, { areaTeams: action.payload });
     }
     case SET_AREA_DELETED: {
       const areaId = action.payload;
@@ -67,8 +97,8 @@ export default function reducer(state = initialState, action) {
 }
 
 // Action Creators
-export function getArea(id) {
-  return (dispatch, state) => {
+export function getArea(id: string) {
+  return (dispatch: AppDispatch, state: () => RootState) => {
     dispatch({
       type: SET_LOADING_AREAS,
       payload: true
@@ -100,8 +130,8 @@ export function getArea(id) {
   };
 }
 
-export function deleteArea(areaId) {
-  return (dispatch, state) => {
+export function deleteArea(areaId: string) {
+  return (dispatch: AppDispatch, state: () => RootState) => {
     areaService.token = state().user.token;
     areaService
       .deleteArea(areaId)
@@ -118,7 +148,7 @@ export function deleteArea(areaId) {
 }
 
 export function getAreas() {
-  return (dispatch, state) => {
+  return (dispatch: AppDispatch, state: () => RootState) => {
     dispatch({
       type: SET_LOADING_AREAS,
       payload: true
@@ -148,8 +178,25 @@ export function getAreas() {
   };
 }
 
+export function getAreaTeams(areaId: string) {
+  return (dispatch: AppDispatch, state: () => RootState) => {
+    return areaService
+      .getAreaTeams(areaId)
+      .then(data => {
+        dispatch({
+          type: SET_AREA_TEAMS,
+          payload: data
+        });
+        return data;
+      })
+      .catch(error => {
+        toastr.error("Unable to load area teams", error);
+      });
+  };
+}
+
 export function getCountries() {
-  return (dispatch, state) => {
+  return (dispatch: AppDispatch) => {
     return utilsService
       .getCountries()
       .then(data => {
@@ -165,8 +212,8 @@ export function getCountries() {
 }
 
 // POST name, geostore ID
-export function saveArea(area, node, method) {
-  return async (dispatch, state) => {
+export function saveArea(area: any, node: HTMLElement, method: string) {
+  return async (dispatch: AppDispatch, state: () => RootState) => {
     dispatch({
       type: SET_SAVING_AREA,
       payload: {
@@ -204,8 +251,8 @@ export function saveArea(area, node, method) {
 }
 
 // async save geostore then area
-export function saveAreaWithGeostore(area, node, method) {
-  return async (dispatch, state) => {
+export function saveAreaWithGeostore(area: any, node: HTMLElement, method: string) {
+  return async (dispatch: AppDispatch) => {
     const geostore = await dispatch(saveGeostore(area.geojson));
     const geostoreId = Object.keys(geostore)[0];
     const areaWithGeostore = { ...area, geostore: geostoreId };
@@ -213,8 +260,8 @@ export function saveAreaWithGeostore(area, node, method) {
   };
 }
 
-export function setEditing(bool) {
-  return async dispatch => {
+export function setEditing(bool: boolean) {
+  return async (dispatch: AppDispatch) => {
     await dispatch({
       type: SET_EDITING_AREA,
       payload: bool
@@ -222,8 +269,8 @@ export function setEditing(bool) {
   };
 }
 
-export function setSaving(payload) {
-  return dispatch => {
+export function setSaving(payload: boolean) {
+  return (dispatch: AppDispatch) => {
     dispatch({
       type: SET_SAVING_AREA,
       payload: payload
@@ -231,8 +278,8 @@ export function setSaving(payload) {
   };
 }
 
-export function setLoading(bool) {
-  return dispatch => {
+export function setLoading(bool: boolean) {
+  return (dispatch: AppDispatch) => {
     dispatch({
       type: SET_LOADING_AREAS,
       payload: bool

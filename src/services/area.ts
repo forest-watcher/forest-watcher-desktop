@@ -4,6 +4,7 @@ import { BaseService } from "./baseService";
 import domtoimage from "dom-to-image";
 import { operations } from "interfaces/api";
 import store from "store";
+import { teamService } from "./teams";
 
 export type TAreasResponse =
   operations["get-v3-forest-watcher-area"]["responses"]["200"]["content"]["application/json"];
@@ -55,6 +56,34 @@ export class AreaService extends BaseService {
   unassignTemplateFromArea(areaId: string, templateId: string) {
     this.token = store.getState().user.token;
     return this.fetch(`/${areaId}/template/${templateId}`, { method: "DELETE" });
+  }
+
+  unassignTeamFromArea(areaId: string, teamId: string) {
+    this.token = store.getState().user.token;
+    return this.fetch(`/${areaId}/team/${teamId}`, { method: "DELETE" });
+  }
+
+  getAreaTeamIds(areaId: string) {
+    this.token = store.getState().user.token;
+    return this.fetchJSON(`/areaTeams/${areaId}`);
+  }
+
+  addTeamsToAreas(areaId: string, teamIds: string[]) {
+    this.token = store.getState().user.token;
+    const promises = teamIds.map(id => this.fetch(`/${areaId}/team/${id}`, { method: "POST" }));
+
+    return Promise.all(promises);
+  }
+
+  async getAreaTeams(areaId: string) {
+    this.token = store.getState().user.token;
+    const resp = await this.getAreaTeamIds(areaId);
+    if (resp.data) {
+      // For each team id get the team..
+      return await Promise.all(resp.data.map((id: string) => teamService.getTeam(id)));
+    }
+
+    return [];
   }
 }
 

@@ -13,17 +13,33 @@ import Article from "components/layouts/Article";
 import DataTable from "components/ui/DataTable/DataTable";
 import PlusIcon from "assets/images/icons/PlusWhite.svg";
 import AddTemplateModal from "./actions/AddTemplate";
-import { TTemplateDataTable, TTemplateDataTableAction } from "./types";
+import { TTeamDataTable, TTeamDataTableAction, TTemplateDataTable, TTemplateDataTableAction } from "./types";
 import RemoveTemplateModal from "./actions/RemoveTemplate";
+import useGetUserId from "hooks/useGetUserId";
+import AddTeamModal from "./actions/AddTeam";
+import RemoveTeamModal from "./actions/RemoveTeam";
 
 interface IProps extends TPropsFromRedux {}
 export type TParams = {
   areaId: string;
 };
 
-const AreasView: FC<IProps & RouteComponentProps<TParams>> = ({ geojson, area, loading, templates, match }) => {
+const AreasView: FC<IProps & RouteComponentProps<TParams>> = ({
+  geojson,
+  area,
+  loading,
+  templates,
+  match,
+  getUserTeams,
+  getAreaTeams,
+  getTeamMembers,
+  areaTeams,
+  teamMembers,
+  teams
+}) => {
   const [mapRef, setMapRef] = useState<MapInstance | null>(null);
   let { path, url } = useRouteMatch();
+  const userId = useGetUserId();
 
   const handleMapLoad = (e: MapboxEvent) => {
     setMapRef(e.target);
@@ -40,6 +56,26 @@ const AreasView: FC<IProps & RouteComponentProps<TParams>> = ({ geojson, area, l
     value: "remove",
     href: template => `${match.url}/template/remove/${template.id}`
   };
+
+  const removeTeam: TTeamDataTableAction = {
+    name: "areas.details.teams.remove.title",
+    value: "remove",
+    href: template => `${match.url}/team/remove/${template.id}`
+  };
+
+  useEffect(() => {
+    if (area && userId) {
+      // areaService.getAreaTeams(area.id);
+      getAreaTeams(area.id);
+      getUserTeams(userId);
+    }
+  }, [area, userId, getUserTeams, getAreaTeams]);
+
+  useEffect(() => {
+    if (areaTeams) {
+      areaTeams.forEach(team => getTeamMembers(team.data.id));
+    }
+  }, [areaTeams, getTeamMembers]);
 
   return (
     <>
@@ -83,7 +119,7 @@ const AreasView: FC<IProps & RouteComponentProps<TParams>> = ({ geojson, area, l
             </Map>
           )
         )}
-        <div className="l-content">
+        <div className="l-content u-h-min-unset">
           <Article
             title="areas.details.templates"
             titleValues={{ num: area?.attributes.reportTemplate.length ?? 0 }}
@@ -106,10 +142,45 @@ const AreasView: FC<IProps & RouteComponentProps<TParams>> = ({ geojson, area, l
                   })) ?? []
                 }
                 columnOrder={[
-                  { key: "name", name: "areas.details.table.header.name", rowHref: row => `/templates/${row.id}` },
-                  { key: "openAssignments", name: "areas.details.table.header.openAssignments" }
+                  {
+                    key: "name",
+                    name: "areas.details.templatesTable.header.name",
+                    rowHref: row => `/templates/${row.id}`
+                  }
                 ]}
                 rowActions={[removeTemplate]}
+              />
+            </div>
+          </Article>
+        </div>
+        <div className="l-content u-padding-top-none u-h-min-unset">
+          <Article
+            title="areas.details.teams"
+            titleValues={{ num: areaTeams.length ?? 0 }}
+            actions={
+              <Link to={`${url}/team/add`} className="c-button c-button--primary">
+                <img className="c-button__inline-icon" src={PlusIcon} alt="" role="presentation" />
+                <FormattedMessage id="areas.details.teams.add.title" />
+              </Link>
+            }
+          >
+            <div className="u-responsive-table">
+              <DataTable<TTeamDataTable>
+                className="u-w-100"
+                rows={
+                  areaTeams.map(team => ({
+                    ...team.data,
+                    //@ts-ignore
+                    name: team.data.attributes.name || "",
+                    openAssignments: 0,
+                    reports: 0
+                  })) ?? []
+                }
+                columnOrder={[
+                  { key: "name", name: "areas.details.teamsTable.header.name", rowHref: row => `/teams/${row.id}` },
+                  { key: "reports", name: "areas.details.teamsTable.header.reports" }
+                ]}
+                rowActions={[removeTeam]}
               />
             </div>
           </Article>
@@ -121,6 +192,12 @@ const AreasView: FC<IProps & RouteComponentProps<TParams>> = ({ geojson, area, l
         </Route>
         <Route path={`${path}/template/remove/:templateId`}>
           <RemoveTemplateModal />
+        </Route>
+        <Route path={`${path}/team/add`}>
+          <AddTeamModal teams={teams} users={teamMembers} />
+        </Route>
+        <Route path={`${path}/team/remove/:teamId`}>
+          <RemoveTeamModal />
         </Route>
       </Switch>
     </>
