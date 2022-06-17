@@ -4,13 +4,22 @@ import { BaseService } from "./baseService";
 import domtoimage from "dom-to-image";
 import { operations } from "interfaces/api";
 import store from "store";
-import { teamService } from "./teams";
+import { TeamResponse, teamService } from "./teams";
 
 export type TAreasResponse =
   operations["get-v3-forest-watcher-area"]["responses"]["200"]["content"]["application/json"];
 
-export type TTeamAreaResponse =
-  operations["get-v3-forest-watcher-area-teamAreas"]["responses"]["200"]["content"]["application/json"];
+export type TTeamAreaResponse = {
+  data: string[];
+};
+
+export type TAreaTeamResponse =
+  operations["get-v3-forest-watcher-area-areaTeams"]["responses"]["200"]["content"]["application/json"];
+
+export type TAreasInTeam = {
+  team: TeamResponse["data"];
+  areas: { data: TAreasResponse }[];
+};
 
 export class AreaService extends BaseService {
   async saveArea(area: any, node: HTMLElement, method: string) {
@@ -30,12 +39,24 @@ export class AreaService extends BaseService {
     });
   }
 
-  getArea(id: string) {
+  getArea(id: string): Promise<any> {
     return this.fetchJSON(`/${id}`);
   }
 
-  getTeamArea(teamId: string): Promise<TTeamAreaResponse> {
-    return this.fetchJSON(`/teamAreas/${teamId}`);
+  async getAreasInUsersTeams(): Promise<TAreasInTeam[]> {
+    // Get teams
+    const teams = await teamService.getUserTeams(store.getState().user.data.id);
+
+    return Promise.all(
+      teams.data.map(async (team: TeamResponse["data"]) => {
+        if (team) {
+          const resp: TTeamAreaResponse = await this.fetchJSON(`/teamAreas/${team.id}`);
+          return { team, areas: await Promise.all(resp.data.map(id => this.getArea(id))) };
+        }
+
+        return { team, areas: [] };
+      })
+    );
   }
 
   getAreaFW(): Promise<TAreasResponse> {

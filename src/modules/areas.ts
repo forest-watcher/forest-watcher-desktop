@@ -3,7 +3,7 @@ import normalize from "json-api-normalizer";
 import { saveGeostore } from "./geostores";
 import { toastr } from "react-redux-toastr";
 import omit from "lodash/omit";
-import { areaService } from "services/area";
+import { areaService, TAreasInTeam } from "services/area";
 import { utilsService } from "services/utils";
 import { AppDispatch, RootState } from "store";
 import { TGetTeamResponse } from "services/teams";
@@ -12,6 +12,8 @@ import { TGetTeamResponse } from "services/teams";
 const SET_AREA = "areas/SET_AREA";
 const SET_AREAS = "areas/SET_AREAS";
 const SET_AREA_TEAMS = "areas/SET_AREA_TEAMS";
+const SET_AREAS_IN_USERS_TEAMS = "areas/SET_AREAS_IN_USERS_TEAMS";
+const SET_LOADING_AREAS_IN_USERS_TEAMS = "areas/SET_LOADING_AREAS_IN_USERS_TEAMS";
 const SET_COUNTRIES = "areas/SET_COUNTRIES";
 const SET_LOADING_AREAS = "areas/SET_LOADING_AREAS";
 const SET_SAVING_AREA = "areas/SET_SAVING_AREA";
@@ -23,7 +25,9 @@ export type TAreasState = {
   data: any;
   countries: any[];
   areaTeams: TGetTeamResponse[];
+  areasInUsersTeams: TAreasInTeam[];
   loading: boolean;
+  loadingAreasInUsers: boolean;
   saving: boolean;
   editing: boolean;
   error: boolean;
@@ -33,6 +37,8 @@ export type TReducerActions =
   | { type: typeof SET_AREA; payload: any }
   | { type: typeof SET_AREAS; payload: any }
   | { type: typeof SET_AREA_TEAMS; payload: { areaTeams: TAreasState["areaTeams"] } }
+  | { type: typeof SET_AREAS_IN_USERS_TEAMS; payload: { areasInUsersTeams: TAreasState["areasInUsersTeams"] } }
+  | { type: typeof SET_LOADING_AREAS_IN_USERS_TEAMS; payload: boolean }
   | { type: typeof SET_COUNTRIES; payload: any }
   | { type: typeof SET_LOADING_AREAS; payload: any }
   | { type: typeof SET_SAVING_AREA; payload: any }
@@ -45,7 +51,9 @@ const initialState: TAreasState = {
   data: {},
   countries: [],
   areaTeams: [],
+  areasInUsersTeams: [],
   loading: true,
+  loadingAreasInUsers: true,
   saving: false,
   editing: false,
   error: false
@@ -77,6 +85,9 @@ export default function reducer(state = initialState, action: TReducerActions): 
     case SET_AREA_TEAMS: {
       return Object.assign({}, state, { areaTeams: action.payload });
     }
+    case SET_AREAS_IN_USERS_TEAMS: {
+      return Object.assign({}, state, { areasInUsersTeams: action.payload });
+    }
     case SET_AREA_DELETED: {
       const areaId = action.payload;
       const ids = state.ids.filter(id => id !== areaId);
@@ -87,6 +98,8 @@ export default function reducer(state = initialState, action: TReducerActions): 
       return Object.assign({}, state, { countries: action.payload });
     case SET_LOADING_AREAS:
       return Object.assign({}, state, { loading: action.payload });
+    case SET_LOADING_AREAS_IN_USERS_TEAMS:
+      return Object.assign({}, state, { loadingAreasInUsers: action.payload });
     case SET_SAVING_AREA:
       return Object.assign({}, state, { ...action.payload });
     case SET_EDITING_AREA:
@@ -191,6 +204,34 @@ export function getAreaTeams(areaId: string) {
       })
       .catch(error => {
         toastr.error("Unable to load area teams", error);
+      });
+  };
+}
+
+export function getAreasInUsersTeams() {
+  return (dispatch: AppDispatch, state: () => RootState) => {
+    dispatch({
+      type: SET_LOADING_AREAS_IN_USERS_TEAMS,
+      payload: true
+    });
+    return areaService
+      .getAreasInUsersTeams()
+      .then(data => {
+        dispatch({
+          type: SET_AREAS_IN_USERS_TEAMS,
+          payload: data
+        });
+        return data;
+      })
+      .catch(error => {
+        console.log(error);
+        toastr.error("Unable to load team areas", error);
+      })
+      .finally(() => {
+        dispatch({
+          type: SET_LOADING_AREAS_IN_USERS_TEAMS,
+          payload: false
+        });
       });
   };
 }
