@@ -84,7 +84,7 @@ describe("TabGroup Component", () => {
   it("should activate the correct tab when the route is changed", () => {
     const { container, getByText } = render();
 
-    const barTab = getByText("bar").parentElement!;
+    const barTab = getByText("bar");
 
     fireEvent.click(barTab);
 

@@ -145,7 +145,7 @@ describe("RadioChipGroup Component", () => {
     `);
   });
 
-  it("should correctly sent the initially value", () => {
+  it("should correctly set the initially value", () => {
     const { getAllByRole } = render({
       value: "zip"
     });
