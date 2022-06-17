@@ -1,6 +1,5 @@
-import { render as utilRender } from "test-utils";
+import { render as utilRender, fireEvent } from "test-utils";
 import RadioChipGroup, { IProps as IRadioChipGroupProps } from "../RadioChipGroup";
-import { fireEvent } from "../../../../test-utils";
 
 const radioOptions: IRadioChipGroupProps["options"] = [
   {
