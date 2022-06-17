@@ -146,62 +146,6 @@ describe("RadioChipGroup Component", () => {
     `);
   });
 
-  it("should render the group variation", () => {
-    const { container } = render({
-      isGrouped: true
-    });
-
-    expect(container).toMatchInlineSnapshot(`
-      <div>
-        <div
-          class="c-radio-chip-group c-radio-chip-group--grouped"
-          id="headlessui-radiogroup-:r9:"
-          role="radiogroup"
-        >
-          <div
-            aria-checked="true"
-            class="my-class-name c-radio-chip-group__item"
-            id="headlessui-radiogroup-option-:ra:"
-            role="radio"
-            tabindex="0"
-          >
-            <span
-              class="c-chip c-chip--secondary-light-text c-chip--is-selectable c-chip--is-selected"
-            >
-              Email
-            </span>
-          </div>
-          <div
-            aria-checked="false"
-            class="my-class-name c-radio-chip-group__item"
-            id="headlessui-radiogroup-option-:rb:"
-            role="radio"
-            tabindex="-1"
-          >
-            <span
-              class="c-chip c-chip--secondary-light-text c-chip--is-selectable"
-            >
-              Zip
-            </span>
-          </div>
-          <div
-            aria-checked="false"
-            class="my-class-name c-radio-chip-group__item"
-            id="headlessui-radiogroup-option-:rc:"
-            role="radio"
-            tabindex="-1"
-          >
-            <span
-              class="c-chip c-chip--secondary-light-text c-chip--is-selectable"
-            >
-              Pigeon
-            </span>
-          </div>
-        </div>
-      </div>
-    `);
-  });
-
   it("should correctly sent the initially value", () => {
     const { getAllByRole } = render({
       value: "zip"

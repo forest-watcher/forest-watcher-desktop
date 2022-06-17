@@ -6,7 +6,6 @@ import { FormattedMessage } from "react-intl";
 
 export interface IProps {
   className?: string;
-  isGrouped?: boolean;
   label?: string;
   options: {
     className?: string;
@@ -18,7 +17,7 @@ export interface IProps {
 }
 
 const RadioChipGroup: FC<IProps> = props => {
-  const { className, isGrouped = false, label, options, value = options[0].value, onChange } = props;
+  const { className, label, options, value = options[0].value, onChange } = props;
   const [selectedValue, setSelectedValue] = useState(value);
 
   useEffect(() => setSelectedValue(value), [value]);
@@ -29,12 +28,8 @@ const RadioChipGroup: FC<IProps> = props => {
   };
 
   return (
-    <RadioGroup
-      value={selectedValue}
-      onChange={handleChange}
-      className={classnames(className, "c-radio-chip-group", isGrouped && "c-radio-chip-group--grouped")}
-    >
-      {label && !isGrouped && (
+    <RadioGroup value={selectedValue} onChange={handleChange} className={classnames(className, "c-radio-chip-group")}>
+      {label && (
         <RadioGroup.Label className="c-radio-chip-group__label">
           <FormattedMessage id={label} />
         </RadioGroup.Label>
@@ -46,11 +41,7 @@ const RadioChipGroup: FC<IProps> = props => {
           className={classnames(option.className, "c-radio-chip-group__item")}
         >
           {({ checked }) => (
-            <Chip
-              isSelectable
-              isSelected={checked}
-              variant={isGrouped ? "secondary-light-text" : checked ? "primary" : "secondary"}
-            >
+            <Chip isSelectable isSelected={checked} variant={checked ? "primary" : "secondary"}>
               <FormattedMessage id={option.name} />
             </Chip>
           )}

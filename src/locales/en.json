@@ -158,6 +158,8 @@
   "reports.detailLink": "Go to detail",
   "reports.dateString": "No date",
   "reports.userString": "No user",
+  "reporting.tabs.investigation": "Investigation",
+  "reporting.tabs.reports": "Reports",
   "settings.name": "Settings",
   "teams.name": "Teams",
   "teams.details.name": "Team {name}",

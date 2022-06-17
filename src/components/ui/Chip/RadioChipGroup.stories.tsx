@@ -1,7 +1,6 @@
 import { ComponentStory, ComponentMeta } from "@storybook/react";
 
 import RadioChipGroup from "components/ui/Chip/RadioChipGroup";
-import { SecondaryLightText } from "./Chip.stories";
 
 // More on default export: https://storybook.js.org/docs/react/writing-stories/introduction#default-export
 export default {
@@ -31,29 +30,4 @@ Standard.args = {
       name: "Pigeon"
     }
   ]
-};
-
-export const Grouped = Template.bind({});
-// More on args: https://storybook.js.org/docs/react/writing-stories/args
-Grouped.args = {
-  isGrouped: true,
-  onChange: v => {},
-  options: [
-    {
-      value: "email",
-      name: "email"
-    },
-    {
-      value: "Zip",
-      name: "Zip"
-    },
-    {
-      value: "Pigeon",
-      name: "Pigeon"
-    }
-  ]
-};
-
-Grouped.parameters = {
-  backgrounds: { default: "dark" }
 };
