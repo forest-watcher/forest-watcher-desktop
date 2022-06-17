@@ -20,16 +20,12 @@ const TabGroup: FC<IProps> = props => {
   const { className, options, value } = props;
 
   return (
-    <RadioGroup
-      value={value}
-      onChange={() => {}}
-      className={classnames(className, "c-radio-chip-group c-radio-chip-group--grouped")}
-    >
+    <RadioGroup value={value} onChange={() => {}} className={classnames(className, "c-tab-group")}>
       {options.map(option => (
         <RadioGroup.Option
           key={option.value}
           value={option.value}
-          className={classnames(option.className, "c-radio-chip-group__item")}
+          className={classnames(option.className, "c-tab-group__item")}
         >
           {({ checked }) => (
             <Link to={typeof option.href === "function" ? option.href(option.value) : option.href}>
