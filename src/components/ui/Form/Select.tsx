@@ -166,7 +166,9 @@ const Select = (props: Props) => {
                         >
                           <span className="c-input__select-list-item-label">{option.label}</span>
                           {option.secondaryLabel && (
-                            <span className="c-input__select-list-item-secondary-label">{option.secondaryLabel}</span>
+                            <span className="c-input__select-list-item-secondary-label u-text-ellipsis">
+                              {option.secondaryLabel}
+                            </span>
                           )}
                           {isMultiple && (
                             <img
