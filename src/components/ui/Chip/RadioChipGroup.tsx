@@ -4,7 +4,7 @@ import Chip from "./Chip";
 import classnames from "classnames";
 import { FormattedMessage } from "react-intl";
 
-interface IProps {
+export interface IProps {
   className?: string;
   isGrouped?: boolean;
   label?: string;
