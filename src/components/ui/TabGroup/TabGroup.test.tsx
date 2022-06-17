@@ -22,8 +22,11 @@ describe("TabGroup Component", () => {
     utilRender(
       <Switch>
         <Redirect exact from="/" to="/foo" />
-        <Route exact path="/foo" render={() => <TabGroup value="foo" options={tabOptions} {...props} />} />
-        <Route exact path="/bar" render={() => <TabGroup value="bar" options={tabOptions} {...props} />} />
+        <Route
+          exact
+          path="/:tab"
+          render={({ match: { params } }) => <TabGroup value={params.tab} options={tabOptions} {...props} />}
+        />
       </Switch>
     );
 
@@ -78,7 +81,7 @@ describe("TabGroup Component", () => {
     `);
   });
 
-  it("should switch activate the correct tab when the route is changed", () => {
+  it("should activate the correct tab when the route is changed", () => {
     const { container, getByText } = render();
 
     const barTab = getByText("bar").parentElement!;
