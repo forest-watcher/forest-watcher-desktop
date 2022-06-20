@@ -43,7 +43,7 @@ const initialState: TTemplatesState = {
   error: false
 };
 
-export default function reducer(state = initialState, action: TReducerActions) {
+export default function reducer(state = initialState, action: TReducerActions): TTemplatesState {
   switch (action.type) {
     case SET_TEMPLATE: {
       const template = action.payload.reports;
