@@ -5,7 +5,7 @@ import AreaView from "./AreaView";
 import { ThunkDispatch } from "redux-thunk";
 import { RouteComponentProps } from "react-router-dom";
 import { readArea, readGeojson } from "helpers/areas";
-import { getUserTeams } from "modules/gfwTeams";
+import { getTeamMembers, getUserTeams } from "modules/gfwTeams";
 
 interface MatchParams {
   areaId?: string;
@@ -19,7 +19,8 @@ const mapStateToProps = (state: RootState, { match }: IMatchParams) => ({
   area: readArea(state, match.params.areaId),
   areaTeams: state.areas.areaTeams,
   templates: state.templates.templates,
-  teams: state.gfwTeams.data
+  teams: state.gfwTeams.data,
+  teamMembers: state.gfwTeams.members
 });
 
 function mapDispatchToProps(dispatch: ThunkDispatch<RootState, null, any>) {
@@ -32,6 +33,9 @@ function mapDispatchToProps(dispatch: ThunkDispatch<RootState, null, any>) {
     },
     getAreaTeams: (areaId: string) => {
       dispatch(getAreaTeams(areaId));
+    },
+    getTeamMembers: (teamId: string) => {
+      dispatch(getTeamMembers(teamId));
     }
   };
 }

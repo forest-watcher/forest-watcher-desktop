@@ -32,7 +32,9 @@ const AreasView: FC<IProps & RouteComponentProps<TParams>> = ({
   match,
   getUserTeams,
   getAreaTeams,
+  getTeamMembers,
   areaTeams,
+  teamMembers,
   teams
 }) => {
   const [mapRef, setMapRef] = useState<MapInstance | null>(null);
@@ -80,6 +82,12 @@ const AreasView: FC<IProps & RouteComponentProps<TParams>> = ({
       getUserTeams(userId);
     }
   }, [area, userId, getUserTeams, getAreaTeams]);
+
+  useEffect(() => {
+    if (areaTeams) {
+      areaTeams.forEach(team => getTeamMembers(team.data.id));
+    }
+  }, [areaTeams, getTeamMembers]);
 
   return (
     <>
@@ -150,8 +158,7 @@ const AreasView: FC<IProps & RouteComponentProps<TParams>> = ({
                     key: "name",
                     name: "areas.details.templatesTable.header.name",
                     rowHref: row => `/templates/${row.id}`
-                  },
-                  { key: "openAssignments", name: "areas.details.templatesTable.header.openAssignments" }
+                  }
                 ]}
                 rowActions={[removeTemplate]}
               />
@@ -183,7 +190,6 @@ const AreasView: FC<IProps & RouteComponentProps<TParams>> = ({
                 }
                 columnOrder={[
                   { key: "name", name: "areas.details.teamsTable.header.name", rowHref: row => `/teams/${row.id}` },
-                  { key: "openAssignments", name: "areas.details.templatesTable.header.openAssignments" },
                   { key: "reports", name: "areas.details.teamsTable.header.reports" }
                 ]}
                 rowActions={[removeTeam]}
@@ -200,7 +206,7 @@ const AreasView: FC<IProps & RouteComponentProps<TParams>> = ({
           <RemoveTemplateModal />
         </Route>
         <Route path={`${path}/team/add`}>
-          <AddTeamModal teams={teamsToAdd} />
+          <AddTeamModal teams={teamsToAdd} users={teamMembers} />
         </Route>
         <Route path={`${path}/team/remove/:teamId`}>
           <RemoveTeamModal />

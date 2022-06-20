@@ -9,12 +9,13 @@ import { Option } from "types";
 import { areaService } from "services/area";
 import { useAppDispatch } from "hooks/useRedux";
 import { getAreas } from "modules/areas";
-import { TGetUserTeamsResponse } from "services/teams";
+import { TGetTeamMembersResponse, TGetUserTeamsResponse } from "services/teams";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup/dist/yup";
 
 interface IProps {
   teams: TGetUserTeamsResponse["data"];
+  users: { [teamId: string]: TGetTeamMembersResponse["data"] };
 }
 
 type TAddTeamForm = {
@@ -28,7 +29,7 @@ const addTeamSchema = yup
   })
   .required();
 
-const AddTeamModal: FC<IProps> = ({ teams }) => {
+const AddTeamModal: FC<IProps> = ({ teams, users }) => {
   const { areaId } = useParams<TParams>();
   const intl = useIntl();
   const history = useHistory();
@@ -37,9 +38,11 @@ const AddTeamModal: FC<IProps> = ({ teams }) => {
     () =>
       teams?.map(team => ({
         label: team.attributes.name,
+        // @ts-ignore name doesn't exist yet, will be added in the future
+        secondaryLabel: users[team.id]?.map(member => member.attributes.name ?? member.id).join(", "),
         value: team.id as string
       })),
-    [teams]
+    [teams, users]
   );
 
   const onClose = () => {
