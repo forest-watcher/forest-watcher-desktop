@@ -4,7 +4,7 @@ import { unique } from "../helpers/utils";
 import { components, paths } from "interfaces/teams";
 import store from "store";
 
-type TeamResponse = components["responses"]["Team"]["content"]["application/json"];
+export type TeamResponse = components["responses"]["Team"]["content"]["application/json"];
 export type Team = components["schemas"]["Team"];
 
 export class Legacy_TeamService extends BaseService {
@@ -76,6 +76,8 @@ export type TDeleteTeamMembersResponse =
 
 export class TeamService extends BaseService {
   getUserTeams(userId: string): Promise<TGetUserTeamsResponse> {
+    this.token = store.getState().user.token;
+
     return this.fetchJSON(`/user/${userId}`);
   }
 

@@ -3,17 +3,10 @@
     display: flex;
     flex-wrap: wrap;
     gap: $global-spacing-10;
-    justify-content: center;
   }
 
   &__item {
     flex: 1 1 325px;
-    .c-card__image {
-      max-height: 200px;
-      height: 100%;
-      width: 100%;
-      object-fit: cover;
-    }
   }
 }
 
@@ -40,5 +33,13 @@
     display: flex;
     gap: $global-spacing-3;
     align-items: center;
+  }
+}
+
+.c-area-card {
+  &__image {
+    height: 200px;
+    width: 100%;
+    object-fit: cover;
   }
 }

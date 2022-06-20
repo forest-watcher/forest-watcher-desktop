@@ -1,15 +1,22 @@
+import { getAreasInUsersTeams } from "modules/areas";
 import { connect, ConnectedProps } from "react-redux";
 import { RootState } from "store";
 
 import Areas from "./Areas";
 
-const mapStateToProps = ({ areas, user, app }: RootState) => ({
+const mapStateToProps = ({ areas, app }: RootState) => ({
   areasList: areas.data,
+  areasInUsersTeams: areas.areasInUsersTeams,
   loading: areas.loading,
-  userChecked: app.userChecked
+  userChecked: app.userChecked,
+  loadingTeamAreas: areas.loadingAreasInUsers
 });
 
-const connector = connect(mapStateToProps);
+const mapDispatchToProps = {
+  getAreasInUsersTeams
+};
+
+const connector = connect(mapStateToProps, mapDispatchToProps);
 
 export type TPropsFromRedux = ConnectedProps<typeof connector>;
 
