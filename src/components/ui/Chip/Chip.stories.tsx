@@ -22,8 +22,27 @@ Secondary.args = {
   variant: "secondary"
 };
 
+export const SecondaryLightText = Template.bind({});
+SecondaryLightText.args = {
+  variant: "secondary-light-text"
+};
+
+SecondaryLightText.parameters = {
+  backgrounds: { default: "dark" }
+};
+
 export const Selectable = Template.bind({});
 Selectable.args = {
   variant: "primary",
   isSelectable: true
+};
+
+export const SecondaryLightTextSelectable = Template.bind({});
+SecondaryLightTextSelectable.args = {
+  variant: "secondary-light-text",
+  isSelectable: true
+};
+
+SecondaryLightTextSelectable.parameters = {
+  backgrounds: { default: "dark" }
 };

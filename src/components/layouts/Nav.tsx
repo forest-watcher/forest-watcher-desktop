@@ -58,7 +58,7 @@ const Nav: FC<IProps> = props => {
           {loggedIn && (
             <ul className="c-nav__subsection c-nav__subsection--links">
               <li className="c-nav__link-wrapper">
-                <NavLink to="/reports" className="c-nav__link" activeClassName="c-nav__link--active">
+                <NavLink to="/reporting" className="c-nav__link" activeClassName="c-nav__link--active">
                   <FormattedMessage id="reports.name" />
                 </NavLink>
               </li>

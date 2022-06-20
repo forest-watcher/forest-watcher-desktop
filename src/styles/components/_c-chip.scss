@@ -55,9 +55,30 @@
     }
   }
 
+  &--secondary-light-text {
+    background-color: transparent;
+    box-shadow: 0 0 0 1px $primary-500;
+    color: $neutral-300;
+    &.c-chip--is-selectable {
+      box-shadow: none;
+      &:hover, &:focus {
+        background-color: rgba($white, 0.05);
+      }
+
+      &:active, &.c-chip--is-selected {
+        background-color: $white;
+        color: #404040;
+      }
+    }
+  }
 }
 
 .c-radio-chip-group {
   display: flex;
+  flex-wrap: wrap;
   gap: $global-spacing-3;
+
+  &__label {
+    flex: 0 0 100%;
+  }
 }

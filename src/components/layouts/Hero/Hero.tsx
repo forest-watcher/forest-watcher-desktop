@@ -2,11 +2,13 @@ import { FC, PropsWithChildren, ReactElement } from "react";
 import classnames from "classnames";
 import { Link } from "react-router-dom";
 import { FormattedMessage } from "react-intl";
+import TabGroup, { IProps as ITabGroupProps } from "components/ui/TabGroup/TabGroup";
 import ChevronRight from "assets/images/icons/ChevronRightBrandGreen.svg";
 
 interface IProps {
   title: string;
   titleValues?: { [key: string]: string | number };
+  pageTabs?: ITabGroupProps;
   actions?: ReactElement;
   backLink?: {
     className?: string;
@@ -16,9 +18,11 @@ interface IProps {
   };
 }
 
-const Hero: FC<PropsWithChildren<IProps>> = ({ title, titleValues, backLink, children, actions }) => {
+const Hero: FC<PropsWithChildren<IProps>> = props => {
+  const { title, titleValues, backLink, pageTabs, children, actions } = props;
+
   return (
-    <aside className="c-hero">
+    <aside className={classnames("c-hero", pageTabs && "c-hero--with-tabs")}>
       <div className="row column">
         {backLink && (
           <div className="c-hero__content">
@@ -29,11 +33,22 @@ const Hero: FC<PropsWithChildren<IProps>> = ({ title, titleValues, backLink, chi
           </div>
         )}
         <div className="c-hero__content">
-          <h1 className="u-text-700 u-text-neutral-300 u-text-capitalize u-text-ellipsis">
+          <h1 className={"c-hero__title u-text-700 u-text-neutral-300 u-text-capitalize u-text-ellipsis"}>
             <FormattedMessage id={title} values={titleValues} />
           </h1>
-          <>{children}</>
-          {actions && <div className="c-hero__actions">{actions}</div>}
+
+          {pageTabs && (
+            <TabGroup
+              className={classnames(pageTabs.className, "c-hero__page-tabs")}
+              value={pageTabs.value}
+              options={pageTabs.options}
+            />
+          )}
+
+          <div className="c-hero__spacer">
+            <>{children}</>
+            {actions && <div className="c-hero__actions">{actions}</div>}
+          </div>
         </div>
       </div>
     </aside>

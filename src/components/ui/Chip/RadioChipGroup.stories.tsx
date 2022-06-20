@@ -13,3 +13,21 @@ const Template: ComponentStory<typeof RadioChipGroup> = args => <RadioChipGroup 
 
 export const Standard = Template.bind({});
 // More on args: https://storybook.js.org/docs/react/writing-stories/args
+Standard.args = {
+  label: "label",
+  onChange: v => {},
+  options: [
+    {
+      value: "email",
+      name: "email"
+    },
+    {
+      value: "Zip",
+      name: "Zip"
+    },
+    {
+      value: "Pigeon",
+      name: "Pigeon"
+    }
+  ]
+};
