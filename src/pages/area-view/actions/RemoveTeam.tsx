@@ -11,13 +11,13 @@ import { areaService } from "services/area";
 import { getAreas } from "modules/areas";
 
 type TParams = TAreaDetailParams & {
-  templateId: string;
+  teamId: string;
 };
 
 interface IProps {}
 
-const RemoveTemplateModal: FC<IProps> = props => {
-  const { templateId, areaId } = useParams<TParams>();
+const RemoveTeamModal: FC<IProps> = props => {
+  const { teamId, areaId } = useParams<TParams>();
   const history = useHistory();
   const intl = useIntl();
   const dispatch = useAppDispatch();
@@ -27,17 +27,17 @@ const RemoveTemplateModal: FC<IProps> = props => {
     history.push(`/areas/${areaId}`);
   }, [history, areaId]);
 
-  const removeTemplate = async () => {
+  const removeTeam = async () => {
     setIsRemoving(true);
     try {
-      await areaService.unassignTemplateFromArea(areaId, templateId);
+      await areaService.unassignTeamFromArea(areaId, teamId);
       dispatch(getAreas());
       onClose();
-      toastr.success(intl.formatMessage({ id: "areas.details.templates.remove.success" }), "");
+      toastr.success(intl.formatMessage({ id: "areas.details.teams.remove.success" }), "");
     } catch (e: any) {
       const error = JSON.parse(e.message) as TErrorResponse;
       toastr.error(
-        intl.formatMessage({ id: "areas.details.templates.remove.error" }),
+        intl.formatMessage({ id: "areas.details.teams.remove.error" }),
         error?.errors?.length ? error.errors[0].detail : ""
       );
       console.error(e);
@@ -49,19 +49,19 @@ const RemoveTemplateModal: FC<IProps> = props => {
     <Modal
       isOpen
       dismissible={false}
-      title={"areas.details.templates.remove.title"}
+      title={"areas.details.teams.remove.title"}
       onClose={onClose}
       actions={[
-        { name: "common.confirm", onClick: removeTemplate },
+        { name: "common.confirm", onClick: removeTeam },
         { name: "common.cancel", variant: "secondary", onClick: onClose }
       ]}
     >
       <Loader isLoading={isRemoving} />
       <p>
-        <FormattedMessage id="areas.details.templates.remove.body" />
+        <FormattedMessage id="areas.details.teams.remove.body" />
       </p>
     </Modal>
   );
 };
 
-export default RemoveTemplateModal;
+export default RemoveTeamModal;
