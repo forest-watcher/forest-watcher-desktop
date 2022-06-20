@@ -11,12 +11,12 @@ describe("AreaCard", () => {
     expect(container).toMatchInlineSnapshot(`
       <div>
         <div
-          class="c-card c-card--large c-areas__item c-class-name"
+          class="c-card c-card--large c-area-card c-class-name"
           data-testid="card"
         >
           <img
             alt=""
-            class="c-card__image"
+            class="c-card__image c-area-card__image"
             loading="lazy"
             src="https://s3.amazonaws.com/forest-watcher-files/areas-staging/0af2690c-d068-47fa-97f7-ada4a70f3895.png"
           />
