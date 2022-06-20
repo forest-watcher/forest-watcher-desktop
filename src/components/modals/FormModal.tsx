@@ -12,7 +12,7 @@ export interface IInputBase<T> {
   formatErrors?: (error: any) => any; // ToDo
   registerProps: {
     name: FieldPath<T>;
-    options: RegisterOptions<T, FieldPath<T>>;
+    options?: RegisterOptions<T, FieldPath<T>>;
   };
 }
 
