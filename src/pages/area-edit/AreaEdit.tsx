@@ -18,6 +18,7 @@ import union from "@turf/union";
 import InfoIcon from "assets/images/icons/Info.svg";
 import { goToGeojson } from "helpers/map";
 import Loader from "components/ui/Loader";
+import { useHistory } from "react-router-dom";
 
 const areaTitleKeys = {
   manage: "areas.manageArea",
@@ -45,6 +46,10 @@ const AreaEdit: FC<IProps> = ({ mode, geojson, getGeoFromShape, setSaving, saveA
   const [isValidatingShapefile, setIsValidatingShapefile] = useState(false);
   const [mapRef, setMapRef] = useState<MapInstance | null>(null);
   const [drawRef, setDrawRef] = useState<MapboxDraw | null>(null);
+  const history = useHistory();
+  const intl = useIntl();
+  const changesValid =
+    formState.errors.name === undefined && (updatedGeojson ? updatedGeojson.features.length > 0 : false);
 
   useEffect(() => {
     if (area?.attributes?.name) {
@@ -52,19 +57,22 @@ const AreaEdit: FC<IProps> = ({ mode, geojson, getGeoFromShape, setSaving, saveA
     }
   }, [area?.attributes?.name, setValue]);
 
-  const onSubmit: SubmitHandler<FormValues> = data => {
+  const onSubmit: SubmitHandler<FormValues> = async data => {
     if (mapRef && updatedGeojson) {
       setSaving(true);
       const method = mode === "manage" ? "PATCH" : "POST";
 
-      saveAreaWithGeostore(
+      await saveAreaWithGeostore(
         {
+          ...area,
           geojson: updatedGeojson,
           name
         },
-        mapRef.getCanvasContainer(),
+        mapRef.getCanvas(),
         method
       );
+      history.push("/areas");
+      toastr.success(intl.formatMessage({ id: "areas.saved" }), "");
       ReactGA.event({
         category: CATEGORY.AREA_CREATION,
         action: ACTION.AREA_SAVE,
@@ -72,11 +80,6 @@ const AreaEdit: FC<IProps> = ({ mode, geojson, getGeoFromShape, setSaving, saveA
       });
     }
   };
-
-  const changesValid =
-    formState.errors.name === undefined && (updatedGeojson ? updatedGeojson.features.length > 0 : false);
-
-  const intl = useIntl();
 
   const handleMapEdit = (e: FeatureCollection) => {
     setUpdatedGeojson(e);
@@ -108,6 +111,7 @@ const AreaEdit: FC<IProps> = ({ mode, geojson, getGeoFromShape, setSaving, saveA
   const handleMapLoad = (e: MapboxEvent) => {
     setMapRef(e.target);
   };
+
   const handleDrawLoad = (e: MapboxDraw) => {
     setDrawRef(e);
   };

@@ -27,8 +27,8 @@ function mapDispatchToProps(dispatch: ThunkDispatch<RootState, null, any>) {
     getGeoFromShape: async (area: any) => {
       return await dispatch(getGeoFromShape(area));
     },
-    saveAreaWithGeostore: (area: any, node: HTMLElement, method: string) => {
-      dispatch(saveAreaWithGeostore(area, node, method));
+    saveAreaWithGeostore: async (area: any, node: HTMLElement, method: string) => {
+      return await dispatch(saveAreaWithGeostore(area, node, method));
     },
     setSaving: (bool: boolean) => {
       dispatch(setSaving(bool));
