@@ -2,7 +2,7 @@ import { FC } from "react";
 import { Redirect, RouteComponentProps } from "react-router-dom";
 import { TPropsFromRedux } from "./ReportsContainer";
 import Hero from "components/layouts/Hero/Hero";
-import TabGroup, { IProps as ITabGroupProps } from "../../components/ui/TabGroup/TabGroup";
+import { IProps as ITabGroupProps } from "../../components/ui/TabGroup/TabGroup";
 
 type TParams = {
   reportingTab: string;
@@ -31,10 +31,7 @@ const Reports: FC<IProps> = props => {
     <Redirect to={`/reporting/investigation`} />
   ) : (
     <div className="l-reporting">
-      <Hero titleClassName="l-reporting__hero-title" title="reports.name">
-        <TabGroup className="l-reporting__tabs" value={reportingTab} options={pageTabs} />
-        <div className="l-reporting__tabs-spacer" />
-      </Hero>
+      <Hero title="reports.name" pageTabs={{ value: reportingTab, options: pageTabs }} />
     </div>
   );
 };
