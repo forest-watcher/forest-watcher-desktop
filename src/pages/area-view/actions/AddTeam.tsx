@@ -10,6 +10,8 @@ import { areaService } from "services/area";
 import { useAppDispatch } from "hooks/useRedux";
 import { getAreas } from "modules/areas";
 import { TGetTeamMembersResponse, TGetUserTeamsResponse } from "services/teams";
+import * as yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup/dist/yup";
 
 interface IProps {
   teams: TGetUserTeamsResponse["data"];
@@ -19,6 +21,13 @@ interface IProps {
 type TAddTeamForm = {
   teams: string[];
 };
+
+const addTeamSchema = yup
+  .object()
+  .shape({
+    teams: yup.array().min(1).required()
+  })
+  .required();
 
 const AddTeamModal: FC<IProps> = ({ teams, users }) => {
   const { areaId } = useParams<TParams>();
@@ -60,6 +69,7 @@ const AddTeamModal: FC<IProps> = ({ teams, users }) => {
       modalTitle="areas.details.teams.add.title"
       modalSubtitle="areas.details.teams.add.select"
       submitBtnName="common.add"
+      useFormProps={{ resolver: yupResolver(addTeamSchema) }}
       inputs={[
         {
           id: "select-teams",
@@ -72,10 +82,9 @@ const AddTeamModal: FC<IProps> = ({ teams, users }) => {
           hideLabel: true,
           isMultiple: true,
           registerProps: {
-            name: "teams",
-            options: { required: true }
+            name: "teams"
           },
-          formatErrors: errors => errors.email
+          formatErrors: errors => errors.teams
         }
       ]}
       actions={

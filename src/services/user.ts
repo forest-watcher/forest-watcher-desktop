@@ -21,6 +21,13 @@ export type TSignUpResponse = {
   email: string;
 };
 
+export type TResetPasswordBody = {
+  email: string;
+};
+export type TResetPasswordResponse = {
+  email: string;
+};
+
 export class UserService extends BaseService {
   checkLogged(token: string) {
     this.token = token;
@@ -46,6 +53,17 @@ export class UserService extends BaseService {
     body.apps = ["rw"];
 
     return this.fetchJSON(`/auth/sign-up?callbackUrl=${API_CALLBACK_URL}`, {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: ""
+      },
+      method: "POST",
+      body: JSON.stringify(body)
+    });
+  }
+
+  resetPassword(body: TResetPasswordBody): Promise<TResetPasswordResponse> {
+    return this.fetchJSON(`/auth/reset-password?callbackUrl=${API_CALLBACK_URL}`, {
       headers: {
         "Content-Type": "application/json",
         Authorization: ""

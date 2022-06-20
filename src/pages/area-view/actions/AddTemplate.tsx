@@ -10,6 +10,8 @@ import { Option } from "types";
 import { areaService } from "services/area";
 import { useAppDispatch } from "hooks/useRedux";
 import { getAreas } from "modules/areas";
+import * as yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup/dist/yup";
 
 interface IProps {
   templates: TGetTemplates["data"];
@@ -18,6 +20,13 @@ interface IProps {
 type TAddTemplateForm = {
   templates: string[];
 };
+
+const addTemplateSchema = yup
+  .object()
+  .shape({
+    templates: yup.array().min(1).required()
+  })
+  .required();
 
 const AddTemplateModal: FC<IProps> = ({ templates }) => {
   const { areaId } = useParams<TParams>();
@@ -58,6 +67,7 @@ const AddTemplateModal: FC<IProps> = ({ templates }) => {
       modalTitle="areas.details.templates.add.title"
       modalSubtitle="areas.details.templates.add.select"
       submitBtnName="common.add"
+      useFormProps={{ resolver: yupResolver(addTemplateSchema) }}
       inputs={[
         {
           id: "select-templates",
@@ -70,10 +80,9 @@ const AddTemplateModal: FC<IProps> = ({ templates }) => {
           hideLabel: true,
           isMultiple: true,
           registerProps: {
-            name: "templates",
-            options: { required: true }
+            name: "templates"
           },
-          formatErrors: errors => errors.email
+          formatErrors: errors => errors.templates
         }
       ]}
       actions={

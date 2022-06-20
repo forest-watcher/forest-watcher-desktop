@@ -41,7 +41,13 @@ export class AreaService extends BaseService {
 
   addTemplatesToAreas(areaId: string, templateIds: string[]) {
     this.token = store.getState().user.token;
-    const promises = templateIds.map(id => this.fetch(`/${areaId}/template/${id}`, { method: "POST" }));
+    const promises = templateIds.map(async id => {
+      const resp = await this.fetch(`/${areaId}/template/${id}`, { method: "POST" });
+      if (!resp.ok) {
+        throw Error(await resp.text());
+      }
+      return resp;
+    });
 
     return Promise.all(promises);
   }
@@ -63,7 +69,13 @@ export class AreaService extends BaseService {
 
   addTeamsToAreas(areaId: string, teamIds: string[]) {
     this.token = store.getState().user.token;
-    const promises = teamIds.map(id => this.fetch(`/${areaId}/team/${id}`, { method: "POST" }));
+    const promises = teamIds.map(async id => {
+      const resp = await this.fetch(`/${areaId}/team/${id}`, { method: "POST" });
+      if (!resp.ok) {
+        throw Error(await resp.text());
+      }
+      return resp;
+    });
 
     return Promise.all(promises);
   }

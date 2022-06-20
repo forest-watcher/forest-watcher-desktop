@@ -1,6 +1,6 @@
 import Hero from "components/layouts/Hero/Hero";
 import Map from "components/ui/Map/Map";
-import { FC, useState, useEffect } from "react";
+import { FC, useState, useEffect, useMemo } from "react";
 import { MapboxEvent, Map as MapInstance } from "mapbox-gl";
 import { FormattedMessage } from "react-intl";
 import { TPropsFromRedux } from "./AreaViewContainer";
@@ -40,6 +40,18 @@ const AreasView: FC<IProps & RouteComponentProps<TParams>> = ({
   const [mapRef, setMapRef] = useState<MapInstance | null>(null);
   let { path, url } = useRouteMatch();
   const userId = useGetUserId();
+
+  const templatesToAdd = useMemo(() => {
+    return (
+      templates?.filter(
+        template => !area?.attributes.reportTemplate.find(areaTemplate => areaTemplate.id === template.id)
+      ) || []
+    );
+  }, [area?.attributes.reportTemplate, templates]);
+
+  const teamsToAdd = useMemo(() => {
+    return teams?.filter(team => !areaTeams.find(areaTeam => areaTeam.data.id === team.id)) || [];
+  }, [areaTeams, teams]);
 
   const handleMapLoad = (e: MapboxEvent) => {
     setMapRef(e.target);
@@ -188,13 +200,13 @@ const AreasView: FC<IProps & RouteComponentProps<TParams>> = ({
       </div>
       <Switch>
         <Route path={`${path}/template/add`}>
-          <AddTemplateModal templates={templates} />
+          <AddTemplateModal templates={templatesToAdd} />
         </Route>
         <Route path={`${path}/template/remove/:templateId`}>
           <RemoveTemplateModal />
         </Route>
         <Route path={`${path}/team/add`}>
-          <AddTeamModal teams={teams} users={teamMembers} />
+          <AddTeamModal teams={teamsToAdd} users={teamMembers} />
         </Route>
         <Route path={`${path}/team/remove/:teamId`}>
           <RemoveTeamModal />
