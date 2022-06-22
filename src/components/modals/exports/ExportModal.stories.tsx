@@ -33,21 +33,20 @@ const Template: ComponentStory<typeof Modal> = args => {
       <pre className="u-margin-top">
         <code>{values && JSON.stringify(values, null, 2)}</code>
       </pre>
-      {isOpen && (
-        <ExportModal
-          {...args}
-          onClose={() => setIsOpen(false)}
-          onSave={onSave}
-          fileTypes={[
-            { label: "Shape file", value: ".shp" },
-            { label: "Geojson", value: ".geojson" }
-          ]}
-          fields={[
-            { label: "Field 1", value: "1" },
-            { label: "Field 2", value: "2" }
-          ]}
-        />
-      )}
+      <ExportModal
+        {...args}
+        onClose={() => setIsOpen(false)}
+        onSave={onSave}
+        fileTypes={[
+          { label: "Shape file", value: ".shp" },
+          { label: "Geojson", value: ".geojson" }
+        ]}
+        fields={[
+          { label: "Field 1", value: "1" },
+          { label: "Field 2", value: "2" }
+        ]}
+        isOpen={isOpen}
+      />
     </div>
   );
 };

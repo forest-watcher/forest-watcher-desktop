@@ -14,6 +14,7 @@ export type TExportForm = {
 interface IProps {
   onClose: IModalProps<TExportForm>["onClose"];
   onSave: IModalProps<TExportForm>["onSave"];
+  isOpen: IModalProps<TExportForm>["isOpen"];
   fileTypes: {
     label: string;
     value: string;
@@ -33,7 +34,7 @@ const exportSchema = yup
   })
   .required();
 
-const ExportModal: FC<IProps> = ({ onClose, onSave, fileTypes, fields }) => {
+const ExportModal: FC<IProps> = ({ onClose, onSave, isOpen, fileTypes, fields }) => {
   const intl = useIntl();
   const inputs = useMemo<IModalProps<TExportForm>["inputs"]>(() => {
     return [
@@ -63,23 +64,24 @@ const ExportModal: FC<IProps> = ({ onClose, onSave, fileTypes, fields }) => {
       },
       {
         id: "downloadMethod",
-        selectProps: {
-          label: intl.formatMessage({ id: "export.downloadMethod" }),
-          placeholder: intl.formatMessage({ id: "export.selectDownloadMethod" }),
+        radioGroupProps: {
+          label: "export.downloadMethod",
           options: [
             {
-              label: "Download",
+              name: "export.downloadMethods.download",
               value: "download"
             },
             {
-              label: "Send Email",
+              name: "export.downloadMethods.email",
               value: "email"
             },
             {
-              label: "Shareable Link",
+              name: "export.downloadMethods.link",
               value: "link"
             }
-          ]
+          ],
+          value: "download",
+          labelClassName: "c-input__label"
         },
         registerProps: {
           name: "downloadMethod"
@@ -91,7 +93,7 @@ const ExportModal: FC<IProps> = ({ onClose, onSave, fileTypes, fields }) => {
 
   return (
     <FormModal<TExportForm>
-      isOpen
+      isOpen={isOpen}
       onClose={onClose}
       onSave={onSave}
       modalTitle="export.title"
