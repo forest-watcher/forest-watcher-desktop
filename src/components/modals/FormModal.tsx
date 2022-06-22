@@ -8,6 +8,7 @@ import UnsavedChanges from "components/modals/UnsavedChanges";
 import Loader from "components/ui/Loader";
 import { UseFormProps } from "react-hook-form/dist/types";
 import { FormattedMessage } from "react-intl";
+import FormModalInput from "./FormModalInput";
 
 export interface IInputBase<T> {
   formatErrors?: (error: any) => any; // ToDo
@@ -81,10 +82,9 @@ const FormModal = <T,>(props: IProps<T>) => {
   const formhook = useForm<T>(useFormProps);
 
   const {
-    register,
     handleSubmit,
     reset,
-    formState: { isDirty, errors }
+    formState: { isDirty }
   } = formhook;
   const [isClosing, setIsClosing] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -109,51 +109,6 @@ const FormModal = <T,>(props: IProps<T>) => {
     setIsLoading(false);
   };
 
-  const getInput = (input: TAvailableTypes<T>) => {
-    if ((input as TInput<T>).htmlInputProps !== undefined) {
-      const inputProps = input as TInput<T>;
-      const { formatErrors, registerProps, ...rest } = inputProps;
-
-      return (
-        <Input
-          {...rest}
-          error={formatErrors && formatErrors(errors)}
-          registered={register(registerProps.name, registerProps.options)}
-        />
-      );
-    }
-
-    if ((input as TSelect<T>).selectProps !== undefined) {
-      const inputProps = input as TSelect<T>;
-      const { formatErrors, registerProps, ...rest } = inputProps;
-
-      return (
-        <Select
-          {...rest}
-          error={formatErrors && formatErrors(errors)}
-          registered={register(registerProps.name, registerProps.options)}
-          formHook={formhook}
-        />
-      );
-    }
-
-    if ((input as TToggleGroup<T>).toggleGroupProps !== undefined) {
-      const inputProps = input as TToggleGroup<T>;
-      const { formatErrors, registerProps, ...rest } = inputProps;
-
-      return (
-        <ToggleGroup
-          {...rest}
-          error={formatErrors && formatErrors(errors)}
-          registered={register(registerProps.name, registerProps.options)}
-          formHook={formhook}
-        />
-      );
-    }
-
-    return "";
-  };
-
   return (
     <>
       <Modal
@@ -172,9 +127,9 @@ const FormModal = <T,>(props: IProps<T>) => {
           </p>
         )}
         <form className="c-modal-form" onSubmit={handleSubmit(onSubmit)}>
-          {inputs.map(item => {
-            return <Fragment key={item.id}>{getInput(item)}</Fragment>;
-          })}
+          {inputs.map(item => (
+            <FormModalInput<T> key={item.id} input={item} formhook={formhook} />
+          ))}
         </form>
         {actions && <div className="c-modal-dialog__extra-actions">{actions}</div>}
       </Modal>
