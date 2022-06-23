@@ -1,9 +1,7 @@
 import { ComponentStory, ComponentMeta } from "@storybook/react";
 
 import MapCard from "components/ui/Map/components/cards/MapCard";
-import Card from "components/ui/Card/Card";
 import Button from "components/ui/Button/Button";
-import { useState } from "react";
 
 // More on default export: https://storybook.js.org/docs/react/writing-stories/introduction#default-export
 export default {
