@@ -89,7 +89,7 @@ const Select = (props: Props) => {
                 {selectProps.label}
               </Listbox.Label>
             )}
-            <div className="u-w-100">
+            <div className={classnames(isMultiple ? "u-w-100" : "c-input__input-wrapper")}>
               <div
                 className={classnames(
                   "c-input__select",
