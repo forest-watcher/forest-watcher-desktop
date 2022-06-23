@@ -3,7 +3,7 @@ import { Redirect, Route, RouteComponentProps, Switch } from "react-router-dom";
 import { TPropsFromRedux } from "./ReportsContainer";
 import Hero from "components/layouts/Hero/Hero";
 import { IProps as ITabGroupProps } from "components/ui/TabGroup/TabGroup";
-import InvestigationPage from "./Investigation";
+import InvestigationPage from "./investigation/Investigation";
 
 type TParams = {
   reportingTab: string;
@@ -35,7 +35,7 @@ const Reports: FC<IProps> = props => {
       <Hero title="reports.name" pageTabs={{ value: reportingTab, options: pageTabs }} />
 
       <Switch>
-        <Route exact path="/reporting/investigation" component={InvestigationPage} />
+        <Route path={"/reporting/investigation"} component={InvestigationPage} />
       </Switch>
     </div>
   );
