@@ -10,6 +10,7 @@
   &__input-wrapper {
     position: relative;
   }
+
   &__label {
     font-weight: 500;
     font-size: 14px;
@@ -20,6 +21,7 @@
       margin-top: 0;
     }
   }
+
   &__input {
     background-color: $neutral-300;
     border: 1px solid $neutral-500;
@@ -241,5 +243,29 @@
       border-radius: 50%;
       transform: translate(-92%, -52%);
     }
+  }
+}
+
+.c-input-group {
+  &__item {
+    margin-bottom: $global-spacing-4;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  &__input-label {
+    color: $neutral-600;
+    font-weight: 400;
+    text-transform: none;
+  }
+
+  &__label {
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 14px;
+    text-transform: uppercase;
+    color: $neutral-700;
+    margin-bottom: $global-spacing-4;
+    display: inline-block;
   }
 }
