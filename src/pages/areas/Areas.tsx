@@ -4,7 +4,7 @@ import Loader from "components/ui/Loader";
 import Map from "components/ui/Map/Map";
 import { FC, useMemo, useEffect, useState } from "react";
 import Polygon from "components/ui/Map/components/layers/Polygon";
-import { MapboxEvent, Map as MapInstance } from "mapbox-gl";
+import { MapboxEvent, Map as MapInstance, MapEventType, EventData } from "mapbox-gl";
 import * as turf from "@turf/turf";
 import { FormattedMessage, useIntl } from "react-intl";
 import ReactGA from "react-ga";
@@ -38,6 +38,28 @@ const Areas: FC<IProps> = props => {
       goToGeojson(mapRef, features);
     }
   }, [features, mapRef]);
+
+  useEffect(() => {
+    if (mapRef) {
+      const callback = (e: MapEventType & EventData) => {
+        if (selectedArea && features && selectedArea.attributes.geostore.geojson.features[0]) {
+          // Is inside?
+          const within = turf.booleanPointInPolygon(
+            [e.lngLat.lng, e.lngLat.lat],
+            selectedArea.attributes.geostore.geojson.features[0] as any // Typing error
+          );
+          if (!within) {
+            setSelectedArea(null);
+          }
+        }
+      };
+      mapRef.on("click", callback);
+
+      return () => {
+        mapRef.off("click", callback);
+      };
+    }
+  }, [features, mapRef, selectedArea]);
 
   useEffect(() => {
     getAreasInUsersTeams();

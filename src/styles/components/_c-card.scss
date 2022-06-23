@@ -27,6 +27,11 @@ $c-card-border-radius:  $global-spacing-1;
       line-height: 22px;
       margin-top: $global-spacing-1;
     }
+    .c-card__list {
+      li:not(:last-child) {
+        margin-bottom: 6px;
+      }
+    }
   }
 
   &--small {
@@ -185,6 +190,9 @@ $c-card-border-radius:  $global-spacing-1;
 
   &__footer {
     border-top: 2px solid $neutral-400;
+    display: flex;
+    flex-direction: column;
+    gap: $global-spacing-3;
     .c-button {
       width: 100%;
     }
@@ -208,5 +216,15 @@ $c-card-border-radius:  $global-spacing-1;
   &--bottom-right {
     right: $global-spacing-10;
     bottom: $global-spacing-10;
+  }
+
+  &--area-detail {
+    max-width: 400px;
+    width: 100%;
+    @media screen and (max-width: 480px) {
+      left: $global-spacing-5;
+      right: $global-spacing-5;
+      width: unset;
+    }
   }
 }
