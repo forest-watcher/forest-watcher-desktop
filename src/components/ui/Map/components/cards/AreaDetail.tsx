@@ -17,7 +17,7 @@ const AreaDetailCard: FC<IParams> = ({ area }) => {
       className="c-map-card--area-detail"
       footer={
         <>
-          <Link to="/reporting/investigation" className="c-button c-button--primary">
+          <Link to={`/reporting/investigation/${area.id}`} className="c-button c-button--primary">
             <FormattedMessage id="investigation.start" />
           </Link>
           <Link to={`/areas/${area.id}`} className="c-button c-button--secondary">
