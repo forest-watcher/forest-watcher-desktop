@@ -149,3 +149,43 @@ $c-card-border-radius:  $global-spacing-1;
     }
   }
 }
+
+
+.c-map-card {
+  padding: 0;
+  &__header {
+    display: flex;
+    align-items: center;
+    gap: $global-spacing-2;
+  }
+
+  &__back-button {
+    width: 16px;
+    height: 16px;
+    background-image: url("../../assets/images/icons/ChevronRightSmall.svg");
+    background-size: contain;
+    transform: rotate(180deg);
+  }
+
+  &__title {
+    margin-top: 0 !important;
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 24px;
+  }
+
+  &__header, &__footer, &__content {
+    padding: $global-spacing-5;
+  }
+
+  &__header {
+    border-bottom: 2px solid $neutral-400;
+  }
+
+  &__footer {
+    border-top: 2px solid $neutral-400;
+    .c-button {
+      width: 100%;
+    }
+  }
+}
