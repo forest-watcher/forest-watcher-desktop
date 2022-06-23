@@ -5,7 +5,7 @@ import Button from "../Button/Button";
 
 // More on default export: https://storybook.js.org/docs/react/writing-stories/introduction#default-export
 export default {
-  title: "UI/Modal",
+  title: "Modals/Generic Modal",
   component: Modal
 } as ComponentMeta<typeof Modal>;
 

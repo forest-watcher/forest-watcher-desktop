@@ -6,6 +6,15 @@ export interface ToggleProps {
   defaultValue?: Boolean;
 }
 
+export interface ToggleGroupProps {
+  label?: string;
+  options: {
+    label: string;
+    value: string;
+  }[];
+  defaultValue?: string[];
+}
+
 export interface ToggleField extends FieldBase, RegisterableField {
   fieldType: FieldType.Toggle;
   toggleProps: ToggleProps;

@@ -38,43 +38,48 @@ describe("RadioChipGroup Component", () => {
           role="radiogroup"
         >
           <div
-            aria-checked="true"
-            class="my-class-name c-radio-chip-group__item"
-            id="headlessui-radiogroup-option-:r1:"
-            role="radio"
-            tabindex="0"
+            class="c-radio-chip-group__options"
+            role="none"
           >
-            <span
-              class="c-chip c-chip--primary c-chip--is-selectable c-chip--is-selected"
+            <div
+              aria-checked="true"
+              class="my-class-name c-radio-chip-group__item"
+              id="headlessui-radiogroup-option-:r1:"
+              role="radio"
+              tabindex="0"
             >
-              Email
-            </span>
-          </div>
-          <div
-            aria-checked="false"
-            class="my-class-name c-radio-chip-group__item"
-            id="headlessui-radiogroup-option-:r2:"
-            role="radio"
-            tabindex="-1"
-          >
-            <span
-              class="c-chip c-chip--secondary c-chip--is-selectable"
+              <span
+                class="c-chip c-chip--primary c-chip--is-selectable c-chip--is-selected"
+              >
+                Email
+              </span>
+            </div>
+            <div
+              aria-checked="false"
+              class="my-class-name c-radio-chip-group__item"
+              id="headlessui-radiogroup-option-:r2:"
+              role="radio"
+              tabindex="-1"
             >
-              Zip
-            </span>
-          </div>
-          <div
-            aria-checked="false"
-            class="my-class-name c-radio-chip-group__item"
-            id="headlessui-radiogroup-option-:r3:"
-            role="radio"
-            tabindex="-1"
-          >
-            <span
-              class="c-chip c-chip--secondary c-chip--is-selectable"
+              <span
+                class="c-chip c-chip--secondary c-chip--is-selectable"
+              >
+                Zip
+              </span>
+            </div>
+            <div
+              aria-checked="false"
+              class="my-class-name c-radio-chip-group__item"
+              id="headlessui-radiogroup-option-:r3:"
+              role="radio"
+              tabindex="-1"
             >
-              Pigeon
-            </span>
+              <span
+                class="c-chip c-chip--secondary c-chip--is-selectable"
+              >
+                Pigeon
+              </span>
+            </div>
           </div>
         </div>
       </div>
@@ -102,43 +107,48 @@ describe("RadioChipGroup Component", () => {
             my.label
           </label>
           <div
-            aria-checked="true"
-            class="my-class-name c-radio-chip-group__item"
-            id="headlessui-radiogroup-option-:r6:"
-            role="radio"
-            tabindex="0"
+            class="c-radio-chip-group__options"
+            role="none"
           >
-            <span
-              class="c-chip c-chip--primary c-chip--is-selectable c-chip--is-selected"
+            <div
+              aria-checked="true"
+              class="my-class-name c-radio-chip-group__item"
+              id="headlessui-radiogroup-option-:r6:"
+              role="radio"
+              tabindex="0"
             >
-              Email
-            </span>
-          </div>
-          <div
-            aria-checked="false"
-            class="my-class-name c-radio-chip-group__item"
-            id="headlessui-radiogroup-option-:r7:"
-            role="radio"
-            tabindex="-1"
-          >
-            <span
-              class="c-chip c-chip--secondary c-chip--is-selectable"
+              <span
+                class="c-chip c-chip--primary c-chip--is-selectable c-chip--is-selected"
+              >
+                Email
+              </span>
+            </div>
+            <div
+              aria-checked="false"
+              class="my-class-name c-radio-chip-group__item"
+              id="headlessui-radiogroup-option-:r7:"
+              role="radio"
+              tabindex="-1"
             >
-              Zip
-            </span>
-          </div>
-          <div
-            aria-checked="false"
-            class="my-class-name c-radio-chip-group__item"
-            id="headlessui-radiogroup-option-:r8:"
-            role="radio"
-            tabindex="-1"
-          >
-            <span
-              class="c-chip c-chip--secondary c-chip--is-selectable"
+              <span
+                class="c-chip c-chip--secondary c-chip--is-selectable"
+              >
+                Zip
+              </span>
+            </div>
+            <div
+              aria-checked="false"
+              class="my-class-name c-radio-chip-group__item"
+              id="headlessui-radiogroup-option-:r8:"
+              role="radio"
+              tabindex="-1"
             >
-              Pigeon
-            </span>
+              <span
+                class="c-chip c-chip--secondary c-chip--is-selectable"
+              >
+                Pigeon
+              </span>
+            </div>
           </div>
         </div>
       </div>
