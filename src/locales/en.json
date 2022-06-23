@@ -361,5 +361,13 @@
   "errors.array.min": "At least {min, plural, one {# item is} other {# items are}} required",
   "errors.number.min": "This should be at least {min}",
   "errors.number.max": "This should be less than {max}",
-  "errors.team.detail": "Could not find Team"
+  "errors.team.detail": "Could not find Team",
+  "export.title": "Export",
+  "export.fileType": "File Type",
+  "export.selectFileType": "Select File Type",
+  "export.fields": "Fields",
+  "export.downloadMethod": "Download Method",
+  "export.downloadMethods.download": "Download",
+  "export.downloadMethods.email": "Send Email",
+  "export.downloadMethods.link": "Shareable"
 }

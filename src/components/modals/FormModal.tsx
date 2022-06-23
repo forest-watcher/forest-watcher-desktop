@@ -1,8 +1,9 @@
-import { Fragment, ReactNode, useEffect, useState } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import Modal from "components/ui/Modal/Modal";
-import Input, { Props as IInputProps } from "components/ui/Form/Input";
-import Select, { Props as ISelectProps } from "components/ui/Form/Select";
-import ToggleGroup, { Props as IToggleGroupProps } from "components/ui/Form/ToggleGroup";
+import { Props as IInputProps } from "components/ui/Form/Input";
+import { Props as ISelectProps } from "components/ui/Form/Select";
+import { Props as IToggleGroupProps } from "components/ui/Form/ToggleGroup";
+import { Props as IRadioChipGroupProps } from "components/ui/Form/RadioChipGroup";
 import { useForm, SubmitHandler, RegisterOptions, UnpackNestedValue, FieldPath } from "react-hook-form";
 import UnsavedChanges from "components/modals/UnsavedChanges";
 import Loader from "components/ui/Loader";
@@ -21,7 +22,8 @@ export interface IInputBase<T> {
 export type TInput<T> = Omit<IInputProps, "registered"> & IInputBase<T>;
 export type TSelect<T> = Omit<Omit<ISelectProps, "formHook">, "registered"> & IInputBase<T>;
 export type TToggleGroup<T> = Omit<Omit<IToggleGroupProps, "formHook">, "registered"> & IInputBase<T>;
-export type TAvailableTypes<T> = TInput<T> | TSelect<T> | TToggleGroup<T>;
+export type TRadioGroup<T> = Omit<Omit<IRadioChipGroupProps, "formHook">, "registered"> & IInputBase<T>;
+export type TAvailableTypes<T> = TInput<T> | TSelect<T> | TToggleGroup<T> | TRadioGroup<T>;
 
 export interface IProps<T> {
   isOpen: boolean;
