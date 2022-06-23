@@ -153,6 +153,7 @@ $c-card-border-radius:  $global-spacing-1;
 
 .c-map-card {
   padding: 0;
+  position: absolute;
   &__header {
     display: flex;
     align-items: center;
@@ -187,5 +188,25 @@ $c-card-border-radius:  $global-spacing-1;
     .c-button {
       width: 100%;
     }
+  }
+
+  &--top-left {
+    left: $global-spacing-10;
+    top: $global-spacing-10;
+  }
+
+  &--bottom-left {
+    left: $global-spacing-10;
+    bottom: $global-spacing-10;
+  }
+
+  &--top-right {
+    right: 160px; // Avoid map controls
+    top: $global-spacing-10;
+  }
+
+  &--bottom-right {
+    right: $global-spacing-10;
+    bottom: $global-spacing-10;
   }
 }

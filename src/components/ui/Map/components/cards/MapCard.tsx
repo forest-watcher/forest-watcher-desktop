@@ -7,11 +7,12 @@ interface IParams extends HTMLAttributes<HTMLElement> {
   title: string;
   footer?: ReactNode;
   children?: ReactNode;
+  position?: "top-left" | "bottom-left" | "top-right" | "bottom-right";
 }
 
-const MapCard: FC<IParams> = ({ onBack, title, footer, children, className }) => {
+const MapCard: FC<IParams> = ({ onBack, title, footer, children, className, position = "top-left" }) => {
   return (
-    <Card className={classNames("c-map-card", className)}>
+    <Card className={classNames("c-map-card", `c-map-card--${position}`, className)}>
       <Card.Header className="c-map-card__header">
         {onBack && <button className="c-map-card__back-button" area-label="back" onClick={() => onBack()} />}
         <Card.Title className="c-map-card__title">{title}</Card.Title>

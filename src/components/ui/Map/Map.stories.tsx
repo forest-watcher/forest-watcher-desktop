@@ -89,8 +89,8 @@ const MultipleTemplate: ComponentStory<typeof Map> = args => {
           <MapCard
             title="Example Popup"
             onBack={() => setSelected(null)}
-            className="c-map__card-control"
             footer={<Button onClick={() => setSelected(null)}>Close</Button>}
+            position="top-left"
           >
             <Card.Text>Selected polygon {selected}</Card.Text>
           </MapCard>
