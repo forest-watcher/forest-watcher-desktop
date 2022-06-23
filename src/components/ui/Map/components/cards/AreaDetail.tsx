@@ -6,9 +6,11 @@ import MapCard from "./MapCard";
 
 interface IParams {
   area: TAreasResponse;
+  numberOfTeams: number;
+  numberOfReports: number;
 }
 
-const AreaDetailCard: FC<IParams> = ({ area }) => {
+const AreaDetailCard: FC<IParams> = ({ area, numberOfTeams, numberOfReports }) => {
   const intl = useIntl();
   return (
     <MapCard
@@ -34,10 +36,10 @@ const AreaDetailCard: FC<IParams> = ({ area }) => {
           />
         </li>
         <li>
-          <FormattedMessage id="areas.card.reports" values={{ num: 0 }} />
+          <FormattedMessage id="areas.card.reports" values={{ num: numberOfReports }} />
         </li>
         <li>
-          <FormattedMessage id="areas.card.teams" values={{ num: 0 }} />
+          <FormattedMessage id="areas.card.teams" values={{ num: numberOfTeams }} />
         </li>
       </ul>
     </MapCard>

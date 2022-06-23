@@ -2,7 +2,7 @@ import Hero from "components/layouts/Hero/Hero";
 import Article from "components/layouts/Article";
 import Loader from "components/ui/Loader";
 import Map from "components/ui/Map/Map";
-import { FC, useMemo, useEffect, useState } from "react";
+import { FC, useMemo, useEffect, useState, Fragment } from "react";
 import Polygon from "components/ui/Map/components/layers/Polygon";
 import { MapboxEvent, Map as MapInstance, MapEventType, EventData } from "mapbox-gl";
 import * as turf from "@turf/turf";
@@ -69,6 +69,18 @@ const Areas: FC<IProps> = props => {
     setMapRef(evt.target);
   };
 
+  const getNumberOfTeamsInArea = (areaId: string) => {
+    let count = 0;
+    areasInUsersTeams.forEach(team =>
+      team.areas.forEach(area => {
+        if (area.data.id === areaId) {
+          count++;
+        }
+      })
+    );
+    return count;
+  };
+
   return (
     <div className="c-areas">
       <Hero title="areas.name" />
@@ -100,7 +112,13 @@ const Areas: FC<IProps> = props => {
                   isSelected={selectedArea === area}
                 />
               ))}
-              {selectedArea && <AreaDetailCard area={selectedArea} />}
+              {selectedArea && (
+                <AreaDetailCard
+                  area={selectedArea}
+                  numberOfTeams={getNumberOfTeamsInArea(selectedArea.id)}
+                  numberOfReports={0}
+                />
+              )}
             </Map>
           )}
         </>
@@ -128,15 +146,15 @@ const Areas: FC<IProps> = props => {
           {areasInUsersTeams.map(
             areasInTeam =>
               areasInTeam.team && (
-                <>
+                <Fragment key={areasInTeam.team.id}>
                   <h3 className="u-text-600 u-text-neutral-700">{areasInTeam.team.attributes?.name}</h3>
 
-                  <div className="c-areas__area-listing" key={areasInTeam.team.id}>
+                  <div className="c-areas__area-listing">
                     {areasInTeam.areas.map(area => (
                       <AreaCard area={area.data} key={area.data.id} className="c-areas__item" />
                     ))}
                   </div>
-                </>
+                </Fragment>
               )
           )}
         </Article>
