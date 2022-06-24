@@ -1,7 +1,7 @@
 import Hero from "components/layouts/Hero/Hero";
 import Article from "components/layouts/Article";
 import Loader from "components/ui/Loader";
-import { FC, useMemo, useEffect } from "react";
+import { FC, useMemo, useEffect, useState } from "react";
 import { FormattedMessage, useIntl } from "react-intl";
 import ReactGA from "react-ga";
 import EmptyState from "components/ui/EmptyState/EmptyState";
@@ -10,12 +10,14 @@ import { TPropsFromRedux } from "./AreasContainer";
 import { TAreasResponse } from "services/area";
 import AreaCard from "components/area-card/AreaCard";
 import UserAreasMap from "components/user-areas-map/UserAreasMap";
+import AreaDetailCard from "../../components/ui/Map/components/cards/AreaDetail";
 
 interface IProps extends TPropsFromRedux {}
 
 const Areas: FC<IProps> = props => {
   const { areasList, loading, loadingTeamAreas, getAreasInUsersTeams, areasInUsersTeams } = props;
   const areaMap = useMemo<TAreasResponse[]>(() => Object.values(areasList), [areasList]);
+  const [selectedArea, setSelectedArea] = useState<TAreasResponse | null>(null);
   const intl = useIntl();
 
   useEffect(() => {
@@ -42,7 +44,13 @@ const Areas: FC<IProps> = props => {
               <Loader isLoading />
             </div>
           ) : (
-            <UserAreasMap className="c-map--within-hero" />
+            <UserAreasMap
+              className="c-map--within-hero"
+              selectedAreaId={selectedArea?.id}
+              onAreaClick={areaId => setSelectedArea(areasList[areaId])}
+            >
+              {selectedArea && <AreaDetailCard area={selectedArea} />}
+            </UserAreasMap>
           )}
         </>
       )}

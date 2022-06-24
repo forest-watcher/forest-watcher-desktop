@@ -6,7 +6,6 @@ import { TAreasResponse } from "../../services/area";
 import { Map as MapInstance, MapboxEvent } from "mapbox-gl";
 import * as turf from "@turf/turf";
 import { goToGeojson } from "../../helpers/map";
-import AreaDetailCard from "components/ui/Map/components/cards/AreaDetail";
 
 interface IProps extends IMapProps {
   onAreaClick?: IPolygonProps["onClick"];
@@ -17,14 +16,9 @@ interface IProps extends IMapProps {
 const UserAreasMap: FC<PropsWithChildren<IProps>> = props => {
   const { onAreaClick, onMapLoad, focusAllAreas = true, selectedAreaId, children, ...rest } = props;
   const [mapRef, setMapRef] = useState<MapInstance | null>(null);
-  const [selectedArea, setSelectedArea] = useState<TAreasResponse | null>(null);
 
   const { data: areasList } = useAppSelector(state => state.areas);
   const areaMap = useMemo<TAreasResponse[]>(() => Object.values(areasList), [areasList]);
-
-  useEffect(() => {
-    if (selectedAreaId) setSelectedArea(areasList[selectedAreaId]);
-  }, [areasList, selectedAreaId]);
 
   const features = useMemo(() => {
     if (areaMap.length > 0) {
@@ -40,11 +34,6 @@ const UserAreasMap: FC<PropsWithChildren<IProps>> = props => {
     }
   }, [features, mapRef, focusAllAreas]);
 
-  const handleAreaClick = (area: TAreasResponse) => (id: string) => {
-    setSelectedArea(area);
-    if (onAreaClick) onAreaClick(id);
-  };
-
   const handleMapLoad = (e: MapboxEvent) => {
     setMapRef(e.target);
     if (onMapLoad) onMapLoad(e);
@@ -58,11 +47,10 @@ const UserAreasMap: FC<PropsWithChildren<IProps>> = props => {
           id={area.id}
           label={area.attributes.name}
           data={area.attributes.geostore.geojson}
-          isSelected={selectedArea?.id === area.id}
-          onClick={handleAreaClick(area)}
+          isSelected={selectedAreaId === area.id}
+          onClick={onAreaClick}
         />
       ))}
-      {selectedArea && <AreaDetailCard area={selectedArea} />}
       {children}
     </Map>
   );
