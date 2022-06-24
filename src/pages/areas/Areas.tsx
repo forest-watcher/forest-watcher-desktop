@@ -1,15 +1,17 @@
 import Hero from "components/layouts/Hero/Hero";
 import Article from "components/layouts/Article";
 import Loader from "components/ui/Loader";
-import { FC, useMemo, useEffect } from "react";
+import { FC, useMemo, useEffect, useState } from "react";
 import { FormattedMessage, useIntl } from "react-intl";
 import ReactGA from "react-ga";
 import EmptyState from "components/ui/EmptyState/EmptyState";
 import PlusIcon from "assets/images/icons/PlusWhite.svg";
 import { TPropsFromRedux } from "./AreasContainer";
+import { goToGeojson } from "helpers/map";
 import { TAreasResponse } from "services/area";
 import AreaCard from "components/area-card/AreaCard";
 import UserAreasMap from "components/user-areas-map/UserAreasMap";
+import AreaDetailCard from "components/ui/Map/components/cards/AreaDetail";
 
 interface IProps extends TPropsFromRedux {}
 
@@ -17,6 +19,7 @@ const Areas: FC<IProps> = props => {
   const { areasList, loading, loadingTeamAreas, getAreasInUsersTeams, areasInUsersTeams } = props;
   const areaMap = useMemo<TAreasResponse[]>(() => Object.values(areasList), [areasList]);
   const intl = useIntl();
+  const [selectedArea, setSelectedArea] = useState<TAreasResponse | null>(null);
 
   useEffect(() => {
     getAreasInUsersTeams();
