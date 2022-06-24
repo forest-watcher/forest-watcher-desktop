@@ -1,19 +1,31 @@
 import { FC } from "react";
-import { RouteComponentProps, useRouteMatch } from "react-router-dom";
+import { Route, RouteComponentProps, Switch, useHistory, useRouteMatch } from "react-router-dom";
 import UserAreasMap from "components/user-areas-map/UserAreasMap";
+import AreaDetailsControlPanel from "./control-panels/AreaDetails";
+import AreaListControlPanel from "./control-panels/AreaList";
+import { TParams } from "./types";
 
 interface IProps extends RouteComponentProps {}
 
 const InvestigationPage: FC<IProps> = props => {
-  let selectAreaMatch = useRouteMatch({ path: "/reporting/investigation/:areaId", strict: true });
-  let startInvestigationMatch = useRouteMatch({ path: "/reporting/investigation/:areaId/start", strict: true });
+  const { match } = props;
+  const history = useHistory();
+  let selectAreaMatch = useRouteMatch<TParams>({ path: "/reporting/investigation/:areaId", exact: true });
 
-  console.log(selectAreaMatch, startInvestigationMatch);
+  const handleAreaClick = (areaId: string) => {
+    history.push(`${match.url}/${areaId}`);
+  };
 
   return (
-    <UserAreasMap>
-      <div>{JSON.stringify(selectAreaMatch)}</div>
-      <div>{JSON.stringify(startInvestigationMatch)}</div>
+    <UserAreasMap
+      onAreaClick={handleAreaClick}
+      focusAllAreas={!selectAreaMatch}
+      activeAreaId={selectAreaMatch?.params.areaId}
+    >
+      <Switch>
+        <Route exact path={`${match.url}`} component={AreaListControlPanel} />
+        <Route exact path={`${match.url}/:areaId`} component={AreaDetailsControlPanel} />
+      </Switch>
     </UserAreasMap>
   );
 };

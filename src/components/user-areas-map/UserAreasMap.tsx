@@ -1,16 +1,20 @@
-import { FC, useEffect, useMemo, useState } from "react";
+import { FC, PropsWithChildren, useEffect, useMemo, useState } from "react";
 import { useAppSelector } from "../../hooks/useRedux";
-import Polygon from "../ui/Map/components/layers/Polygon";
+import Polygon, { IProps as IPolygonProps } from "../ui/Map/components/layers/Polygon";
 import Map, { IProps as IMapProps } from "../ui/Map/Map";
 import { TAreasResponse } from "../../services/area";
 import { Map as MapInstance, MapboxEvent } from "mapbox-gl";
 import * as turf from "@turf/turf";
 import { goToGeojson } from "../../helpers/map";
 
-interface IProps extends IMapProps {}
+interface IProps extends IMapProps {
+  onAreaClick?: IPolygonProps["onClick"];
+  focusAllAreas?: boolean;
+  activeAreaId?: string;
+}
 
-const UserAreasMap: FC<IProps> = props => {
-  const { onMapLoad, ...rest } = props;
+const UserAreasMap: FC<PropsWithChildren<IProps>> = props => {
+  const { onAreaClick, onMapLoad, focusAllAreas = true, activeAreaId, children, ...rest } = props;
   const [mapRef, setMapRef] = useState<MapInstance | null>(null);
 
   const { data: areasList } = useAppSelector(state => state.areas);
@@ -25,10 +29,10 @@ const UserAreasMap: FC<IProps> = props => {
   }, [areaMap]);
 
   useEffect(() => {
-    if (features) {
+    if (features && focusAllAreas) {
       goToGeojson(mapRef, features);
     }
-  }, [features, mapRef]);
+  }, [features, mapRef, focusAllAreas]);
 
   const handleMapLoad = (e: MapboxEvent) => {
     setMapRef(e.target);
@@ -38,8 +42,16 @@ const UserAreasMap: FC<IProps> = props => {
   return (
     <Map onMapLoad={handleMapLoad} {...rest}>
       {areaMap.map((area: any) => (
-        <Polygon key={area.id} id={area.id} label={area.attributes.name} data={area.attributes.geostore.geojson} />
+        <Polygon
+          key={area.id}
+          id={area.id}
+          label={area.attributes.name}
+          data={area.attributes.geostore.geojson}
+          isActive={activeAreaId === area.id}
+          onClick={onAreaClick}
+        />
       ))}
+      {children}
     </Map>
   );
 };

@@ -1,19 +1,22 @@
-import { FC, useEffect, useMemo, useState } from "react";
+import { FC, useEffect, useMemo, useReducer, useState } from "react";
 import { Layer, LngLatBoundsLike, Source, useMap } from "react-map-gl";
 import { polygonStyle, polygonLineStyle, polygonLineStyleHover, labelStyle } from "./styles";
 import * as turf from "@turf/turf";
 import { AllGeoJSON } from "@turf/turf";
 
-interface IProps {
+export interface IProps {
   id: string;
   data: GeoJSON.Feature<GeoJSON.Geometry> | GeoJSON.FeatureCollection<GeoJSON.Geometry> | string | undefined;
   onClick?: (id: string) => void;
   label?: string;
+  isActive?: boolean;
 }
 
-const Polygon: FC<IProps> = ({ id, data, onClick, label }) => {
+const Polygon: FC<IProps> = props => {
+  const { id, data, onClick, label, isActive = false } = props;
   const { current: map } = useMap();
   const [isHover, setIsHover] = useState(false);
+
   const centrePoint = useMemo(() => {
     if (!data || typeof data === "string") {
       return null;
@@ -61,7 +64,7 @@ const Polygon: FC<IProps> = ({ id, data, onClick, label }) => {
     });
   }, [bounds, id, map, onClick]);
 
-  const layerStyle = isHover ? polygonLineStyleHover : polygonLineStyle;
+  const layerStyle = isHover || isActive ? polygonLineStyleHover : polygonLineStyle;
 
   return (
     <>
