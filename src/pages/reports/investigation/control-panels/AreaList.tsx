@@ -4,19 +4,21 @@ import { RouteComponentProps } from "react-router-dom";
 import MapCard from "components/ui/Map/components/cards/MapCard";
 import Card from "components/ui/Card/Card";
 import { FormattedMessage, useIntl } from "react-intl";
+import Loader from "../../../../components/ui/Loader";
 
 interface IProps extends RouteComponentProps {}
 
 const AreaListControlPanel: FC<IProps> = props => {
   const { match } = props;
   const intl = useIntl();
-  const { data: areas } = useAppSelector(state => state.areas);
+  const { data: areas, loading: isLoadingAreas } = useAppSelector(state => state.areas);
 
   return (
     <MapCard
       className="c-map-control-panel"
       title={intl.formatMessage({ id: "reporting.control.panel.area.list.title" })}
     >
+      <Loader isLoading={isLoadingAreas} />
       <h3 className="c-map-control-panel__sub-title">
         <FormattedMessage id="reporting.control.panel.area.list.your.areas" />
       </h3>
@@ -28,7 +30,7 @@ const AreaListControlPanel: FC<IProps> = props => {
             year = areaCreatedDate.getFullYear();
 
           return (
-            <div className="c-map-control-panel__grid-item">
+            <div key={area.id} className="c-map-control-panel__grid-item">
               <Card className="c-map-control-panel__area-card" size="small">
                 <Card.Image
                   alt=""
