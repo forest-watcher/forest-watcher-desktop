@@ -4,4 +4,40 @@
   bottom: 40px;
   max-width: 400px;
   width: 100%;
+
+  &__sub-title {
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 24px;
+    color: $neutral-700;
+    padding: 0;
+    margin-bottom: 12px;
+  }
+
+  &__area-card-content {
+    margin-top: 3px;
+  }
+
+  &__grid {
+    display: flex;
+    flex-wrap: wrap;
+    margin-top: -12px;
+    margin-left: -6px;
+    margin-right: -6px;
+  }
+
+  &__grid-item {
+    width: 50%;
+    flex: 0 0 50%;
+    padding: 12px 6px 0;
+  }
+
+  &__area-card {
+    width: 100%;
+    height: 100%;
+  }
+
+  &__area-card-image {
+    height: 90px;
+  }
 }
