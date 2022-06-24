@@ -38,7 +38,7 @@ const AreaListControlPanel: FC<IProps> = props => {
                 />
                 <div className="c-map-control-panel__area-card-content">
                   <Card.Title className="u-margin-top-none">{area.attributes.name}</Card.Title>
-                  <Card.Text>
+                  <Card.Text className="u-margin-top-none">
                     <FormattedMessage id="reporting.control.panel.area.created.at">
                       {txt => <>{`${txt} ${day} ${month} ${year}`}</>}
                     </FormattedMessage>
