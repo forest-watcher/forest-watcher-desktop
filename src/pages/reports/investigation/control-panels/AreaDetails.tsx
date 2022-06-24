@@ -1,15 +1,16 @@
 import { FC, useEffect, useMemo } from "react";
-import { Link, RouteComponentProps } from "react-router-dom";
+import { RouteComponentProps } from "react-router-dom";
 import { LngLatBoundsLike, useMap } from "react-map-gl";
 import * as turf from "@turf/turf";
 import { AllGeoJSON } from "@turf/turf";
 import { useAppSelector } from "hooks/useRedux";
 import { TParams } from "../types";
+import MapCard from "components/ui/Map/components/cards/MapCard";
 
 interface IProps extends RouteComponentProps<TParams> {}
 
 const AreaDetailsControlPanel: FC<IProps> = props => {
-  const { match } = props;
+  const { match, history } = props;
   const { areaId } = match.params;
   const { data: areas } = useAppSelector(state => state.areas);
   const { current: map } = useMap();
@@ -27,7 +28,15 @@ const AreaDetailsControlPanel: FC<IProps> = props => {
     }
   }, [map, bounds]);
 
-  return <div className="c-map-control-panel">{JSON.stringify(areas[areaId])}</div>;
+  const handleBackBtnClick = () => {
+    history.push("/reporting/investigation");
+  };
+
+  return (
+    <MapCard className="c-map-control-panel" title={areas[areaId].attributes.name} onBack={handleBackBtnClick}>
+      {JSON.stringify(areas[areaId])}
+    </MapCard>
+  );
 };
 
 export default AreaDetailsControlPanel;
