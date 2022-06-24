@@ -6,19 +6,25 @@ import { TAreasResponse } from "../../services/area";
 import { Map as MapInstance, MapboxEvent } from "mapbox-gl";
 import * as turf from "@turf/turf";
 import { goToGeojson } from "../../helpers/map";
+import AreaDetailCard from "components/ui/Map/components/cards/AreaDetail";
 
 interface IProps extends IMapProps {
   onAreaClick?: IPolygonProps["onClick"];
   focusAllAreas?: boolean;
-  activeAreaId?: string;
+  selectedAreaId?: string;
 }
 
 const UserAreasMap: FC<PropsWithChildren<IProps>> = props => {
-  const { onAreaClick, onMapLoad, focusAllAreas = true, activeAreaId, children, ...rest } = props;
+  const { onAreaClick, onMapLoad, focusAllAreas = true, selectedAreaId, children, ...rest } = props;
   const [mapRef, setMapRef] = useState<MapInstance | null>(null);
+  const [selectedArea, setSelectedArea] = useState<TAreasResponse | null>(null);
 
   const { data: areasList } = useAppSelector(state => state.areas);
   const areaMap = useMemo<TAreasResponse[]>(() => Object.values(areasList), [areasList]);
+
+  useEffect(() => {
+    if (selectedAreaId) setSelectedArea(areasList[selectedAreaId]);
+  }, [areasList, selectedAreaId]);
 
   const features = useMemo(() => {
     if (areaMap.length > 0) {
@@ -34,6 +40,11 @@ const UserAreasMap: FC<PropsWithChildren<IProps>> = props => {
     }
   }, [features, mapRef, focusAllAreas]);
 
+  const handleAreaClick = (area: TAreasResponse) => (id: string) => {
+    setSelectedArea(area);
+    if (onAreaClick) onAreaClick(id);
+  };
+
   const handleMapLoad = (e: MapboxEvent) => {
     setMapRef(e.target);
     if (onMapLoad) onMapLoad(e);
@@ -41,16 +52,17 @@ const UserAreasMap: FC<PropsWithChildren<IProps>> = props => {
 
   return (
     <Map onMapLoad={handleMapLoad} {...rest}>
-      {areaMap.map((area: any) => (
+      {areaMap.map(area => (
         <Polygon
           key={area.id}
           id={area.id}
           label={area.attributes.name}
           data={area.attributes.geostore.geojson}
-          isActive={activeAreaId === area.id}
-          onClick={onAreaClick}
+          isSelected={selectedArea?.id === area.id}
+          onClick={handleAreaClick(area)}
         />
       ))}
+      {selectedArea && <AreaDetailCard area={selectedArea} />}
       {children}
     </Map>
   );

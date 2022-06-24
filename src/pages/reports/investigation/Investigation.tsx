@@ -10,7 +10,7 @@ interface IProps extends RouteComponentProps {}
 const InvestigationPage: FC<IProps> = props => {
   const { match } = props;
   const history = useHistory();
-  let selectAreaMatch = useRouteMatch<TParams>({ path: "/reporting/investigation/:areaId", exact: true });
+  let selectedAreaMatch = useRouteMatch<TParams>({ path: "/reporting/investigation/:areaId", exact: true });
 
   const handleAreaClick = (areaId: string) => {
     history.push(`${match.url}/${areaId}`);
@@ -19,8 +19,8 @@ const InvestigationPage: FC<IProps> = props => {
   return (
     <UserAreasMap
       onAreaClick={handleAreaClick}
-      focusAllAreas={!selectAreaMatch}
-      activeAreaId={selectAreaMatch?.params.areaId}
+      focusAllAreas={!selectedAreaMatch}
+      selectedAreaId={selectedAreaMatch?.params.areaId}
     >
       <Switch>
         <Route exact path={`${match.url}`} component={AreaListControlPanel} />
