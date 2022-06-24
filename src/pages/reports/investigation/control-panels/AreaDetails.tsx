@@ -27,15 +27,7 @@ const AreaDetailsControlPanel: FC<IProps> = props => {
     }
   }, [map, bounds]);
 
-  return (
-    <div className="c-map-control-panel">
-      {Object.values<any>(areas).map(area => (
-        <Link to={`/reporting/investigation/${area.id}`} className="c-button c-button--primary">
-          {area.attributes.name}
-        </Link>
-      ))}
-    </div>
-  );
+  return <div className="c-map-control-panel">{JSON.stringify(areas[areaId])}</div>;
 };
 
 export default AreaDetailsControlPanel;
