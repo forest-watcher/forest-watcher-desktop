@@ -3,15 +3,18 @@ import { Layer, LngLatBoundsLike, Source, useMap } from "react-map-gl";
 import { polygonStyle, polygonLineStyle, polygonLineStyleHover, labelStyle } from "./styles";
 import * as turf from "@turf/turf";
 import { AllGeoJSON } from "@turf/turf";
+import { TAreasResponse } from "services/area";
+import { GeoJSONSourceOptions } from "mapbox-gl";
 
 interface IProps {
   id: string;
-  data: GeoJSON.Feature<GeoJSON.Geometry> | GeoJSON.FeatureCollection<GeoJSON.Geometry> | string | undefined;
+  data: GeoJSONSourceOptions["data"] | TAreasResponse["attributes"]["geostore"]["geojson"];
   onClick?: (id: string) => void;
   label?: string;
+  isSelected?: boolean;
 }
 
-const Polygon: FC<IProps> = ({ id, data, onClick, label }) => {
+const Polygon: FC<IProps> = ({ id, data, onClick, label, isSelected = false }) => {
   const { current: map } = useMap();
   const [isHover, setIsHover] = useState(false);
   const centrePoint = useMemo(() => {
@@ -61,15 +64,15 @@ const Polygon: FC<IProps> = ({ id, data, onClick, label }) => {
     });
   }, [bounds, id, map, onClick]);
 
-  const layerStyle = isHover ? polygonLineStyleHover : polygonLineStyle;
+  const layerStyle = isHover || isSelected ? polygonLineStyleHover : polygonLineStyle;
 
   return (
     <>
-      <Source id={id} data={data} type="geojson">
+      <Source id={id} data={data as GeoJSONSourceOptions["data"]} type="geojson">
         {/* @ts-ignore */}
         <Layer {...polygonStyle} id={id} />
       </Source>
-      <Source id={id} data={data} type="geojson">
+      <Source id={id} data={data as GeoJSONSourceOptions["data"]} type="geojson">
         {/* @ts-ignore */}
         <Layer {...layerStyle} id={`${id}-line`} />
       </Source>

@@ -14,6 +14,7 @@ import { TPropsFromRedux } from "./AreasContainer";
 import { goToGeojson } from "helpers/map";
 import { TAreasResponse } from "services/area";
 import AreaCard from "components/area-card/AreaCard";
+import AreaDetailCard from "components/ui/Map/components/cards/AreaDetail";
 
 interface IProps extends TPropsFromRedux {}
 
@@ -21,6 +22,7 @@ const Areas: FC<IProps> = props => {
   const { areasList, loading, loadingTeamAreas, getAreasInUsersTeams, areasInUsersTeams } = props;
   const areaMap = useMemo<TAreasResponse[]>(() => Object.values(areasList), [areasList]);
   const intl = useIntl();
+  const [selectedArea, setSelectedArea] = useState<TAreasResponse | null>(null);
 
   const [mapRef, setMapRef] = useState<MapInstance | null>(null);
   const features = useMemo(() => {
@@ -66,14 +68,17 @@ const Areas: FC<IProps> = props => {
             </div>
           ) : (
             <Map className="c-map--within-hero" onMapLoad={handleMapLoad}>
-              {areaMap.map((area: any) => (
+              {areaMap.map(area => (
                 <Polygon
                   key={area.id}
                   id={area.id}
                   label={area.attributes.name}
                   data={area.attributes.geostore.geojson}
+                  onClick={() => setSelectedArea(area)}
+                  isSelected={selectedArea === area}
                 />
               ))}
+              {selectedArea && <AreaDetailCard area={selectedArea} />}
             </Map>
           )}
         </>

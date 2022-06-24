@@ -5,6 +5,7 @@ import Card from "components/ui/Card/Card";
 import Polygon from "./components/layers/Polygon";
 import Button from "components/ui/Button/Button";
 import { useState } from "react";
+import MapCard from "./components/cards/MapCard";
 
 const polygon = {
   type: "FeatureCollection",
@@ -85,13 +86,14 @@ const MultipleTemplate: ComponentStory<typeof Map> = args => {
           onClick={id => setSelected(id)}
         />
         {selected && (
-          <Card className="c-map__card-control">
-            <Card.Title>Example Popup</Card.Title>
+          <MapCard
+            title="Example Popup"
+            onBack={() => setSelected(null)}
+            footer={<Button onClick={() => setSelected(null)}>Close</Button>}
+            position="top-left"
+          >
             <Card.Text>Selected polygon {selected}</Card.Text>
-            <Button className="u-margin-top" onClick={() => setSelected(null)}>
-              Close
-            </Button>
-          </Card>
+          </MapCard>
         )}
       </Map>
       <details className="u-margin-top">

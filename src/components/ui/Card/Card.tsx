@@ -23,6 +23,8 @@ interface ICardComposition {
   Title: FC<ITitleProps>;
   Cta: FC<ICtaProps>;
   Text: FC<React.HTMLAttributes<HTMLParagraphElement>>;
+  Header: FC<React.HTMLAttributes<HTMLDivElement>>;
+  Footer: FC<React.HTMLAttributes<HTMLDivElement>>;
 }
 
 const Card: FC<IProps> & ICardComposition = props => {
@@ -36,7 +38,7 @@ const Card: FC<IProps> & ICardComposition = props => {
   );
 };
 
-const Image: FC<ImgHTMLAttributes<HTMLImageElement>> = props => {
+const Image: ICardComposition["Image"] = props => {
   const { className, ...rest } = props;
   const classes = classnames("c-card__image", className);
 
@@ -44,14 +46,14 @@ const Image: FC<ImgHTMLAttributes<HTMLImageElement>> = props => {
   return <img {...rest} className={classes} />;
 };
 
-const Title: FC<ITitleProps> = props => {
+const Title: ICardComposition["Title"] = props => {
   const { className, HeadingLevel = "h2", ...rest } = props;
   const classes = classnames("c-card__title", className);
 
   return <HeadingLevel {...rest} className={classes} />;
 };
 
-const Cta: FC<ICtaProps> = props => {
+const Cta: ICardComposition["Cta"] = props => {
   const { className, iconSrc = "", children, ...rest } = props;
   const classes = classnames("c-card__cta", className);
 
@@ -63,16 +65,32 @@ const Cta: FC<ICtaProps> = props => {
   );
 };
 
-const Text: FC<React.HTMLAttributes<HTMLParagraphElement>> = props => {
+const Text: ICardComposition["Text"] = props => {
   const { className, ...rest } = props;
   const classes = classnames("c-card__text", className);
 
   return <p {...rest} className={classes} />;
 };
 
+const Header: ICardComposition["Header"] = props => {
+  const { className, ...rest } = props;
+  const classes = classnames("c-card__header", className);
+
+  return <div {...rest} className={classes} />;
+};
+
+const Footer: ICardComposition["Footer"] = props => {
+  const { className, ...rest } = props;
+  const classes = classnames("c-card__footer", className);
+
+  return <div {...rest} className={classes} />;
+};
+
 Card.Image = Image;
 Card.Title = Title;
 Card.Cta = Cta;
 Card.Text = Text;
+Card.Header = Header;
+Card.Footer = Footer;
 
 export default Card;
