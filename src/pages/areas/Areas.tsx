@@ -113,11 +113,7 @@ const Areas: FC<IProps> = props => {
                 />
               ))}
               {selectedArea && (
-                <AreaDetailCard
-                  area={selectedArea}
-                  numberOfTeams={getNumberOfTeamsInArea(selectedArea.id)}
-                  numberOfReports={0}
-                />
+                <AreaDetailCard area={selectedArea} numberOfTeams={getNumberOfTeamsInArea(selectedArea.id)} />
               )}
             </Map>
           )}
