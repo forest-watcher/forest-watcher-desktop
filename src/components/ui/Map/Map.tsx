@@ -15,7 +15,7 @@ export interface IMapViewState {
   zoom: number;
 }
 
-interface IProps extends HTMLAttributes<HTMLElement> {
+export interface IProps extends HTMLAttributes<HTMLElement> {
   mapViewState?: IMapViewState;
   setMapViewState?: (viewState: IMapViewState) => void;
   onMapLoad?: (e: MapboxEvent) => void;

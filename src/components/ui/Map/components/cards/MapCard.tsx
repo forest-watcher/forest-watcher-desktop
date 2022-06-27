@@ -11,7 +11,8 @@ interface IParams extends HTMLAttributes<HTMLElement> {
   position?: "top-left" | "bottom-left" | "top-right" | "bottom-right";
 }
 
-const MapCard: FC<IParams> = ({ onBack, title, footer, children, className, position = "top-left" }) => {
+const MapCard: FC<IParams> = props => {
+  const { onBack, title, footer, children, className, position = "top-left" } = props;
   const intl = useIntl();
   return (
     <Card className={classNames("c-map-card", `c-map-card--${position}`, className)}>

@@ -6,7 +6,7 @@ import { AllGeoJSON } from "@turf/turf";
 import { TAreasResponse } from "services/area";
 import { GeoJSONSourceOptions } from "mapbox-gl";
 
-interface IProps {
+export interface IProps {
   id: string;
   data: GeoJSONSourceOptions["data"] | TAreasResponse["attributes"]["geostore"]["geojson"];
   onClick?: (id: string) => void;
@@ -14,9 +14,11 @@ interface IProps {
   isSelected?: boolean;
 }
 
-const Polygon: FC<IProps> = ({ id, data, onClick, label, isSelected = false }) => {
+const Polygon: FC<IProps> = props => {
+  const { id, data, onClick, label, isSelected = false } = props;
   const { current: map } = useMap();
   const [isHover, setIsHover] = useState(false);
+
   const centrePoint = useMemo(() => {
     if (!data || typeof data === "string") {
       return null;
