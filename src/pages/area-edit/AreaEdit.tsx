@@ -19,8 +19,6 @@ import InfoIcon from "assets/images/icons/Info.svg";
 import { goToGeojson } from "helpers/map";
 import Loader from "components/ui/Loader";
 import { useHistory } from "react-router-dom";
-import UnsavedChanges from "components/modals/UnsavedChanges";
-import { Transition } from "history";
 import useUnsavedChanges from "hooks/useUnsavedChanges";
 
 const areaTitleKeys = {
