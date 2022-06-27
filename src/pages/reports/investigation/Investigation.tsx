@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, useCallback } from "react";
 import { Route, RouteComponentProps, Switch, useHistory, useRouteMatch } from "react-router-dom";
 import UserAreasMap from "components/user-areas-map/UserAreasMap";
 import AreaDetailsControlPanel from "./control-panels/AreaDetails";
@@ -12,9 +12,13 @@ const InvestigationPage: FC<IProps> = props => {
   const history = useHistory();
   let selectedAreaMatch = useRouteMatch<TParams>({ path: "/reporting/investigation/:areaId", exact: true });
 
-  const handleAreaClick = (areaId: string) => {
-    history.push(`${match.url}/${areaId}`);
-  };
+  const handleAreaClick = useCallback(
+    (areaId: string) => {
+      console.log("area click", areaId);
+      history.push(`/reporting/investigation/${areaId}`);
+    },
+    [history]
+  );
 
   return (
     <UserAreasMap

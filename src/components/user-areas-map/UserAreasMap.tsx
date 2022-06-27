@@ -8,6 +8,7 @@ import * as turf from "@turf/turf";
 import { goToGeojson } from "../../helpers/map";
 
 interface IProps extends IMapProps {
+  // Should be a memorised function! useCallBack()
   onAreaClick?: IPolygonProps["onClick"];
   focusAllAreas?: boolean;
   selectedAreaId?: string;
