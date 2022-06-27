@@ -155,10 +155,11 @@ $c-card-border-radius:  $global-spacing-1;
   }
 }
 
-
 .c-map-card {
   padding: 0;
   position: absolute;
+  display: flex;
+  flex-direction: column;
   &__header {
     display: flex;
     align-items: center;
@@ -186,6 +187,10 @@ $c-card-border-radius:  $global-spacing-1;
 
   &__header {
     border-bottom: 2px solid $neutral-400;
+  }
+
+  &__content {
+    overflow: auto;
   }
 
   &__footer {

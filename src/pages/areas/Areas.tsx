@@ -1,9 +1,7 @@
+import { FC, useMemo, useEffect, useState, Fragment } from "react";
 import Hero from "components/layouts/Hero/Hero";
 import Article from "components/layouts/Article";
 import Loader from "components/ui/Loader";
-import Map from "components/ui/Map/Map";
-import { FC, useMemo, useEffect, useState, Fragment } from "react";
-import Polygon from "components/ui/Map/components/layers/Polygon";
 import { MapboxEvent, Map as MapInstance, MapEventType, EventData } from "mapbox-gl";
 import * as turf from "@turf/turf";
 import { FormattedMessage, useIntl } from "react-intl";
@@ -11,9 +9,9 @@ import ReactGA from "react-ga";
 import EmptyState from "components/ui/EmptyState/EmptyState";
 import PlusIcon from "assets/images/icons/PlusWhite.svg";
 import { TPropsFromRedux } from "./AreasContainer";
-import { goToGeojson } from "helpers/map";
 import { TAreasResponse } from "services/area";
 import AreaCard from "components/area-card/AreaCard";
+import UserAreasMap from "components/user-areas-map/UserAreasMap";
 import AreaDetailCard from "components/ui/Map/components/cards/AreaDetail";
 
 interface IProps extends TPropsFromRedux {}
@@ -21,28 +19,14 @@ interface IProps extends TPropsFromRedux {}
 const Areas: FC<IProps> = props => {
   const { areasList, loading, loadingTeamAreas, getAreasInUsersTeams, areasInUsersTeams } = props;
   const areaMap = useMemo<TAreasResponse[]>(() => Object.values(areasList), [areasList]);
-  const intl = useIntl();
   const [selectedArea, setSelectedArea] = useState<TAreasResponse | null>(null);
-
   const [mapRef, setMapRef] = useState<MapInstance | null>(null);
-  const features = useMemo(() => {
-    if (areaMap.length > 0) {
-      const mapped = areaMap.map((area: any) => area.attributes.geostore.geojson.features).flat();
-      return turf.featureCollection(mapped);
-    }
-    return null;
-  }, [areaMap]);
-
-  useEffect(() => {
-    if (features) {
-      goToGeojson(mapRef, features);
-    }
-  }, [features, mapRef]);
+  const intl = useIntl();
 
   useEffect(() => {
     if (mapRef) {
       const callback = (e: MapEventType & EventData) => {
-        if (selectedArea && features && selectedArea.attributes.geostore.geojson.features[0]) {
+        if (selectedArea?.attributes.geostore.geojson.features[0]) {
           // Is inside?
           const within = turf.booleanPointInPolygon(
             [e.lngLat.lng, e.lngLat.lat],
@@ -59,7 +43,7 @@ const Areas: FC<IProps> = props => {
         mapRef.off("click", callback);
       };
     }
-  }, [features, mapRef, selectedArea]);
+  }, [mapRef, selectedArea]);
 
   useEffect(() => {
     getAreasInUsersTeams();
@@ -101,21 +85,16 @@ const Areas: FC<IProps> = props => {
               <Loader isLoading />
             </div>
           ) : (
-            <Map className="c-map--within-hero" onMapLoad={handleMapLoad}>
-              {areaMap.map(area => (
-                <Polygon
-                  key={area.id}
-                  id={area.id}
-                  label={area.attributes.name}
-                  data={area.attributes.geostore.geojson}
-                  onClick={() => setSelectedArea(area)}
-                  isSelected={selectedArea === area}
-                />
-              ))}
+            <UserAreasMap
+              className="c-map--within-hero"
+              selectedAreaId={selectedArea?.id}
+              onAreaClick={areaId => setSelectedArea(areasList[areaId])}
+              onMapLoad={handleMapLoad}
+            >
               {selectedArea && (
                 <AreaDetailCard area={selectedArea} numberOfTeams={getNumberOfTeamsInArea(selectedArea.id)} />
               )}
-            </Map>
+            </UserAreasMap>
           )}
         </>
       )}
