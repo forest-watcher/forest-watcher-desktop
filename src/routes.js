@@ -64,7 +64,15 @@ const Routes = props => {
           <Route exact path={`${match.url}templates/:templateId`} component={TemplatesManage} />
 
           <Redirect exact from={`${match.url}reporting`} to={`${match.url}reporting/investigation`} />
-          <Route exact path={`${match.url}reporting/:reportingTab`} component={Reports} />
+          <Route
+            exact
+            path={[
+              `${match.url}reporting/:reportingTab`,
+              `${match.url}reporting/:reportingTab/:areaId`,
+              `${match.url}reporting/:reportingTab/:areaId/start`
+            ]}
+            component={Reports}
+          />
 
           <Route exact path={`${match.url}teams`} component={Teams} />
           <Route exact path={`${match.url}teams/create`} render={args => <Teams isCreatingTeam {...args} />} />
