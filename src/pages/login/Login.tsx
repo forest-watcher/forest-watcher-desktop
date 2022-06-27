@@ -93,7 +93,7 @@ const Login: FC<IProps> = () => {
         </Link>
       </p>
 
-      <SocialSignIn className="c-login-form__social-buttons" />
+      <SocialSignIn className="c-login-form__social-buttons" handleClick={() => setIsLoading(true)} />
     </LoginLayout>
   );
 };

@@ -112,7 +112,9 @@ const SignUpAndReset: FC<IProps> = ({ isResetPassword = false }) => {
         </Link>
       </p>
 
-      {!isResetPassword && <SocialSignIn className="c-login-form__social-buttons" />}
+      {!isResetPassword && (
+        <SocialSignIn className="c-login-form__social-buttons" handleClick={() => setIsLoading(true)} />
+      )}
     </LoginLayout>
   );
 };
