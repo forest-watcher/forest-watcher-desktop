@@ -51,6 +51,9 @@ const Routes = props => {
             path={`${match.url}forgotten-password`}
             render={args => <SignUpAndReset isResetPassword {...args} />}
           />
+          <Route path="*">
+            <Redirect to="/login" />
+          </Route>
         </Switch>
       )}
       {user.loggedIn ? (
@@ -95,6 +98,9 @@ const Routes = props => {
             render={args => <TeamDetail isRemovingTeamMember {...args} />}
           />
           <Route exact path={`${match.url}settings`} component={Settings} />
+          <Route path="*">
+            <Redirect to="/areas" />
+          </Route>
         </Switch>
       ) : (
         !queryParams.token && <Route path={`${match.url}`} render={() => <Redirect to="/login" />} />
