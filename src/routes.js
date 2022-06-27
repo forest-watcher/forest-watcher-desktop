@@ -51,6 +51,10 @@ const Routes = props => {
             path={`${match.url}forgotten-password`}
             render={args => <SignUpAndReset isResetPassword {...args} />}
           />
+          {/* After the user logs in with a social login. They are redirected
+           *  to GFW with their JWT in a query param, then the page fetches
+           *  their info using the JWT. Without '!queryParams.token' the
+           *  login page would flicker while their info is being fetched */}
           {!queryParams.token && <Route path="*" render={() => <Redirect to="/login" />} />}
         </Switch>
       )}
