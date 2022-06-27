@@ -19,6 +19,9 @@ import InfoIcon from "assets/images/icons/Info.svg";
 import { goToGeojson } from "helpers/map";
 import Loader from "components/ui/Loader";
 import { useHistory } from "react-router-dom";
+import UnsavedChanges from "components/modals/UnsavedChanges";
+import { Transition } from "history";
+import useUnsavedChanges from "hooks/useUnsavedChanges";
 
 const areaTitleKeys = {
   manage: "areas.manageArea",
@@ -49,7 +52,11 @@ const AreaEdit: FC<IProps> = ({ mode, geojson, getGeoFromShape, setSaving, saveA
   const history = useHistory();
   const intl = useIntl();
   const changesValid =
-    formState.errors.name === undefined && (updatedGeojson ? updatedGeojson.features.length > 0 : false);
+    formState.errors.name === undefined && (updatedGeojson ? updatedGeojson.features.length > 0 : true);
+
+  const changesMade = area?.attributes.name !== name || updatedGeojson !== null;
+
+  const { modal, isBlockingNavigation } = useUnsavedChanges(changesMade);
 
   useEffect(() => {
     if (area?.attributes?.name) {
@@ -82,7 +89,11 @@ const AreaEdit: FC<IProps> = ({ mode, geojson, getGeoFromShape, setSaving, saveA
   };
 
   const handleMapEdit = (e: FeatureCollection) => {
-    setUpdatedGeojson(e);
+    if (JSON.stringify(e) !== JSON.stringify(geojson)) {
+      setUpdatedGeojson(e);
+    } else {
+      setUpdatedGeojson(null);
+    }
   };
 
   const handleResetForm = (e: MouseEvent<HTMLButtonElement>) => {
@@ -169,64 +180,70 @@ const AreaEdit: FC<IProps> = ({ mode, geojson, getGeoFromShape, setSaving, saveA
   };
 
   return (
-    <div className="c-area-edit">
-      <Hero title={areaTitleKeys[mode as keyof typeof areaTitleKeys]} backLink={{ name: "areas.back", to: "/areas" }} />
-
-      {loading ? (
-        <div className="c-map c-map--within-hero">
-          <Loader isLoading />
-        </div>
-      ) : (
-        <Map
-          className="c-map--within-hero"
-          onMapLoad={handleMapLoad}
-          onDrawLoad={handleDrawLoad}
-          onMapEdit={handleMapEdit}
-          geojsonToEdit={geojson}
+    <>
+      <div className="c-area-edit">
+        <Hero
+          title={areaTitleKeys[mode as keyof typeof areaTitleKeys]}
+          backLink={{ name: "areas.back", to: "/areas" }}
         />
-      )}
 
-      <div className="row column">
-        <div className="c-area-edit__actions">
-          <div className="c-area-edit__shapefile">
-            <label className="c-button c-button--default" htmlFor="shapefile">
-              <FormattedMessage id={isValidatingShapefile ? "common.loading" : "areas.uploadShapefile"} />
-            </label>
-            <input
-              type="file"
-              id="shapefile"
-              name="shapefile"
-              className="u-visually-hidden"
-              accept=".zip, .csv, .json, .geojson, .kml, .kmz"
-              onChange={onShapefileChange}
-              disabled={isValidatingShapefile || !drawRef}
-            />
-            <Button variant="primary" isIcon aria-label={intl.formatMessage({ id: "areas.uploadShapefileHelp" })}>
-              <img src={InfoIcon} alt="" role="presentation" />
-            </Button>
+        {loading ? (
+          <div className="c-map c-map--within-hero">
+            <Loader isLoading />
           </div>
-          <form onSubmit={handleSubmit(onSubmit)} className="c-area-edit__form">
-            <Input
-              id="area-name"
-              registered={register("name", { required: true })}
-              error={formState.errors.name}
-              htmlInputProps={{
-                type: "text",
-                placeholder: intl.formatMessage({ id: "areas.nameAreaPlaceholder" }),
-                label: intl.formatMessage({ id: "areas.nameArea" }),
-                onChange: () => {}
-              }}
-            />
-            <div className="c-area-edit__form-actions">
-              <Button disabled={!changesValid} variant="secondary" onClick={handleResetForm}>
-                <FormattedMessage id="common.cancel" />
+        ) : (
+          <Map
+            className="c-map--within-hero"
+            onMapLoad={handleMapLoad}
+            onDrawLoad={handleDrawLoad}
+            onMapEdit={handleMapEdit}
+            geojsonToEdit={geojson}
+          />
+        )}
+
+        <div className="row column">
+          <div className="c-area-edit__actions">
+            <div className="c-area-edit__shapefile">
+              <label className="c-button c-button--default" htmlFor="shapefile">
+                <FormattedMessage id={isValidatingShapefile ? "common.loading" : "areas.uploadShapefile"} />
+              </label>
+              <input
+                type="file"
+                id="shapefile"
+                name="shapefile"
+                className="u-visually-hidden"
+                accept=".zip, .csv, .json, .geojson, .kml, .kmz"
+                onChange={onShapefileChange}
+                disabled={isValidatingShapefile || !drawRef}
+              />
+              <Button variant="primary" isIcon aria-label={intl.formatMessage({ id: "areas.uploadShapefileHelp" })}>
+                <img src={InfoIcon} alt="" role="presentation" />
               </Button>
-              <input disabled={!changesValid} type="submit" className="c-button c-button--primary" />
             </div>
-          </form>
+            <form onSubmit={handleSubmit(onSubmit)} className="c-area-edit__form">
+              <Input
+                id="area-name"
+                registered={register("name", { required: true })}
+                error={formState.errors.name}
+                htmlInputProps={{
+                  type: "text",
+                  placeholder: intl.formatMessage({ id: "areas.nameAreaPlaceholder" }),
+                  label: intl.formatMessage({ id: "areas.nameArea" }),
+                  onChange: () => {}
+                }}
+              />
+              <div className="c-area-edit__form-actions">
+                <Button disabled={!changesMade} variant="secondary" onClick={handleResetForm}>
+                  <FormattedMessage id="common.cancel" />
+                </Button>
+                <input disabled={!(changesMade && changesValid)} type="submit" className="c-button c-button--primary" />
+              </div>
+            </form>
+          </div>
         </div>
       </div>
-    </div>
+      {modal}
+    </>
   );
 };
 export default AreaEdit;
