@@ -37,6 +37,8 @@
   "signIn.input.confirmPassword": "Re-enter password",
   "signIn.input.confirmPassword.placeholder": "Enter password",
   "signIn.input.submit": "Sign In",
+  "signIn.social.google": "Continue with Google",
+  "signIn.social.facebook": "Continue with Facebook",
   "signUp.input.submit": "Sign Up",
   "signIn.error": "Sign in failed",
   "signUp.success.message": "Thank you for registering",

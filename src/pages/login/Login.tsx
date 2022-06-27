@@ -1,4 +1,5 @@
-import { FC, useState } from "react";
+import { API_BASE_AUTH_URL, API_CALLBACK_URL } from "constants/global";
+import React, { FC, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
 import { TLoginBody } from "services/user";
@@ -13,6 +14,9 @@ import { userService } from "services/user";
 import { toastr } from "react-redux-toastr";
 import { TErrorResponse } from "constants/api";
 import LoginLayout from "components/layouts/Login";
+import GoogleLogo from "assets/images/icons/google-logo.svg";
+import FacebookLogo from "assets/images/icons/facebook-logo.svg";
+import "./login-font.module.scss";
 
 type TLoginForm = TLoginBody;
 
@@ -91,6 +95,25 @@ const Login: FC<IProps> = () => {
           <FormattedMessage id="signIn.link.signUp" />
         </Link>
       </p>
+
+      <div className="c-login-form__social-buttons">
+        <a
+          className="c-social-button c-social-button--google"
+          rel="noreferrer nofollow"
+          href={`${API_BASE_AUTH_URL}/auth/google?token=true&callbackUrl=${API_CALLBACK_URL}`}
+        >
+          <img role="presentation" alt="" className="c-social-button__image" src={GoogleLogo} />
+          <FormattedMessage id="signIn.social.google" />
+        </a>
+        <a
+          className="c-social-button c-social-button--facebook"
+          rel="noreferrer nofollow"
+          href={`${API_BASE_AUTH_URL}/auth/facebook?token=true&callbackUrl=${API_CALLBACK_URL}`}
+        >
+          <img role="presentation" alt="" className="c-social-button__image" src={FacebookLogo} />
+          <FormattedMessage id="signIn.social.facebook" />
+        </a>
+      </div>
     </LoginLayout>
   );
 };
