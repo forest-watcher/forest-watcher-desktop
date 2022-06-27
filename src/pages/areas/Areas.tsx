@@ -10,7 +10,7 @@ import { TPropsFromRedux } from "./AreasContainer";
 import { TAreasResponse } from "services/area";
 import AreaCard from "components/area-card/AreaCard";
 import UserAreasMap from "components/user-areas-map/UserAreasMap";
-import AreaDetailCard from "../../components/ui/Map/components/cards/AreaDetail";
+import AreaDetailCard from "components/ui/Map/components/cards/AreaDetail";
 
 interface IProps extends TPropsFromRedux {}
 
