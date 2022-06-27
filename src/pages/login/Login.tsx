@@ -1,4 +1,3 @@
-import { API_BASE_AUTH_URL, API_CALLBACK_URL } from "constants/global";
 import React, { FC, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
