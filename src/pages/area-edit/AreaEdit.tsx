@@ -1,6 +1,6 @@
 import Hero from "components/layouts/Hero/Hero";
 import Map from "components/ui/Map/Map";
-import { FC, useState, MouseEvent, ChangeEvent, useEffect } from "react";
+import { FC, useState, MouseEvent, ChangeEvent, useEffect, useMemo } from "react";
 import { MapboxEvent, Map as MapInstance } from "mapbox-gl";
 import { FormattedMessage, useIntl } from "react-intl";
 import ReactGA from "react-ga";
@@ -51,12 +51,17 @@ const AreaEdit: FC<IProps> = ({ mode, geojson, getGeoFromShape, setSaving, saveA
   const [drawRef, setDrawRef] = useState<MapboxDraw | null>(null);
   const history = useHistory();
   const intl = useIntl();
-  const changesValid =
-    formState.errors.name === undefined && (updatedGeojson ? updatedGeojson.features.length > 0 : true);
 
-  const changesMade = area?.attributes.name !== name || updatedGeojson !== null;
+  const { changesMade, changesValid } = useMemo(() => {
+    const changesValid =
+      formState.errors.name === undefined && (updatedGeojson ? updatedGeojson.features.length > 0 : true);
 
-  const { modal, isBlockingNavigation } = useUnsavedChanges(changesMade);
+    const changesMade = area?.attributes.name !== name || updatedGeojson !== null;
+
+    return { changesMade, changesValid };
+  }, [area?.attributes.name, formState.errors.name, name, updatedGeojson]);
+
+  const { modal } = useUnsavedChanges(changesMade);
 
   useEffect(() => {
     if (area?.attributes?.name) {
