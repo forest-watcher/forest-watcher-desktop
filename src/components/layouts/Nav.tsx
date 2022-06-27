@@ -1,5 +1,5 @@
 import { HTMLAttributes, useMemo, useEffect } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useHistory } from "react-router-dom";
 import Select from "components/ui/Form/Select";
 
 import { MY_GFW_LINK } from "../../constants/global";
@@ -24,6 +24,7 @@ interface IProps extends HTMLAttributes<HTMLDivElement> {
 const Nav: FC<IProps> = props => {
   const { translations, setLocale, loggedIn, logout, locale, user, ...rest } = props;
   const formhook = useForm();
+  const history = useHistory();
   const { register, watch } = formhook;
   const intl = useIntl();
   const localeValue = watch("localeSelect");
@@ -42,6 +43,11 @@ const Nav: FC<IProps> = props => {
       })),
     [intl, translations]
   );
+
+  const handleLogout = () => {
+    history.push("/login");
+    logout();
+  };
 
   return (
     <div className="row column" {...rest}>
@@ -115,7 +121,7 @@ const Nav: FC<IProps> = props => {
                   </ReactGA.OutboundLink>
                 </li>
                 <li className="c-nav__link-wrapper">
-                  <button onClick={logout} className="c-nav__link">
+                  <button onClick={handleLogout} className="c-nav__link">
                     <FormattedMessage id="app.logout" />
                   </button>
                 </li>
