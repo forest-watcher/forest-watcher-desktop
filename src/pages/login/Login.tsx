@@ -93,7 +93,7 @@ const Login: FC<IProps> = () => {
         </Link>
       </p>
 
-      <SocialSignIn />
+      <SocialSignIn className="c-login-form__social-buttons" />
     </LoginLayout>
   );
 };
