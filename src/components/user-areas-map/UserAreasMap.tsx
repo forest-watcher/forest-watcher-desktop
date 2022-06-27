@@ -1,11 +1,11 @@
 import { FC, PropsWithChildren, useEffect, useMemo, useState } from "react";
-import { useAppSelector } from "../../hooks/useRedux";
+import { useAppSelector } from "hooks/useRedux";
 import Polygon, { IProps as IPolygonProps } from "../ui/Map/components/layers/Polygon";
 import Map, { IProps as IMapProps } from "../ui/Map/Map";
-import { TAreasResponse } from "../../services/area";
+import { TAreasResponse } from "services/area";
 import { Map as MapInstance, MapboxEvent } from "mapbox-gl";
 import * as turf from "@turf/turf";
-import { goToGeojson } from "../../helpers/map";
+import { goToGeojson } from "helpers/map";
 
 interface IProps extends IMapProps {
   // Should be a memorised function! useCallBack()

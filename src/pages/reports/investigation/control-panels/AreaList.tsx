@@ -4,7 +4,7 @@ import { RouteComponentProps } from "react-router-dom";
 import MapCard from "components/ui/Map/components/cards/MapCard";
 import Card from "components/ui/Card/Card";
 import { FormattedMessage, useIntl } from "react-intl";
-import Loader from "../../../../components/ui/Loader";
+import Loader from "components/ui/Loader";
 
 interface IProps extends RouteComponentProps {}
 

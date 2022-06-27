@@ -6,7 +6,7 @@ import { AllGeoJSON } from "@turf/turf";
 import { useAppSelector } from "hooks/useRedux";
 import { TParams } from "../types";
 import MapCard from "components/ui/Map/components/cards/MapCard";
-import Loader from "../../../../components/ui/Loader";
+import Loader from "components/ui/Loader";
 
 interface IProps extends RouteComponentProps<TParams> {}
 
