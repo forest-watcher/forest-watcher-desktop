@@ -51,12 +51,10 @@ const Routes = props => {
             path={`${match.url}forgotten-password`}
             render={args => <SignUpAndReset isResetPassword {...args} />}
           />
-          <Route path="*">
-            <Redirect to="/login" />
-          </Route>
+          {!queryParams.token && <Route path="*" render={() => <Redirect to="/login" />} />}
         </Switch>
       )}
-      {user.loggedIn ? (
+      {user.loggedIn && (
         <Switch>
           <Route exact path={`${match.url}areas`} component={Areas} />
           <Route exact path={`${match.url}areas/create`} component={AreaEdit} />
@@ -102,8 +100,6 @@ const Routes = props => {
             <Redirect to="/areas" />
           </Route>
         </Switch>
-      ) : (
-        !queryParams.token && <Route path={`${match.url}`} render={() => <Redirect to="/login" />} />
       )}
     </Switch>
   );
