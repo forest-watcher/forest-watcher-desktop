@@ -14,7 +14,6 @@ const InvestigationPage: FC<IProps> = props => {
 
   const handleAreaClick = useCallback(
     (areaId: string) => {
-      console.log("area click", areaId);
       history.push(`/reporting/investigation/${areaId}`);
     },
     [history]

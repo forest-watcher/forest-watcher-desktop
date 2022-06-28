@@ -163,6 +163,10 @@
   "areas.details.teams.remove.error": "Failed to unassign, try again later",
   "areas.details.teamsTable.header.name": "Name",
   "areas.details.teamsTable.header.reports": "Reports",
+  "areas.card.title": "{name} Details",
+  "areas.card.size": "Size: {size} m2",
+  "areas.card.reports": "Reports: {num}",
+  "areas.card.teams": "Teams: {num}",
   "templates.name": "templates",
   "templates.title": "Your Templates",
   "templates.subtitle": "Your templates",
@@ -385,5 +389,6 @@
   "export.downloadMethod": "Download Method",
   "export.downloadMethods.download": "Download",
   "export.downloadMethods.email": "Send Email",
-  "export.downloadMethods.link": "Shareable"
+  "export.downloadMethods.link": "Shareable",
+  "investigation.start": "Start Investigation"
 }

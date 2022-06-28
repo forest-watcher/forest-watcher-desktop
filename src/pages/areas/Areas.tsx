@@ -1,7 +1,9 @@
+import { FC, useMemo, useEffect, useState, Fragment } from "react";
 import Hero from "components/layouts/Hero/Hero";
 import Article from "components/layouts/Article";
 import Loader from "components/ui/Loader";
-import { FC, useMemo, useEffect, useState } from "react";
+import { MapboxEvent, Map as MapInstance, MapEventType, EventData } from "mapbox-gl";
+import * as turf from "@turf/turf";
 import { FormattedMessage, useIntl } from "react-intl";
 import ReactGA from "react-ga";
 import EmptyState from "components/ui/EmptyState/EmptyState";
@@ -18,11 +20,50 @@ const Areas: FC<IProps> = props => {
   const { areasList, loading, loadingTeamAreas, getAreasInUsersTeams, areasInUsersTeams } = props;
   const areaMap = useMemo<TAreasResponse[]>(() => Object.values(areasList), [areasList]);
   const [selectedArea, setSelectedArea] = useState<TAreasResponse | null>(null);
+  const [mapRef, setMapRef] = useState<MapInstance | null>(null);
   const intl = useIntl();
+
+  useEffect(() => {
+    if (mapRef) {
+      const callback = (e: MapEventType & EventData) => {
+        if (selectedArea?.attributes.geostore.geojson.features[0]) {
+          // Is inside?
+          const within = turf.booleanPointInPolygon(
+            [e.lngLat.lng, e.lngLat.lat],
+            selectedArea.attributes.geostore.geojson.features[0] as any // Typing error
+          );
+          if (!within) {
+            setSelectedArea(null);
+          }
+        }
+      };
+      mapRef.on("click", callback);
+
+      return () => {
+        mapRef.off("click", callback);
+      };
+    }
+  }, [mapRef, selectedArea]);
 
   useEffect(() => {
     getAreasInUsersTeams();
   }, [getAreasInUsersTeams]);
+
+  const handleMapLoad = (evt: MapboxEvent) => {
+    setMapRef(evt.target);
+  };
+
+  const getNumberOfTeamsInArea = (areaId: string) => {
+    let count = 0;
+    areasInUsersTeams.forEach(team =>
+      team.areas.forEach(area => {
+        if (area.data.id === areaId) {
+          count++;
+        }
+      })
+    );
+    return count;
+  };
 
   return (
     <div className="c-areas">
@@ -48,8 +89,11 @@ const Areas: FC<IProps> = props => {
               className="c-map--within-hero"
               selectedAreaId={selectedArea?.id}
               onAreaClick={areaId => setSelectedArea(areasList[areaId])}
+              onMapLoad={handleMapLoad}
             >
-              {selectedArea && <AreaDetailCard area={selectedArea} />}
+              {selectedArea && (
+                <AreaDetailCard area={selectedArea} numberOfTeams={getNumberOfTeamsInArea(selectedArea.id)} />
+              )}
             </UserAreasMap>
           )}
         </>
@@ -77,15 +121,15 @@ const Areas: FC<IProps> = props => {
           {areasInUsersTeams.map(
             areasInTeam =>
               areasInTeam.team && (
-                <>
+                <Fragment key={areasInTeam.team.id}>
                   <h3 className="u-text-600 u-text-neutral-700">{areasInTeam.team.attributes?.name}</h3>
 
-                  <div className="c-areas__area-listing" key={areasInTeam.team.id}>
+                  <div className="c-areas__area-listing">
                     {areasInTeam.areas.map(area => (
                       <AreaCard area={area.data} key={area.data.id} className="c-areas__item" />
                     ))}
                   </div>
-                </>
+                </Fragment>
               )
           )}
         </Article>
