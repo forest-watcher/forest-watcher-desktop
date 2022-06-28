@@ -8,6 +8,7 @@ import AreaEdit from "./pages/area-edit/AreaEditContainer";
 import Templates from "./pages/templates/TemplatesContainer";
 import TemplatesManage from "./pages/templates-manage/TemplatesManageContainer";
 import Teams from "./pages/teams/TeamsContainer";
+import TeamsInvitations from "pages/teams/invitation/InvitationContainer";
 import TeamDetail from "./pages/teams-detail/TeamDetailContainer";
 import Settings from "./pages/settings/SettingsContainer";
 import Reports from "./pages/reports/ReportsContainer";
@@ -80,6 +81,7 @@ const Routes = props => {
           />
 
           <Route exact path={`${match.url}teams`} component={Teams} />
+          <Route exact path={`${match.url}teams/invitations`} component={TeamsInvitations} />
           <Route exact path={`${match.url}teams/create`} render={args => <Teams isCreatingTeam {...args} />} />
           <Route exact path={`${match.url}teams/:teamId`} component={TeamDetail} />
           <Route
