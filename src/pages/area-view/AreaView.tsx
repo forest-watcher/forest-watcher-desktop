@@ -40,14 +40,21 @@ const AreasView: FC<IProps & RouteComponentProps<TParams>> = ({
   const [mapRef, setMapRef] = useState<MapInstance | null>(null);
   let { path, url } = useRouteMatch();
   const userId = useGetUserId();
+  const reportTemplateIsArray = useMemo(
+    () => Array.isArray(area?.attributes.reportTemplate),
+    [area?.attributes.reportTemplate]
+  );
 
   const templatesToAdd = useMemo(() => {
     return (
-      templates?.filter(
-        template => !area?.attributes.reportTemplate.find(areaTemplate => areaTemplate.id === template.id)
-      ) || []
+      templates?.filter(template => {
+        if (!reportTemplateIsArray) {
+          return false;
+        }
+        return !area?.attributes.reportTemplate.find(areaTemplate => areaTemplate.id === template.id);
+      }) || []
     );
-  }, [area?.attributes.reportTemplate, templates]);
+  }, [area?.attributes.reportTemplate, reportTemplateIsArray, templates]);
 
   const teamsToAdd = useMemo(() => {
     return teams?.filter(team => !areaTeams.find(areaTeam => areaTeam.data.id === team.id)) || [];
@@ -146,12 +153,14 @@ const AreasView: FC<IProps & RouteComponentProps<TParams>> = ({
               <DataTable<TTemplateDataTable>
                 className="u-w-100"
                 rows={
-                  area?.attributes.reportTemplate.map(template => ({
-                    ...template,
-                    //@ts-ignore
-                    name: (template.name?.[template.defaultLanguage] as string) || "",
-                    openAssignments: 0
-                  })) ?? []
+                  reportTemplateIsArray
+                    ? area?.attributes.reportTemplate.map(template => ({
+                        ...template,
+                        //@ts-ignore
+                        name: (template.name?.[template.defaultLanguage] as string) || "",
+                        openAssignments: 0
+                      })) ?? []
+                    : []
                 }
                 columnOrder={[
                   {
