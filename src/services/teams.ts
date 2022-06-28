@@ -74,6 +74,11 @@ export type TDeleteTeamMembersParams = paths["/v3/teams/{teamId}/users/{teamUser
 export type TDeleteTeamMembersResponse =
   paths["/v3/teams/{teamId}/users/{teamUserId}"]["delete"]["responses"]["200"]["content"]["application/json"];
 
+export type TPatchTeamInviteAcceptResponse =
+  paths["/v3/teams/{teamId}/users/{userId}/accept"]["patch"]["responses"]["200"]["content"]["application/json"];
+export type TPatchTeamInviteDeclineResponse =
+  paths["/v3/teams/{teamId}/users/{userId}/decline"]["patch"]["responses"]["200"]["content"]["application/json"];
+
 export class TeamService extends BaseService {
   getUserTeams(userId: string): Promise<TGetUserTeamsResponse> {
     this.token = store.getState().user.token;
@@ -87,6 +92,26 @@ export class TeamService extends BaseService {
 
   getMyTeamInvites(): Promise<TGetMyTeamInvites> {
     return this.fetchJSON("/myinvites");
+  }
+
+  acceptTeamInvite(teamId: string): Promise<TPatchTeamInviteAcceptResponse> {
+    const {
+      token,
+      data: { id: userId }
+    } = store.getState().user;
+    this.token = token;
+
+    return this.fetchJSON(`${teamId}/users/${userId}/accept`);
+  }
+
+  declineTeamInvite(teamId: string): Promise<TPatchTeamInviteDeclineResponse> {
+    const {
+      token,
+      data: { id: userId }
+    } = store.getState().user;
+    this.token = token;
+
+    return this.fetchJSON(`${teamId}/users/${userId}/decline`);
   }
 
   createTeam(body: TPostTeamBody): Promise<TPostTeamResponse> {

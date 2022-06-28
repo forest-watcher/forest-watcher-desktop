@@ -1,10 +1,15 @@
 import Article from "components/layouts/Article";
 import Hero from "components/layouts/Hero/Hero";
 import DataTable, { IRowAction } from "components/ui/DataTable/DataTable";
-import Accept from "pages/teams/invitation/actions/Accept";
+import AcceptOrDecline from "pages/teams/invitation/actions/AcceptOrDecline";
 import { FC } from "react";
 import { FormattedMessage, useIntl } from "react-intl";
-import { Link, Route, RouteComponentProps, Switch } from "react-router-dom";
+import { Link, RouteComponentProps, useRouteMatch } from "react-router-dom";
+
+type TParams = {
+  actionType: "accept" | "decline";
+  teamId: string;
+};
 
 type TTeamInvitationsDataTable = {
   id: string;
@@ -17,6 +22,7 @@ interface IProps extends RouteComponentProps {}
 const Invitation: FC<IProps> = props => {
   const { match } = props;
   const intl = useIntl();
+  const actionMatch = useRouteMatch<TParams>({ path: `${match.url}/:actionType/:teamId/`, exact: true });
 
   const acceptInvitation: IRowAction<TTeamInvitationsDataTable> = {
     name: "teams.invitation.accept",
@@ -69,12 +75,7 @@ const Invitation: FC<IProps> = props => {
         </Article>
       </div>
 
-      <Switch>
-        <Route path={`${match.url}/accept/:teamId`}>
-          <Accept />
-        </Route>
-        {/*<Route path={`${match.url}/decline/:teamId`}></Route>*/}
-      </Switch>
+      <AcceptOrDecline isOpen={!!actionMatch} actionType={actionMatch?.params.actionType || "accept"} />
     </>
   );
 };

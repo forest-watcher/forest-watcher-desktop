@@ -81,7 +81,7 @@ const Routes = props => {
           />
 
           <Route exact path={`${match.url}teams`} component={Teams} />
-          <Route exact path={`${match.url}teams/invitations`} component={TeamsInvitations} />
+          <Route path={`${match.url}teams/invitations`} component={TeamsInvitations} />
           <Route exact path={`${match.url}teams/create`} render={args => <Teams isCreatingTeam {...args} />} />
           <Route exact path={`${match.url}teams/:teamId`} component={TeamDetail} />
           <Route
