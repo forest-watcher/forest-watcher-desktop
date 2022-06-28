@@ -1,8 +1,11 @@
 import Article from "components/layouts/Article";
 import Hero from "components/layouts/Hero/Hero";
 import DataTable, { IRowAction } from "components/ui/DataTable/DataTable";
+import Loader from "components/ui/Loader";
+import { getMyTeamInvites } from "modules/gfwTeams";
 import AcceptOrDecline from "pages/teams/invitation/actions/AcceptOrDecline";
-import { FC } from "react";
+import { TPropsFromRedux } from "pages/teams/invitation/InvitationContainer";
+import { FC, useEffect, useMemo } from "react";
 import { FormattedMessage, useIntl } from "react-intl";
 import { Link, RouteComponentProps, useRouteMatch } from "react-router-dom";
 
@@ -17,12 +20,26 @@ type TTeamInvitationsDataTable = {
   userRole: string;
 };
 
-interface IProps extends RouteComponentProps {}
+interface IProps extends TPropsFromRedux, RouteComponentProps {}
 
 const Invitation: FC<IProps> = props => {
-  const { match } = props;
+  const { match, invitations, invitationsFetched, getMyTeamInvites } = props;
   const intl = useIntl();
   const actionMatch = useRouteMatch<TParams>({ path: `${match.url}/:actionType/:teamId/`, exact: true });
+
+  useEffect(() => {
+    if (!invitationsFetched) getMyTeamInvites();
+  }, [getMyTeamInvites, invitationsFetched]);
+
+  const invitationRows = useMemo(
+    () =>
+      invitations.map(invitation => ({
+        id: invitation.id,
+        name: invitation.attributes.name,
+        userRole: intl.formatMessage({ id: `teams.details.table.userRole.${invitation.attributes.userRole}` })
+      })),
+    [intl, invitations]
+  );
 
   const acceptInvitation: IRowAction<TTeamInvitationsDataTable> = {
     name: "teams.invitation.accept",
@@ -38,6 +55,7 @@ const Invitation: FC<IProps> = props => {
 
   return (
     <>
+      <Loader isLoading={!invitationsFetched} />
       <Hero
         title="teams.invitation.title"
         titleValues={{ num: 5 }}
@@ -53,18 +71,7 @@ const Invitation: FC<IProps> = props => {
           <div className="u-responsive-table">
             <DataTable<TTeamInvitationsDataTable>
               className="u-w-100"
-              rows={[
-                {
-                  id: "1",
-                  name: "Team 1",
-                  userRole: intl.formatMessage({ id: "teams.details.table.userRole.manager" })
-                },
-                {
-                  id: "2",
-                  name: "Team 2",
-                  userRole: intl.formatMessage({ id: "teams.details.table.userRole.monitor" })
-                }
-              ]}
+              rows={invitationRows}
               columnOrder={[
                 { key: "name", name: "teams.details.table.header.teamName" },
                 { key: "userRole", name: "teams.details.table.header.userRole" }
@@ -75,7 +82,11 @@ const Invitation: FC<IProps> = props => {
         </Article>
       </div>
 
-      <AcceptOrDecline isOpen={!!actionMatch} actionType={actionMatch?.params.actionType || "accept"} />
+      <AcceptOrDecline
+        isOpen={!!actionMatch}
+        actionType={actionMatch?.params.actionType || "accept"}
+        teamId={actionMatch?.params.teamId || ""}
+      />
     </>
   );
 };

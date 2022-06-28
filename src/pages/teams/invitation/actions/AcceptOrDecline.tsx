@@ -1,7 +1,7 @@
 import { FC, useCallback, useState } from "react";
 import Modal from "components/ui/Modal/Modal";
 import Loader from "components/ui/Loader";
-import { useHistory, useParams } from "react-router-dom";
+import { useHistory, useParams, useRouteMatch } from "react-router-dom";
 import { teamService } from "services/teams";
 import { toastr } from "react-redux-toastr";
 import { TErrorResponse } from "constants/api";
@@ -33,12 +33,12 @@ const CONFIG = {
 export interface IProps {
   isOpen: boolean;
   actionType: keyof typeof CONFIG;
+  teamId: string;
 }
 
 const RemoveTeamMemberModal: FC<IProps> = props => {
-  const { isOpen, actionType } = props;
+  const { isOpen, actionType, teamId } = props;
   const config = CONFIG[actionType];
-  const { teamId } = useParams<TParams>();
   const history = useHistory();
   const intl = useIntl();
   const [isLoading, setIsLoading] = useState(false);
@@ -46,6 +46,8 @@ const RemoveTeamMemberModal: FC<IProps> = props => {
   const close = useCallback(() => {
     history.push(`/teams/invitations`);
   }, [history]);
+
+  // Close modal with teamId or actionType is invalid
 
   // useEffect(() => {
   //   // Close the modal if the member id isn't present on team
