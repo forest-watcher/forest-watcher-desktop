@@ -16,7 +16,7 @@ const UnsavedChanges: FC<IProps> = props => {
       isOpen={isOpen}
       dismissible={false}
       title="common.unsaved.changes"
-      onClose={leaveCallBack}
+      onClose={stayCallBack}
       actions={[
         { name: "common.stay", onClick: stayCallBack },
         { name: "common.leave.page", variant: "secondary", onClick: leaveCallBack }
