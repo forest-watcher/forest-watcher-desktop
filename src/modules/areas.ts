@@ -7,6 +7,7 @@ import { areaService, TAreasInTeam } from "services/area";
 import { utilsService } from "services/utils";
 import { AppDispatch, RootState } from "store";
 import { TGetTeamResponse } from "services/teams";
+import { LOGOUT } from "modules/user";
 
 // Actions
 const SET_AREA = "areas/SET_AREA";
@@ -43,7 +44,8 @@ export type TReducerActions =
   | { type: typeof SET_LOADING_AREAS; payload: any }
   | { type: typeof SET_SAVING_AREA; payload: any }
   | { type: typeof SET_EDITING_AREA; payload: any }
-  | { type: typeof SET_AREA_DELETED; payload: any };
+  | { type: typeof SET_AREA_DELETED; payload: any }
+  | { type: typeof LOGOUT; payload: null };
 
 // Reducer
 const initialState: TAreasState = {
@@ -104,6 +106,8 @@ export default function reducer(state = initialState, action: TReducerActions): 
       return Object.assign({}, state, { ...action.payload });
     case SET_EDITING_AREA:
       return Object.assign({}, state, { editing: action.payload });
+    case LOGOUT:
+      return { ...initialState };
     default:
       return state;
   }

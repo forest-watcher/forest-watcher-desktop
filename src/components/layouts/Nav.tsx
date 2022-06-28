@@ -1,5 +1,5 @@
 import { HTMLAttributes, useMemo, useEffect } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, Link } from "react-router-dom";
 import Select from "components/ui/Form/Select";
 
 import { MY_GFW_LINK } from "../../constants/global";
@@ -115,9 +115,9 @@ const Nav: FC<IProps> = props => {
                   </ReactGA.OutboundLink>
                 </li>
                 <li className="c-nav__link-wrapper">
-                  <button onClick={logout} className="c-nav__link">
+                  <Link to="/login" onClick={logout} className="c-nav__link">
                     <FormattedMessage id="app.logout" />
-                  </button>
+                  </Link>
                 </li>
               </>
             )}

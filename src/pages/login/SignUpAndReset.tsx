@@ -1,4 +1,5 @@
-import { FC, useState } from "react";
+import SocialSignIn from "pages/login/SocialSignIn";
+import React, { FC, useState } from "react";
 import * as yup from "yup";
 import Input from "components/ui/Form/Input";
 import Button from "components/ui/Button/Button";
@@ -110,6 +111,10 @@ const SignUpAndReset: FC<IProps> = ({ isResetPassword = false }) => {
           <FormattedMessage id={config.alreadyJoinedLink} />
         </Link>
       </p>
+
+      {!isResetPassword && (
+        <SocialSignIn className="c-login-form__social-buttons" handleClick={() => setIsLoading(true)} />
+      )}
     </LoginLayout>
   );
 };

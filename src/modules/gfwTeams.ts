@@ -1,7 +1,8 @@
 import { teamService } from "services/teams";
-import { apiService } from "../services/api";
+import { apiService } from "services/api";
 import { RootState, AppDispatch } from "store";
 import type { TGetUserTeamsResponse, TGetTeamMembersResponse, TGetMyTeamInvites } from "services/teams";
+import { LOGOUT } from "modules/user";
 import { toastr } from "react-redux-toastr";
 
 const GET_USER_TEAMS = "gfwTeams/GET_USER_TEAMS";
@@ -26,7 +27,8 @@ export type TReducerActions =
   // ToDo: Change any to TGetAreasByTeamId["data"] when docs are upto date!
   | { type: typeof GET_TEAM_AREAS; payload: { teamId: string; areas: any } }
   | { type: typeof INCREASE_FETCHES; payload: null }
-  | { type: typeof DECREASE_FETCHES; payload: null };
+  | { type: typeof DECREASE_FETCHES; payload: null }
+  | { type: typeof LOGOUT; payload: null };
 
 const initialState: TGFWTeamsState = {
   data: [],
@@ -66,6 +68,9 @@ export default function reducer(state = initialState, action: TReducerActions) {
         [action.payload.teamId]: action.payload.areas
       };
       return Object.assign({}, state, { areas: teamAreas });
+    }
+    case LOGOUT: {
+      return { ...initialState };
     }
     default:
       return state;

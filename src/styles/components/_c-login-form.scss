@@ -10,6 +10,18 @@
     }
   }
 
+  &__social-buttons {
+    max-width: 800px;
+    width: 100%;
+    border-top: 2px solid $neutral-400;
+    margin-top: 32px;
+    padding-top: 32px;
+
+    .c-social-button:not(:last-child) {
+      margin-bottom: 16px;
+    }
+  }
+
   &__submit-btn {
     display: inline-flex;
     margin-top: 20px;

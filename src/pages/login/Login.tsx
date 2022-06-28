@@ -1,4 +1,4 @@
-import { FC, useState } from "react";
+import React, { FC, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
 import { TLoginBody } from "services/user";
@@ -13,6 +13,7 @@ import { userService } from "services/user";
 import { toastr } from "react-redux-toastr";
 import { TErrorResponse } from "constants/api";
 import LoginLayout from "components/layouts/Login";
+import SocialSignIn from "pages/login/SocialSignIn";
 
 type TLoginForm = TLoginBody;
 
@@ -91,6 +92,8 @@ const Login: FC<IProps> = () => {
           <FormattedMessage id="signIn.link.signUp" />
         </Link>
       </p>
+
+      <SocialSignIn className="c-login-form__social-buttons" handleClick={() => setIsLoading(true)} />
     </LoginLayout>
   );
 };

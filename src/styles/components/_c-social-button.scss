@@ -1,0 +1,28 @@
+.c-social-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  line-height: 23px;
+  height: 54px;
+  width: 345px;
+  border-radius: 10px;
+  margin: 0 auto;
+
+  &__image {
+    margin-right: 15px;
+  }
+
+  &--google {
+    font-family: "Roboto", sans-serif;
+    color: #0000008A;
+    background: $white;
+    box-shadow: 0 0 3px rgba(0, 0, 0, 0.084), 0 2px 3px rgba(0, 0, 0, 0.168);
+  }
+
+  &--facebook {
+    font-family: "Helvetica", sans-serif;
+    color: $white;
+    background: #1877F2;
+  }
+}

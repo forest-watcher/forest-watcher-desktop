@@ -1,7 +1,6 @@
 .c-input {
   display: flex;
   gap: $global-spacing-3;
-  align-items: center;
 
   &--alt-label {
     flex-direction: column;
@@ -13,9 +12,10 @@
   }
 
   &__label {
+    margin-top: 9px;
     font-weight: 500;
     font-size: 14px;
-    line-height: 14px;
+    line-height: 24px;
     text-transform: uppercase;
     color: $neutral-700;
     &--alt {
