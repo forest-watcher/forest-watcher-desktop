@@ -27,6 +27,7 @@ export type TAvailableTypes<T> = TInput<T> | TSelect<T> | TToggleGroup<T> | TRad
 
 export interface IProps<T> {
   isOpen: boolean;
+  dismissible?: boolean;
   inputs: Array<TAvailableTypes<T>>;
   onClose: () => void;
   onSave: (data: UnpackNestedValue<T>) => Promise<void>;
@@ -70,6 +71,7 @@ export interface IProps<T> {
 const FormModal = <T,>(props: IProps<T>) => {
   const {
     isOpen = false,
+    dismissible,
     inputs,
     useFormProps,
     onClose,
@@ -117,6 +119,7 @@ const FormModal = <T,>(props: IProps<T>) => {
         isOpen={isOpen && !isClosing}
         onClose={handleCloseRequest}
         title={modalTitle}
+        dismissible={dismissible}
         actions={[
           { name: submitBtnName, onClick: handleSubmit(onSubmit) },
           { name: cancelBtnName, variant: "secondary", onClick: handleCloseRequest }

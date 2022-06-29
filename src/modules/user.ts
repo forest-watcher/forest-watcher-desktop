@@ -5,7 +5,7 @@ import { getTeamByUserId } from "./teams";
 import { toastr } from "react-redux-toastr";
 import { legacy_TeamService } from "services/teams";
 import { userService } from "services/user";
-import { AppDispatch, RootState } from "../store";
+import { AppDispatch, RootState } from "store";
 
 // Actions
 const CHECK_USER_LOGGED = "user/CHECK_USER_LOGGED";
@@ -21,7 +21,8 @@ const initialState = {
   },
   fetching: false,
   loggedIn: false,
-  token: null
+  token: null,
+  userHasNoLastName: false
 };
 
 export type TReducerActions =
@@ -34,7 +35,13 @@ export type TReducerActions =
 export default function reducer(state = initialState, action: TReducerActions) {
   switch (action.type) {
     case SET_USER_DATA:
-      return { ...state, data: action.payload, fetching: false };
+      return {
+        ...state,
+        data: action.payload,
+        fetching: false,
+        // The site requires each user to have a last name
+        userHasNoLastName: !action.payload.lastName
+      };
     case CHECK_USER_LOGGED:
       return Object.assign({}, state, { fetching: false, ...action.payload });
     case LOGOUT:

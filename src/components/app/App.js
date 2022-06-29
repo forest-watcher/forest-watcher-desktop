@@ -9,6 +9,7 @@ import ReactGA from "react-ga";
 import "react-redux-toastr/lib/css/react-redux-toastr.min.css";
 import Nav from "../layouts/Nav";
 import Landing from "../../pages/landing/LandingContainer";
+import UserNameForm from "components/modals/UserNameForm";
 import "configureYup";
 
 // Pages
@@ -49,7 +50,7 @@ class App extends Component {
   }
 
   render() {
-    const { match, user, userChecked, logout, locale, setLocale, location } = this.props;
+    const { match, user, userChecked, userHasNoLastName, logout, locale, setLocale, location } = this.props;
     if (!userChecked) return null;
     const mergedMessages = Object.assign({}, translations[DEFAULT_LANGUAGE], translations[locale]);
 
@@ -74,6 +75,7 @@ class App extends Component {
               location={location}
               defaultComponent={() => <Landing locale={locale} setLocale={setLocale} translations={translations} />}
             />
+            <UserNameForm isOpen={userHasNoLastName} />
             <ReduxToastr position="bottom-right" transitionIn="fadeIn" transitionOut="fadeOut" />
           </main>
         </div>
