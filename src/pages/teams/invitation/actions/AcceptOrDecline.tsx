@@ -62,8 +62,7 @@ const RemoveTeamMemberModal: FC<IProps> = props => {
     if (
       isOpen &&
       myInvitesFetched &&
-      ((myInvites.length && teamId !== "all" && !myInvites.find(invite => invite.id === teamId)) ||
-        (!myInvites.length && teamId === "all"))
+      ((myInvites.length && teamId !== "all" && !myInvites.find(invite => invite.id === teamId)) || !myInvites.length)
     ) {
       toastr.warning(intl.formatMessage({ id: "teams.invitation.invalid" }), "");
       close();
