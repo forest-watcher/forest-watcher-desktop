@@ -1,8 +1,6 @@
 import Article from "components/layouts/Article";
 import Hero from "components/layouts/Hero/Hero";
 import DataTable, { IRowAction } from "components/ui/DataTable/DataTable";
-import Loader from "components/ui/Loader";
-import { getMyTeamInvites } from "modules/gfwTeams";
 import AcceptOrDecline from "pages/teams/invitation/actions/AcceptOrDecline";
 import { TPropsFromRedux } from "pages/teams/invitation/InvitationContainer";
 import { FC, useEffect, useMemo } from "react";
@@ -55,10 +53,9 @@ const Invitation: FC<IProps> = props => {
 
   return (
     <>
-      <Loader isLoading={!invitationsFetched} />
       <Hero
         title="teams.invitation.title"
-        titleValues={{ num: 5 }}
+        titleValues={{ num: invitationRows.length }}
         backLink={{ name: "teams.details.back", to: "/teams" }}
         actions={
           <Link to={`${match.url}/accept/all`} className="c-button c-button--primary">
@@ -67,7 +64,11 @@ const Invitation: FC<IProps> = props => {
         }
       />
       <div className="l-content c-teams-details">
-        <Article>
+        <Article
+          className="c-teams-details__heading"
+          title="teams.invitation.subTitle"
+          titleValues={{ num: invitationRows.length }}
+        >
           <div className="u-responsive-table">
             <DataTable<TTeamInvitationsDataTable>
               className="u-w-100"

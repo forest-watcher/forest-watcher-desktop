@@ -1,15 +1,13 @@
+import { useAppDispatch } from "hooks/useRedux";
 import { FC, useCallback, useState } from "react";
 import Modal from "components/ui/Modal/Modal";
 import Loader from "components/ui/Loader";
-import { useHistory, useParams, useRouteMatch } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import { teamService } from "services/teams";
+import { getMyTeamInvites } from "modules/gfwTeams";
 import { toastr } from "react-redux-toastr";
 import { TErrorResponse } from "constants/api";
 import { FormattedMessage, useIntl } from "react-intl";
-
-type TParams = {
-  teamId: string;
-};
 
 const CONFIG = {
   accept: {
@@ -40,6 +38,7 @@ const RemoveTeamMemberModal: FC<IProps> = props => {
   const { isOpen, actionType, teamId } = props;
   const config = CONFIG[actionType];
   const history = useHistory();
+  const dispatch = useAppDispatch();
   const intl = useIntl();
   const [isLoading, setIsLoading] = useState(false);
 
@@ -66,6 +65,7 @@ const RemoveTeamMemberModal: FC<IProps> = props => {
         await teamService.declineTeamInvite(teamId);
       }
       close();
+      dispatch(getMyTeamInvites());
       toastr.success(intl.formatMessage({ id: config.successMessage }), "");
     } catch (e: any) {
       const error = JSON.parse(e.message) as TErrorResponse;

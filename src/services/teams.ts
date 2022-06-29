@@ -101,7 +101,12 @@ export class TeamService extends BaseService {
     } = store.getState().user;
     this.token = token;
 
-    return this.fetchJSON(`/${teamId}/users/${userId}/accept`);
+    return this.fetchJSON(`/${teamId}/users/${userId}/accept`, {
+      headers: {
+        "Content-Type": "application/json"
+      },
+      method: "PATCH"
+    });
   }
 
   declineTeamInvite(teamId: string): Promise<TPatchTeamInviteDeclineResponse> {
@@ -111,7 +116,12 @@ export class TeamService extends BaseService {
     } = store.getState().user;
     this.token = token;
 
-    return this.fetchJSON(`${teamId}/users/${userId}/decline`);
+    return this.fetchJSON(`/${teamId}/users/${userId}/decline`, {
+      headers: {
+        "Content-Type": "application/json"
+      },
+      method: "PATCH"
+    });
   }
 
   createTeam(body: TPostTeamBody): Promise<TPostTeamResponse> {
