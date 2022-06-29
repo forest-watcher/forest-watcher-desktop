@@ -252,6 +252,7 @@
   "teams.invitation.acceptAll": "Accept All",
   "teams.invitation.accept": "Accept",
   "teams.invitation.decline": "Decline",
+  "teams.invitation.invalid": "Could not find Team Invitation",
   "teams.invitation.accept.modal.title": "Accept Invitation",
   "teams.invitation.accept.modal.body": "PLACEHOLDER teams.invitation.accept.modal.body",
   "teams.invitation.accept.modal.success": "Invitation Accepted",

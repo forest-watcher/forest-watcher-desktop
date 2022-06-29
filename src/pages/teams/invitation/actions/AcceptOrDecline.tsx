@@ -1,8 +1,8 @@
 import { useAppDispatch, useAppSelector } from "hooks/useRedux";
-import { FC, useCallback, useState } from "react";
+import { FC, useCallback, useEffect, useState } from "react";
 import Modal from "components/ui/Modal/Modal";
 import Loader from "components/ui/Loader";
-import { useHistory } from "react-router-dom";
+import { Redirect, useHistory } from "react-router-dom";
 import { teamService } from "services/teams";
 import { getMyTeamInvites } from "modules/gfwTeams";
 import { toastr } from "react-redux-toastr";
@@ -44,7 +44,6 @@ export interface IProps {
 
 const RemoveTeamMemberModal: FC<IProps> = props => {
   const { isOpen, actionType, teamId } = props;
-  const config = teamId === "all" && actionType === "accept" ? CONFIG["acceptAll"] : CONFIG[actionType];
   const history = useHistory();
   const dispatch = useAppDispatch();
   const { myInvites, myInvitesFetched, numOfActiveFetches } = useAppSelector(state => state.gfwTeams);
@@ -57,13 +56,21 @@ const RemoveTeamMemberModal: FC<IProps> = props => {
 
   // Close modal with teamId or actionType is invalid
 
-  // useEffect(() => {
-  //   // Close the modal if the member id isn't present on team
-  //   if (isOpen && members && !members.some(m => m.id === memberId)) {
-  //     toastr.warning(intl.formatMessage({ id: "teams.member.invalid" }), "");
-  //     close();
-  //   }
-  // }, [close, history, intl, isOpen, memberId, members, teamId]);
+  useEffect(() => {
+    // Close the modal if teamId isn't present in the team invites
+    // Or the user has no invites when they're trying to "accept all"
+    if (
+      isOpen &&
+      myInvitesFetched &&
+      ((myInvites.length && teamId !== "all" && !myInvites.find(invite => invite.id === teamId)) ||
+        (!myInvites.length && teamId === "all"))
+    ) {
+      toastr.warning(intl.formatMessage({ id: "teams.invitation.invalid" }), "");
+      close();
+    }
+  }, [actionType, close, history, intl, isOpen, myInvites, myInvitesFetched, teamId]);
+
+  const config = teamId === "all" && actionType === "accept" ? CONFIG["acceptAll"] : CONFIG[actionType];
 
   const acceptTeamInvite = async () => {
     setIsLoading(true);
@@ -92,7 +99,10 @@ const RemoveTeamMemberModal: FC<IProps> = props => {
     setIsLoading(false);
   };
 
-  return (
+  return (isOpen && actionType !== "accept" && actionType !== "decline") ||
+    (actionType === "decline" && teamId === "all") ? (
+    <Redirect to="/teams/invitations" />
+  ) : (
     <Modal
       isOpen={isOpen}
       dismissible={false}
