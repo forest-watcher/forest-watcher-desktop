@@ -1,8 +1,10 @@
+import { useAppDispatch } from "hooks/useRedux";
 import { FC } from "react";
 import FormModal from "components/modals/FormModal";
 import { UnpackNestedValue } from "react-hook-form";
 import { useHistory } from "react-router-dom";
-import { teamService } from "services/teams";
+import { userService } from "services/user";
+import { getUser } from "modules/user";
 import { toastr } from "react-redux-toastr";
 import { useIntl } from "react-intl";
 import * as yup from "yup";
@@ -16,7 +18,7 @@ type TUserNameForm = {
 const userTeamSchema = yup
   .object()
   .shape({
-    firstName: yup.string(),
+    firstName: yup.string().required(),
     lastName: yup.string().required()
   })
   .required();
@@ -28,19 +30,15 @@ interface IProps {
 const UserNameForm: FC<IProps> = props => {
   const { isOpen } = props;
   const intl = useIntl();
-  const history = useHistory();
-
-  const onClose = () => {
-    history.push("/teams");
-  };
+  const dispatch = useAppDispatch();
 
   const onSave = async (data: UnpackNestedValue<TUserNameForm>) => {
     try {
-      // const { data: newTeam } = await teamService.createTeam(data);
-      history.push("/");
-      toastr.success(intl.formatMessage({ id: "" }), "");
+      await userService.setUserProfile(data);
+      await dispatch(getUser());
+      toastr.success(intl.formatMessage({ id: "signUp.profile.form.success" }), "");
     } catch (e) {
-      toastr.error(intl.formatMessage({ id: "" }), "");
+      toastr.error(intl.formatMessage({ id: "signUp.profile.form.error" }), "");
       console.error(e);
     }
   };
@@ -48,9 +46,7 @@ const UserNameForm: FC<IProps> = props => {
   return (
     <FormModal<TUserNameForm>
       isOpen={isOpen}
-      onClose={onClose}
       onSave={onSave}
-      dismissible={false}
       modalTitle="signUp.profile.form.title"
       submitBtnName="common.save"
       useFormProps={{ resolver: yupResolver(userTeamSchema) }}
