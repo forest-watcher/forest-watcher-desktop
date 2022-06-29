@@ -14,6 +14,7 @@ const reducer = combineReducers({
   ...reducers
 });
 
-const configureStore = () => createStore(reducer, compose(applyMiddleware(thunk), autoRehydrate()));
+const composeEnhancers = (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+const configureStore = () => createStore(reducer, composeEnhancers(applyMiddleware(thunk), autoRehydrate()));
 
 export default configureStore;
