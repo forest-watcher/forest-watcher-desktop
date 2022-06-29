@@ -58,9 +58,13 @@ const Invitation: FC<IProps> = props => {
         titleValues={{ num: invitationRows.length }}
         backLink={{ name: "teams.details.back", to: "/teams" }}
         actions={
-          <Link to={`${match.url}/accept/all`} className="c-button c-button--primary">
-            <FormattedMessage id="teams.invitation.accept.all" />
-          </Link>
+          <>
+            {invitationRows.length && (
+              <Link to={`${match.url}/accept/all`} className="c-button c-button--primary">
+                <FormattedMessage id="teams.invitation.acceptAll" />
+              </Link>
+            )}
+          </>
         }
       />
       <div className="l-content c-teams-details">

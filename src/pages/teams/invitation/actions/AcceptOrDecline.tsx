@@ -1,4 +1,4 @@
-import { useAppDispatch } from "hooks/useRedux";
+import { useAppDispatch, useAppSelector } from "hooks/useRedux";
 import { FC, useCallback, useState } from "react";
 import Modal from "components/ui/Modal/Modal";
 import Loader from "components/ui/Loader";
@@ -18,6 +18,14 @@ const CONFIG = {
     successMessage: "teams.invitation.accept.modal.success",
     errorMessage: "teams.invitation.accept.modal.error"
   },
+  acceptAll: {
+    title: "teams.invitation.acceptAll.modal.title",
+    body: "teams.invitation.acceptAll.modal.body",
+    confirmBtn: "teams.invitation.acceptAll",
+    cancelBtn: "common.cancel",
+    successMessage: "teams.invitation.acceptAll.modal.success",
+    errorMessage: "teams.invitation.acceptAll.modal.error"
+  },
   decline: {
     title: "teams.invitation.decline.modal.title",
     body: "teams.invitation.decline.modal.body",
@@ -30,15 +38,16 @@ const CONFIG = {
 
 export interface IProps {
   isOpen: boolean;
-  actionType: keyof typeof CONFIG;
+  actionType: "accept" | "decline";
   teamId: string;
 }
 
 const RemoveTeamMemberModal: FC<IProps> = props => {
   const { isOpen, actionType, teamId } = props;
-  const config = CONFIG[actionType];
+  const config = teamId === "all" && actionType === "accept" ? CONFIG["acceptAll"] : CONFIG[actionType];
   const history = useHistory();
   const dispatch = useAppDispatch();
+  const { myInvites, myInvitesFetched, numOfActiveFetches } = useAppSelector(state => state.gfwTeams);
   const intl = useIntl();
   const [isLoading, setIsLoading] = useState(false);
 
@@ -59,11 +68,16 @@ const RemoveTeamMemberModal: FC<IProps> = props => {
   const acceptTeamInvite = async () => {
     setIsLoading(true);
     try {
-      if (actionType === "accept") {
+      if (actionType === "accept" && teamId === "all") {
+        for (let i = 0; i < myInvites.length; i++) {
+          await teamService.acceptTeamInvite(myInvites[i].id);
+        }
+      } else if (actionType === "accept") {
         await teamService.acceptTeamInvite(teamId);
       } else if (actionType === "decline") {
         await teamService.declineTeamInvite(teamId);
       }
+
       close();
       dispatch(getMyTeamInvites());
       toastr.success(intl.formatMessage({ id: config.successMessage }), "");
@@ -89,7 +103,7 @@ const RemoveTeamMemberModal: FC<IProps> = props => {
         { name: config.cancelBtn, variant: "secondary", onClick: close }
       ]}
     >
-      <Loader isLoading={isLoading} />
+      <Loader isLoading={isLoading || numOfActiveFetches > 0} />
       <p>
         <FormattedMessage id={config.body} />
       </p>
