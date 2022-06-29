@@ -17,6 +17,7 @@ export type TGFWTeamsState = {
   members: { [teamId: string]: TGetTeamMembersResponse["data"] };
   areas: { [teamId: string]: any }; // ToDo: Change any to TGetAreasByTeamId["data"] when docs are upto date!
   myInvites: TGetMyTeamInvites["data"];
+  myInvitesFetched: boolean;
   numOfActiveFetches: number;
 };
 
@@ -35,6 +36,7 @@ const initialState: TGFWTeamsState = {
   members: {},
   areas: {},
   myInvites: [],
+  myInvitesFetched: false,
   numOfActiveFetches: 0
 };
 
@@ -60,7 +62,7 @@ export default function reducer(state = initialState, action: TReducerActions) {
       return Object.assign({}, state, { members: teamMembers });
     }
     case GET_MY_TEAM_INVITES: {
-      return Object.assign({}, state, { myInvites: action.payload.myInvites });
+      return Object.assign({}, state, { myInvites: action.payload.myInvites, myInvitesFetched: true });
     }
     case GET_TEAM_AREAS: {
       const teamAreas = {

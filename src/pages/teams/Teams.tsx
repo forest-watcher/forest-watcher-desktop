@@ -58,9 +58,9 @@ const Teams: FC<IProps> = props => {
                 {txt => <span className="l-team-invitations__title">{txt}</span>}
               </FormattedMessage>
 
-              <Button variant="primary">
-                <FormattedMessage id="teams.invitation.accept" />
-              </Button>
+              <Link to={`${match.path}/invitations`} className="c-button c-button--primary">
+                <FormattedMessage id="teams.invitation.view" values={{ num: myInvites.length }} />
+              </Link>
             </div>
           </div>
         </div>
