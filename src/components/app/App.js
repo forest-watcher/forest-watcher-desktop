@@ -7,12 +7,14 @@ import translations from "locales/index.js";
 import { DEFAULT_LANGUAGE, GA_UA } from "constants/global";
 import ReactGA from "react-ga";
 import "react-redux-toastr/lib/css/react-redux-toastr.min.css";
-import Nav from "../layouts/Nav";
-import Landing from "../../pages/landing/LandingContainer";
+import Nav from "components/layouts/Nav";
+import Landing from "pages/landing/LandingContainer";
 import "configureYup";
+import { ErrorBoundary } from "react-error-boundary";
+import ErrorFallback from "components/modals/ErrorFallbackModal";
 
 // Pages
-import Routes from "../../routes";
+import Routes from "routes";
 
 class App extends Component {
   UNSAFE_componentWillMount() {
@@ -55,28 +57,30 @@ class App extends Component {
 
     return (
       <IntlProvider locale={locale} messages={mergedMessages}>
-        <div>
-          <header className="l-header" role="banner">
-            <Nav
-              loggedIn={user.loggedIn}
-              logout={logout}
-              locale={locale}
-              setLocale={setLocale}
-              translations={translations}
-              user={user}
-            />
-          </header>
+        <ErrorBoundary FallbackComponent={ErrorFallback}>
+          <div>
+            <header className="l-header" role="banner">
+              <Nav
+                loggedIn={user.loggedIn}
+                logout={logout}
+                locale={locale}
+                setLocale={setLocale}
+                translations={translations}
+                user={user}
+              />
+            </header>
 
-          <main role="main" className="l-main">
-            <Routes
-              match={match}
-              user={user}
-              location={location}
-              defaultComponent={() => <Landing locale={locale} setLocale={setLocale} translations={translations} />}
-            />
-            <ReduxToastr position="bottom-right" transitionIn="fadeIn" transitionOut="fadeOut" />
-          </main>
-        </div>
+            <main role="main" className="l-main">
+              <Routes
+                match={match}
+                user={user}
+                location={location}
+                defaultComponent={() => <Landing locale={locale} setLocale={setLocale} translations={translations} />}
+              />
+              <ReduxToastr position="bottom-right" transitionIn="fadeIn" transitionOut="fadeOut" />
+            </main>
+          </div>
+        </ErrorBoundary>
       </IntlProvider>
     );
   }
