@@ -53,7 +53,6 @@ const Reports: FC<IProps> = props => {
                 { key: "createdAt", name: "reports.reports.table.header.area" },
                 { key: "createdAt", name: "reports.reports.table.header.coordinates" }
               ]}
-              paginationLength={10}
             />
           </div>
         </Article>
