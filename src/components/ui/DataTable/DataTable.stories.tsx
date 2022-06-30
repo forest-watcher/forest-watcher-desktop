@@ -55,3 +55,9 @@ WithActions.args = {
     }
   ]
 };
+
+export const WithPagination = Template<TDataTableRows>().bind({});
+WithPagination.args = {
+  ...FullWidth.args,
+  isPaginated: true
+};
