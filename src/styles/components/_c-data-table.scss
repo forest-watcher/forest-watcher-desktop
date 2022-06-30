@@ -40,4 +40,13 @@
     padding: 8px 34px 8px 8px;
     margin-left: auto;
   }
+
+  &__pagination {
+    margin-top: $global-spacing-10;
+    display: flex;
+    justify-content: end;
+    position: relative;
+    right:  2px;
+    bottom: 2px; // Fix Chrome issue cutting off radius on overflow hidden parents
+  }
 }

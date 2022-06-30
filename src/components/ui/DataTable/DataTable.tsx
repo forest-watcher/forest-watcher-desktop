@@ -95,8 +95,11 @@ const DataTable = <T extends { [key: string]: string | number }>(props: IProps<T
           ))}
         </tbody>
       </table>
+
       {rows.length !== rowsToDisplay.length && (
-        <Pagination min={1} max={Math.ceil(rows.length / rowsPerPage)} onPageChange={handlePaginatedChange} />
+        <div className="c-data-table__pagination">
+          <Pagination min={1} max={Math.ceil(rows.length / rowsPerPage)} onPageChange={handlePaginatedChange} />
+        </div>
       )}
     </>
   );
