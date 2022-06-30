@@ -4,6 +4,7 @@ import { TPropsFromRedux } from "./ReportsContainer";
 import Hero from "components/layouts/Hero/Hero";
 import { IProps as ITabGroupProps } from "components/ui/TabGroup/TabGroup";
 import InvestigationPage from "./investigation/Investigation";
+import ReportsPage from "./reports/ReportsContainer";
 
 type TParams = {
   reportingTab: string;
@@ -36,6 +37,7 @@ const Reports: FC<IProps> = props => {
 
       <Switch>
         <Route path={"/reporting/investigation"} component={InvestigationPage} />
+        <Route path={"/reporting/reports"} component={ReportsPage} />
       </Switch>
     </div>
   );
