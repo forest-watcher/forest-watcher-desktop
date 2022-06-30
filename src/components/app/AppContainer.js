@@ -11,7 +11,6 @@ ReactGA.initialize(GA_UA, { testMode: ENVIRONMENT === "test" });
 const mapStateToProps = ({ app, user }) => ({
   user,
   userChecked: app.userChecked,
-  userHasNoLastName: user.userHasNoLastName,
   locale: app.locale
 });
 

@@ -45,6 +45,7 @@
   "signUp.success.message.extra": "Please check your emails and confirm your account",
   "signUp.error": "Sign up failed",
   "signUp.profile.form.title": "Your Profile",
+  "signUp.profile.form.subTitle": "Forest Watcher requires you to enter your name",
   "signUp.profile.form.field.firstName": "First Name",
   "signUp.profile.form.field.lastName": "Last Name",
   "signUp.profile.form.success": "Profile Updated",

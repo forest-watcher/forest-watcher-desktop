@@ -50,7 +50,7 @@ class App extends Component {
   }
 
   render() {
-    const { match, user, userChecked, userHasNoLastName, logout, locale, setLocale, location } = this.props;
+    const { match, user, userChecked, logout, locale, setLocale, location } = this.props;
     if (!userChecked) return null;
     const mergedMessages = Object.assign({}, translations[DEFAULT_LANGUAGE], translations[locale]);
 
@@ -75,7 +75,7 @@ class App extends Component {
               location={location}
               defaultComponent={() => <Landing locale={locale} setLocale={setLocale} translations={translations} />}
             />
-            <UserNameForm isOpen={userHasNoLastName} />
+            <UserNameForm isOpen={user.userHasNoLastName} />
             <ReduxToastr position="bottom-right" transitionIn="fadeIn" transitionOut="fadeOut" />
           </main>
         </div>

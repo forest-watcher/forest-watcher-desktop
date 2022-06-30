@@ -2,7 +2,6 @@ import { useAppDispatch } from "hooks/useRedux";
 import { FC } from "react";
 import FormModal from "components/modals/FormModal";
 import { UnpackNestedValue } from "react-hook-form";
-import { useHistory } from "react-router-dom";
 import { userService } from "services/user";
 import { getUser } from "modules/user";
 import { toastr } from "react-redux-toastr";
@@ -48,6 +47,7 @@ const UserNameForm: FC<IProps> = props => {
       isOpen={isOpen}
       onSave={onSave}
       modalTitle="signUp.profile.form.title"
+      modalSubtitle="signUp.profile.form.subTitle"
       submitBtnName="common.save"
       useFormProps={{ resolver: yupResolver(userTeamSchema) }}
       inputs={[
