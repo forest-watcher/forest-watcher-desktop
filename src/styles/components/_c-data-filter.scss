@@ -28,5 +28,13 @@
       text-transform: capitalize;
       margin-top: 0px;
     }
+
+    .c-input__select-list-box--simple-green {
+      top: $global-spacing-10;
+    }
+  }
+
+  &__add-more {
+    margin-left: auto;
   }
 }

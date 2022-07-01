@@ -418,5 +418,7 @@
   "export.downloadMethods.email": "Send Email",
   "export.downloadMethods.link": "Shareable",
   "investigation.start": "Start Investigation",
-  "filters.title": "Filters"
+  "filters.title": "Filters",
+  "filters.extra": "Apply more filters",
+  "filters.clearAll": "Clear all"
 }
