@@ -50,9 +50,19 @@ const UserAreasMap: FC<PropsWithChildren<IProps>> = props => {
 
   // When an area is clicked the click state is set to type "select".
   // Effectively overriding the previous 'preclick' handler.
-  // So, when a click happens an assumption is made that a deselect should
+  // So, when a click happens an assumption is made that a de-select should
   // occur unless it's overwritten immediately by an area click.
-  const handleAreaClick = useCallback((areaId: string) => setClickState({ type: "select", areaId }), []);
+  const handleAreaClick = useCallback(
+    (areaId: string) => {
+      if (areaId !== selectedAreaId) {
+        setClickState({ type: "select", areaId });
+      } else {
+        // If the same area was clicked, do nothing
+        setClickState(undefined);
+      }
+    },
+    [selectedAreaId]
+  );
 
   useEffect(() => {
     if (clickState?.type === "deselect" && onAreaDeselect && selectedAreaId) {
