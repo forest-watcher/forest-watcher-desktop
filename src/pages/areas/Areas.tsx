@@ -1,9 +1,7 @@
-import { FC, useMemo, useEffect, useState, Fragment } from "react";
+import { FC, useMemo, useEffect, useState, Fragment, useCallback } from "react";
 import Hero from "components/layouts/Hero/Hero";
 import Article from "components/layouts/Article";
 import Loader from "components/ui/Loader";
-import { MapboxEvent, Map as MapInstance, MapEventType, EventData } from "mapbox-gl";
-import * as turf from "@turf/turf";
 import { FormattedMessage, useIntl } from "react-intl";
 import ReactGA from "react-ga";
 import EmptyState from "components/ui/EmptyState/EmptyState";
@@ -20,38 +18,22 @@ const Areas: FC<IProps> = props => {
   const { areasList, loading, loadingTeamAreas, getAreasInUsersTeams, areasInUsersTeams } = props;
   const areaMap = useMemo<TAreasResponse[]>(() => Object.values(areasList), [areasList]);
   const [selectedArea, setSelectedArea] = useState<TAreasResponse | null>(null);
-  const [mapRef, setMapRef] = useState<MapInstance | null>(null);
   const intl = useIntl();
-
-  useEffect(() => {
-    if (mapRef) {
-      const callback = (e: MapEventType & EventData) => {
-        if (selectedArea?.attributes.geostore.geojson.features[0]) {
-          // Is inside?
-          const within = turf.booleanPointInPolygon(
-            [e.lngLat.lng, e.lngLat.lat],
-            selectedArea.attributes.geostore.geojson.features[0] as any // Typing error
-          );
-          if (!within) {
-            setSelectedArea(null);
-          }
-        }
-      };
-      mapRef.on("click", callback);
-
-      return () => {
-        mapRef.off("click", callback);
-      };
-    }
-  }, [mapRef, selectedArea]);
 
   useEffect(() => {
     getAreasInUsersTeams();
   }, [getAreasInUsersTeams]);
 
-  const handleMapLoad = (evt: MapboxEvent) => {
-    setMapRef(evt.target);
-  };
+  const handleAreaDeselect = useCallback(() => {
+    setSelectedArea(null);
+  }, []);
+
+  const handleAreaSelect = useCallback(
+    (areaId: string) => {
+      setSelectedArea(areasList[areaId]);
+    },
+    [areasList]
+  );
 
   const getNumberOfTeamsInArea = (areaId: string) => {
     let count = 0;
@@ -88,8 +70,8 @@ const Areas: FC<IProps> = props => {
             <UserAreasMap
               className="c-map--within-hero"
               selectedAreaId={selectedArea?.id}
-              onAreaClick={areaId => setSelectedArea(areasList[areaId])}
-              onMapLoad={handleMapLoad}
+              onAreaSelect={handleAreaSelect}
+              onAreaDeselect={handleAreaDeselect}
             >
               {selectedArea && (
                 <AreaDetailCard area={selectedArea} numberOfTeams={getNumberOfTeamsInArea(selectedArea.id)} />

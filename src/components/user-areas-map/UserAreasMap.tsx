@@ -9,14 +9,19 @@ import { goToGeojson } from "helpers/map";
 
 interface IProps extends IMapProps {
   // Should be a memorised function! useCallBack()
-  onAreaClick?: IPolygonProps["onClick"];
+  onAreaSelect?: IPolygonProps["onClick"];
+  // Should be a memorised function! useCallBack()
+  onAreaDeselect?: (id: string) => void;
   focusAllAreas?: boolean;
   selectedAreaId?: string;
 }
 
 const UserAreasMap: FC<PropsWithChildren<IProps>> = props => {
-  const { onAreaClick, onMapLoad, focusAllAreas = true, selectedAreaId, children, ...rest } = props;
+  const { onAreaSelect, onAreaDeselect, onMapLoad, focusAllAreas = true, selectedAreaId, children, ...rest } = props;
   const [mapRef, setMapRef] = useState<MapInstance | null>(null);
+  const [clickState, setClickState] = useState<{ type: "map" } | { type: "area"; areaId: string } | undefined>(
+    undefined
+  );
 
   const { data: areasList } = useAppSelector(state => state.areas);
   const areaMap = useMemo<TAreasResponse[]>(() => Object.values(areasList), [areasList]);
@@ -28,6 +33,31 @@ const UserAreasMap: FC<PropsWithChildren<IProps>> = props => {
     }
     return null;
   }, [areaMap]);
+
+  useEffect(() => {
+    const callback = () => {
+      setClickState({ type: "map" });
+    };
+
+    mapRef?.on("preclick", callback);
+    return () => {
+      mapRef?.off("preclick", callback);
+    };
+  }, [mapRef]);
+
+  useEffect(() => {
+    if (clickState?.type === "map" && onAreaDeselect && selectedAreaId) {
+      onAreaDeselect(selectedAreaId);
+    }
+
+    if (clickState?.type === "area" && onAreaSelect) {
+      onAreaSelect(clickState.areaId);
+    }
+
+    if (clickState?.type === "map" || clickState?.type === "area") {
+      setClickState(undefined);
+    }
+  }, [clickState, onAreaSelect, onAreaDeselect, selectedAreaId]);
 
   useEffect(() => {
     if (features && focusAllAreas) {
@@ -49,7 +79,7 @@ const UserAreasMap: FC<PropsWithChildren<IProps>> = props => {
           label={area.attributes.name}
           data={area.attributes.geostore.geojson}
           isSelected={selectedAreaId === area.id}
-          onClick={onAreaClick}
+          onClick={areaId => setClickState({ type: "area", areaId })}
         />
       ))}
       {children}
