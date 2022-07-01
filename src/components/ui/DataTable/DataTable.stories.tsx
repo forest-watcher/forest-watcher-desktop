@@ -55,3 +55,76 @@ WithActions.args = {
     }
   ]
 };
+
+export const WithPagination = Template<TDataTableRows>().bind({});
+WithPagination.args = {
+  ...FullWidth.args,
+  isPaginated: true,
+  rowsPerPage: 5,
+  rows: [
+    {
+      name: "Foo",
+      email: "foo@user.com"
+    },
+    {
+      name: "Bar",
+      email: "bar@user.com"
+    },
+    {
+      name: "Baz",
+      email: "baz@user.com"
+    },
+    {
+      name: "Fizz",
+      email: "fizz@user.com"
+    },
+    {
+      name: "Pop",
+      email: "pop@user.com"
+    },
+    {
+      name: "Bubble",
+      email: "bubble@user.com"
+    },
+    {
+      name: "Squek",
+      email: "Squek@user.com"
+    },
+    {
+      name: "Bang",
+      email: "bang@user.com"
+    },
+    {
+      name: "Hiya",
+      email: "hiya@user.com"
+    },
+    {
+      name: "Too",
+      email: "too@user.com"
+    },
+    {
+      name: "Many",
+      email: "many@user.com"
+    },
+    {
+      name: "Names",
+      email: "names@user.com"
+    },
+    {
+      name: "To",
+      email: "to@user.com"
+    },
+    {
+      name: "Come",
+      email: "come@user.com"
+    },
+    {
+      name: "Up",
+      email: "up@user.com"
+    },
+    {
+      name: "With",
+      email: "with@user.com"
+    }
+  ]
+};

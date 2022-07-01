@@ -3,6 +3,7 @@ import Modal from "components/ui/Modal/Modal";
 import { Props as IInputProps } from "components/ui/Form/Input";
 import { Props as ISelectProps } from "components/ui/Form/Select";
 import { Props as IToggleGroupProps } from "components/ui/Form/ToggleGroup";
+import { Props as IToggleProps } from "components/ui/Form/Toggle";
 import { Props as IRadioChipGroupProps } from "components/ui/Form/RadioChipGroup";
 import { useForm, SubmitHandler, RegisterOptions, UnpackNestedValue, FieldPath } from "react-hook-form";
 import UnsavedChanges from "components/modals/UnsavedChanges";
@@ -22,8 +23,9 @@ export interface IInputBase<T> {
 export type TInput<T> = Omit<IInputProps, "registered"> & IInputBase<T>;
 export type TSelect<T> = Omit<Omit<ISelectProps, "formHook">, "registered"> & IInputBase<T>;
 export type TToggleGroup<T> = Omit<Omit<IToggleGroupProps, "formHook">, "registered"> & IInputBase<T>;
+export type TToggle<T> = Omit<Omit<IToggleProps, "formHook">, "registered"> & IInputBase<T>;
 export type TRadioGroup<T> = Omit<Omit<IRadioChipGroupProps, "formHook">, "registered"> & IInputBase<T>;
-export type TAvailableTypes<T> = TInput<T> | TSelect<T> | TToggleGroup<T> | TRadioGroup<T>;
+export type TAvailableTypes<T> = TInput<T> | TSelect<T> | TToggleGroup<T> | TToggle<T> | TRadioGroup<T>;
 
 export interface IProps<T> {
   isOpen: boolean;
@@ -36,6 +38,7 @@ export interface IProps<T> {
   cancelBtnName?: string;
   useFormProps?: UseFormProps<T>;
   actions?: ReactNode;
+  resetValues?: UnpackNestedValue<T>;
 }
 
 /**
@@ -78,7 +81,8 @@ const FormModal = <T,>(props: IProps<T>) => {
     submitBtnName,
     cancelBtnName = "common.cancel",
     modalSubtitle,
-    actions
+    actions,
+    resetValues
   } = props;
 
   const formhook = useForm<T>(useFormProps);
@@ -94,7 +98,8 @@ const FormModal = <T,>(props: IProps<T>) => {
   useEffect(() => {
     setIsClosing(false);
     setIsLoading(false);
-    reset();
+    reset(resetValues);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen, reset]);
 
   const handleCloseRequest = () => {

@@ -72,6 +72,19 @@
         text-transform: uppercase;
       }
     }
+    &--simple-green {
+      min-width: unset;
+      padding: 0px;
+      border-radius: 14px;
+      border: 1px solid $primary-500;
+      min-width: 96px;
+      .c-input__select-value {
+        text-align: left;
+      }
+      &.c-input__select--open {
+        border: 1px solid $primary-500;
+      }
+    }
     &--multiple {
       border: 0px;
 
@@ -135,7 +148,7 @@
     gap: $global-spacing-4;
     font-family: $base-font-family;
     width: 100%;
-    &--simple {
+    &--simple, &--simple-green {
       padding: 0;
       gap: $global-spacing-1;
       font-weight: 400;
@@ -145,6 +158,14 @@
       .c-input__select-indicator {
         path {
           fill: $neutral-600;
+        }
+      }
+    }
+    &--simple-green {
+      padding: $global-spacing-1 $global-spacing-3;
+      .c-input__select-indicator {
+        path {
+          fill: $primary-500;
         }
       }
     }
@@ -177,6 +198,12 @@
       left: unset;
       right: 0;
       top: 35px;
+    }
+    &--simple-green {
+      top: 26px;
+      min-width: 192px;
+      right: 0;
+      left: unset;
     }
   }
 

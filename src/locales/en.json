@@ -413,6 +413,9 @@
   "errors.number.min": "This should be at least {min}",
   "errors.number.max": "This should be less than {max}",
   "errors.team.detail": "Could not find Team",
+  "errors.boundary.title": "Something went wrong",
+  "errors.boundary.message": "Something unexpected happen, please try again later",
+  "errors.boundary.submit": "Close",
   "import.title": "Import",
   "export.title": "Export",
   "export.fileType": "File Type",
@@ -422,5 +425,8 @@
   "export.downloadMethods.download": "Download",
   "export.downloadMethods.email": "Send Email",
   "export.downloadMethods.link": "Shareable",
-  "investigation.start": "Start Investigation"
+  "investigation.start": "Start Investigation",
+  "filters.title": "Filters",
+  "filters.extra": "Apply more filters",
+  "filters.clearAll": "Clear all"
 }
