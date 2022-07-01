@@ -1,9 +1,10 @@
 import Input from "components/ui/Form/Input";
 import RadioChipGroupFormWrapper from "components/ui/Form/RadioChipGroup";
 import Select from "components/ui/Form/Select";
+import Toggle from "components/ui/Form/Toggle";
 import ToggleGroup from "components/ui/Form/ToggleGroup";
 import { UseFormReturn } from "react-hook-form/dist/types";
-import { TAvailableTypes, TInput, TRadioGroup, TSelect, TToggleGroup } from "./FormModal";
+import { TAvailableTypes, TInput, TRadioGroup, TSelect, TToggleGroup, TToggle } from "./FormModal";
 
 export interface IProps<T> {
   input: TAvailableTypes<T>;
@@ -51,6 +52,20 @@ const FormModalInput = <T,>(props: IProps<T>) => {
 
     return (
       <ToggleGroup
+        {...rest}
+        error={formatErrors && formatErrors(errors)}
+        registered={register(registerProps.name, registerProps.options)}
+        formHook={formhook}
+      />
+    );
+  }
+
+  if ((input as TToggle<T>).toggleProps !== undefined) {
+    const inputProps = input as TToggle<T>;
+    const { formatErrors, registerProps, ...rest } = inputProps;
+
+    return (
+      <Toggle
         {...rest}
         error={formatErrors && formatErrors(errors)}
         registered={register(registerProps.name, registerProps.options)}
