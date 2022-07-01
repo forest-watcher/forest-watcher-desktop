@@ -44,7 +44,7 @@
   &__pagination {
     margin-top: $global-spacing-10;
     display: flex;
-    justify-content: end;
+    justify-content: flex-end;
     position: relative;
     right:  2px;
     bottom: 2px; // Fix Chrome issue cutting off radius on overflow hidden parents

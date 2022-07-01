@@ -23,18 +23,20 @@ it("Toggle Input should render correctly unspecified", () => {
       <div
         class="c-input"
       >
+        <label
+          class="c-input__label"
+          id="headlessui-label-:r0:"
+        >
+          Hello
+        </label>
         <button
+          aria-labelledby="headlessui-label-:r0:"
           class="c-input__toggle"
-          id="headlessui-switch-:r0:"
+          id="headlessui-switch-:r1:"
           role="switch"
           tabindex="0"
           type="button"
         >
-          <span
-            class="u-visually-hidden"
-          >
-            Hello
-          </span>
           <span
             class="c-input__toggle-indicator"
           />
@@ -60,19 +62,21 @@ it("Toggle Input should render correctly as true", () => {
       <div
         class="c-input"
       >
+        <label
+          class="c-input__label"
+          id="headlessui-label-:r2:"
+        >
+          Hello
+        </label>
         <button
           aria-checked="true"
+          aria-labelledby="headlessui-label-:r2:"
           class="c-input__toggle c-input__toggle--on"
-          id="headlessui-switch-:r1:"
+          id="headlessui-switch-:r3:"
           role="switch"
           tabindex="0"
           type="button"
         >
-          <span
-            class="u-visually-hidden"
-          >
-            Hello
-          </span>
           <span
             class="c-input__toggle-indicator"
           />
@@ -98,19 +102,21 @@ it("Toggle Input should render correctly as false", () => {
       <div
         class="c-input"
       >
+        <label
+          class="c-input__label"
+          id="headlessui-label-:r4:"
+        >
+          Hello
+        </label>
         <button
           aria-checked="false"
+          aria-labelledby="headlessui-label-:r4:"
           class="c-input__toggle"
-          id="headlessui-switch-:r2:"
+          id="headlessui-switch-:r5:"
           role="switch"
           tabindex="0"
           type="button"
         >
-          <span
-            class="u-visually-hidden"
-          >
-            Hello
-          </span>
           <span
             class="c-input__toggle-indicator"
           />
