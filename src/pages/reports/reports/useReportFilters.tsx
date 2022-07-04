@@ -5,26 +5,28 @@ import { useIntl } from "react-intl";
 import { Option } from "types/select";
 import { TFilterFields } from "./Reports";
 
+const ALL_VALUE = "all";
+
 const useReportFilters = () => {
   const intl = useIntl();
 
   const areaFilterOptions = useMemo<Option[]>(
-    () => [{ label: intl.formatMessage({ id: "common.all" }), value: "all" }],
+    () => [{ label: intl.formatMessage({ id: "common.all" }), value: ALL_VALUE }],
     [intl]
   );
 
   const templateOptions = useMemo<Option[]>(
-    () => [{ label: intl.formatMessage({ id: "common.all" }), value: "all" }],
+    () => [{ label: intl.formatMessage({ id: "common.all" }), value: ALL_VALUE }],
     [intl]
   );
 
   const timeFrameOptions = useMemo<Option[]>(
-    () => [{ label: intl.formatMessage({ id: "common.all" }), value: "all" }],
+    () => [{ label: intl.formatMessage({ id: "common.all" }), value: ALL_VALUE }],
     [intl]
   );
 
   const alertTypeOptions = useMemo<Option[]>(
-    () => [{ label: intl.formatMessage({ id: "common.all" }), value: "all" }],
+    () => [{ label: intl.formatMessage({ id: "common.all" }), value: ALL_VALUE }],
     [intl]
   );
 
@@ -46,7 +48,7 @@ const useReportFilters = () => {
           }
         },
         filterCallback: (item, value) => {
-          if (!value || value === "any") {
+          if (!value || value === ALL_VALUE) {
             return true;
           } else {
             return item.area === value;
@@ -69,7 +71,7 @@ const useReportFilters = () => {
           }
         },
         filterCallback: (item, value) => {
-          if (!value || value === "any") {
+          if (!value || value === ALL_VALUE) {
             return true;
           } else {
             return item.template === value;
@@ -92,7 +94,7 @@ const useReportFilters = () => {
           }
         },
         filterCallback: (item, value) => {
-          if (!value || value === "any") {
+          if (!value || value === ALL_VALUE) {
             return true;
           } else {
             return item.area === value; // TODO: Build timeframe callback
@@ -119,7 +121,7 @@ const useReportFilters = () => {
           }
         },
         filterCallback: (item, value) => {
-          if (!value || value === "any") {
+          if (!value || value === ALL_VALUE) {
             return true;
           } else {
             return item.area === value;
@@ -160,7 +162,7 @@ const useReportFilters = () => {
           }
         },
         filterCallback: (item, value) => {
-          if (!value || value === "any") {
+          if (!value || value === ALL_VALUE) {
             return true;
           } else {
             return item.area === value;
@@ -168,7 +170,7 @@ const useReportFilters = () => {
         }
       }
     ];
-  }, []);
+  }, [alertTypeOptions, intl]);
 
   return { filters, extraFilters };
 };
