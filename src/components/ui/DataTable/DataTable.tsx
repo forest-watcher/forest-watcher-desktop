@@ -30,9 +30,9 @@ export interface IProps<T> {
 }
 
 export enum Direction {
-  Asc,
-  Desc,
-  None
+  Asc = "ascending",
+  Desc = "descending",
+  None = "none"
 }
 
 const DataTable = <T extends { [key: string]: string | number }>(props: IProps<T>) => {
@@ -85,7 +85,7 @@ const DataTable = <T extends { [key: string]: string | number }>(props: IProps<T
         <thead className="c-data-table__header">
           <tr>
             {columnOrder.map(column => (
-              <th key={column.key.toString()}>
+              <th key={column.key.toString()} aria-sort={column.key === sortedCol?.key ? sortedDirection : undefined}>
                 {column.sortCompareFn ? (
                   <button onClick={() => handleSort(column)}>
                     <FormattedMessage id={column.name} />
