@@ -9,6 +9,7 @@ import ReactGA from "react-ga";
 import "react-redux-toastr/lib/css/react-redux-toastr.min.css";
 import Nav from "components/layouts/Nav";
 import Landing from "pages/landing/LandingContainer";
+import UserNameForm from "components/modals/UserNameForm";
 import "configureYup";
 import { ErrorBoundary } from "react-error-boundary";
 import ErrorFallback from "components/modals/ErrorFallbackModal";
@@ -77,6 +78,7 @@ class App extends Component {
                 location={location}
                 defaultComponent={() => <Landing locale={locale} setLocale={setLocale} translations={translations} />}
               />
+              <UserNameForm isOpen={user.userHasNoLastName} />
               <ReduxToastr position="bottom-right" transitionIn="fadeIn" transitionOut="fadeOut" />
             </main>
           </div>
