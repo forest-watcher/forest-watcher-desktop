@@ -135,6 +135,7 @@ const AreasView: FC<IProps & RouteComponentProps<TParams>> = ({
           <Article
             title="areas.details.templates"
             titleValues={{ num: area?.attributes.reportTemplate.length ?? 0 }}
+            size="small"
             actions={
               <Link to={`${url}/template/add`} className="c-button c-button--primary">
                 <img className="c-button__inline-icon" src={PlusIcon} alt="" role="presentation" />
@@ -174,6 +175,7 @@ const AreasView: FC<IProps & RouteComponentProps<TParams>> = ({
           <Article
             title="areas.details.teams"
             titleValues={{ num: areaTeams.length ?? 0 }}
+            size="small"
             actions={
               <Link to={`${url}/team/add`} className="c-button c-button--primary">
                 <img className="c-button__inline-icon" src={PlusIcon} alt="" role="presentation" />

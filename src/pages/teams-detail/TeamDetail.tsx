@@ -173,6 +173,7 @@ const TeamDetail: FC<IProps> = props => {
           className="c-teams-details__heading"
           title="teams.details.managers"
           titleValues={{ num: manages.length }}
+          size="small"
           actions={
             userIsManager && (
               <Link to={`${match.url}/add/manager`} className="c-button c-button--primary">
@@ -197,6 +198,7 @@ const TeamDetail: FC<IProps> = props => {
           className="c-teams-details__heading"
           title="teams.details.monitors"
           titleValues={{ num: monitors.length }}
+          size="small"
           actions={
             userIsManager && (
               <Link to={`${match.url}/add/monitor`} className="c-button c-button--primary">
