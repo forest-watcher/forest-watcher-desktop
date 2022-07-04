@@ -50,6 +50,7 @@
   "resetPW.success.message": "Reset password request sent",
   "resetPW.success.message.extra": "Please check your emails to reset your password",
   "resetPW.error": "Reset password failed",
+  "common.all": "All",
   "common.create": "Create",
   "common.edit": "Edit",
   "common.add": "Add",
@@ -169,11 +170,13 @@
   "areas.card.size": "Size: {size} m2",
   "areas.card.reports": "Reports: {num}",
   "areas.card.teams": "Teams: {num}",
+  "areas.filterBy": "Filter by areas",
   "templates.name": "templates",
   "templates.title": "Your Templates",
   "templates.subtitle": "Your templates",
   "templates.cantEdit": "You cannot edit this template.",
   "templates.cantEditQuestions": "You cannot edit the following questions.",
+  "templates.filterBy": "Filter by templates",
   "reports.name": "Reporting",
   "reports.title": "Your Reports",
   "reports.downloadBtn": "Download reports",
@@ -428,5 +431,13 @@
   "investigation.start": "Start Investigation",
   "filters.title": "Filters",
   "filters.extra": "Apply more filters",
-  "filters.clearAll": "Clear all"
+  "filters.clearAll": "Clear all",
+  "timeframe.name": "Time frame",
+  "timeframe.filterBy": "Filter by time frame",
+  "alertType.name": "Alert type",
+  "alertType.filterBy": "Filter by Alert type",
+  "voiceRecordings.toggleBy": "Voice recordings only",
+  "submittedBy.name": "Submitted by",
+  "submittedBy.filterBy": "Filter by submitter"
+
 }
