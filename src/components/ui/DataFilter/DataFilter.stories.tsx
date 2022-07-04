@@ -16,6 +16,8 @@ type TOptionType = {
 type TFormFields = {
   name: string;
   foo: boolean;
+  email: string;
+  bar: boolean;
 };
 
 const options = [
@@ -36,6 +38,11 @@ const options = [
 const selectOptions = [
   { label: "All", value: "any" },
   ...options.map(item => ({ label: item.name, value: item.name }))
+];
+
+const emailSelectOptions = [
+  { label: "All", value: "any" },
+  ...options.map(item => ({ label: item.email, value: item.email }))
 ];
 
 const filters: IFilter<TAvailableTypes<TFormFields>, TOptionType>[] = [
@@ -83,6 +90,50 @@ const filters: IFilter<TAvailableTypes<TFormFields>, TOptionType>[] = [
   }
 ];
 
+const extraFilters: IFilter<TAvailableTypes<TFormFields>, TOptionType>[] = [
+  {
+    name: "filter.by.email",
+    filterOptions: {
+      id: "listofthings-email",
+      selectProps: {
+        placeholder: "Filter by email",
+        options: emailSelectOptions,
+        label: "Email",
+        defaultValue: emailSelectOptions[0]
+      },
+      registerProps: {
+        name: "email"
+      }
+    },
+    filterCallback: (item, value) => {
+      if (!value || value === "any") {
+        return true;
+      } else {
+        return item.email === value;
+      }
+    }
+  },
+  {
+    name: "toggle.bar",
+    filterOptions: {
+      id: "toggle-bar",
+      toggleProps: {
+        label: "Only Bar"
+      },
+      registerProps: {
+        name: "bar"
+      }
+    },
+    filterCallback: (item, value) => {
+      if (!value) {
+        return true;
+      } else {
+        return item.name === "Bar";
+      }
+    }
+  }
+];
+
 const Template: ComponentStory<typeof DataFilter> = args => {
   const [filteredOptions, setFilteredOptions] = useState(options);
 
@@ -103,4 +154,4 @@ const Template: ComponentStory<typeof DataFilter> = args => {
 
 export const Standard = Template.bind({});
 // @ts-ignore
-Standard.args = { filters };
+Standard.args = { filters, extraFilters };

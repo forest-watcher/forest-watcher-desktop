@@ -82,8 +82,7 @@
         text-align: left;
       }
       &.c-input__select--open {
-        border-radius: 14px 14px 0px 0px;
-        border-bottom: none;
+        border: 1px solid $primary-500;
       }
     }
     &--multiple {
@@ -201,9 +200,10 @@
       top: 35px;
     }
     &--simple-green {
-      border-radius: 0px 0px 14px 14px;
-      border: 1px solid $primary-500;
-      border-top: none;
+      top: 26px;
+      min-width: 192px;
+      right: 0;
+      left: unset;
     }
   }
 
@@ -221,11 +221,6 @@
       font-size: 14px;
       line-height: 14px;
       padding: $global-spacing-2;
-    }
-    &--simple-green {
-      padding: $global-spacing-1 $global-spacing-3;
-      font-size: 14px;
-      line-height: 14px;
     }
   }
 

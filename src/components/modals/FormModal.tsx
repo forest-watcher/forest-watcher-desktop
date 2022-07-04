@@ -39,6 +39,7 @@ export interface IProps<T> {
   cancelBtnName?: string;
   useFormProps?: UseFormProps<T>;
   actions?: ReactNode;
+  resetValues?: UnpackNestedValue<T>;
 }
 
 /**
@@ -82,7 +83,8 @@ const FormModal = <T,>(props: IProps<T>) => {
     submitBtnName,
     cancelBtnName = "common.cancel",
     modalSubtitle,
-    actions
+    actions,
+    resetValues
   } = props;
 
   const formhook = useForm<T>(useFormProps);
@@ -98,7 +100,8 @@ const FormModal = <T,>(props: IProps<T>) => {
   useEffect(() => {
     setIsClosing(false);
     setIsLoading(false);
-    reset();
+    reset(resetValues);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen, reset]);
 
   const handleCloseRequest = () => {
