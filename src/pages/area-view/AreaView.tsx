@@ -142,27 +142,32 @@ const AreasView: FC<IProps & RouteComponentProps<TParams>> = ({
               </Link>
             }
           >
-            <div className="u-responsive-table">
-              <DataTable<TTemplateDataTable>
-                className="u-w-100"
-                rows={
-                  area?.attributes.reportTemplate.map(template => ({
-                    ...template,
-                    //@ts-ignore
-                    name: (template.name?.[template.defaultLanguage] as string) || "",
-                    openAssignments: 0
-                  })) ?? []
-                }
-                columnOrder={[
-                  {
-                    key: "name",
-                    name: "areas.details.templatesTable.header.name",
-                    rowHref: row => `/templates/${row.id}`
-                  }
-                ]}
-                rowActions={[removeTemplate]}
-              />
-            </div>
+            {
+              /* TS issue here, reportTemplate.length can be undefined */
+              (area?.attributes.reportTemplate.length ?? 0) > 0 && (
+                <div className="u-responsive-table">
+                  <DataTable<TTemplateDataTable>
+                    className="u-w-100"
+                    rows={
+                      area?.attributes.reportTemplate.map(template => ({
+                        ...template,
+                        //@ts-ignore
+                        name: (template.name?.[template.defaultLanguage] as string) || "",
+                        openAssignments: 0
+                      })) ?? []
+                    }
+                    columnOrder={[
+                      {
+                        key: "name",
+                        name: "areas.details.templatesTable.header.name",
+                        rowHref: row => `/templates/${row.id}`
+                      }
+                    ]}
+                    rowActions={[removeTemplate]}
+                  />
+                </div>
+              )
+            }
           </Article>
         </div>
         <div className="l-content u-padding-top-none u-h-min-unset">
@@ -176,25 +181,27 @@ const AreasView: FC<IProps & RouteComponentProps<TParams>> = ({
               </Link>
             }
           >
-            <div className="u-responsive-table">
-              <DataTable<TTeamDataTable>
-                className="u-w-100"
-                rows={
-                  areaTeams.map(team => ({
-                    ...team.data,
-                    //@ts-ignore
-                    name: team.data.attributes.name || "",
-                    openAssignments: 0,
-                    reports: 0
-                  })) ?? []
-                }
-                columnOrder={[
-                  { key: "name", name: "areas.details.teamsTable.header.name", rowHref: row => `/teams/${row.id}` },
-                  { key: "reports", name: "areas.details.teamsTable.header.reports" }
-                ]}
-                rowActions={[removeTeam]}
-              />
-            </div>
+            {areaTeams.length > 0 && (
+              <div className="u-responsive-table">
+                <DataTable<TTeamDataTable>
+                  className="u-w-100"
+                  rows={
+                    areaTeams.map(team => ({
+                      ...team.data,
+                      //@ts-ignore
+                      name: team.data.attributes.name || "",
+                      openAssignments: 0,
+                      reports: 0
+                    })) ?? []
+                  }
+                  columnOrder={[
+                    { key: "name", name: "areas.details.teamsTable.header.name", rowHref: row => `/teams/${row.id}` },
+                    { key: "reports", name: "areas.details.teamsTable.header.reports" }
+                  ]}
+                  rowActions={[removeTeam]}
+                />
+              </div>
+            )}
           </Article>
         </div>
       </div>
