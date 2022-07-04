@@ -14,7 +14,7 @@ export interface Props extends FieldPropsBase {
   registered: UseFormRegisterReturn;
   formHook: UseFormReturn<any>;
   onChange?: () => void;
-  isSimple?: boolean;
+  variant?: "simple" | "simple-green";
   isMultiple?: boolean;
 }
 
@@ -27,7 +27,7 @@ const getSelectedItems = (isMultiple: boolean, value: any, options: Option[]) =>
 };
 
 const Select = (props: Props) => {
-  const { selectProps, registered, error, id, formHook, isSimple = false, hideLabel, isMultiple = false } = props;
+  const { selectProps, registered, error, id, formHook, variant, hideLabel, isMultiple = false } = props;
   const [options, setOptions] = useState<Option[]>(selectProps.options || []);
 
   const value =
@@ -83,7 +83,7 @@ const Select = (props: Props) => {
                 className={classnames(
                   "c-input__label c-input__label--select",
                   selectProps.alternateLabelStyle && "c-input__label--alt",
-                  (isSimple || hideLabel) && "u-visually-hidden"
+                  hideLabel && "u-visually-hidden"
                 )}
               >
                 {selectProps.label}
@@ -94,7 +94,7 @@ const Select = (props: Props) => {
                 className={classnames(
                   "c-input__select",
                   open && "c-input__select--open",
-                  isSimple && "c-input__select--simple",
+                  variant && `c-input__select--${variant}`,
                   isMultiple && "c-input__select--multiple"
                 )}
               >
@@ -104,14 +104,14 @@ const Select = (props: Props) => {
                     !value && "c-input__select-button--has-placeholder",
                     open && "c-input__select-button--open",
                     error && "c-input__select-button--invalid",
-                    isSimple && "c-input__select-button--simple",
+                    variant && `c-input__select-button--${variant}`,
                     isMultiple && "u-visually-hidden"
                   )}
                 >
                   <span className="c-input__select-value">{label ? label : selectProps.placeholder}</span>
                   {error ? (
                     <img alt="" role="presentation" src={errorIcon} className="c-input__select-error-icon" />
-                  ) : isSimple ? (
+                  ) : variant ? (
                     <svg
                       width="10"
                       height="11"
@@ -150,7 +150,7 @@ const Select = (props: Props) => {
                   )}
                 </Listbox.Button>
                 <Listbox.Options
-                  className={classnames("c-input__select-list-box", isSimple && "c-input__select-list-box--simple")}
+                  className={classnames("c-input__select-list-box", variant && `c-input__select-list-box--${variant}`)}
                   static={isMultiple}
                 >
                   {options.map(option => (
@@ -161,7 +161,7 @@ const Select = (props: Props) => {
                             "c-input__select-list-item",
                             active && "c-input__select-list-item--is-active",
                             selected && "c-input__select-list-item--is-selected",
-                            isSimple && "c-input__select-list-item--simple"
+                            variant && `c-input__select-list-item--${variant}`
                           )}
                         >
                           <span className="c-input__select-list-item-label">{option.label}</span>

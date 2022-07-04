@@ -90,7 +90,8 @@ const Nav: FC<IProps> = props => {
                 id="locale-select"
                 registered={register("localeSelect")}
                 formHook={formhook}
-                isSimple
+                variant="simple"
+                hideLabel
                 selectProps={{
                   placeholder: "",
                   options: languages,
