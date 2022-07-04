@@ -47,8 +47,6 @@ export class UserService extends BaseService {
   setUserProfile(body: TUserProfileBody) {
     this.token = store.getState().user.token;
 
-    console.log(this.token);
-
     return this.fetchJSON(`/v2/user`, {
       headers: {
         "Content-Type": "application/json"
