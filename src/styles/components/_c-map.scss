@@ -128,6 +128,9 @@
     width: 100%;
     position: relative;
 
+    &::placeholder {
+      color: $neutral-600;
+    }
   }
 
   &__panel-input {
@@ -135,6 +138,12 @@
     width: 100%;
     .c-input__input-wrapper, .c-input__input {
       width: 100%;
+    }
+
+    .c-input__input {
+      font-family: "Fira Sans", sans-serif;
+      padding: 10px 16px;
+      color: $neutral-700;
     }
   }
 
