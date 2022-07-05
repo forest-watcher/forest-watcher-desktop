@@ -4,6 +4,7 @@ import Pagination from "../Pagination/Pagination";
 import { FormattedMessage } from "react-intl";
 import { Link } from "react-router-dom";
 import { useCallback, useEffect, useState } from "react";
+import SortIcon from "../SortIcon/SortIcon";
 
 export interface IRowAction<T> extends Omit<Omit<IContextMenuProps["menuItems"][number], "onClick">, "href"> {
   onClick?: (row: T, value?: string) => void;
@@ -87,8 +88,9 @@ const DataTable = <T extends { [key: string]: string | number }>(props: IProps<T
             {columnOrder.map(column => (
               <th key={column.key.toString()} aria-sort={column.key === sortedCol?.key ? sortedDirection : undefined}>
                 {column.sortCompareFn ? (
-                  <button onClick={() => handleSort(column)}>
+                  <button onClick={() => handleSort(column)} className="c-data-table__sort-button">
                     <FormattedMessage id={column.name} />
+                    <SortIcon direction={column.key === sortedCol?.key ? sortedDirection : Direction.None} />
                   </button>
                 ) : (
                   <FormattedMessage id={column.name} />

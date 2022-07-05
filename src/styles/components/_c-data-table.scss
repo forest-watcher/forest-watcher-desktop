@@ -54,4 +54,10 @@
     right:  2px;
     bottom: 2px; // Fix Chrome issue cutting off radius on overflow hidden parents
   }
+
+  &__sort-button {
+    display: flex;
+    align-items: center;
+    gap: $global-spacing-2;
+  }
 }
