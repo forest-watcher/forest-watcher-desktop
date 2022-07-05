@@ -16,6 +16,8 @@ export interface IColumnOrder<T> {
   key: keyof T;
   name: string;
   rowHref?: string | ((row: T, value?: string) => string);
+  rowLabel?: string | ((row: T, value?: string | number) => string);
+  sortCompareFn?: (a: string | number, b: string | number, direction: Direction) => number;
 }
 
 export interface IProps<T> {
@@ -27,18 +29,55 @@ export interface IProps<T> {
   className?: string;
 }
 
+export enum Direction {
+  Asc = "ascending",
+  Desc = "descending",
+  None = "none"
+}
+
 const DataTable = <T extends { [key: string]: string | number }>(props: IProps<T>) => {
   const { rows, columnOrder, className, rowActions, isPaginated = false, rowsPerPage = 10 } = props;
   const [rowDisplayStart, setRowDisplayStart] = useState(0);
+  const [sortedRows, setSortedRows] = useState<T[]>(rows);
+  const [sortedCol, setSortedCol] = useState<IColumnOrder<T> | null>(null);
+  const [sortedDirection, setSortedDirection] = useState<Direction>(Direction.None);
 
   useEffect(() => setRowDisplayStart(0), [rowsPerPage, rows]);
 
-  const rowsToDisplay = isPaginated ? rows.slice(rowDisplayStart, rowDisplayStart + rowsPerPage) : rows;
+  const rowsToDisplay = isPaginated ? sortedRows.slice(rowDisplayStart, rowDisplayStart + rowsPerPage) : sortedRows;
 
   const handlePaginatedChange = useCallback(
     (pageNumber: number) => setRowDisplayStart(pageNumber === 1 ? 0 : (pageNumber - 1) * rowsPerPage),
     [rowsPerPage]
   );
+
+  const handleSort = (col: IColumnOrder<T>) => {
+    let direction = Direction.None;
+    if (sortedCol === null) {
+      direction = Direction.Asc;
+    } else if (sortedCol.key === col.key && sortedRows && sortedDirection !== Direction.Desc) {
+      direction = Direction.Desc;
+    }
+
+    if (direction !== Direction.None) {
+      setSortedCol(col);
+      setSortedDirection(direction);
+    } else {
+      setSortedCol(null);
+      setSortedDirection(Direction.None);
+    }
+  };
+
+  useEffect(() => {
+    if (sortedCol !== null && sortedDirection !== Direction.None) {
+      const newRows = [...rows];
+      setSortedRows(
+        newRows.sort((a, b) => sortedCol.sortCompareFn?.(a[sortedCol.key], b[sortedCol.key], sortedDirection) || 1)
+      );
+    } else {
+      setSortedRows(rows);
+    }
+  }, [rows, sortedCol, sortedDirection]);
 
   return (
     <>
@@ -46,8 +85,14 @@ const DataTable = <T extends { [key: string]: string | number }>(props: IProps<T
         <thead className="c-data-table__header">
           <tr>
             {columnOrder.map(column => (
-              <th key={column.key.toString()}>
-                <FormattedMessage id={column.name} />
+              <th key={column.key.toString()} aria-sort={column.key === sortedCol?.key ? sortedDirection : undefined}>
+                {column.sortCompareFn ? (
+                  <button onClick={() => handleSort(column)}>
+                    <FormattedMessage id={column.name} />
+                  </button>
+                ) : (
+                  <FormattedMessage id={column.name} />
+                )}
               </th>
             ))}
 
@@ -65,11 +110,10 @@ const DataTable = <T extends { [key: string]: string | number }>(props: IProps<T
                       className="u-link-unstyled"
                       to={typeof column.rowHref === "function" ? column.rowHref(row) : column.rowHref}
                     >
-                      {row[column.key]}
-                      <svg className="c-icon -x-small -green -no-margin">
-                        <use xlinkHref="#icon-arrow-link"></use>
-                      </svg>
+                      {typeof column.rowLabel === "function" ? column.rowLabel(row, row[column.key]) : row[column.key]}
                     </Link>
+                  ) : typeof column.rowLabel === "function" ? (
+                    column.rowLabel(row, row[column.key])
                   ) : (
                     row[column.key]
                   )}

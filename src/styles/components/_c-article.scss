@@ -6,6 +6,12 @@
     margin-bottom: $global-spacing-10;
   }
 
+  &--size-small {
+    .c-article__top-row {
+      margin-bottom: 26px;
+    }
+  }
+
   .section {
     padding-top: 30px;
   }
