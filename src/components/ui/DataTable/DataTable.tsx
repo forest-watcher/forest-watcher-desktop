@@ -4,7 +4,7 @@ import Pagination from "../Pagination/Pagination";
 import { FormattedMessage } from "react-intl";
 import { Link } from "react-router-dom";
 import { useCallback, useEffect, useState } from "react";
-import SortIcon from "../SortIcon/SortIcon";
+import SortIcon from "components/ui/SortIcon/SortIcon";
 
 export interface IRowAction<T> extends Omit<Omit<IContextMenuProps["menuItems"][number], "onClick">, "href"> {
   onClick?: (row: T, value?: string) => void;
