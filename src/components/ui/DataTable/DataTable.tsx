@@ -111,9 +111,6 @@ const DataTable = <T extends { [key: string]: string | number }>(props: IProps<T
                       to={typeof column.rowHref === "function" ? column.rowHref(row) : column.rowHref}
                     >
                       {typeof column.rowLabel === "function" ? column.rowLabel(row, row[column.key]) : row[column.key]}
-                      <svg className="c-icon -x-small -green -no-margin">
-                        <use xlinkHref="#icon-arrow-link"></use>
-                      </svg>
                     </Link>
                   ) : typeof column.rowLabel === "function" ? (
                     column.rowLabel(row, row[column.key])
