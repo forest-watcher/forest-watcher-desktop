@@ -6,7 +6,6 @@ interface IProps extends HTMLAttributes<HTMLDivElement> {
   title?: string;
   titleValues?: { [key: string]: string | number };
   actions?: ReactNode;
-  titleSize?: string;
   size?: "default" | "small";
 }
 

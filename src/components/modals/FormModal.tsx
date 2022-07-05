@@ -1,5 +1,5 @@
 import { ReactNode, useEffect, useState } from "react";
-import Modal from "components/ui/Modal/Modal";
+import Modal, { IProps as IModalProps } from "components/ui/Modal/Modal";
 import { Props as IInputProps } from "components/ui/Form/Input";
 import { Props as ISelectProps } from "components/ui/Form/Select";
 import { Props as IToggleGroupProps } from "components/ui/Form/ToggleGroup";
@@ -29,8 +29,9 @@ export type TAvailableTypes<T> = TInput<T> | TSelect<T> | TToggleGroup<T> | TTog
 
 export interface IProps<T> {
   isOpen: boolean;
+  dismissible?: boolean;
   inputs: Array<TAvailableTypes<T>>;
-  onClose: () => void;
+  onClose?: () => void;
   onSave: (data: UnpackNestedValue<T>) => Promise<void>;
   modalTitle: string;
   modalSubtitle?: string;
@@ -73,6 +74,7 @@ export interface IProps<T> {
 const FormModal = <T,>(props: IProps<T>) => {
   const {
     isOpen = false,
+    dismissible,
     inputs,
     useFormProps,
     onClose,
@@ -105,7 +107,7 @@ const FormModal = <T,>(props: IProps<T>) => {
   const handleCloseRequest = () => {
     if (isDirty) {
       setIsClosing(true);
-    } else {
+    } else if (onClose) {
       onClose();
     }
   };
@@ -116,16 +118,19 @@ const FormModal = <T,>(props: IProps<T>) => {
     setIsLoading(false);
   };
 
+  const modalActions: IModalProps["actions"] = [{ name: submitBtnName, onClick: handleSubmit(onSubmit) }];
+  if (onClose) {
+    modalActions.push({ name: cancelBtnName, variant: "secondary", onClick: handleCloseRequest });
+  }
+
   return (
     <>
       <Modal
         isOpen={isOpen && !isClosing}
-        onClose={handleCloseRequest}
+        onClose={onClose && handleCloseRequest}
         title={modalTitle}
-        actions={[
-          { name: submitBtnName, onClick: handleSubmit(onSubmit) },
-          { name: cancelBtnName, variant: "secondary", onClick: handleCloseRequest }
-        ]}
+        dismissible={dismissible}
+        actions={modalActions}
       >
         <Loader isLoading={isLoading} />
         {modalSubtitle && (
@@ -141,7 +146,9 @@ const FormModal = <T,>(props: IProps<T>) => {
         {actions && <div className="c-modal-dialog__extra-actions">{actions}</div>}
       </Modal>
 
-      <UnsavedChanges isOpen={isOpen && isClosing} leaveCallBack={onClose} stayCallBack={() => setIsClosing(false)} />
+      {onClose && (
+        <UnsavedChanges isOpen={isOpen && isClosing} leaveCallBack={onClose} stayCallBack={() => setIsClosing(false)} />
+      )}
     </>
   );
 };

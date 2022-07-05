@@ -1,5 +1,11 @@
+import store from "store";
 import { API_BASE_AUTH_URL, API_CALLBACK_URL } from "../constants/global";
 import { BaseService } from "./baseService";
+
+export type TUserProfileBody = {
+  firstName: string;
+  lastName: string;
+};
 
 export type TLoginBody = {
   email: string;
@@ -36,6 +42,18 @@ export class UserService extends BaseService {
 
   getUser() {
     return this.fetchJSON("/user");
+  }
+
+  setUserProfile(body: TUserProfileBody) {
+    this.token = store.getState().user.token;
+
+    return this.fetchJSON(`/v2/user`, {
+      headers: {
+        "Content-Type": "application/json"
+      },
+      method: "POST",
+      body: JSON.stringify(body)
+    });
   }
 
   login(body: TLoginBody): Promise<TLoginResponse> {

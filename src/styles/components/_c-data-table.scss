@@ -14,13 +14,18 @@
     vertical-align: middle;
   }
 
-  th {
+  th, th button {
     font-size: 14px;
     line-height: 14px;
     font-weight: 500;
     padding: 23px 24px;
     text-transform: uppercase;
     color: $neutral-700;
+    font-family: inherit;
+  }
+
+  th button {
+    padding: 0px;
   }
 
   td {
@@ -48,5 +53,11 @@
     position: relative;
     right:  2px;
     bottom: 2px; // Fix Chrome issue cutting off radius on overflow hidden parents
+  }
+
+  &__sort-button {
+    display: flex;
+    align-items: center;
+    gap: $global-spacing-2;
   }
 }

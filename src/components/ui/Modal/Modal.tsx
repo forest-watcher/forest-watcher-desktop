@@ -7,7 +7,7 @@ import CloseIcon from "assets/images/icons/CloseLg.svg";
 export interface IProps {
   isOpen: boolean;
   dismissible?: boolean;
-  onClose: () => void;
+  onClose?: () => void;
   title: string;
   actions?: {
     name: string;
@@ -28,15 +28,17 @@ const Modal: FC<PropsWithChildren<IProps>> = props => {
       enterFrom="c-modal-dialog--animate"
       leaveTo="c-modal-dialog--animate"
     >
-      <Dialog className="c-modal-dialog__container" onClose={dismissible ? onClose : () => {}}>
+      <Dialog className="c-modal-dialog__container" onClose={dismissible && onClose ? onClose : () => {}}>
         <div className="c-modal-dialog__backdrop" aria-hidden="true" />
 
         <Dialog.Panel className="c-modal-dialog">
           <Dialog.Title className="c-modal-dialog__title">
             <FormattedMessage id={title} />
-            <button className="c-button c-modal-dialog__close-btn" onClick={onClose}>
-              <img alt="" src={CloseIcon} role="presentation" />
-            </button>
+            {onClose && (
+              <button className="c-button c-modal-dialog__close-btn" onClick={onClose}>
+                <img alt="" src={CloseIcon} role="presentation" />
+              </button>
+            )}
           </Dialog.Title>
 
           <div className="c-modal-dialog__body">{children}</div>
