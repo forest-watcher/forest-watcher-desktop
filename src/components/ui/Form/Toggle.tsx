@@ -25,7 +25,7 @@ const Toggle = (props: Props) => {
   };
 
   return (
-    <div className="c-input">
+    <div className="c-input c-input--toggle">
       <Switch.Group>
         <Switch.Label className={classnames("c-input__label", hideLabel && "u-visually-hidden")}>
           {toggleProps.label}
