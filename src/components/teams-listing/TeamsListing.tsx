@@ -1,6 +1,6 @@
 import { FC } from "react";
 import { TGFWTeamsState } from "modules/gfwTeams";
-import TeamCard from "./team-card/TeamCardContainer";
+import TeamCard from "./team-card/TeamCard";
 
 interface IProps {
   teams: TGFWTeamsState["data"];
