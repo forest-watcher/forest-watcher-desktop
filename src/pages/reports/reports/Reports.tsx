@@ -20,6 +20,7 @@ export type TReportsDataTable = {
   name: string;
   area: string;
   coordinates: string;
+  template: string;
 };
 
 export type TFilterFields = {
@@ -34,7 +35,7 @@ export type TFilterFields = {
 interface IProps extends TPropsFromRedux, RouteComponentProps {}
 
 const Reports: FC<IProps> = props => {
-  const { allAnswers, getAllReports, loading } = props;
+  const { allAnswers, getAllReports, loading, templates } = props;
 
   const rows = useMemo<TReportsDataTable[]>(
     () =>
@@ -45,6 +46,7 @@ const Reports: FC<IProps> = props => {
         alertType: answer.attributes?.layer ?? "",
         name: answer.attributes?.reportName ?? "",
         area: answer.attributes?.areaOfInterestName ?? "",
+        template: answer.attributes?.report ?? "",
         coordinates: answer.attributes?.userPosition?.toString().replace(",", ", ") ?? ""
       })) ?? [],
     [allAnswers]
@@ -56,7 +58,7 @@ const Reports: FC<IProps> = props => {
     setFilteredRows(resp);
   };
 
-  const { filters, extraFilters } = useReportFilters();
+  const { filters, extraFilters } = useReportFilters(allAnswers, templates);
 
   useEffect(() => {
     getAllReports();
@@ -88,7 +90,7 @@ const Reports: FC<IProps> = props => {
                 text={intl.formatMessage({ id: "reports.empty.state.subTitle" })}
               />
             ) : (
-              <div className="u-responsive-table">
+              <>
                 <DataFilter<TFilterFields, any>
                   filters={filters}
                   extraFilters={extraFilters}
@@ -96,43 +98,45 @@ const Reports: FC<IProps> = props => {
                   options={rows}
                   className="c-data-filter--above-table"
                 />
-                <DataTable<TReportsDataTable>
-                  className="u-w-100"
-                  rows={filteredRows}
-                  isPaginated
-                  columnOrder={[
-                    {
-                      key: "createdAt",
-                      name: "reports.reports.table.header.createdAt",
-                      rowLabel: (row, value) => {
-                        return intl.formatDate(value, { day: "2-digit", month: "2-digit", year: "2-digit" });
+                <div className="u-responsive-table">
+                  <DataTable<TReportsDataTable>
+                    className="u-w-100"
+                    rows={filteredRows}
+                    isPaginated
+                    columnOrder={[
+                      {
+                        key: "createdAt",
+                        name: "reports.reports.table.header.createdAt",
+                        rowLabel: (row, value) => {
+                          return intl.formatDate(value, { day: "2-digit", month: "2-digit", year: "2-digit" });
+                        },
+                        sortCompareFn: sortByDateString
                       },
-                      sortCompareFn: sortByDateString
-                    },
-                    { key: "monitor", name: "reports.reports.table.header.monitor", sortCompareFn: sortByString },
-                    {
-                      key: "alertType",
-                      name: "reports.reports.table.header.alertType",
-                      rowLabel: (row, value) => {
-                        return intl.formatMessage({ id: `layers.${value}`, defaultMessage: value?.toString() });
-                      },
-                      sortCompareFn: (a, b, direction) => {
-                        const newA = intl.formatMessage({ id: `layers.${a}`, defaultMessage: a?.toString() });
-                        const newB = intl.formatMessage({ id: `layers.${b}`, defaultMessage: b?.toString() });
+                      { key: "monitor", name: "reports.reports.table.header.monitor", sortCompareFn: sortByString },
+                      {
+                        key: "alertType",
+                        name: "reports.reports.table.header.alertType",
+                        rowLabel: (row, value) => {
+                          return intl.formatMessage({ id: `layers.${value}`, defaultMessage: value?.toString() });
+                        },
+                        sortCompareFn: (a, b, direction) => {
+                          const newA = intl.formatMessage({ id: `layers.${a}`, defaultMessage: a?.toString() });
+                          const newB = intl.formatMessage({ id: `layers.${b}`, defaultMessage: b?.toString() });
 
-                        return sortByString(newA, newB, direction);
+                          return sortByString(newA, newB, direction);
+                        }
+                      },
+                      { key: "name", name: "reports.reports.table.header.name", sortCompareFn: sortByString },
+                      { key: "area", name: "reports.reports.table.header.area", sortCompareFn: sortByString },
+                      {
+                        key: "coordinates",
+                        name: "reports.reports.table.header.coordinates",
+                        sortCompareFn: sortByString
                       }
-                    },
-                    { key: "name", name: "reports.reports.table.header.name", sortCompareFn: sortByString },
-                    { key: "area", name: "reports.reports.table.header.area", sortCompareFn: sortByString },
-                    {
-                      key: "coordinates",
-                      name: "reports.reports.table.header.coordinates",
-                      sortCompareFn: sortByString
-                    }
-                  ]}
-                />
-              </div>
+                    ]}
+                  />
+                </div>
+              </>
             ))}
         </Article>
       </div>

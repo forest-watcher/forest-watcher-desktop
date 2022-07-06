@@ -3,9 +3,10 @@ import { RootState } from "store";
 import Reports from "./Reports";
 import { getAllReports } from "modules/reports";
 
-const mapStateToProps = ({ reports }: RootState) => ({
+const mapStateToProps = ({ reports, templates }: RootState) => ({
   allAnswers: reports.allAnswers,
-  loading: reports.loading
+  loading: reports.loading,
+  templates: templates.templates
 });
 
 const mapDispatchToProps = { getAllReports };

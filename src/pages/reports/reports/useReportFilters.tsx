@@ -1,34 +1,69 @@
 import { TAvailableTypes } from "components/modals/FormModal";
 import { IFilter } from "components/ui/DataFilter/DataFilter";
+import { ALL_VALUE, filterByTimeFrame, getTimeFrames } from "helpers/table";
 import { useMemo } from "react";
 import { useIntl } from "react-intl";
+import { TGetAllAnswers, TGetTemplates } from "services/reports";
 import { Option } from "types/select";
 import { TFilterFields } from "./Reports";
 
-const ALL_VALUE = "all";
-
-const useReportFilters = () => {
+const useReportFilters = (answers: TGetAllAnswers["data"] = [], templates: TGetTemplates["data"] = []) => {
   const intl = useIntl();
 
-  const areaFilterOptions = useMemo<Option[]>(
-    () => [{ label: intl.formatMessage({ id: "common.all" }), value: ALL_VALUE }],
-    [intl]
-  );
+  const areaFilterOptions = useMemo<Option[]>(() => {
+    const uniqueAreas = answers
+      .map(answer => ({
+        label: answer.attributes?.areaOfInterestName ?? "",
+        value: answer.attributes?.areaOfInterestName ?? ""
+      }))
+      .filter((value, index, self) => self.findIndex(t => t.value === value.value) === index);
 
-  const templateOptions = useMemo<Option[]>(
-    () => [{ label: intl.formatMessage({ id: "common.all" }), value: ALL_VALUE }],
-    [intl]
-  );
+    return [{ label: intl.formatMessage({ id: "common.all" }), value: ALL_VALUE }, ...uniqueAreas];
+  }, [answers, intl]);
 
-  const timeFrameOptions = useMemo<Option[]>(
-    () => [{ label: intl.formatMessage({ id: "common.all" }), value: ALL_VALUE }],
-    [intl]
-  );
+  const templateOptions = useMemo<Option[]>(() => {
+    const uniqueUsers = answers
+      .map(answer => {
+        const template = templates.find(t => t.id === answer.attributes?.report);
+        const names = (template?.attributes.name as any) ?? {};
+        return {
+          label: template
+            ? names[template.attributes.defaultLanguage as keyof typeof names]
+            : answer.attributes?.report ?? "", // Convert to template name
+          value: answer.attributes?.report ?? ""
+        };
+      })
+      .filter((value, index, self) => self.findIndex(t => t.value === value.value) === index);
 
-  const alertTypeOptions = useMemo<Option[]>(
-    () => [{ label: intl.formatMessage({ id: "common.all" }), value: ALL_VALUE }],
-    [intl]
-  );
+    return [{ label: intl.formatMessage({ id: "common.all" }), value: ALL_VALUE }, ...uniqueUsers];
+  }, [answers, intl, templates]);
+
+  const timeFrameOptions = useMemo<Option[]>(() => getTimeFrames(intl), [intl]);
+
+  const alertTypeOptions = useMemo<Option[]>(() => {
+    const uniqueAlerts = answers
+      .map(answer => ({
+        label: intl.formatMessage({
+          id: `layers.${answer.attributes?.layer}`,
+          defaultMessage: answer.attributes?.layer ?? ""
+        }),
+        value: answer.attributes?.layer ?? ""
+      }))
+      .filter((value, index, self) => self.findIndex(t => t.value === value.value) === index);
+
+    return [{ label: intl.formatMessage({ id: "common.all" }), value: ALL_VALUE }, ...uniqueAlerts];
+  }, [answers, intl]);
+
+  const usernameOptions = useMemo<Option[]>(() => {
+    const uniqueUsers = answers
+      .map(answer => ({
+        label: answer.attributes?.username ?? "",
+        value: answer.attributes?.username ?? ""
+      }))
+      .filter((value, index, self) => self.findIndex(t => t.value === value.value) === index);
+
+    return [{ label: intl.formatMessage({ id: "common.all" }), value: ALL_VALUE }, ...uniqueUsers];
+  }, [answers, intl]);
 
   const filters = useMemo<IFilter<TAvailableTypes<TFilterFields>, any>[]>(() => {
     return [
@@ -94,11 +129,7 @@ const useReportFilters = () => {
           }
         },
         filterCallback: (item, value) => {
-          if (!value || value === ALL_VALUE) {
-            return true;
-          } else {
-            return item.area === value; // TODO: Build timeframe callback
-          }
+          return filterByTimeFrame(item.createdAt, value);
         }
       }
     ];
@@ -124,38 +155,38 @@ const useReportFilters = () => {
           if (!value || value === ALL_VALUE) {
             return true;
           } else {
-            return item.area === value;
+            return item.alertType === value;
           }
         }
       },
-      {
-        name: "toggle.voice",
-        filterOptions: {
-          id: "voice",
-          toggleProps: {
-            label: intl.formatMessage({ id: "voiceRecordings.toggleBy" })
-          },
-          registerProps: {
-            name: "voice"
-          }
-        },
-        filterCallback: (item, value) => {
-          if (!value) {
-            return true;
-          } else {
-            return item.name === "Foo";
-          }
-        }
-      },
+      // {
+      //   name: "toggle.voice",
+      //   filterOptions: {
+      //     id: "voice",
+      //     toggleProps: {
+      //       label: intl.formatMessage({ id: "voiceRecordings.toggleBy" })
+      //     },
+      //     registerProps: {
+      //       name: "voice"
+      //     }
+      //   },
+      //   filterCallback: (item, value) => {
+      //     if (!value) {
+      //       return true;
+      //     } else {
+      //       return item.name === "Foo";
+      //     }
+      //   }
+      // }, Filtering by voice in next phase of work
       {
         name: "filter.by.submittedBy",
         filterOptions: {
           id: "submittedBy",
           selectProps: {
             placeholder: intl.formatMessage({ id: "submittedBy.filterBy" }),
-            options: alertTypeOptions,
+            options: usernameOptions,
             label: intl.formatMessage({ id: "submittedBy.name" }),
-            defaultValue: alertTypeOptions[0]
+            defaultValue: usernameOptions[0]
           },
           registerProps: {
             name: "submittedBy"
@@ -170,7 +201,7 @@ const useReportFilters = () => {
         }
       }
     ];
-  }, [alertTypeOptions, intl]);
+  }, [alertTypeOptions, intl, usernameOptions]);
 
   return { filters, extraFilters };
 };
