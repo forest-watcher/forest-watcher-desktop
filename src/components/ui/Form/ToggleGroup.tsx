@@ -40,7 +40,7 @@ const ToggleGroup = (props: Props) => {
         const checked = value.length && Boolean(value.find((item: string) => item === toggle.value));
         return (
           <Switch.Group key={toggle.value}>
-            <div className="c-input c-input-group__item">
+            <div className="c-input c-input--toggle c-input-group__item">
               <Switch.Label className="c-input__label c-input-group__input-label">{toggle.label}</Switch.Label>
               <Switch
                 checked={checked}
