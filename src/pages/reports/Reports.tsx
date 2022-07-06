@@ -13,8 +13,8 @@ type TParams = {
 
 interface IProps extends TPropsFromRedux, RouteComponentProps<TParams> {}
 
-const INVESTIGATION_URL = "/reporting/investigation";
-const REPORTS_URL = "/reporting/reports";
+const INVESTIGATION_PATH = "/reporting/investigation";
+const REPORTS_PATH = "/reporting/reports";
 
 const pageTabs: ITabGroupProps["options"] = [
   {
@@ -34,14 +34,14 @@ const Reports: FC<IProps> = props => {
   const { reportingTab } = match.params;
 
   return !pageTabs.find(pageTab => pageTab.value === reportingTab) ? (
-    <Redirect to={INVESTIGATION_URL} />
+    <Redirect to={INVESTIGATION_PATH} />
   ) : (
-    <div className={classnames(match.url === INVESTIGATION_URL && "l-reporting")}>
+    <div className={classnames(match.url === INVESTIGATION_PATH && "l-reporting")}>
       <Hero title="reports.name" pageTabs={{ value: reportingTab, options: pageTabs }} />
 
       <Switch>
-        <Route path={INVESTIGATION_URL} component={InvestigationPage} />
-        <Route path={REPORTS_URL} component={ReportsPage} />
+        <Route path={INVESTIGATION_PATH} component={InvestigationPage} />
+        <Route path={REPORTS_PATH} component={ReportsPage} />
       </Switch>
     </div>
   );
