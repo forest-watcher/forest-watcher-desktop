@@ -1,4 +1,4 @@
-import { FC, PropsWithChildren, useEffect, useMemo, useState } from "react";
+import { FC, PropsWithChildren, useCallback, useEffect, useMemo, useState } from "react";
 import { useAppSelector } from "hooks/useRedux";
 import Polygon, { IProps as IPolygonProps } from "../ui/Map/components/layers/Polygon";
 import Map, { IProps as IMapProps } from "../ui/Map/Map";
@@ -9,14 +9,19 @@ import { goToGeojson } from "helpers/map";
 
 interface IProps extends IMapProps {
   // Should be a memorised function! useCallBack()
-  onAreaClick?: IPolygonProps["onClick"];
+  onAreaSelect?: IPolygonProps["onClick"];
+  // Should be a memorised function! useCallBack()
+  onAreaDeselect?: (id: string) => void;
   focusAllAreas?: boolean;
   selectedAreaId?: string;
 }
 
 const UserAreasMap: FC<PropsWithChildren<IProps>> = props => {
-  const { onAreaClick, onMapLoad, focusAllAreas = true, selectedAreaId, children, ...rest } = props;
+  const { onAreaSelect, onAreaDeselect, onMapLoad, focusAllAreas = true, selectedAreaId, children, ...rest } = props;
   const [mapRef, setMapRef] = useState<MapInstance | null>(null);
+  const [clickState, setClickState] = useState<{ type: "deselect" } | { type: "select"; areaId: string } | undefined>(
+    undefined
+  );
 
   const { data: areasList } = useAppSelector(state => state.areas);
   const areaMap = useMemo<TAreasResponse[]>(() => Object.values(areasList), [areasList]);
@@ -28,6 +33,50 @@ const UserAreasMap: FC<PropsWithChildren<IProps>> = props => {
     }
     return null;
   }, [areaMap]);
+
+  // On 'preclick' the click state is set to type "deselect"
+  // This will fire before an area 'click' handler
+  useEffect(() => {
+    const callback = () => {
+      setClickState({ type: "deselect" });
+    };
+
+    // https://docs.mapbox.com/mapbox-gl-js/api/map/#map.event:preclick
+    mapRef?.on("preclick", callback);
+    return () => {
+      mapRef?.off("preclick", callback);
+    };
+  }, [mapRef]);
+
+  // When an area is clicked the click state is set to type "select".
+  // Effectively overriding the previous 'preclick' handler.
+  // So, when a click happens an assumption is made that a de-select should
+  // occur unless it's overwritten immediately by an area click.
+  const handleAreaClick = useCallback(
+    (areaId: string) => {
+      if (areaId !== selectedAreaId) {
+        setClickState({ type: "select", areaId });
+      } else {
+        // If the same area was clicked, do nothing
+        setClickState(undefined);
+      }
+    },
+    [selectedAreaId]
+  );
+
+  useEffect(() => {
+    if (clickState?.type === "deselect" && onAreaDeselect && selectedAreaId) {
+      onAreaDeselect(selectedAreaId);
+    }
+
+    if (clickState?.type === "select" && onAreaSelect) {
+      onAreaSelect(clickState.areaId);
+    }
+
+    if (clickState?.type === "deselect" || clickState?.type === "select") {
+      setClickState(undefined);
+    }
+  }, [clickState, onAreaSelect, onAreaDeselect, selectedAreaId]);
 
   useEffect(() => {
     if (features && focusAllAreas) {
@@ -49,7 +98,7 @@ const UserAreasMap: FC<PropsWithChildren<IProps>> = props => {
           label={area.attributes.name}
           data={area.attributes.geostore.geojson}
           isSelected={selectedAreaId === area.id}
-          onClick={onAreaClick}
+          onClick={handleAreaClick}
         />
       ))}
       {children}
