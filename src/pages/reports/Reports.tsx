@@ -1,4 +1,6 @@
-import { FC } from "react";
+import { useAppDispatch } from "hooks/useRedux";
+import { getAreasInUsersTeams } from "modules/areas";
+import { FC, useEffect } from "react";
 import { Redirect, Route, RouteComponentProps, Switch } from "react-router-dom";
 import { TPropsFromRedux } from "./ReportsContainer";
 import Hero from "components/layouts/Hero/Hero";
@@ -26,7 +28,12 @@ const pageTabs: ITabGroupProps["options"] = [
 
 const Reports: FC<IProps> = props => {
   const { match } = props;
+  const dispatch = useAppDispatch();
   const { reportingTab } = match.params;
+
+  useEffect(() => {
+    dispatch(getAreasInUsersTeams());
+  }, [dispatch]);
 
   return !pageTabs.find(pageTab => pageTab.value === reportingTab) ? (
     <Redirect to={`/reporting/investigation`} />
