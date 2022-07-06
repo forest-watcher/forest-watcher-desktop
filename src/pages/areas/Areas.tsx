@@ -1,4 +1,4 @@
-import { FC, useMemo, useEffect, useState, Fragment, useCallback } from "react";
+import { FC, useMemo, useState, Fragment, useCallback } from "react";
 import Hero from "components/layouts/Hero/Hero";
 import Article from "components/layouts/Article";
 import Loader from "components/ui/Loader";
@@ -15,14 +15,10 @@ import AreaDetailCard from "components/ui/Map/components/cards/AreaDetail";
 interface IProps extends TPropsFromRedux {}
 
 const Areas: FC<IProps> = props => {
-  const { areasList, loading, loadingTeamAreas, getAreasInUsersTeams, areasInUsersTeams } = props;
+  const { areasList, loading, loadingTeamAreas, areasInUsersTeams } = props;
   const areaMap = useMemo<TAreasResponse[]>(() => Object.values(areasList), [areasList]);
   const [selectedArea, setSelectedArea] = useState<TAreasResponse | null>(null);
   const intl = useIntl();
-
-  useEffect(() => {
-    getAreasInUsersTeams();
-  }, [getAreasInUsersTeams]);
 
   const handleAreaDeselect = useCallback(() => {
     setSelectedArea(null);
