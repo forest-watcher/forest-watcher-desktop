@@ -2,8 +2,13 @@
   &__top-row {
     display: flex;
     justify-content: space-between;
-    align-items: baseline;
+    align-items: center;
     margin-bottom: $global-spacing-10;
+  }
+
+  &__actions {
+    display: flex;
+    gap: $global-spacing-3;
   }
 
   &--size-small {

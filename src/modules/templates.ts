@@ -1,6 +1,6 @@
 // @ts-ignore missing types
 import normalize from "json-api-normalizer";
-import { TReport, reportService, TGetTemplates } from "services/reports";
+import { TReport, legacy_reportService, TGetTemplates } from "services/reports";
 import { getAreas } from "./areas";
 import { AppDispatch, RootState } from "../store";
 
@@ -100,8 +100,8 @@ export function getTemplates() {
       payload: true
     });
 
-    reportService.token = state().user.token;
-    return reportService
+    legacy_reportService.token = state().user.token;
+    return legacy_reportService
       .getTemplates()
       .then(data => {
         const normalized = normalize(data);
@@ -135,8 +135,8 @@ export function getTemplate(templateId: string) {
       payload: true
     });
 
-    reportService.token = state().user.token;
-    return reportService
+    legacy_reportService.token = state().user.token;
+    return legacy_reportService
       .getTemplate(templateId)
       .then(data => {
         const normalized = normalize(data);
@@ -169,8 +169,8 @@ export function saveTemplate(template: TReport, method: string, templateId: stri
       }
     });
 
-    reportService.token = state().user.token;
-    return reportService
+    legacy_reportService.token = state().user.token;
+    return legacy_reportService
       .saveTemplate(template, method, templateId)
       .then(data => {
         const normalized = normalize(data);
@@ -209,7 +209,7 @@ export function deleteTemplate(templateId: string, aois: string[]) {
         error: false
       }
     });
-    return reportService
+    return legacy_reportService
       .deleteTemplate(templateId, aois)
       .then(() => {
         dispatch({

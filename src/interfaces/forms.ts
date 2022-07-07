@@ -20,6 +20,11 @@ export interface paths {
     post: operations["post-report"];
     parameters: {};
   };
+  "/v3/reports/getAllAnswersForUser": {
+    /** Returns all answers created by a user, and created by any member of a team they manage for all reports */
+    get: operations["get-all-answers-for-user"];
+    parameters: {};
+  };
   "/v1/reports/{reportId}/download-answers": {
     /** Download the given report as a CSV file */
     get: operations["get-report-csv"];
@@ -225,6 +230,7 @@ export interface components {
       responses?: components["schemas"]["AnswerResponse"][];
       /** Format: date-time */
       createdAt: string;
+      fullName?: string;
     };
     /** Response */
     Response: {
@@ -445,6 +451,14 @@ export interface operations {
     responses: {
       200: components["responses"]["Report"];
       400: components["responses"]["Error"];
+      401: components["responses"]["Error"];
+    };
+  };
+  /** Returns all answers created by a user, and created by any member of a team they manage for all reports */
+  "get-all-answers-for-user": {
+    parameters: {};
+    responses: {
+      200: components["responses"]["Answers"];
       401: components["responses"]["Error"];
     };
   };
