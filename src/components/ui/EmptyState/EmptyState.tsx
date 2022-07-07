@@ -19,7 +19,7 @@ const EmptyState: FC<IProps> = props => {
     <div className={classes} data-testid="button" {...rest}>
       {iconUrl && <img src={iconUrl} role="presentation" alt="" className="c-empty-state__icon" />}
       {title && <h2 className="c-empty-state__title">{title}</h2>}
-      {text && <p className="c-empty-state__text">{text}</p>}
+      {text && <p className={classnames("c-empty-state__text", !ctaTo && "c-empty-state__text--no-margin")}>{text}</p>}
       {ctaTo && ctaText && (
         <Link to={ctaTo} className="c-button c-button--primary c-empty-state__cta">
           {ctaText}

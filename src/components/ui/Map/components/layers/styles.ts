@@ -1,9 +1,53 @@
 const primary500 = "#94BE43";
 const neutral300 = "#FFFFFF";
 
+export const pointStyle = {
+  id: "point",
+  type: "symbol",
+  layout: {
+    "icon-image": ["get", "icon"],
+    "icon-size": 1,
+    "icon-allow-overlap": true
+  },
+  filter: ["!", ["has", "point_count"]]
+};
+
+export const clusterStyle = {
+  id: "clusters",
+  type: "circle",
+  filter: ["has", "point_count"],
+  paint: {
+    // Use step expressions (https://docs.mapbox.com/mapbox-gl-js/style-spec/#expressions-step)
+    // with three steps to implement three types of circles:
+    //   * Blue, 20px circles when point count is less than 100
+    //   * Yellow, 30px circles when point count is between 100 and 750
+    //   * Pink, 40px circles when point count is greater than or equal to 750
+    "circle-color": "#94BE43",
+    "circle-radius": 33
+  }
+};
+
+export const clusterCountStyle = {
+  id: "cluster-count",
+  type: "symbol",
+  filter: ["has", "point_count"],
+  glyphs: "mapbox://fonts/3sidedcube/{fontstack}/{range}.pbf",
+  layout: {
+    "text-field": "{point_count_abbreviated}",
+    "text-font": ["Fira Sans Regular", "Arial Unicode MS Bold"],
+    "text-size": 20
+  },
+  paint: {
+    "text-color": "#ffffff"
+  }
+};
+
 export const polygonStyle = {
   id: "polygon",
   type: "fill",
+  layout: {
+    "fill-sort-key": 0
+  },
   paint: {
     "fill-color": primary500,
     "fill-opacity": 0.6

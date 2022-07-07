@@ -5,7 +5,7 @@ import { Map as MapInstance } from "mapbox-gl";
 import MapboxDraw from "@mapbox/mapbox-gl-draw";
 import MapControls from "./components/ControlsContainer";
 import MapEditControls from "./components/EditControls";
-import { addMapLabelImage, goToGeojson } from "helpers/map";
+import { addAlertIconImages, addMapLabelImage, goToGeojson } from "helpers/map";
 import { editStyles } from "./components/layers/styles";
 import { FeatureCollection } from "geojson";
 
@@ -69,6 +69,7 @@ const Map: FC<IProps> = props => {
   const handleMapLoad = (evt: MapboxEvent) => {
     evt.target.resize();
     addMapLabelImage(evt.target);
+    addAlertIconImages(evt.target);
     onMapLoad?.(evt);
     setMapRef(evt.target);
   };
@@ -80,7 +81,7 @@ const Map: FC<IProps> = props => {
       <ReactMap
         {...actualViewState}
         onMove={evt => (setMapViewState ? setMapViewState(evt.viewState) : setViewState(evt.viewState))}
-        mapStyle="mapbox://styles/mapbox/satellite-streets-v11"
+        mapStyle="mapbox://styles/3sidedcube/cl5axl8ha002c14o5exjzmdlb"
         onLoad={handleMapLoad}
       >
         <MapControls />

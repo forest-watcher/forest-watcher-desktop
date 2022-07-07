@@ -1,5 +1,7 @@
 import { Map as MapInstance, LngLatBoundsLike } from "mapbox-gl";
 import labelBackgroundIcon from "assets/images/icons/MapLabelFrame.png";
+import reportNotSelectedIcon from "assets/images/icons/alertIcons/ReportNotSelected.png";
+import reportHoverIcon from "assets/images/icons/alertIcons/ReportHover.png";
 import L from "leaflet";
 import * as turf from "@turf/turf";
 
@@ -27,6 +29,21 @@ export const addMapLabelImage = async (map: MapInstance) => {
       stretchY: [[3, 30]],
       // This part of the image that can contain text ([x1, y1, x2, y2]):
       content: [5, 5, 28, 28],
+      pixelRatio: 1
+    });
+  }
+};
+
+export const addAlertIconImages = async (map: MapInstance) => {
+  const image = await loadMapImage(map, reportNotSelectedIcon);
+  if (image) {
+    map.addImage("report-not-selected", image, {
+      pixelRatio: 1
+    });
+  }
+  const image2 = await loadMapImage(map, reportHoverIcon);
+  if (image2) {
+    map.addImage("report-hover", image2, {
       pixelRatio: 1
     });
   }

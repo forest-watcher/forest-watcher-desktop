@@ -4,11 +4,12 @@ import UserAreasMap from "components/user-areas-map/UserAreasMap";
 import AreaDetailsControlPanel from "./control-panels/AreaDetails";
 import AreaListControlPanel from "./control-panels/AreaList";
 import { TParams } from "./types";
+import { TPropsFromRedux } from "./InvestigationContainer";
 
-interface IProps extends RouteComponentProps {}
+interface IProps extends RouteComponentProps, TPropsFromRedux {}
 
 const InvestigationPage: FC<IProps> = props => {
-  const { match } = props;
+  const { match, allAnswers } = props;
   const history = useHistory();
   let selectedAreaMatch = useRouteMatch<TParams>({ path: "/reporting/investigation/:areaId", exact: true });
 
@@ -24,6 +25,8 @@ const InvestigationPage: FC<IProps> = props => {
       onAreaClick={handleAreaClick}
       focusAllAreas={!selectedAreaMatch}
       selectedAreaId={selectedAreaMatch?.params.areaId}
+      showReports
+      answers={allAnswers}
     >
       <Switch>
         <Route exact path={`${match.url}`} component={AreaListControlPanel} />

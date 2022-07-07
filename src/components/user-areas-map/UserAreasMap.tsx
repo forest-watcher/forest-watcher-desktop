@@ -6,20 +6,49 @@ import { TAreasResponse } from "services/area";
 import { Map as MapInstance, MapboxEvent } from "mapbox-gl";
 import * as turf from "@turf/turf";
 import { goToGeojson } from "helpers/map";
+import { TGetAllAnswers } from "services/reports";
+import SquareClusterMarkers from "components/ui/Map/components/layers/SquareClusterMarkers";
+
+const dummyPoints = [
+  {
+    position: [-1.879481, 50.715018] as [number, number],
+    label: "1"
+  },
+  {
+    position: [-1.876792, 50.715535] as [number, number],
+    label: "2"
+  },
+  {
+    position: [-1.873366, 50.71606] as [number, number],
+    label: "3"
+  }
+];
 
 interface IProps extends IMapProps {
   // Should be a memorised function! useCallBack()
   onAreaClick?: IPolygonProps["onClick"];
   focusAllAreas?: boolean;
   selectedAreaId?: string;
+  showReports?: boolean;
+  answers?: TGetAllAnswers["data"];
 }
 
 const UserAreasMap: FC<PropsWithChildren<IProps>> = props => {
-  const { onAreaClick, onMapLoad, focusAllAreas = true, selectedAreaId, children, ...rest } = props;
+  const {
+    onAreaClick,
+    onMapLoad,
+    focusAllAreas = true,
+    selectedAreaId,
+    children,
+    showReports = false,
+    answers = [],
+    ...rest
+  } = props;
   const [mapRef, setMapRef] = useState<MapInstance | null>(null);
 
   const { data: areasList } = useAppSelector(state => state.areas);
   const areaMap = useMemo<TAreasResponse[]>(() => Object.values(areasList), [areasList]);
+  const [timeoutShowReports, setTimeoutShowReports] = useState(false);
 
   const features = useMemo(() => {
     if (areaMap.length > 0) {
@@ -28,6 +57,15 @@ const UserAreasMap: FC<PropsWithChildren<IProps>> = props => {
     }
     return null;
   }, [areaMap]);
+
+  useEffect(() => {
+    if (mapRef) {
+      setTimeout(() => {
+        // Delay as  hack to get markers on top
+        setTimeoutShowReports(showReports);
+      }, 5000);
+    }
+  }, [mapRef, showReports]);
 
   useEffect(() => {
     if (features && focusAllAreas) {
@@ -52,6 +90,21 @@ const UserAreasMap: FC<PropsWithChildren<IProps>> = props => {
           onClick={onAreaClick}
         />
       ))}
+
+      {timeoutShowReports && (
+        <SquareClusterMarkers
+          id="answers"
+          points={dummyPoints}
+          // answers
+          //   .filter(answer => answer.attributes?.areaOfInterest === selectedAreaId)
+          //   .map(answer => ({
+          //     // @ts-ignore
+          //     position: [answer.attributes?.clickedPosition[0].lon, answer.attributes?.clickedPosition[0].lat],
+          //     label: "hey"
+          //   }))}
+        />
+      )}
+
       {children}
     </Map>
   );
