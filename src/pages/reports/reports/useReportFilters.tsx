@@ -57,8 +57,8 @@ const useReportFilters = (answers: TGetAllAnswers["data"] = [], templates: TGetT
   const usernameOptions = useMemo<Option[]>(() => {
     const uniqueUsers = answers
       .map(answer => ({
-        label: answer.attributes?.username ?? "",
-        value: answer.attributes?.username ?? ""
+        label: answer.attributes?.fullName ?? "",
+        value: answer.attributes?.fullName ?? ""
       }))
       .filter((value, index, self) => self.findIndex(t => t.value === value.value) === index);
 
@@ -196,7 +196,7 @@ const useReportFilters = (answers: TGetAllAnswers["data"] = [], templates: TGetT
           if (!value || value === ALL_VALUE) {
             return true;
           } else {
-            return item.area === value;
+            return item.monitor === value;
           }
         }
       }
