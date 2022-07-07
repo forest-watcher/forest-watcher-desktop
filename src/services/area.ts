@@ -32,7 +32,6 @@ export class AreaService extends BaseService {
     body.append("geostore", area.geostore);
     body.append("geojson", JSON.stringify(area.geojson));
     body.append("image", image);
-    body.append("application", "fw-web");
 
     return this.fetchJSON(url, {
       method,
