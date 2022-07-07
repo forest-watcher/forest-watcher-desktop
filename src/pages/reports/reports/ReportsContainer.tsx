@@ -1,13 +1,15 @@
 import { connect, ConnectedProps } from "react-redux";
 import { RootState } from "store";
 import Reports from "./Reports";
-import { getMyTeamInvites } from "modules/gfwTeams";
+import { getAllReports } from "modules/reports";
 
-const mapStateToProps = ({ reports }: RootState) => ({
-  reports: reports.answers
+const mapStateToProps = ({ reports, templates }: RootState) => ({
+  allAnswers: reports.allAnswers,
+  loading: reports.loading,
+  templates: templates.templates
 });
 
-const mapDispatchToProps = { getMyTeamInvites };
+const mapDispatchToProps = { getAllReports };
 
 const connector = connect(mapStateToProps, mapDispatchToProps);
 
