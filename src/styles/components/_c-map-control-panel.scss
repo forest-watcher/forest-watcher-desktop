@@ -5,6 +5,20 @@
   max-width: 400px;
   width: 100%;
 
+  &__team-areas {
+    position: relative;
+    margin-top: 24px;
+    min-height: 100px; // For the loading spinner space
+  }
+
+  &__team-name {
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 21px;
+    padding: 0;
+    color: $neutral-700;
+  }
+
   &__sub-title {
     font-weight: 400;
     font-size: 18px;
