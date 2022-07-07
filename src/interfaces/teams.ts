@@ -535,8 +535,6 @@ export interface operations {
                 userRole: "administrator" | "manager" | "monitor" | "left";
                 /** Format: date-time */
                 createdAt: string;
-                areas?: string[];
-                members?: components["schemas"]["TeamUserRelation"][];
               };
             }[];
           };

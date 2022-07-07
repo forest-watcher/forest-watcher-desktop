@@ -12,29 +12,31 @@ export interface IOwnProps {
 export type IProps = TPropsFromRedux & IOwnProps;
 
 const TeamCard: FC<IProps> = props => {
-  const { team, getTeamAreas, teamAreas } = props;
+  const { team, getTeamMembers, teamMembers, getTeamAreas, teamAreas } = props;
 
   useEffect(() => {
+    getTeamMembers();
     getTeamAreas();
-  }, [getTeamAreas]);
+  }, [getTeamMembers, getTeamAreas]);
 
-  const [managers, monitors] = useMemo(() => {
-    if (team.attributes.members) {
-      return team.attributes.members.reduce<[typeof team.attributes.members, typeof team.attributes.members]>(
+  const [manages, monitors] = useMemo(
+    () =>
+      teamMembers.reduce<[typeof teamMembers, typeof teamMembers]>(
         (acc, teamMember) => {
-          if ((teamMember.role === "administrator" || teamMember.role === "manager") && teamMember.userId) {
+          if (
+            (teamMember.attributes.role === "administrator" || teamMember.attributes.role === "manager") &&
+            teamMember.attributes.userId
+          ) {
             acc[0].push(teamMember);
-          } else if (teamMember.userId) {
+          } else if (teamMember.attributes.userId) {
             acc[1].push(teamMember);
           }
           return acc;
         },
         [[], []]
-      );
-    } else {
-      return [[], []];
-    }
-  }, [team]);
+      ),
+    [teamMembers]
+  );
 
   return (
     <Card size="large" className="c-teams__card">
@@ -50,15 +52,15 @@ const TeamCard: FC<IProps> = props => {
       <Card size="large" className={"c-teams__card c-teams--nested-card"}>
         <div>
           <h3 className="c-teams__sub-title">
-            <FormattedMessage id="teams.managers" values={{ num: managers.length }} />
+            <FormattedMessage id="teams.managers" values={{ num: manages.length }} />
           </h3>
-          <p>{managers.map(i => i.userId).join(", ")}</p>
+          <p>{manages.map(i => i.attributes.userId).join(", ")}</p>
         </div>
         <div>
           <h3 className="c-teams__sub-title">
             <FormattedMessage id="teams.monitors" values={{ num: monitors.length }} />
           </h3>
-          <p>{monitors.map(i => i.userId).join(", ")}</p>
+          <p>{monitors.map(i => i.attributes.userId).join(", ")}</p>
         </div>
       </Card>
 

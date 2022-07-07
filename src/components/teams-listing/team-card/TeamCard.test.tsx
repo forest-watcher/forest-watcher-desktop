@@ -7,31 +7,44 @@ const mockTeam: ITeamCardProps["team"] = {
   attributes: {
     name: "My Team",
     userRole: "administrator",
-    createdAt: "2022-05-17T10:59:07.136Z",
-    members: [
-      {
-        teamId: "1234",
-        userId: "1234",
-        email: "user@test.com",
-        status: "confirmed",
-        role: "administrator"
-      },
-      {
-        teamId: "1234",
-        email: "user+gfw@test.com",
-        status: "invited",
-        role: "monitor"
-      },
-      {
-        teamId: "1234",
-        userId: "1234",
-        email: "user+gfw1@test.com",
-        status: "confirmed",
-        role: "manager"
-      }
-    ]
+    createdAt: "2022-05-17T10:59:07.136Z"
   }
 };
+
+const mockTeamMembers: ITeamCardProps["teamMembers"] = [
+  {
+    type: "teamUser",
+    id: "1234",
+    attributes: {
+      teamId: "1234",
+      userId: "1234",
+      email: "user@test.com",
+      status: "confirmed",
+      role: "administrator"
+    }
+  },
+  {
+    type: "teamUser",
+    id: "1234",
+    attributes: {
+      teamId: "1234",
+      email: "user+gfw@test.com",
+      status: "invited",
+      role: "monitor"
+    }
+  },
+  {
+    type: "teamUser",
+    id: "1234",
+    attributes: {
+      teamId: "1234",
+      userId: "1234",
+      email: "user+gfw1@test.com",
+      status: "confirmed",
+      role: "manager"
+    }
+  }
+];
 
 // const mockTeamAreas = [
 //   { type: "area", id: "6233708756b0c7001bf95232", attributes: { name: "Area #1" } },
@@ -42,9 +55,19 @@ const mockTeam: ITeamCardProps["team"] = {
 const mockTeamAreas = ["Area #1", "Area #2", "Area #3"];
 
 describe("TeamCard", () => {
-  let getTeamAreas = jest.fn();
+  let getTeamMembers = jest.fn(),
+    getTeamAreas = jest.fn();
 
-  const render = () => utilRender(<TeamCard team={mockTeam} teamAreas={mockTeamAreas} getTeamAreas={getTeamAreas} />);
+  const render = () =>
+    utilRender(
+      <TeamCard
+        team={mockTeam}
+        teamMembers={mockTeamMembers}
+        teamAreas={mockTeamAreas}
+        getTeamMembers={getTeamMembers}
+        getTeamAreas={getTeamAreas}
+      />
+    );
 
   it("should render correctly", () => {
     const { container } = render();
@@ -143,6 +166,12 @@ describe("TeamCard", () => {
         </div>
       </div>
     `);
+  });
+
+  it("should call getTeamMembers dispatcher once", () => {
+    render();
+
+    expect(getTeamMembers).toHaveBeenCalledTimes(1);
   });
 
   it("should call getTeamAreas dispatcher once", () => {
