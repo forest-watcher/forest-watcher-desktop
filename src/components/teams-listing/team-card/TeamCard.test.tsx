@@ -8,7 +8,6 @@ const mockTeam: ITeamCardProps["team"] = {
     name: "My Team",
     userRole: "administrator",
     createdAt: "2022-05-17T10:59:07.136Z",
-    areas: ["Area #1", "Area #2", "Area #3"],
     members: [
       {
         teamId: "1234",
@@ -34,8 +33,18 @@ const mockTeam: ITeamCardProps["team"] = {
   }
 };
 
+// const mockTeamAreas = [
+//   { type: "area", id: "6233708756b0c7001bf95232", attributes: { name: "Area #1" } },
+//   { type: "area", id: "6233708756b0c7001bf95232", attributes: { name: "Area #2" } },
+//   { type: "area", id: "6233708756b0c7001bf95232", attributes: { name: "Area #3" } }
+// ];
+
+const mockTeamAreas = ["Area #1", "Area #2", "Area #3"];
+
 describe("TeamCard", () => {
-  const render = () => utilRender(<TeamCard team={mockTeam} />);
+  let getTeamAreas = jest.fn();
+
+  const render = () => utilRender(<TeamCard team={mockTeam} teamAreas={mockTeamAreas} getTeamAreas={getTeamAreas} />);
 
   it("should render correctly", () => {
     const { container } = render();
@@ -134,5 +143,11 @@ describe("TeamCard", () => {
         </div>
       </div>
     `);
+  });
+
+  it("should call getTeamAreas dispatcher once", () => {
+    render();
+
+    expect(getTeamAreas).toHaveBeenCalledTimes(1);
   });
 });

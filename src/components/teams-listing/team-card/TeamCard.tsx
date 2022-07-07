@@ -1,15 +1,22 @@
-import { FC, useMemo } from "react";
+import { FC, useEffect, useMemo } from "react";
 import Card from "../../ui/Card/Card";
 import EditIcon from "assets/images/icons/Edit.svg";
 import { FormattedMessage } from "react-intl";
 import { TGFWTeamsState } from "modules/gfwTeams";
+import { TPropsFromRedux } from "./TeamCardContainer";
 
-export type IProps = {
+export interface IOwnProps {
   team: TGFWTeamsState["data"][number];
-};
+}
+
+export type IProps = TPropsFromRedux & IOwnProps;
 
 const TeamCard: FC<IProps> = props => {
-  const { team } = props;
+  const { team, getTeamAreas, teamAreas } = props;
+
+  useEffect(() => {
+    getTeamAreas();
+  }, [getTeamAreas]);
 
   const [managers, monitors] = useMemo(() => {
     if (team.attributes.members) {
@@ -61,7 +68,8 @@ const TeamCard: FC<IProps> = props => {
             <h3 className="c-teams__sub-title">
               <FormattedMessage id="teams.summary.areas" />
             </h3>
-            <p>{team.attributes.areas?.join(", ")}</p>
+            {/* ToDo: Change any to TGetAreasByTeamId["data"] when docs are upto date! */}
+            <p>{teamAreas.join(", ")}</p>
           </div>
           <Card.Cta to={"/areas"} iconSrc={EditIcon}>
             <FormattedMessage id="common.manage.area" />
