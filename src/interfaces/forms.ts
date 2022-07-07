@@ -20,7 +20,7 @@ export interface paths {
     post: operations["post-report"];
     parameters: {};
   };
-  "/v1/reports/getAllAnswersForUser": {
+  "/v3/reports/getAllAnswersForUser": {
     /** Returns all answers created by a user, and created by any member of a team they manage for all reports */
     get: operations["get-all-answers-for-user"];
     parameters: {};
@@ -42,11 +42,6 @@ export interface paths {
         reportId: string;
       };
     };
-  };
-  "/v3/reports/getAllAnswersForUser": {
-    /** Returns all answers created by a user and all team members of teams the user manages */
-    get: operations["get-all-answers-for-user"];
-    parameters: {};
   };
   "/v3/reports/{reportId}/answers/area/{areaId}": {
     get: operations["get-answers-for-report-and-area"];
@@ -235,6 +230,7 @@ export interface components {
       responses?: components["schemas"]["AnswerResponse"][];
       /** Format: date-time */
       createdAt: string;
+      fullName?: string;
     };
     /** Response */
     Response: {
@@ -458,13 +454,12 @@ export interface operations {
       401: components["responses"]["Error"];
     };
   };
-  /** Returns all answers created by a user and all team members of teams the user manages */
+  /** Returns all answers created by a user, and created by any member of a team they manage for all reports */
   "get-all-answers-for-user": {
     parameters: {};
     responses: {
       200: components["responses"]["Answers"];
       401: components["responses"]["Error"];
-      404: components["responses"]["Error"];
     };
   };
   /** Download the given report as a CSV file */

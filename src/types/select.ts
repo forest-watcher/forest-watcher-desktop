@@ -12,7 +12,7 @@ export interface SelectProps {
 
 export interface Option {
   label: string;
-  value: string;
+  value: string | number;
   secondaryLabel?: string;
   metadata?: any;
 }
