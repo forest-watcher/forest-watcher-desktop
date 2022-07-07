@@ -21,7 +21,7 @@ it("Toggle Input should render correctly unspecified", () => {
   expect(container).toMatchInlineSnapshot(`
     <div>
       <div
-        class="c-input"
+        class="c-input c-input--toggle"
       >
         <label
           class="c-input__label"
@@ -60,7 +60,7 @@ it("Toggle Input should render correctly as true", () => {
   expect(container).toMatchInlineSnapshot(`
     <div>
       <div
-        class="c-input"
+        class="c-input c-input--toggle"
       >
         <label
           class="c-input__label"
@@ -100,7 +100,7 @@ it("Toggle Input should render correctly as false", () => {
   expect(container).toMatchInlineSnapshot(`
     <div>
       <div
-        class="c-input"
+        class="c-input c-input--toggle"
       >
         <label
           class="c-input__label"

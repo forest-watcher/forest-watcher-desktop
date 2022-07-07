@@ -13,16 +13,21 @@ const InvestigationPage: FC<IProps> = props => {
   const history = useHistory();
   let selectedAreaMatch = useRouteMatch<TParams>({ path: "/reporting/investigation/:areaId", exact: true });
 
-  const handleAreaClick = useCallback(
+  const handleAreaSelect = useCallback(
     (areaId: string) => {
       history.push(`/reporting/investigation/${areaId}`);
     },
     [history]
   );
 
+  const handleAreaDeselect = useCallback(() => {
+    history.push("/reporting/investigation");
+  }, [history]);
+
   return (
     <UserAreasMap
-      onAreaClick={handleAreaClick}
+      onAreaSelect={handleAreaSelect}
+      onAreaDeselect={handleAreaDeselect}
       focusAllAreas={!selectedAreaMatch}
       selectedAreaId={selectedAreaMatch?.params.areaId}
       showReports

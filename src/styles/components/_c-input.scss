@@ -1,4 +1,5 @@
 .c-input {
+  $this: &;
   display: flex;
   gap: $global-spacing-3;
 
@@ -7,12 +8,20 @@
     align-items: unset;
   }
 
+  &--toggle {
+    align-items: center;
+
+    #{$this}__label {
+      margin-top: 0;
+    }
+  }
+
   &__input-wrapper {
     position: relative;
   }
 
   &__label {
-    margin-top: 9px;
+    margin-top: 8px;
     font-weight: 500;
     font-size: 14px;
     line-height: 24px;

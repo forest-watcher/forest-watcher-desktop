@@ -42,7 +42,7 @@ const Reports: FC<IProps> = props => {
       allAnswers?.map(answer => ({
         id: answer.id ?? "",
         createdAt: answer.attributes?.createdAt ?? "",
-        monitor: answer.attributes?.username ?? "",
+        monitor: answer.attributes?.fullName ?? "",
         alertType: answer.attributes?.layer ?? "",
         name: answer.attributes?.reportName ?? "",
         area: answer.attributes?.areaOfInterestName ?? "",
