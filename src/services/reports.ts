@@ -10,7 +10,7 @@ export type TReportResponse = {
 };
 export type TGetTemplates = paths["/v1/reports"]["get"]["responses"]["200"]["content"]["application/json"];
 export type TGetAllAnswers =
-  paths["/v1/reports/getAllAnswersForUser"]["get"]["responses"]["200"]["content"]["application/json"];
+  paths["/v3/reports/getAllAnswersForUser"]["get"]["responses"]["200"]["content"]["application/json"];
 
 export class LegacyReportService extends BaseService {
   getAnswers(reportId: string) {

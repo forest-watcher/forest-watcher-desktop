@@ -447,6 +447,10 @@
   "alertType.filterBy": "Filter by Alert type",
   "voiceRecordings.toggleBy": "Voice recordings only",
   "submittedBy.name": "Submitted by",
-  "submittedBy.filterBy": "Filter by submitter"
-
+  "submittedBy.filterBy": "Filter by submitter",
+  "timeframes.2weeks": "2 weeks",
+  "timeframes.1month": "1 month",
+  "timeframes.2months": "2 months",
+  "timeframes.6months": "6 months",
+  "timeframes.12months": "12 months"
 }
