@@ -5,7 +5,7 @@ import { Map as MapInstance } from "mapbox-gl";
 import MapboxDraw from "@mapbox/mapbox-gl-draw";
 import MapControls from "./components/ControlsContainer";
 import MapEditControls from "./components/EditControls";
-import { addAlertIconImages, addMapLabelImage, goToGeojson } from "helpers/map";
+import { goToGeojson, setupMapImages } from "helpers/map";
 import { editStyles } from "./components/layers/styles";
 import { FeatureCollection } from "geojson";
 
@@ -68,8 +68,7 @@ const Map: FC<IProps> = props => {
 
   const handleMapLoad = (evt: MapboxEvent) => {
     evt.target.resize();
-    addMapLabelImage(evt.target);
-    addAlertIconImages(evt.target);
+    setupMapImages(evt.target);
     onMapLoad?.(evt);
     setMapRef(evt.target);
   };

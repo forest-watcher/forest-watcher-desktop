@@ -73,20 +73,17 @@ const Polygon: FC<IProps> = props => {
       <Source id={id} data={data as GeoJSONSourceOptions["data"]} type="geojson">
         {/* @ts-ignore */}
         <Layer {...polygonStyle} id={id} />
-      </Source>
-      <Source id={id} data={data as GeoJSONSourceOptions["data"]} type="geojson">
         {/* @ts-ignore */}
         <Layer {...layerStyle} id={`${id}-line`} />
       </Source>
+      {centrePoint && (
+        <Source id={`label-${id}`} type="geojson" data={centrePoint}>
+          {/* @ts-ignore */}
+          <Layer {...labelStyle} id={`label-${id}`} />
+        </Source>
+      )}
     </>
   );
 };
-
-// {centrePoint && (
-//   <Source id={`label-${id}`} type="geojson" data={centrePoint}>
-//     {/* @ts-ignore */}
-//     <Layer {...labelStyle} id={`label-${id}`} />
-//   </Source>
-// )}
 
 export default Polygon;

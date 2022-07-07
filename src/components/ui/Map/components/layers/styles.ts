@@ -1,3 +1,5 @@
+import { MapImages } from "helpers/map";
+
 const primary500 = "#94BE43";
 const neutral300 = "#FFFFFF";
 
@@ -89,7 +91,7 @@ export const labelStyle = {
     "text-justify": "auto",
     "text-size": 18,
     "icon-text-fit": "both",
-    "icon-image": "label-background"
+    "icon-image": MapImages.label
   },
   paint: {
     "text-color": "#555555"

@@ -3,14 +3,34 @@ import { Layer, Source, useMap } from "react-map-gl";
 import { pointStyle, clusterStyle, clusterCountStyle } from "./styles";
 import * as turf from "@turf/turf";
 import { GeoJSONSource } from "mapbox-gl";
+import { MapImages } from "helpers/map";
+
+interface IPoint {
+  position: [number, number];
+  id: string;
+}
 
 export interface IProps {
   id: string;
-  points: { position: [number, number]; label: string }[];
+  points: IPoint[];
+  onSquareSelect?: (id: string) => void;
+  selectedSquareId: string | null;
 }
 
+const getImage = (point: IPoint, hoveredPoint: string | null, selectedPoint: string | null) => {
+  if (point.id === selectedPoint) {
+    return MapImages.reportSelected;
+  }
+
+  if (point.id === hoveredPoint) {
+    return MapImages.reportHover;
+  }
+
+  return MapImages.reportDefault;
+};
+
 const SquareClusterMarkers: FC<IProps> = props => {
-  const { id, points } = props;
+  const { id, points, onSquareSelect, selectedSquareId } = props;
   const { current: map } = useMap();
   const [hoveredPoint, setHoveredPoint] = useState<string | null>(null);
   const [selectedPoint, setSelectedPoint] = useState<string | null>(null);
@@ -20,19 +40,19 @@ const SquareClusterMarkers: FC<IProps> = props => {
       turf.featureCollection(
         points.map(point =>
           turf.point(point.position, {
-            label: point.label,
-            icon: point.label === hoveredPoint ? "report-hover" : "report-not-selected"
+            id: point.id,
+            icon: getImage(point, hoveredPoint, selectedPoint)
           })
         )
       ),
-    [hoveredPoint, points]
+    [hoveredPoint, points, selectedPoint]
   );
 
   useEffect(() => {
     map?.on("mouseenter", id, e => {
       const { features } = e;
       if (features && features[0]?.source === id) {
-        setHoveredPoint(features[0]?.properties?.label);
+        setHoveredPoint(features[0]?.properties?.id);
       }
     });
 
@@ -40,7 +60,16 @@ const SquareClusterMarkers: FC<IProps> = props => {
       setHoveredPoint(null);
     });
 
-    map?.on("click", id, e => {});
+    map?.on("click", id, e => {
+      const features = map.queryRenderedFeatures(e.point, {
+        layers: [id]
+      });
+
+      const pointId = features[0]?.properties?.id;
+      setSelectedPoint(pointId);
+      onSquareSelect?.(pointId);
+    });
+
     map?.on("click", `clusters-${id}`, e => {
       const features = map.queryRenderedFeatures(e.point, {
         layers: [`clusters-${id}`]
@@ -60,7 +89,11 @@ const SquareClusterMarkers: FC<IProps> = props => {
         });
       });
     });
-  }, [id, map]);
+  }, [id, map, onSquareSelect]);
+
+  useEffect(() => {
+    setSelectedPoint(selectedSquareId);
+  }, [selectedSquareId]);
 
   return (
     <>

@@ -9,21 +9,6 @@ import { goToGeojson } from "helpers/map";
 import { TGetAllAnswers } from "services/reports";
 import SquareClusterMarkers from "components/ui/Map/components/layers/SquareClusterMarkers";
 
-const dummyPoints = [
-  {
-    position: [-1.879481, 50.715018] as [number, number],
-    label: "1"
-  },
-  {
-    position: [-1.876792, 50.715535] as [number, number],
-    label: "2"
-  },
-  {
-    position: [-1.873366, 50.71606] as [number, number],
-    label: "3"
-  }
-];
-
 interface IProps extends IMapProps {
   // Should be a memorised function! useCallBack()
   onAreaSelect?: IPolygonProps["onClick"];
@@ -55,7 +40,7 @@ const UserAreasMap: FC<PropsWithChildren<IProps>> = props => {
   const { data: areasList } = useAppSelector(state => state.areas);
   const areaMap = useMemo<TAreasResponse[]>(() => Object.values(areasList), [areasList]);
   const [timeoutShowReports, setTimeoutShowReports] = useState(false);
-
+  const [selectedReportId, setSelectedReportId] = useState<string | null>(null);
   const features = useMemo(() => {
     if (areaMap.length > 0) {
       const mapped = areaMap.map((area: any) => area.attributes.geostore.geojson.features).flat();
@@ -90,6 +75,7 @@ const UserAreasMap: FC<PropsWithChildren<IProps>> = props => {
         // If the same area was clicked, do nothing
         setClickState(undefined);
       }
+      setSelectedReportId(null);
     },
     [selectedAreaId]
   );
@@ -106,6 +92,8 @@ const UserAreasMap: FC<PropsWithChildren<IProps>> = props => {
     if (clickState?.type === "deselect" || clickState?.type === "select") {
       setClickState(undefined);
     }
+
+    setSelectedReportId(null);
   }, [clickState, onAreaSelect, onAreaDeselect, selectedAreaId]);
 
   useEffect(() => {
@@ -144,14 +132,19 @@ const UserAreasMap: FC<PropsWithChildren<IProps>> = props => {
       {timeoutShowReports && (
         <SquareClusterMarkers
           id="answers"
-          points={dummyPoints}
-          // answers
-          //   .filter(answer => answer.attributes?.areaOfInterest === selectedAreaId)
-          //   .map(answer => ({
-          //     // @ts-ignore
-          //     position: [answer.attributes?.clickedPosition[0].lon, answer.attributes?.clickedPosition[0].lat],
-          //     label: "hey"
-          //   }))}
+          points={
+            answers
+              ? answers
+                  .filter(answer => answer.attributes?.areaOfInterest === selectedAreaId)
+                  .map(answer => ({
+                    // @ts-ignore
+                    position: [answer.attributes?.clickedPosition[0].lon, answer.attributes?.clickedPosition[0].lat],
+                    id: answer.id || ""
+                  }))
+              : []
+          }
+          onSquareSelect={(id: string) => setSelectedReportId(id)}
+          selectedSquareId={selectedReportId}
         />
       )}
 
