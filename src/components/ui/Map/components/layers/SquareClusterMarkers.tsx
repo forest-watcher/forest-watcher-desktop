@@ -1,14 +1,10 @@
 import { FC, useEffect, useMemo, useState } from "react";
 import { Layer, Source, useMap } from "react-map-gl";
-import { pointStyle, clusterStyle, clusterCountStyle } from "./styles";
+import { pointStyle, clusterCountStyle } from "./styles";
 import * as turf from "@turf/turf";
-import { GeoJSONSource } from "mapbox-gl";
-import { MapImages } from "helpers/map";
-
-interface IPoint {
-  position: [number, number];
-  id: string;
-}
+import { Marker } from "mapbox-gl";
+import { clusterZoom, createLayeredClusterSVG, getReportImage } from "helpers/map";
+import { IMarkers, IPoint, ReportLayerColours, ReportLayers } from "types/map";
 
 export interface IProps {
   id: string;
@@ -17,17 +13,13 @@ export interface IProps {
   selectedSquareId: string | null;
 }
 
-const getImage = (point: IPoint, hoveredPoint: string | null, selectedPoint: string | null) => {
-  if (point.id === selectedPoint) {
-    return MapImages.reportSelected;
-  }
-
-  if (point.id === hoveredPoint) {
-    return MapImages.reportHover;
-  }
-
-  return MapImages.reportDefault;
+const LAYER_EXPRESSION_FILTERS = {
+  default: ["!", ["==", ReportLayers.VIIRS, ["get", "layer"]]],
+  viirs: ["==", ReportLayers.VIIRS, ["get", "layer"]]
 };
+
+const markers: IMarkers = {};
+let markersOnScreen: IMarkers = {};
 
 const SquareClusterMarkers: FC<IProps> = props => {
   const { id, points, onSquareSelect, selectedSquareId } = props;
@@ -41,7 +33,8 @@ const SquareClusterMarkers: FC<IProps> = props => {
         points.map(point =>
           turf.point(point.position, {
             id: point.id,
-            icon: getImage(point, hoveredPoint, selectedPoint)
+            icon: getReportImage(point, hoveredPoint, selectedPoint),
+            layer: point.layer
           })
         )
       ),
@@ -70,24 +63,63 @@ const SquareClusterMarkers: FC<IProps> = props => {
       onSquareSelect?.(pointId);
     });
 
-    map?.on("click", `clusters-${id}`, e => {
-      const features = map.queryRenderedFeatures(e.point, {
-        layers: [`clusters-${id}`]
-      });
-      const clusterId = features[0]?.properties?.cluster_id;
-      const source = map.getSource(id) as GeoJSONSource;
+    map?.on("render", () => {
+      const mapInstance = map.getMap();
+      if (!mapInstance.isSourceLoaded(id) || !map) return;
+      // Render custom cluster icons.
+      const newMarkers: IMarkers = {};
+      const features = mapInstance.querySourceFeatures(id);
 
-      source.getClusterExpansionZoom(clusterId, (err, zoom) => {
-        if (err) {
-          return;
+      // for every cluster on the screen, create an HTML marker for it (if we didn't yet),
+      // and add it to the map if it's not there already
+      for (const feature of features) {
+        // @ts-ignore
+        const coords = feature.geometry.coordinates;
+        const props = feature.properties;
+        if (!props || !props.cluster) {
+          continue;
         }
 
-        map.easeTo({
-          // @ts-ignore
-          center: features[0].geometry.coordinates,
-          zoom: zoom
-        });
-      });
+        const clusterId = props.cluster_id;
+
+        let marker = markers[clusterId];
+
+        const colours = [];
+
+        if (props.viirs) {
+          colours.push(ReportLayerColours.VIIRS);
+        }
+
+        if (props.default) {
+          colours.push(ReportLayerColours.DEFAULT);
+        }
+
+        if (!marker) {
+          const el = createLayeredClusterSVG(props, colours);
+
+          if (el) {
+            // Handle cluster zoom
+            el.onclick = () => clusterZoom(map, clusterId, id, coords);
+            // Create a new marker
+            marker = markers[clusterId] = new Marker({
+              element: el
+            }).setLngLat(coords);
+          }
+        }
+        newMarkers[clusterId] = marker;
+
+        if (!markersOnScreen[clusterId]) {
+          // Add to map
+          marker.addTo(mapInstance);
+        }
+      }
+      // for every marker we've added previously, remove those that are no longer visible
+      for (const toRemoveid in markersOnScreen) {
+        if (!newMarkers[toRemoveid]) {
+          markersOnScreen[toRemoveid].remove();
+        }
+      }
+      markersOnScreen = newMarkers;
     });
   }, [id, map, onSquareSelect]);
 
@@ -97,11 +129,20 @@ const SquareClusterMarkers: FC<IProps> = props => {
 
   return (
     <>
-      <Source id={id} data={featureCollection} type="geojson" cluster clusterRadius={40}>
+      <Source
+        id={id}
+        data={featureCollection}
+        type="geojson"
+        cluster
+        clusterRadius={40}
+        clusterProperties={{
+          default: ["+", ["case", LAYER_EXPRESSION_FILTERS.default, 1, 0]],
+          viirs: ["+", ["case", LAYER_EXPRESSION_FILTERS.viirs, 1, 0]]
+        }}
+      >
         {/* @ts-ignore */}
         <Layer {...pointStyle} id={id} />
-        {/* @ts-ignore */}
-        <Layer {...clusterStyle} id={`clusters-${id}`} />
+
         {/* @ts-ignore */}
         <Layer {...clusterCountStyle} id={`clusters-count-${id}`} />
       </Source>

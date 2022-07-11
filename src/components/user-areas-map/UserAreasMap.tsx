@@ -139,7 +139,8 @@ const UserAreasMap: FC<PropsWithChildren<IProps>> = props => {
                   .map(answer => ({
                     // @ts-ignore
                     position: [answer.attributes?.clickedPosition[0].lon, answer.attributes?.clickedPosition[0].lat],
-                    id: answer.id || ""
+                    id: answer.id || "",
+                    layer: answer.attributes?.layer
                   }))
               : []
           }
