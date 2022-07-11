@@ -1,7 +1,7 @@
-import { FC, useCallback } from "react";
+import { FC, useCallback, useState } from "react";
 import { Route, RouteComponentProps, Switch, useHistory, useRouteMatch } from "react-router-dom";
 import UserAreasMap from "components/user-areas-map/UserAreasMap";
-import AreaDetailsControlPanel from "./control-panels/AreaDetails";
+import AreaDetailsControlPanel, { FormValues, LAYERS } from "./control-panels/AreaDetails";
 import AreaListControlPanel from "./control-panels/AreaList";
 import { TParams } from "./types";
 import { TPropsFromRedux } from "./InvestigationContainer";
@@ -10,6 +10,7 @@ interface IProps extends RouteComponentProps, TPropsFromRedux {}
 
 const InvestigationPage: FC<IProps> = props => {
   const { match, allAnswers } = props;
+  const [showReports, setShowReports] = useState(true);
   const history = useHistory();
   let selectedAreaMatch = useRouteMatch<TParams>({ path: "/reporting/investigation/:areaId", exact: true });
 
@@ -24,18 +25,24 @@ const InvestigationPage: FC<IProps> = props => {
     history.push("/reporting/investigation");
   }, [history]);
 
+  const handleControlPanelChange = (resp: FormValues) => {
+    setShowReports(Boolean(resp.layers && resp.layers?.indexOf(LAYERS.reports) > -1));
+  };
+
   return (
     <UserAreasMap
       onAreaSelect={handleAreaSelect}
       onAreaDeselect={handleAreaDeselect}
       focusAllAreas={!selectedAreaMatch}
       selectedAreaId={selectedAreaMatch?.params.areaId}
-      showReports
+      showReports={showReports}
       answers={allAnswers}
     >
       <Switch>
         <Route exact path={`${match.url}`} component={AreaListControlPanel} />
-        <Route exact path={`${match.url}/:areaId`} component={AreaDetailsControlPanel} />
+        <Route exact path={`${match.url}/:areaId`}>
+          <AreaDetailsControlPanel onChange={handleControlPanelChange} />
+        </Route>
       </Switch>
     </UserAreasMap>
   );

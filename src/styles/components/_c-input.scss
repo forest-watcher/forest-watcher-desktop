@@ -305,4 +305,10 @@
     margin-bottom: $global-spacing-4;
     display: inline-block;
   }
+
+  .c-input--toggle {
+    .c-input-group__input-label {
+      font-size: 16px;
+    }
+  }
 }

@@ -217,6 +217,8 @@
   "reporting.control.panel.area.list.title": "Select An Area",
   "reporting.control.panel.area.list.your.areas": "Your Areas",
   "reporting.control.panel.area.created.at": "Created:",
+  "reporting.control.panel.investigation.title": "Investigation: {area}",
+  "reporting.control.panel.investigation.options.completedReports": "Completed Reports",
   "reports.empty.state.title": "No Reports Added",
   "reports.empty.state.subTitle": "Create a report in the mobile app",
   "settings.name": "Settings",
