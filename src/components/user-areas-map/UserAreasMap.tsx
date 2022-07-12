@@ -39,7 +39,6 @@ const UserAreasMap: FC<PropsWithChildren<IProps>> = props => {
 
   const { data: areasList } = useAppSelector(state => state.areas);
   const areaMap = useMemo<TAreasResponse[]>(() => Object.values(areasList), [areasList]);
-  const [timeoutShowReports, setTimeoutShowReports] = useState(false);
   const [hasLoaded, setHasLoaded] = useState(false);
   const [selectedReportId, setSelectedReportId] = useState<string | null>(null);
   const features = useMemo(() => {
