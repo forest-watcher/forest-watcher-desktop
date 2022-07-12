@@ -1,9 +1,50 @@
+import { MapImages } from "helpers/map";
+
 const primary500 = "#94BE43";
 const neutral300 = "#FFFFFF";
+
+export const pointStyle = {
+  id: "point",
+  type: "symbol",
+  layout: {
+    "icon-image": ["get", "icon"],
+    "icon-size": 1,
+    "icon-allow-overlap": true
+  },
+  filter: ["!", ["has", "point_count"]]
+};
+
+export const clusterStyle = {
+  id: "clusters",
+  type: "circle",
+  filter: ["has", "point_count"],
+  paint: {
+    "circle-color": "#94BE43",
+    "circle-radius": 33
+  }
+};
+
+export const clusterCountStyle = {
+  id: "cluster-count",
+  type: "symbol",
+  filter: ["has", "point_count"],
+  glyphs: "mapbox://fonts/3sidedcube/{fontstack}/{range}.pbf",
+  layout: {
+    "text-field": "{point_count_abbreviated}",
+    "text-font": ["Fira Sans Regular", "Arial Unicode MS Bold"],
+    "text-size": 20
+  },
+  paint: {
+    "text-color": "#ffffff"
+  }
+};
 
 export const polygonStyle = {
   id: "polygon",
   type: "fill",
+  layout: {
+    "fill-sort-key": 0
+  },
   paint: {
     "fill-color": primary500,
     "fill-opacity": 0.6
@@ -45,7 +86,7 @@ export const labelStyle = {
     "text-justify": "auto",
     "text-size": 18,
     "icon-text-fit": "both",
-    "icon-image": "label-background"
+    "icon-image": MapImages.label
   },
   paint: {
     "text-color": "#555555"

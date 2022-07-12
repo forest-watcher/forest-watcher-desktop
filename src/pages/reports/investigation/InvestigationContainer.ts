@@ -1,14 +1,15 @@
 import { connect, ConnectedProps } from "react-redux";
-import Reports from "./Reports";
+import Investigation from "./Investigation";
 import { RootState } from "store";
-import { getAllReports } from "modules/reports";
 
-const mapStateToProps = (state: RootState) => ({});
+const mapStateToProps = ({ reports }: RootState) => ({
+  allAnswers: reports.allAnswers
+});
 
-const mapDispatchToProps = { getAllReports };
+const mapDispatchToProps = {};
 
 const connector = connect(mapStateToProps, mapDispatchToProps);
 
 export type TPropsFromRedux = ConnectedProps<typeof connector>;
 
-export default connector(Reports);
+export default connector(Investigation);

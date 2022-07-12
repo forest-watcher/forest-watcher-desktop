@@ -3,13 +3,13 @@ import Button from "components/ui/Button/Button";
 import DataFilter from "components/ui/DataFilter/DataFilter";
 import DataTable from "components/ui/DataTable/DataTable";
 import { TPropsFromRedux } from "./ReportsContainer";
-import { FC, useEffect, useMemo, useState } from "react";
+import { FC, useMemo, useState } from "react";
 import { FormattedMessage, useIntl } from "react-intl";
 import { RouteComponentProps } from "react-router-dom";
 import useReportFilters from "./useReportFilters";
 import Loader from "components/ui/Loader";
 import EmptyState from "components/ui/EmptyState/EmptyState";
-import EmptyStateIcon from "assets/images/icons/EmptyTeams.svg";
+import EmptyStateIcon from "assets/images/icons/EmptyReports.svg";
 import { sortByDateString, sortByString } from "helpers/table";
 
 export type TReportsDataTable = {
@@ -35,7 +35,7 @@ export type TFilterFields = {
 interface IProps extends TPropsFromRedux, RouteComponentProps {}
 
 const Reports: FC<IProps> = props => {
-  const { allAnswers, getAllReports, loading, templates } = props;
+  const { allAnswers, loading, templates } = props;
 
   const rows = useMemo<TReportsDataTable[]>(
     () =>
@@ -59,10 +59,6 @@ const Reports: FC<IProps> = props => {
   };
 
   const { filters, extraFilters } = useReportFilters(allAnswers, templates);
-
-  useEffect(() => {
-    getAllReports();
-  }, [getAllReports]);
 
   return (
     <>
