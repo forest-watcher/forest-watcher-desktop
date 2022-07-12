@@ -1,4 +1,3 @@
-import { getAreasInUsersTeams } from "modules/areas";
 import { connect, ConnectedProps } from "react-redux";
 import { RootState } from "store";
 
@@ -12,9 +11,7 @@ const mapStateToProps = ({ areas, app }: RootState) => ({
   loadingTeamAreas: areas.loadingAreasInUsers
 });
 
-const mapDispatchToProps = {
-  getAreasInUsersTeams
-};
+const mapDispatchToProps = {};
 
 const connector = connect(mapStateToProps, mapDispatchToProps);
 

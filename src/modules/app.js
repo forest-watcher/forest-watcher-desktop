@@ -1,5 +1,5 @@
 import { getGeostore } from "./geostores";
-import { getAreas } from "./areas";
+import { getAreas, getAreasInUsersTeams } from "./areas";
 import { getTemplate, getTemplates } from "./templates";
 import { getTeamByUserId } from "./teams";
 import { getUser } from "./user";
@@ -44,6 +44,8 @@ export function syncApp() {
       }
     });
     await Promise.all(areaPromises);
+    // Fetch all team user areas
+    dispatch(getAreasInUsersTeams());
 
     // fetch all user templates
     await dispatch(getTemplates());

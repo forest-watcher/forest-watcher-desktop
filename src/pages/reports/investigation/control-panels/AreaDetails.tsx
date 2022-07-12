@@ -1,5 +1,6 @@
-import { FC, useEffect, useMemo } from "react";
 import { useHistory, useParams } from "react-router-dom";
+import { FC, useCallback, useEffect, useMemo } from "react";
+import { toastr } from "react-redux-toastr";
 import { LngLatBoundsLike, useMap } from "react-map-gl";
 import * as turf from "@turf/turf";
 import { AllGeoJSON } from "@turf/turf";
@@ -52,10 +53,19 @@ const AreaDetailsControlPanel: FC<IProps> = props => {
     }
   }, [map, bounds]);
 
-  const handleBackBtnClick = () => {
+  const handleBackBtnClick = useCallback(() => {
     reset();
     history.push("/reporting/investigation");
-  };
+  }, [history, reset]);
+
+  useEffect(() => {
+    // If the areas has been fetched, and the selected Area Geo Data hasn't
+    // been found then return to reporting/investigation as the areaId is invalid
+    if (!selectedAreaGeoData && areaId && Object.keys(areas).length) {
+      toastr.warning(intl.formatMessage({ id: "reporting.investigation.error" }), "");
+      handleBackBtnClick();
+    }
+  }, [selectedAreaGeoData, areaId, areas, handleBackBtnClick, intl]);
 
   useEffect(() => {
     onChange?.(watcher);
