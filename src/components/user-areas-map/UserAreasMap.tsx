@@ -28,7 +28,7 @@ const UserAreasMap: FC<PropsWithChildren<IProps>> = props => {
     focusAllAreas = true,
     selectedAreaId,
     children,
-    showReports = false,
+    showReports = true,
     answers,
     ...rest
   } = props;
@@ -39,7 +39,7 @@ const UserAreasMap: FC<PropsWithChildren<IProps>> = props => {
 
   const { data: areasList } = useAppSelector(state => state.areas);
   const areaMap = useMemo<TAreasResponse[]>(() => Object.values(areasList), [areasList]);
-  const [timeoutShowReports, setTimeoutShowReports] = useState(false);
+  const [hasLoaded, setHasLoaded] = useState(false);
   const [selectedReportId, setSelectedReportId] = useState<string | null>(null);
   const features = useMemo(() => {
     if (areaMap.length > 0) {
@@ -98,12 +98,14 @@ const UserAreasMap: FC<PropsWithChildren<IProps>> = props => {
 
   useEffect(() => {
     if (mapRef) {
-      setTimeout(() => {
-        // Delay as  hack to get markers on top
-        setTimeoutShowReports(showReports);
-      }, 5000);
+      if (!hasLoaded) {
+        setTimeout(() => {
+          // Delay as  hack to get markers on top
+          setHasLoaded(true);
+        }, 5000);
+      }
     }
-  }, [mapRef, showReports]);
+  }, [hasLoaded, mapRef]);
 
   useEffect(() => {
     if (features && focusAllAreas) {
@@ -118,6 +120,25 @@ const UserAreasMap: FC<PropsWithChildren<IProps>> = props => {
 
   return (
     <Map onMapLoad={handleMapLoad} {...rest}>
+      {hasLoaded && (
+        <SquareClusterMarkers
+          id="answers"
+          points={
+            answers && showReports
+              ? answers
+                  .filter(answer => answer.attributes?.areaOfInterest === selectedAreaId)
+                  .map(answer => ({
+                    // @ts-ignore
+                    position: [answer.attributes?.clickedPosition[0].lon, answer.attributes?.clickedPosition[0].lat],
+                    id: answer.id || "",
+                    layer: answer.attributes?.layer
+                  }))
+              : []
+          }
+          onSquareSelect={(id: string) => setSelectedReportId(id)}
+          selectedSquareId={selectedReportId}
+        />
+      )}
       {areaMap.map(area => (
         <Polygon
           key={area.id}
@@ -128,26 +149,6 @@ const UserAreasMap: FC<PropsWithChildren<IProps>> = props => {
           onClick={handleAreaClick}
         />
       ))}
-
-      {timeoutShowReports && (
-        <SquareClusterMarkers
-          id="answers"
-          points={
-            answers
-              ? answers
-                  .filter(answer => answer.attributes?.areaOfInterest === selectedAreaId)
-                  .map(answer => ({
-                    // @ts-ignore
-                    position: [answer.attributes?.clickedPosition[0].lon, answer.attributes?.clickedPosition[0].lat],
-                    id: answer.id || ""
-                  }))
-              : []
-          }
-          onSquareSelect={(id: string) => setSelectedReportId(id)}
-          selectedSquareId={selectedReportId}
-        />
-      )}
-
       {children}
     </Map>
   );

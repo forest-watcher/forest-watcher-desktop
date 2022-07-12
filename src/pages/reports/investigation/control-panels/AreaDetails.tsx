@@ -1,5 +1,5 @@
 import { FC, useEffect, useMemo } from "react";
-import { RouteComponentProps } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 import { LngLatBoundsLike, useMap } from "react-map-gl";
 import * as turf from "@turf/turf";
 import { AllGeoJSON } from "@turf/turf";
@@ -7,16 +7,39 @@ import { useAppSelector } from "hooks/useRedux";
 import { TParams } from "../types";
 import MapCard from "components/ui/Map/components/cards/MapCard";
 import Loader from "components/ui/Loader";
+import { useIntl } from "react-intl";
+import ToggleGroup from "components/ui/Form/ToggleGroup";
+import { useForm, useWatch } from "react-hook-form";
 
-interface IProps extends RouteComponentProps<TParams> {}
+export enum LAYERS {
+  reports = "reports"
+}
+
+export type FormValues = {
+  layers?: string[];
+};
+
+interface IProps {
+  onChange?: (values: FormValues) => void;
+}
 
 const AreaDetailsControlPanel: FC<IProps> = props => {
-  const { match, history } = props;
-  const { areaId } = match.params;
+  const history = useHistory();
+  const { areaId } = useParams<TParams>();
+  const { onChange } = props;
+
   const { data: areas, loading: isLoadingAreas } = useAppSelector(state => state.areas);
   const { current: map } = useMap();
+  const intl = useIntl();
 
   const selectedAreaGeoData = useMemo(() => areas[areaId]?.attributes.geostore.geojson, [areaId, areas]);
+  const formhook = useForm<FormValues>({
+    defaultValues: {
+      layers: [LAYERS.reports]
+    }
+  });
+  const { register, reset } = formhook;
+  const watcher = useWatch({ control: formhook.control });
 
   const bounds = useMemo(
     () => (selectedAreaGeoData ? turf.bbox(selectedAreaGeoData as AllGeoJSON) : null),
@@ -30,13 +53,40 @@ const AreaDetailsControlPanel: FC<IProps> = props => {
   }, [map, bounds]);
 
   const handleBackBtnClick = () => {
+    reset();
     history.push("/reporting/investigation");
   };
 
+  useEffect(() => {
+    onChange?.(watcher);
+  }, [onChange, watcher]);
+
   return (
-    <MapCard className="c-map-control-panel" title={areas[areaId]?.attributes.name} onBack={handleBackBtnClick}>
+    <MapCard
+      className="c-map-control-panel"
+      title={intl.formatMessage(
+        { id: "reporting.control.panel.investigation.title" },
+        { area: areas[areaId]?.attributes.name }
+      )}
+      onBack={handleBackBtnClick}
+    >
       <Loader isLoading={isLoadingAreas} />
-      {JSON.stringify(areas[areaId])}
+      <form>
+        <ToggleGroup
+          id="layer-toggles"
+          registered={register("layers")}
+          formHook={formhook}
+          toggleGroupProps={{
+            label: intl.formatMessage({ id: "layers.name" }),
+            options: [
+              {
+                label: intl.formatMessage({ id: "reporting.control.panel.investigation.options.completedReports" }),
+                value: LAYERS.reports
+              }
+            ]
+          }}
+        />
+      </form>
     </MapCard>
   );
 };
