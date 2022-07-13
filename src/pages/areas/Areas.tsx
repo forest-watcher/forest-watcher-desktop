@@ -11,6 +11,7 @@ import { TAreasResponse } from "services/area";
 import AreaCard from "components/area-card/AreaCard";
 import UserAreasMap from "components/user-areas-map/UserAreasMap";
 import AreaDetailCard from "components/ui/Map/components/cards/AreaDetail";
+import AreaIcon from "assets/images/icons/EmptyAreas.svg";
 
 interface IProps extends TPropsFromRedux {}
 
@@ -46,71 +47,71 @@ const Areas: FC<IProps> = props => {
   return (
     <div className="c-areas">
       <Hero title="areas.name" />
-      {(!areaMap || areaMap.length === 0) && !loading ? (
-        <div className="row column">
-          <EmptyState
-            title={intl.formatMessage({ id: "areas.empty.title" })}
-            text={intl.formatMessage({ id: "areas.empty.text" })}
-            ctaText={intl.formatMessage({ id: "areas.addArea" })}
-            ctaTo="/areas/create"
-            hasMargins
-          />
+      {loading ? (
+        <div className="c-map c-map--within-hero">
+          <Loader isLoading />
         </div>
       ) : (
-        <>
-          {loading ? (
-            <div className="c-map c-map--within-hero">
-              <Loader isLoading />
-            </div>
-          ) : (
-            <UserAreasMap
-              className="c-map--within-hero"
-              selectedAreaId={selectedArea?.id}
-              onAreaSelect={handleAreaSelect}
-              onAreaDeselect={handleAreaDeselect}
-            >
-              {selectedArea && (
-                <AreaDetailCard area={selectedArea} numberOfTeams={getNumberOfTeamsInArea(selectedArea.id)} />
-              )}
-            </UserAreasMap>
+        <UserAreasMap
+          className="c-map--within-hero"
+          selectedAreaId={selectedArea?.id}
+          onAreaSelect={handleAreaSelect}
+          onAreaDeselect={handleAreaDeselect}
+        >
+          {selectedArea && (
+            <AreaDetailCard area={selectedArea} numberOfTeams={getNumberOfTeamsInArea(selectedArea.id)} />
           )}
-        </>
+        </UserAreasMap>
       )}
 
       <div className="l-content l-content--neutral-400">
-        <Article
-          title="areas.subtitle"
-          actions={
-            <ReactGA.OutboundLink eventLabel="Add new area" to="/areas/create" className="c-button c-button--primary">
-              <img src={PlusIcon} alt="" role="presentation" className="c-button__inline-icon" />
-              <FormattedMessage id="areas.addArea" />
-            </ReactGA.OutboundLink>
-          }
-        >
-          <div className="c-areas__area-listing">
-            {areaMap.map((area: TAreasResponse) => (
-              <AreaCard area={area} key={area.id} className="c-areas__item" />
-            ))}
+        {(!areaMap || areaMap.length === 0) && (!areasInUsersTeams || areasInUsersTeams.length === 0) && !loading ? (
+          <div className="row column">
+            <EmptyState
+              iconUrl={AreaIcon}
+              title={intl.formatMessage({ id: "areas.empty.title" })}
+              text={intl.formatMessage({ id: "areas.empty.text" })}
+              ctaText={intl.formatMessage({ id: "areas.createArea" })}
+              ctaTo="/areas/create"
+            />
           </div>
-        </Article>
+        ) : (
+          <Article
+            title="areas.subtitle"
+            actions={
+              <ReactGA.OutboundLink eventLabel="Add new area" to="/areas/create" className="c-button c-button--primary">
+                <img src={PlusIcon} alt="" role="presentation" className="c-button__inline-icon" />
+                <FormattedMessage id="areas.addArea" />
+              </ReactGA.OutboundLink>
+            }
+          >
+            <div className="c-areas__area-listing">
+              {areaMap.map((area: TAreasResponse) => (
+                <AreaCard area={area} key={area.id} className="c-areas__item" />
+              ))}
+            </div>
+          </Article>
+        )}
       </div>
       <div className="l-content">
-        <Article title="areas.teamSubtitle">
-          {areasInUsersTeams.map(
-            areasInTeam =>
-              areasInTeam.team && (
-                <Fragment key={areasInTeam.team.id}>
-                  <h3 className="u-text-600 u-text-neutral-700">{areasInTeam.team.attributes?.name}</h3>
+        {areasInUsersTeams && areasInUsersTeams.length > 0 && !loadingTeamAreas && (
+          <Article title="areas.teamSubtitle">
+            {areasInUsersTeams.map(
+              areasInTeam =>
+                areasInTeam.team && (
+                  <Fragment key={areasInTeam.team.id}>
+                    <h3 className="u-text-600 u-text-neutral-700">{areasInTeam.team.attributes?.name}</h3>
 
-                  <div className="c-areas__area-listing">
-                    {areasInTeam.areas.map(area => (
-                      <AreaCard area={area.data} key={area.data.id} className="c-areas__item" />
-                    ))}
-                  </div>
-                </Fragment>
-              )
-          )}
-        </Article>
+                    <div className="c-areas__area-listing">
+                      {areasInTeam.areas.map(area => (
+                        <AreaCard area={area.data} key={area.data.id} className="c-areas__item" />
+                      ))}
+                    </div>
+                  </Fragment>
+                )
+            )}
+          </Article>
+        )}
         <Loader isLoading={loadingTeamAreas} />
       </div>
     </div>

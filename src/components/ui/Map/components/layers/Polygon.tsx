@@ -70,7 +70,7 @@ const Polygon: FC<IProps> = props => {
 
   return (
     <>
-      <Source id={id} data={data as GeoJSONSourceOptions["data"]} type="geojson">
+      <Source id={id} data={data as GeoJSONSourceOptions["data"]} type="geojson" tolerance={0.00001}>
         {/* @ts-ignore */}
         <Layer {...polygonStyle} id={id} />
         {/* @ts-ignore */}
