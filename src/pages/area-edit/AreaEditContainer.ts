@@ -1,6 +1,6 @@
 import { connect, ConnectedProps } from "react-redux";
 import { RootState } from "store";
-import { saveAreaWithGeostore, setSaving, setLoading } from "modules/areas";
+import { saveAreaWithGeostore, setSaving, setLoading, saveArea } from "modules/areas";
 import { getGeoFromShape } from "modules/geostores";
 import AreaEdit from "./AreaEdit";
 import { ThunkDispatch } from "redux-thunk";
@@ -27,8 +27,11 @@ function mapDispatchToProps(dispatch: ThunkDispatch<RootState, null, any>) {
     getGeoFromShape: async (area: any) => {
       return await dispatch(getGeoFromShape(area));
     },
-    saveAreaWithGeostore: async (area: any, node: HTMLElement, method: string) => {
+    saveAreaWithGeostore: async (area: any, node: HTMLCanvasElement, method: string) => {
       return await dispatch(saveAreaWithGeostore(area, node, method));
+    },
+    saveArea: async (area: any, node: HTMLCanvasElement, method: string) => {
+      return await dispatch(saveArea(area, node, method));
     },
     setSaving: (bool: boolean) => {
       dispatch(setSaving(bool));
