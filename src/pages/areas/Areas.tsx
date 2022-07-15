@@ -86,9 +86,11 @@ const Areas: FC<IProps> = props => {
             }
           >
             <div className="c-areas__area-listing">
-              {areaMap.map((area: TAreasResponse) => (
-                <AreaCard area={area} key={area.id} className="c-areas__item" />
-              ))}
+              {[...areaMap]
+                .sort((a, b) => a.attributes.name.localeCompare(b.attributes.name.toString()))
+                .map((area: TAreasResponse) => (
+                  <AreaCard area={area} key={area.id} className="c-areas__item" />
+                ))}
             </div>
           </Article>
         )}
@@ -103,9 +105,11 @@ const Areas: FC<IProps> = props => {
                     <h3 className="u-text-600 u-text-neutral-700">{areasInTeam.team.attributes?.name}</h3>
 
                     <div className="c-areas__area-listing">
-                      {areasInTeam.areas.map(area => (
-                        <AreaCard area={area.data} key={area.data.id} className="c-areas__item" />
-                      ))}
+                      {[...areasInTeam.areas]
+                        .sort((a, b) => a.data.attributes.name.localeCompare(b.data.attributes.name.toString()))
+                        .map(area => (
+                          <AreaCard area={area.data} key={area.data.id} className="c-areas__item" />
+                        ))}
                     </div>
                   </Fragment>
                 )
