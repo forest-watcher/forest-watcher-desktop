@@ -17,9 +17,10 @@ import union from "@turf/union";
 import InfoIcon from "assets/images/icons/Info.svg";
 import { goToGeojson } from "helpers/map";
 import Loader from "components/ui/Loader";
-import { useHistory } from "react-router-dom";
+import { Link, Route, Switch, useHistory, useRouteMatch } from "react-router-dom";
 import useUnsavedChanges from "hooks/useUnsavedChanges";
 import Modal from "components/ui/Modal/Modal";
+import DeleteArea from "./actions/DeleteAreaContainer";
 
 const areaTitleKeys = {
   manage: "areas.manageArea",
@@ -61,6 +62,7 @@ const AreaEdit: FC<IProps> = ({
   const [showShapeFileHelpModal, setShowShapeFileHelpModal] = useState(false);
   const history = useHistory();
   const intl = useIntl();
+  let { path, url } = useRouteMatch();
 
   const { changesMade, changesValid } = useMemo(() => {
     const changesValid =
@@ -82,7 +84,7 @@ const AreaEdit: FC<IProps> = ({
   const onSubmit: SubmitHandler<FormValues> = async data => {
     if (mapRef && (updatedGeojson || name)) {
       setShouldUseChangesMade(false);
-      goToGeojson(mapRef, geojson, false);
+      goToGeojson(mapRef, updatedGeojson || area?.attributes.geostore.geojson, false);
       setSaving(true);
       const method = mode === "manage" ? "PATCH" : "POST";
 
@@ -202,6 +204,13 @@ const AreaEdit: FC<IProps> = ({
         <Hero
           title={areaTitleKeys[mode as keyof typeof areaTitleKeys]}
           backLink={{ name: "areas.back", to: "/areas" }}
+          actions={
+            mode === "manage" ? (
+              <Link className="c-button c-button--secondary-light-text" to={`${url}/delete`}>
+                <FormattedMessage id="areas.deleteArea" />
+              </Link>
+            ) : undefined
+          }
         />
 
         <Map
@@ -292,6 +301,12 @@ const AreaEdit: FC<IProps> = ({
         </ul>
       </Modal>
       {modal}
+
+      <Switch>
+        <Route path={`${path}/delete`}>
+          <DeleteArea />
+        </Route>
+      </Switch>
     </>
   );
 };
