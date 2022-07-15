@@ -80,7 +80,6 @@ const AreaEdit: FC<IProps> = ({
   }, [area?.attributes?.name, setValue]);
 
   const onSubmit: SubmitHandler<FormValues> = async data => {
-    console.log("Submit", updatedGeojson, name);
     if (mapRef && (updatedGeojson || name)) {
       setShouldUseChangesMade(false);
       goToGeojson(mapRef, geojson, false);
