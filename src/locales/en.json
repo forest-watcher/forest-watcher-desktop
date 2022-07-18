@@ -58,6 +58,8 @@
   "resetPW.error": "Reset password failed",
   "common.all": "All",
   "common.create": "Create",
+  "common.close": "Close",
+  "common.more": "More",
   "common.edit": "Edit",
   "common.add": "Add",
   "common.back": "Back",
