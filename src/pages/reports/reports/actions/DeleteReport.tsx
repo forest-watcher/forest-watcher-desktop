@@ -28,14 +28,11 @@ const DeleteReport: FC<IProps> = props => {
   const onDeleteReport = async () => {
     setIsDeleting(true);
     try {
-      console.log("wait.");
       await legacy_reportService.deleteAnswer(reportId, id);
-      console.log("done");
       getAllReports();
       toastr.success(intl.formatMessage({ id: "reports.delete.success" }), "");
       close();
     } catch (e: any) {
-      console.log("err");
       toastr.error(intl.formatMessage({ id: "reports.delete.error" }), "");
       console.error(e);
     }
