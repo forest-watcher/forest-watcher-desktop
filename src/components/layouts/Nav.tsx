@@ -105,7 +105,9 @@ const NavLinks: FC<INavLinks> = ({ loggedIn, formHook, languages, user, logout, 
                   onClick={() => onLinkSelect?.()}
                 >
                   <img src={ProfileIcon} alt="" role="presentation" className="c-nav__link-profile-icon" />
-                  <span className="c-nav__link-text">{user?.data?.name}</span>
+                  <span className="c-nav__link-text">
+                    {user?.data?.firstName} {user?.data?.lastName}
+                  </span>
                 </ReactGA.OutboundLink>
               </li>
             )}
@@ -140,7 +142,9 @@ const NavLinks: FC<INavLinks> = ({ loggedIn, formHook, languages, user, logout, 
                     className="c-nav__link"
                   >
                     <img src={ProfileIcon} alt="" role="presentation" className="c-nav__link-profile-icon" />
-                    <span className="c-nav__link-text">{user?.data?.name}</span>
+                    <span className="c-nav__link-text">
+                      {user?.data?.firstName} {user?.data?.lastName}
+                    </span>
                   </ReactGA.OutboundLink>
                 </li>
               )}
