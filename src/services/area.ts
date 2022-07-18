@@ -1,7 +1,5 @@
 import { API_BASE_URL_V3 } from "../constants/global";
-import { BLOB_CONFIG } from "../constants/map";
 import { BaseService } from "./baseService";
-import domtoimage from "dom-to-image";
 import { operations } from "interfaces/api";
 import store from "store";
 import { TeamResponse, teamService } from "./teams";
@@ -22,16 +20,29 @@ export type TAreasInTeam = {
 };
 
 export class AreaService extends BaseService {
-  async saveArea(area: any, node: HTMLElement, method: string) {
+  async saveArea(area: any, node: HTMLCanvasElement, method: string) {
     const url = method === "PATCH" ? `/${area.id}` : `/`;
-    const blob = await domtoimage.toBlob(node, BLOB_CONFIG);
+    const dataUrl = node.toDataURL("image/jpeg");
+    const blob = await (await fetch(dataUrl)).blob();
 
-    const image = new File([blob], `${encodeURIComponent(area.name)}.png`, { type: "image/png" });
     const body = new FormData();
-    body.append("name", area.name);
-    body.append("geostore", area.geostore);
-    body.append("geojson", JSON.stringify(area.geojson));
-    body.append("image", image);
+
+    if (blob) {
+      const image = new File([blob], `${encodeURIComponent(area.name)}.jpg`, { type: "image/jpeg" });
+      body.append("image", image);
+    }
+
+    if (area.name) {
+      body.append("name", area.name);
+    }
+
+    if (area.geostore) {
+      body.append("geostore", area.geostore);
+    }
+
+    if (area.geojson) {
+      body.append("geojson", JSON.stringify(area.geojson));
+    }
 
     if (method === "POST") {
       body.append("application", "fw-web");

@@ -257,8 +257,8 @@ export function getCountries() {
 }
 
 // POST name, geostore ID
-export function saveArea(area: any, node: HTMLElement, method: string) {
-  return async (dispatch: AppDispatch, state: () => RootState) => {
+export function saveArea(area: any, node: HTMLCanvasElement, method: string) {
+  return (dispatch: AppDispatch, state: () => RootState) => {
     dispatch({
       type: SET_SAVING_AREA,
       payload: {
@@ -267,7 +267,7 @@ export function saveArea(area: any, node: HTMLElement, method: string) {
       }
     });
     areaService.token = state().user.token;
-    areaService
+    return areaService
       .saveArea(area, node, method)
       .then(data => {
         const normalized = normalize(data);
@@ -282,6 +282,7 @@ export function saveArea(area: any, node: HTMLElement, method: string) {
             error: false
           }
         });
+        return normalized;
       })
       .catch(error => {
         dispatch({
@@ -296,7 +297,7 @@ export function saveArea(area: any, node: HTMLElement, method: string) {
 }
 
 // async save geostore then area
-export function saveAreaWithGeostore(area: any, node: HTMLElement, method: string) {
+export function saveAreaWithGeostore(area: any, node: HTMLCanvasElement, method: string) {
   return async (dispatch: AppDispatch) => {
     const geostore = await dispatch(saveGeostore(area.geojson));
     const geostoreId = Object.keys(geostore)[0];

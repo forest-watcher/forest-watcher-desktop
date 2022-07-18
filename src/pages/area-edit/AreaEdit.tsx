@@ -13,13 +13,14 @@ import * as yup from "yup";
 import Button from "components/ui/Button/Button";
 import { toastr } from "react-redux-toastr";
 import { CATEGORY, ACTION } from "constants/analytics";
-import { checkArea } from "helpers/areas";
 import union from "@turf/union";
 import InfoIcon from "assets/images/icons/Info.svg";
 import { goToGeojson } from "helpers/map";
 import Loader from "components/ui/Loader";
-import { useHistory } from "react-router-dom";
+import { Link, Route, Switch, useHistory, useRouteMatch } from "react-router-dom";
 import useUnsavedChanges from "hooks/useUnsavedChanges";
+import Modal from "components/ui/Modal/Modal";
+import DeleteArea from "./actions/DeleteAreaContainer";
 
 const areaTitleKeys = {
   manage: "areas.manageArea",
@@ -38,7 +39,17 @@ const schema = yup
   })
   .required();
 
-const AreaEdit: FC<IProps> = ({ mode, geojson, getGeoFromShape, setSaving, saveAreaWithGeostore, area, loading }) => {
+const AreaEdit: FC<IProps> = ({
+  mode,
+  geojson,
+  getGeoFromShape,
+  setSaving,
+  saveAreaWithGeostore,
+  saveArea,
+  area,
+  loading,
+  saving
+}) => {
   const { register, handleSubmit, watch, formState, reset, setValue } = useForm<FormValues>({
     resolver: yupResolver(schema)
   });
@@ -47,8 +58,11 @@ const AreaEdit: FC<IProps> = ({ mode, geojson, getGeoFromShape, setSaving, saveA
   const [isValidatingShapefile, setIsValidatingShapefile] = useState(false);
   const [mapRef, setMapRef] = useState<MapInstance | null>(null);
   const [drawRef, setDrawRef] = useState<MapboxDraw | null>(null);
+  const [shouldUseChangesMade, setShouldUseChangesMade] = useState(true);
+  const [showShapeFileHelpModal, setShowShapeFileHelpModal] = useState(false);
   const history = useHistory();
   const intl = useIntl();
+  let { path, url } = useRouteMatch();
 
   const { changesMade, changesValid } = useMemo(() => {
     const changesValid =
@@ -59,7 +73,7 @@ const AreaEdit: FC<IProps> = ({ mode, geojson, getGeoFromShape, setSaving, saveA
     return { changesMade, changesValid };
   }, [area?.attributes.name, formState.errors.name, name, updatedGeojson]);
 
-  const { modal } = useUnsavedChanges(changesMade);
+  const { modal } = useUnsavedChanges(shouldUseChangesMade ? changesMade : false);
 
   useEffect(() => {
     if (area?.attributes?.name) {
@@ -68,26 +82,38 @@ const AreaEdit: FC<IProps> = ({ mode, geojson, getGeoFromShape, setSaving, saveA
   }, [area?.attributes?.name, setValue]);
 
   const onSubmit: SubmitHandler<FormValues> = async data => {
-    if (mapRef && updatedGeojson) {
+    if (mapRef && (updatedGeojson || name)) {
+      setShouldUseChangesMade(false);
+      goToGeojson(mapRef, updatedGeojson || area?.attributes.geostore.geojson, false);
       setSaving(true);
       const method = mode === "manage" ? "PATCH" : "POST";
 
-      await saveAreaWithGeostore(
-        {
-          ...area,
-          geojson: updatedGeojson,
-          name
-        },
-        mapRef.getCanvas(),
-        method
-      );
-      history.push("/areas");
-      toastr.success(intl.formatMessage({ id: "areas.saved" }), "");
-      ReactGA.event({
-        category: CATEGORY.AREA_CREATION,
-        action: ACTION.AREA_SAVE,
-        label: "Area creation success"
-      });
+      try {
+        if (updatedGeojson) {
+          await saveAreaWithGeostore(
+            {
+              ...area,
+              geojson: updatedGeojson,
+              name
+            },
+            mapRef.getCanvas(),
+            method
+          );
+        } else {
+          await saveArea({ ...area, name }, mapRef.getCanvas(), method);
+        }
+
+        history.push("/areas");
+        toastr.success(intl.formatMessage({ id: "areas.saved" }), "");
+        ReactGA.event({
+          category: CATEGORY.AREA_CREATION,
+          action: ACTION.AREA_SAVE,
+          label: "Area creation success"
+        });
+      } catch (err) {
+        toastr.error(intl.formatMessage({ id: "areas.errorSaving" }), "");
+        setShouldUseChangesMade(true);
+      }
     }
   };
 
@@ -146,25 +172,13 @@ const AreaEdit: FC<IProps> = ({ mode, geojson, getGeoFromShape, setSaving, saveA
       if (geojson && geojson.features) {
         const geojsonParsed = geojson.features.reduce(union);
 
-        if (!checkArea(geojsonParsed)) {
-          toastr.error(
-            intl.formatMessage({ id: "areas.tooLarge" }),
-            intl.formatMessage({ id: "areas.uploadedTooLargeDesc" })
-          );
+        if (geojsonParsed) {
+          handleShapefileSuccess(geojsonParsed);
           ReactGA.event({
             category: CATEGORY.AREA_CREATION,
             action: ACTION.UPLOAD_SHAPEFILE,
-            label: "Shapefile upload failed - Area too large"
+            label: "Shapefile upload success"
           });
-        } else {
-          if (geojsonParsed) {
-            handleShapefileSuccess(geojsonParsed);
-            ReactGA.event({
-              category: CATEGORY.AREA_CREATION,
-              action: ACTION.UPLOAD_SHAPEFILE,
-              label: "Shapefile upload success"
-            });
-          }
         }
       }
     } else {
@@ -185,24 +199,27 @@ const AreaEdit: FC<IProps> = ({ mode, geojson, getGeoFromShape, setSaving, saveA
   return (
     <>
       <div className="c-area-edit">
+        <Loader isLoading={loading || saving} />
+
         <Hero
           title={areaTitleKeys[mode as keyof typeof areaTitleKeys]}
           backLink={{ name: "areas.back", to: "/areas" }}
+          actions={
+            mode === "manage" ? (
+              <Link className="c-button c-button--secondary-light-text" to={`${url}/delete`}>
+                <FormattedMessage id="areas.deleteArea" />
+              </Link>
+            ) : undefined
+          }
         />
 
-        {loading ? (
-          <div className="c-map c-map--within-hero">
-            <Loader isLoading />
-          </div>
-        ) : (
-          <Map
-            className="c-map--within-hero"
-            onMapLoad={handleMapLoad}
-            onDrawLoad={handleDrawLoad}
-            onMapEdit={handleMapEdit}
-            geojsonToEdit={geojson}
-          />
-        )}
+        <Map
+          className="c-map--within-hero"
+          onMapLoad={handleMapLoad}
+          onDrawLoad={handleDrawLoad}
+          onMapEdit={handleMapEdit}
+          geojsonToEdit={geojson}
+        />
 
         <div className="row column">
           <div className="c-area-edit__actions">
@@ -219,7 +236,14 @@ const AreaEdit: FC<IProps> = ({ mode, geojson, getGeoFromShape, setSaving, saveA
                 onChange={onShapefileChange}
                 disabled={isValidatingShapefile || !drawRef}
               />
-              <Button variant="primary" isIcon aria-label={intl.formatMessage({ id: "areas.uploadShapefileHelp" })}>
+              <Button
+                variant="primary"
+                isIcon
+                aria-label={intl.formatMessage({ id: "areas.uploadShapefileHelp" })}
+                onClick={() => {
+                  setShowShapeFileHelpModal(true);
+                }}
+              >
                 <img src={InfoIcon} alt="" role="presentation" />
               </Button>
             </div>
@@ -245,7 +269,44 @@ const AreaEdit: FC<IProps> = ({ mode, geojson, getGeoFromShape, setSaving, saveA
           </div>
         </div>
       </div>
+      <Modal
+        isOpen={showShapeFileHelpModal}
+        onClose={() => {
+          setShowShapeFileHelpModal(false);
+        }}
+        title="areas.shapefileInfoTitle"
+        actions={[
+          {
+            name: "common.ok",
+            onClick: () => {
+              setShowShapeFileHelpModal(false);
+            }
+          }
+        ]}
+      >
+        <p className="c-modal-dialog__text">
+          <FormattedMessage id="areas.shapefileInfoMaxSize" />
+        </p>
+        <p className="c-modal-dialog__text">
+          <FormattedMessage id="areas.shapefileInfoFormats" />
+        </p>
+        <ul className="c-list c-modal-dialog__text">
+          <li className="c-list__item">
+            <FormattedMessage id="areas.shapefileInfoUnzippedTitle" />{" "}
+            <FormattedMessage id="areas.shapefileInfoUnzipped" />
+          </li>
+          <li className="c-list__item">
+            <FormattedMessage id="areas.shapefileInfoZippedTitle" /> <FormattedMessage id="areas.shapefileInfoZipped" />
+          </li>
+        </ul>
+      </Modal>
       {modal}
+
+      <Switch>
+        <Route path={`${path}/delete`}>
+          <DeleteArea />
+        </Route>
+      </Switch>
     </>
   );
 };

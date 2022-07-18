@@ -82,6 +82,7 @@ const Map: FC<IProps> = props => {
         onMove={evt => (setMapViewState ? setMapViewState(evt.viewState) : setViewState(evt.viewState))}
         mapStyle="mapbox://styles/3sidedcube/cl5axl8ha002c14o5exjzmdlb"
         onLoad={handleMapLoad}
+        preserveDrawingBuffer // Allows canvas.toDataURL to work
       >
         <MapControls />
         {drawRef && mapRef && <MapEditControls draw={drawRef} map={mapRef} onUpdate={onMapEdit} />}
