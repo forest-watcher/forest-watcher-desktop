@@ -5,12 +5,13 @@ import DataTable from "components/ui/DataTable/DataTable";
 import { TPropsFromRedux } from "./ReportsContainer";
 import { FC, useMemo, useState } from "react";
 import { FormattedMessage, useIntl } from "react-intl";
-import { RouteComponentProps } from "react-router-dom";
+import { Route, Switch, useRouteMatch } from "react-router-dom";
 import useReportFilters from "./useReportFilters";
 import Loader from "components/ui/Loader";
 import EmptyState from "components/ui/EmptyState/EmptyState";
 import EmptyStateIcon from "assets/images/icons/EmptyReports.svg";
 import { sortByDateString, sortByString } from "helpers/table";
+import DeleteRoute from "./actions/DeleteReportContainer";
 
 export type TReportsDataTable = {
   id: string;
@@ -32,10 +33,11 @@ export type TFilterFields = {
   voice: boolean;
 };
 
-interface IProps extends TPropsFromRedux, RouteComponentProps {}
+interface IProps extends TPropsFromRedux {}
 
 const Reports: FC<IProps> = props => {
   const { allAnswers, loading, templates } = props;
+  let { path, url } = useRouteMatch();
 
   const rows = useMemo<TReportsDataTable[]>(
     () =>
@@ -68,14 +70,9 @@ const Reports: FC<IProps> = props => {
           title="reports.reports.subTitle"
           size="small"
           actions={
-            <>
-              <Button>
-                <FormattedMessage id="import.title" />
-              </Button>
-              <Button>
-                <FormattedMessage id="export.title" />
-              </Button>
-            </>
+            <Button>
+              <FormattedMessage id="export.title" />
+            </Button>
           }
         >
           {!loading &&
@@ -99,6 +96,12 @@ const Reports: FC<IProps> = props => {
                     className="u-w-100"
                     rows={filteredRows}
                     isPaginated
+                    rowActions={[
+                      {
+                        name: "common.delete",
+                        href: row => `${url}/${row.template}/${row.id}/delete/`
+                      }
+                    ]}
                     columnOrder={[
                       {
                         key: "createdAt",
@@ -136,6 +139,11 @@ const Reports: FC<IProps> = props => {
             ))}
         </Article>
       </div>
+      <Switch>
+        <Route path={`${path}/:reportId/:id/delete`}>
+          <DeleteRoute />
+        </Route>
+      </Switch>
     </>
   );
 };
