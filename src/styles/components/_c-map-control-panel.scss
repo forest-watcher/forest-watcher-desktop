@@ -1,14 +1,14 @@
 .c-map-control-panel {
   position: absolute;
   background-color: $white;
-  bottom: 40px;
+  bottom: $global-spacing-10;
   max-width: 400px;
   width: 100%;
   font-family: $base-font-family;
 
   &__team-areas {
     position: relative;
-    margin-top: 24px;
+    margin-top: $global-spacing-6;
     min-height: 100px; // For the loading spinner space
   }
 
@@ -26,8 +26,8 @@
     line-height: 24px;
     color: $neutral-700;
     padding: 0;
-    margin-top: 4px;
-    margin-bottom: 12px;
+    margin-top: $global-spacing-1;
+    margin-bottom: $global-spacing-3;
   }
 
   &__area-card-content {
@@ -55,5 +55,13 @@
 
   &__area-card-image {
     height: 90px;
+  }
+
+  @include before(md) {
+    max-width: 200px;
+    &__grid-item {
+      width: 100%;
+      flex: 0 0 100%;
+    }
   }
 }

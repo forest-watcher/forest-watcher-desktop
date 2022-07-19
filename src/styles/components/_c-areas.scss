@@ -34,6 +34,18 @@
     gap: $global-spacing-3;
     align-items: center;
   }
+
+  @include before(md) {
+    &__actions {
+      flex-direction: column;
+    }
+  }
+  @include before(sm) {
+    &__form {
+      flex-direction: column;
+      gap: $global-spacing-10;
+    }
+  }
 }
 
 .c-area-card {
