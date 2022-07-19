@@ -18,3 +18,15 @@ $grid-breakpoints: (
     @content;
   }
 }
+
+@mixin before($name) {
+  $min: map-get($grid-breakpoints, $name);
+
+  @if $min != 0 {
+    @media (max-width: $min) {
+      @content;
+    }
+  } @else {
+    @content;
+  }
+}

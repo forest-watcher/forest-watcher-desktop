@@ -11,10 +11,15 @@ export type TReportResponse = {
 export type TGetTemplates = paths["/v1/reports"]["get"]["responses"]["200"]["content"]["application/json"];
 export type TGetAllAnswers =
   paths["/v3/reports/getAllAnswersForUser"]["get"]["responses"]["200"]["content"]["application/json"];
+export type TDeleteAnswer = paths["/v1/reports/{reportId}/answers/{id}"]["delete"]["responses"]["204"];
 
 export class LegacyReportService extends BaseService {
   getAnswers(reportId: string) {
     return this.fetchJSON(`/${reportId}/answers`);
+  }
+
+  deleteAnswer(reportId: string, id: string) {
+    return this.fetch(`/${reportId}/answers/${id}`, { method: "DELETE" });
   }
 
   downloadAnswers(reportId: string) {

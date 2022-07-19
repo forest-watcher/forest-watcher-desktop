@@ -9,7 +9,7 @@ export class BaseService {
   fetch = async (url: string, config?: RequestInit | undefined) => {
     const headers = config?.headers || {};
 
-    return await fetch(`${this.baseUrl}${url}`, {
+    return fetch(`${this.baseUrl}${url}`, {
       ...config,
       headers: {
         Authorization: `Bearer ${this.token}`,

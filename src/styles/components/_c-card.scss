@@ -171,7 +171,13 @@ $c-card-border-radius:  $global-spacing-1;
     height: 16px;
     background-image: url("../../assets/images/icons/ChevronRightSmall.svg");
     background-size: contain;
+    background-repeat: no-repeat;
     transform: rotate(180deg);
+    flex: 0 1 16px;
+
+    @include before(md) {
+      flex: 1 0 16px;
+    }
   }
 
   &__title {

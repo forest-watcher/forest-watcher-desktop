@@ -40,5 +40,6 @@
 
   &--above-table {
     margin-bottom: $global-spacing-7;
+    overflow-x: auto;
   }
 }
