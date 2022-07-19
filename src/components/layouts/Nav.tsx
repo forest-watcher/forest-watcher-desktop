@@ -209,7 +209,7 @@ const Nav: FC<IProps> = props => {
             {({ open, close }) => (
               <>
                 <Popover.Button className="c-nav__dropdown-button">
-                  <FormattedMessage id={!open ? "common.more" : "common.close"} />
+                  <FormattedMessage id={!open ? "common.menu" : "common.close"} />
                   <div className={classnames("c-nav__dropdown-hamburger", open && "c-nav__dropdown-hamburger--open")}>
                     <span className="c-nav__dropdown-hamburger-stripe c-nav__dropdown-hamburger-stripe--1" />
                     <span className="c-nav__dropdown-hamburger-stripe c-nav__dropdown-hamburger-stripe--2" />
