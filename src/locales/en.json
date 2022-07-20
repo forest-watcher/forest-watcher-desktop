@@ -466,5 +466,10 @@
   "timeframes.1month": "1 month",
   "timeframes.2months": "2 months",
   "timeframes.6months": "6 months",
-  "timeframes.12months": "12 months"
+  "timeframes.12months": "12 months",
+  "maps.satellite": "Satellite",
+  "maps.light": "Light",
+  "maps.dark": "Dark",
+  "maps.planet": "Planet Imagery",
+  "maps.basemapAndPlanet": "Basemap and Planet Imagery"
 }

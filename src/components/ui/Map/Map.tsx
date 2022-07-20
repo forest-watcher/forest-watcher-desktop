@@ -22,6 +22,7 @@ export interface IProps extends HTMLAttributes<HTMLElement> {
   onDrawLoad?: (e: MapboxDraw) => void;
   onMapEdit?: (e: FeatureCollection) => void;
   geojsonToEdit?: GeoJSON.FeatureCollection<GeoJSON.Geometry>;
+  mapStyle?: string;
 }
 
 const Map: FC<IProps> = props => {
@@ -38,6 +39,7 @@ const Map: FC<IProps> = props => {
     onMapEdit,
     geojsonToEdit,
     onDrawLoad,
+    mapStyle = "mapbox://styles/3sidedcube/cl5axl8ha002c14o5exjzmdlb",
     ...rest
   } = props;
   const classes = classnames("c-map", className);
@@ -80,7 +82,7 @@ const Map: FC<IProps> = props => {
       <ReactMap
         {...actualViewState}
         onMove={evt => (setMapViewState ? setMapViewState(evt.viewState) : setViewState(evt.viewState))}
-        mapStyle="mapbox://styles/3sidedcube/cl5axl8ha002c14o5exjzmdlb"
+        mapStyle={mapStyle}
         onLoad={handleMapLoad}
         preserveDrawingBuffer // Allows canvas.toDataURL to work
       >

@@ -8,6 +8,11 @@ import * as turf from "@turf/turf";
 import { goToGeojson } from "helpers/map";
 import { TGetAllAnswers } from "services/reports";
 import SquareClusterMarkers from "components/ui/Map/components/layers/SquareClusterMarkers";
+import { IMosaic } from "services/basemap";
+import { Layer } from "react-map-gl";
+import { BASEMAPS } from "constants/mapbox";
+
+const basemap = BASEMAPS["planet"];
 
 interface IProps extends IMapProps {
   // Should be a memorised function! useCallBack()
@@ -18,6 +23,7 @@ interface IProps extends IMapProps {
   selectedAreaId?: string;
   showReports?: boolean;
   answers?: TGetAllAnswers["data"];
+  currentPlanetBasemap?: IMosaic;
 }
 
 const UserAreasMap: FC<PropsWithChildren<IProps>> = props => {
@@ -30,6 +36,7 @@ const UserAreasMap: FC<PropsWithChildren<IProps>> = props => {
     children,
     showReports = true,
     answers,
+    currentPlanetBasemap,
     ...rest
   } = props;
   const [mapRef, setMapRef] = useState<MapInstance | null>(null);
@@ -48,6 +55,23 @@ const UserAreasMap: FC<PropsWithChildren<IProps>> = props => {
     }
     return null;
   }, [areaMap]);
+
+  const planetBasemapUrl = useMemo(() => {
+    if (currentPlanetBasemap) {
+      return basemap.url.replace("{name}", currentPlanetBasemap.name);
+    }
+    return null;
+  }, [currentPlanetBasemap]);
+
+  useEffect(() => {
+    if (mapRef && planetBasemapUrl) {
+      console.log("adding source");
+      mapRef.addSource("planet-map", {
+        type: "raster",
+        tiles: [planetBasemapUrl]
+      });
+    }
+  }, [mapRef, planetBasemapUrl]);
 
   // On 'preclick' the click state is set to type "deselect"
   // This will fire before an area 'click' handler
@@ -118,6 +142,8 @@ const UserAreasMap: FC<PropsWithChildren<IProps>> = props => {
     if (onMapLoad) onMapLoad(e);
   };
 
+  console.log(planetBasemapUrl);
+
   return (
     <Map onMapLoad={handleMapLoad} {...rest}>
       {hasLoaded && (
@@ -149,6 +175,17 @@ const UserAreasMap: FC<PropsWithChildren<IProps>> = props => {
           onClick={handleAreaClick}
         />
       ))}
+      {planetBasemapUrl && (
+        <Layer
+          id="planet-map-layer"
+          type="raster"
+          source="planet-map"
+          // source={{
+          //   type: "raster",
+          //   tiles: [planetBasemapUrl]
+          // }}
+        />
+      )}
       {children}
     </Map>
   );

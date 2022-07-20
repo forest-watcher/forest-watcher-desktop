@@ -107,6 +107,10 @@ $c-card-border-radius:  $global-spacing-1;
     width: 16px;
     height: 16px;
   }
+
+  &--checked {
+    border-color: $primary-500;
+  }
 }
 
 .c-card__LEGACY {

@@ -11,6 +11,9 @@ import Loader from "components/ui/Loader";
 import { useIntl } from "react-intl";
 import ToggleGroup from "components/ui/Form/ToggleGroup";
 import { useForm, useWatch } from "react-hook-form";
+import RadioCardGroup from "components/ui/Form/RadioCardGroup";
+import { BASEMAPS } from "constants/mapbox";
+import { TypeOf } from "yup";
 
 export enum LAYERS {
   reports = "reports"
@@ -18,6 +21,7 @@ export enum LAYERS {
 
 export type FormValues = {
   layers?: string[];
+  currentMap?: string;
 };
 
 interface IProps {
@@ -33,13 +37,30 @@ const AreaDetailsControlPanel: FC<IProps> = props => {
   const { current: map } = useMap();
   const intl = useIntl();
 
+  const mapOptions = useMemo(() => {
+    const keys = Object.keys(BASEMAPS);
+
+    return keys.map(key => {
+      return {
+        value: key,
+        name: intl.formatMessage({ id: BASEMAPS[key as keyof typeof BASEMAPS].key }),
+        className: "c-map-control-panel__grid-item",
+        image: BASEMAPS[key as keyof typeof BASEMAPS].image
+      };
+    });
+  }, [intl]);
+
   const selectedAreaGeoData = useMemo(() => areas[areaId]?.attributes.geostore.geojson, [areaId, areas]);
   const formhook = useForm<FormValues>({
     defaultValues: {
       layers: [LAYERS.reports]
     }
   });
-  const { register, reset } = formhook;
+  const {
+    register,
+    reset,
+    formState: { errors }
+  } = formhook;
   const watcher = useWatch({ control: formhook.control });
 
   const bounds = useMemo(
@@ -82,6 +103,18 @@ const AreaDetailsControlPanel: FC<IProps> = props => {
     >
       <Loader isLoading={isLoadingAreas} />
       <form>
+        <RadioCardGroup
+          className="u-margin-bottom-40"
+          error={errors.currentMap}
+          registered={register("currentMap")}
+          formHook={formhook}
+          radioGroupProps={{
+            label: intl.formatMessage({ id: "maps.basemapAndPlanet" }),
+            optionsClassName: "c-map-control-panel__grid",
+            options: mapOptions
+          }}
+          id="map-styles"
+        />
         <ToggleGroup
           id="layer-toggles"
           registered={register("layers")}
