@@ -1,3 +1,4 @@
+// Adapted from https://github.com/Vizzuality/gfw/blob/46f907e6c8354377f564262ce2f47ac807bebdec/components/satellite-basemaps/planet-selectors.js
 import isEmpty from "lodash/isEmpty";
 import sortBy from "lodash/sortBy";
 import { format, differenceInMonths } from "date-fns";
