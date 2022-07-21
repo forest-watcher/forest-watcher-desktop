@@ -13,7 +13,8 @@ import ToggleGroup from "components/ui/Form/ToggleGroup";
 import { useForm, useWatch } from "react-hook-form";
 import RadioCardGroup from "components/ui/Form/RadioCardGroup";
 import { BASEMAPS } from "constants/mapbox";
-import { TypeOf } from "yup";
+import Select from "components/ui/Form/Select";
+import { TPropsFromRedux } from "./AreaDetailsContainer";
 
 export enum LAYERS {
   reports = "reports"
@@ -22,16 +23,17 @@ export enum LAYERS {
 export type FormValues = {
   layers?: string[];
   currentMap?: string;
+  currentPlanetPeriod?: string;
 };
 
-interface IProps {
+interface IProps extends TPropsFromRedux {
   onChange?: (values: FormValues) => void;
 }
 
 const AreaDetailsControlPanel: FC<IProps> = props => {
   const history = useHistory();
   const { areaId } = useParams<TParams>();
-  const { onChange } = props;
+  const { onChange, basemaps } = props;
 
   const { data: areas, loading: isLoadingAreas } = useAppSelector(state => state.areas);
   const { current: map } = useMap();
@@ -42,13 +44,20 @@ const AreaDetailsControlPanel: FC<IProps> = props => {
 
     return keys.map(key => {
       return {
-        value: key,
+        value: BASEMAPS[key as keyof typeof BASEMAPS].key,
         name: intl.formatMessage({ id: BASEMAPS[key as keyof typeof BASEMAPS].key }),
         className: "c-map-control-panel__grid-item",
         image: BASEMAPS[key as keyof typeof BASEMAPS].image
       };
     });
   }, [intl]);
+
+  const baseMapPeriods = useMemo(() => {
+    return basemaps.map(bm => ({
+      label: bm.period,
+      value: bm.name
+    }));
+  }, [basemaps]);
 
   const selectedAreaGeoData = useMemo(() => areas[areaId]?.attributes.geostore.geojson, [areaId, areas]);
   const formhook = useForm<FormValues>({
@@ -115,6 +124,22 @@ const AreaDetailsControlPanel: FC<IProps> = props => {
           }}
           id="map-styles"
         />
+        {watcher.currentMap === BASEMAPS.planet.key && basemaps.length && (
+          <div className="u-margin-bottom-40">
+            <Select
+              id="country"
+              formHook={formhook}
+              registered={register("currentPlanetPeriod")}
+              selectProps={{
+                placeholder: intl.formatMessage({ id: "maps.period" }),
+                options: baseMapPeriods,
+                label: intl.formatMessage({ id: "maps.period" }),
+                alternateLabelStyle: true,
+                defaultValue: baseMapPeriods[0]
+              }}
+            />
+          </div>
+        )}
         <ToggleGroup
           id="layer-toggles"
           registered={register("layers")}

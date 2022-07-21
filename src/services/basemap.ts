@@ -16,12 +16,12 @@ export interface IMosaic {
   bbox: number[];
   coordinate_system: string;
   datatype: string;
-  first_acquired: Date;
+  first_acquired: string;
   grid: IGrid;
   id: string;
   interval: string;
   item_types: string[];
-  last_acquired: Date;
+  last_acquired: string;
   level: number;
   name: string;
   product_type: string;
