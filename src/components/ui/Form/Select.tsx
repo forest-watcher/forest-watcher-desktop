@@ -27,7 +27,7 @@ const getSelectedItems = (isMultiple: boolean, value: any, options: Option[]) =>
 };
 
 const Select = (props: Props) => {
-  const { selectProps, registered, error, id, formHook, variant, hideLabel, isMultiple = false } = props;
+  const { selectProps, registered, error, id, formHook, variant, hideLabel, isMultiple = false, className } = props;
   const [options, setOptions] = useState<Option[]>(selectProps.options || []);
 
   const value =
@@ -74,7 +74,7 @@ const Select = (props: Props) => {
   }, [fetchOptions]);
 
   return (
-    <div className={classnames("c-input", selectProps.alternateLabelStyle && "c-input--alt-label")}>
+    <div className={classnames("c-input", selectProps.alternateLabelStyle && "c-input--alt-label", className)}>
       <Listbox value={selectedItems} onChange={onChange} multiple={isMultiple}>
         {({ open }) => (
           <>

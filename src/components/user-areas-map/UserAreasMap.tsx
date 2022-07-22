@@ -24,6 +24,7 @@ interface IProps extends IMapProps {
   showReports?: boolean;
   answers?: TGetAllAnswers["data"];
   currentPlanetBasemap?: IPlanetBasemap;
+  currentProc?: "" | "cir";
 }
 
 const UserAreasMap: FC<PropsWithChildren<IProps>> = props => {
@@ -37,6 +38,7 @@ const UserAreasMap: FC<PropsWithChildren<IProps>> = props => {
     showReports = true,
     answers,
     currentPlanetBasemap,
+    currentProc = "",
     ...rest
   } = props;
   const [mapRef, setMapRef] = useState<MapInstance | null>(null);
@@ -58,10 +60,10 @@ const UserAreasMap: FC<PropsWithChildren<IProps>> = props => {
 
   const planetBasemapUrl = useMemo(() => {
     if (currentPlanetBasemap) {
-      return basemap.url.replace("{name}", currentPlanetBasemap.name);
+      return basemap.url.replace("{name}", currentPlanetBasemap.name).replace("{proc}", currentProc);
     }
     return null;
-  }, [currentPlanetBasemap]);
+  }, [currentPlanetBasemap, currentProc]);
 
   // On 'preclick' the click state is set to type "deselect"
   // This will fire before an area 'click' handler
@@ -131,8 +133,6 @@ const UserAreasMap: FC<PropsWithChildren<IProps>> = props => {
     setMapRef(e.target);
     if (onMapLoad) onMapLoad(e);
   };
-
-  console.log(planetBasemapUrl);
 
   return (
     <Map onMapLoad={handleMapLoad} {...rest}>

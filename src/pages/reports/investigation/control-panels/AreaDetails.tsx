@@ -24,6 +24,7 @@ export type FormValues = {
   layers?: string[];
   currentMap?: string;
   currentPlanetPeriod?: string;
+  currentPlanetImageType?: "nat" | "cir";
 };
 
 interface IProps extends TPropsFromRedux {
@@ -39,6 +40,19 @@ const AreaDetailsControlPanel: FC<IProps> = props => {
   const { current: map } = useMap();
   const intl = useIntl();
 
+  const formhook = useForm<FormValues>({
+    defaultValues: {
+      layers: [LAYERS.reports]
+    }
+  });
+  const {
+    register,
+    reset,
+    resetField,
+    formState: { errors }
+  } = formhook;
+  const watcher = useWatch({ control: formhook.control });
+
   const mapOptions = useMemo(() => {
     const keys = Object.keys(BASEMAPS);
 
@@ -52,25 +66,33 @@ const AreaDetailsControlPanel: FC<IProps> = props => {
     });
   }, [intl]);
 
+  const imageTypeOptions = useMemo(
+    () => [
+      {
+        value: "nat",
+        label: intl.formatMessage({ id: "maps.imageType.natural" })
+      },
+      {
+        value: "cir",
+        label: intl.formatMessage({ id: "maps.imageType.cir" })
+      }
+    ],
+    [intl]
+  );
+
   const baseMapPeriods = useMemo(() => {
-    return basemaps.map(bm => ({
-      label: bm.period,
-      value: bm.name
-    }));
-  }, [basemaps]);
+    const currentProc = watcher.currentPlanetImageType === "nat" ? "" : watcher.currentPlanetImageType || "";
+    const imageType = currentProc === "cir" ? "analytic" : "visual";
+    return basemaps
+      .filter(bm => bm.imageType === imageType)
+      .map(bm => ({
+        label: bm.period,
+        value: bm.name,
+        metadata: bm
+      }));
+  }, [basemaps, watcher.currentPlanetImageType]);
 
   const selectedAreaGeoData = useMemo(() => areas[areaId]?.attributes.geostore.geojson, [areaId, areas]);
-  const formhook = useForm<FormValues>({
-    defaultValues: {
-      layers: [LAYERS.reports]
-    }
-  });
-  const {
-    register,
-    reset,
-    formState: { errors }
-  } = formhook;
-  const watcher = useWatch({ control: formhook.control });
 
   const bounds = useMemo(
     () => (selectedAreaGeoData ? turf.bbox(selectedAreaGeoData as AllGeoJSON) : null),
@@ -101,6 +123,11 @@ const AreaDetailsControlPanel: FC<IProps> = props => {
     onChange?.(watcher);
   }, [onChange, watcher]);
 
+  useEffect(() => {
+    console.log("resetting");
+    resetField("currentPlanetPeriod");
+  }, [resetField, baseMapPeriods]);
+
   return (
     <MapCard
       className="c-map-control-panel"
@@ -127,7 +154,7 @@ const AreaDetailsControlPanel: FC<IProps> = props => {
         {watcher.currentMap === BASEMAPS.planet.key && basemaps.length && (
           <div className="u-margin-bottom-40">
             <Select
-              id="country"
+              id="period"
               formHook={formhook}
               registered={register("currentPlanetPeriod")}
               selectProps={{
@@ -136,6 +163,20 @@ const AreaDetailsControlPanel: FC<IProps> = props => {
                 label: intl.formatMessage({ id: "maps.period" }),
                 alternateLabelStyle: true,
                 defaultValue: baseMapPeriods[0]
+              }}
+              key={watcher.currentPlanetImageType}
+              className="u-margin-bottom-20"
+            />
+            <Select
+              id="colour"
+              formHook={formhook}
+              registered={register("currentPlanetImageType")}
+              selectProps={{
+                placeholder: intl.formatMessage({ id: "maps.imageType" }),
+                options: imageTypeOptions,
+                label: intl.formatMessage({ id: "maps.imageType" }),
+                alternateLabelStyle: true,
+                defaultValue: imageTypeOptions[0]
               }}
             />
           </div>

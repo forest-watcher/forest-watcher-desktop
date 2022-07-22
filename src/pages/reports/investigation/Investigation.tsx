@@ -16,6 +16,7 @@ const InvestigationPage: FC<IProps> = props => {
   const [mapStyle, setMapStyle] = useState<string | undefined>(undefined);
   const [isPlanet, setIsPlanet] = useState(false);
   const [currentPlanetPeriod, setCurrentPlanetPeriod] = useState("");
+  const [currentProc, setCurrentProc] = useState<"" | "cir">("");
   const history = useHistory();
   let selectedAreaMatch = useRouteMatch<TParams>({ path: "/reporting/investigation/:areaId", exact: true });
 
@@ -42,6 +43,7 @@ const InvestigationPage: FC<IProps> = props => {
     }
 
     setCurrentPlanetPeriod(resp.currentPlanetPeriod || "");
+    setCurrentProc(resp.currentPlanetImageType === "nat" ? "" : resp.currentPlanetImageType || "");
   };
 
   return (
@@ -54,8 +56,9 @@ const InvestigationPage: FC<IProps> = props => {
       answers={allAnswers}
       mapStyle={mapStyle}
       currentPlanetBasemap={
-        isPlanet && basemaps.length ? basemaps.find(bm => bm.name === currentPlanetPeriod) : undefined
+        basemaps.length && isPlanet ? basemaps.find(bm => bm.name === currentPlanetPeriod) || basemaps[0] : undefined
       }
+      currentProc={currentProc}
     >
       <Switch>
         <Route exact path={`${match.url}`} component={AreaListControlPanel} />
