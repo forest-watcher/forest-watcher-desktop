@@ -13,6 +13,8 @@ import { Popover } from "@headlessui/react";
 
 import { FC } from "react";
 import { FieldValues, useForm, UseFormReturn } from "react-hook-form";
+//@ts-ignore
+import breakpoints from "styles/utilities/_u-breakpoints.scss";
 
 interface IProps extends HTMLAttributes<HTMLDivElement> {
   translations: any;
@@ -37,7 +39,7 @@ interface INavLinks {
 
 const NavLinks: FC<INavLinks> = ({ loggedIn, formHook, languages, user, logout, onLinkSelect }) => {
   const { register } = formHook;
-  const isMobile = useMediaQuery({ maxWidth: 768 });
+  const isMobile = useMediaQuery({ maxWidth: breakpoints.mobile });
 
   return (
     <>
@@ -174,7 +176,7 @@ const Nav: FC<IProps> = props => {
   const { watch } = formhook;
   const intl = useIntl();
   const localeValue = watch("localeSelect");
-  const isMobile = useMediaQuery({ maxWidth: 768 });
+  const isMobile = useMediaQuery({ maxWidth: breakpoints.mobile });
 
   useEffect(() => {
     if (localeValue) {

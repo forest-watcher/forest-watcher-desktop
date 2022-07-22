@@ -15,6 +15,10 @@ import RadioCardGroup from "components/ui/Form/RadioCardGroup";
 import { BASEMAPS } from "constants/mapbox";
 import Select from "components/ui/Form/Select";
 import { TPropsFromRedux } from "./AreaDetailsContainer";
+import Timeframe from "components/ui/Timeframe";
+//@ts-ignore
+import breakpoints from "styles/utilities/_u-breakpoints.scss";
+import { useMediaQuery } from "react-responsive";
 
 export enum LAYERS {
   reports = "reports"
@@ -35,6 +39,7 @@ const AreaDetailsControlPanel: FC<IProps> = props => {
   const history = useHistory();
   const { areaId } = useParams<TParams>();
   const { onChange, basemaps } = props;
+  const isMobile = useMediaQuery({ maxWidth: breakpoints.mobile });
 
   const { data: areas, loading: isLoadingAreas } = useAppSelector(state => state.areas);
   const { current: map } = useMap();
@@ -49,6 +54,7 @@ const AreaDetailsControlPanel: FC<IProps> = props => {
     register,
     reset,
     resetField,
+    setValue,
     formState: { errors }
   } = formhook;
   const watcher = useWatch({ control: formhook.control });
@@ -89,7 +95,8 @@ const AreaDetailsControlPanel: FC<IProps> = props => {
         label: bm.period,
         value: bm.name,
         metadata: bm
-      }));
+      }))
+      .reverse();
   }, [basemaps, watcher.currentPlanetImageType]);
 
   const selectedAreaGeoData = useMemo(() => areas[areaId]?.attributes.geostore.geojson, [areaId, areas]);
@@ -124,9 +131,10 @@ const AreaDetailsControlPanel: FC<IProps> = props => {
   }, [onChange, watcher]);
 
   useEffect(() => {
-    console.log("resetting");
-    resetField("currentPlanetPeriod", { defaultValue: baseMapPeriods[0].value });
+    resetField("currentPlanetPeriod", { defaultValue: baseMapPeriods[baseMapPeriods.length - 1]?.value });
   }, [resetField, baseMapPeriods]);
+
+  console.log(baseMapPeriods);
 
   return (
     <MapCard
@@ -145,7 +153,7 @@ const AreaDetailsControlPanel: FC<IProps> = props => {
           registered={register("currentMap")}
           formHook={formhook}
           radioGroupProps={{
-            label: intl.formatMessage({ id: "maps.basemapAndPlanet" }),
+            label: "maps.basemapAndPlanet",
             optionsClassName: "c-map-control-panel__grid",
             options: mapOptions
           }}
@@ -162,11 +170,24 @@ const AreaDetailsControlPanel: FC<IProps> = props => {
                 options: baseMapPeriods,
                 label: intl.formatMessage({ id: "maps.period" }),
                 alternateLabelStyle: true,
-                defaultValue: baseMapPeriods[0]
+                defaultValue: baseMapPeriods[baseMapPeriods.length - 1]
               }}
               key={watcher.currentPlanetImageType}
               className="u-margin-bottom-20"
             />
+            {!isMobile && (
+              <div className="u-margin-bottom-40">
+                <Timeframe
+                  periods={baseMapPeriods}
+                  selected={baseMapPeriods.findIndex(bmp => {
+                    return bmp.value === watcher.currentPlanetPeriod;
+                  })}
+                  onChange={value => setValue("currentPlanetPeriod", value.value)}
+                  labelGetter="metadata.label"
+                  yearGetter="metadata.year"
+                />
+              </div>
+            )}
             <Select
               id="colour"
               formHook={formhook}
