@@ -30,7 +30,7 @@ export interface IMosaic {
 
 export class ReportService extends BaseService {
   getPlanetBasemaps() {
-    return this.fetchJSON(`/mosaics?api_key=${process.env.REACT_APP_PLANET_API_KEY}`);
+    return this.fetchJSON(`/mosaics?api_key=${process.env.REACT_APP_PLANET_API_KEY}&_page_size=1000`);
   }
 }
 

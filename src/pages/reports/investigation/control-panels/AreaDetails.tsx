@@ -125,7 +125,7 @@ const AreaDetailsControlPanel: FC<IProps> = props => {
 
   useEffect(() => {
     console.log("resetting");
-    resetField("currentPlanetPeriod");
+    resetField("currentPlanetPeriod", { defaultValue: baseMapPeriods[0].value });
   }, [resetField, baseMapPeriods]);
 
   return (
