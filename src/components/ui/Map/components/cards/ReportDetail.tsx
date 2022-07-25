@@ -15,7 +15,6 @@ const ReportDetailCard: FC<IParams> = ({ answers, areasInUsersTeams }) => {
   const intl = useIntl();
   const [answer, setCurrentAnswer] = useState<TAnswer | undefined>(undefined);
 
-
   const alertTypesString = useAlertTypeString(answer);
 
   const teams = useMemo(() => {
