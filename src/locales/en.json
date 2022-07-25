@@ -416,6 +416,7 @@
   "layers.wur_radd_alerts": "Deforestation (RADD)",
   "layers.glad_sentinel_2": "Deforestation (GLAD-S2)",
   "layers.viirs": "Fires (VIIRS)",
+  "layers.none": "No Alert Selected",
   "components.pagination.previousPage": "Previous Page",
   "components.pagination.nextPage": "Next Page",
   "components.pagination.ofCount": "of {value}",

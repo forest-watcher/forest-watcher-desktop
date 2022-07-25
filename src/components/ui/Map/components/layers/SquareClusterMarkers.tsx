@@ -14,8 +14,8 @@ export interface IProps {
 }
 
 const LAYER_EXPRESSION_FILTERS = {
-  default: ["!", ["==", ReportLayers.VIIRS, ["get", "layer"]]],
-  viirs: ["==", ReportLayers.VIIRS, ["get", "layer"]]
+  default: ["!", ["==", ReportLayers.VIIRS, ["get", "alertType"]]],
+  viirs: ["==", ReportLayers.VIIRS, ["get", "alertType"]]
 };
 
 const markers: IMarkers = {};
@@ -34,7 +34,7 @@ const SquareClusterMarkers: FC<IProps> = props => {
           turf.point(point.position, {
             id: point.id,
             icon: getReportImage(point, hoveredPoint, selectedPoint),
-            layer: point.layer
+            alertType: point.alertTypes?.length ? point.alertTypes[0].id : ""
           })
         )
       ),

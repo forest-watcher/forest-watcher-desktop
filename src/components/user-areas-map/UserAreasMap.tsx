@@ -11,6 +11,8 @@ import SquareClusterMarkers from "components/ui/Map/components/layers/SquareClus
 import { Layer, Source } from "react-map-gl";
 import { BASEMAPS } from "constants/mapbox";
 import { IPlanetBasemap } from "helpers/basemap";
+import ReportDetailCard, { TAnswer } from "components/ui/Map/components/cards/ReportDetail";
+import { getReportAlertsByName } from "helpers/reports";
 
 const basemap = BASEMAPS["planet"];
 
@@ -147,7 +149,7 @@ const UserAreasMap: FC<PropsWithChildren<IProps>> = props => {
                     // @ts-ignore
                     position: [answer.attributes?.clickedPosition[0].lon, answer.attributes?.clickedPosition[0].lat],
                     id: answer.id || "",
-                    layer: answer.attributes?.layer
+                    alertTypes: getReportAlertsByName(answer.attributes?.reportName)
                   }))
               : []
           }

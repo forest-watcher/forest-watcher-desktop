@@ -1,5 +1,7 @@
 import { TAvailableTypes } from "components/modals/FormModal";
 import { IFilter } from "components/ui/DataFilter/DataFilter";
+import { IAlertIdentifier } from "constants/alerts";
+import { getReportAlertsByName } from "helpers/reports";
 import { ALL_VALUE, filterByTimeFrame, getTimeFrames } from "helpers/table";
 import { useMemo } from "react";
 import { useIntl } from "react-intl";
@@ -41,13 +43,23 @@ const useReportFilters = (answers: TGetAllAnswers["data"] = [], templates: TGetT
   const timeFrameOptions = useMemo<Option[]>(() => getTimeFrames(intl), [intl]);
 
   const alertTypeOptions = useMemo<Option[]>(() => {
-    const uniqueAlerts = answers
-      .map(answer => ({
+    const allAlerts = answers
+      .map(answer => {
+        const alerts = getReportAlertsByName(answer.attributes?.reportName);
+        if (alerts.length === 0) {
+          return "none";
+        }
+        return alerts.map(alert => alert.id);
+      })
+      .flat();
+
+    const uniqueAlerts = allAlerts
+      .map(id => ({
         label: intl.formatMessage({
-          id: `layers.${answer.attributes?.layer}`,
-          defaultMessage: answer.attributes?.layer ?? ""
+          id: `layers.${id}`,
+          defaultMessage: id
         }),
-        value: answer.attributes?.layer ?? ""
+        value: id
       }))
       .filter((value, index, self) => self.findIndex(t => t.value === value.value) === index);
 
@@ -152,10 +164,14 @@ const useReportFilters = (answers: TGetAllAnswers["data"] = [], templates: TGetT
           }
         },
         filterCallback: (item, value) => {
+          if (item.alerts.length === 0 && value === "none") {
+            return true;
+          }
+
           if (!value || value === ALL_VALUE) {
             return true;
           } else {
-            return item.alertType === value;
+            return item.alerts.find((alert: IAlertIdentifier) => alert.id === value);
           }
         }
       },

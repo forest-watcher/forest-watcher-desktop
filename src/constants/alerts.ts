@@ -1,4 +1,13 @@
-const alertTypes = {
+export interface IAlertIdentifier {
+  id: string;
+  reportNameId: string;
+}
+
+interface IAlertTypes {
+  [key: string]: IAlertIdentifier;
+}
+
+const alertTypes: IAlertTypes = {
   umd_as_it_happens: {
     id: "umd_as_it_happens",
     reportNameId: "GLAD" // Must match regex for report names: [A-Z]

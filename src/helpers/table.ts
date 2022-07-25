@@ -33,7 +33,10 @@ export const filterByTimeFrame = (item: any, value: any) => {
   }
 };
 
-export const sortByDateString = (a: string | number, b: string | number, direction: Direction) => {
+export const sortByDateString = (a: string | number | any[], b: string | number | any[], direction: Direction) => {
+  if (Array.isArray(a) || Array.isArray(b)) {
+    return 0;
+  }
   const date1 = new Date(a).getTime();
   const date2 = new Date(b).getTime();
 
@@ -44,7 +47,7 @@ export const sortByDateString = (a: string | number, b: string | number, directi
   return date2 - date1;
 };
 
-export const sortByString = (a: string | number, b: string | number, direction: Direction) => {
+export const sortByString = (a: string | number | any[], b: string | number | any[], direction: Direction) => {
   if (direction === Direction.Asc) {
     return a.toString().localeCompare(b.toString());
   }

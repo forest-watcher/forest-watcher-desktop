@@ -17,8 +17,8 @@ export interface IColumnOrder<T> {
   key: keyof T;
   name: string;
   rowHref?: string | ((row: T, value?: string) => string);
-  rowLabel?: string | ((row: T, value?: string | number) => string);
-  sortCompareFn?: (a: string | number, b: string | number, direction: Direction) => number;
+  rowLabel?: string | ((row: T, value?: string | number | any[]) => string);
+  sortCompareFn?: (a: string | number | any[], b: string | number | any[], direction: Direction) => number;
 }
 
 export interface IProps<T> {
@@ -36,7 +36,7 @@ export enum Direction {
   None = "none"
 }
 
-const DataTable = <T extends { [key: string]: string | number }>(props: IProps<T>) => {
+const DataTable = <T extends { [key: string]: string | number | any[] }>(props: IProps<T>) => {
   const { rows, columnOrder, className, rowActions, isPaginated = false, rowsPerPage = 10 } = props;
   const [rowDisplayStart, setRowDisplayStart] = useState(0);
   const [sortedRows, setSortedRows] = useState<T[]>(rows);

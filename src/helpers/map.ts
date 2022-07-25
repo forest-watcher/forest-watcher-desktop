@@ -154,15 +154,17 @@ export const clusterZoom = (map: MapRef, clusterId: any, sourceId: string, coord
 };
 
 export const getReportImage = (point: IPoint, hoveredPoint: string | null, selectedPoint: string | null) => {
+  const firstAlert = point.alertTypes?.length ? point.alertTypes[0].id : "";
+
   if (point.id === selectedPoint) {
-    switch (point.layer) {
+    switch (firstAlert) {
       default:
         return MapImages.reportSelected;
     }
   }
 
   if (point.id === hoveredPoint) {
-    switch (point.layer) {
+    switch (firstAlert) {
       case ReportLayers.VIIRS:
         return MapImages.reportViirsHover;
       default:
@@ -170,7 +172,7 @@ export const getReportImage = (point: IPoint, hoveredPoint: string | null, selec
     }
   }
 
-  switch (point.layer) {
+  switch (firstAlert) {
     case ReportLayers.VIIRS:
       return MapImages.reportViirsDefault;
     default:
