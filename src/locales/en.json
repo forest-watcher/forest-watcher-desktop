@@ -211,6 +211,7 @@
   "reports.detailLink": "Go to detail",
   "reports.dateString": "No date",
   "reports.userString": "No user",
+  "reports.select": "Select a report",
   "reports.reports.subTitle": "Reports",
   "reports.reports.table.header.createdAt": "Date created",
   "reports.reports.table.header.monitor": "Monitor",

@@ -5,12 +5,13 @@ import * as turf from "@turf/turf";
 import { Marker } from "mapbox-gl";
 import { clusterZoom, createLayeredClusterSVG, getReportImage } from "helpers/map";
 import { IMarkers, IPoint, ReportLayerColours, ReportLayers } from "types/map";
+import { feature } from "@turf/turf";
 
 export interface IProps {
   id: string;
   points: IPoint[];
-  onSquareSelect?: (id: string) => void;
-  selectedSquareId: string | null;
+  onSquareSelect?: (ids: string[]) => void;
+  selectedSquareIds: string[] | null;
 }
 
 const LAYER_EXPRESSION_FILTERS = {
@@ -22,10 +23,10 @@ const markers: IMarkers = {};
 let markersOnScreen: IMarkers = {};
 
 const SquareClusterMarkers: FC<IProps> = props => {
-  const { id, points, onSquareSelect, selectedSquareId } = props;
+  const { id, points, onSquareSelect, selectedSquareIds } = props;
   const { current: map } = useMap();
   const [hoveredPoint, setHoveredPoint] = useState<string | null>(null);
-  const [selectedPoint, setSelectedPoint] = useState<string | null>(null);
+  const [selectedPoints, setSelectedPoints] = useState<string[] | null>(null);
 
   const featureCollection = useMemo(
     () =>
@@ -33,12 +34,12 @@ const SquareClusterMarkers: FC<IProps> = props => {
         points.map(point =>
           turf.point(point.position, {
             id: point.id,
-            icon: getReportImage(point, hoveredPoint, selectedPoint),
+            icon: getReportImage(point, hoveredPoint, selectedPoints?.length ? selectedPoints[0] : null),
             alertType: point.alertTypes?.length ? point.alertTypes[0].id : ""
           })
         )
       ),
-    [hoveredPoint, points, selectedPoint]
+    [hoveredPoint, points, selectedPoints]
   );
 
   useEffect(() => {
@@ -58,9 +59,10 @@ const SquareClusterMarkers: FC<IProps> = props => {
         layers: [id]
       });
 
-      const pointId = features[0]?.properties?.id;
-      setSelectedPoint(pointId);
-      onSquareSelect?.(pointId);
+      const pointIds = features.map(feature => feature.properties?.id);
+
+      setSelectedPoints(pointIds);
+      onSquareSelect?.(pointIds);
     });
 
     map?.on("render", () => {
@@ -124,8 +126,8 @@ const SquareClusterMarkers: FC<IProps> = props => {
   }, [id, map, onSquareSelect]);
 
   useEffect(() => {
-    setSelectedPoint(selectedSquareId);
-  }, [selectedSquareId]);
+    setSelectedPoints(selectedSquareIds);
+  }, [selectedSquareIds]);
 
   return (
     <>

@@ -52,7 +52,7 @@ const UserAreasMap: FC<PropsWithChildren<IProps>> = props => {
   const { data: areasList } = useAppSelector(state => state.areas);
   const areaMap = useMemo<TAreasResponse[]>(() => Object.values(areasList), [areasList]);
   const [hasLoaded, setHasLoaded] = useState(false);
-  const [selectedReportId, setSelectedReportId] = useState<string | null>(null);
+  const [selectedReportIds, setSelectedReportIds] = useState<string[] | null>(null);
   const features = useMemo(() => {
     if (areaMap.length > 0) {
       const mapped = areaMap.map((area: any) => area.attributes.geostore.geojson.features).flat();
@@ -94,7 +94,7 @@ const UserAreasMap: FC<PropsWithChildren<IProps>> = props => {
         // If the same area was clicked, do nothing
         setClickState(undefined);
       }
-      setSelectedReportId(null);
+      setSelectedReportIds(null);
     },
     [selectedAreaId]
   );
@@ -112,7 +112,7 @@ const UserAreasMap: FC<PropsWithChildren<IProps>> = props => {
       setClickState(undefined);
     }
 
-    setSelectedReportId(null);
+    setSelectedReportIds(null);
   }, [clickState, onAreaSelect, onAreaDeselect, selectedAreaId]);
 
   useEffect(() => {
@@ -154,8 +154,8 @@ const UserAreasMap: FC<PropsWithChildren<IProps>> = props => {
                   }))
               : []
           }
-          onSquareSelect={(id: string) => setSelectedReportId(id)}
-          selectedSquareId={selectedReportId}
+          onSquareSelect={(ids: string[]) => setSelectedReportIds(ids)}
+          selectedSquareIds={selectedReportIds}
         />
       )}
       {areaMap.map(area => (
@@ -173,8 +173,14 @@ const UserAreasMap: FC<PropsWithChildren<IProps>> = props => {
           <Layer id="planet-map-layer" type="raster" />
         </Source>
       )}
-      {selectedReportId && (
-        <ReportDetailCard answer={answers?.find(answer => answer.id === selectedReportId)?.attributes as TAnswer} />
+      {selectedReportIds && selectedReportIds.length > 0 && (
+        <ReportDetailCard
+          answers={
+            answers
+              ?.filter(answer => selectedReportIds.findIndex(id => id === answer.id) > -1)
+              .map(answer => answer.attributes) as TAnswer[]
+          }
+        />
       )}
 
       {children}
