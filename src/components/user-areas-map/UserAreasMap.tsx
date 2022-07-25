@@ -11,8 +11,9 @@ import SquareClusterMarkers from "components/ui/Map/components/layers/SquareClus
 import { Layer, Source } from "react-map-gl";
 import { BASEMAPS } from "constants/mapbox";
 import { IPlanetBasemap } from "helpers/basemap";
-import ReportDetailCard, { TAnswer } from "components/ui/Map/components/cards/ReportDetail";
+import ReportDetailCard from "components/ui/Map/components/cards/ReportDetailContainer";
 import { getReportAlertsByName } from "helpers/reports";
+import { TAnswer } from "components/ui/Map/components/cards/ReportDetail";
 
 const basemap = BASEMAPS["planet"];
 
@@ -172,6 +173,10 @@ const UserAreasMap: FC<PropsWithChildren<IProps>> = props => {
           <Layer id="planet-map-layer" type="raster" />
         </Source>
       )}
+      {selectedReportId && (
+        <ReportDetailCard answer={answers?.find(answer => answer.id === selectedReportId)?.attributes as TAnswer} />
+      )}
+
       {children}
     </Map>
   );

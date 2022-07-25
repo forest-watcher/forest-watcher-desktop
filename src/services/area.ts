@@ -66,7 +66,10 @@ export class AreaService extends BaseService {
       teams.data.map(async (team: TeamResponse["data"]) => {
         if (team) {
           const resp: TTeamAreaResponse = await this.fetchJSON(`/teamAreas/${team.id}`);
-          return { team, areas: await Promise.all(resp.data.map(id => this.getArea(id))) };
+          // Filter out failed area fetches.
+          const areaPromises = resp.data.map(id => this.getArea(id));
+          const areasResp = await Promise.all(areaPromises.map(p => p.catch(e => e)));
+          return { team, areas: areasResp.filter((result: any) => !(result instanceof Error)) };
         }
 
         return { team, areas: [] };

@@ -134,8 +134,6 @@ const AreaDetailsControlPanel: FC<IProps> = props => {
     resetField("currentPlanetPeriod", { defaultValue: baseMapPeriods[baseMapPeriods.length - 1]?.value });
   }, [resetField, baseMapPeriods]);
 
-  console.log(baseMapPeriods);
-
   return (
     <MapCard
       className="c-map-control-panel"
