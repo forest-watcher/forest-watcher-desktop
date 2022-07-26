@@ -16,6 +16,8 @@
   "app.setupEmail": "Configurez votre e-mail",
   "app.iOSAppStore": "Télécharger sur l'App Store",
   "app.googlePlay": "Télécharger sur Google play",
+  "app.closed": "L'ajout et la modification de contenu dans Forest Watcher sont actuellement désactivés pendant que nous effectuons la maintenance de l'application.",
+  "app.closedTitle": "Forest Watcher est actuellement désactivé",
   "common.create": "Créer",
   "common.edit": "Éditer",
   "common.add": "Ajouter",
