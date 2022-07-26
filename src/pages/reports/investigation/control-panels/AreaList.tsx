@@ -86,15 +86,19 @@ const AreaListControlPanel: FC<IProps> = props => {
           <h3 className="c-map-control-panel__sub-title">
             <FormattedMessage id="reporting.control.panel.area.list.team.areas" />
           </h3>
-          {teamAreas.map(teamArea => (
-            <div key={teamArea.team?.id}>
-              <h4 className="c-map-control-panel__team-name">{teamArea.team?.attributes?.name}</h4>
-
-              {teamArea.areas.map(({ data: area }) => (
-                <AreaListAreaCard key={area.id} area={area} />
-              ))}
-            </div>
-          ))}
+          {teamAreas.map(
+            teamArea =>
+              teamArea.team && (
+                <div key={teamArea.team?.id}>
+                  <h4 className="c-map-control-panel__team-name">{teamArea.team?.attributes?.name}</h4>
+                  <div className="c-map-control-panel__grid">
+                    {teamArea.areas.map(({ data: area }) => (
+                      <AreaListAreaCard key={area.id} area={area} />
+                    ))}
+                  </div>
+                </div>
+              )
+          )}
         </div>
       )}
     </MapCard>
