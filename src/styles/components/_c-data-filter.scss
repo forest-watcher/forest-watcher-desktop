@@ -1,6 +1,7 @@
 .c-data-filter {
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
   gap: $global-spacing-15;
   background: $white;
   border: 2px solid rgba(85, 85, 85, 0.1);
@@ -17,6 +18,7 @@
 
   &__filters {
     display: flex;
+    flex-wrap: wrap;
     gap: $global-spacing-10;
     align-items: center;
     .c-input {
@@ -40,6 +42,5 @@
 
   &--above-table {
     margin-bottom: $global-spacing-7;
-    overflow-x: auto;
   }
 }
