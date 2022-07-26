@@ -2,7 +2,7 @@ import { API_BASE_URL_V3 } from "../constants/global";
 import { BaseService } from "./baseService";
 import { operations } from "interfaces/api";
 import store from "store";
-import { TeamResponse, teamService, TGetUserTeamsResponse } from "./teams";
+import { TeamResponse, teamService } from "./teams";
 
 export type TAreasResponse =
   operations["get-v3-forest-watcher-area"]["responses"]["200"]["content"]["application/json"];
