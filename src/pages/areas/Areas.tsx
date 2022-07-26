@@ -12,6 +12,7 @@ import AreaCard from "components/area-card/AreaCard";
 import UserAreasMap from "components/user-areas-map/UserAreasMap";
 import AreaDetailCard from "components/ui/Map/components/cards/AreaDetail";
 import AreaIcon from "assets/images/icons/EmptyAreas.svg";
+import { getNumberOfTeamsInArea } from "helpers/areas";
 
 interface IProps extends TPropsFromRedux {}
 
@@ -32,18 +33,6 @@ const Areas: FC<IProps> = props => {
     [areasList]
   );
 
-  const getNumberOfTeamsInArea = (areaId: string) => {
-    let count = 0;
-    areasInUsersTeams.forEach(team =>
-      team.areas.forEach(area => {
-        if (area.data.id === areaId) {
-          count++;
-        }
-      })
-    );
-    return count;
-  };
-
   return (
     <div className="c-areas">
       <Hero title="areas.name" />
@@ -59,7 +48,10 @@ const Areas: FC<IProps> = props => {
           onAreaDeselect={handleAreaDeselect}
         >
           {selectedArea && (
-            <AreaDetailCard area={selectedArea} numberOfTeams={getNumberOfTeamsInArea(selectedArea.id)} />
+            <AreaDetailCard
+              area={selectedArea}
+              numberOfTeams={getNumberOfTeamsInArea(selectedArea.id, areasInUsersTeams)}
+            />
           )}
         </UserAreasMap>
       )}

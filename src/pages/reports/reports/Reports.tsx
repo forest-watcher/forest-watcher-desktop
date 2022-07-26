@@ -12,12 +12,14 @@ import EmptyState from "components/ui/EmptyState/EmptyState";
 import EmptyStateIcon from "assets/images/icons/EmptyReports.svg";
 import { sortByDateString, sortByString } from "helpers/table";
 import DeleteRoute from "./actions/DeleteReportContainer";
+import { getReportAlertsByName } from "helpers/reports";
+import { IAlertIdentifier } from "constants/alerts";
 
 export type TReportsDataTable = {
   id: string;
   createdAt: string;
   monitor: string;
-  alertType: string;
+  alerts: IAlertIdentifier[];
   name: string;
   area: string;
   coordinates: string;
@@ -45,7 +47,7 @@ const Reports: FC<IProps> = props => {
         id: answer.id ?? "",
         createdAt: answer.attributes?.createdAt ?? "",
         monitor: answer.attributes?.fullName ?? "",
-        alertType: answer.attributes?.layer ?? "",
+        alerts: getReportAlertsByName(answer.attributes?.reportName),
         name: answer.attributes?.reportName ?? "",
         area: answer.attributes?.areaOfInterestName ?? "",
         template: answer.attributes?.report ?? "",
@@ -107,16 +109,25 @@ const Reports: FC<IProps> = props => {
                         key: "createdAt",
                         name: "reports.reports.table.header.createdAt",
                         rowLabel: (row, value) => {
-                          return intl.formatDate(value, { day: "2-digit", month: "2-digit", year: "2-digit" });
+                          return !Array.isArray(value)
+                            ? intl.formatDate(value, { day: "2-digit", month: "2-digit", year: "2-digit" })
+                            : "";
                         },
                         sortCompareFn: sortByDateString
                       },
                       { key: "monitor", name: "reports.reports.table.header.monitor", sortCompareFn: sortByString },
                       {
-                        key: "alertType",
+                        key: "alerts",
                         name: "reports.reports.table.header.alertType",
                         rowLabel: (row, value) => {
-                          return intl.formatMessage({ id: `layers.${value}`, defaultMessage: value?.toString() });
+                          if (!Array.isArray(value)) {
+                            return "";
+                          }
+                          if (value.length === 0) {
+                            return intl.formatMessage({ id: "layers.none" });
+                          }
+
+                          return value.map(alert => intl.formatMessage({ id: `layers.${alert.id}` })).join(", ");
                         },
                         sortCompareFn: (a, b, direction) => {
                           const newA = intl.formatMessage({ id: `layers.${a}`, defaultMessage: a?.toString() });

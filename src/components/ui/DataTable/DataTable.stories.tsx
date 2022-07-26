@@ -40,7 +40,7 @@ Standard.args = {
       key: "createdDate",
       name: "common.createdDate",
       rowLabel: (row, value) =>
-        value
+        value && !Array.isArray(value)
           ? new Intl.DateTimeFormat(undefined, { month: "short", day: "2-digit", year: "numeric" }).format(
               new Date(value)
             )

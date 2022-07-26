@@ -12,11 +12,15 @@ export type TTeamAreaResponse = {
 };
 
 export type TAreaTeamResponse =
-  operations["get-v3-forest-watcher-area-areaTeams"]["responses"]["200"]["content"]["application/json"];
+  operations["get-v3-forest-watcher-area-teams"]["responses"]["200"]["content"]["application/json"];
 
 export type TAreasInTeam = {
-  team: TeamResponse["data"];
+  team: TeamResponse["data"] | null;
   areas: { data: TAreasResponse }[];
+};
+
+type TAreas = {
+  data: TAreasResponse[];
 };
 
 export class AreaService extends BaseService {
@@ -61,17 +65,21 @@ export class AreaService extends BaseService {
   async getAreasInUsersTeams(): Promise<TAreasInTeam[]> {
     // Get teams
     const teams = await teamService.getUserTeams(store.getState().user.data.id);
+    const areas: TAreas = await this.fetchJSON("/teams");
 
-    return Promise.all(
-      teams.data.map(async (team: TeamResponse["data"]) => {
-        if (team) {
-          const resp: TTeamAreaResponse = await this.fetchJSON(`/teamAreas/${team.id}`);
-          return { team, areas: await Promise.all(resp.data.map(id => this.getArea(id))) };
-        }
+    const data = teams.data.map(team => {
+      return {
+        team,
+        // @ts-ignore - type doesn't properly exist yet.
+        areas: areas.data.filter(area => area.attributes.teamId === team.id).map(area => ({ data: area }))
+      };
+    });
 
-        return { team, areas: [] };
-      })
-    );
+    return [
+      ...data,
+      // @ts-ignore - type doesn't properly exist yet.
+      { team: null, areas: areas.data.filter(area => area.attributes.teamId === null).map(area => ({ data: area })) }
+    ];
   }
 
   getAreaFW(): Promise<TAreasResponse> {

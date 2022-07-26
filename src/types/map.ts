@@ -1,8 +1,9 @@
+import { alertTypes, IAlertIdentifier } from "constants/alerts";
 import { Marker } from "mapbox-gl";
 
-export enum ReportLayers {
-  VIIRS = "viirs"
-}
+export const ReportLayers = {
+  VIIRS: alertTypes.viirs.id
+};
 
 export enum ReportLayerColours {
   VIIRS = "#5E4FC3",
@@ -12,7 +13,7 @@ export enum ReportLayerColours {
 export interface IPoint {
   position: [number, number];
   id: string;
-  layer?: string;
+  alertTypes?: IAlertIdentifier[];
 }
 
 export interface IMarkers {
