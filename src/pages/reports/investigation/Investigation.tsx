@@ -1,5 +1,5 @@
 import { FC, useCallback, useState } from "react";
-import { Route, RouteComponentProps, Switch, useHistory, useRouteMatch } from "react-router-dom";
+import { Route, RouteComponentProps, Switch, useHistory, useParams, useRouteMatch } from "react-router-dom";
 import UserAreasMap from "components/user-areas-map/UserAreasMap";
 import AreaDetailsControlPanel from "./control-panels/AreaDetailsContainer";
 import { FormValues, LAYERS } from "./control-panels/AreaDetails";
@@ -7,18 +7,41 @@ import AreaListControlPanel from "./control-panels/AreaList";
 import { TParams } from "./types";
 import { TPropsFromRedux } from "./InvestigationContainer";
 import { BASEMAPS } from "constants/mapbox";
+import AreaDetailCard from "components/ui/Map/components/cards/AreaDetail";
+import { getNumberOfTeamsInArea } from "helpers/areas";
+import { TAreasInTeam } from "services/area";
 
 interface IProps extends RouteComponentProps, TPropsFromRedux {}
 
+interface IAreaCardProps {
+  areas: any;
+  areasInUsersTeams: TAreasInTeam[];
+}
+
+const AreaCardWrapper: FC<IAreaCardProps> = ({ areas, areasInUsersTeams }) => {
+  const { areaId } = useParams<TParams>();
+  const history = useHistory();
+
+  return (
+    <AreaDetailCard
+      className="c-map-control-panel"
+      area={areas[areaId]}
+      numberOfTeams={getNumberOfTeamsInArea(areaId, areasInUsersTeams)}
+      position="top-left"
+      onBack={() => history.push("/reporting/investigation")}
+    />
+  );
+};
+
 const InvestigationPage: FC<IProps> = props => {
-  const { match, allAnswers, basemaps } = props;
+  const { match, allAnswers, basemaps, areas, areasInUsersTeams } = props;
   const [showReports, setShowReports] = useState(true);
   const [mapStyle, setMapStyle] = useState<string | undefined>(undefined);
   const [isPlanet, setIsPlanet] = useState(false);
   const [currentPlanetPeriod, setCurrentPlanetPeriod] = useState("");
   const [currentProc, setCurrentProc] = useState<"" | "cir">("");
   const history = useHistory();
-  let selectedAreaMatch = useRouteMatch<TParams>({ path: "/reporting/investigation/:areaId", exact: true });
+  let selectedAreaMatch = useRouteMatch<TParams>({ path: "/reporting/investigation/:areaId/start", exact: true });
 
   const handleAreaSelect = useCallback(
     (areaId: string) => {
@@ -28,8 +51,10 @@ const InvestigationPage: FC<IProps> = props => {
   );
 
   const handleAreaDeselect = useCallback(() => {
-    history.push("/reporting/investigation");
-  }, [history]);
+    if (!selectedAreaMatch) {
+      history.push("/reporting/investigation");
+    }
+  }, [history, selectedAreaMatch]);
 
   const handleControlPanelChange = (resp: FormValues) => {
     setShowReports(Boolean(resp.layers && resp.layers?.indexOf(LAYERS.reports) > -1));
@@ -52,7 +77,7 @@ const InvestigationPage: FC<IProps> = props => {
       onAreaDeselect={handleAreaDeselect}
       focusAllAreas={!selectedAreaMatch}
       selectedAreaId={selectedAreaMatch?.params.areaId}
-      showReports={showReports}
+      showReports={showReports && !!selectedAreaMatch}
       answers={allAnswers}
       mapStyle={mapStyle}
       currentPlanetBasemap={
@@ -63,6 +88,9 @@ const InvestigationPage: FC<IProps> = props => {
       <Switch>
         <Route exact path={`${match.url}`} component={AreaListControlPanel} />
         <Route exact path={`${match.url}/:areaId`}>
+          <AreaCardWrapper areas={areas} areasInUsersTeams={areasInUsersTeams} />
+        </Route>
+        <Route exact path={`${match.url}/:areaId/start`}>
           <AreaDetailsControlPanel onChange={handleControlPanelChange} />
         </Route>
       </Switch>

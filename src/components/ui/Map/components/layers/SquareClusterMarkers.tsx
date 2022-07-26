@@ -5,7 +5,6 @@ import * as turf from "@turf/turf";
 import { Marker } from "mapbox-gl";
 import { clusterZoom, createLayeredClusterSVG, getReportImage } from "helpers/map";
 import { IMarkers, IPoint, ReportLayerColours, ReportLayers } from "types/map";
-import { feature } from "@turf/turf";
 
 export interface IProps {
   id: string;

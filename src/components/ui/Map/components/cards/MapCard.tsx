@@ -3,12 +3,14 @@ import Card from "components/ui/Card/Card";
 import { FC, HTMLAttributes, ReactNode } from "react";
 import { useIntl } from "react-intl";
 
+export type positions = "top-left" | "bottom-left" | "top-right" | "bottom-right";
+
 interface IParams extends HTMLAttributes<HTMLElement> {
   onBack?: () => void;
   title: string;
   footer?: ReactNode;
   children?: ReactNode;
-  position?: "top-left" | "bottom-left" | "top-right" | "bottom-right";
+  position?: positions;
 }
 
 const MapCard: FC<IParams> = props => {
