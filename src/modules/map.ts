@@ -1,5 +1,5 @@
 import { AppDispatch } from "store";
-import { basemapService, IMosaic } from "services/basemap";
+import { basemapService } from "services/basemap";
 import { getPlanetBasemaps as getFriendlyPlanetBasemaps, IPlanetBasemap } from "helpers/basemap";
 
 // Actions
