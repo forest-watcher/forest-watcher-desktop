@@ -8,9 +8,9 @@ import * as turf from "@turf/turf";
 import { goToGeojson } from "helpers/map";
 import { TGetAllAnswers } from "services/reports";
 import SquareClusterMarkers from "components/ui/Map/components/layers/SquareClusterMarkers";
-import { IMosaic } from "services/basemap";
-import { Layer } from "react-map-gl";
+import { Layer, Source } from "react-map-gl";
 import { BASEMAPS } from "constants/mapbox";
+import { IPlanetBasemap } from "helpers/basemap";
 
 const basemap = BASEMAPS["planet"];
 
@@ -23,7 +23,8 @@ interface IProps extends IMapProps {
   selectedAreaId?: string;
   showReports?: boolean;
   answers?: TGetAllAnswers["data"];
-  currentPlanetBasemap?: IMosaic;
+  currentPlanetBasemap?: IPlanetBasemap;
+  currentProc?: "" | "cir";
 }
 
 const UserAreasMap: FC<PropsWithChildren<IProps>> = props => {
@@ -37,6 +38,7 @@ const UserAreasMap: FC<PropsWithChildren<IProps>> = props => {
     showReports = true,
     answers,
     currentPlanetBasemap,
+    currentProc = "",
     ...rest
   } = props;
   const [mapRef, setMapRef] = useState<MapInstance | null>(null);
@@ -58,20 +60,10 @@ const UserAreasMap: FC<PropsWithChildren<IProps>> = props => {
 
   const planetBasemapUrl = useMemo(() => {
     if (currentPlanetBasemap) {
-      return basemap.url.replace("{name}", currentPlanetBasemap.name);
+      return basemap.url.replace("{name}", currentPlanetBasemap.name).replace("{proc}", currentProc);
     }
     return null;
-  }, [currentPlanetBasemap]);
-
-  useEffect(() => {
-    if (mapRef && planetBasemapUrl) {
-      console.log("adding source");
-      mapRef.addSource("planet-map", {
-        type: "raster",
-        tiles: [planetBasemapUrl]
-      });
-    }
-  }, [mapRef, planetBasemapUrl]);
+  }, [currentPlanetBasemap, currentProc]);
 
   // On 'preclick' the click state is set to type "deselect"
   // This will fire before an area 'click' handler
@@ -142,8 +134,6 @@ const UserAreasMap: FC<PropsWithChildren<IProps>> = props => {
     if (onMapLoad) onMapLoad(e);
   };
 
-  console.log(planetBasemapUrl);
-
   return (
     <Map onMapLoad={handleMapLoad} {...rest}>
       {hasLoaded && (
@@ -176,15 +166,9 @@ const UserAreasMap: FC<PropsWithChildren<IProps>> = props => {
         />
       ))}
       {planetBasemapUrl && (
-        <Layer
-          id="planet-map-layer"
-          type="raster"
-          source="planet-map"
-          // source={{
-          //   type: "raster",
-          //   tiles: [planetBasemapUrl]
-          // }}
-        />
+        <Source id="planet-map" type="raster" tiles={[planetBasemapUrl]} key={planetBasemapUrl}>
+          <Layer id="planet-map-layer" type="raster" />
+        </Source>
       )}
       {children}
     </Map>

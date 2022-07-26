@@ -1,7 +1,8 @@
 import { FC, useCallback, useState } from "react";
 import { Route, RouteComponentProps, Switch, useHistory, useRouteMatch } from "react-router-dom";
 import UserAreasMap from "components/user-areas-map/UserAreasMap";
-import AreaDetailsControlPanel, { FormValues, LAYERS } from "./control-panels/AreaDetails";
+import AreaDetailsControlPanel from "./control-panels/AreaDetailsContainer";
+import { FormValues, LAYERS } from "./control-panels/AreaDetails";
 import AreaListControlPanel from "./control-panels/AreaList";
 import { TParams } from "./types";
 import { TPropsFromRedux } from "./InvestigationContainer";
@@ -14,6 +15,8 @@ const InvestigationPage: FC<IProps> = props => {
   const [showReports, setShowReports] = useState(true);
   const [mapStyle, setMapStyle] = useState<string | undefined>(undefined);
   const [isPlanet, setIsPlanet] = useState(false);
+  const [currentPlanetPeriod, setCurrentPlanetPeriod] = useState("");
+  const [currentProc, setCurrentProc] = useState<"" | "cir">("");
   const history = useHistory();
   let selectedAreaMatch = useRouteMatch<TParams>({ path: "/reporting/investigation/:areaId", exact: true });
 
@@ -30,11 +33,17 @@ const InvestigationPage: FC<IProps> = props => {
 
   const handleControlPanelChange = (resp: FormValues) => {
     setShowReports(Boolean(resp.layers && resp.layers?.indexOf(LAYERS.reports) > -1));
-    const basemap = BASEMAPS[resp.currentMap as keyof typeof BASEMAPS];
+    const basemapKey = Object.keys(BASEMAPS).find(
+      key => BASEMAPS[key as keyof typeof BASEMAPS].key === resp.currentMap
+    );
+    const basemap = BASEMAPS[basemapKey as keyof typeof BASEMAPS];
     if (basemap) {
       setMapStyle(basemap.style);
-      setIsPlanet(resp.currentMap === "planet");
+      setIsPlanet(resp.currentMap === BASEMAPS.planet.key);
     }
+
+    setCurrentPlanetPeriod(resp.currentPlanetPeriod || "");
+    setCurrentProc(resp.currentPlanetImageType === "nat" ? "" : resp.currentPlanetImageType || "");
   };
 
   return (
@@ -46,7 +55,10 @@ const InvestigationPage: FC<IProps> = props => {
       showReports={showReports}
       answers={allAnswers}
       mapStyle={mapStyle}
-      currentPlanetBasemap={isPlanet && basemaps.length ? basemaps[0] : undefined} // TODO, pick basemaps
+      currentPlanetBasemap={
+        basemaps.length && isPlanet ? basemaps.find(bm => bm.name === currentPlanetPeriod) || basemaps[0] : undefined
+      }
+      currentProc={currentProc}
     >
       <Switch>
         <Route exact path={`${match.url}`} component={AreaListControlPanel} />

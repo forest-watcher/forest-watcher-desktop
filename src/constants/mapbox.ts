@@ -23,7 +23,7 @@ export const BASEMAPS = {
     key: "maps.planet",
     style: "mapbox://styles/3sidedcube/cl5s9hhoj000414mrsifh4yn6",
     image: MapPlanetImage,
-    url: `https://tiles.planet.com/basemaps/v1/planet-tiles/{name}/gmap/{z}/{x}/{y}.png?proc=&api_key=${process.env.REACT_APP_PLANET_API_KEY}`
+    url: `https://tiles.planet.com/basemaps/v1/planet-tiles/{name}/gmap/{z}/{x}/{y}.png?proc={proc}&api_key=${process.env.REACT_APP_PLANET_API_KEY}`
     // url: "https://globalforestwatch.org/api/planet-tiles/{name}/gmap/{z}/{x}/{y}/?proc="
   } // Look at using https://tiles.planet.com/basemaps/v1/planet-tiles/
 };

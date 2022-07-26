@@ -6,12 +6,20 @@ import { Tooltip } from "react-tippy";
 import Tip from "components/ui/Tip";
 import ChevronIcon from "assets/images/icons/ChevronRightSmall.svg";
 import { useIntl } from "react-intl";
+import get from "lodash.get";
 
 import useTimeline from "./hook";
 
 const DOT_SIZE = 24;
 
-const TimeSlider = ({ dotSize = DOT_SIZE, selected = 0, periods = [], onChange }) => {
+const TimeSlider = ({
+  dotSize = DOT_SIZE,
+  selected = 0,
+  periods = [],
+  onChange,
+  labelGetter = "label",
+  yearGetter = "year"
+}) => {
   const ref = useRef();
   const tileRefs = useRef([]);
   const [initialized, setInitialized] = useState(false);
@@ -44,12 +52,19 @@ const TimeSlider = ({ dotSize = DOT_SIZE, selected = 0, periods = [], onChange }
   return (
     <>
       <section className="c-timeframe">
-        <span className="c-timeframe__year-label c-timeframe__year-label--start">{periods[labels[0]].year}</span>
-        <span className="c-timeframe__year-label c-timeframe__year-label--end">{periods[labels[1]].year}</span>
+        <span className="c-timeframe__year-label c-timeframe__year-label--start">
+          {get(periods[labels[0]], yearGetter)}
+        </span>
+        <span className="c-timeframe__year-label c-timeframe__year-label--end">
+          {get(periods[labels[1]], yearGetter)}
+        </span>
         <button
           className="c-timeframe__button c-timeframe__button--prev"
           style={{ width: `${timeline.buttonWidth}px` }}
-          onClick={() => moveTimeline("prev")}
+          onClick={e => {
+            e.preventDefault();
+            moveTimeline("prev");
+          }}
           aria-label={intl.formatMessage({ id: "common.previous" })}
         >
           <img src={ChevronIcon} alt="" role="presentation" />
@@ -106,7 +121,7 @@ const TimeSlider = ({ dotSize = DOT_SIZE, selected = 0, periods = [], onChange }
                       ${i === 0 ? "c-timeframe__label--x-start" : ""}
                       ${i === periods.length - 1 ? "c-timeframe__label--x-end" : ""}`}
                   >
-                    {d.label}
+                    {get(d, labelGetter)}
                   </span>
                 </span>
               </li>
@@ -117,7 +132,10 @@ const TimeSlider = ({ dotSize = DOT_SIZE, selected = 0, periods = [], onChange }
         <button
           className="c-timeframe__button c-timeframe__button--next"
           style={{ width: `${timeline.buttonWidth}px` }}
-          onClick={() => moveTimeline("next")}
+          onClick={e => {
+            e.preventDefault();
+            moveTimeline("next");
+          }}
           aria-label={intl.formatMessage({ id: "common.next" })}
         >
           <img src={ChevronIcon} alt="" role="presentation" />

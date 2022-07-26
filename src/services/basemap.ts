@@ -16,12 +16,12 @@ export interface IMosaic {
   bbox: number[];
   coordinate_system: string;
   datatype: string;
-  first_acquired: Date;
+  first_acquired: string;
   grid: IGrid;
   id: string;
   interval: string;
   item_types: string[];
-  last_acquired: Date;
+  last_acquired: string;
   level: number;
   name: string;
   product_type: string;
@@ -30,7 +30,7 @@ export interface IMosaic {
 
 export class ReportService extends BaseService {
   getPlanetBasemaps() {
-    return this.fetchJSON(`/mosaics?api_key=${process.env.REACT_APP_PLANET_API_KEY}`);
+    return this.fetchJSON(`/mosaics?api_key=${process.env.REACT_APP_PLANET_API_KEY}&_page_size=1000`);
   }
 }
 

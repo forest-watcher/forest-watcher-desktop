@@ -471,5 +471,9 @@
   "maps.light": "Light",
   "maps.dark": "Dark",
   "maps.planet": "Planet Imagery",
-  "maps.basemapAndPlanet": "Basemap and Planet Imagery"
+  "maps.basemapAndPlanet": "Basemap and Planet Imagery",
+  "maps.period": "Period",
+  "maps.imageType": "Image type",
+  "maps.imageType.natural": "Natural color",
+  "maps.imageType.cir": "False color (NIR)"
 }

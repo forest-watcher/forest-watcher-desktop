@@ -201,6 +201,7 @@ $c-card-border-radius:  $global-spacing-1;
 
   &__content {
     overflow: auto;
+    height: 100%;
   }
 
   &__footer {
