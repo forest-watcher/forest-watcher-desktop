@@ -1,9 +1,8 @@
 import { connect, ConnectedProps } from "react-redux";
-import Investigation from "./Investigation";
+import AreaDetails from "./AreaDetails";
 import { RootState } from "store";
 
-const mapStateToProps = ({ reports, map }: RootState) => ({
-  allAnswers: reports.allAnswers,
+const mapStateToProps = ({ map }: RootState) => ({
   basemaps: map.data
 });
 
@@ -13,4 +12,4 @@ const connector = connect(mapStateToProps, mapDispatchToProps);
 
 export type TPropsFromRedux = ConnectedProps<typeof connector>;
 
-export default connector(Investigation);
+export default connector(AreaDetails);

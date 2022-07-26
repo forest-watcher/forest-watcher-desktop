@@ -1,0 +1,10 @@
+.c-radio-card-group {
+  &__options {
+    display: flex;
+    gap: $global-spacing-3;
+  }
+
+  &__item {
+    cursor: pointer;
+  }
+}

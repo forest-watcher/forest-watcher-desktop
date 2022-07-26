@@ -40,7 +40,7 @@ const LargeImageCardAsLinkTemplate: ComponentStory<typeof Card> = args => (
 const SmallImageCardTemplate: ComponentStory<typeof Card> = args => (
   <Card {...args}>
     <Card.Image alt="Placeholder picture" src="https://picsum.photos/200" />
-    <Card.Title>Area with a load of text</Card.Title>
+    <Card.Title>Area with a load of text - small</Card.Title>
     <Card.Text>Some text</Card.Text>
   </Card>
 );

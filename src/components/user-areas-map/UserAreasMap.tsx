@@ -8,6 +8,11 @@ import * as turf from "@turf/turf";
 import { goToGeojson } from "helpers/map";
 import { TGetAllAnswers } from "services/reports";
 import SquareClusterMarkers from "components/ui/Map/components/layers/SquareClusterMarkers";
+import { Layer, Source } from "react-map-gl";
+import { BASEMAPS } from "constants/mapbox";
+import { IPlanetBasemap } from "helpers/basemap";
+
+const basemap = BASEMAPS["planet"];
 
 interface IProps extends IMapProps {
   // Should be a memorised function! useCallBack()
@@ -18,6 +23,8 @@ interface IProps extends IMapProps {
   selectedAreaId?: string;
   showReports?: boolean;
   answers?: TGetAllAnswers["data"];
+  currentPlanetBasemap?: IPlanetBasemap;
+  currentProc?: "" | "cir";
 }
 
 const UserAreasMap: FC<PropsWithChildren<IProps>> = props => {
@@ -30,6 +37,8 @@ const UserAreasMap: FC<PropsWithChildren<IProps>> = props => {
     children,
     showReports = true,
     answers,
+    currentPlanetBasemap,
+    currentProc = "",
     ...rest
   } = props;
   const [mapRef, setMapRef] = useState<MapInstance | null>(null);
@@ -48,6 +57,13 @@ const UserAreasMap: FC<PropsWithChildren<IProps>> = props => {
     }
     return null;
   }, [areaMap]);
+
+  const planetBasemapUrl = useMemo(() => {
+    if (currentPlanetBasemap) {
+      return basemap.url.replace("{name}", currentPlanetBasemap.name).replace("{proc}", currentProc);
+    }
+    return null;
+  }, [currentPlanetBasemap, currentProc]);
 
   // On 'preclick' the click state is set to type "deselect"
   // This will fire before an area 'click' handler
@@ -149,6 +165,11 @@ const UserAreasMap: FC<PropsWithChildren<IProps>> = props => {
           onClick={handleAreaClick}
         />
       ))}
+      {planetBasemapUrl && (
+        <Source id="planet-map" type="raster" tiles={[planetBasemapUrl]} key={planetBasemapUrl}>
+          <Layer id="planet-map-layer" type="raster" />
+        </Source>
+      )}
       {children}
     </Map>
   );

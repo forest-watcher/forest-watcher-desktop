@@ -71,7 +71,7 @@ function useTimeline(ref, tileRefs, data, selectedIndex, dotSize, onChange) {
       const rect = ref.current.getBoundingClientRect();
       const tileWidth = rect.width / 4;
       const dataWidth = tileWidth * data.length;
-      const buttonWidth = tileWidth / 1.5 - dotSize / 2;
+      const buttonWidth = tileWidth / 2 - dotSize / 2;
 
       setTimeline({
         tileWidth,

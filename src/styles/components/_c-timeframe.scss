@@ -16,11 +16,11 @@
     line-height: 21px;
 
     &--start {
-      left: 30px;
+      left: 0px;
     }
 
     &--end {
-      right: 30px;
+      right: 0px;
     }
   }
 
@@ -33,6 +33,9 @@
     background: transparent;
     top: 50%;
     transform: translateY(-50%);
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
 
     &--prev {
       left: 0;

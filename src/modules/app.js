@@ -3,6 +3,7 @@ import { getAreas, getAreasInUsersTeams } from "./areas";
 import { getTemplate, getTemplates } from "./templates";
 import { getTeamByUserId } from "./teams";
 import { getUser } from "./user";
+import { getPlanetBasemaps } from "./map";
 
 // Actions
 export const USER_CHECKED = "app/USER_CHECKED";
@@ -49,6 +50,9 @@ export function syncApp() {
 
     // fetch all user templates
     await dispatch(getTemplates());
+
+    // fetch planet base maps
+    dispatch(getPlanetBasemaps());
 
     // fetch any missing team templates
     let templatePromises = [];
