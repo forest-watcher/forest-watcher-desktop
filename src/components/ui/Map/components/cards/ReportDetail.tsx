@@ -4,6 +4,7 @@ import MapCard from "./MapCard";
 import { components } from "interfaces/forms";
 import useAlertTypeString from "hooks/useAlertTypeString";
 import { TPropsFromRedux } from "./ReportDetailContainer";
+import { TAreasInTeam } from "services/area";
 
 export type TAnswer = components["schemas"]["Answer"];
 
@@ -21,7 +22,7 @@ const ReportDetailCard: FC<IParams> = ({ answers, areasInUsersTeams }) => {
     if (!answer) {
       return [];
     }
-    const teams: any[] = [];
+    const teams: TAreasInTeam["team"][] = [];
 
     areasInUsersTeams.forEach(areaTeam => {
       const areaIndex = areaTeam.areas.findIndex(area => answer.areaOfInterest === area.data.id);
@@ -30,7 +31,7 @@ const ReportDetailCard: FC<IParams> = ({ answers, areasInUsersTeams }) => {
       }
     });
 
-    return teams.filter((value, index, self) => self.findIndex(t => t.id === value.id) === index);
+    return teams.filter((value, index, self) => value && self.findIndex(t => t?.id === value?.id) === index);
   }, [answer, areasInUsersTeams]);
 
   useEffect(() => {
@@ -61,7 +62,7 @@ const ReportDetailCard: FC<IParams> = ({ answers, areasInUsersTeams }) => {
           <li>
             <FormattedMessage
               id="reports.preview.monitors"
-              values={{ teams: teams.map(team => team.attributes.name).join(", ") }}
+              values={{ teams: teams.map(team => team?.attributes?.name || "").join(", ") }}
             />
           </li>
           <li>
