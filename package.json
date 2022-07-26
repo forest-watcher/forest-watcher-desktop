@@ -30,6 +30,7 @@
     "leaflet-draw": "^1.0.4",
     "leaflet-search": "^2.9.8",
     "lodash": "^4.17.11",
+    "lodash.get": "^4.4.2",
     "lodash.isempty": "^4.4.0",
     "lodash.sortby": "^4.7.0",
     "mapbox-gl": "^2.9.1",
