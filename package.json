@@ -108,15 +108,16 @@
     "deploy": "npm run build&&gh-pages -d build",
     "test": "react-scripts test --env=jsdom",
     "lint-staged": "lint-staged",
-    "lint": "eslint --fix --ext .",
+    "lint": "eslint --fix --ext .js,.jsx,.ts,.tsx ./src --fix",
     "precommit": "yarn run lint-staged",
-    "transifex:push": "node transifex/transifex-push.js",
-    "transifex:pull": "node transifex/transifex-pull.js",
+    "transifex:push": "tx push",
+    "transifex:pull": "tx pull -f && yarn transifex:prettier",
     "generate-interface:teams": "npx openapi-typescript https://raw.githubusercontent.com/wri/fw_teams/dev/docs/fw_teams.yaml --output ./src/interfaces/teams.ts",
     "generate-interface:api": "npx openapi-typescript https://raw.githubusercontent.com/wri/fw_api/dev/docs/fw_api.yaml --output ./src/interfaces/api.ts",
     "generate-interface:forms": "npx openapi-typescript https://raw.githubusercontent.com/wri/fw_forms/dev/docs/fw_forms.yaml --output ./src/interfaces/forms.ts",
     "storybook": "start-storybook -p 6006 -s src/assets",
-    "build-storybook": "build-storybook -s src/assets"
+    "build-storybook": "build-storybook -s src/assets",
+    "transifex:prettier": "prettier --ignore-path .gitignore \"src/locales/*.+(json)\" --write"
   },
   "prettier": "@3sidedcube/prettier-config",
   "eslintConfig": {
@@ -141,7 +142,7 @@
   },
   "homepage": ".",
   "lint-staged": {
-    "src/**/*.js": "eslint --fix"
+    "src/**/*.{js,jsx,ts,tsx}": "eslint --fix"
   },
   "browserslist": {
     "production": [

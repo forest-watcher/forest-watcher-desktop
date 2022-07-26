@@ -21,6 +21,8 @@
   "app.localeName.pt": "Português",
   "app.localeName.id": "Bahasa Indonesia",
   "app.localeName.es": "Español",
+  "app.localeName.nl": "Nederlands",
+  "app.localeName.mg": "Malagasy",
   "signIn.title": "Log in to my GFW",
   "signIn.subTitle": "Log in is required so you can view, manage, and delete your areas of interest.",
   "signIn.not.a.member": "Not a member?",
