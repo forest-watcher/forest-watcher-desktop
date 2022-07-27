@@ -97,6 +97,8 @@
   "common.date.month.9": "Oct",
   "common.date.month.10": "Nov",
   "common.date.month.11": "Dec",
+  "common.selectAll": "Select all",
+  "common.selectRow": "Select row",
   "login.welcome": "Log in using one of following accounts:",
   "forms.required": "required",
   "forms.save": "save",
