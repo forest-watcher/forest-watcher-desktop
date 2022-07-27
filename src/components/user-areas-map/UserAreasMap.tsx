@@ -51,7 +51,8 @@ const UserAreasMap: FC<PropsWithChildren<IProps>> = props => {
 
   const { data: areasList } = useAppSelector(state => state.areas);
   const areaMap = useMemo<TAreasResponse[]>(() => Object.values(areasList), [areasList]);
-  const [hasLoaded, setHasLoaded] = useState(false);
+  const [hasLoaded, setHasLoaded] = useState(true);
+  const [selectedPoint, setSelectedPoint] = useState<mapboxgl.Point | null>(null);
   const [selectedReportIds, setSelectedReportIds] = useState<string[] | null>(null);
   const features = useMemo(() => {
     if (areaMap.length > 0) {
@@ -87,17 +88,31 @@ const UserAreasMap: FC<PropsWithChildren<IProps>> = props => {
   // So, when a click happens an assumption is made that a de-select should
   // occur unless it's overwritten immediately by an area click.
   const handleAreaClick = useCallback(
-    (areaId: string) => {
+    (areaId: string, point?: mapboxgl.Point) => {
       if (areaId !== selectedAreaId) {
         setClickState({ type: "select", areaId });
       } else {
         // If the same area was clicked, do nothing
         setClickState(undefined);
+        // If points within similar area, do not set reports to null
+        const boundary = 20;
+        const { x, y } = selectedPoint || { x: 0, y: 0 };
+
+        const xInRange = x > (point?.x || 0) - boundary && x < (point?.x || 0) + boundary;
+        const yInRange = y > (point?.y || 0) - boundary && y < (point?.y || 0) + boundary;
+
+        if (!(xInRange && yInRange) && selectedReportIds !== null) {
+          setSelectedReportIds(null);
+        }
       }
-      setSelectedReportIds(null);
     },
-    [selectedAreaId]
+    [selectedAreaId, selectedPoint, selectedReportIds]
   );
+
+  const handleSquareSelect = useCallback((ids: string[], point: mapboxgl.Point) => {
+    setSelectedPoint(point);
+    setSelectedReportIds(ids);
+  }, []);
 
   useEffect(() => {
     if (clickState?.type === "deselect" && onAreaDeselect && selectedAreaId) {
@@ -105,7 +120,7 @@ const UserAreasMap: FC<PropsWithChildren<IProps>> = props => {
     }
 
     if (clickState?.type === "select" && onAreaSelect) {
-      onAreaSelect(clickState.areaId);
+      onAreaSelect(clickState.areaId, undefined);
     }
 
     if (clickState?.type === "deselect" || clickState?.type === "select") {
@@ -113,6 +128,7 @@ const UserAreasMap: FC<PropsWithChildren<IProps>> = props => {
     }
 
     setSelectedReportIds(null);
+    setSelectedPoint(null);
   }, [clickState, onAreaSelect, onAreaDeselect, selectedAreaId]);
 
   useEffect(() => {
@@ -121,7 +137,7 @@ const UserAreasMap: FC<PropsWithChildren<IProps>> = props => {
         setTimeout(() => {
           // Delay as  hack to get markers on top
           setHasLoaded(true);
-        }, 5000);
+        }, 6000);
       }
     }
   }, [hasLoaded, mapRef]);
@@ -154,8 +170,9 @@ const UserAreasMap: FC<PropsWithChildren<IProps>> = props => {
                   }))
               : []
           }
-          onSquareSelect={(ids: string[]) => setSelectedReportIds(ids)}
+          onSquareSelect={handleSquareSelect}
           selectedSquareIds={selectedReportIds}
+          mapRef={mapRef}
         />
       )}
       {areaMap.map(area => (

@@ -9,7 +9,7 @@ import { GeoJSONSourceOptions } from "mapbox-gl";
 export interface IProps {
   id: string;
   data: GeoJSONSourceOptions["data"] | TAreasResponse["attributes"]["geostore"]["geojson"];
-  onClick?: (id: string) => void;
+  onClick?: (id: string, point?: mapboxgl.Point) => void;
   label?: string;
   isSelected?: boolean;
 }
@@ -51,19 +51,30 @@ const Polygon: FC<IProps> = props => {
     map?.on("mouseleave", id, e => {
       setIsHover(false);
     });
+  }, [id, map]);
 
-    map?.on("click", id, e => {
+  useEffect(() => {
+    const click = (
+      e: mapboxgl.MapMouseEvent & {
+        features?: mapboxgl.MapboxGeoJSONFeature[] | undefined;
+      } & mapboxgl.EventData
+    ) => {
       const { features } = e;
-
-      const zoomLevel = map.getZoom();
+      const zoomLevel = map?.getZoom();
 
       if (features && features[0]?.source === id) {
-        if (zoomLevel < 10) {
-          map.fitBounds(bounds as LngLatBoundsLike, { padding: 40 });
+        if (zoomLevel && zoomLevel < 10) {
+          map?.fitBounds(bounds as LngLatBoundsLike, { padding: 40 });
         }
-        onClick?.(id);
+        onClick?.(id, e.point);
       }
-    });
+    };
+
+    map?.on("click", id, click);
+
+    return () => {
+      map?.off("click", id, click);
+    };
   }, [bounds, id, map, onClick]);
 
   const layerStyle = isHover || isSelected ? polygonLineStyleHover : polygonLineStyle;

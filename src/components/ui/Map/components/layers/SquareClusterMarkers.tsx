@@ -5,12 +5,14 @@ import * as turf from "@turf/turf";
 import { Marker } from "mapbox-gl";
 import { clusterZoom, createLayeredClusterSVG, getReportImage } from "helpers/map";
 import { IMarkers, IPoint, ReportLayerColours, ReportLayers } from "types/map";
+import { Map as MapInstance } from "mapbox-gl";
 
 export interface IProps {
   id: string;
   points: IPoint[];
-  onSquareSelect?: (ids: string[]) => void;
+  onSquareSelect?: (ids: string[], point: mapboxgl.Point) => void;
   selectedSquareIds: string[] | null;
+  mapRef: MapInstance | null;
 }
 
 const LAYER_EXPRESSION_FILTERS = {
@@ -22,10 +24,11 @@ const markers: IMarkers = {};
 let markersOnScreen: IMarkers = {};
 
 const SquareClusterMarkers: FC<IProps> = props => {
-  const { id, points, onSquareSelect, selectedSquareIds } = props;
+  const { id, points, onSquareSelect, selectedSquareIds, mapRef } = props;
   const { current: map } = useMap();
   const [hoveredPoint, setHoveredPoint] = useState<string | null>(null);
   const [selectedPoints, setSelectedPoints] = useState<string[] | null>(null);
+  const [hasMoved, setHasMoved] = useState(false);
 
   const featureCollection = useMemo(
     () =>
@@ -53,20 +56,9 @@ const SquareClusterMarkers: FC<IProps> = props => {
       setHoveredPoint(null);
     });
 
-    map?.on("click", id, e => {
-      const features = map.queryRenderedFeatures(e.point, {
-        layers: [id]
-      });
-
-      const pointIds = features.map(feature => feature.properties?.id);
-
-      setSelectedPoints(pointIds);
-      onSquareSelect?.(pointIds);
-    });
-
     map?.on("render", () => {
       const mapInstance = map.getMap();
-      if (!mapInstance.isSourceLoaded(id) || !map) return;
+      if (!map) return;
       // Render custom cluster icons.
       const newMarkers: IMarkers = {};
       const features = mapInstance.querySourceFeatures(id);
@@ -125,8 +117,40 @@ const SquareClusterMarkers: FC<IProps> = props => {
   }, [id, map, onSquareSelect]);
 
   useEffect(() => {
+    const click = (
+      e: mapboxgl.MapMouseEvent & {
+        features?: mapboxgl.MapboxGeoJSONFeature[] | undefined;
+      } & mapboxgl.EventData
+    ) => {
+      const features = map?.queryRenderedFeatures(e.point, {
+        layers: [id]
+      });
+
+      const pointIds = features?.map(feature => feature.properties?.id) || [];
+
+      setSelectedPoints(pointIds);
+      onSquareSelect?.(pointIds, e.point);
+    };
+
+    map?.on("click", id, click);
+
+    return () => {
+      map?.off("click", id, click);
+    };
+  }, [id, map, onSquareSelect]);
+
+  useEffect(() => {
     setSelectedPoints(selectedSquareIds);
   }, [selectedSquareIds]);
+
+  useEffect(() => {
+    if (mapRef && featureCollection.features.length > 0 && !hasMoved) {
+      // Move layer to the top
+      mapRef.moveLayer(id);
+      setHasMoved(true);
+      console.log(mapRef);
+    }
+  }, [id, mapRef, featureCollection, hasMoved]);
 
   return (
     <>
