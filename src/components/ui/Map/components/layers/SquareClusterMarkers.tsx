@@ -148,7 +148,6 @@ const SquareClusterMarkers: FC<IProps> = props => {
       // Move layer to the top
       mapRef.moveLayer(id);
       setHasMoved(true);
-      console.log(mapRef);
     }
   }, [id, mapRef, featureCollection, hasMoved]);
 
