@@ -82,6 +82,7 @@
     "@types/dom-to-image": "^2.6.4",
     "@types/history": "^5.0.0",
     "@types/leaflet": "^1.7.10",
+    "@types/lodash.get": "^4.4.7",
     "@types/mapbox__mapbox-gl-geocoder": "^4.7.2",
     "@types/react-redux": "^7.1.24",
     "@types/react-redux-toastr": "^7.6.2",
@@ -115,6 +116,7 @@
     "generate-interface:teams": "npx openapi-typescript https://raw.githubusercontent.com/wri/fw_teams/dev/docs/fw_teams.yaml --output ./src/interfaces/teams.ts",
     "generate-interface:api": "npx openapi-typescript https://raw.githubusercontent.com/wri/fw_api/dev/docs/fw_api.yaml --output ./src/interfaces/api.ts",
     "generate-interface:forms": "npx openapi-typescript https://raw.githubusercontent.com/wri/fw_forms/dev/docs/fw_forms.yaml --output ./src/interfaces/forms.ts",
+    "generate-interface:exports": "npx openapi-typescript https://raw.githubusercontent.com/wri/fw_exports/dev/docs/fw_exports.yaml --output ./src/interfaces/exports.ts",
     "storybook": "start-storybook -p 6006 -s src/assets",
     "build-storybook": "build-storybook -s src/assets",
     "transifex:prettier": "prettier --ignore-path .gitignore \"src/locales/*.+(json)\" --write"

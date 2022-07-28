@@ -1,10 +1,13 @@
 import classNames from "classnames";
 import ContextMenu, { IProps as IContextMenuProps } from "components/ui/ContextMenu/ContextMenu";
 import Pagination from "../Pagination/Pagination";
-import { FormattedMessage } from "react-intl";
+import { FormattedMessage, useIntl } from "react-intl";
 import { Link } from "react-router-dom";
-import { useCallback, useEffect, useState } from "react";
+import { ChangeEvent, FC, useCallback, useEffect, useState } from "react";
 import SortIcon from "components/ui/SortIcon/SortIcon";
+import get from "lodash.get";
+import CheckboxOnIcon from "assets/images/icons/checkbox-on.svg";
+import CheckboxOnffIcon from "assets/images/icons/checkbox-off.svg";
 
 export interface IRowAction<T> extends Omit<Omit<IContextMenuProps["menuItems"][number], "onClick">, "href"> {
   onClick?: (row: T, value?: string) => void;
@@ -28,6 +31,8 @@ export interface IProps<T> {
   columnOrder: IColumnOrder<T>[];
   rowActions?: IRowAction<T>[];
   className?: string;
+  onSelect?: (selected: T[]) => void;
+  selectFindGetter?: string;
 }
 
 export enum Direction {
@@ -36,12 +41,56 @@ export enum Direction {
   None = "none"
 }
 
+interface ICheckBoxParams {
+  onChange: (event: ChangeEvent<HTMLInputElement>) => void;
+  label: string;
+  checked: boolean;
+}
+
+const CellCheckbox: FC<ICheckBoxParams> = ({ label, checked, ...rest }) => {
+  return (
+    <div>
+      <label className="u-flex c-data-table__checkbox">
+        <span className="u-visually-hidden">{label}</span>
+        <img
+          role="presentation"
+          alt=""
+          src={CheckboxOnffIcon}
+          className={classNames(checked && "u-visually-hidden")}
+          width="24"
+          height="24"
+        />
+        <img
+          role="presentation"
+          alt=""
+          src={CheckboxOnIcon}
+          className={classNames(!checked && "u-visually-hidden")}
+          width="24"
+          height="24"
+        />
+        <input className="u-visually-hidden" {...rest} type="checkbox" checked={checked} />
+      </label>
+    </div>
+  );
+};
+
 const DataTable = <T extends { [key: string]: string | number | any[] }>(props: IProps<T>) => {
-  const { rows, columnOrder, className, rowActions, isPaginated = false, rowsPerPage = 10 } = props;
+  const {
+    rows,
+    columnOrder,
+    className,
+    rowActions,
+    isPaginated = false,
+    rowsPerPage = 10,
+    onSelect,
+    selectFindGetter = "id"
+  } = props;
   const [rowDisplayStart, setRowDisplayStart] = useState(0);
   const [sortedRows, setSortedRows] = useState<T[]>(rows);
   const [sortedCol, setSortedCol] = useState<IColumnOrder<T> | null>(null);
   const [sortedDirection, setSortedDirection] = useState<Direction>(Direction.None);
+  const [selectedRows, setSelectedRows] = useState<T[]>([]);
+  const intl = useIntl();
 
   useEffect(() => setRowDisplayStart(0), [rowsPerPage, rows]);
 
@@ -80,11 +129,51 @@ const DataTable = <T extends { [key: string]: string | number | any[] }>(props: 
     }
   }, [rows, sortedCol, sortedDirection]);
 
+  const handleSelectAll = () => {
+    if (selectedRows.length === rows.length) {
+      setSelectedRows([]);
+    } else {
+      setSelectedRows(rows);
+    }
+  };
+
+  const handleSelectOne = (row: T) => {
+    const index = selectedRows.findIndex(selected => get(selected, selectFindGetter) === get(row, selectFindGetter));
+    if (index > -1) {
+      setSelectedRows(rows => {
+        const newRows = [...rows];
+        newRows.splice(index, 1);
+        return newRows;
+      });
+    } else {
+      setSelectedRows(rows => {
+        const newRows = [...rows];
+        newRows.push(row);
+        return newRows;
+      });
+    }
+  };
+
+  useEffect(() => {
+    if (onSelect) {
+      onSelect(selectedRows);
+    }
+  }, [selectedRows, onSelect]);
+
   return (
     <>
       <table className={classNames("c-data-table", className)}>
         <thead className="c-data-table__header">
           <tr>
+            {onSelect && (
+              <th>
+                <CellCheckbox
+                  label={intl.formatMessage({ id: "common.selectAll" })}
+                  onChange={handleSelectAll}
+                  checked={selectedRows.length === rows.length}
+                />
+              </th>
+            )}
             {columnOrder.map(column => (
               <th key={column.key.toString()} aria-sort={column.key === sortedCol?.key ? sortedDirection : undefined}>
                 {column.sortCompareFn ? (
@@ -105,6 +194,19 @@ const DataTable = <T extends { [key: string]: string | number | any[] }>(props: 
         <tbody>
           {rowsToDisplay.map((row, id) => (
             <tr key={id} className="c-data-table__row">
+              {onSelect && (
+                <td>
+                  <CellCheckbox
+                    label={intl.formatMessage({ id: "common.selectRow" })}
+                    onChange={() => handleSelectOne(row)}
+                    checked={
+                      selectedRows.findIndex(
+                        selected => get(selected, selectFindGetter) === get(row, selectFindGetter)
+                      ) > -1
+                    }
+                  />
+                </td>
+              )}
               {columnOrder.map(column => (
                 <td key={column.key.toString()}>
                   {column.rowHref ? (

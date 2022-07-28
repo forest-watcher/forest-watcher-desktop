@@ -47,13 +47,22 @@ Standard.args = {
           : "",
       sortCompareFn: sortByDateString
     }
-  ]
+  ],
+  onSelect: undefined
 };
 
 export const FullWidth = Template<TDataTableRows>().bind({});
 FullWidth.args = {
   ...Standard.args,
   className: "u-w-100"
+};
+
+export const Selectable = Template<TDataTableRows>().bind({});
+Selectable.args = {
+  ...Standard.args,
+  className: "u-w-100",
+  onSelect: (selected: TDataTableRows[]) => console.log(selected),
+  selectFindGetter: "email"
 };
 
 export const WithActions = Template<TDataTableRows>().bind({});

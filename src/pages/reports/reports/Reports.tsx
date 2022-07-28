@@ -98,6 +98,8 @@ const Reports: FC<IProps> = props => {
                     className="u-w-100"
                     rows={filteredRows}
                     isPaginated
+                    onSelect={console.log}
+                    selectFindGetter="id"
                     rowActions={[
                       {
                         name: "common.delete",
