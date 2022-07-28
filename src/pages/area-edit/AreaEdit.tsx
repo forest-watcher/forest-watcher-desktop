@@ -1,13 +1,13 @@
 import Hero from "components/layouts/Hero/Hero";
 import Map from "components/ui/Map/Map";
-import { FC, useState, MouseEvent, ChangeEvent, useEffect, useMemo } from "react";
+import { FC, useState, MouseEvent, ChangeEvent, useEffect, useMemo, useCallback } from "react";
 import { MapboxEvent, Map as MapInstance } from "mapbox-gl";
 import { FormattedMessage, useIntl } from "react-intl";
 import ReactGA from "react-ga";
 import { TPropsFromRedux } from "./AreaEditContainer";
 import { FeatureCollection } from "geojson";
 import Input from "components/ui/Form/Input";
-import { useForm, SubmitHandler } from "react-hook-form";
+import { useForm, SubmitHandler, UnpackNestedValue } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import Button from "components/ui/Button/Button";
@@ -21,6 +21,9 @@ import { Link, Route, Switch, useHistory, useRouteMatch } from "react-router-dom
 import useUnsavedChanges from "hooks/useUnsavedChanges";
 import Modal from "components/ui/Modal/Modal";
 import DeleteArea from "./actions/DeleteAreaContainer";
+import ExportModal, { TExportForm } from "components/modals/exports/ExportModal";
+import { AREA_EXPORT_FILE_TYPES } from "constants/export";
+import { exportService } from "services/exports";
 
 const areaTitleKeys = {
   manage: "areas.manageArea",

@@ -37,7 +37,7 @@ const exportSchema = yup
 const ExportModal: FC<IProps> = ({ onClose, onSave, isOpen, fileTypes, fields }) => {
   const intl = useIntl();
   const inputs = useMemo<IModalProps<TExportForm>["inputs"]>(() => {
-    return [
+    const toReturn: IModalProps<TExportForm>["inputs"] = [
       {
         id: "file",
         selectProps: {
@@ -49,18 +49,6 @@ const ExportModal: FC<IProps> = ({ onClose, onSave, isOpen, fileTypes, fields })
           name: "fileType"
         },
         formatErrors: errors => errors.fileType
-      },
-      {
-        id: "fields",
-        toggleGroupProps: {
-          label: intl.formatMessage({ id: "export.fields" }),
-          options: fields,
-          defaultValue: []
-        },
-        registerProps: {
-          name: "fields"
-        },
-        formatErrors: errors => errors.fields
       },
       {
         id: "downloadMethod",
@@ -89,6 +77,23 @@ const ExportModal: FC<IProps> = ({ onClose, onSave, isOpen, fileTypes, fields })
         formatErrors: errors => errors.downloadMethod
       }
     ];
+
+    if (fields.length > 0) {
+      toReturn.splice(1, 0, {
+        id: "fields",
+        toggleGroupProps: {
+          label: intl.formatMessage({ id: "export.fields" }),
+          options: fields,
+          defaultValue: []
+        },
+        registerProps: {
+          name: "fields"
+        },
+        formatErrors: errors => errors.fields
+      });
+    }
+
+    return toReturn;
   }, [fields, fileTypes, intl]);
 
   return (
