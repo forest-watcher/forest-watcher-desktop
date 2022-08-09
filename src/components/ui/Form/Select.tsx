@@ -152,6 +152,7 @@ const Select = (props: Props) => {
                 <Listbox.Options
                   className={classnames("c-input__select-list-box", variant && `c-input__select-list-box--${variant}`)}
                   static={isMultiple}
+                  onFocus={selectProps.onFocus}
                 >
                   {options.map(option => (
                     <Listbox.Option as={Fragment} key={option.value} value={option}>
