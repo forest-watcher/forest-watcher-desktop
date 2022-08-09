@@ -42,7 +42,7 @@ const DeleteArea: FC<IProps> = props => {
     <Modal
       isOpen
       dismissible={false}
-      title="areas.deleteArea"
+      title="areas.deleteAreaTitle"
       onClose={close}
       actions={[
         { name: "areas.deleteArea", onClick: onDeleteArea },
