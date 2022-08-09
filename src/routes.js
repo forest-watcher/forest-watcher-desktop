@@ -46,7 +46,7 @@ const Routes = props => {
 
   useEffect(() => {
     // only on top level (main nav)
-    // stops deepr routes, that just contain modals, triggering a reset
+    // stops deeper routes, that just contain modals, triggering a reset
     const isTopLevel = pathname.split("/").length === 2;
     if (isTopLevel) {
       window.scrollTo(0, 0);
