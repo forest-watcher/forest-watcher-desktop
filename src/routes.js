@@ -45,7 +45,12 @@ const Routes = props => {
   const { pathname } = useLocation();
 
   useEffect(() => {
-    window.scrollTo(0, 0);
+    // only on top level (main nav)
+    // stops deepr routes, that just contain modals, triggering a reset
+    const isTopLevel = pathname.split("/").length === 2;
+    if (isTopLevel) {
+      window.scrollTo(0, 0);
+    }
   }, [pathname]);
 
   return (
