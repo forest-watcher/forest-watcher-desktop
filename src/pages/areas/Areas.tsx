@@ -92,7 +92,8 @@ const Areas: FC<IProps> = props => {
           <Article title="areas.teamSubtitle">
             {areasInUsersTeams.map(
               areasInTeam =>
-                areasInTeam.team && (
+                areasInTeam.team &&
+                areasInTeam.areas.length > 0 && (
                   <Fragment key={areasInTeam.team.id}>
                     <h3 className="u-text-600 u-text-neutral-700">{areasInTeam.team.attributes?.name}</h3>
 
