@@ -161,10 +161,14 @@ const UserAreasMap: FC<PropsWithChildren<IProps>> = props => {
           points={
             answers && showReports
               ? answers
-                  .filter(answer => answer.attributes?.areaOfInterest === selectedAreaId)
+                  .filter(
+                    answer =>
+                      answer.attributes?.areaOfInterest === selectedAreaId &&
+                      Boolean(answer?.attributes?.clickedPosition?.length)
+                  )
                   .map(answer => ({
                     // @ts-ignore
-                    position: [answer.attributes?.clickedPosition[0].lon, answer.attributes?.clickedPosition[0].lat],
+                    position: [answer.attributes.clickedPosition[0].lon, answer.attributes.clickedPosition[0].lat],
                     id: answer.id || "",
                     alertTypes: getReportAlertsByName(answer.attributes?.reportName)
                   }))
