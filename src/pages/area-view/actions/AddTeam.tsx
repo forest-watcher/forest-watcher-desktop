@@ -12,6 +12,7 @@ import { getAreas } from "modules/areas";
 import { TGetTeamMembersResponse, TGetUserTeamsResponse } from "services/teams";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup/dist/yup";
+import PlusIcon from "assets/images/icons/PlusForButton.svg";
 
 interface IProps {
   teams: TGetUserTeamsResponse["data"];
@@ -88,7 +89,8 @@ const AddTeamModal: FC<IProps> = ({ teams, users }) => {
         }
       ]}
       actions={
-        <Link className="c-button c-button--primary" to={`/teams/create?backTo=/areas/${areaId}/team`}>
+        <Link className="c-button c-button--secondary" to={`/teams/create?backTo=/areas/${areaId}/team`}>
+          <img className="c-button__inline-icon" src={PlusIcon} alt="" role="presentation" />
           <FormattedMessage id="teams.create" />
         </Link>
       }

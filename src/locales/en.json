@@ -465,6 +465,8 @@
   "export.downloadMethods.download": "Download",
   "export.downloadMethods.email": "Send Email",
   "export.downloadMethods.link": "Shareable",
+  "export.all": "Export all",
+  "export.selected": "Export selected",
   "investigation.start": "Start Investigation",
   "filters.title": "Filters",
   "filters.extra": "Apply more filters",
