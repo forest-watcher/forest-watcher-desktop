@@ -1,4 +1,4 @@
-import { FC, HTMLAttributes, useEffect, useMemo, useRef, useState } from "react";
+import { FC, HTMLAttributes, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import classnames from "classnames";
 import { LngLatBoundsLike, useMap } from "react-map-gl";
 import ZoomInIcon from "assets/images/icons/Plus.svg";
@@ -9,7 +9,7 @@ import CloseIcon from "assets/images/icons/Close.svg";
 import { Popover } from "@headlessui/react";
 import Input from "components/ui/Form/Input";
 import Select from "components/ui/Form/Select";
-import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
+import { FieldValues, SubmitHandler, useForm, useWatch } from "react-hook-form";
 import MapboxGeocoder from "@mapbox/mapbox-gl-geocoder";
 import * as turf from "@turf/turf";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -33,6 +33,12 @@ const schema = yup
   })
   .required();
 
+enum inputs {
+  geoSearch,
+  country,
+  langLat
+}
+
 const MapControls: FC<IProps> = props => {
   const { className, countriesOptions = [], getCountries, countries, ...rest } = props;
   const classes = classnames("c-map__controls", className);
@@ -44,11 +50,14 @@ const MapControls: FC<IProps> = props => {
   const {
     register,
     handleSubmit,
-    watch,
     formState: { errors },
-    reset
+    reset,
+    resetField,
+    control
   } = formHook;
-  const selectedCountry = watch("country");
+
+  const selectedCountry = useWatch({ control, name: "country" });
+
   const intl = useIntl();
 
   const geocoder = useMemo(() => {
@@ -62,7 +71,37 @@ const MapControls: FC<IProps> = props => {
     return null;
   }, [map]);
 
-  const geocoderInputContainer = useRef(null);
+  const clearFieldsExcept = useCallback(
+    (except: inputs) => {
+      switch (except) {
+        case inputs.langLat:
+          // Clear geocoder and country
+          resetField("country");
+          geocoder?.setInput("");
+
+          break;
+        case inputs.country:
+          // Clear geocoder and langlat
+          resetField("lng");
+          resetField("lat");
+          geocoder?.setInput("");
+          break;
+        case inputs.geoSearch:
+          // clear country and langlat
+          resetField("lng");
+          resetField("lat");
+          resetField("country");
+          break;
+      }
+    },
+    [geocoder, resetField]
+  );
+
+  const geocoderInputContainer = useRef<any>(null);
+
+  useEffect(() => {
+    geocoder?.on("result", () => clearFieldsExcept(inputs.geoSearch));
+  }, [clearFieldsExcept, geocoder]);
 
   const onZoomIn = () => {
     map?.zoomIn();
@@ -147,7 +186,8 @@ const MapControls: FC<IProps> = props => {
                     placeholder: intl.formatMessage({ id: "components.map.selectACountry" }),
                     options: countriesOptions,
                     label: intl.formatMessage({ id: "components.map.searchACountry" }),
-                    alternateLabelStyle: true
+                    alternateLabelStyle: true,
+                    onFocus: () => clearFieldsExcept(inputs.country)
                   }}
                 />
                 <p className="c-map__search-label">
@@ -160,7 +200,8 @@ const MapControls: FC<IProps> = props => {
                     type: "text",
                     placeholder: intl.formatMessage({ id: "components.map.enterLat" }),
                     label: intl.formatMessage({ id: "components.map.enterLat" }),
-                    inputMode: "decimal"
+                    inputMode: "decimal",
+                    onFocus: () => clearFieldsExcept(inputs.langLat)
                   }}
                   hideLabel
                   className="c-map__panel-input"
@@ -173,7 +214,8 @@ const MapControls: FC<IProps> = props => {
                     type: "text",
                     placeholder: intl.formatMessage({ id: "components.map.enterLng" }),
                     label: intl.formatMessage({ id: "components.map.enterLng" }),
-                    inputMode: "decimal"
+                    inputMode: "decimal",
+                    onFocus: () => clearFieldsExcept(inputs.langLat)
                   }}
                   hideLabel
                   className="c-map__panel-input"

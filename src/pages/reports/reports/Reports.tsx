@@ -40,6 +40,7 @@ interface IProps extends TPropsFromRedux {}
 const Reports: FC<IProps> = props => {
   const { allAnswers, loading, templates } = props;
   let { path, url } = useRouteMatch();
+  const [selectedReports, setSelectedReports] = useState<TReportsDataTable[]>([]);
 
   const rows = useMemo<TReportsDataTable[]>(
     () =>
@@ -73,7 +74,7 @@ const Reports: FC<IProps> = props => {
           size="small"
           actions={
             <Button>
-              <FormattedMessage id="export.title" />
+              <FormattedMessage id={selectedReports.length > 0 ? "export.selected" : "export.all"} />
             </Button>
           }
         >
@@ -98,7 +99,7 @@ const Reports: FC<IProps> = props => {
                     className="u-w-100"
                     rows={filteredRows}
                     isPaginated
-                    onSelect={console.log}
+                    onSelect={setSelectedReports}
                     selectFindGetter="id"
                     rowActions={[
                       {

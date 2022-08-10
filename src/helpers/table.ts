@@ -54,3 +54,11 @@ export const sortByString = (a: string | number | any[], b: string | number | an
 
   return b.toString().localeCompare(a.toString());
 };
+
+export const sortByNumber = (a: number, b: number, direction: Direction) => {
+  if (direction === Direction.Asc) {
+    return a - b;
+  }
+
+  return b - a;
+};

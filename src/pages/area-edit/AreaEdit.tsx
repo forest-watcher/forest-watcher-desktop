@@ -7,7 +7,7 @@ import ReactGA from "react-ga";
 import { TPropsFromRedux } from "./AreaEditContainer";
 import { FeatureCollection } from "geojson";
 import Input from "components/ui/Form/Input";
-import { useForm, SubmitHandler, UnpackNestedValue } from "react-hook-form";
+import { useForm, SubmitHandler } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import Button from "components/ui/Button/Button";
@@ -24,9 +24,13 @@ import DeleteArea from "./actions/DeleteAreaContainer";
 import ExportModal, { TExportForm } from "components/modals/exports/ExportModal";
 import { AREA_EXPORT_FILE_TYPES } from "constants/export";
 import { exportService } from "services/exports";
+import { Source, Layer } from "react-map-gl";
+import { labelStyle } from "components/ui/Map/components/layers/styles";
+import * as turf from "@turf/turf";
+import { AllGeoJSON } from "@turf/turf";
 
 const areaTitleKeys = {
-  manage: "areas.manageArea",
+  manage: "areas.editArea",
   create: "areas.createArea"
 };
 
@@ -61,6 +65,7 @@ const AreaEdit: FC<IProps> = ({
   const [isValidatingShapefile, setIsValidatingShapefile] = useState(false);
   const [mapRef, setMapRef] = useState<MapInstance | null>(null);
   const [drawRef, setDrawRef] = useState<MapboxDraw | null>(null);
+  const [showLabel, setShowLabel] = useState(true);
   const [shouldUseChangesMade, setShouldUseChangesMade] = useState(true);
   const [showShapeFileHelpModal, setShowShapeFileHelpModal] = useState(false);
   const history = useHistory();
@@ -84,16 +89,47 @@ const AreaEdit: FC<IProps> = ({
     }
   }, [area?.attributes?.name, setValue]);
 
+  const centrePoint = useMemo(() => {
+    let data = updatedGeojson || geojson;
+
+    if (!data || typeof data === "string" || data?.features?.length === 0 || name?.length === 0) {
+      return null;
+    }
+
+    const centre = turf.center(data as AllGeoJSON);
+
+    if (!centre) {
+      return null;
+    }
+
+    return {
+      ...centre,
+      properties: {
+        description: name
+      }
+    };
+  }, [geojson, name, updatedGeojson]);
+
+  useEffect(() => {
+    if (mapRef && centrePoint && showLabel) {
+      // Bring label to top
+      mapRef.moveLayer("label");
+    }
+  }, [centrePoint, mapRef, showLabel]);
+
   const onSubmit: SubmitHandler<FormValues> = async data => {
     if (mapRef && (updatedGeojson || name)) {
+      setSaving(true);
+      setShowLabel(false);
       setShouldUseChangesMade(false);
       goToGeojson(mapRef, updatedGeojson || area?.attributes.geostore.geojson, false);
-      setSaving(true);
       const method = mode === "manage" ? "PATCH" : "POST";
+
+      let id = area?.id || "";
 
       try {
         if (updatedGeojson) {
-          await saveAreaWithGeostore(
+          const resp = await saveAreaWithGeostore(
             {
               ...area,
               geojson: updatedGeojson,
@@ -102,11 +138,13 @@ const AreaEdit: FC<IProps> = ({
             mapRef.getCanvas(),
             method
           );
+          // @ts-ignore - Incorrect type
+          id = Object.keys(resp.area)[0];
         } else {
           await saveArea({ ...area, name }, mapRef.getCanvas(), method);
         }
 
-        history.push("/areas");
+        history.push(`/areas/${id}`);
         toastr.success(intl.formatMessage({ id: "areas.saved" }), "");
         ReactGA.event({
           category: CATEGORY.AREA_CREATION,
@@ -117,6 +155,8 @@ const AreaEdit: FC<IProps> = ({
         toastr.error(intl.formatMessage({ id: "areas.errorSaving" }), "");
         setShouldUseChangesMade(true);
       }
+
+      setShowLabel(true);
     }
   };
 
@@ -201,7 +241,7 @@ const AreaEdit: FC<IProps> = ({
 
   return (
     <>
-      <div className="c-area-edit">
+      <div className="c-area-edit l-full-page-map">
         <Loader isLoading={loading || saving} />
 
         <Hero
@@ -217,14 +257,21 @@ const AreaEdit: FC<IProps> = ({
         />
 
         <Map
-          className="c-map--within-hero"
+          // className="c-map--within-hero"
           onMapLoad={handleMapLoad}
           onDrawLoad={handleDrawLoad}
           onMapEdit={handleMapEdit}
           geojsonToEdit={geojson}
-        />
+        >
+          {centrePoint && showLabel && (
+            <Source id="label" type="geojson" data={centrePoint}>
+              {/* @ts-ignore */}
+              <Layer {...labelStyle} id="label" />
+            </Source>
+          )}
+        </Map>
 
-        <div className="row column">
+        <div className="row column u-w-100">
           <div className="c-area-edit__actions">
             <div className="c-area-edit__shapefile">
               <label className="c-button c-button--default" htmlFor="shapefile">

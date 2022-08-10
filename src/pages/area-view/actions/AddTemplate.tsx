@@ -12,6 +12,7 @@ import { useAppDispatch } from "hooks/useRedux";
 import { getAreas } from "modules/areas";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup/dist/yup";
+import PlusIcon from "assets/images/icons/PlusForButton.svg";
 
 interface IProps {
   templates: TGetTemplates["data"];
@@ -86,7 +87,8 @@ const AddTemplateModal: FC<IProps> = ({ templates }) => {
         }
       ]}
       actions={
-        <Link className="c-button c-button--primary" to="/templates/create">
+        <Link className="c-button c-button--secondary" to={`/templates/create?backTo=/areas/${areaId}/template`}>
+          <img className="c-button__inline-icon" src={PlusIcon} alt="" role="presentation" />
           <FormattedMessage id="templates.create" />
         </Link>
       }

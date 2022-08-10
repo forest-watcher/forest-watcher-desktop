@@ -40,7 +40,7 @@ const Reports: FC<IProps> = props => {
   return !pageTabs.find(pageTab => pageTab.value === reportingTab) ? (
     <Redirect to={INVESTIGATION_PATH} />
   ) : (
-    <div className={classnames(match.url.includes(INVESTIGATION_PATH) && "l-reporting")}>
+    <div className={classnames(match.url.includes(INVESTIGATION_PATH) && "l-full-page-map")}>
       <Hero title="reports.name" pageTabs={{ value: reportingTab, options: pageTabs }} />
 
       <Switch>

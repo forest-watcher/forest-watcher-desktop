@@ -1,4 +1,5 @@
-import { Route, Switch, Redirect } from "react-router-dom";
+import { useEffect } from "react";
+import { Route, Switch, Redirect, useLocation } from "react-router-dom";
 import PropTypes from "prop-types";
 import querystring from "query-string";
 
@@ -40,6 +41,18 @@ const getLoginComponent = ({ user, location }) => {
 const Routes = props => {
   const queryParams = querystring.parse(window.location.search || "");
   const { match, user, location, defaultComponent } = props;
+
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    // only on top level (main nav)
+    // stops deeper routes, that just contain modals, triggering a reset
+    const isTopLevel = pathname.split("/").length === 2;
+    if (isTopLevel) {
+      window.scrollTo(0, 0);
+    }
+  }, [pathname]);
+
   return (
     <Switch>
       <Route exact path="/" render={defaultComponent} />

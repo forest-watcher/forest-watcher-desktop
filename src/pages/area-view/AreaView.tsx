@@ -21,6 +21,7 @@ import { UnpackNestedValue } from "react-hook-form";
 import ExportModal, { TExportForm } from "components/modals/exports/ExportModal";
 import { exportService } from "services/exports";
 import { AREA_EXPORT_FILE_TYPES } from "constants/export";
+import { sortByNumber, sortByString } from "helpers/table";
 
 interface IProps extends TPropsFromRedux {}
 export type TParams = {
@@ -188,7 +189,8 @@ const AreasView: FC<IProps & RouteComponentProps<TParams>> = ({
                       {
                         key: "name",
                         name: "areas.details.templatesTable.header.name",
-                        rowHref: row => `/templates/${row.id}`
+                        rowHref: row => `/templates/${row.id}`,
+                        sortCompareFn: sortByString
                       }
                     ]}
                     rowActions={[removeTemplate]}
@@ -224,8 +226,17 @@ const AreasView: FC<IProps & RouteComponentProps<TParams>> = ({
                     })) ?? []
                   }
                   columnOrder={[
-                    { key: "name", name: "areas.details.teamsTable.header.name", rowHref: row => `/teams/${row.id}` },
-                    { key: "reports", name: "areas.details.teamsTable.header.reports" }
+                    {
+                      key: "name",
+                      name: "areas.details.teamsTable.header.name",
+                      rowHref: row => `/teams/${row.id}`,
+                      sortCompareFn: sortByString
+                    },
+                    {
+                      key: "reports",
+                      name: "areas.details.teamsTable.header.reports",
+                      sortCompareFn: (a, b, direction) => sortByNumber(a as number, b as number, direction)
+                    }
                   ]}
                   rowActions={[removeTeam]}
                 />
