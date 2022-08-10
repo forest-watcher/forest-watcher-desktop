@@ -7,7 +7,7 @@ import { toastr } from "react-redux-toastr";
 import { useIntl } from "react-intl";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup/dist/yup";
-import useQuery from "hooks/useQuery";
+import useUrlQuery from "hooks/useUrlQuery";
 
 type TCreateTeamForm = {
   name: string;
@@ -28,7 +28,7 @@ const CreateTeamModal: FC<IProps> = props => {
   const { isOpen } = props;
   const intl = useIntl();
   const history = useHistory();
-  const urlQuery = useQuery();
+  const urlQuery = useUrlQuery();
   const backTo = useMemo(() => urlQuery.get("backTo"), [urlQuery]);
 
   const onClose = () => {
