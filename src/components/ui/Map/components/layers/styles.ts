@@ -79,7 +79,7 @@ export const labelStyle = {
   id: "labels",
   type: "symbol",
   source: "places",
-  minzoom: 5,
+  minzoom: 3,
   tolerance: 0,
   layout: {
     "text-field": ["get", "description"],
