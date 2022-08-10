@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, useMemo } from "react";
 import FormModal from "components/modals/FormModal";
 import { UnpackNestedValue } from "react-hook-form";
 import { useHistory } from "react-router-dom";
@@ -7,6 +7,7 @@ import { toastr } from "react-redux-toastr";
 import { useIntl } from "react-intl";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup/dist/yup";
+import useQuery from "hooks/useQuery";
 
 type TCreateTeamForm = {
   name: string;
@@ -27,15 +28,17 @@ const CreateTeamModal: FC<IProps> = props => {
   const { isOpen } = props;
   const intl = useIntl();
   const history = useHistory();
+  const urlQuery = useQuery();
+  const backTo = useMemo(() => urlQuery.get("backTo"), [urlQuery]);
 
   const onClose = () => {
-    history.push("/teams");
+    history.push(backTo || "/teams");
   };
 
   const onSave = async (data: UnpackNestedValue<TCreateTeamForm>) => {
     try {
       const { data: newTeam } = await teamService.createTeam(data);
-      history.push(`/teams/${newTeam.id}`);
+      history.push(backTo || `/teams/${newTeam.id}`);
       toastr.success(intl.formatMessage({ id: "teams.create.success" }), "");
     } catch (e) {
       toastr.error(intl.formatMessage({ id: "teams.create.error" }), "");

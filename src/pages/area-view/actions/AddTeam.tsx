@@ -88,7 +88,7 @@ const AddTeamModal: FC<IProps> = ({ teams, users }) => {
         }
       ]}
       actions={
-        <Link className="c-button c-button--primary" to="/teams/create">
+        <Link className="c-button c-button--primary" to={`/teams/create?backTo=/areas/${areaId}/team`}>
           <FormattedMessage id="teams.create" />
         </Link>
       }
