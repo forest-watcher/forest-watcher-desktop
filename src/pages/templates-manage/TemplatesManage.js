@@ -28,6 +28,8 @@ class TemplatesManage extends Component {
     super(props);
     this.state = {};
     this.canSubmit = true;
+    this.urlParams = new URLSearchParams(props.location.search);
+    this.backLink = this.urlParams.get("backTo") || "/templates";
   }
 
   ///////////////////////////////
@@ -41,14 +43,14 @@ class TemplatesManage extends Component {
     const { history } = this.props;
     if (nextProps.template !== this.props.template && this.props.mode === "manage") this.setPropsToState(nextProps);
     if (this.props.saving && !nextProps.saving && !nextProps.error) {
-      history.push("/templates");
+      history.push(this.backLink);
       toastr.success(this.props.intl.formatMessage({ id: "templates.saved" }));
     }
     if (nextProps.error) {
       toastr.error(this.props.intl.formatMessage({ id: "templates.errorSaving" }));
     }
     if (this.props.deleting && !nextProps.deleting && !nextProps.error) {
-      history.push("/templates");
+      history.push(this.backLink);
       toastr.info(this.props.intl.formatMessage({ id: "templates.deleted" }));
     }
     if (nextProps.error) {
@@ -353,7 +355,7 @@ class TemplatesManage extends Component {
               )}
             </div>
             <FormFooter>
-              <Link to="/templates">
+              <Link to={this.backLink}>
                 <Button variant="secondary" disabled={isLoading}>
                   <FormattedMessage id="forms.cancel" />
                 </Button>

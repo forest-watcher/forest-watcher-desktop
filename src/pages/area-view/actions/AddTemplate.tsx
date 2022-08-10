@@ -86,7 +86,7 @@ const AddTemplateModal: FC<IProps> = ({ templates }) => {
         }
       ]}
       actions={
-        <Link className="c-button c-button--primary" to="/templates/create">
+        <Link className="c-button c-button--primary" to={`/templates/create?backTo=/areas/${areaId}/template`}>
           <FormattedMessage id="templates.create" />
         </Link>
       }

@@ -179,6 +179,7 @@ export function saveTemplate(template: TReport, method: string, templateId: stri
           type: SET_TEMPLATE,
           payload: normalized
         });
+        dispatch(getTemplates());
         dispatch({
           type: SET_SAVING_TEMPLATE,
           payload: {

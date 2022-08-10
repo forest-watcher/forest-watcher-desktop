@@ -30,6 +30,10 @@ const Select = (props: Props) => {
   const { selectProps, registered, error, id, formHook, variant, hideLabel, isMultiple = false, className } = props;
   const [options, setOptions] = useState<Option[]>(selectProps.options || []);
 
+  useEffect(() => {
+    setOptions(options);
+  }, [options]);
+
   const value =
     formHook.watch(props.registered.name) ||
     (Array.isArray(selectProps.defaultValue)
