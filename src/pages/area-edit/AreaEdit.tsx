@@ -89,7 +89,7 @@ const AreaEdit: FC<IProps> = ({
   const centrePoint = useMemo(() => {
     let data = updatedGeojson || geojson;
 
-    if (!data || typeof data === "string" || data?.features?.length === 0 || name.length === 0) {
+    if (!data || typeof data === "string" || data?.features?.length === 0 || name?.length === 0) {
       return null;
     }
 

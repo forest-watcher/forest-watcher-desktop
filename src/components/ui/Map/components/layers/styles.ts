@@ -88,7 +88,8 @@ export const labelStyle = {
     "text-justify": "auto",
     "text-size": 18,
     "icon-text-fit": "both",
-    "icon-image": MapImages.label
+    "icon-image": MapImages.label,
+    "icon-allow-overlap": true
   },
   paint: {
     "text-color": "#555555"
