@@ -24,6 +24,21 @@ export class ExportSerive extends BaseService {
     });
   }
 
+  exportAllReports(fileType: string): Promise<TExportAllAreasResponse> {
+    this.token = store.getState().user.token;
+
+    const body = {
+      fileType,
+      fields: ["areaOfInterestName", "reportName"],
+      language: "en"
+    };
+
+    return this.fetchJSON(`/reports/exportAll`, {
+      method: "POST",
+      body: JSON.stringify(body)
+    });
+  }
+
   exportArea(id: string, fileType: string): Promise<TExportOneAreaResponse> {
     this.token = store.getState().user.token;
 

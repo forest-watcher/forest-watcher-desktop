@@ -3,9 +3,9 @@ import Button from "components/ui/Button/Button";
 import DataFilter from "components/ui/DataFilter/DataFilter";
 import DataTable from "components/ui/DataTable/DataTable";
 import { TPropsFromRedux } from "./ReportsContainer";
-import { FC, useMemo, useState } from "react";
+import { FC, useCallback, useMemo, useState } from "react";
 import { FormattedMessage, useIntl } from "react-intl";
-import { Route, Switch, useRouteMatch } from "react-router-dom";
+import { Link, Route, Switch, useHistory, useRouteMatch } from "react-router-dom";
 import useReportFilters from "./useReportFilters";
 import Loader from "components/ui/Loader";
 import EmptyState from "components/ui/EmptyState/EmptyState";
@@ -14,6 +14,10 @@ import { sortByDateString, sortByString } from "helpers/table";
 import DeleteRoute from "./actions/DeleteReportContainer";
 import { getReportAlertsByName } from "helpers/reports";
 import { IAlertIdentifier } from "constants/alerts";
+import { UnpackNestedValue } from "react-hook-form";
+import ExportModal, { TExportForm } from "components/modals/exports/ExportModal";
+import { exportService } from "services/exports";
+import { REPORT_EXPORT_FILE_TYPES } from "constants/export";
 
 export type TReportsDataTable = {
   id: string;
@@ -40,6 +44,7 @@ interface IProps extends TPropsFromRedux {}
 const Reports: FC<IProps> = props => {
   const { allAnswers, loading, templates } = props;
   let { path, url } = useRouteMatch();
+  const history = useHistory();
   const [selectedReports, setSelectedReports] = useState<TReportsDataTable[]>([]);
 
   const rows = useMemo<TReportsDataTable[]>(
@@ -65,6 +70,24 @@ const Reports: FC<IProps> = props => {
 
   const { filters, extraFilters } = useReportFilters(allAnswers, templates);
 
+  const handleExport = useCallback(async (values: UnpackNestedValue<TExportForm>) => {
+    console.log(values);
+    // Do request
+    try {
+      const { data } = await exportService.exportAllReports(values.fileType);
+      if (data) {
+        console.log(data);
+      }
+    } catch (err) {
+      // Do toast
+    }
+    // Action request
+
+    // Go back
+    // history.push("/areas");
+    return Promise.resolve();
+  }, []);
+
   return (
     <>
       <div className="l-content">
@@ -73,9 +96,9 @@ const Reports: FC<IProps> = props => {
           title="reports.reports.subTitle"
           size="small"
           actions={
-            <Button>
+            <Link className="c-button c-button--primary" to={`${url}/export`}>
               <FormattedMessage id={selectedReports.length > 0 ? "export.selected" : "export.all"} />
-            </Button>
+            </Link>
           }
         >
           {!loading &&
@@ -156,6 +179,15 @@ const Reports: FC<IProps> = props => {
       <Switch>
         <Route path={`${path}/:reportId/:id/delete`}>
           <DeleteRoute />
+        </Route>
+        <Route path={`${path}/export`}>
+          <ExportModal
+            onSave={handleExport}
+            onClose={() => history.push("/reporting/reports")}
+            isOpen
+            fileTypes={REPORT_EXPORT_FILE_TYPES}
+            fields={[]}
+          />
         </Route>
       </Switch>
     </>
