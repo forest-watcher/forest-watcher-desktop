@@ -110,6 +110,7 @@
   "areas.reportsBtn": "show reports",
   "areas.addArea": "add area",
   "areas.createArea": "Create area",
+  "areas.editArea": "Edit area",
   "areas.manageArea": "Manage area",
   "areas.manageAreaName": "Manage area: {name}",
   "areas.uploadShapefile": "Upload shapefile",

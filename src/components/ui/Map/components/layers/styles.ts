@@ -80,9 +80,11 @@ export const labelStyle = {
   type: "symbol",
   source: "places",
   minzoom: 5,
+  tolerance: 0,
   layout: {
     "text-field": ["get", "description"],
     "text-anchor": "center",
+    "icon-anchor": "center",
     "text-justify": "auto",
     "text-size": 18,
     "icon-text-fit": "both",
