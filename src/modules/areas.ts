@@ -302,7 +302,7 @@ export function saveAreaWithGeostore(area: any, node: HTMLCanvasElement, method:
     const geostore = await dispatch(saveGeostore(area.geojson));
     const geostoreId = Object.keys(geostore)[0];
     const areaWithGeostore = { ...area, geostore: geostoreId };
-    await dispatch(saveArea(areaWithGeostore, node, method));
+    return await dispatch(saveArea(areaWithGeostore, node, method));
   };
 }
 

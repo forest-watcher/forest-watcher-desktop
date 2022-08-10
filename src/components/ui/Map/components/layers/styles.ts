@@ -79,14 +79,17 @@ export const labelStyle = {
   id: "labels",
   type: "symbol",
   source: "places",
-  minzoom: 5,
+  minzoom: 3,
+  tolerance: 0,
   layout: {
     "text-field": ["get", "description"],
     "text-anchor": "center",
+    "icon-anchor": "center",
     "text-justify": "auto",
     "text-size": 18,
     "icon-text-fit": "both",
-    "icon-image": MapImages.label
+    "icon-image": MapImages.label,
+    "icon-allow-overlap": true
   },
   paint: {
     "text-color": "#555555"
