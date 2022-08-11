@@ -48,7 +48,6 @@ const InvestigationPage: FC<IProps> = props => {
   const history = useHistory();
   let selectedAreaMatch = useRouteMatch<TParams>({ path: "/reporting/investigation/:areaId", exact: false });
 
-  console.log(selectedAreaMatch);
   const handleAreaSelect = useCallback(
     (areaId: string) => {
       history.push(`/reporting/investigation/${areaId}`);
