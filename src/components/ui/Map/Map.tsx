@@ -85,6 +85,7 @@ const Map: FC<IProps> = props => {
         mapStyle={mapStyle}
         onLoad={handleMapLoad}
         preserveDrawingBuffer // Allows canvas.toDataURL to work
+        cooperativeGestures
       >
         <MapControls />
         {drawRef && mapRef && <MapEditControls draw={drawRef} map={mapRef} onUpdate={onMapEdit} />}
