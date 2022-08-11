@@ -1,4 +1,4 @@
-import { FC, useCallback, useState } from "react";
+import { FC, useCallback, useMemo, useState } from "react";
 import { Route, RouteComponentProps, Switch, useHistory, useParams, useRouteMatch } from "react-router-dom";
 import UserAreasMap from "components/user-areas-map/UserAreasMap";
 import AreaDetailsControlPanel from "./control-panels/AreaDetailsContainer";
@@ -10,6 +10,8 @@ import { BASEMAPS } from "constants/mapbox";
 import AreaDetailCard from "components/ui/Map/components/cards/AreaDetail";
 import { getNumberOfTeamsInArea } from "helpers/areas";
 import { TAreasInTeam } from "services/area";
+import { AllGeoJSON } from "@turf/turf";
+import useZoomToGeojson from "hooks/useZoomToArea";
 
 interface IProps extends RouteComponentProps, TPropsFromRedux {}
 
@@ -21,6 +23,9 @@ interface IAreaCardProps {
 const AreaCardWrapper: FC<IAreaCardProps> = ({ areas, areasInUsersTeams }) => {
   const { areaId } = useParams<TParams>();
   const history = useHistory();
+
+  const selectedAreaGeoData = useMemo(() => areas[areaId]?.attributes.geostore.geojson, [areaId, areas]);
+  useZoomToGeojson(selectedAreaGeoData as AllGeoJSON);
 
   return (
     <AreaDetailCard
@@ -41,8 +46,9 @@ const InvestigationPage: FC<IProps> = props => {
   const [currentPlanetPeriod, setCurrentPlanetPeriod] = useState("");
   const [currentProc, setCurrentProc] = useState<"" | "cir">("");
   const history = useHistory();
-  let selectedAreaMatch = useRouteMatch<TParams>({ path: "/reporting/investigation/:areaId/start", exact: true });
+  let selectedAreaMatch = useRouteMatch<TParams>({ path: "/reporting/investigation/:areaId", exact: false });
 
+  console.log(selectedAreaMatch);
   const handleAreaSelect = useCallback(
     (areaId: string) => {
       history.push(`/reporting/investigation/${areaId}`);

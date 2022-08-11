@@ -1,8 +1,6 @@
 import { useHistory, useParams } from "react-router-dom";
 import { FC, useCallback, useEffect, useMemo } from "react";
 import { toastr } from "react-redux-toastr";
-import { LngLatBoundsLike, useMap } from "react-map-gl";
-import * as turf from "@turf/turf";
 import { AllGeoJSON } from "@turf/turf";
 import { useAppSelector } from "hooks/useRedux";
 import { TParams } from "../types";
@@ -19,6 +17,7 @@ import Timeframe from "components/ui/Timeframe";
 //@ts-ignore
 import breakpoints from "styles/utilities/_u-breakpoints.scss";
 import { useMediaQuery } from "react-responsive";
+import useZoomToGeojson from "hooks/useZoomToArea";
 
 export enum LAYERS {
   reports = "reports"
@@ -42,8 +41,10 @@ const AreaDetailsControlPanel: FC<IProps> = props => {
   const isMobile = useMediaQuery({ maxWidth: breakpoints.mobile });
 
   const { data: areas, loading: isLoadingAreas } = useAppSelector(state => state.areas);
-  const { current: map } = useMap();
+  const selectedAreaGeoData = useMemo(() => areas[areaId]?.attributes.geostore.geojson, [areaId, areas]);
   const intl = useIntl();
+
+  useZoomToGeojson(selectedAreaGeoData as AllGeoJSON);
 
   const formhook = useForm<FormValues>({
     defaultValues: {
@@ -98,19 +99,6 @@ const AreaDetailsControlPanel: FC<IProps> = props => {
       }))
       .reverse();
   }, [basemaps, watcher.currentPlanetImageType]);
-
-  const selectedAreaGeoData = useMemo(() => areas[areaId]?.attributes.geostore.geojson, [areaId, areas]);
-
-  const bounds = useMemo(
-    () => (selectedAreaGeoData ? turf.bbox(selectedAreaGeoData as AllGeoJSON) : null),
-    [selectedAreaGeoData]
-  );
-
-  useEffect(() => {
-    if (map && bounds) {
-      map.fitBounds(bounds as LngLatBoundsLike, { padding: 40 });
-    }
-  }, [map, bounds]);
 
   const handleBackBtnClick = useCallback(() => {
     reset();

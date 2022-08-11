@@ -74,9 +74,11 @@ const AreaListControlPanel: FC<IProps> = props => {
         <FormattedMessage id="reporting.control.panel.area.list.your.areas" />
       </h3>
       <div className="c-map-control-panel__grid">
-        {Object.values<any>(areas).map(area => (
-          <AreaListAreaCard key={area.id} area={area} />
-        ))}
+        {Object.values<any>(areas)
+          .sort((a, b) => a.attributes.name.localeCompare(b.attributes.name.toString()))
+          .map(area => (
+            <AreaListAreaCard key={area.id} area={area} />
+          ))}
       </div>
 
       {!isLoadingAreas && (isLoadingAreasInUsers || teamAreas.length) && (
@@ -92,9 +94,11 @@ const AreaListControlPanel: FC<IProps> = props => {
                 <div key={teamArea.team?.id}>
                   <h4 className="c-map-control-panel__team-name">{teamArea.team?.attributes?.name}</h4>
                   <div className="c-map-control-panel__grid">
-                    {teamArea.areas.map(({ data: area }) => (
-                      <AreaListAreaCard key={area.id} area={area} />
-                    ))}
+                    {[...teamArea.areas]
+                      .sort((a, b) => a.data.attributes.name.localeCompare(b.data.attributes.name.toString()))
+                      .map(({ data: area }) => (
+                        <AreaListAreaCard key={area.id} area={area} />
+                      ))}
                   </div>
                 </div>
               )
