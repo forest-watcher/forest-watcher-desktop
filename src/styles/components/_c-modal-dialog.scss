@@ -56,12 +56,11 @@ $c-modal-transition-duration: 300ms;
   &__title {
     padding: 30px 46px 30px 60px;
     background-color: $neutral-400;
-
     font-weight: 400;
     font-size: 24px;
     line-height: 36px;
     color: $neutral-700;
-
+    text-transform: capitalize;
     display: flex;
     justify-content: space-between;
     align-items: center;

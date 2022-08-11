@@ -65,4 +65,15 @@
     align-items: center;
     gap: $global-spacing-2;
   }
+
+  &__checkbox-cell {
+    left: 0;
+    position: sticky;
+    z-index: 9999;
+    background: white;
+  }
+
+  &__checkbox-header-cell {
+    background: #f7f7f7;
+  }
 }
