@@ -103,7 +103,6 @@ const ExportModal: FC<IProps> = ({ onClose, onSave, isOpen, fileTypes, fields })
     const saveResp = await onSave(resp);
     if (saveResp) {
       // handle action, e.g. download
-      console.log({ saveResp });
       switch (resp.downloadMethod) {
         case "download":
           download(saveResp);
