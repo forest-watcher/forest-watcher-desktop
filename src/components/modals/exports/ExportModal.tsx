@@ -4,6 +4,9 @@ import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup/dist/yup";
 import { IProps as IModalProps } from "components/modals/FormModal";
 import { useIntl } from "react-intl";
+import { UnpackNestedValue } from "react-hook-form";
+import { copyToClipboard, download, openMailClient } from "helpers/exports";
+import { toastr } from "react-redux-toastr";
 
 export type TExportForm = {
   fileType: string;
@@ -13,7 +16,7 @@ export type TExportForm = {
 
 interface IProps {
   onClose: IModalProps<TExportForm>["onClose"];
-  onSave: IModalProps<TExportForm>["onSave"];
+  onSave: (data: UnpackNestedValue<TExportForm>) => Promise<string | void>;
   isOpen: IModalProps<TExportForm>["isOpen"];
   fileTypes: {
     label: string;
@@ -96,11 +99,30 @@ const ExportModal: FC<IProps> = ({ onClose, onSave, isOpen, fileTypes, fields })
     return toReturn;
   }, [fields, fileTypes, intl]);
 
+  const handleSave = async (resp: UnpackNestedValue<TExportForm>) => {
+    const saveResp = await onSave(resp);
+    if (saveResp) {
+      // handle action, e.g. download
+      console.log({ saveResp });
+      switch (resp.downloadMethod) {
+        case "download":
+          download(saveResp);
+          break;
+        case "link":
+          await copyToClipboard(saveResp);
+          toastr.success(intl.formatMessage({ id: "export.link.success" }), "");
+          break;
+        case "email":
+          openMailClient(intl.formatMessage({ id: "export.subject" }), saveResp);
+      }
+    }
+  };
+
   return (
     <FormModal<TExportForm>
       isOpen={isOpen}
       onClose={onClose}
-      onSave={onSave}
+      onSave={handleSave}
       modalTitle="export.title"
       submitBtnName="common.done"
       useFormProps={{ resolver: yupResolver(exportSchema) }}
