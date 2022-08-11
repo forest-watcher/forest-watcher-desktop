@@ -166,7 +166,7 @@ const DataTable = <T extends { [key: string]: string | number | any[] }>(props: 
         <thead className="c-data-table__header">
           <tr>
             {onSelect && (
-              <th>
+              <th className="c-data-table__checkbox-cell c-data-table__checkbox-header-cell">
                 <CellCheckbox
                   label={intl.formatMessage({ id: "common.selectAll" })}
                   onChange={handleSelectAll}
@@ -195,7 +195,7 @@ const DataTable = <T extends { [key: string]: string | number | any[] }>(props: 
           {rowsToDisplay.map((row, id) => (
             <tr key={id} className="c-data-table__row">
               {onSelect && (
-                <td>
+                <td className="c-data-table__checkbox-cell">
                   <CellCheckbox
                     label={intl.formatMessage({ id: "common.selectRow" })}
                     onChange={() => handleSelectOne(row)}
