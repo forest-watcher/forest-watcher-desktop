@@ -115,6 +115,9 @@
         &--is-active {
           background-color: $neutral-300;
         }
+        &:last-of-type {
+          margin-bottom: 0px;
+        }
       }
 
       .c-input__select-list-item-radio {

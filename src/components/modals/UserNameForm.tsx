@@ -47,7 +47,6 @@ const UserNameForm: FC<IProps> = props => {
       isOpen={isOpen}
       onSave={onSave}
       modalTitle="signUp.profile.form.title"
-      modalSubtitle="signUp.profile.form.subTitle"
       submitBtnName="common.save"
       useFormProps={{ resolver: yupResolver(userTeamSchema) }}
       inputs={[
@@ -55,7 +54,7 @@ const UserNameForm: FC<IProps> = props => {
           id: "user-first-name-input",
           htmlInputProps: {
             label: intl.formatMessage({ id: "signUp.profile.form.field.firstName" }),
-            placeholder: "",
+            placeholder: intl.formatMessage({ id: "signUp.profile.form.field.firstNamePlaceholder" }),
             type: "text"
           },
           registerProps: {
@@ -67,7 +66,7 @@ const UserNameForm: FC<IProps> = props => {
           id: "user-last-name-input",
           htmlInputProps: {
             label: intl.formatMessage({ id: "signUp.profile.form.field.lastName" }),
-            placeholder: "",
+            placeholder: intl.formatMessage({ id: "signUp.profile.form.field.lastNamePlaceholder" }),
             type: "text"
           },
           registerProps: {
