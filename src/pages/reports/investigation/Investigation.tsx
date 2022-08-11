@@ -56,10 +56,8 @@ const InvestigationPage: FC<IProps> = props => {
   );
 
   const handleAreaDeselect = useCallback(() => {
-    if (!selectedAreaMatch) {
-      history.push("/reporting/investigation");
-    }
-  }, [history, selectedAreaMatch]);
+    history.push("/reporting/investigation");
+  }, [history]);
 
   const handleControlPanelChange = (resp: FormValues) => {
     setShowReports(Boolean(resp.layers && resp.layers?.indexOf(LAYERS.reports) > -1));
