@@ -23,7 +23,9 @@ describe("AreaCard", () => {
           <div
             class="c-card__content-flex"
           >
-            <div>
+            <div
+              class="u-text-ellipsis u-flex-1"
+            >
               <h2
                 class="c-card__title u-margin-top-none"
               >
