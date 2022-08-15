@@ -160,18 +160,12 @@ const UserAreasMap: FC<PropsWithChildren<IProps>> = props => {
           id="answers"
           points={
             answers && showReports
-              ? answers
-                  .filter(
-                    answer =>
-                      answer.attributes?.areaOfInterest === selectedAreaId &&
-                      Boolean(answer?.attributes?.clickedPosition?.length)
-                  )
-                  .map(answer => ({
-                    // @ts-ignore
-                    position: [answer.attributes.clickedPosition[0].lon, answer.attributes.clickedPosition[0].lat],
-                    id: answer.id || "",
-                    alertTypes: getReportAlertsByName(answer.attributes?.reportName)
-                  }))
+              ? answers.map(answer => ({
+                  // @ts-ignore
+                  position: [answer.attributes.clickedPosition[0].lon, answer.attributes.clickedPosition[0].lat],
+                  id: answer.id || "",
+                  alertTypes: getReportAlertsByName(answer.attributes?.reportName)
+                }))
               : []
           }
           onSquareSelect={handleSquareSelect}

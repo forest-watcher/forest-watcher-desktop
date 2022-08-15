@@ -9,6 +9,7 @@ export interface SelectProps {
   defaultValue?: Option | Option[];
   alternateLabelStyle?: Boolean;
   onFocus?: () => void;
+  scrollOnOpen?: boolean;
 }
 
 export interface Option {

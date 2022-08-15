@@ -235,6 +235,12 @@
     }
   }
 
+  &__select-spacer {
+    position: absolute;
+    height: 20px;
+    width: 100%;
+  }
+
   &__error-icon {
     position: absolute;
     right: 10px;

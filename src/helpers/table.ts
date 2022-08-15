@@ -13,8 +13,8 @@ export enum TimeFrames {
   oneYear = moment().subtract(1, "year").valueOf()
 }
 
-export const getTimeFrames = (intl: IntlShape): Option[] => [
-  { label: intl.formatMessage({ id: "common.all" }), value: ALL_VALUE },
+export const getTimeFrames = (intl: IntlShape, allIntlId = "common.all"): Option[] => [
+  { label: intl.formatMessage({ id: allIntlId }), value: ALL_VALUE },
   { label: intl.formatMessage({ id: "timeframes.2weeks" }), value: TimeFrames.twoWeeks },
   { label: intl.formatMessage({ id: "timeframes.1month" }), value: TimeFrames.oneMonth },
   { label: intl.formatMessage({ id: "timeframes.2months" }), value: TimeFrames.twoMonths },
