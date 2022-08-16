@@ -29,7 +29,6 @@ const getSelectedItems = (isMultiple: boolean, value: any, options: Option[]) =>
 const Select = (props: Props) => {
   const { selectProps, registered, error, id, formHook, variant, hideLabel, isMultiple = false, className } = props;
   const [options, setOptions] = useState<Option[]>(selectProps.options || []);
-  const selectOptionsRef = useRef(null);
   const [selectHeight, setSelectHeight] = useState<number>(0);
 
   useEffect(() => {
