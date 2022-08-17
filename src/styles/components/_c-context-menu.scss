@@ -6,6 +6,7 @@
   min-width: 160px;
   // To override default styles
   border: 0;
+  transform: translateY(-2px);
 
   .szh-menu__item:not(:first-child) {
     margin-top: -1px;

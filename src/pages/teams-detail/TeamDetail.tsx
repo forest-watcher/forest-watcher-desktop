@@ -17,6 +17,7 @@ import DeleteTeam from "./actions/DeleteTeam";
 import RemoveTeamMember from "./actions/RemoveTeamMember";
 import { TTeamsDetailDataTableAction } from "./types";
 import { TGFWTeamsState } from "modules/gfwTeams";
+import { sortByString } from "helpers/table";
 
 export type TParams = {
   teamId: string;
@@ -33,13 +34,13 @@ export interface IOwnProps extends RouteComponentProps<TParams> {
 type IProps = IOwnProps & TPropsFromRedux;
 
 const columnOrder: TTeamsDetailDataTableColumns[] = [
-  { key: "name", name: "teams.details.table.header.name" },
-  { key: "email", name: "teams.details.table.header.user" }
+  { key: "name", name: "teams.details.table.header.name", sortCompareFn: sortByString },
+  { key: "email", name: "teams.details.table.header.user", sortCompareFn: sortByString }
 ];
 
 const columnOrderWithStatus: TTeamsDetailDataTableColumns[] = [
   ...columnOrder,
-  { key: "status", name: "teams.details.table.header.status" }
+  { key: "status", name: "teams.details.table.header.status", sortCompareFn: sortByString }
 ];
 
 const TeamDetail: FC<IProps> = props => {
