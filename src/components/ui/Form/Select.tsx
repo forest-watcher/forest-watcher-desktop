@@ -1,5 +1,5 @@
 import classnames from "classnames";
-import { Fragment, useCallback, useEffect, useRef, useState } from "react";
+import { Fragment, useCallback, useEffect, useState } from "react";
 import { UseFormRegisterReturn, UseFormReturn } from "react-hook-form";
 import { FieldPropsBase } from "types/field";
 import { SelectProps, Option } from "types/select";
