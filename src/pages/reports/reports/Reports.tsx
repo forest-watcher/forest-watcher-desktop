@@ -18,6 +18,7 @@ import { UnpackNestedValue } from "react-hook-form";
 import ExportModal, { TExportForm } from "components/modals/exports/ExportModal";
 import { exportService } from "services/exports";
 import { REPORT_EXPORT_FILE_TYPES } from "constants/export";
+import { toastr } from "react-redux-toastr";
 
 export type TReportsDataTable = {
   id: string;
@@ -70,23 +71,24 @@ const Reports: FC<IProps> = props => {
 
   const { filters, extraFilters } = useReportFilters(allAnswers, templates);
 
-  const handleExport = useCallback(async (values: UnpackNestedValue<TExportForm>) => {
-    console.log(values);
-    // Do request
-    try {
-      const { data } = await exportService.exportAllReports(values.fileType);
-      if (data) {
-        console.log(data);
+  const handleExport = useCallback(
+    async (values: UnpackNestedValue<TExportForm>) => {
+      // Do request
+      try {
+        if (selectedReports.length === rows.length || selectedReports.length === 0) {
+          const { data } = await exportService.exportAllReports(values.fileType, values.fields);
+          return data;
+        } else {
+          const { data } = await exportService.exportSomeReports(values.fileType, values.fields, selectedReports);
+          return data;
+        }
+      } catch (err) {
+        // Do toast
+        toastr.error(intl.formatMessage({ id: "export.error" }), "");
       }
-    } catch (err) {
-      // Do toast
-    }
-    // Action request
-
-    // Go back
-    // history.push("/areas");
-    return Promise.resolve();
-  }, []);
+    },
+    [intl, rows.length, selectedReports]
+  );
 
   return (
     <>
@@ -186,7 +188,28 @@ const Reports: FC<IProps> = props => {
             onClose={() => history.push("/reporting/reports")}
             isOpen
             fileTypes={REPORT_EXPORT_FILE_TYPES}
-            fields={[]}
+            fields={[
+              {
+                label: intl.formatMessage({ id: "reports.reports.table.header.createdAt" }),
+                value: "createdAt"
+              },
+              {
+                label: intl.formatMessage({ id: "reports.reports.table.header.monitor" }),
+                value: "fullName"
+              },
+              {
+                label: intl.formatMessage({ id: "reports.reports.table.header.name" }),
+                value: "reportName"
+              },
+              {
+                label: intl.formatMessage({ id: "reports.reports.table.header.area" }),
+                value: "areaOfInterestName"
+              },
+              {
+                label: intl.formatMessage({ id: "reports.reports.table.header.coordinates" }),
+                value: "clickedPosition"
+              }
+            ]}
           />
         </Route>
       </Switch>
