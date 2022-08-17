@@ -172,6 +172,7 @@ $c-card-border-radius:  $global-spacing-1;
 
   &__back-button {
     width: 16px;
+    min-width: 16px;
     height: 16px;
     background-image: url("../../assets/images/icons/ChevronRightSmall.svg");
     background-size: contain;
