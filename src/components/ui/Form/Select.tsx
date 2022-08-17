@@ -29,6 +29,7 @@ const getSelectedItems = (isMultiple: boolean, value: any, options: Option[]) =>
 const Select = (props: Props) => {
   const { selectProps, registered, error, id, formHook, variant, hideLabel, isMultiple = false, className } = props;
   const [options, setOptions] = useState<Option[]>(selectProps.options || []);
+  const [selectHeight, setSelectHeight] = useState<number>(0);
 
   useEffect(() => {
     setOptions(options);
@@ -157,6 +158,12 @@ const Select = (props: Props) => {
                   className={classnames("c-input__select-list-box", variant && `c-input__select-list-box--${variant}`)}
                   static={isMultiple}
                   onFocus={selectProps.onFocus}
+                  ref={(instance: HTMLUListElement | null) => {
+                    if (instance && selectProps.scrollOnOpen) {
+                      instance.scrollIntoView();
+                    }
+                    setSelectHeight(instance?.clientHeight || 0);
+                  }}
                 >
                   {options.map(option => (
                     <Listbox.Option as={Fragment} key={option.value} value={option}>
@@ -188,6 +195,9 @@ const Select = (props: Props) => {
                     </Listbox.Option>
                   ))}
                 </Listbox.Options>
+                {open && selectProps.scrollOnOpen && (
+                  <div className="c-input__select-spacer" style={{ bottom: -selectHeight - 20 }}></div>
+                )}
               </div>
               <FieldError error={error} id={`${id}-error`} />
             </div>

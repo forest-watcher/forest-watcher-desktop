@@ -1,5 +1,5 @@
 import { useHistory, useParams } from "react-router-dom";
-import { FC, useCallback, useEffect, useMemo } from "react";
+import { FC, useCallback, useEffect, useMemo, useState } from "react";
 import { toastr } from "react-redux-toastr";
 import { AllGeoJSON } from "@turf/turf";
 import { useAppSelector } from "hooks/useRedux";
@@ -18,6 +18,10 @@ import Timeframe from "components/ui/Timeframe";
 import breakpoints from "styles/utilities/_u-breakpoints.scss";
 import { useMediaQuery } from "react-responsive";
 import useZoomToGeojson from "hooks/useZoomToArea";
+import DataFilter from "components/ui/DataFilter/DataFilter";
+import { TFilterFields } from "pages/reports/reports/Reports";
+import useControlPanelReportFilters from "pages/reports/reports/useControlPanelReportFilters";
+import { TGetAllAnswers } from "services/reports";
 
 export enum LAYERS {
   reports = "reports"
@@ -32,17 +36,27 @@ export type FormValues = {
 
 interface IProps extends TPropsFromRedux {
   onChange?: (values: FormValues) => void;
+  onFilterUpdate: (answers: TGetAllAnswers["data"]) => void;
+  answers?: TGetAllAnswers["data"];
 }
 
 const AreaDetailsControlPanel: FC<IProps> = props => {
   const history = useHistory();
   const { areaId } = useParams<TParams>();
-  const { onChange, basemaps } = props;
+  const { onChange, basemaps, answers, templates, onFilterUpdate } = props;
+  const [filteredRows, setFilteredRows] = useState<any>(answers);
+
+  useEffect(() => {
+    setFilteredRows(answers);
+  }, [answers]);
+
   const isMobile = useMediaQuery({ maxWidth: breakpoints.mobile });
 
   const { data: areas, loading: isLoadingAreas } = useAppSelector(state => state.areas);
   const selectedAreaGeoData = useMemo(() => areas[areaId]?.attributes.geostore.geojson, [areaId, areas]);
   const intl = useIntl();
+
+  const { filters } = useControlPanelReportFilters(answers, templates);
 
   useZoomToGeojson(selectedAreaGeoData as AllGeoJSON);
 
@@ -117,6 +131,10 @@ const AreaDetailsControlPanel: FC<IProps> = props => {
   useEffect(() => {
     onChange?.(watcher);
   }, [onChange, watcher]);
+
+  useEffect(() => {
+    onFilterUpdate(filteredRows);
+  }, [filteredRows, onFilterUpdate]);
 
   useEffect(() => {
     resetField("currentPlanetPeriod", { defaultValue: baseMapPeriods[baseMapPeriods.length - 1]?.value });
@@ -202,6 +220,14 @@ const AreaDetailsControlPanel: FC<IProps> = props => {
             ]
           }}
         />
+        {answers && (
+          <DataFilter<TFilterFields, any>
+            filters={filters}
+            onFiltered={setFilteredRows}
+            options={answers}
+            className="c-data-filter--in-control-panel"
+          />
+        )}
       </form>
     </MapCard>
   );

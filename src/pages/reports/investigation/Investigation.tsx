@@ -12,6 +12,7 @@ import { getNumberOfTeamsInArea } from "helpers/areas";
 import { TAreasInTeam } from "services/area";
 import { AllGeoJSON } from "@turf/turf";
 import useZoomToGeojson from "hooks/useZoomToArea";
+import { TGetAllAnswers } from "services/reports";
 
 interface IProps extends RouteComponentProps, TPropsFromRedux {}
 
@@ -46,7 +47,16 @@ const InvestigationPage: FC<IProps> = props => {
   const [currentPlanetPeriod, setCurrentPlanetPeriod] = useState("");
   const [currentProc, setCurrentProc] = useState<"" | "cir">("");
   const history = useHistory();
+  const [filteredAnswers, setFilteredAnswers] = useState<TGetAllAnswers["data"] | null>(null);
   let selectedAreaMatch = useRouteMatch<TParams>({ path: "/reporting/investigation/:areaId", exact: false });
+
+  const answersBySelectedArea = useMemo(() => {
+    return allAnswers?.filter(
+      answer =>
+        answer.attributes?.areaOfInterest === selectedAreaMatch?.params.areaId &&
+        Boolean(answer?.attributes?.clickedPosition?.length)
+    );
+  }, [allAnswers, selectedAreaMatch?.params.areaId]);
 
   const handleAreaSelect = useCallback(
     (areaId: string) => {
@@ -74,6 +84,14 @@ const InvestigationPage: FC<IProps> = props => {
     setCurrentProc(resp.currentPlanetImageType === "nat" ? "" : resp.currentPlanetImageType || "");
   };
 
+  const handleFiltersChange = (filters: TGetAllAnswers["data"]) => {
+    if (filters?.length === answersBySelectedArea?.length) {
+      setFilteredAnswers(null);
+    } else {
+      setFilteredAnswers(filters);
+    }
+  };
+
   return (
     <UserAreasMap
       onAreaSelect={handleAreaSelect}
@@ -81,7 +99,7 @@ const InvestigationPage: FC<IProps> = props => {
       focusAllAreas={!selectedAreaMatch}
       selectedAreaId={selectedAreaMatch?.params.areaId}
       showReports={showReports && !!selectedAreaMatch}
-      answers={allAnswers}
+      answers={filteredAnswers || answersBySelectedArea}
       mapStyle={mapStyle}
       currentPlanetBasemap={
         basemaps.length && isPlanet ? basemaps.find(bm => bm.name === currentPlanetPeriod) || basemaps[0] : undefined
@@ -94,7 +112,11 @@ const InvestigationPage: FC<IProps> = props => {
           <AreaCardWrapper areas={areas} areasInUsersTeams={areasInUsersTeams} />
         </Route>
         <Route exact path={`${match.url}/:areaId/start`}>
-          <AreaDetailsControlPanel onChange={handleControlPanelChange} />
+          <AreaDetailsControlPanel
+            onChange={handleControlPanelChange}
+            answers={answersBySelectedArea}
+            onFilterUpdate={handleFiltersChange}
+          />
         </Route>
       </Switch>
     </UserAreasMap>

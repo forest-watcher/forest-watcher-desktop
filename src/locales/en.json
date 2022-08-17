@@ -493,5 +493,9 @@
   "maps.period": "Period",
   "maps.imageType": "Image type",
   "maps.imageType.natural": "Natural color",
-  "maps.imageType.cir": "False color (NIR)"
+  "maps.imageType.cir": "False color (NIR)",
+  "filters.all.alerts": "All Alerts",
+  "filters.all.templates": "All Templates",
+  "filters.all.timeframes": "All Time Frames",
+  "filters.all.monitors": "All Monitors"
 }
