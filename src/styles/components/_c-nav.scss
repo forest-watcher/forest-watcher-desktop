@@ -75,6 +75,14 @@
       transform: translateY(2px);
     }
 
+    .c-input, .c-input__select, .c-input__select-button {
+      height: 100%;
+    }
+
+    .c-input__select-list-box--simple {
+      top: 55px;
+    }
+
     &:hover {
       border-bottom: 5px solid $primary-400;
     }
@@ -160,8 +168,13 @@
       min-height: 42px;
       width: 100%;
 
+      .c-input, .c-input__select, .c-input__select-button {
+        height: unset;
+      }
+
       .c-input__select-list-box--simple {
         left: 0;
+        top: 28px;
       }
       &:hover {
         background: rgb(247, 247, 247);
