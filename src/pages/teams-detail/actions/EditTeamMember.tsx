@@ -11,7 +11,7 @@ import { getTeamMembers } from "modules/gfwTeams";
 import { TErrorResponse } from "constants/api";
 
 type TParams = TTeamDetailParams & {
-  memberRole: "manager" | "monitor";
+  memberRole: "manager" | "monitor" | "admin";
   memberId: string;
 };
 
@@ -34,11 +34,16 @@ const EditMemberRoleModal: FC<IProps> = props => {
 
   useEffect(() => {
     // In case the URL ends in anything else: /teams/:teamId/edit/:memberId/:memberRole
-    if (isOpen && memberRole && memberRole !== "manager" && memberRole !== "monitor") {
+    if (isOpen && memberRole && memberRole !== "manager" && memberRole !== "monitor" && memberRole !== "admin") {
       close();
     }
     // Close the modal if the member id isn't present on team
-    if (isOpen && members && !members.some(m => m.id === memberId)) {
+    if (
+      isOpen &&
+      members &&
+      !members.some(m => m.id === memberId) &&
+      !members.some(m => m.attributes.userId === memberId)
+    ) {
       toastr.warning(intl.formatMessage({ id: "teams.member.invalid" }), "");
       close();
     }
@@ -47,7 +52,11 @@ const EditMemberRoleModal: FC<IProps> = props => {
   const editTeamMember = async () => {
     setIsSaving(true);
     try {
-      await teamService.updateTeamMember({ teamId, teamUserId: memberId }, { role: memberRole });
+      if (memberRole !== "admin") {
+        await teamService.updateTeamMember({ teamId, teamUserId: memberId }, { role: memberRole });
+      } else {
+        await teamService.reassignAdmin({ teamId, userId: memberId });
+      }
       // Refetch the Team members
       dispatch(getTeamMembers(teamId));
       close();

@@ -5,6 +5,8 @@ export type TTeamDetailDataTable = {
   name?: string;
   email: string;
   status: string;
+  statusSuffix: string;
+  userId?: string;
 };
 
 export type TTeamsDetailDataTableAction = IRowAction<TTeamDetailDataTable>;
