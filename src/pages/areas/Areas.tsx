@@ -20,6 +20,12 @@ const Areas: FC<IProps> = props => {
   const { areasList, loading, loadingTeamAreas, areasInUsersTeams } = props;
   const areaMap = useMemo<TAreasResponse[]>(() => Object.values(areasList), [areasList]);
   const [selectedArea, setSelectedArea] = useState<TAreasResponse | null>(null);
+  const hasTeamAreas = useMemo(() => {
+    const teamWithAreasIndex = areasInUsersTeams.findIndex(teamArea => teamArea.areas.length > 0);
+
+    return teamWithAreasIndex > -1;
+  }, [areasInUsersTeams]);
+
   const intl = useIntl();
 
   const handleAreaDeselect = useCallback(() => {
@@ -57,7 +63,7 @@ const Areas: FC<IProps> = props => {
       )}
 
       <div className="l-content l-content--neutral-400">
-        {(!areaMap || areaMap.length === 0) && (!areasInUsersTeams || areasInUsersTeams.length === 0) && !loading ? (
+        {(!areaMap || areaMap.length === 0) && !loading ? (
           <div className="row column">
             <EmptyState
               iconUrl={AreaIcon}
@@ -87,30 +93,32 @@ const Areas: FC<IProps> = props => {
           </Article>
         )}
       </div>
-      <div className="l-content">
-        {areasInUsersTeams && areasInUsersTeams.length > 0 && !loadingTeamAreas && (
-          <Article title="areas.teamSubtitle">
-            {areasInUsersTeams.map(
-              areasInTeam =>
-                areasInTeam.team &&
-                areasInTeam.areas.length > 0 && (
-                  <Fragment key={areasInTeam.team.id}>
-                    <h3 className="u-text-600 u-text-neutral-700">{areasInTeam.team.attributes?.name}</h3>
+      {hasTeamAreas && (
+        <div className="l-content">
+          {areasInUsersTeams && areasInUsersTeams.length > 0 && !loadingTeamAreas && (
+            <Article title="areas.teamSubtitle">
+              {areasInUsersTeams.map(
+                areasInTeam =>
+                  areasInTeam.team &&
+                  areasInTeam.areas.length > 0 && (
+                    <Fragment key={areasInTeam.team.id}>
+                      <h3 className="u-text-600 u-text-neutral-700">{areasInTeam.team.attributes?.name}</h3>
 
-                    <div className="c-areas__area-listing">
-                      {[...areasInTeam.areas]
-                        .sort((a, b) => a.data.attributes.name.localeCompare(b.data.attributes.name.toString()))
-                        .map(area => (
-                          <AreaCard area={area.data} key={area.data.id} className="c-areas__item" />
-                        ))}
-                    </div>
-                  </Fragment>
-                )
-            )}
-          </Article>
-        )}
-        <Loader isLoading={loadingTeamAreas} />
-      </div>
+                      <div className="c-areas__area-listing">
+                        {[...areasInTeam.areas]
+                          .sort((a, b) => a.data.attributes.name.localeCompare(b.data.attributes.name.toString()))
+                          .map(area => (
+                            <AreaCard area={area.data} key={area.data.id} className="c-areas__item" />
+                          ))}
+                      </div>
+                    </Fragment>
+                  )
+              )}
+            </Article>
+          )}
+          <Loader isLoading={loadingTeamAreas} />
+        </div>
+      )}
     </div>
   );
 };
