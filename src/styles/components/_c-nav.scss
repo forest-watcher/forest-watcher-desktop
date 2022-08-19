@@ -64,6 +64,30 @@
     }
   }
 
+  &__menu {
+    height: 100%;
+    border-bottom: 5px solid transparent;
+    display: flex;
+    align-items: center;
+    justify-self: center;
+
+    .c-input__select-button {
+      transform: translateY(2px);
+    }
+
+    .c-input, .c-input__select, .c-input__select-button {
+      height: 100%;
+    }
+
+    .c-input__select-list-box--simple {
+      top: 55px;
+    }
+
+    &:hover {
+      border-bottom: 5px solid $primary-400;
+    }
+  }
+
   &__link-text {
     white-space: nowrap;
     overflow: hidden;
@@ -137,12 +161,24 @@
 
     .c-nav__menu {
       padding: 0px $global-spacing-5;
-      height: 42px;
       display: flex;
       align-items: center;
+      justify-self: center;
+      border: 0px;
+      min-height: 42px;
+      width: 100%;
+
+      .c-input, .c-input__select, .c-input__select-button {
+        height: unset;
+      }
 
       .c-input__select-list-box--simple {
         left: 0;
+        top: 28px;
+      }
+      &:hover {
+        background: rgb(247, 247, 247);
+        color: $neutral-600;
       }
     }
 
