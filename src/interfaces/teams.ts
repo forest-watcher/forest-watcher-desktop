@@ -107,9 +107,8 @@ export interface paths {
      * Delete a team member.
      *
      * Cannot delete the "administrator"\
-     * Cannot delete self, instead leave the team by `/v3/teams/{teamId}/users/{userId}/leave`
      *
-     * The authenticated user has to be either the "administrator" or a "manager" of the team.
+     * The authenticated user has to be either the "administrator" or a "manager" of the team or the user that is being deleted (only used in the case of account deletion). In all other cases, leave the team by `/v3/teams/{teamId}/users/{userId}/leave`
      */
     delete: operations["delete-v3-teams-teamId-users-teamUserId"];
     /**
@@ -125,6 +124,22 @@ export interface paths {
       path: {
         teamId: string;
         teamUserId: string;
+      };
+    };
+  };
+  "/v3/teams/{teamId}/users/reassignAdmin/{userId}": {
+    /**
+     * Reassign the administrator role to the user with user id {userId} with this user's team relation returned as a response. The current administrator is demoted to a manager.
+     *
+     * Only the administrator can do this (401 thrown if anyone but administrator hits the endpoint).
+     *
+     * 400 thrown if administrator tries to update themselves.
+     */
+    patch: operations["patch-v3-teams-teamId-users-reassignAdmin-userId"];
+    parameters: {
+      path: {
+        teamId: string;
+        userId: string;
       };
     };
   };
@@ -220,6 +235,7 @@ export interface components {
       role: "administrator" | "manager" | "monitor" | "left";
       /** @enum {string} */
       status: "confirmed" | "invited" | "declined";
+      name?: string;
     };
   };
   responses: {
@@ -506,6 +522,8 @@ export interface operations {
                 userRole: "administrator" | "manager" | "monitor" | "left";
                 /** Format: date-time */
                 createdAt: string;
+                areas?: string[];
+                members?: components["schemas"]["TeamUserRelation"][];
               };
             }[];
           };
@@ -535,6 +553,8 @@ export interface operations {
                 userRole: "administrator" | "manager" | "monitor" | "left";
                 /** Format: date-time */
                 createdAt: string;
+                areas?: string[];
+                members?: components["schemas"]["TeamUserRelation"][];
               };
             }[];
           };
@@ -592,9 +612,8 @@ export interface operations {
    * Delete a team member.
    *
    * Cannot delete the "administrator"\
-   * Cannot delete self, instead leave the team by `/v3/teams/{teamId}/users/{userId}/leave`
    *
-   * The authenticated user has to be either the "administrator" or a "manager" of the team.
+   * The authenticated user has to be either the "administrator" or a "manager" of the team or the user that is being deleted (only used in the case of account deletion). In all other cases, leave the team by `/v3/teams/{teamId}/users/{userId}/leave`
    */
   "delete-v3-teams-teamId-users-teamUserId": {
     parameters: {
@@ -637,6 +656,27 @@ export interface operations {
           role?: "manager" | "monitor";
         };
       };
+    };
+  };
+  /**
+   * Reassign the administrator role to the user with user id {userId} with this user's team relation returned as a response. The current administrator is demoted to a manager.
+   *
+   * Only the administrator can do this (401 thrown if anyone but administrator hits the endpoint).
+   *
+   * 400 thrown if administrator tries to update themselves.
+   */
+  "patch-v3-teams-teamId-users-reassignAdmin-userId": {
+    parameters: {
+      path: {
+        teamId: string;
+        userId: string;
+      };
+    };
+    responses: {
+      200: components["responses"]["TeamUserRelation"];
+      400: components["responses"]["Error"];
+      401: components["responses"]["Error"];
+      404: components["responses"]["Error"];
     };
   };
   /**

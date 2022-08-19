@@ -117,9 +117,11 @@ const TeamDetail: FC<IProps> = props => {
 
         return {
           id: member.id,
-          name: member.attributes.userId,
+          name: member.attributes.name || member.attributes.userId || "",
           email: member.attributes.email,
-          status: intl.formatMessage({ id: `teams.details.table.status.${statusSuffix}` })
+          status: intl.formatMessage({ id: `teams.details.table.status.${statusSuffix}` }),
+          statusSuffix,
+          userId: member.attributes.userId
         };
       }),
     [intl]
@@ -135,6 +137,15 @@ const TeamDetail: FC<IProps> = props => {
     name: "teams.details.table.actions.monitor",
     value: "makeMonitor",
     href: memberRow => `${match.url}/edit/${memberRow.id}/monitor`
+  };
+
+  const makeAdmin: TTeamsDetailDataTableAction = {
+    name: "teams.details.table.actions.admin",
+    value: "makeAdmin",
+    href: memberRow => `${match.url}/edit/${memberRow.userId}/admin`,
+    shouldShow: memberRow => {
+      return userIsAdmin && memberRow.statusSuffix === "confirmed";
+    }
   };
 
   const removeMember: TTeamsDetailDataTableAction = {
@@ -189,7 +200,7 @@ const TeamDetail: FC<IProps> = props => {
               className="u-w-100"
               rows={mapMembersToRows(manages)}
               columnOrder={userIsManager ? columnOrderWithStatus : columnOrder}
-              rowActions={userIsManager ? [makeMonitor, removeMember] : undefined}
+              rowActions={userIsManager ? [makeAdmin, makeMonitor, removeMember] : undefined}
             />
           </div>
         </Article>

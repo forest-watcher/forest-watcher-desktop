@@ -14,6 +14,7 @@ export interface IRowAction<T> extends Omit<Omit<IContextMenuProps["menuItems"][
   // For dynamic links, set href as a function, this will pass the row and
   // value information each time to generate the link
   href?: string | ((row: T, value?: string) => string);
+  shouldShow?: (row: T, value?: string) => boolean;
 }
 
 export interface IColumnOrder<T> {
@@ -230,12 +231,14 @@ const DataTable = <T extends { [key: string]: string | number | any[] }>(props: 
                     toggleClassName="c-data-table__action-toggle"
                     align="end"
                     offsetY={8}
-                    menuItems={rowActions.map(({ onClick = () => {}, href, value, ...menuItem }) => ({
-                      onClick: e => onClick(row, e.value),
-                      href: typeof href === "function" ? href(row, value) : href,
-                      value,
-                      ...menuItem
-                    }))}
+                    menuItems={rowActions
+                      .filter(rowAction => (rowAction.shouldShow ? rowAction.shouldShow(row, rowAction.value) : true))
+                      .map(({ onClick = () => {}, href, value, shouldShow, ...menuItem }) => ({
+                        onClick: e => onClick(row, e.value),
+                        href: typeof href === "function" ? href(row, value) : href,
+                        value,
+                        ...menuItem
+                      }))}
                   />
                 </td>
               )}

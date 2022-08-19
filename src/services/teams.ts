@@ -70,6 +70,11 @@ export type TPatchTeamMembersBody =
 export type TPatchTeamMembersResponse =
   paths["/v3/teams/{teamId}/users/{teamUserId}"]["patch"]["responses"]["200"]["content"]["application/json"];
 
+export type TAssignAdminParams =
+  paths["/v3/teams/{teamId}/users/reassignAdmin/{userId}"]["patch"]["parameters"]["path"];
+export type TAssignAdminResponse =
+  paths["/v3/teams/{teamId}/users/reassignAdmin/{userId}"]["patch"]["responses"]["200"]["content"]["application/json"];
+
 export type TDeleteTeamMembersParams = paths["/v3/teams/{teamId}/users/{teamUserId}"]["delete"]["parameters"]["path"];
 export type TDeleteTeamMembersResponse =
   paths["/v3/teams/{teamId}/users/{teamUserId}"]["delete"]["responses"]["200"]["content"]["application/json"];
@@ -185,6 +190,17 @@ export class TeamService extends BaseService {
       },
       method: "PATCH",
       body: JSON.stringify(body)
+    });
+  }
+
+  reassignAdmin(params: TAssignAdminParams): Promise<TAssignAdminResponse> {
+    this.token = store.getState().user.token;
+
+    return this.fetchJSON(`/${params.teamId}/users/reassignAdmin/${params.userId}`, {
+      headers: {
+        "Content-Type": "application/json"
+      },
+      method: "PATCH"
     });
   }
 
