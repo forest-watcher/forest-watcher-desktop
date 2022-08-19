@@ -1,6 +1,7 @@
 import Article from "components/layouts/Article";
 import Hero from "components/layouts/Hero/Hero";
 import DataTable, { IRowAction } from "components/ui/DataTable/DataTable";
+import { sortByString } from "helpers/table";
 import AcceptOrDecline from "pages/teams/invitation/actions/AcceptOrDecline";
 import { TPropsFromRedux } from "pages/teams/invitation/InvitationContainer";
 import { FC, useEffect, useMemo } from "react";
@@ -78,8 +79,8 @@ const Invitation: FC<IProps> = props => {
               className="u-w-100"
               rows={invitationRows}
               columnOrder={[
-                { key: "name", name: "teams.details.table.header.teamName" },
-                { key: "userRole", name: "teams.details.table.header.userRole" }
+                { key: "name", name: "teams.details.table.header.teamName", sortCompareFn: sortByString },
+                { key: "userRole", name: "teams.details.table.header.userRole", sortCompareFn: sortByString }
               ]}
               rowActions={[acceptInvitation, declineInvitation]}
             />
