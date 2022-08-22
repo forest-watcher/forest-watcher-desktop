@@ -58,7 +58,12 @@ const Reports: FC<IProps> = props => {
         name: answer.attributes?.reportName ?? "",
         area: answer.attributes?.areaOfInterestName ?? "",
         template: answer.attributes?.report ?? "",
-        coordinates: answer.attributes?.userPosition?.toString().replace(",", ", ") ?? ""
+        coordinates: `${
+          answer.attributes?.clickedPosition
+            ?.map((position: any) => [position.lat, position.lon])[0]
+            .toString()
+            .replace(",", ", ") || ""
+        }${(answer.attributes?.clickedPosition?.length || 0) > 1 ? "…" : ""}`
       })) ?? [],
     [allAnswers]
   );

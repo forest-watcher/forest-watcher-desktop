@@ -5,7 +5,7 @@ import { Props as ISelectProps } from "components/ui/Form/Select";
 import { Props as IToggleGroupProps } from "components/ui/Form/ToggleGroup";
 import { Props as IToggleProps } from "components/ui/Form/Toggle";
 import { Props as IRadioChipGroupProps } from "components/ui/Form/RadioChipGroup";
-import { useForm, SubmitHandler, RegisterOptions, UnpackNestedValue, FieldPath } from "react-hook-form";
+import { useForm, SubmitHandler, RegisterOptions, UnpackNestedValue, FieldPath, useWatch } from "react-hook-form";
 import UnsavedChanges from "components/modals/UnsavedChanges";
 import Loader from "components/ui/Loader";
 import { UseFormProps } from "react-hook-form/dist/types";
@@ -96,6 +96,8 @@ const FormModal = <T,>(props: IProps<T>) => {
   } = formhook;
   const [isClosing, setIsClosing] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+
+  const watcher = useWatch({ control: formhook.control });
 
   useEffect(() => {
     setIsClosing(false);
