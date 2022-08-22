@@ -18,7 +18,7 @@ class LayersSwitcher extends Component {
   }
 
   render() {
-    const { publicLayers, teamLayers, userLayers, deleteLayer, isManager } = this.props;
+    const { publicLayers, userLayers, deleteLayer, isManager } = this.props;
 
     const switchRow = (layer, i) => (
       <div className="list-row">
@@ -67,8 +67,7 @@ class LayersSwitcher extends Component {
           </h3>
         </div>
         <div className="layers-switchs">
-          {isManager && renderLayers("public", publicLayers)}
-          {renderLayers("team", teamLayers)}
+          {renderLayers("public", publicLayers)}
           {renderLayers("user", userLayers)}
         </div>
       </div>

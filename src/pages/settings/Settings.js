@@ -67,11 +67,10 @@ class Settings extends Component {
   };
 
   render() {
-    const { team, editing, loading, saving, isManager, publicLayers, teamLayers, userLayers, setEditing } = this.props;
+    const { editing, loading, saving, publicLayers, teamLayers, userLayers, setEditing } = this.props;
 
     const renderHero = () => {
-      const canEdit = !editing && (isManager || this.state.tabIndex === 1);
-      const tabStyle = !canEdit ? "-no-action" : "";
+      const canEdit = !editing;
       return (
         <Hero
           title={"settings.name"}
@@ -82,15 +81,7 @@ class Settings extends Component {
               </Button>
             )
           }
-        >
-          <Tab
-            pill
-            style={tabStyle}
-            options={["settings.myTeam", "settings.layers"]}
-            selectedIndex={this.state.tabIndex}
-            handleTabIndexChange={this.handleTabIndexChange}
-          />
-        </Hero>
+        ></Hero>
       );
     };
 
@@ -100,35 +91,19 @@ class Settings extends Component {
         <div className="l-content">
           {!loading && (
             <div>
-              {team && !editing ? (
+              {!editing ? (
                 <div className="settings-show">
-                  <Article>
-                    {this.state.tabIndex === 0 ? (
-                      <TeamsShow />
-                    ) : (
-                      <LayersShow
-                        isManager={isManager}
-                        publicLayers={publicLayers}
-                        teamLayers={teamLayers}
-                        userLayers={userLayers}
-                      />
-                    )}
-                  </Article>
+                  <LayersShow publicLayers={publicLayers} teamLayers={teamLayers} userLayers={userLayers} />
                 </div>
               ) : (
                 <div className="settings-edit">
-                  {this.state.tabIndex === 0 ? (
-                    <TeamsForm setEditing={setEditing} editing={editing} team={team} />
-                  ) : (
-                    <LayersManager
-                      editing={editing}
-                      setEditing={setEditing}
-                      isManager={isManager}
-                      publicLayers={publicLayers}
-                      teamLayers={teamLayers}
-                      userLayers={userLayers}
-                    />
-                  )}
+                  <LayersManager
+                    editing={editing}
+                    setEditing={setEditing}
+                    publicLayers={publicLayers}
+                    teamLayers={teamLayers}
+                    userLayers={userLayers}
+                  />
                 </div>
               )}
               <Loader isLoading={saving} />
