@@ -84,6 +84,7 @@ const Routes = props => {
 
           <Route path={[`${match.url}reporting/:reportingTab?`]} component={Reports} />
 
+          {/* TODO update these routes to use nested routes */}
           <Route exact path={`${match.url}teams`} component={Teams} />
           <Route path={`${match.url}teams/invitations`} component={TeamsInvitations} />
           <Route exact path={`${match.url}teams/create`} render={args => <Teams isCreatingTeam {...args} />} />

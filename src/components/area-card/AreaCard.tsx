@@ -14,7 +14,7 @@ const AreaCard: FC<IProps> = ({ className, area }) => {
     <Card size="large" className={classNames("c-area-card", className)}>
       <Card.Image alt="" src={area.attributes.image} loading="lazy" className="c-area-card__image" />
       <div className="c-card__content-flex">
-        <div>
+        <div className="u-text-ellipsis u-flex-1">
           <Card.Title className="u-margin-top-none">{area.attributes.name}</Card.Title>
         </div>
         <Card.Cta to={`/areas/${area.id}`} iconSrc={EditIcon}>
