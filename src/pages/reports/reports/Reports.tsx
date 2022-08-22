@@ -1,5 +1,4 @@
 import Article from "components/layouts/Article";
-import Button from "components/ui/Button/Button";
 import DataFilter from "components/ui/DataFilter/DataFilter";
 import DataTable from "components/ui/DataTable/DataTable";
 import { TPropsFromRedux } from "./ReportsContainer";
