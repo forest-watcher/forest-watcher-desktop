@@ -18,6 +18,7 @@ import ExportModal, { TExportForm } from "components/modals/exports/ExportModal"
 import { UnpackNestedValue } from "react-hook-form";
 import { AREA_EXPORT_FILE_TYPES } from "constants/export";
 import { exportService } from "services/exports";
+import { toastr } from "react-redux-toastr";
 
 interface IProps extends TPropsFromRedux {}
 
@@ -48,23 +49,16 @@ const Areas: FC<IProps> = props => {
 
   const handleExport = useCallback(
     async (values: UnpackNestedValue<TExportForm>) => {
-      console.log(values);
       // Do request
       try {
         const { data } = await exportService.exportAllAreas(values.fileType);
-        if (data) {
-          console.log(data);
-        }
+        return data;
       } catch (err) {
         // Do toast
+        toastr.error(intl.formatMessage({ id: "export.error" }), "");
       }
-      // Action request
-
-      // Go back
-      history.push("/areas");
-      return Promise.resolve();
     },
-    [history]
+    [intl]
   );
 
   return (
