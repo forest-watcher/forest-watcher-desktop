@@ -16,6 +16,7 @@ const useUnsavedChanges = (blockingCondition: boolean) => {
         setAttemptedLocation(location);
         return false;
       }
+      setIsBlockingNavigation(false);
       return true;
     });
 
