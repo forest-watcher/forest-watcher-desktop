@@ -13,6 +13,11 @@ import UserAreasMap from "components/user-areas-map/UserAreasMap";
 import AreaDetailCard from "components/ui/Map/components/cards/AreaDetail";
 import AreaIcon from "assets/images/icons/EmptyAreas.svg";
 import { getNumberOfTeamsInArea } from "helpers/areas";
+import { Link, Route, Switch, useHistory, useRouteMatch } from "react-router-dom";
+import ExportModal, { TExportForm } from "components/modals/exports/ExportModal";
+import { UnpackNestedValue } from "react-hook-form";
+import { AREA_EXPORT_FILE_TYPES } from "constants/export";
+import { exportService } from "services/exports";
 
 interface IProps extends TPropsFromRedux {}
 
@@ -27,6 +32,8 @@ const Areas: FC<IProps> = props => {
   }, [areasInUsersTeams]);
 
   const intl = useIntl();
+  const { url } = useRouteMatch();
+  const history = useHistory();
 
   const handleAreaDeselect = useCallback(() => {
     setSelectedArea(null);
@@ -39,9 +46,37 @@ const Areas: FC<IProps> = props => {
     [areasList]
   );
 
+  const handleExport = useCallback(
+    async (values: UnpackNestedValue<TExportForm>) => {
+      console.log(values);
+      // Do request
+      try {
+        const { data } = await exportService.exportAllAreas(values.fileType);
+        if (data) {
+          console.log(data);
+        }
+      } catch (err) {
+        // Do toast
+      }
+      // Action request
+
+      // Go back
+      history.push("/areas");
+      return Promise.resolve();
+    },
+    [history]
+  );
+
   return (
     <div className="c-areas">
-      <Hero title="areas.name" />
+      <Hero
+        title="areas.name"
+        actions={
+          <Link className="c-button c-button--primary" to={`${url}/export`}>
+            <FormattedMessage id="areas.exportAreas" />
+          </Link>
+        }
+      />
       {loading ? (
         <div className="c-map c-map--within-hero">
           <Loader isLoading />
@@ -119,6 +154,17 @@ const Areas: FC<IProps> = props => {
           <Loader isLoading={loadingTeamAreas} />
         </div>
       )}
+      <Switch>
+        <Route path={`/areas/export`}>
+          <ExportModal
+            onSave={handleExport}
+            onClose={() => history.push("/areas")}
+            isOpen
+            fileTypes={AREA_EXPORT_FILE_TYPES}
+            fields={[]}
+          />
+        </Route>
+      </Switch>
     </div>
   );
 };

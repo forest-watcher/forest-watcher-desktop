@@ -13,13 +13,13 @@ export interface Props extends FieldPropsBase {
 }
 
 const RadioChipGroupFormWrapper = (props: Props) => {
-  const { id, registered, className, radioGroupProps, formHook, error } = props;
-
+  const { id, registered, className, radioGroupProps, formHook, error, onChange } = props;
   useEffect(() => {
     if (radioGroupProps.value) {
       formHook.setValue(registered.name, radioGroupProps.value);
+      onChange?.();
     }
-  }, [formHook, radioGroupProps.value, registered.name]);
+  }, [formHook, onChange, radioGroupProps.value, registered.name]);
 
   const handleChange = (v: string) => {
     formHook.setValue(registered.name, v);

@@ -1,11 +1,10 @@
 import Article from "components/layouts/Article";
-import Button from "components/ui/Button/Button";
 import DataFilter from "components/ui/DataFilter/DataFilter";
 import DataTable from "components/ui/DataTable/DataTable";
 import { TPropsFromRedux } from "./ReportsContainer";
-import { FC, useMemo, useState } from "react";
+import { FC, useCallback, useMemo, useState } from "react";
 import { FormattedMessage, useIntl } from "react-intl";
-import { Route, Switch, useRouteMatch } from "react-router-dom";
+import { Link, Route, Switch, useHistory, useRouteMatch } from "react-router-dom";
 import useReportFilters from "./useReportFilters";
 import Loader from "components/ui/Loader";
 import EmptyState from "components/ui/EmptyState/EmptyState";
@@ -14,6 +13,11 @@ import { sortByDateString, sortByString } from "helpers/table";
 import DeleteRoute from "./actions/DeleteReportContainer";
 import { getReportAlertsByName } from "helpers/reports";
 import { IAlertIdentifier } from "constants/alerts";
+import { UnpackNestedValue } from "react-hook-form";
+import ExportModal, { TExportForm } from "components/modals/exports/ExportModal";
+import { exportService } from "services/exports";
+import { REPORT_EXPORT_FILE_TYPES } from "constants/export";
+import { toastr } from "react-redux-toastr";
 
 export type TReportsDataTable = {
   id: string;
@@ -40,6 +44,8 @@ interface IProps extends TPropsFromRedux {}
 const Reports: FC<IProps> = props => {
   const { allAnswers, loading, templates } = props;
   let { path, url } = useRouteMatch();
+  const history = useHistory();
+  const [selectedReports, setSelectedReports] = useState<TReportsDataTable[]>([]);
 
   const rows = useMemo<TReportsDataTable[]>(
     () =>
@@ -51,7 +57,12 @@ const Reports: FC<IProps> = props => {
         name: answer.attributes?.reportName ?? "",
         area: answer.attributes?.areaOfInterestName ?? "",
         template: answer.attributes?.report ?? "",
-        coordinates: answer.attributes?.userPosition?.toString().replace(",", ", ") ?? ""
+        coordinates: `${
+          answer.attributes?.clickedPosition
+            ?.map((position: any) => [position.lat, position.lon])[0]
+            .toString()
+            .replace(",", ", ") || ""
+        }${(answer.attributes?.clickedPosition?.length || 0) > 1 ? "…" : ""}`
       })) ?? [],
     [allAnswers]
   );
@@ -64,6 +75,25 @@ const Reports: FC<IProps> = props => {
 
   const { filters, extraFilters } = useReportFilters(allAnswers, templates);
 
+  const handleExport = useCallback(
+    async (values: UnpackNestedValue<TExportForm>) => {
+      // Do request
+      try {
+        if (selectedReports.length === rows.length || selectedReports.length === 0) {
+          const { data } = await exportService.exportAllReports(values.fileType, values.fields);
+          return data;
+        } else {
+          const { data } = await exportService.exportSomeReports(values.fileType, values.fields, selectedReports);
+          return data;
+        }
+      } catch (err) {
+        // Do toast
+        toastr.error(intl.formatMessage({ id: "export.error" }), "");
+      }
+    },
+    [intl, rows.length, selectedReports]
+  );
+
   return (
     <>
       <div className="l-content">
@@ -72,9 +102,9 @@ const Reports: FC<IProps> = props => {
           title="reports.reports.subTitle"
           size="small"
           actions={
-            <Button>
-              <FormattedMessage id="export.title" />
-            </Button>
+            <Link className="c-button c-button--primary" to={`${url}/export`}>
+              <FormattedMessage id={selectedReports.length > 0 ? "export.selected" : "export.all"} />
+            </Link>
           }
         >
           {!loading &&
@@ -98,7 +128,7 @@ const Reports: FC<IProps> = props => {
                     className="u-w-100"
                     rows={filteredRows}
                     isPaginated
-                    onSelect={console.log}
+                    onSelect={setSelectedReports}
                     selectFindGetter="id"
                     rowActions={[
                       {
@@ -155,6 +185,36 @@ const Reports: FC<IProps> = props => {
       <Switch>
         <Route path={`${path}/:reportId/:id/delete`}>
           <DeleteRoute />
+        </Route>
+        <Route path={`${path}/export`}>
+          <ExportModal
+            onSave={handleExport}
+            onClose={() => history.push("/reporting/reports")}
+            isOpen
+            fileTypes={REPORT_EXPORT_FILE_TYPES}
+            fields={[
+              {
+                label: intl.formatMessage({ id: "reports.reports.table.header.createdAt" }),
+                value: "createdAt"
+              },
+              {
+                label: intl.formatMessage({ id: "reports.reports.table.header.monitor" }),
+                value: "fullName"
+              },
+              {
+                label: intl.formatMessage({ id: "reports.reports.table.header.name" }),
+                value: "reportName"
+              },
+              {
+                label: intl.formatMessage({ id: "reports.reports.table.header.area" }),
+                value: "areaOfInterestName"
+              },
+              {
+                label: intl.formatMessage({ id: "reports.reports.table.header.coordinates" }),
+                value: "clickedPosition"
+              }
+            ]}
+          />
         </Route>
       </Switch>
     </>

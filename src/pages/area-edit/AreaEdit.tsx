@@ -1,6 +1,6 @@
 import Hero from "components/layouts/Hero/Hero";
 import Map from "components/ui/Map/Map";
-import { FC, useState, MouseEvent, ChangeEvent, useEffect, useMemo } from "react";
+import { FC, useState, MouseEvent, ChangeEvent, useEffect, useMemo, useCallback } from "react";
 import { MapboxEvent, Map as MapInstance } from "mapbox-gl";
 import { FormattedMessage, useIntl } from "react-intl";
 import ReactGA from "react-ga";
@@ -21,6 +21,9 @@ import { Link, Route, Switch, useHistory, useRouteMatch } from "react-router-dom
 import useUnsavedChanges from "hooks/useUnsavedChanges";
 import Modal from "components/ui/Modal/Modal";
 import DeleteArea from "./actions/DeleteAreaContainer";
+import ExportModal, { TExportForm } from "components/modals/exports/ExportModal";
+import { AREA_EXPORT_FILE_TYPES } from "constants/export";
+import { exportService } from "services/exports";
 import { Source, Layer } from "react-map-gl";
 import { labelStyle } from "components/ui/Map/components/layers/styles";
 import * as turf from "@turf/turf";

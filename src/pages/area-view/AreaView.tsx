@@ -1,14 +1,13 @@
 import Hero from "components/layouts/Hero/Hero";
 import Map from "components/ui/Map/Map";
-import { FC, useState, useEffect, useMemo } from "react";
+import { FC, useState, useEffect, useMemo, useCallback } from "react";
 import { MapboxEvent, Map as MapInstance } from "mapbox-gl";
 import { FormattedMessage } from "react-intl";
 import { TPropsFromRedux } from "./AreaViewContainer";
 import { goToGeojson } from "helpers/map";
 import Loader from "components/ui/Loader";
 import Polygon from "components/ui/Map/components/layers/Polygon";
-import Button from "components/ui/Button/Button";
-import { Link, Route, RouteComponentProps, Switch, useRouteMatch } from "react-router-dom";
+import { Link, Route, RouteComponentProps, Switch, useHistory, useRouteMatch } from "react-router-dom";
 import Article from "components/layouts/Article";
 import DataTable from "components/ui/DataTable/DataTable";
 import PlusIcon from "assets/images/icons/PlusWhite.svg";
@@ -18,6 +17,10 @@ import RemoveTemplateModal from "./actions/RemoveTemplate";
 import useGetUserId from "hooks/useGetUserId";
 import AddTeamModal from "./actions/AddTeam";
 import RemoveTeamModal from "./actions/RemoveTeam";
+import { UnpackNestedValue } from "react-hook-form";
+import ExportModal, { TExportForm } from "components/modals/exports/ExportModal";
+import { exportService } from "services/exports";
+import { AREA_EXPORT_FILE_TYPES } from "constants/export";
 import { sortByNumber, sortByString } from "helpers/table";
 
 interface IProps extends TPropsFromRedux {}
@@ -41,6 +44,7 @@ const AreasView: FC<IProps & RouteComponentProps<TParams>> = ({
   const [mapRef, setMapRef] = useState<MapInstance | null>(null);
   let { path, url } = useRouteMatch();
   const userId = useGetUserId();
+  const history = useHistory();
 
   const templatesToAdd = useMemo(() => {
     return (
@@ -78,7 +82,6 @@ const AreasView: FC<IProps & RouteComponentProps<TParams>> = ({
 
   useEffect(() => {
     if (area && userId) {
-      // areaService.getAreaTeams(area.id);
       getAreaTeams(area.id);
       getUserTeams(userId);
     }
@@ -89,6 +92,30 @@ const AreasView: FC<IProps & RouteComponentProps<TParams>> = ({
       areaTeams.forEach(team => getTeamMembers(team.data.id));
     }
   }, [areaTeams, getTeamMembers]);
+
+  const handleExport = useCallback(
+    async (values: UnpackNestedValue<TExportForm>) => {
+      console.log(values);
+      // Do request
+      if (area) {
+        try {
+          const { data } = await exportService.exportArea(area.id, values.fileType);
+          if (data) {
+            console.log(data);
+          }
+        } catch (err) {
+          // Do toast
+        }
+        // Action request
+
+        // Go back
+        history.push(`/areas/${area.id}`);
+      }
+
+      return Promise.resolve();
+    },
+    [area, history]
+  );
 
   return (
     <>
@@ -103,9 +130,9 @@ const AreasView: FC<IProps & RouteComponentProps<TParams>> = ({
                 <Link to={`${url}/edit`} className="c-button c-button--primary">
                   <FormattedMessage id="common.edit" />
                 </Link>
-                <Button variant="secondary-light-text">
+                <Link to={`${url}/export`} className="c-button c-button--secondary-light-text">
                   <FormattedMessage id="common.export" />
-                </Button>
+                </Link>
                 <a
                   href={`${process.env.REACT_APP_FLAGSHIP_URL}/map/aoi/${area.id}`}
                   target="_blank"
@@ -230,6 +257,15 @@ const AreasView: FC<IProps & RouteComponentProps<TParams>> = ({
         </Route>
         <Route path={`${path}/team/remove/:teamId`}>
           <RemoveTeamModal />
+        </Route>
+        <Route path={`${path}/export`}>
+          <ExportModal
+            onSave={handleExport}
+            onClose={() => history.push(`/areas/${area?.id}`)}
+            isOpen
+            fileTypes={AREA_EXPORT_FILE_TYPES}
+            fields={[]}
+          />
         </Route>
       </Switch>
     </>

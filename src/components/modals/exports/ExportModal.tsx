@@ -4,6 +4,9 @@ import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup/dist/yup";
 import { IProps as IModalProps } from "components/modals/FormModal";
 import { useIntl } from "react-intl";
+import { UnpackNestedValue } from "react-hook-form";
+import { copyToClipboard, download, openMailClient } from "helpers/exports";
+import { toastr } from "react-redux-toastr";
 
 export type TExportForm = {
   fileType: string;
@@ -13,7 +16,7 @@ export type TExportForm = {
 
 interface IProps {
   onClose: IModalProps<TExportForm>["onClose"];
-  onSave: IModalProps<TExportForm>["onSave"];
+  onSave: (data: UnpackNestedValue<TExportForm>) => Promise<string | void>;
   isOpen: IModalProps<TExportForm>["isOpen"];
   fileTypes: {
     label: string;
@@ -37,7 +40,7 @@ const exportSchema = yup
 const ExportModal: FC<IProps> = ({ onClose, onSave, isOpen, fileTypes, fields }) => {
   const intl = useIntl();
   const inputs = useMemo<IModalProps<TExportForm>["inputs"]>(() => {
-    return [
+    const toReturn: IModalProps<TExportForm>["inputs"] = [
       {
         id: "file",
         selectProps: {
@@ -49,18 +52,6 @@ const ExportModal: FC<IProps> = ({ onClose, onSave, isOpen, fileTypes, fields })
           name: "fileType"
         },
         formatErrors: errors => errors.fileType
-      },
-      {
-        id: "fields",
-        toggleGroupProps: {
-          label: intl.formatMessage({ id: "export.fields" }),
-          options: fields,
-          defaultValue: []
-        },
-        registerProps: {
-          name: "fields"
-        },
-        formatErrors: errors => errors.fields
       },
       {
         id: "downloadMethod",
@@ -89,16 +80,51 @@ const ExportModal: FC<IProps> = ({ onClose, onSave, isOpen, fileTypes, fields })
         formatErrors: errors => errors.downloadMethod
       }
     ];
+
+    if (fields.length > 0) {
+      toReturn.splice(1, 0, {
+        id: "fields",
+        toggleGroupProps: {
+          label: intl.formatMessage({ id: "export.fields" }),
+          options: fields,
+          defaultValue: []
+        },
+        registerProps: {
+          name: "fields"
+        },
+        formatErrors: errors => errors.fields
+      });
+    }
+
+    return toReturn;
   }, [fields, fileTypes, intl]);
+
+  const handleSave = async (resp: UnpackNestedValue<TExportForm>) => {
+    const saveResp = await onSave(resp);
+    if (saveResp) {
+      // handle action, e.g. download
+      switch (resp.downloadMethod) {
+        case "download":
+          download(saveResp);
+          break;
+        case "link":
+          await copyToClipboard(saveResp);
+          toastr.success(intl.formatMessage({ id: "export.link.success" }), "");
+          break;
+        case "email":
+          openMailClient(intl.formatMessage({ id: "export.subject" }), saveResp);
+      }
+    }
+  };
 
   return (
     <FormModal<TExportForm>
       isOpen={isOpen}
       onClose={onClose}
-      onSave={onSave}
+      onSave={handleSave}
       modalTitle="export.title"
       submitBtnName="common.done"
-      useFormProps={{ resolver: yupResolver(exportSchema) }}
+      useFormProps={{ resolver: yupResolver(exportSchema), defaultValues: { downloadMethod: "download" } }}
       inputs={inputs}
     />
   );
