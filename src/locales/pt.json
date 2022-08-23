@@ -465,7 +465,7 @@
   "errors.team.detail": "Could not find Team",
   "errors.boundary.title": "Algo correu mal",
   "errors.boundary.message": "Something unexpected happen, please try again later",
-  "errors.boundary.submit": "Close",
+  "errors.boundary.submit": "Try again",
   "import.title": "Import",
   "export.title": "Exportar",
   "export.fileType": "File Type",
