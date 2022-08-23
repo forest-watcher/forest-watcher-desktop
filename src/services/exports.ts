@@ -19,6 +19,8 @@ export type TExportSomeReportsResponse =
 export type TReportResponse =
   paths["/v3/exports/reports/{id}"]["get"]["responses"]["200"]["content"]["application/json"];
 
+export type TAreaResponse = paths["/v3/exports/areas/{id}"]["get"]["responses"]["200"]["content"]["application/json"];
+
 function delay(timeInMs: number) {
   return new Promise(resolve => setTimeout(resolve, timeInMs));
 }
@@ -110,21 +112,46 @@ export class ExportSerive extends BaseService {
     throw Error("Failed to get export");
   }
 
-  exportArea(id: string, fileType: string): Promise<TExportOneAreaResponse> {
+  async exportArea(id: string, fileType: string): Promise<TAreaResponse> {
     this.token = store.getState().user.token;
 
     const body = {
-      fileType,
-      fields: []
+      fileType
     };
 
-    return this.fetchJSON(`/areas/exportOne/${id}`, {
+    const resp: TExportOneAreaResponse = await this.fetchJSON(`/areas/exportOne/${id}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
       },
       body: JSON.stringify(body)
     });
+
+    if (resp.data) {
+      return this.checkAreaStatus(resp.data);
+    }
+
+    throw Error("Failed to get export");
+  }
+
+  async checkAreaStatus(id: string): Promise<TAreaResponse> {
+    let hasFinished = false;
+
+    do {
+      const resp: TAreaResponse = await this.fetchJSON(`/areas/${id}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json"
+        }
+      });
+      if (resp.data) {
+        hasFinished = true;
+        return resp;
+      }
+      await delay(3000);
+    } while (!hasFinished);
+
+    throw Error("Failed to get export");
   }
 }
 
