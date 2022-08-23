@@ -168,28 +168,26 @@ const AreasView: FC<IProps & RouteComponentProps<TParams>> = ({
             {
               /* TS issue here, reportTemplate.length can be undefined */
               (area?.attributes.reportTemplate.length ?? 0) > 0 && (
-                <div className="u-responsive-table">
-                  <DataTable<TTemplateDataTable>
-                    className="u-w-100"
-                    rows={
-                      area?.attributes.reportTemplate.map(template => ({
-                        ...template,
-                        //@ts-ignore
-                        name: (template?.name?.[template?.defaultLanguage] as string) || "",
-                        openAssignments: 0
-                      })) ?? []
+                <DataTable<TTemplateDataTable>
+                  className="u-w-100"
+                  rows={
+                    area?.attributes.reportTemplate.map(template => ({
+                      ...template,
+                      //@ts-ignore
+                      name: (template?.name?.[template?.defaultLanguage] as string) || "",
+                      openAssignments: 0
+                    })) ?? []
+                  }
+                  columnOrder={[
+                    {
+                      key: "name",
+                      name: "areas.details.templatesTable.header.name",
+                      rowHref: row => `/templates/${row.id}`,
+                      sortCompareFn: sortByString
                     }
-                    columnOrder={[
-                      {
-                        key: "name",
-                        name: "areas.details.templatesTable.header.name",
-                        rowHref: row => `/templates/${row.id}`,
-                        sortCompareFn: sortByString
-                      }
-                    ]}
-                    rowActions={[removeTemplate]}
-                  />
-                </div>
+                  ]}
+                  rowActions={[removeTemplate]}
+                />
               )
             }
           </Article>
@@ -207,34 +205,32 @@ const AreasView: FC<IProps & RouteComponentProps<TParams>> = ({
             }
           >
             {areaTeams.length > 0 && (
-              <div className="u-responsive-table">
-                <DataTable<TTeamDataTable>
-                  className="u-w-100"
-                  rows={
-                    areaTeams.map(team => ({
-                      ...team.data,
-                      //@ts-ignore
-                      name: team.data.attributes.name || "",
-                      openAssignments: 0,
-                      reports: 0
-                    })) ?? []
+              <DataTable<TTeamDataTable>
+                className="u-w-100"
+                rows={
+                  areaTeams.map(team => ({
+                    ...team.data,
+                    //@ts-ignore
+                    name: team.data.attributes.name || "",
+                    openAssignments: 0,
+                    reports: 0
+                  })) ?? []
+                }
+                columnOrder={[
+                  {
+                    key: "name",
+                    name: "areas.details.teamsTable.header.name",
+                    rowHref: row => `/teams/${row.id}`,
+                    sortCompareFn: sortByString
+                  },
+                  {
+                    key: "reports",
+                    name: "areas.details.teamsTable.header.reports",
+                    sortCompareFn: (a, b, direction) => sortByNumber(a as number, b as number, direction)
                   }
-                  columnOrder={[
-                    {
-                      key: "name",
-                      name: "areas.details.teamsTable.header.name",
-                      rowHref: row => `/teams/${row.id}`,
-                      sortCompareFn: sortByString
-                    },
-                    {
-                      key: "reports",
-                      name: "areas.details.teamsTable.header.reports",
-                      sortCompareFn: (a, b, direction) => sortByNumber(a as number, b as number, direction)
-                    }
-                  ]}
-                  rowActions={[removeTeam]}
-                />
-              </div>
+                ]}
+                rowActions={[removeTeam]}
+              />
             )}
           </Article>
         </div>
