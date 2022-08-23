@@ -2,13 +2,9 @@ import { Component } from "react";
 import PropTypes from "prop-types";
 
 import Hero from "components/layouts/Hero/Hero";
-import Article from "../../components/layouts/Article";
-import TeamsShow from "../../components/teams-show/TeamsShowContainer";
-import TeamsForm from "../../components/teams-manager/TeamsFormContainer";
 import LayersManager from "../../components/layers-manager/LayersManager";
 import LayersShow from "../../components/layers-show/LayersShow";
 import Loader from "../../components/ui/Loader";
-import Tab from "../../components/ui/Tab";
 import Confirm from "../../components/ui/Confirm";
 import withModal from "../../components/ui/withModal";
 import { injectIntl } from "react-intl";
