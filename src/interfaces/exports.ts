@@ -4,17 +4,27 @@
  */
 
 export interface paths {
-  "/v3/reports/{templateId}/exportSome": {
-    /** Exports a selection of report answers and associated images given its id as either fwbundle or zipped csv. The "fields" array in the body determines the columns in any csv export. Include "responses" if questions and answers are required. */
-    post: operations["post-v3-reports-templateId-exportOne-answerId"];
+  "/v3/exports/reports/exportSome": {
+    /** Exports a selection of report answers and associated images given its id as either fwbundle or zipped csv. The "fields" array in the body determines the columns in any csv export. Include "responses" if questions and answers are required. The response is an id to poll the GET /v3/exports/reports/{id} endpoint is for the URL once the export has completed */
+    post: operations["post-v3-reports-templateId-exportSome"];
+    parameters: {};
+  };
+  "/v3/exports/reports/exportAll": {
+    /** Exports all report answers and associated images available to the user for the given template as either fwbundle or zipped csv.The "fields" array in the body determines the columns in any csv export. Include "responses" if questions and answers are required. The response is an id to poll the GET /v3/exports/reports/{id} endpoint is for the URL once the export has completed */
+    post: operations["post-v3-reports-templateId-exportAll"];
+    parameters: {};
+  };
+  "/v3/exports/reports/{id}": {
+    /** Returns the url for a given id token received from a reports export request */
+    get: operations["get-v3-exports-reports-id"];
     parameters: {
       path: {
-        templateId: string;
+        id: string;
       };
     };
   };
-  "/v3/areas/exportOne/{areaId}": {
-    /** Exports an and associated images given its id as either fwbundle or zipped csv, shp or geojson. The "fields" array in the body determines the columns in any csv export. */
+  "/v3/exports/areas/exportOne/{areaId}": {
+    /** Exports an and associated images given its id as either fwbundle or zipped csv, shp or geojson. The "fields" array in the body determines the columns in any csv export. The response is an id to poll the GET /v3/exports/areas/{id} endpoint is for the URL once the export has completed */
     post: operations["post-v3-areas-exportOne-areaId"];
     parameters: {
       path: {
@@ -22,19 +32,19 @@ export interface paths {
       };
     };
   };
-  "/v3/reports/{templateId}/exportAll": {
-    /** Exports all report answers and associated images available to the user for the given template as either fwbundle or zipped csv.The "fields" array in the body determines the columns in any csv export. Include "responses" if questions and answers are required. */
-    post: operations["post-v3-reports-templateId-exportAll"];
-    parameters: {
-      path: {
-        templateId: string;
-      };
-    };
-  };
-  "/v3/areas/exportAll": {
-    /** Exports all areas and associated images available to the user as either fwbundle or zipped csv, shp or geojson. The "fields" array in the body determines the columns in any csv export. */
+  "/v3/exports/areas/exportAll": {
+    /** Exports all areas and associated images available to the user as either fwbundle or zipped csv, shp or geojson. The "fields" array in the body determines the columns in any csv export. The response is an id to poll the GET /v3/exports/areas/{id} endpoint is for the URL once the export has completed */
     post: operations["post-v3-areas-exportAll"];
     parameters: {};
+  };
+  "/v3/exports/areas/{id}": {
+    /** Returns the url for a given id token received from an areas export request */
+    get: operations["get-v3-exports-areas-id"];
+    parameters: {
+      path: {
+        id: string;
+      };
+    };
   };
 }
 
@@ -74,13 +84,9 @@ export interface components {
 }
 
 export interface operations {
-  /** Exports a selection of report answers and associated images given its id as either fwbundle or zipped csv. The "fields" array in the body determines the columns in any csv export. Include "responses" if questions and answers are required. */
-  "post-v3-reports-templateId-exportOne-answerId": {
-    parameters: {
-      path: {
-        templateId: string;
-      };
-    };
+  /** Exports a selection of report answers and associated images given its id as either fwbundle or zipped csv. The "fields" array in the body determines the columns in any csv export. Include "responses" if questions and answers are required. The response is an id to poll the GET /v3/exports/reports/{id} endpoint is for the URL once the export has completed */
+  "post-v3-reports-templateId-exportSome": {
+    parameters: {};
     responses: {
       /** OK */
       200: {
@@ -90,6 +96,7 @@ export interface operations {
           };
         };
       };
+      400: components["responses"]["Error"];
       401: components["responses"]["Error"];
       404: components["responses"]["Error"];
     };
@@ -107,7 +114,52 @@ export interface operations {
       };
     };
   };
-  /** Exports an and associated images given its id as either fwbundle or zipped csv, shp or geojson. The "fields" array in the body determines the columns in any csv export. */
+  /** Exports all report answers and associated images available to the user for the given template as either fwbundle or zipped csv.The "fields" array in the body determines the columns in any csv export. Include "responses" if questions and answers are required. The response is an id to poll the GET /v3/exports/reports/{id} endpoint is for the URL once the export has completed */
+  "post-v3-reports-templateId-exportAll": {
+    parameters: {};
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/json": {
+            data?: string;
+          };
+        };
+      };
+      400: components["responses"]["Error"];
+      401: components["responses"]["Error"];
+      404: components["responses"]["Error"];
+    };
+    requestBody: {
+      content: {
+        "application/json": {
+          language?: string;
+          fileType?: string;
+          fields?: string[];
+        };
+      };
+    };
+  };
+  /** Returns the url for a given id token received from a reports export request */
+  "get-v3-exports-reports-id": {
+    parameters: {
+      path: {
+        id: string;
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/json": {
+            data?: string;
+          };
+        };
+      };
+      401: components["responses"]["Error"];
+    };
+  };
+  /** Exports an and associated images given its id as either fwbundle or zipped csv, shp or geojson. The "fields" array in the body determines the columns in any csv export. The response is an id to poll the GET /v3/exports/areas/{id} endpoint is for the URL once the export has completed */
   "post-v3-areas-exportOne-areaId": {
     parameters: {
       path: {
@@ -123,41 +175,13 @@ export interface operations {
           };
         };
       };
+      400: components["responses"]["Error"];
       401: components["responses"]["Error"];
       404: components["responses"]["Error"];
     };
     requestBody: components["requestBodies"]["Export-areas-request"];
   };
-  /** Exports all report answers and associated images available to the user for the given template as either fwbundle or zipped csv.The "fields" array in the body determines the columns in any csv export. Include "responses" if questions and answers are required. */
-  "post-v3-reports-templateId-exportAll": {
-    parameters: {
-      path: {
-        templateId: string;
-      };
-    };
-    responses: {
-      /** OK */
-      200: {
-        content: {
-          "application/json": {
-            data?: string;
-          };
-        };
-      };
-      401: components["responses"]["Error"];
-      404: components["responses"]["Error"];
-    };
-    requestBody: {
-      content: {
-        "application/json": {
-          language?: string;
-          fileType?: string;
-          fields?: string[];
-        };
-      };
-    };
-  };
-  /** Exports all areas and associated images available to the user as either fwbundle or zipped csv, shp or geojson. The "fields" array in the body determines the columns in any csv export. */
+  /** Exports all areas and associated images available to the user as either fwbundle or zipped csv, shp or geojson. The "fields" array in the body determines the columns in any csv export. The response is an id to poll the GET /v3/exports/areas/{id} endpoint is for the URL once the export has completed */
   "post-v3-areas-exportAll": {
     parameters: {};
     responses: {
@@ -169,10 +193,30 @@ export interface operations {
           };
         };
       };
+      400: components["responses"]["Error"];
       401: components["responses"]["Error"];
       404: components["responses"]["Error"];
     };
     requestBody: components["requestBodies"]["Export-areas-request"];
+  };
+  /** Returns the url for a given id token received from an areas export request */
+  "get-v3-exports-areas-id": {
+    parameters: {
+      path: {
+        id: string;
+      };
+    };
+    responses: {
+      /** OK */
+      200: {
+        content: {
+          "application/json": {
+            data?: string;
+          };
+        };
+      };
+      401: components["responses"]["Error"];
+    };
   };
 }
 

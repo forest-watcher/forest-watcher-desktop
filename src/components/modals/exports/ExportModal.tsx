@@ -124,7 +124,7 @@ const ExportModal: FC<IProps> = ({ onClose, onSave, isOpen, fileTypes, fields })
       onSave={handleSave}
       modalTitle="export.title"
       submitBtnName="common.done"
-      useFormProps={{ resolver: yupResolver(exportSchema) }}
+      useFormProps={{ resolver: yupResolver(exportSchema), defaultValues: { downloadMethod: "download" } }}
       inputs={inputs}
     />
   );
