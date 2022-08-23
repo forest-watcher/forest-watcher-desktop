@@ -35,44 +35,48 @@ describe("DataTable Component", () => {
 
     expect(container).toMatchInlineSnapshot(`
       <div>
-        <table
-          class="c-data-table"
+        <div
+          class="u-responsive-table"
         >
-          <thead
-            class="c-data-table__header"
+          <table
+            class="c-data-table"
           >
-            <tr>
-              <th>
-                name
-              </th>
-              <th>
-                email
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr
-              class="c-data-table__row"
+            <thead
+              class="c-data-table__header"
             >
-              <td>
-                Foo
-              </td>
-              <td>
-                foo@user.com
-              </td>
-            </tr>
-            <tr
-              class="c-data-table__row"
-            >
-              <td>
-                Bar
-              </td>
-              <td>
-                bar@user.com
-              </td>
-            </tr>
-          </tbody>
-        </table>
+              <tr>
+                <th>
+                  name
+                </th>
+                <th>
+                  email
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr
+                class="c-data-table__row"
+              >
+                <td>
+                  Foo
+                </td>
+                <td>
+                  foo@user.com
+                </td>
+              </tr>
+              <tr
+                class="c-data-table__row"
+              >
+                <td>
+                  Bar
+                </td>
+                <td>
+                  bar@user.com
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     `);
   });
@@ -87,44 +91,48 @@ describe("DataTable Component", () => {
 
     expect(container).toMatchInlineSnapshot(`
       <div>
-        <table
-          class="c-data-table"
+        <div
+          class="u-responsive-table"
         >
-          <thead
-            class="c-data-table__header"
+          <table
+            class="c-data-table"
           >
-            <tr>
-              <th>
-                email
-              </th>
-              <th>
-                name
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr
-              class="c-data-table__row"
+            <thead
+              class="c-data-table__header"
             >
-              <td>
-                foo@user.com
-              </td>
-              <td>
-                Foo
-              </td>
-            </tr>
-            <tr
-              class="c-data-table__row"
-            >
-              <td>
-                bar@user.com
-              </td>
-              <td>
-                Bar
-              </td>
-            </tr>
-          </tbody>
-        </table>
+              <tr>
+                <th>
+                  email
+                </th>
+                <th>
+                  name
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr
+                class="c-data-table__row"
+              >
+                <td>
+                  foo@user.com
+                </td>
+                <td>
+                  Foo
+                </td>
+              </tr>
+              <tr
+                class="c-data-table__row"
+              >
+                <td>
+                  bar@user.com
+                </td>
+                <td>
+                  Bar
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     `);
   });
@@ -145,95 +153,99 @@ describe("DataTable Component", () => {
 
     expect(container).toMatchInlineSnapshot(`
       <div>
-        <table
-          class="c-data-table"
+        <div
+          class="u-responsive-table"
         >
-          <thead
-            class="c-data-table__header"
+          <table
+            class="c-data-table"
           >
-            <tr>
-              <th>
-                name
-              </th>
-              <th>
-                email
-              </th>
-              <th />
-            </tr>
-          </thead>
-          <tbody>
-            <tr
-              class="c-data-table__row"
+            <thead
+              class="c-data-table__header"
             >
-              <td>
-                Foo
-              </td>
-              <td>
-                foo@user.com
-              </td>
-              <td
-                class="c-data-table__action-cell"
+              <tr>
+                <th>
+                  name
+                </th>
+                <th>
+                  email
+                </th>
+                <th />
+              </tr>
+            </thead>
+            <tbody>
+              <tr
+                class="c-data-table__row"
               >
-                <button
-                  aria-expanded="false"
-                  aria-haspopup="true"
-                  aria-label="Open Menu"
-                  class="szh-menu-button c-button c-context-menu__toggle c-data-table__action-toggle"
-                  data-testid="menuToggle"
-                  type="button"
+                <td>
+                  Foo
+                </td>
+                <td>
+                  foo@user.com
+                </td>
+                <td
+                  class="c-data-table__action-cell"
                 >
-                  <img
-                    alt=""
-                    class="c-context-menu__icon"
-                    role="presentation"
-                    src="kebab.svg"
-                  />
-                  <img
-                    alt=""
-                    class="c-context-menu__icon c-context-menu--hover"
-                    role="presentation"
-                    src="kebab-hover.svg"
-                  />
-                </button>
-              </td>
-            </tr>
-            <tr
-              class="c-data-table__row"
-            >
-              <td>
-                Bar
-              </td>
-              <td>
-                bar@user.com
-              </td>
-              <td
-                class="c-data-table__action-cell"
+                  <button
+                    aria-expanded="false"
+                    aria-haspopup="true"
+                    aria-label="Open Menu"
+                    class="szh-menu-button c-button c-context-menu__toggle c-data-table__action-toggle"
+                    data-testid="menuToggle"
+                    type="button"
+                  >
+                    <img
+                      alt=""
+                      class="c-context-menu__icon"
+                      role="presentation"
+                      src="kebab.svg"
+                    />
+                    <img
+                      alt=""
+                      class="c-context-menu__icon c-context-menu--hover"
+                      role="presentation"
+                      src="kebab-hover.svg"
+                    />
+                  </button>
+                </td>
+              </tr>
+              <tr
+                class="c-data-table__row"
               >
-                <button
-                  aria-expanded="false"
-                  aria-haspopup="true"
-                  aria-label="Open Menu"
-                  class="szh-menu-button c-button c-context-menu__toggle c-data-table__action-toggle"
-                  data-testid="menuToggle"
-                  type="button"
+                <td>
+                  Bar
+                </td>
+                <td>
+                  bar@user.com
+                </td>
+                <td
+                  class="c-data-table__action-cell"
                 >
-                  <img
-                    alt=""
-                    class="c-context-menu__icon"
-                    role="presentation"
-                    src="kebab.svg"
-                  />
-                  <img
-                    alt=""
-                    class="c-context-menu__icon c-context-menu--hover"
-                    role="presentation"
-                    src="kebab-hover.svg"
-                  />
-                </button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+                  <button
+                    aria-expanded="false"
+                    aria-haspopup="true"
+                    aria-label="Open Menu"
+                    class="szh-menu-button c-button c-context-menu__toggle c-data-table__action-toggle"
+                    data-testid="menuToggle"
+                    type="button"
+                  >
+                    <img
+                      alt=""
+                      class="c-context-menu__icon"
+                      role="presentation"
+                      src="kebab.svg"
+                    />
+                    <img
+                      alt=""
+                      class="c-context-menu__icon c-context-menu--hover"
+                      role="presentation"
+                      src="kebab-hover.svg"
+                    />
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     `);
   });
@@ -245,44 +257,48 @@ describe("DataTable Component", () => {
 
     expect(container).toMatchInlineSnapshot(`
       <div>
-        <table
-          class="c-data-table myClassName"
+        <div
+          class="u-responsive-table"
         >
-          <thead
-            class="c-data-table__header"
+          <table
+            class="c-data-table myClassName"
           >
-            <tr>
-              <th>
-                name
-              </th>
-              <th>
-                email
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr
-              class="c-data-table__row"
+            <thead
+              class="c-data-table__header"
             >
-              <td>
-                Foo
-              </td>
-              <td>
-                foo@user.com
-              </td>
-            </tr>
-            <tr
-              class="c-data-table__row"
-            >
-              <td>
-                Bar
-              </td>
-              <td>
-                bar@user.com
-              </td>
-            </tr>
-          </tbody>
-        </table>
+              <tr>
+                <th>
+                  name
+                </th>
+                <th>
+                  email
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr
+                class="c-data-table__row"
+              >
+                <td>
+                  Foo
+                </td>
+                <td>
+                  foo@user.com
+                </td>
+              </tr>
+              <tr
+                class="c-data-table__row"
+              >
+                <td>
+                  Bar
+                </td>
+                <td>
+                  bar@user.com
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     `);
   });
