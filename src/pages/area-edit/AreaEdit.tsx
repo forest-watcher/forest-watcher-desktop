@@ -165,8 +165,8 @@ const AreaEdit: FC<IProps> = ({
     }
   };
 
-  const handleResetForm = (e: MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
+  const handleResetForm = (e?: MouseEvent<HTMLButtonElement>) => {
+    e?.preventDefault();
     reset();
     if (area?.attributes?.name) {
       setValue("name", area.attributes.name);
@@ -246,7 +246,19 @@ const AreaEdit: FC<IProps> = ({
           backLink={{ name: "areas.back", to: "/areas" }}
           actions={
             mode === "manage" ? (
-              <Link className="c-button c-button--secondary-light-text" to={`${url}/delete`}>
+              <Link
+                className="c-button c-button--secondary-light-text"
+                to={`${url}/delete`}
+                onClick={e => {
+                  setShouldUseChangesMade(false);
+                  // handleResetForm();
+                  setTimeout(() => {
+                    // Due to the saved changes modal, the url may get blocked before shouldUseChangesMade updates
+                    // Dirty hack to push if we are waiting on it.
+                    history.push(`${url}/delete`, { replace: true });
+                  }, 500);
+                }}
+              >
                 <FormattedMessage id="areas.deleteArea" />
               </Link>
             ) : undefined
@@ -347,11 +359,11 @@ const AreaEdit: FC<IProps> = ({
           </li>
         </ul>
       </Modal>
-      {modal}
+      {shouldUseChangesMade && modal}
 
       <Switch>
         <Route path={`${path}/delete`}>
-          <DeleteArea />
+          <DeleteArea onClose={() => setShouldUseChangesMade(true)} />
         </Route>
       </Switch>
     </>

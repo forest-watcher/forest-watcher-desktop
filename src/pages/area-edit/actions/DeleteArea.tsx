@@ -8,16 +8,19 @@ import { TErrorResponse } from "constants/api";
 import { TParams } from "pages/area-view/AreaView";
 import { TPropsFromRedux } from "./DeleteAreaContainer";
 
-interface IProps extends TPropsFromRedux {}
+interface IProps extends TPropsFromRedux {
+  onClose?: () => void;
+}
 
 const DeleteArea: FC<IProps> = props => {
   const intl = useIntl();
   const history = useHistory();
   const [isDeleting, setIsDeleting] = useState(false);
   const { areaId } = useParams<TParams>();
-  const { deleteArea } = props;
+  const { deleteArea, onClose } = props;
 
   const close = () => {
+    onClose?.();
     history.push(`/areas/${areaId}/edit`);
   };
 
