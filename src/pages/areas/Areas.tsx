@@ -27,7 +27,9 @@ const Areas: FC<IProps> = props => {
   const areaMap = useMemo<TAreasResponse[]>(() => Object.values(areasList), [areasList]);
   const [selectedArea, setSelectedArea] = useState<TAreasResponse | null>(null);
   const hasTeamAreas = useMemo(() => {
-    const teamWithAreasIndex = areasInUsersTeams.findIndex(teamArea => teamArea.areas.length > 0);
+    const teamWithAreasIndex = areasInUsersTeams.findIndex(
+      teamArea => teamArea.areas.length > 0 && teamArea.team !== null
+    );
 
     return teamWithAreasIndex > -1;
   }, [areasInUsersTeams]);
