@@ -198,6 +198,7 @@ $c-card-border-radius:  $global-spacing-1;
 
   &__header {
     border-bottom: 2px solid $neutral-400;
+    padding-bottom: $global-spacing-3;
   }
 
   &__content {

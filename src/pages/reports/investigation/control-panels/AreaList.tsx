@@ -81,7 +81,7 @@ const AreaListControlPanel: FC<IProps> = props => {
           ))}
       </div>
 
-      {!isLoadingAreas && (isLoadingAreasInUsers || teamAreas.length) && (
+      {!isLoadingAreas && (isLoadingAreasInUsers || Boolean(teamAreas.length)) && (
         <div className="c-map-control-panel__team-areas">
           <Loader isLoading={isLoadingAreasInUsers} />
 
@@ -91,7 +91,7 @@ const AreaListControlPanel: FC<IProps> = props => {
           {teamAreas.map(
             teamArea =>
               teamArea.team && (
-                <div key={teamArea.team?.id}>
+                <div className="u-margin-bottom-24" key={teamArea.team?.id}>
                   <h4 className="c-map-control-panel__team-name">{teamArea.team?.attributes?.name}</h4>
                   <div className="c-map-control-panel__grid">
                     {[...teamArea.areas]

@@ -21,9 +21,6 @@ import { Link, Route, Switch, useHistory, useRouteMatch } from "react-router-dom
 import useUnsavedChanges from "hooks/useUnsavedChanges";
 import Modal from "components/ui/Modal/Modal";
 import DeleteArea from "./actions/DeleteAreaContainer";
-// import ExportModal, { TExportForm } from "components/modals/exports/ExportModal";
-// import { AREA_EXPORT_FILE_TYPES } from "constants/export";
-// import { exportService } from "services/exports";
 import { Source, Layer } from "react-map-gl";
 import { labelStyle } from "components/ui/Map/components/layers/styles";
 import * as turf from "@turf/turf";
@@ -122,6 +119,8 @@ const AreaEdit: FC<IProps> = ({
       setSaving(true);
       setShowLabel(false);
       setShouldUseChangesMade(false);
+      // Deselect shape
+      drawRef?.changeMode("simple_select");
       goToGeojson(mapRef, updatedGeojson || area?.attributes.geostore.geojson, false);
       const method = mode === "manage" ? "PATCH" : "POST";
 
@@ -268,13 +267,7 @@ const AreaEdit: FC<IProps> = ({
           }
         />
 
-        <Map
-          // className="c-map--within-hero"
-          onMapLoad={handleMapLoad}
-          onDrawLoad={handleDrawLoad}
-          onMapEdit={handleMapEdit}
-          geojsonToEdit={geojson}
-        >
+        <Map onMapLoad={handleMapLoad} onDrawLoad={handleDrawLoad} onMapEdit={handleMapEdit} geojsonToEdit={geojson}>
           {centrePoint && showLabel && (
             <Source id="label" type="geojson" data={centrePoint}>
               {/* @ts-ignore */}
