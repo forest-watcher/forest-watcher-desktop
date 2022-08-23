@@ -12,7 +12,7 @@ export interface IOwnProps {
 export type IProps = TPropsFromRedux & IOwnProps;
 
 const TeamCard: FC<IProps> = props => {
-  const { team, getTeamMembers, teamMembers, getTeamAreas, teamAreas } = props;
+  const { team, getTeamMembers, teamMembers, getTeamAreas, teamAreas, areasDetail } = props;
 
   useEffect(() => {
     getTeamMembers();
@@ -49,18 +49,18 @@ const TeamCard: FC<IProps> = props => {
         </Card.Cta>
       </div>
 
-      <Card size="large" className={"c-teams__card c-teams--nested-card"}>
+      <Card size="large" className={"c-teams__card c-teams--nested-card c-teams--nested-card-people"}>
         <div>
           <h3 className="c-teams__sub-title">
             <FormattedMessage id="teams.managers" values={{ num: manages.length }} />
           </h3>
-          <p>{manages.map(i => i.attributes.userId).join(", ")}</p>
+          <p>{manages.map(i => i.attributes.name || i.attributes.email).join(", ")}</p>
         </div>
         <div>
           <h3 className="c-teams__sub-title">
             <FormattedMessage id="teams.monitors" values={{ num: monitors.length }} />
           </h3>
-          <p>{monitors.map(i => i.attributes.userId).join(", ")}</p>
+          <p>{monitors.map(i => i.attributes.name || i.attributes.email).join(", ")}</p>
         </div>
       </Card>
 
@@ -71,7 +71,9 @@ const TeamCard: FC<IProps> = props => {
               <FormattedMessage id="teams.summary.areas" />
             </h3>
             {/* ToDo: Change any to TGetAreasByTeamId["data"] when docs are upto date! */}
-            <p>{teamAreas.join(", ")}</p>
+            <p>
+              {areasDetail ? areasDetail.areas.map(area => area.data.attributes.name).join(", ") : teamAreas.join(", ")}
+            </p>
           </div>
           <Card.Cta to={"/areas"} iconSrc={EditIcon}>
             <FormattedMessage id="common.manage.area" />

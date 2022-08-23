@@ -66,6 +66,7 @@ describe("TeamCard", () => {
         teamAreas={mockTeamAreas}
         getTeamMembers={getTeamMembers}
         getTeamAreas={getTeamAreas}
+        areasDetail={undefined}
       />
     );
 
@@ -106,7 +107,7 @@ describe("TeamCard", () => {
             </a>
           </div>
           <div
-            class="c-card c-card--large c-teams__card c-teams--nested-card"
+            class="c-card c-card--large c-teams__card c-teams--nested-card c-teams--nested-card-people"
             data-testid="card"
           >
             <div>
@@ -116,7 +117,7 @@ describe("TeamCard", () => {
                 2 Managers:
               </h3>
               <p>
-                1234, 1234
+                user@test.com, user+gfw1@test.com
               </p>
             </div>
             <div>
