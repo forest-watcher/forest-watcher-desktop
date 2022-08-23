@@ -13,7 +13,7 @@ class LayersShow extends Component {
   }
 
   render() {
-    const { publicLayers, teamLayers, userLayers, isManager } = this.props;
+    const { publicLayers, userLayers } = this.props;
     const renderLayers = (layerType, layers) => (
       <div className="layers-type">
         <div className="layers-title">
@@ -39,8 +39,7 @@ class LayersShow extends Component {
               <FormattedMessage id={"settings.enabled"} />
             </div>
             <div className="layers-list">
-              {isManager && renderLayers("public", publicLayers)}
-              {renderLayers("team", teamLayers)}
+              {renderLayers("public", publicLayers)}
               {renderLayers("user", userLayers)}
             </div>
           </div>

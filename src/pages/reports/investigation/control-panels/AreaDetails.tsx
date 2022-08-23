@@ -32,6 +32,7 @@ export type FormValues = {
   currentMap?: string;
   currentPlanetPeriod?: string;
   currentPlanetImageType?: "nat" | "cir";
+  contextualLayers?: string[];
 };
 
 interface IProps extends TPropsFromRedux {
@@ -43,7 +44,7 @@ interface IProps extends TPropsFromRedux {
 const AreaDetailsControlPanel: FC<IProps> = props => {
   const history = useHistory();
   const { areaId } = useParams<TParams>();
-  const { onChange, basemaps, answers, templates, onFilterUpdate } = props;
+  const { onChange, basemaps, answers, templates, onFilterUpdate, layersOptions, getLayers } = props;
   const [filteredRows, setFilteredRows] = useState<any>(answers);
 
   useEffect(() => {
@@ -140,6 +141,11 @@ const AreaDetailsControlPanel: FC<IProps> = props => {
     resetField("currentPlanetPeriod", { defaultValue: baseMapPeriods[baseMapPeriods.length - 1]?.value });
   }, [resetField, baseMapPeriods]);
 
+  useEffect(() => {
+    getLayers();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
     <MapCard
       className="c-map-control-panel"
@@ -220,12 +226,27 @@ const AreaDetailsControlPanel: FC<IProps> = props => {
             ]
           }}
         />
-        {answers && (
+        {answers && Boolean(watcher.layers?.length) && (
           <DataFilter<TFilterFields, any>
             filters={filters}
             onFiltered={setFilteredRows}
             options={answers}
-            className="c-data-filter--in-control-panel"
+            className="c-data-filter--in-control-panel u-margin-bottom-20"
+          />
+        )}
+        {layersOptions.length && (
+          <ToggleGroup
+            id="contextual-layer-toggles"
+            registered={register("contextualLayers")}
+            formHook={formhook}
+            hideLabel
+            toggleGroupProps={{
+              label: intl.formatMessage({ id: "layers.contextual" }),
+              options: layersOptions.map((layer: any) => ({
+                label: intl.formatMessage({ id: layer.label }),
+                value: layer.option
+              }))
+            }}
           />
         )}
       </form>

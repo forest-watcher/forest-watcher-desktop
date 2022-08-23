@@ -12,7 +12,7 @@ export interface Props extends FieldPropsBase {
 }
 
 const ToggleGroup = (props: Props) => {
-  const { registered, className, toggleGroupProps, formHook } = props;
+  const { registered, className, toggleGroupProps, formHook, hideLabel } = props;
   const value =
     formHook.watch(props.registered.name) === undefined
       ? toggleGroupProps.defaultValue
@@ -35,9 +35,13 @@ const ToggleGroup = (props: Props) => {
 
   return (
     <div className="c-input-group">
-      {toggleGroupProps.label && <label className="c-input-group__label">{toggleGroupProps.label}</label>}
+      {toggleGroupProps.label && (
+        <label className={classnames("c-input-group__label", hideLabel && "u-visually-hidden")}>
+          {toggleGroupProps.label}
+        </label>
+      )}
       {toggleGroupProps.options.map(toggle => {
-        const checked = value.length && Boolean(value.find((item: string) => item === toggle.value));
+        const checked = value?.length && Boolean(value.find((item: string) => item === toggle.value));
         return (
           <Switch.Group key={toggle.value}>
             <div className="c-input c-input--toggle c-input-group__item">

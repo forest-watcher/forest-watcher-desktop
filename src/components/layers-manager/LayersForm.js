@@ -204,7 +204,7 @@ class LayersForm extends Component {
                 callback={() => this.setState({ teamMode: !this.state.teamMode })}
               />
             )}
-            <button className="c-button -light -right">
+            <button className="c-button c-button--secondary -right">
               <FormattedMessage id="common.add" />
             </button>
           </div>

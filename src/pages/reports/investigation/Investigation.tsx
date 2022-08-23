@@ -13,6 +13,7 @@ import { TAreasInTeam } from "services/area";
 import { AllGeoJSON } from "@turf/turf";
 import useZoomToGeojson from "hooks/useZoomToArea";
 import { TGetAllAnswers } from "services/reports";
+import { Layer, Source } from "react-map-gl";
 
 interface IProps extends RouteComponentProps, TPropsFromRedux {}
 
@@ -40,12 +41,13 @@ const AreaCardWrapper: FC<IAreaCardProps> = ({ areas, areasInUsersTeams }) => {
 };
 
 const InvestigationPage: FC<IProps> = props => {
-  const { match, allAnswers, basemaps, areas, areasInUsersTeams } = props;
+  const { match, allAnswers, basemaps, areas, areasInUsersTeams, selectedLayers } = props;
   const [showReports, setShowReports] = useState(true);
   const [mapStyle, setMapStyle] = useState<string | undefined>(undefined);
   const [isPlanet, setIsPlanet] = useState(false);
   const [currentPlanetPeriod, setCurrentPlanetPeriod] = useState("");
   const [currentProc, setCurrentProc] = useState<"" | "cir">("");
+  const [contextualLayerUrls, setContextualLayerUrls] = useState<string[]>([]);
   const history = useHistory();
   const [filteredAnswers, setFilteredAnswers] = useState<TGetAllAnswers["data"] | null>(null);
   let selectedAreaMatch = useRouteMatch<TParams>({ path: "/reporting/investigation/:areaId", exact: false });
@@ -82,6 +84,7 @@ const InvestigationPage: FC<IProps> = props => {
 
     setCurrentPlanetPeriod(resp.currentPlanetPeriod || "");
     setCurrentProc(resp.currentPlanetImageType === "nat" ? "" : resp.currentPlanetImageType || "");
+    setContextualLayerUrls(resp.contextualLayers?.map(layer => selectedLayers[layer].attributes.url) || []);
   };
 
   const handleFiltersChange = (filters: TGetAllAnswers["data"]) => {
@@ -117,6 +120,11 @@ const InvestigationPage: FC<IProps> = props => {
             answers={answersBySelectedArea}
             onFilterUpdate={handleFiltersChange}
           />
+          {contextualLayerUrls.map(url => (
+            <Source id={url} type="raster" tiles={[url]} key={url}>
+              <Layer id={`${url}-layer`} type="raster" />
+            </Source>
+          ))}
         </Route>
       </Switch>
     </UserAreasMap>
