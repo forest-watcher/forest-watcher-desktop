@@ -39,7 +39,7 @@ type FormValues = {
 
 const schema = yup
   .object({
-    name: yup.string().required()
+    name: yup.string().required().max(40)
   })
   .required();
 
@@ -311,6 +311,7 @@ const AreaEdit: FC<IProps> = ({
                   type: "text",
                   placeholder: intl.formatMessage({ id: "areas.nameAreaPlaceholder" }),
                   label: intl.formatMessage({ id: "areas.nameArea" }),
+                  maxLength: 40,
                   onChange: () => {}
                 }}
               />
