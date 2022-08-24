@@ -1,4 +1,4 @@
-import { FC, useMemo, useState, Fragment, useCallback } from "react";
+import { FC, useMemo, useState, Fragment, useCallback, useEffect } from "react";
 import Hero from "components/layouts/Hero/Hero";
 import Article from "components/layouts/Article";
 import Loader from "components/ui/Loader";
@@ -19,6 +19,7 @@ import { UnpackNestedValue } from "react-hook-form";
 import { AREA_EXPORT_FILE_TYPES } from "constants/export";
 import { exportService } from "services/exports";
 import { toastr } from "react-redux-toastr";
+import { MapboxEvent, Map as MapInstance } from "mapbox-gl";
 
 interface IProps extends TPropsFromRedux {}
 
@@ -26,6 +27,8 @@ const Areas: FC<IProps> = props => {
   const { areasList, loading, loadingTeamAreas, areasInUsersTeams, allAnswers } = props;
   const areaMap = useMemo<TAreasResponse[]>(() => Object.values(areasList), [areasList]);
   const [selectedArea, setSelectedArea] = useState<TAreasResponse | null>(null);
+  const [mapRef, setMapRef] = useState<MapInstance | null>(null);
+  const [currentBoundsStr, setCurrentBoundsStr] = useState("");
   const hasTeamAreas = useMemo(() => {
     const teamWithAreasIndex = areasInUsersTeams.findIndex(
       teamArea => teamArea.areas.length > 0 && teamArea.team !== null
@@ -70,6 +73,26 @@ const Areas: FC<IProps> = props => {
     [intl]
   );
 
+  const handleMapLoad = (e: MapboxEvent) => {
+    setMapRef(e.target);
+  };
+
+  useEffect(() => {
+    const onIdleHandler = () => {
+      // Get current bounds.
+      const bounds = mapRef?.getBounds();
+      if (bounds) {
+        setCurrentBoundsStr(JSON.stringify([bounds.getSouthWest(), bounds.getNorthEast()]));
+      }
+    };
+
+    mapRef?.on("idle", onIdleHandler);
+
+    return () => {
+      mapRef?.off("idle", onIdleHandler);
+    };
+  }, [mapRef]);
+
   return (
     <div className="c-areas">
       <Hero
@@ -90,6 +113,7 @@ const Areas: FC<IProps> = props => {
           selectedAreaId={selectedArea?.id}
           onAreaSelect={handleAreaSelect}
           onAreaDeselect={handleAreaDeselect}
+          onMapLoad={handleMapLoad}
         >
           {selectedArea && (
             <AreaDetailCard
@@ -109,14 +133,18 @@ const Areas: FC<IProps> = props => {
               title={intl.formatMessage({ id: "areas.empty.title" })}
               text={intl.formatMessage({ id: "areas.empty.text" })}
               ctaText={intl.formatMessage({ id: "areas.createArea" })}
-              ctaTo="/areas/create"
+              ctaTo={`/areas/create?bounds=${currentBoundsStr}`}
             />
           </div>
         ) : (
           <Article
             title="areas.subtitle"
             actions={
-              <ReactGA.OutboundLink eventLabel="Add new area" to="/areas/create" className="c-button c-button--primary">
+              <ReactGA.OutboundLink
+                eventLabel="Add new area"
+                to={`/areas/create?bounds=${currentBoundsStr}`}
+                className="c-button c-button--primary"
+              >
                 <img src={PlusIcon} alt="" role="presentation" className="c-button__inline-icon" />
                 <FormattedMessage id="areas.addArea" />
               </ReactGA.OutboundLink>
