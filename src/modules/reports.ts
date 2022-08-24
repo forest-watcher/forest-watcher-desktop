@@ -54,30 +54,32 @@ export default function reducer(state = initialState, action: TReducerActions): 
 
 export function getAllReports() {
   return (dispatch: AppDispatch, state: () => RootState) => {
-    dispatch({
-      type: SET_LOADING_REPORTS,
-      payload: true
-    });
-
-    reportService.token = state().user.token;
-    return reportService
-      .getAnswers()
-      .then(({ data }) => {
-        dispatch({
-          type: GET_ALL_ANSWERS,
-          payload: data
-        });
-        dispatch({
-          type: SET_LOADING_REPORTS,
-          payload: false
-        });
-      })
-      .catch(error => {
-        dispatch({
-          type: SET_LOADING_REPORTS,
-          payload: false
-        });
+    if (!state().reports.loading) {
+      dispatch({
+        type: SET_LOADING_REPORTS,
+        payload: true
       });
+
+      reportService.token = state().user.token;
+      return reportService
+        .getAnswers()
+        .then(({ data }) => {
+          dispatch({
+            type: GET_ALL_ANSWERS,
+            payload: data
+          });
+          dispatch({
+            type: SET_LOADING_REPORTS,
+            payload: false
+          });
+        })
+        .catch(error => {
+          dispatch({
+            type: SET_LOADING_REPORTS,
+            payload: false
+          });
+        });
+    }
   };
 }
 

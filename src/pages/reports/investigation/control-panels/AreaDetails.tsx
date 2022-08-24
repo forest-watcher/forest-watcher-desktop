@@ -55,12 +55,14 @@ const AreaDetailsControlPanel: FC<IProps> = props => {
   const isMobile = useMediaQuery({ maxWidth: breakpoints.mobile });
 
   const { data: areas, loading: isLoadingAreas } = useAppSelector(state => state.areas);
+  const { loading: isLoadingAnswers } = useAppSelector(state => state.reports);
+
   const selectedAreaGeoData = useMemo(() => areas[areaId]?.attributes.geostore.geojson, [areaId, areas]);
   const intl = useIntl();
 
   const { filters } = useControlPanelReportFilters(answers);
 
-  const hasZoomed = useZoomToGeojson(selectedAreaGeoData as AllGeoJSON);
+  useZoomToGeojson(selectedAreaGeoData as AllGeoJSON);
 
   const formhook = useForm<FormValues>({
     defaultValues: {
@@ -133,7 +135,8 @@ const AreaDetailsControlPanel: FC<IProps> = props => {
 
   useEffect(() => {
     onChange?.(watcher);
-  }, [onChange, watcher]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [watcher]);
 
   useEffect(() => {
     onFilterUpdate(filteredRows);
@@ -157,7 +160,7 @@ const AreaDetailsControlPanel: FC<IProps> = props => {
       )}
       onBack={handleBackBtnClick}
     >
-      <Loader isLoading={isLoadingAreas} />
+      <Loader isLoading={isLoadingAreas || isLoadingAnswers} />
       <form>
         <RadioCardGroup
           className="u-margin-bottom-40"

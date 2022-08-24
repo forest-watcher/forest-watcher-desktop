@@ -32,8 +32,8 @@ const Select = (props: Props) => {
   const [selectHeight, setSelectHeight] = useState<number>(0);
 
   useEffect(() => {
-    setOptions(options);
-  }, [options]);
+    setOptions(selectProps.options || []);
+  }, [selectProps.options]);
 
   const value =
     formHook.watch(props.registered.name) ||
