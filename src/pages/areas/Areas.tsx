@@ -23,7 +23,7 @@ import { toastr } from "react-redux-toastr";
 interface IProps extends TPropsFromRedux {}
 
 const Areas: FC<IProps> = props => {
-  const { areasList, loading, loadingTeamAreas, areasInUsersTeams } = props;
+  const { areasList, loading, loadingTeamAreas, areasInUsersTeams, allAnswers } = props;
   const areaMap = useMemo<TAreasResponse[]>(() => Object.values(areasList), [areasList]);
   const [selectedArea, setSelectedArea] = useState<TAreasResponse | null>(null);
   const hasTeamAreas = useMemo(() => {
@@ -33,6 +33,13 @@ const Areas: FC<IProps> = props => {
 
     return teamWithAreasIndex > -1;
   }, [areasInUsersTeams]);
+
+  const answersBySelectedArea = useMemo(() => {
+    return allAnswers?.filter(
+      answer =>
+        answer.attributes?.areaOfInterest === selectedArea?.id && Boolean(answer?.attributes?.clickedPosition?.length)
+    );
+  }, [allAnswers, selectedArea]);
 
   const intl = useIntl();
   const { url } = useRouteMatch();
@@ -88,6 +95,7 @@ const Areas: FC<IProps> = props => {
             <AreaDetailCard
               area={selectedArea}
               numberOfTeams={getNumberOfTeamsInArea(selectedArea.id, areasInUsersTeams)}
+              numberOfReports={answersBySelectedArea?.length}
             />
           )}
         </UserAreasMap>

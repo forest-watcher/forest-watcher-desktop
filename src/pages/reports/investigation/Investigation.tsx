@@ -21,9 +21,10 @@ interface IProps extends RouteComponentProps, TPropsFromRedux {}
 interface IAreaCardProps {
   areas: any;
   areasInUsersTeams: TAreasInTeam[];
+  numberOfReports?: number;
 }
 
-const AreaCardWrapper: FC<IAreaCardProps> = ({ areas, areasInUsersTeams }) => {
+const AreaCardWrapper: FC<IAreaCardProps> = ({ areas, areasInUsersTeams, numberOfReports }) => {
   const { areaId } = useParams<TParams>();
   const urlQuery = useUrlQuery();
   const scrollToTeamId = useMemo(() => urlQuery.get("scrollToTeamId"), [urlQuery]);
@@ -38,6 +39,7 @@ const AreaCardWrapper: FC<IAreaCardProps> = ({ areas, areasInUsersTeams }) => {
       className="c-map-control-panel"
       area={areas[areaId]}
       numberOfTeams={getNumberOfTeamsInArea(areaId, areasInUsersTeams)}
+      numberOfReports={numberOfReports}
       position="top-left"
       onBack={() =>
         history.push(
@@ -124,7 +126,11 @@ const InvestigationPage: FC<IProps> = props => {
       <Switch>
         <Route exact path={`${match.url}`} component={AreaListControlPanel} />
         <Route exact path={`${match.url}/:areaId`}>
-          <AreaCardWrapper areas={areas} areasInUsersTeams={areasInUsersTeams} />
+          <AreaCardWrapper
+            areas={areas}
+            areasInUsersTeams={areasInUsersTeams}
+            numberOfReports={answersBySelectedArea?.length}
+          />
         </Route>
         <Route exact path={`${match.url}/:areaId/start`}>
           <AreaDetailsControlPanel
