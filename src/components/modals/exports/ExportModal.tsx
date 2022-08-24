@@ -114,6 +114,7 @@ const ExportModal: FC<IProps> = ({ onClose, onSave, isOpen, fileTypes, fields })
         case "email":
           openMailClient(intl.formatMessage({ id: "export.subject" }), saveResp);
       }
+      onClose?.();
     }
   };
 

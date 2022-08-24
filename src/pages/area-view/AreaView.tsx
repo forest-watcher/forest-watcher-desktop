@@ -2,7 +2,7 @@ import Hero from "components/layouts/Hero/Hero";
 import Map from "components/ui/Map/Map";
 import { FC, useState, useEffect, useMemo, useCallback } from "react";
 import { MapboxEvent, Map as MapInstance } from "mapbox-gl";
-import { FormattedMessage } from "react-intl";
+import { FormattedMessage, useIntl } from "react-intl";
 import { TPropsFromRedux } from "./AreaViewContainer";
 import { goToGeojson } from "helpers/map";
 import Loader from "components/ui/Loader";
@@ -22,6 +22,7 @@ import ExportModal, { TExportForm } from "components/modals/exports/ExportModal"
 import { exportService } from "services/exports";
 import { AREA_EXPORT_FILE_TYPES } from "constants/export";
 import { sortByNumber, sortByString } from "helpers/table";
+import { toastr } from "react-redux-toastr";
 
 interface IProps extends TPropsFromRedux {}
 export type TParams = {
@@ -45,6 +46,7 @@ const AreasView: FC<IProps & RouteComponentProps<TParams>> = ({
   let { path, url } = useRouteMatch();
   const userId = useGetUserId();
   const history = useHistory();
+  const intl = useIntl();
 
   const templatesToAdd = useMemo(() => {
     return (
@@ -95,26 +97,18 @@ const AreasView: FC<IProps & RouteComponentProps<TParams>> = ({
 
   const handleExport = useCallback(
     async (values: UnpackNestedValue<TExportForm>) => {
-      console.log(values);
       // Do request
       if (area) {
         try {
           const { data } = await exportService.exportArea(area.id, values.fileType);
-          if (data) {
-            console.log(data);
-          }
+          return data;
         } catch (err) {
           // Do toast
+          toastr.error(intl.formatMessage({ id: "export.error" }), "");
         }
-        // Action request
-
-        // Go back
-        history.push(`/areas/${area.id}`);
       }
-
-      return Promise.resolve();
     },
-    [area, history]
+    [intl, area]
   );
 
   return (
