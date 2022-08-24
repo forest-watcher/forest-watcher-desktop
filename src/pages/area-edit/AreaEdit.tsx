@@ -1,7 +1,7 @@
 import Hero from "components/layouts/Hero/Hero";
 import Map from "components/ui/Map/Map";
 import { FC, useState, MouseEvent, ChangeEvent, useEffect, useMemo } from "react";
-import { MapboxEvent, Map as MapInstance } from "mapbox-gl";
+import { MapboxEvent, Map as MapInstance, LngLatBounds } from "mapbox-gl";
 import { FormattedMessage, useIntl } from "react-intl";
 import ReactGA from "react-ga";
 import { TPropsFromRedux } from "./AreaEditContainer";
@@ -25,6 +25,7 @@ import { Source, Layer } from "react-map-gl";
 import { labelStyle } from "components/ui/Map/components/layers/styles";
 import * as turf from "@turf/turf";
 import { AllGeoJSON } from "@turf/turf";
+import useUrlQuery from "hooks/useUrlQuery";
 
 const areaTitleKeys = {
   manage: "areas.editArea",
@@ -68,6 +69,20 @@ const AreaEdit: FC<IProps> = ({
   const history = useHistory();
   const intl = useIntl();
   let { path, url } = useRouteMatch();
+  const urlQuery = useUrlQuery();
+  const bounds = useMemo<null | LngLatBounds>(() => {
+    const str = urlQuery.get("bounds");
+    let boundsObj = null;
+    if (str) {
+      try {
+        boundsObj = JSON.parse(str);
+      } catch (err) {
+        console.log("no bounds");
+      }
+    }
+
+    return boundsObj;
+  }, [urlQuery]);
 
   const { changesMade, changesValid } = useMemo(() => {
     const changesValid =
@@ -113,6 +128,12 @@ const AreaEdit: FC<IProps> = ({
       mapRef.moveLayer("label");
     }
   }, [centrePoint, mapRef, showLabel]);
+
+  useEffect(() => {
+    if (mapRef && bounds) {
+      mapRef.fitBounds(bounds, { easing: () => 1 });
+    }
+  }, [bounds, mapRef]);
 
   const onSubmit: SubmitHandler<FormValues> = async data => {
     if (mapRef && (updatedGeojson || name)) {
@@ -319,7 +340,12 @@ const AreaEdit: FC<IProps> = ({
                 <Button disabled={!changesMade} variant="secondary" onClick={handleResetForm}>
                   <FormattedMessage id="common.cancel" />
                 </Button>
-                <input disabled={!(changesMade && changesValid)} type="submit" className="c-button c-button--primary" />
+                <input
+                  disabled={!(changesMade && changesValid)}
+                  type="submit"
+                  className="c-button c-button--primary"
+                  value={intl.formatMessage({ id: "common.save" })}
+                />
               </div>
             </form>
           </div>

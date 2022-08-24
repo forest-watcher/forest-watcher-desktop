@@ -24,7 +24,7 @@ const Polygon: FC<IProps> = props => {
       return null;
     }
 
-    const centre = turf.center(data as AllGeoJSON);
+    const centre = turf.centerOfMass(data as AllGeoJSON);
 
     if (!centre) {
       return null;
@@ -77,7 +77,7 @@ const Polygon: FC<IProps> = props => {
     };
   }, [bounds, id, map, onClick]);
 
-  const layerStyle = isHover || isSelected ? polygonLineStyleHover : polygonLineStyle;
+  const layerStyle = (isHover || isSelected) && onClick ? polygonLineStyleHover : polygonLineStyle;
 
   return (
     <>
