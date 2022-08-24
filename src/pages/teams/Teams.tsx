@@ -96,7 +96,7 @@ const Teams: FC<IProps> = props => {
                 </Link>
               }
             >
-              <TeamsListing teams={managedTeams} />
+              <TeamsListing teams={managedTeams} canManage />
             </Article>
           </div>
           <div className="l-content l-content--neutral-400 c-teams">

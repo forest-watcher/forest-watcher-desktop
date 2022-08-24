@@ -67,6 +67,7 @@ describe("TeamCard", () => {
         getTeamMembers={getTeamMembers}
         getTeamAreas={getTeamAreas}
         areasDetail={undefined}
+        canManage
       />
     );
 
