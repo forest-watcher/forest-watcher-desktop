@@ -22,6 +22,7 @@ import DataFilter from "components/ui/DataFilter/DataFilter";
 import { TFilterFields } from "pages/reports/reports/Reports";
 import useControlPanelReportFilters from "pages/reports/reports/useControlPanelReportFilters";
 import { TGetAllAnswers } from "services/reports";
+import useFindArea from "hooks/useFindArea";
 
 export enum LAYERS {
   reports = "reports"
@@ -54,14 +55,16 @@ const AreaDetailsControlPanel: FC<IProps> = props => {
 
   const isMobile = useMediaQuery({ maxWidth: breakpoints.mobile });
 
-  const { data: areas, loading: isLoadingAreas } = useAppSelector(state => state.areas);
+  const { data: areas, areasInUsersTeams, loading: isLoadingAreas } = useAppSelector(state => state.areas);
   const { loading: isLoadingAnswers } = useAppSelector(state => state.reports);
+  const area = useFindArea(areaId, areas, areasInUsersTeams);
 
-  const selectedAreaGeoData = useMemo(() => areas[areaId]?.attributes.geostore.geojson, [areaId, areas]);
+  const selectedAreaGeoData = useMemo(() => area?.attributes.geostore.geojson, [area]);
   const intl = useIntl();
 
   const { filters } = useControlPanelReportFilters(answers);
 
+  // @ts-ignore
   useZoomToGeojson(selectedAreaGeoData as AllGeoJSON);
 
   const formhook = useForm<FormValues>({
@@ -154,10 +157,7 @@ const AreaDetailsControlPanel: FC<IProps> = props => {
   return (
     <MapCard
       className="c-map-control-panel"
-      title={intl.formatMessage(
-        { id: "reporting.control.panel.investigation.title" },
-        { area: areas[areaId]?.attributes.name }
-      )}
+      title={intl.formatMessage({ id: "reporting.control.panel.investigation.title" }, { area: area?.attributes.name })}
       onBack={handleBackBtnClick}
     >
       <Loader isLoading={isLoadingAreas || isLoadingAnswers} />

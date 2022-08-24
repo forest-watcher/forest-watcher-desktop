@@ -2,7 +2,7 @@ import { FC, PropsWithChildren, useCallback, useEffect, useMemo, useState } from
 import { useAppSelector } from "hooks/useRedux";
 import Polygon, { IProps as IPolygonProps } from "../ui/Map/components/layers/Polygon";
 import Map, { IProps as IMapProps } from "../ui/Map/Map";
-import { TAreasResponse } from "services/area";
+import { TAreasInTeam, TAreasResponse } from "services/area";
 import { Map as MapInstance, MapboxEvent } from "mapbox-gl";
 import * as turf from "@turf/turf";
 import { goToGeojson } from "helpers/map";
@@ -28,6 +28,7 @@ interface IProps extends IMapProps {
   answers?: TGetAllAnswers["data"];
   currentPlanetBasemap?: IPlanetBasemap;
   currentProc?: "" | "cir";
+  showTeamAreas?: boolean;
 }
 
 const UserAreasMap: FC<PropsWithChildren<IProps>> = props => {
@@ -42,6 +43,7 @@ const UserAreasMap: FC<PropsWithChildren<IProps>> = props => {
     answers,
     currentPlanetBasemap,
     currentProc = "",
+    showTeamAreas = false,
     ...rest
   } = props;
   const [mapRef, setMapRef] = useState<MapInstance | null>(null);
@@ -49,8 +51,21 @@ const UserAreasMap: FC<PropsWithChildren<IProps>> = props => {
     undefined
   );
 
-  const { data: areasList } = useAppSelector(state => state.areas);
-  const areaMap = useMemo<TAreasResponse[]>(() => Object.values(areasList), [areasList]);
+  const { data: areasList, areasInUsersTeams } = useAppSelector(state => state.areas);
+
+  const areaMap = useMemo<TAreasResponse[]>(() => {
+    if (showTeamAreas) {
+      const mapped: TAreasResponse[] = areasInUsersTeams
+        .map(teamAreas => {
+          return teamAreas.areas.map(area => area.data as TAreasResponse);
+        })
+        .flat();
+
+      return mapped.filter((value, index, self) => self.findIndex(t => t.id === value.id) === index);
+    }
+    return Object.values(areasList);
+  }, [areasInUsersTeams, areasList, showTeamAreas]);
+
   const [hasLoaded, setHasLoaded] = useState(true);
   const [selectedPoint, setSelectedPoint] = useState<mapboxgl.Point | null>(null);
   const [selectedReportIds, setSelectedReportIds] = useState<string[] | null>(null);

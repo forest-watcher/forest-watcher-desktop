@@ -9,12 +9,14 @@ import { TPropsFromRedux } from "./InvestigationContainer";
 import { BASEMAPS } from "constants/mapbox";
 import AreaDetailCard from "components/ui/Map/components/cards/AreaDetail";
 import { getNumberOfTeamsInArea } from "helpers/areas";
-import { TAreasInTeam } from "services/area";
+import { TAreasInTeam, TAreasResponse } from "services/area";
 import { AllGeoJSON } from "@turf/turf";
 import useZoomToGeojson from "hooks/useZoomToArea";
 import { TGetAllAnswers } from "services/reports";
 import { Layer, Source } from "react-map-gl";
 import useUrlQuery from "hooks/useUrlQuery";
+import { TAreaResponse } from "services/exports";
+import useFindArea from "hooks/useFindArea";
 
 interface IProps extends RouteComponentProps, TPropsFromRedux {}
 
@@ -31,24 +33,29 @@ const AreaCardWrapper: FC<IAreaCardProps> = ({ areas, areasInUsersTeams, numberO
 
   const history = useHistory();
 
-  const selectedAreaGeoData = useMemo(() => areas[areaId]?.attributes.geostore.geojson, [areaId, areas]);
+  const area = useFindArea(areaId, areas, areasInUsersTeams);
+
+  const selectedAreaGeoData = useMemo(() => area?.attributes.geostore.geojson, [area]);
+  //@ts-ignore
   useZoomToGeojson(selectedAreaGeoData as AllGeoJSON);
 
   return (
-    <AreaDetailCard
-      className="c-map-control-panel"
-      area={areas[areaId]}
-      numberOfTeams={getNumberOfTeamsInArea(areaId, areasInUsersTeams)}
-      numberOfReports={numberOfReports}
-      position="top-left"
-      onBack={() =>
-        history.push(
-          `/reporting/investigation?scrollToAreaId=${areaId}${
-            scrollToTeamId ? `&scrollToTeamId=${scrollToTeamId}` : ""
-          }`
-        )
-      }
-    />
+    area && (
+      <AreaDetailCard
+        className="c-map-control-panel"
+        area={area}
+        numberOfTeams={getNumberOfTeamsInArea(areaId, areasInUsersTeams)}
+        numberOfReports={numberOfReports}
+        position="top-left"
+        onBack={() =>
+          history.push(
+            `/reporting/investigation?scrollToAreaId=${areaId}${
+              scrollToTeamId ? `&scrollToTeamId=${scrollToTeamId}` : ""
+            }`
+          )
+        }
+      />
+    )
   );
 };
 
@@ -122,6 +129,7 @@ const InvestigationPage: FC<IProps> = props => {
         basemaps.length && isPlanet ? basemaps.find(bm => bm.name === currentPlanetPeriod) || basemaps[0] : undefined
       }
       currentProc={currentProc}
+      showTeamAreas
     >
       <Switch>
         <Route exact path={`${match.url}`} component={AreaListControlPanel} />
