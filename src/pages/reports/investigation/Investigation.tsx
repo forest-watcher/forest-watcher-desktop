@@ -9,13 +9,12 @@ import { TPropsFromRedux } from "./InvestigationContainer";
 import { BASEMAPS } from "constants/mapbox";
 import AreaDetailCard from "components/ui/Map/components/cards/AreaDetail";
 import { getNumberOfTeamsInArea } from "helpers/areas";
-import { TAreasInTeam, TAreasResponse } from "services/area";
+import { TAreasInTeam } from "services/area";
 import { AllGeoJSON } from "@turf/turf";
 import useZoomToGeojson from "hooks/useZoomToArea";
 import { TGetAllAnswers } from "services/reports";
 import { Layer, Source } from "react-map-gl";
 import useUrlQuery from "hooks/useUrlQuery";
-import { TAreaResponse } from "services/exports";
 import useFindArea from "hooks/useFindArea";
 
 interface IProps extends RouteComponentProps, TPropsFromRedux {}

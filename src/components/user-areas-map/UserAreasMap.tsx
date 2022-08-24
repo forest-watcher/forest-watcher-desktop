@@ -2,7 +2,7 @@ import { FC, PropsWithChildren, useCallback, useEffect, useMemo, useState } from
 import { useAppSelector } from "hooks/useRedux";
 import Polygon, { IProps as IPolygonProps } from "../ui/Map/components/layers/Polygon";
 import Map, { IProps as IMapProps } from "../ui/Map/Map";
-import { TAreasInTeam, TAreasResponse } from "services/area";
+import { TAreasResponse } from "services/area";
 import { Map as MapInstance, MapboxEvent } from "mapbox-gl";
 import * as turf from "@turf/turf";
 import { goToGeojson } from "helpers/map";
