@@ -162,6 +162,7 @@
   "areas.empty.text": "Create an area to start assigning teams",
   "areas.back": "Back to Areas",
   "areas.viewInGfw": "View in gfw",
+  "areas.exportAreas": "Export areas",
   "areas.details.templates": "Templates attached to this area ({num})",
   "areas.details.templates.add.title": "Add Template",
   "areas.details.templates.add.select": "Select the templates you want to assign to this area.",

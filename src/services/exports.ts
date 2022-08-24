@@ -26,21 +26,26 @@ function delay(timeInMs: number) {
 }
 
 export class ExportSerive extends BaseService {
-  exportAllAreas(fileType: string): Promise<TExportAllAreasResponse> {
+  async exportAllAreas(fileType: string): Promise<TAreaResponse> {
     this.token = store.getState().user.token;
 
     const body = {
-      fileType,
-      fields: []
+      fileType
     };
 
-    return this.fetchJSON(`/areas/exportAll`, {
+    const resp: TExportAllAreasResponse = await this.fetchJSON(`/areas/exportAll`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
       },
       body: JSON.stringify(body)
     });
+
+    if (resp.data) {
+      return this.checkAreaStatus(resp.data);
+    }
+
+    throw Error("Failed to get export");
   }
 
   async exportAllReports(fileType: string, fields: string[]): Promise<TReportResponse> {
