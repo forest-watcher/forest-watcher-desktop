@@ -45,4 +45,16 @@
       text-transform: uppercase;
     }
   }
+
+  @include before(md) {
+    .c-input {
+      &__input-wrapper {
+        width: 100%;
+      }
+
+      &__label {
+        min-width: 70px;
+      }
+    }
+  }
 }
