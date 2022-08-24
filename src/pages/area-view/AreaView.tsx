@@ -51,7 +51,7 @@ const AreasView: FC<IProps & RouteComponentProps<TParams>> = ({
   const templatesToAdd = useMemo(() => {
     return (
       templates?.filter(
-        template => !area?.attributes.reportTemplate.find(areaTemplate => areaTemplate.id === template.id)
+        template => !area?.attributes.reportTemplate.find(areaTemplate => areaTemplate?.id === template?.id)
       ) || []
     );
   }, [area?.attributes.reportTemplate, templates]);
@@ -175,7 +175,7 @@ const AreasView: FC<IProps & RouteComponentProps<TParams>> = ({
                       area?.attributes.reportTemplate.map(template => ({
                         ...template,
                         //@ts-ignore
-                        name: (template.name?.[template.defaultLanguage] as string) || "",
+                        name: (template?.name?.[template?.defaultLanguage] as string) || "",
                         openAssignments: 0
                       })) ?? []
                     }
