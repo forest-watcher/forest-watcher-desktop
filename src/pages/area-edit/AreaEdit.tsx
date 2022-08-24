@@ -127,7 +127,7 @@ const AreaEdit: FC<IProps> = ({
       // Bring label to top
       setTimeout(() => {
         mapRef.moveLayer("label");
-      }, 1000);
+      }, 3000);
     }
   }, [centrePoint, drawRef, mapRef, showLabel]);
 
