@@ -8,6 +8,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    gap: $global-spacing-3;
 
     &:last-child {
       padding-bottom: $global-spacing-7;

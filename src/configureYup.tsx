@@ -14,6 +14,7 @@ setLocale({
   },
   string: {
     min: ({ min }) => ({ key: "errors.string.min", values: { min } }),
+    max: ({ max }) => ({ key: "errors.string.max", values: { max } }),
     email: () => ({ key: "errors.string.email" })
   },
   array: {
