@@ -44,7 +44,7 @@ it("Hero should render properly", () => {
             <h1
               class="c-hero__title u-text-700 u-text-neutral-300 u-text-capitalize u-text-ellipsis"
             >
-              Manage area: Area
+              Area
             </h1>
             <div
               class="c-hero__spacer"
@@ -125,7 +125,7 @@ it("Hero should render properly with Page Tabs", () => {
             <h1
               class="c-hero__title u-text-700 u-text-neutral-300 u-text-capitalize u-text-ellipsis"
             >
-              Manage area: Area
+              Area
             </h1>
             <div
               class="c-hero__page-tabs c-tab-group"
