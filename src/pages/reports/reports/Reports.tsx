@@ -123,61 +123,59 @@ const Reports: FC<IProps> = props => {
                   options={rows}
                   className="c-data-filter--above-table"
                 />
-                <div className="u-responsive-table">
-                  <DataTable<TReportsDataTable>
-                    className="u-w-100"
-                    rows={filteredRows}
-                    isPaginated
-                    onSelect={setSelectedReports}
-                    selectFindGetter="id"
-                    rowActions={[
-                      {
-                        name: "common.delete",
-                        href: row => `${url}/${row.template}/${row.id}/delete/`
-                      }
-                    ]}
-                    columnOrder={[
-                      {
-                        key: "createdAt",
-                        name: "reports.reports.table.header.createdAt",
-                        rowLabel: (row, value) => {
-                          return !Array.isArray(value)
-                            ? intl.formatDate(value, { day: "2-digit", month: "2-digit", year: "2-digit" })
-                            : "";
-                        },
-                        sortCompareFn: sortByDateString
+                <DataTable<TReportsDataTable>
+                  className="u-w-100"
+                  rows={filteredRows}
+                  isPaginated
+                  onSelect={setSelectedReports}
+                  selectFindGetter="id"
+                  rowActions={[
+                    {
+                      name: "common.delete",
+                      href: row => `${url}/${row.template}/${row.id}/delete/`
+                    }
+                  ]}
+                  columnOrder={[
+                    {
+                      key: "createdAt",
+                      name: "reports.reports.table.header.createdAt",
+                      rowLabel: (row, value) => {
+                        return !Array.isArray(value)
+                          ? intl.formatDate(value, { day: "2-digit", month: "2-digit", year: "2-digit" })
+                          : "";
                       },
-                      { key: "monitor", name: "reports.reports.table.header.monitor", sortCompareFn: sortByString },
-                      {
-                        key: "alerts",
-                        name: "reports.reports.table.header.alertType",
-                        rowLabel: (row, value) => {
-                          if (!Array.isArray(value)) {
-                            return "";
-                          }
-                          if (value.length === 0) {
-                            return intl.formatMessage({ id: "layers.none" });
-                          }
-
-                          return value.map(alert => intl.formatMessage({ id: `layers.${alert.id}` })).join(", ");
-                        },
-                        sortCompareFn: (a, b, direction) => {
-                          const newA = intl.formatMessage({ id: `layers.${a}`, defaultMessage: a?.toString() });
-                          const newB = intl.formatMessage({ id: `layers.${b}`, defaultMessage: b?.toString() });
-
-                          return sortByString(newA, newB, direction);
+                      sortCompareFn: sortByDateString
+                    },
+                    { key: "monitor", name: "reports.reports.table.header.monitor", sortCompareFn: sortByString },
+                    {
+                      key: "alerts",
+                      name: "reports.reports.table.header.alertType",
+                      rowLabel: (row, value) => {
+                        if (!Array.isArray(value)) {
+                          return "";
                         }
+                        if (value.length === 0) {
+                          return intl.formatMessage({ id: "layers.none" });
+                        }
+
+                        return value.map(alert => intl.formatMessage({ id: `layers.${alert.id}` })).join(", ");
                       },
-                      { key: "name", name: "reports.reports.table.header.name", sortCompareFn: sortByString },
-                      { key: "area", name: "reports.reports.table.header.area", sortCompareFn: sortByString },
-                      {
-                        key: "coordinates",
-                        name: "reports.reports.table.header.coordinates",
-                        sortCompareFn: sortByString
+                      sortCompareFn: (a, b, direction) => {
+                        const newA = intl.formatMessage({ id: `layers.${a}`, defaultMessage: a?.toString() });
+                        const newB = intl.formatMessage({ id: `layers.${b}`, defaultMessage: b?.toString() });
+
+                        return sortByString(newA, newB, direction);
                       }
-                    ]}
-                  />
-                </div>
+                    },
+                    { key: "name", name: "reports.reports.table.header.name", sortCompareFn: sortByString },
+                    { key: "area", name: "reports.reports.table.header.area", sortCompareFn: sortByString },
+                    {
+                      key: "coordinates",
+                      name: "reports.reports.table.header.coordinates",
+                      sortCompareFn: sortByString
+                    }
+                  ]}
+                />
               </>
             ))}
         </Article>

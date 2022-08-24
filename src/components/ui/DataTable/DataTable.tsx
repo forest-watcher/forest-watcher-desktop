@@ -163,90 +163,93 @@ const DataTable = <T extends { [key: string]: string | number | any[] }>(props: 
 
   return (
     <>
-      <table className={classNames("c-data-table", className)}>
-        <thead className="c-data-table__header">
-          <tr>
-            {onSelect && (
-              <th className="c-data-table__checkbox-cell c-data-table__checkbox-header-cell">
-                <CellCheckbox
-                  label={intl.formatMessage({ id: "common.selectAll" })}
-                  onChange={handleSelectAll}
-                  checked={selectedRows.length === rows.length}
-                />
-              </th>
-            )}
-            {columnOrder.map(column => (
-              <th key={column.key.toString()} aria-sort={column.key === sortedCol?.key ? sortedDirection : undefined}>
-                {column.sortCompareFn ? (
-                  <button onClick={() => handleSort(column)} className="c-data-table__sort-button">
-                    <FormattedMessage id={column.name} />
-                    <SortIcon direction={column.key === sortedCol?.key ? sortedDirection : Direction.None} />
-                  </button>
-                ) : (
-                  <FormattedMessage id={column.name} />
-                )}
-              </th>
-            ))}
-
-            {rowActions && <th></th>}
-          </tr>
-        </thead>
-
-        <tbody>
-          {rowsToDisplay.map((row, id) => (
-            <tr key={id} className="c-data-table__row">
+      <div className="u-responsive-table">
+        <table className={classNames("c-data-table", className)}>
+          <thead className="c-data-table__header">
+            <tr>
               {onSelect && (
-                <td className="c-data-table__checkbox-cell">
+                <th className="c-data-table__checkbox-cell c-data-table__checkbox-header-cell">
                   <CellCheckbox
-                    label={intl.formatMessage({ id: "common.selectRow" })}
-                    onChange={() => handleSelectOne(row)}
-                    checked={
-                      selectedRows.findIndex(
-                        selected => get(selected, selectFindGetter) === get(row, selectFindGetter)
-                      ) > -1
-                    }
+                    label={intl.formatMessage({ id: "common.selectAll" })}
+                    onChange={handleSelectAll}
+                    checked={selectedRows.length === rows.length}
                   />
-                </td>
+                </th>
               )}
               {columnOrder.map(column => (
-                <td key={column.key.toString()}>
-                  {column.rowHref ? (
-                    <Link
-                      className="u-link-unstyled"
-                      to={typeof column.rowHref === "function" ? column.rowHref(row) : column.rowHref}
-                    >
-                      {typeof column.rowLabel === "function" ? column.rowLabel(row, row[column.key]) : row[column.key]}
-                    </Link>
-                  ) : typeof column.rowLabel === "function" ? (
-                    column.rowLabel(row, row[column.key])
+                <th key={column.key.toString()} aria-sort={column.key === sortedCol?.key ? sortedDirection : undefined}>
+                  {column.sortCompareFn ? (
+                    <button onClick={() => handleSort(column)} className="c-data-table__sort-button">
+                      <FormattedMessage id={column.name} />
+                      <SortIcon direction={column.key === sortedCol?.key ? sortedDirection : Direction.None} />
+                    </button>
                   ) : (
-                    row[column.key]
+                    <FormattedMessage id={column.name} />
                   )}
-                </td>
+                </th>
               ))}
 
-              {rowActions && (
-                <td className="c-data-table__action-cell">
-                  <ContextMenu
-                    toggleClassName="c-data-table__action-toggle"
-                    align="end"
-                    offsetY={8}
-                    menuItems={rowActions
-                      .filter(rowAction => (rowAction.shouldShow ? rowAction.shouldShow(row, rowAction.value) : true))
-                      .map(({ onClick = () => {}, href, value, shouldShow, ...menuItem }) => ({
-                        onClick: e => onClick(row, e.value),
-                        href: typeof href === "function" ? href(row, value) : href,
-                        value,
-                        ...menuItem
-                      }))}
-                  />
-                </td>
-              )}
+              {rowActions && <th></th>}
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
 
+          <tbody>
+            {rowsToDisplay.map((row, id) => (
+              <tr key={id} className="c-data-table__row">
+                {onSelect && (
+                  <td className="c-data-table__checkbox-cell">
+                    <CellCheckbox
+                      label={intl.formatMessage({ id: "common.selectRow" })}
+                      onChange={() => handleSelectOne(row)}
+                      checked={
+                        selectedRows.findIndex(
+                          selected => get(selected, selectFindGetter) === get(row, selectFindGetter)
+                        ) > -1
+                      }
+                    />
+                  </td>
+                )}
+                {columnOrder.map(column => (
+                  <td key={column.key.toString()}>
+                    {column.rowHref ? (
+                      <Link
+                        className="u-link-unstyled"
+                        to={typeof column.rowHref === "function" ? column.rowHref(row) : column.rowHref}
+                      >
+                        {typeof column.rowLabel === "function"
+                          ? column.rowLabel(row, row[column.key])
+                          : row[column.key]}
+                      </Link>
+                    ) : typeof column.rowLabel === "function" ? (
+                      column.rowLabel(row, row[column.key])
+                    ) : (
+                      row[column.key]
+                    )}
+                  </td>
+                ))}
+
+                {rowActions && (
+                  <td className="c-data-table__action-cell">
+                    <ContextMenu
+                      toggleClassName="c-data-table__action-toggle"
+                      align="end"
+                      offsetY={8}
+                      menuItems={rowActions
+                        .filter(rowAction => (rowAction.shouldShow ? rowAction.shouldShow(row, rowAction.value) : true))
+                        .map(({ onClick = () => {}, href, value, shouldShow, ...menuItem }) => ({
+                          onClick: e => onClick(row, e.value),
+                          href: typeof href === "function" ? href(row, value) : href,
+                          value,
+                          ...menuItem
+                        }))}
+                    />
+                  </td>
+                )}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
       {rows.length !== rowsToDisplay.length && (
         <div className="c-data-table__pagination">
           <Pagination min={1} max={Math.ceil(rows.length / rowsPerPage)} onPageChange={handlePaginatedChange} />

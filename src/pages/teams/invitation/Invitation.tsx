@@ -74,17 +74,15 @@ const Invitation: FC<IProps> = props => {
           title="teams.invitation.subTitle"
           titleValues={{ num: invitationRows.length }}
         >
-          <div className="u-responsive-table">
-            <DataTable<TTeamInvitationsDataTable>
-              className="u-w-100"
-              rows={invitationRows}
-              columnOrder={[
-                { key: "name", name: "teams.details.table.header.teamName", sortCompareFn: sortByString },
-                { key: "userRole", name: "teams.details.table.header.userRole", sortCompareFn: sortByString }
-              ]}
-              rowActions={[acceptInvitation, declineInvitation]}
-            />
-          </div>
+          <DataTable<TTeamInvitationsDataTable>
+            className="u-w-100"
+            rows={invitationRows}
+            columnOrder={[
+              { key: "name", name: "teams.details.table.header.teamName", sortCompareFn: sortByString },
+              { key: "userRole", name: "teams.details.table.header.userRole", sortCompareFn: sortByString }
+            ]}
+            rowActions={[acceptInvitation, declineInvitation]}
+          />
         </Article>
       </div>
 
