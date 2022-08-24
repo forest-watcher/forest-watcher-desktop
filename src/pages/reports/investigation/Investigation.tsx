@@ -58,6 +58,7 @@ const InvestigationPage: FC<IProps> = props => {
   const [currentPlanetPeriod, setCurrentPlanetPeriod] = useState("");
   const [currentProc, setCurrentProc] = useState<"" | "cir">("");
   const [contextualLayerUrls, setContextualLayerUrls] = useState<string[]>([]);
+  const [basemapKey, setBasemapKey] = useState<undefined | string>();
   const history = useHistory();
   const [filteredAnswers, setFilteredAnswers] = useState<TGetAllAnswers["data"] | null>(null);
   let selectedAreaMatch = useRouteMatch<TParams>({ path: "/reporting/investigation/:areaId", exact: false });
@@ -95,6 +96,7 @@ const InvestigationPage: FC<IProps> = props => {
     setCurrentPlanetPeriod(resp.currentPlanetPeriod || "");
     setCurrentProc(resp.currentPlanetImageType === "nat" ? "" : resp.currentPlanetImageType || "");
     setContextualLayerUrls(resp.contextualLayers?.map(layer => selectedLayers[layer].attributes.url) || []);
+    setBasemapKey(resp.currentMap);
   };
 
   const handleFiltersChange = (filters: TGetAllAnswers["data"]) => {
@@ -129,6 +131,7 @@ const InvestigationPage: FC<IProps> = props => {
             onChange={handleControlPanelChange}
             answers={answersBySelectedArea}
             onFilterUpdate={handleFiltersChange}
+            defaultBasemap={basemapKey}
           />
           {contextualLayerUrls.map(url => (
             <Source id={url} type="raster" tiles={[url]} key={url}>
