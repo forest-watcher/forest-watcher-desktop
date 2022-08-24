@@ -1,11 +1,11 @@
 import { FC, HTMLAttributes, useEffect, useState } from "react";
 import classnames from "classnames";
 import ReactMap, { MapboxEvent } from "react-map-gl";
-import { Map as MapInstance, MapLayerEventType } from "mapbox-gl";
+import { Map as MapInstance } from "mapbox-gl";
 import MapboxDraw from "@mapbox/mapbox-gl-draw";
 import MapControls from "./components/ControlsContainer";
 import MapEditControls from "./components/EditControls";
-import { goToGeojson, loadMapImage, MapImages, mapImagesArr, setupMapImages } from "helpers/map";
+import { goToGeojson, setupMapImages } from "helpers/map";
 import { editStyles } from "./components/layers/styles";
 import { FeatureCollection } from "geojson";
 
