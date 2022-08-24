@@ -5,29 +5,25 @@ import { getReportAlertsByName } from "helpers/reports";
 import { ALL_VALUE, filterByTimeFrame, getTimeFrames } from "helpers/table";
 import { useMemo } from "react";
 import { useIntl } from "react-intl";
-import { TGetAllAnswers, TGetTemplates } from "services/reports";
+import { TGetAllAnswers } from "services/reports";
 import { Option } from "types/select";
 import { TFilterFields } from "./Reports";
 
-const useControlPanelReportFilters = (answers: TGetAllAnswers["data"] = [], templates: TGetTemplates["data"] = []) => {
+const useControlPanelReportFilters = (answers: TGetAllAnswers["data"] = []) => {
   const intl = useIntl();
 
   const templateOptions = useMemo<Option[]>(() => {
-    const uniqueUsers = answers
-      .map(answer => {
-        const template = templates.find(t => t.id === answer.attributes?.report);
-        const names = (template?.attributes.name as any) ?? {};
-        return {
-          label: template
-            ? names[template.attributes.defaultLanguage as keyof typeof names]
-            : answer.attributes?.report ?? "", // Convert to template name
-          value: answer.attributes?.report ?? ""
-        };
-      })
-      .filter((value, index, self) => self.findIndex(t => t.value === value.value) === index);
+    const uniqueTemplates = answers
+      .map(answer => ({
+        // @ts-ignore
+        label: answer.attributes?.templateName ?? "",
+        // @ts-ignore
+        value: answer.attributes?.templateName ?? ""
+      }))
+      .filter((value, index, self) => self.findIndex(t => t.value === value.value) === index && value.value !== "");
 
-    return [{ label: intl.formatMessage({ id: "filters.all.templates" }), value: ALL_VALUE }, ...uniqueUsers];
-  }, [answers, intl, templates]);
+    return [{ label: intl.formatMessage({ id: "filters.all.templates" }), value: ALL_VALUE }, ...uniqueTemplates];
+  }, [answers, intl]);
 
   const timeFrameOptions = useMemo<Option[]>(() => getTimeFrames(intl, "filters.all.timeframes"), [intl]);
 
@@ -117,7 +113,7 @@ const useControlPanelReportFilters = (answers: TGetAllAnswers["data"] = [], temp
           if (!value || value === ALL_VALUE) {
             return true;
           } else {
-            return item.attributes.report === value;
+            return item.attributes.templateName === value;
           }
         }
       },

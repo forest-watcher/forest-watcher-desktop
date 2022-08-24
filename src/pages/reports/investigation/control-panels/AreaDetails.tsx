@@ -45,7 +45,7 @@ interface IProps extends TPropsFromRedux {
 const AreaDetailsControlPanel: FC<IProps> = props => {
   const history = useHistory();
   const { areaId } = useParams<TParams>();
-  const { onChange, basemaps, answers, templates, onFilterUpdate, layersOptions, getLayers, defaultBasemap } = props;
+  const { onChange, basemaps, answers, onFilterUpdate, layersOptions, getLayers, defaultBasemap } = props;
   const [filteredRows, setFilteredRows] = useState<any>(answers);
 
   useEffect(() => {
@@ -58,9 +58,9 @@ const AreaDetailsControlPanel: FC<IProps> = props => {
   const selectedAreaGeoData = useMemo(() => areas[areaId]?.attributes.geostore.geojson, [areaId, areas]);
   const intl = useIntl();
 
-  const { filters } = useControlPanelReportFilters(answers, templates);
+  const { filters } = useControlPanelReportFilters(answers);
 
-  useZoomToGeojson(selectedAreaGeoData as AllGeoJSON);
+  const hasZoomed = useZoomToGeojson(selectedAreaGeoData as AllGeoJSON);
 
   const formhook = useForm<FormValues>({
     defaultValues: {

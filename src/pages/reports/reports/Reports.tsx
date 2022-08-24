@@ -42,7 +42,7 @@ export type TFilterFields = {
 interface IProps extends TPropsFromRedux {}
 
 const Reports: FC<IProps> = props => {
-  const { allAnswers, loading, templates } = props;
+  const { allAnswers, loading } = props;
   let { path, url } = useRouteMatch();
   const history = useHistory();
   const [selectedReports, setSelectedReports] = useState<TReportsDataTable[]>([]);
@@ -56,7 +56,8 @@ const Reports: FC<IProps> = props => {
         alerts: getReportAlertsByName(answer.attributes?.reportName),
         name: answer.attributes?.reportName ?? "",
         area: answer.attributes?.areaOfInterestName ?? "",
-        template: answer.attributes?.report ?? "",
+        // @ts-ignore - types not correct
+        template: answer.attributes?.templateName ?? "",
         coordinates: `${
           answer.attributes?.clickedPosition
             ?.map((position: any) => [position.lat, position.lon])[0]
@@ -73,7 +74,7 @@ const Reports: FC<IProps> = props => {
     setFilteredRows(resp);
   };
 
-  const { filters, extraFilters } = useReportFilters(allAnswers, templates);
+  const { filters, extraFilters } = useReportFilters(allAnswers);
 
   const handleExport = useCallback(
     async (values: UnpackNestedValue<TExportForm>) => {
