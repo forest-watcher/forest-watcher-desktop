@@ -39,12 +39,13 @@ interface IProps extends TPropsFromRedux {
   onChange?: (values: FormValues) => void;
   onFilterUpdate: (answers: TGetAllAnswers["data"]) => void;
   answers?: TGetAllAnswers["data"];
+  defaultBasemap?: string;
 }
 
 const AreaDetailsControlPanel: FC<IProps> = props => {
   const history = useHistory();
   const { areaId } = useParams<TParams>();
-  const { onChange, basemaps, answers, templates, onFilterUpdate, layersOptions, getLayers } = props;
+  const { onChange, basemaps, answers, templates, onFilterUpdate, layersOptions, getLayers, defaultBasemap } = props;
   const [filteredRows, setFilteredRows] = useState<any>(answers);
 
   useEffect(() => {
@@ -63,7 +64,8 @@ const AreaDetailsControlPanel: FC<IProps> = props => {
 
   const formhook = useForm<FormValues>({
     defaultValues: {
-      layers: [LAYERS.reports]
+      layers: [LAYERS.reports],
+      currentMap: defaultBasemap
     }
   });
   const {
@@ -165,7 +167,8 @@ const AreaDetailsControlPanel: FC<IProps> = props => {
           radioGroupProps={{
             label: "maps.basemapAndPlanet",
             optionsClassName: "c-map-control-panel__grid",
-            options: mapOptions
+            options: mapOptions,
+            value: defaultBasemap
           }}
           id="map-styles"
         />
