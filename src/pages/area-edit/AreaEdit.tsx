@@ -108,7 +108,7 @@ const AreaEdit: FC<IProps> = ({
       return null;
     }
 
-    const centre = turf.center(data as AllGeoJSON);
+    const centre = turf.centerOfMass(data as AllGeoJSON);
 
     if (!centre) {
       return null;
@@ -123,11 +123,13 @@ const AreaEdit: FC<IProps> = ({
   }, [geojson, name, updatedGeojson]);
 
   useEffect(() => {
-    if (mapRef && centrePoint && showLabel) {
+    if (mapRef && drawRef && centrePoint && showLabel) {
       // Bring label to top
-      mapRef.moveLayer("label");
+      setTimeout(() => {
+        mapRef.moveLayer("label");
+      }, 1000);
     }
-  }, [centrePoint, mapRef, showLabel]);
+  }, [centrePoint, drawRef, mapRef, showLabel]);
 
   useEffect(() => {
     if (mapRef && bounds) {
@@ -289,7 +291,7 @@ const AreaEdit: FC<IProps> = ({
         />
 
         <Map onMapLoad={handleMapLoad} onDrawLoad={handleDrawLoad} onMapEdit={handleMapEdit} geojsonToEdit={geojson}>
-          {centrePoint && showLabel && (
+          {centrePoint && showLabel && drawRef && (
             <Source id="label" type="geojson" data={centrePoint}>
               {/* @ts-ignore */}
               <Layer {...labelStyle} id="label" />

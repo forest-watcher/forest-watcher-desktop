@@ -81,18 +81,18 @@ const Polygon: FC<IProps> = props => {
 
   return (
     <>
-      <Source id={id} data={data as GeoJSONSourceOptions["data"]} type="geojson" tolerance={0.00001}>
-        {/* @ts-ignore */}
-        <Layer {...polygonStyle} id={id} />
-        {/* @ts-ignore */}
-        <Layer {...layerStyle} id={`${id}-line`} />
-      </Source>
       {centrePoint && (
-        <Source id={`label-${id}`} type="geojson" data={centrePoint}>
+        <Source id={`label-${id}`} type="geojson" data={centrePoint} tolerance={0.00001}>
           {/* @ts-ignore */}
           <Layer {...labelStyle} id={`label-${id}`} />
         </Source>
       )}
+      <Source id={id} data={data as GeoJSONSourceOptions["data"]} type="geojson" tolerance={0.00001}>
+        {/* @ts-ignore */}
+        <Layer {...polygonStyle} id={id} beforeId={`label-${id}`} />
+        {/* @ts-ignore */}
+        <Layer {...layerStyle} id={`${id}-line`} beforeId={`label-${id}`} />
+      </Source>
     </>
   );
 };

@@ -1,11 +1,11 @@
 import { FC, HTMLAttributes, useEffect, useState } from "react";
 import classnames from "classnames";
 import ReactMap, { MapboxEvent } from "react-map-gl";
-import { Map as MapInstance } from "mapbox-gl";
+import { Map as MapInstance, MapLayerEventType } from "mapbox-gl";
 import MapboxDraw from "@mapbox/mapbox-gl-draw";
 import MapControls from "./components/ControlsContainer";
 import MapEditControls from "./components/EditControls";
-import { goToGeojson, setupMapImages } from "helpers/map";
+import { goToGeojson, loadMapImage, MapImages, mapImagesArr, setupMapImages } from "helpers/map";
 import { editStyles } from "./components/layers/styles";
 import { FeatureCollection } from "geojson";
 
@@ -68,9 +68,10 @@ const Map: FC<IProps> = props => {
     }
   }, [onMapEdit, mapRef, geojsonToEdit, drawRef, addedGeoJson]);
 
-  const handleMapLoad = (evt: MapboxEvent) => {
+  const handleMapLoad = async (evt: MapboxEvent) => {
     evt.target.resize();
-    setupMapImages(evt.target);
+    // wait for images to load
+    await setupMapImages(evt.target);
     onMapLoad?.(evt);
     setMapRef(evt.target);
   };
