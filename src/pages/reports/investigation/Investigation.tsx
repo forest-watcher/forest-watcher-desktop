@@ -14,6 +14,7 @@ import { AllGeoJSON } from "@turf/turf";
 import useZoomToGeojson from "hooks/useZoomToArea";
 import { TGetAllAnswers } from "services/reports";
 import { Layer, Source } from "react-map-gl";
+import useUrlQuery from "hooks/useUrlQuery";
 
 interface IProps extends RouteComponentProps, TPropsFromRedux {}
 
@@ -24,6 +25,9 @@ interface IAreaCardProps {
 
 const AreaCardWrapper: FC<IAreaCardProps> = ({ areas, areasInUsersTeams }) => {
   const { areaId } = useParams<TParams>();
+  const urlQuery = useUrlQuery();
+  const scrollToTeamId = useMemo(() => urlQuery.get("scrollToTeamId"), [urlQuery]);
+
   const history = useHistory();
 
   const selectedAreaGeoData = useMemo(() => areas[areaId]?.attributes.geostore.geojson, [areaId, areas]);
@@ -35,7 +39,13 @@ const AreaCardWrapper: FC<IAreaCardProps> = ({ areas, areasInUsersTeams }) => {
       area={areas[areaId]}
       numberOfTeams={getNumberOfTeamsInArea(areaId, areasInUsersTeams)}
       position="top-left"
-      onBack={() => history.push("/reporting/investigation")}
+      onBack={() =>
+        history.push(
+          `/reporting/investigation?scrollToAreaId=${areaId}${
+            scrollToTeamId ? `&scrollToTeamId=${scrollToTeamId}` : ""
+          }`
+        )
+      }
     />
   );
 };

@@ -4,11 +4,15 @@
   border-radius: 24px;
 
   .c-chip {
-    font-weight: 500;
+    font-weight: 400;
     font-size: 14px;
     line-height: 14px;
     border-radius: 20px;
     padding: 13px 20px;
     text-transform: uppercase;
+  }
+
+  .c-chip--is-selected {
+    font-weight: 500;
   }
 }

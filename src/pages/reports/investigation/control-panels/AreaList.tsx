@@ -5,20 +5,36 @@ import MapCard from "components/ui/Map/components/cards/MapCard";
 import Card from "components/ui/Card/Card";
 import { FormattedMessage, useIntl } from "react-intl";
 import Loader from "components/ui/Loader";
+import useUrlQuery from "hooks/useUrlQuery";
 
 interface IProps extends RouteComponentProps {}
 
-const AreaListAreaCard: FC<{ area: any }> = ({ area }) => {
+const AreaListAreaCard: FC<{ area: any; teamId?: string }> = ({ area, teamId }) => {
   const intl = useIntl();
   const location = useLocation();
+  const urlQuery = useUrlQuery();
+  const scrollToAreaId = useMemo(() => urlQuery.get("scrollToAreaId"), [urlQuery]);
+  const scrollToTeamId = useMemo(() => urlQuery.get("scrollToTeamId"), [urlQuery]);
 
   const areaCreatedDate = new Date(area.attributes.createdAt);
   const day = ("0" + areaCreatedDate.getDate()).slice(-2),
     month = intl.formatMessage({ id: `common.date.month.${areaCreatedDate.getMonth()}` }),
     year = areaCreatedDate.getFullYear();
 
+  const handleCardRef = (id: string, el: HTMLDivElement | null) => {
+    if (id === scrollToAreaId && el && (teamId === scrollToTeamId || (!teamId && scrollToTeamId === null))) {
+      // @ts-ignore Not a standard function.
+      if (el.scrollIntoViewIfNeeded) {
+        // @ts-ignore Not a standard function.
+        el.scrollIntoViewIfNeeded();
+      } else {
+        el.scrollIntoView();
+      }
+    }
+  };
+
   return (
-    <div className="c-map-control-panel__grid-item">
+    <div className="c-map-control-panel__grid-item" ref={el => handleCardRef(area.id, el)}>
       <Card className="c-map-control-panel__area-card" size="small">
         <Card.Image
           alt=""
@@ -33,7 +49,7 @@ const AreaListAreaCard: FC<{ area: any }> = ({ area }) => {
               {txt => <>{`${txt} ${day} ${month} ${year}`}</>}
             </FormattedMessage>
           </Card.Text>
-          <Card.Cta to={`${location.pathname}/${area.id}`} />
+          <Card.Cta to={`${location.pathname}/${area.id}${teamId ? `?scrollToTeamId=${teamId}` : ""}`} />
         </div>
       </Card>
     </div>
@@ -97,7 +113,7 @@ const AreaListControlPanel: FC<IProps> = props => {
                     {[...teamArea.areas]
                       .sort((a, b) => a.data.attributes.name.localeCompare(b.data.attributes.name.toString()))
                       .map(({ data: area }) => (
-                        <AreaListAreaCard key={area.id} area={area} />
+                        <AreaListAreaCard key={area.id} area={area} teamId={teamArea.team?.id} />
                       ))}
                   </div>
                 </div>
