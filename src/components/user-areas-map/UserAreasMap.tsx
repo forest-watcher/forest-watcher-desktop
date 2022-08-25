@@ -28,6 +28,7 @@ interface IProps extends IMapProps {
   answers?: TGetAllAnswers["data"];
   currentPlanetBasemap?: IPlanetBasemap;
   currentProc?: "" | "cir";
+  showTeamAreas?: boolean;
 }
 
 const UserAreasMap: FC<PropsWithChildren<IProps>> = props => {
@@ -42,6 +43,7 @@ const UserAreasMap: FC<PropsWithChildren<IProps>> = props => {
     answers,
     currentPlanetBasemap,
     currentProc = "",
+    showTeamAreas = false,
     ...rest
   } = props;
   const [mapRef, setMapRef] = useState<MapInstance | null>(null);
@@ -49,8 +51,21 @@ const UserAreasMap: FC<PropsWithChildren<IProps>> = props => {
     undefined
   );
 
-  const { data: areasList } = useAppSelector(state => state.areas);
-  const areaMap = useMemo<TAreasResponse[]>(() => Object.values(areasList), [areasList]);
+  const { data: areasList, areasInUsersTeams } = useAppSelector(state => state.areas);
+
+  const areaMap = useMemo<TAreasResponse[]>(() => {
+    if (showTeamAreas) {
+      const mapped: TAreasResponse[] = areasInUsersTeams
+        .map(teamAreas => {
+          return teamAreas.areas.map(area => area.data as TAreasResponse);
+        })
+        .flat();
+
+      return mapped.filter((value, index, self) => self.findIndex(t => t.id === value.id) === index);
+    }
+    return Object.values(areasList);
+  }, [areasInUsersTeams, areasList, showTeamAreas]);
+
   const [hasLoaded, setHasLoaded] = useState(true);
   const [selectedPoint, setSelectedPoint] = useState<mapboxgl.Point | null>(null);
   const [selectedReportIds, setSelectedReportIds] = useState<string[] | null>(null);
