@@ -197,8 +197,6 @@ const Nav: FC<IProps> = props => {
     [intl, translations]
   );
 
-  console.log({ locale });
-
   return (
     <div className="row column" {...rest}>
       <nav className="c-nav">

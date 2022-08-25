@@ -31,7 +31,7 @@ const addTeamSchema = yup
   })
   .required();
 
-const AddTeamModal: FC<IProps> = ({ teams, users }) => {
+const AddTeamModal: FC<IProps> = ({ teams }) => {
   const { areaId } = useParams<TParams>();
   const intl = useIntl();
   const history = useHistory();
@@ -44,16 +44,16 @@ const AddTeamModal: FC<IProps> = ({ teams, users }) => {
         ?.map(team => ({
           label: team.attributes.name,
           // @ts-ignore name doesn't exist yet, will be added in the future
-          secondaryLabel: users[team.id]?.map(member => member.attributes.name ?? member.attributes.email).join(", "),
+          secondaryLabel: team?.attributes?.members?.map(member => member.name ?? member.email).join(", "),
           value: team.id as string,
           metadata: {
             canShow: Boolean(
-              users[team.id].find(member => member.attributes.userId === userId && member.attributes.role !== "monitor")
+              team?.attributes?.members?.find(member => member.userId === userId && member.role !== "monitor")
             )
           }
         }))
         .filter(team => team.metadata.canShow),
-    [teams, userId, users]
+    [teams, userId]
   );
 
   const onClose = () => {
