@@ -173,6 +173,11 @@ const UserAreasMap: FC<PropsWithChildren<IProps>> = props => {
           mapRef={mapRef}
         />
       )}
+      {planetBasemapUrl && (
+        <Source id="planet-map" type="raster" tiles={[planetBasemapUrl]} key={planetBasemapUrl}>
+          <Layer id="planet-map-layer" type="raster" />
+        </Source>
+      )}
       {areaMap.map(area => (
         <Polygon
           key={area.id}
@@ -183,11 +188,7 @@ const UserAreasMap: FC<PropsWithChildren<IProps>> = props => {
           onClick={handleAreaClick}
         />
       ))}
-      {planetBasemapUrl && (
-        <Source id="planet-map" type="raster" tiles={[planetBasemapUrl]} key={planetBasemapUrl}>
-          <Layer id="planet-map-layer" type="raster" />
-        </Source>
-      )}
+
       {selectedReportIds && selectedReportIds.length > 0 && (
         <ReportDetailCard
           answers={
