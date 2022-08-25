@@ -24,8 +24,8 @@ const RemoveTeamModal: FC<IProps> = props => {
   const [isRemoving, setIsRemoving] = useState(false);
 
   const onClose = useCallback(() => {
-    history.push(`/areas/${areaId}`);
-  }, [history, areaId]);
+    history.goBack();
+  }, [history]);
 
   const removeTeam = async () => {
     setIsRemoving(true);

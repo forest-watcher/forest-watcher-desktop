@@ -286,7 +286,7 @@ const AreasView: FC<IProps & RouteComponentProps<TParams>> = ({
         <Route path={`${path}/export`}>
           <ExportModal
             onSave={handleExport}
-            onClose={() => history.push(`/areas/${area?.id}`)}
+            onClose={() => history.goBack()}
             isOpen
             fileTypes={AREA_EXPORT_FILE_TYPES}
             fields={[]}
