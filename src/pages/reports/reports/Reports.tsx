@@ -19,6 +19,7 @@ import { exportService } from "services/exports";
 import { REPORT_EXPORT_FILE_TYPES } from "constants/export";
 import { toastr } from "react-redux-toastr";
 import useUrlQuery from "hooks/useUrlQuery";
+import useGetUserId from "hooks/useGetUserId";
 
 export type TReportsDataTable = {
   id: string;
@@ -29,6 +30,7 @@ export type TReportsDataTable = {
   area: string;
   coordinates: string;
   template: string;
+  userId?: string;
 };
 
 export type TFilterFields = {
@@ -49,6 +51,7 @@ const Reports: FC<IProps> = props => {
   const [selectedReports, setSelectedReports] = useState<TReportsDataTable[]>([]);
   const urlQuery = useUrlQuery();
   const defaultTemplateFilter = useMemo(() => urlQuery.get("defaultTemplateFilter"), [urlQuery]);
+  const userId = useGetUserId();
 
   const rows = useMemo<TReportsDataTable[]>(
     () =>
@@ -66,7 +69,8 @@ const Reports: FC<IProps> = props => {
             ?.map((position: any) => [position.lat, position.lon])[0]
             .toString()
             .replace(",", ", ") || ""
-        }${(answer.attributes?.clickedPosition?.length || 0) > 1 ? "…" : ""}`
+        }${(answer.attributes?.clickedPosition?.length || 0) > 1 ? "…" : ""}`,
+        userId: answer.attributes?.user
       })) ?? [],
     [allAnswers]
   );
@@ -137,7 +141,8 @@ const Reports: FC<IProps> = props => {
                   rowActions={[
                     {
                       name: "common.delete",
-                      href: row => `${url}/${row.template}/${row.id}/delete/`
+                      href: row => `${url}/${row.template}/${row.id}/delete/`,
+                      shouldShow: row => row.userId === userId
                     }
                   ]}
                   columnOrder={[
