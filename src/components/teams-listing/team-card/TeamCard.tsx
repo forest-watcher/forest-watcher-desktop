@@ -77,11 +77,6 @@ const TeamCard: FC<IProps> = props => {
               {areasDetail ? areasDetail.areas.map(area => area.data.attributes.name).join(", ") : teamAreas.join(", ")}
             </p>
           </div>
-          {canManage && (
-            <Card.Cta to={"/areas"} iconSrc={EditIcon}>
-              <FormattedMessage id="common.manage.area" />
-            </Card.Cta>
-          )}
         </div>
       </Card>
     </Card>
