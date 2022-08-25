@@ -85,7 +85,7 @@ const AreaListControlPanel: FC<IProps> = props => {
       className="c-map-control-panel"
       title={intl.formatMessage({ id: "reporting.control.panel.area.list.title" })}
     >
-      <Loader isLoading={isLoadingAreas} />
+      <Loader isLoading={isLoadingAreas || isLoadingAreasInUsers} />
       <h3 className="c-map-control-panel__sub-title">
         <FormattedMessage id="reporting.control.panel.area.list.your.areas" />
       </h3>
@@ -99,8 +99,6 @@ const AreaListControlPanel: FC<IProps> = props => {
 
       {!isLoadingAreas && (isLoadingAreasInUsers || Boolean(teamAreas.length)) && (
         <div className="c-map-control-panel__team-areas">
-          <Loader isLoading={isLoadingAreasInUsers} />
-
           <h3 className="c-map-control-panel__sub-title">
             <FormattedMessage id="reporting.control.panel.area.list.team.areas" />
           </h3>
