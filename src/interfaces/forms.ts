@@ -25,6 +25,11 @@ export interface paths {
     get: operations["get-all-answers-for-user"];
     parameters: {};
   };
+  "/v3/reports/deleteAllAnswersForUser": {
+    /** Deletes all answers a user has created for all templates */
+    delete: operations["delete-v3-reports-deleteAllAnswersForUser"];
+    parameters: {};
+  };
   "/v1/reports/{reportId}/download-answers": {
     /** Download the given report as a CSV file */
     get: operations["get-report-csv"];
@@ -43,7 +48,17 @@ export interface paths {
       };
     };
   };
+  "/v3/reports/{reportId}/answers": {
+    get: operations["get-answers-for-report-v3"];
+    post: operations["post-answers-for-report-v3"];
+    parameters: {
+      path: {
+        reportId: string;
+      };
+    };
+  };
   "/v3/reports/{reportId}/answers/area/{areaId}": {
+    /** Returns all answers a user, and members of the user's teams, have created for this area of interest. Only returns user answers when optional "restricted" query param is true */
     get: operations["get-answers-for-report-and-area"];
     parameters: {
       path: {
@@ -56,6 +71,17 @@ export interface paths {
     get: operations["get-answer-for-report"];
     delete: operations["delete-answer-for-report"];
     patch: operations["patch-awnser-for-report"];
+    parameters: {
+      path: {
+        reportId: string;
+        id: string;
+      };
+    };
+  };
+  "/v3/reports/{reportId}/answers/{id}": {
+    get: operations["get-answer-for-report-v3"];
+    delete: operations["delete-answer-for-report-v3"];
+    patch: operations["patch-awnser-for-report-v3"];
     parameters: {
       path: {
         reportId: string;
@@ -462,6 +488,15 @@ export interface operations {
       401: components["responses"]["Error"];
     };
   };
+  /** Deletes all answers a user has created for all templates */
+  "delete-v3-reports-deleteAllAnswersForUser": {
+    parameters: {};
+    responses: {
+      /** No Content */
+      204: never;
+      401: components["responses"]["Error"];
+    };
+  };
   /** Download the given report as a CSV file */
   "get-report-csv": {
     parameters: {
@@ -504,11 +539,40 @@ export interface operations {
       401: components["responses"]["Error"];
     };
   };
+  "get-answers-for-report-v3": {
+    parameters: {
+      path: {
+        reportId: string;
+      };
+    };
+    responses: {
+      200: components["responses"]["Answers"];
+      401: components["responses"]["Error"];
+      404: components["responses"]["Error"];
+    };
+  };
+  "post-answers-for-report-v3": {
+    parameters: {
+      path: {
+        reportId: string;
+      };
+    };
+    responses: {
+      200: components["responses"]["Answers"];
+      400: components["responses"]["Error"];
+      401: components["responses"]["Error"];
+    };
+  };
+  /** Returns all answers a user, and members of the user's teams, have created for this area of interest. Only returns user answers when optional "restricted" query param is true */
   "get-answers-for-report-and-area": {
     parameters: {
       path: {
         reportId: string;
         areaId: string;
+      };
+      query: {
+        /** restricts returned answers to ONLY user answers when true */
+        restricted?: string;
       };
     };
     responses: {
@@ -545,6 +609,44 @@ export interface operations {
     };
   };
   "patch-awnser-for-report": {
+    parameters: {
+      path: {
+        reportId: string;
+        id: string;
+      };
+    };
+    responses: {
+      500: components["responses"]["Error"];
+    };
+  };
+  "get-answer-for-report-v3": {
+    parameters: {
+      path: {
+        reportId: string;
+        id: string;
+      };
+    };
+    responses: {
+      200: components["responses"]["Answer"];
+      401: components["responses"]["Error"];
+      404: components["responses"]["Error"];
+    };
+  };
+  "delete-answer-for-report-v3": {
+    parameters: {
+      path: {
+        reportId: string;
+        id: string;
+      };
+    };
+    responses: {
+      /** No Content */
+      204: never;
+      401: components["responses"]["Error"];
+      404: components["responses"]["Error"];
+    };
+  };
+  "patch-awnser-for-report-v3": {
     parameters: {
       path: {
         reportId: string;

@@ -45,7 +45,7 @@ interface IProps extends TPropsFromRedux {
 const AreaDetailsControlPanel: FC<IProps> = props => {
   const history = useHistory();
   const { areaId } = useParams<TParams>();
-  const { onChange, basemaps, answers, templates, onFilterUpdate, layersOptions, getLayers, defaultBasemap } = props;
+  const { onChange, basemaps, answers, onFilterUpdate, layersOptions, getLayers, defaultBasemap } = props;
   const [filteredRows, setFilteredRows] = useState<any>(answers);
 
   useEffect(() => {
@@ -55,10 +55,12 @@ const AreaDetailsControlPanel: FC<IProps> = props => {
   const isMobile = useMediaQuery({ maxWidth: breakpoints.mobile });
 
   const { data: areas, loading: isLoadingAreas } = useAppSelector(state => state.areas);
+  const { loading: isLoadingAnswers } = useAppSelector(state => state.reports);
+
   const selectedAreaGeoData = useMemo(() => areas[areaId]?.attributes.geostore.geojson, [areaId, areas]);
   const intl = useIntl();
 
-  const { filters } = useControlPanelReportFilters(answers, templates);
+  const { filters } = useControlPanelReportFilters(answers);
 
   useZoomToGeojson(selectedAreaGeoData as AllGeoJSON);
 
@@ -133,7 +135,8 @@ const AreaDetailsControlPanel: FC<IProps> = props => {
 
   useEffect(() => {
     onChange?.(watcher);
-  }, [onChange, watcher]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [watcher]);
 
   useEffect(() => {
     onFilterUpdate(filteredRows);
@@ -157,7 +160,7 @@ const AreaDetailsControlPanel: FC<IProps> = props => {
       )}
       onBack={handleBackBtnClick}
     >
-      <Loader isLoading={isLoadingAreas} />
+      <Loader isLoading={isLoadingAreas || isLoadingAnswers} />
       <form>
         <RadioCardGroup
           className="u-margin-bottom-40"

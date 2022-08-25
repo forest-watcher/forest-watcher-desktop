@@ -37,8 +37,6 @@ const ReportDetailCard: FC<IParams> = ({ answers, areasInUsersTeams }) => {
   useEffect(() => {
     if (answers.length === 1) {
       setCurrentAnswer(answers[0]);
-    } else {
-      setCurrentAnswer(undefined);
     }
   }, [answers]);
 
