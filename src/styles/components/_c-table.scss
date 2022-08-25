@@ -2,6 +2,11 @@
     position: relative;
     border: 0;
     color: $theme-text;
+    overflow-x: auto;
+
+    .rt-table {
+        min-width: 68.7rem;
+    }
 
     .rt-thead {
         background: transparent;

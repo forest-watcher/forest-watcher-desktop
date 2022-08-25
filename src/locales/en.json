@@ -465,7 +465,7 @@
   "errors.number.max": "This should be less than {max}",
   "errors.team.detail": "Could not find Team",
   "errors.boundary.title": "Something went wrong",
-  "errors.boundary.message": "Something unexpected happened, please try again later",
+  "errors.boundary.message": "Something unexpected happened. Please try again later.",
   "errors.boundary.submit": "Try again",
   "import.title": "Import",
   "export.title": "Export",
