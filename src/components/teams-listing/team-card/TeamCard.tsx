@@ -79,7 +79,7 @@ const TeamCard: FC<IProps> = props => {
           </div>
           {canManage && (
             <Card.Cta to={"/areas"} iconSrc={EditIcon}>
-              <FormattedMessage id="common.view.team" />
+              <FormattedMessage id="common.manage.area" />
             </Card.Cta>
           )}
         </div>
