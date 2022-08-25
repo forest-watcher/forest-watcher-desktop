@@ -34,4 +34,10 @@
       flex: 0 0 auto;
     }
   }
+
+  @include before(md) {
+    &__actions, &__content {
+      flex-wrap: wrap;
+    }
+  }
 }
