@@ -23,6 +23,7 @@ export interface IProps extends HTMLAttributes<HTMLElement> {
   onMapEdit?: (e: FeatureCollection) => void;
   geojsonToEdit?: GeoJSON.FeatureCollection<GeoJSON.Geometry>;
   mapStyle?: string;
+  cooperativeGestures?: boolean;
 }
 
 const Map: FC<IProps> = props => {
@@ -40,6 +41,7 @@ const Map: FC<IProps> = props => {
     geojsonToEdit,
     onDrawLoad,
     mapStyle = "mapbox://styles/3sidedcube/cl5axl8ha002c14o5exjzmdlb",
+    cooperativeGestures = true,
     ...rest
   } = props;
   const classes = classnames("c-map", className);
@@ -86,7 +88,7 @@ const Map: FC<IProps> = props => {
         mapStyle={mapStyle}
         onLoad={handleMapLoad}
         preserveDrawingBuffer // Allows canvas.toDataURL to work
-        cooperativeGestures
+        cooperativeGestures={cooperativeGestures}
       >
         <MapControls />
         {drawRef && mapRef && <MapEditControls draw={drawRef} map={mapRef} onUpdate={onMapEdit} />}
