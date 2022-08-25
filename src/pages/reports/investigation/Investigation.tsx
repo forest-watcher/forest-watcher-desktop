@@ -69,6 +69,9 @@ const InvestigationPage: FC<IProps> = props => {
   const history = useHistory();
   const [filteredAnswers, setFilteredAnswers] = useState<TGetAllAnswers["data"] | null>(null);
   let selectedAreaMatch = useRouteMatch<TParams>({ path: "/reporting/investigation/:areaId", exact: false });
+  let investigationMatch = useRouteMatch<TParams>({ path: "/reporting/investigation/:areaId/start", exact: true });
+
+  console.log({ selectedAreaMatch, investigationMatch });
 
   const answersBySelectedArea = useMemo(() => {
     return allAnswers?.filter(
@@ -86,8 +89,10 @@ const InvestigationPage: FC<IProps> = props => {
   );
 
   const handleAreaDeselect = useCallback(() => {
-    history.push("/reporting/investigation");
-  }, [history]);
+    if (!investigationMatch) {
+      history.push("/reporting/investigation");
+    }
+  }, [history, investigationMatch]);
 
   const handleControlPanelChange = (resp: FormValues) => {
     setShowReports(Boolean(resp.layers && resp.layers?.indexOf(LAYERS.reports) > -1));
@@ -128,6 +133,7 @@ const InvestigationPage: FC<IProps> = props => {
       }
       currentProc={currentProc}
       showTeamAreas
+      cooperativeGestures={false}
     >
       <Switch>
         <Route exact path={`${match.url}`} component={AreaListControlPanel} />

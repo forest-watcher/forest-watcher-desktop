@@ -29,6 +29,7 @@ interface IProps extends IMapProps {
   currentPlanetBasemap?: IPlanetBasemap;
   currentProc?: "" | "cir";
   showTeamAreas?: boolean;
+  cooperativeGestures?: boolean;
 }
 
 const UserAreasMap: FC<PropsWithChildren<IProps>> = props => {
@@ -44,6 +45,7 @@ const UserAreasMap: FC<PropsWithChildren<IProps>> = props => {
     currentPlanetBasemap,
     currentProc = "",
     showTeamAreas = false,
+    cooperativeGestures = true,
     ...rest
   } = props;
   const [mapRef, setMapRef] = useState<MapInstance | null>(null);
@@ -169,7 +171,7 @@ const UserAreasMap: FC<PropsWithChildren<IProps>> = props => {
   };
 
   return (
-    <Map onMapLoad={handleMapLoad} {...rest}>
+    <Map onMapLoad={handleMapLoad} cooperativeGestures={cooperativeGestures} {...rest}>
       {hasLoaded && (
         <SquareClusterMarkers
           id="answers"
