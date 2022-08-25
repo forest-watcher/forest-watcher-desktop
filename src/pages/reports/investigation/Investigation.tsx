@@ -1,4 +1,4 @@
-import { FC, useCallback, useMemo, useState } from "react";
+import { FC, useCallback, useEffect, useMemo, useState } from "react";
 import { Route, RouteComponentProps, Switch, useHistory, useParams, useRouteMatch } from "react-router-dom";
 import UserAreasMap from "components/user-areas-map/UserAreasMap";
 import AreaDetailsControlPanel from "./control-panels/AreaDetailsContainer";
@@ -16,6 +16,8 @@ import { TGetAllAnswers } from "services/reports";
 import { Layer, Source } from "react-map-gl";
 import useUrlQuery from "hooks/useUrlQuery";
 import useFindArea from "hooks/useFindArea";
+import { setupMapImages } from "helpers/map";
+import { Map as MapInstance, MapboxEvent } from "mapbox-gl";
 
 interface IProps extends RouteComponentProps, TPropsFromRedux {}
 
@@ -62,6 +64,7 @@ const InvestigationPage: FC<IProps> = props => {
   const [showReports, setShowReports] = useState(true);
   const [mapStyle, setMapStyle] = useState<string | undefined>(undefined);
   const [isPlanet, setIsPlanet] = useState(false);
+  const [mapRef, setMapRef] = useState<MapInstance | null>(null);
   const [currentPlanetPeriod, setCurrentPlanetPeriod] = useState("");
   const [currentProc, setCurrentProc] = useState<"" | "cir">("");
   const [contextualLayerUrls, setContextualLayerUrls] = useState<string[]>([]);
@@ -70,6 +73,23 @@ const InvestigationPage: FC<IProps> = props => {
   const [filteredAnswers, setFilteredAnswers] = useState<TGetAllAnswers["data"] | null>(null);
   let selectedAreaMatch = useRouteMatch<TParams>({ path: "/reporting/investigation/:areaId", exact: false });
   let investigationMatch = useRouteMatch<TParams>({ path: "/reporting/investigation/:areaId/start", exact: true });
+
+  const handleMapLoad = (evt: MapboxEvent) => {
+    setMapRef(evt.target);
+  };
+
+  useEffect(() => {
+    if (mapRef) {
+      try {
+        setupMapImages(mapRef);
+      } catch (err) {
+        // Issue with mapbox losing references to images.
+        // Reset them all on style change.
+        // It may error because some may still exist.
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [mapStyle, isPlanet]);
 
   const answersBySelectedArea = useMemo(() => {
     return allAnswers?.filter(
@@ -121,6 +141,7 @@ const InvestigationPage: FC<IProps> = props => {
     <UserAreasMap
       onAreaSelect={handleAreaSelect}
       onAreaDeselect={handleAreaDeselect}
+      onMapLoad={handleMapLoad}
       focusAllAreas={!selectedAreaMatch}
       selectedAreaId={selectedAreaMatch?.params.areaId}
       showReports={showReports && !!selectedAreaMatch}
