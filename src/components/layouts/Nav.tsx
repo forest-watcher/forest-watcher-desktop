@@ -12,7 +12,7 @@ import { useMediaQuery } from "react-responsive";
 import { Popover } from "@headlessui/react";
 
 import { FC } from "react";
-import { FieldValues, useForm, UseFormReturn } from "react-hook-form";
+import { useForm, UseFormReturn } from "react-hook-form";
 //@ts-ignore
 import breakpoints from "styles/utilities/_u-breakpoints.scss";
 
@@ -25,9 +25,13 @@ interface IProps extends HTMLAttributes<HTMLDivElement> {
   user: any;
 }
 
+export interface IFormValues {
+  localeSelect?: string;
+}
+
 interface INavLinks {
   loggedIn: boolean;
-  formHook: UseFormReturn<FieldValues, any>;
+  formHook: UseFormReturn<IFormValues, any>;
   languages: {
     value: string;
     label: string;
@@ -172,7 +176,7 @@ const NavLinks: FC<INavLinks> = ({ loggedIn, formHook, languages, user, logout, 
 
 const Nav: FC<IProps> = props => {
   const { translations, setLocale, loggedIn, logout, locale, user, ...rest } = props;
-  const formhook = useForm();
+  const formhook = useForm<IFormValues>({ defaultValues: { localeSelect: locale } });
   const { watch } = formhook;
   const intl = useIntl();
   const localeValue = watch("localeSelect");
@@ -192,6 +196,8 @@ const Nav: FC<IProps> = props => {
       })),
     [intl, translations]
   );
+
+  console.log({ locale });
 
   return (
     <div className="row column" {...rest}>

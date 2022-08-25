@@ -80,6 +80,7 @@ const InvestigationPage: FC<IProps> = props => {
 
   useEffect(() => {
     if (mapRef) {
+      console.log("setting images");
       try {
         setupMapImages(mapRef);
       } catch (err) {
