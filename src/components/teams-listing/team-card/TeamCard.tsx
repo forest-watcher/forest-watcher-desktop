@@ -45,11 +45,10 @@ const TeamCard: FC<IProps> = props => {
         <div className="c-teams__title-text">
           <Card.Title className="u-margin-top-none">{team.attributes.name}</Card.Title>
         </div>
-        {canManage && (
-          <Card.Cta to={`/teams/${team.id}`} iconSrc={EditIcon}>
-            <FormattedMessage id="common.manage.team" />
-          </Card.Cta>
-        )}
+
+        <Card.Cta to={`/teams/${team.id}`} iconSrc={canManage ? EditIcon : undefined}>
+          <FormattedMessage id={canManage ? "common.manage.team" : "common.view.team"} />
+        </Card.Cta>
       </div>
 
       <Card size="large" className={"c-teams__card c-teams--nested-card c-teams--nested-card-people"}>
@@ -78,11 +77,6 @@ const TeamCard: FC<IProps> = props => {
               {areasDetail ? areasDetail.areas.map(area => area.data.attributes.name).join(", ") : teamAreas.join(", ")}
             </p>
           </div>
-          {canManage && (
-            <Card.Cta to={"/areas"} iconSrc={EditIcon}>
-              <FormattedMessage id="common.manage.area" />
-            </Card.Cta>
-          )}
         </div>
       </Card>
     </Card>

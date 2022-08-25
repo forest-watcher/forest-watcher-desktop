@@ -49,6 +49,11 @@ const AreasView: FC<IProps & RouteComponentProps<TParams>> = ({
   const intl = useIntl();
   const { areaId } = useParams<TParams>();
 
+  useEffect(() => {
+    // Rare case, only other scroll tos are in routes.js for the top level nav
+    window.scrollTo(0, 0);
+  }, []);
+
   const area = useFindArea(areaId);
 
   const canManage = useMemo(() => {
