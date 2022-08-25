@@ -160,6 +160,11 @@ const Areas: FC<IProps> = props => {
           </Article>
         )}
       </div>
+      {loadingTeamAreas && (
+        <div className="l-content">
+          <Loader isLoading />
+        </div>
+      )}
       {hasTeamAreas && (
         <div className="l-content">
           {areasInUsersTeams && areasInUsersTeams.length > 0 && !loadingTeamAreas && (
