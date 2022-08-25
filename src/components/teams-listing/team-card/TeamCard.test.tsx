@@ -149,20 +149,6 @@ describe("TeamCard", () => {
                   Area #1, Area #2, Area #3
                 </p>
               </div>
-              <a
-                class="c-card__cta"
-                href="/areas"
-              >
-                <img
-                  alt=""
-                  class="c-card__cta-image"
-                  role="presentation"
-                  src="Edit.svg"
-                />
-                <span>
-                  Manage Area
-                </span>
-              </a>
             </div>
           </div>
         </div>
