@@ -58,7 +58,7 @@ const AreaCardWrapper: FC<IAreaCardProps> = ({ areasInUsersTeams, numberOfReport
 };
 
 const InvestigationPage: FC<IProps> = props => {
-  const { match, allAnswers, basemaps, areas, areasInUsersTeams, selectedLayers } = props;
+  const { match, allAnswers, basemaps, areasInUsersTeams, selectedLayers } = props;
   const [showReports, setShowReports] = useState(true);
   const [mapStyle, setMapStyle] = useState<string | undefined>(undefined);
   const [isPlanet, setIsPlanet] = useState(false);
