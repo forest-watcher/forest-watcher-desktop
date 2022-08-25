@@ -39,6 +39,7 @@ const AreasView: FC<IProps & RouteComponentProps<TParams>> = ({
   getTeamMembers,
   areaTeams,
   teamMembers,
+  allAnswers,
   teams
 }) => {
   const [mapRef, setMapRef] = useState<MapInstance | null>(null);
@@ -49,6 +50,25 @@ const AreasView: FC<IProps & RouteComponentProps<TParams>> = ({
   const { areaId } = useParams<TParams>();
 
   const area = useFindArea(areaId);
+
+  const canManage = useMemo(() => {
+    // For Each team in the area
+    let hasPermissions = area?.attributes.userId === userId;
+    areaTeams.forEach(team => {
+      if (teamMembers[team.data.id] && !hasPermissions) {
+        const membersOfTeam = teamMembers[team.data.id];
+        // Get the current user
+        const user = membersOfTeam.find(member => member.attributes.userId === userId);
+        // If exists, can manage
+        hasPermissions = Boolean(
+          user && (user.attributes.role === "administrator" || user.attributes.role === "manager")
+        );
+      }
+    });
+
+    return hasPermissions;
+  }, [area?.attributes.userId, areaTeams, teamMembers, userId]);
+
   const geojson = useMemo(() => area?.attributes.geostore.geojson, [area]);
 
   const templatesToAdd = useMemo(() => {
@@ -83,7 +103,8 @@ const AreasView: FC<IProps & RouteComponentProps<TParams>> = ({
   const removeTeam: TTeamDataTableAction = {
     name: "areas.details.teams.remove.title",
     value: "remove",
-    href: template => `${match.url}/team/remove/${template.id}`
+    href: template => `${match.url}/team/remove/${template.id}`,
+    shouldShow: () => canManage
   };
 
   useEffect(() => {
@@ -115,6 +136,8 @@ const AreasView: FC<IProps & RouteComponentProps<TParams>> = ({
     [intl, area]
   );
 
+  console.log({ teamMembers, areaTeams, allAnswers });
+
   return (
     <>
       <div className="c-area-manage">
@@ -125,9 +148,11 @@ const AreasView: FC<IProps & RouteComponentProps<TParams>> = ({
           actions={
             area ? (
               <>
-                <Link to={`${url}/edit`} className="c-button c-button--primary">
-                  <FormattedMessage id="common.edit" />
-                </Link>
+                {canManage && (
+                  <Link to={`${url}/edit`} className="c-button c-button--primary">
+                    <FormattedMessage id="common.edit" />
+                  </Link>
+                )}
                 <Link to={`${url}/export`} className="c-button c-button--secondary-light-text">
                   <FormattedMessage id="common.export" />
                 </Link>
@@ -203,10 +228,12 @@ const AreasView: FC<IProps & RouteComponentProps<TParams>> = ({
             titleValues={{ num: areaTeams.length ?? 0 }}
             size="small"
             actions={
-              <Link to={`${url}/team/add`} className="c-button c-button--primary">
-                <img className="c-button__inline-icon" src={PlusIcon} alt="" role="presentation" />
-                <FormattedMessage id="areas.details.teams.add.title" />
-              </Link>
+              canManage && (
+                <Link to={`${url}/team/add`} className="c-button c-button--primary">
+                  <img className="c-button__inline-icon" src={PlusIcon} alt="" role="presentation" />
+                  <FormattedMessage id="areas.details.teams.add.title" />
+                </Link>
+              )
             }
           >
             {areaTeams.length > 0 && (
