@@ -1,7 +1,10 @@
 import { useMemo } from "react";
-import { TAreasInTeam, TAreasResponse } from "services/area";
+import { TAreasResponse } from "services/area";
+import { useAppSelector } from "./useRedux";
 
-const useFindArea = (areaId: string, userAreas: any, teamAreas: TAreasInTeam[]): TAreasResponse | null => {
+const useFindArea = (areaId: string): TAreasResponse | null => {
+  const { data: userAreas, areasInUsersTeams: teamAreas } = useAppSelector(state => state.areas);
+
   const area = useMemo(() => {
     if (userAreas[areaId]) {
       return userAreas[areaId] as TAreasResponse;
