@@ -136,8 +136,6 @@ const AreasView: FC<IProps & RouteComponentProps<TParams>> = ({
     [intl, area]
   );
 
-  console.log({ teamMembers, areaTeams, allAnswers });
-
   return (
     <>
       <div className="c-area-manage">
