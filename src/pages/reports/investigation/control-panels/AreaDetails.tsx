@@ -55,9 +55,9 @@ const AreaDetailsControlPanel: FC<IProps> = props => {
 
   const isMobile = useMediaQuery({ maxWidth: breakpoints.mobile });
 
-  const { data: areas, areasInUsersTeams, loading: isLoadingAreas } = useAppSelector(state => state.areas);
+  const { data: areas, loading: isLoadingAreas } = useAppSelector(state => state.areas);
   const { loading: isLoadingAnswers } = useAppSelector(state => state.reports);
-  const area = useFindArea(areaId, areas, areasInUsersTeams);
+  const area = useFindArea(areaId);
 
   const selectedAreaGeoData = useMemo(() => area?.attributes.geostore.geojson, [area]);
   const intl = useIntl();

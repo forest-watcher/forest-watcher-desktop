@@ -7,7 +7,7 @@ import { TPropsFromRedux } from "./AreaViewContainer";
 import { goToGeojson } from "helpers/map";
 import Loader from "components/ui/Loader";
 import Polygon from "components/ui/Map/components/layers/Polygon";
-import { Link, Route, RouteComponentProps, Switch, useHistory, useRouteMatch } from "react-router-dom";
+import { Link, Route, RouteComponentProps, Switch, useHistory, useParams, useRouteMatch } from "react-router-dom";
 import Article from "components/layouts/Article";
 import DataTable from "components/ui/DataTable/DataTable";
 import PlusIcon from "assets/images/icons/PlusWhite.svg";
@@ -23,6 +23,7 @@ import { exportService } from "services/exports";
 import { AREA_EXPORT_FILE_TYPES } from "constants/export";
 import { sortByNumber, sortByString } from "helpers/table";
 import { toastr } from "react-redux-toastr";
+import useFindArea from "hooks/useFindArea";
 
 interface IProps extends TPropsFromRedux {}
 export type TParams = {
@@ -30,8 +31,6 @@ export type TParams = {
 };
 
 const AreasView: FC<IProps & RouteComponentProps<TParams>> = ({
-  geojson,
-  area,
   loading,
   templates,
   match,
@@ -47,6 +46,10 @@ const AreasView: FC<IProps & RouteComponentProps<TParams>> = ({
   const userId = useGetUserId();
   const history = useHistory();
   const intl = useIntl();
+  const { areaId } = useParams<TParams>();
+
+  const area = useFindArea(areaId);
+  const geojson = useMemo(() => area?.attributes.geostore.geojson, [area]);
 
   const templatesToAdd = useMemo(() => {
     return (
@@ -73,7 +76,8 @@ const AreasView: FC<IProps & RouteComponentProps<TParams>> = ({
   const removeTemplate: TTemplateDataTableAction = {
     name: "areas.details.templates.remove.title",
     value: "remove",
-    href: template => `${match.url}/template/remove/${template.id}`
+    href: template => `${match.url}/template/remove/${template.id}`,
+    shouldShow: row => row.name !== "Forest Watcher Questionnaire"
   };
 
   const removeTeam: TTeamDataTableAction = {
@@ -147,7 +151,8 @@ const AreasView: FC<IProps & RouteComponentProps<TParams>> = ({
             <Loader isLoading />
           </div>
         ) : (
-          area && (
+          area &&
+          geojson && (
             <Map className="c-map--within-hero" onMapLoad={handleMapLoad}>
               <Polygon id={area.id} label={area.attributes.name} data={geojson} />
             </Map>

@@ -17,7 +17,7 @@ const ContextMenu: FC<IProps> = props => {
   const { className, toggleClassName, menuItems, transition = true, portal = true, ...rest } = props;
   const intl = useIntl();
 
-  return (
+  return menuItems.length > 0 ? (
     <Menu
       menuClassName={classnames("c-context-menu", className)}
       menuButton={
@@ -54,7 +54,7 @@ const ContextMenu: FC<IProps> = props => {
         );
       })}
     </Menu>
-  );
+  ) : null;
 };
 
 export default ContextMenu;

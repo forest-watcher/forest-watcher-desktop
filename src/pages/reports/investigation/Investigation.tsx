@@ -20,19 +20,18 @@ import useFindArea from "hooks/useFindArea";
 interface IProps extends RouteComponentProps, TPropsFromRedux {}
 
 interface IAreaCardProps {
-  areas: any;
   areasInUsersTeams: TAreasInTeam[];
   numberOfReports?: number;
 }
 
-const AreaCardWrapper: FC<IAreaCardProps> = ({ areas, areasInUsersTeams, numberOfReports }) => {
+const AreaCardWrapper: FC<IAreaCardProps> = ({ areasInUsersTeams, numberOfReports }) => {
   const { areaId } = useParams<TParams>();
   const urlQuery = useUrlQuery();
   const scrollToTeamId = useMemo(() => urlQuery.get("scrollToTeamId"), [urlQuery]);
 
   const history = useHistory();
 
-  const area = useFindArea(areaId, areas, areasInUsersTeams);
+  const area = useFindArea(areaId);
 
   const selectedAreaGeoData = useMemo(() => area?.attributes.geostore.geojson, [area]);
   //@ts-ignore
@@ -133,11 +132,7 @@ const InvestigationPage: FC<IProps> = props => {
       <Switch>
         <Route exact path={`${match.url}`} component={AreaListControlPanel} />
         <Route exact path={`${match.url}/:areaId`}>
-          <AreaCardWrapper
-            areas={areas}
-            areasInUsersTeams={areasInUsersTeams}
-            numberOfReports={answersBySelectedArea?.length}
-          />
+          <AreaCardWrapper areasInUsersTeams={areasInUsersTeams} numberOfReports={answersBySelectedArea?.length} />
         </Route>
         <Route exact path={`${match.url}/:areaId/start`}>
           <AreaDetailsControlPanel
