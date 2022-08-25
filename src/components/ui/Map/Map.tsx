@@ -68,9 +68,10 @@ const Map: FC<IProps> = props => {
     }
   }, [onMapEdit, mapRef, geojsonToEdit, drawRef, addedGeoJson]);
 
-  const handleMapLoad = (evt: MapboxEvent) => {
+  const handleMapLoad = async (evt: MapboxEvent) => {
     evt.target.resize();
-    setupMapImages(evt.target);
+    // wait for images to load
+    await setupMapImages(evt.target);
     onMapLoad?.(evt);
     setMapRef(evt.target);
   };

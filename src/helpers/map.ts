@@ -21,7 +21,7 @@ export enum MapImages {
   reportViirsDefault = "report-viirs-default"
 }
 
-const mapImagesArr = [
+export const mapImagesArr = [
   {
     type: MapImages.label,
     image: labelBackgroundIcon,
@@ -71,13 +71,15 @@ export const loadMapImage = (map: MapInstance, url: string): Promise<HTMLImageEl
 };
 
 export const setupMapImages = (map: MapInstance) => {
-  mapImagesArr.forEach(async mapImage => {
-    const image = await loadMapImage(map, mapImage.image);
+  return Promise.all(
+    mapImagesArr.map(async mapImage => {
+      const image = await loadMapImage(map, mapImage.image);
 
-    if (image) {
-      map.addImage(mapImage.type, image, mapImage.options);
-    }
-  });
+      if (image) {
+        map.addImage(mapImage.type, image, mapImage.options);
+      }
+    })
+  );
 };
 
 export const getBoundFromGeoJSON = (geoJSON: any, padding = [15, 15]) => {

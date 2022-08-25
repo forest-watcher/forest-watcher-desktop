@@ -80,7 +80,7 @@ export const labelStyle = {
   type: "symbol",
   source: "places",
   minzoom: 3,
-  tolerance: 0,
+  tolerance: 0.01,
   layout: {
     "text-field": ["get", "description"],
     "text-anchor": "center",
@@ -89,7 +89,8 @@ export const labelStyle = {
     "text-size": 18,
     "icon-text-fit": "both",
     "icon-image": MapImages.label,
-    "icon-allow-overlap": true
+    "icon-allow-overlap": true,
+    "icon-ignore-placement": true
   },
   paint: {
     "text-color": "#555555"
