@@ -63,7 +63,7 @@ class Templates extends Component {
         accessor: "count",
         className: "report-link",
         Cell: props => (
-          <Link className="text -x-small-title" to={`/reports/${props.original.id}`}>
+          <Link className="text -x-small-title" to={`/reporting/reports?defaultTemplateFilter=${props.row.title}`}>
             <span>{props.value}</span>
             <span className="link text -x-small-title">
               {this.props.intl.formatMessage({ id: "templates.showReports" })}

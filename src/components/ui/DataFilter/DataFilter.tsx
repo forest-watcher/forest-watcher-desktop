@@ -1,5 +1,5 @@
 import classnames from "classnames";
-import { UnpackNestedValue, useForm, useWatch } from "react-hook-form";
+import { DeepPartial, UnpackNestedValue, useForm, useWatch } from "react-hook-form";
 import FormModalInput from "components/modals/FormModalInput";
 import FormModal, { TAvailableTypes } from "components/modals/FormModal";
 import { useEffect, useState } from "react";
@@ -17,12 +17,15 @@ export interface IProps<T, OPTION_TYPE> {
   className?: string;
   options: OPTION_TYPE[];
   onFiltered?: (arr: OPTION_TYPE[]) => void;
+  defaults?: UnpackNestedValue<DeepPartial<T>>;
 }
 
 const DataFilter = <T, OPTION_TYPE>(props: IProps<T, OPTION_TYPE>) => {
-  const { filters, className, options, onFiltered, extraFilters } = props;
+  const { filters, className, options, onFiltered, extraFilters, defaults } = props;
 
-  const formhook = useForm<T>();
+  const formhook = useForm<T>({
+    defaultValues: defaults
+  });
   const watcher = useWatch({ control: formhook.control });
   const [isExtrasOpen, setIsExtrasOpen] = useState(false);
   const [extrasValue, setExtrasValue] = useState<undefined | UnpackNestedValue<T>>(undefined);

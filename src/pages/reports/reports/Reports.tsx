@@ -18,6 +18,7 @@ import ExportModal, { TExportForm } from "components/modals/exports/ExportModal"
 import { exportService } from "services/exports";
 import { REPORT_EXPORT_FILE_TYPES } from "constants/export";
 import { toastr } from "react-redux-toastr";
+import useUrlQuery from "hooks/useUrlQuery";
 
 export type TReportsDataTable = {
   id: string;
@@ -46,6 +47,8 @@ const Reports: FC<IProps> = props => {
   let { path, url } = useRouteMatch();
   const history = useHistory();
   const [selectedReports, setSelectedReports] = useState<TReportsDataTable[]>([]);
+  const urlQuery = useUrlQuery();
+  const defaultTemplateFilter = useMemo(() => urlQuery.get("defaultTemplateFilter"), [urlQuery]);
 
   const rows = useMemo<TReportsDataTable[]>(
     () =>
@@ -74,7 +77,7 @@ const Reports: FC<IProps> = props => {
     setFilteredRows(resp);
   };
 
-  const { filters, extraFilters } = useReportFilters(allAnswers);
+  const { filters, extraFilters } = useReportFilters(allAnswers, defaultTemplateFilter);
 
   const handleExport = useCallback(
     async (values: UnpackNestedValue<TExportForm>) => {
@@ -123,6 +126,7 @@ const Reports: FC<IProps> = props => {
                   onFiltered={onFilterChange}
                   options={rows}
                   className="c-data-filter--above-table"
+                  defaults={{ template: defaultTemplateFilter || undefined }}
                 />
                 <DataTable<TReportsDataTable>
                   className="u-w-100"
