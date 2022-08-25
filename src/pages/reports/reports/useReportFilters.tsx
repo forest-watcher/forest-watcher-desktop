@@ -9,7 +9,10 @@ import { TGetAllAnswers } from "services/reports";
 import { Option } from "types/select";
 import { TFilterFields } from "./Reports";
 
-const useReportFilters = (answers: TGetAllAnswers["data"] = []) => {
+const useReportFilters = (
+  answers: TGetAllAnswers["data"] = [],
+  defaultTemplateFilter: string | null | undefined = ""
+) => {
   const intl = useIntl();
 
   const areaFilterOptions = useMemo<Option[]>(() => {
@@ -106,7 +109,9 @@ const useReportFilters = (answers: TGetAllAnswers["data"] = []) => {
             placeholder: intl.formatMessage({ id: "templates.filterBy" }),
             options: templateOptions,
             label: intl.formatMessage({ id: "templates.name" }),
-            defaultValue: templateOptions[0]
+            defaultValue: defaultTemplateFilter
+              ? templateOptions.find(option => option.value === defaultTemplateFilter) || templateOptions[0]
+              : templateOptions[0]
           },
           variant: "simple-green",
           registerProps: {
@@ -141,7 +146,7 @@ const useReportFilters = (answers: TGetAllAnswers["data"] = []) => {
         }
       }
     ];
-  }, [areaFilterOptions, intl, templateOptions, timeFrameOptions]);
+  }, [areaFilterOptions, defaultTemplateFilter, intl, templateOptions, timeFrameOptions]);
 
   const extraFilters = useMemo<IFilter<TAvailableTypes<TFilterFields>, any>[]>(() => {
     return [

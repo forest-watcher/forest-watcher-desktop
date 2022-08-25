@@ -71,8 +71,6 @@ const InvestigationPage: FC<IProps> = props => {
   let selectedAreaMatch = useRouteMatch<TParams>({ path: "/reporting/investigation/:areaId", exact: false });
   let investigationMatch = useRouteMatch<TParams>({ path: "/reporting/investigation/:areaId/start", exact: true });
 
-  console.log({ selectedAreaMatch, investigationMatch });
-
   const answersBySelectedArea = useMemo(() => {
     return allAnswers?.filter(
       answer =>
