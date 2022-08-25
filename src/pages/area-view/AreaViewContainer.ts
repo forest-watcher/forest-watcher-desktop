@@ -10,7 +10,8 @@ const mapStateToProps = (state: RootState) => ({
   areaTeams: state.areas.areaTeams,
   templates: state.templates.templates,
   teams: state.gfwTeams.data,
-  teamMembers: state.gfwTeams.members
+  teamMembers: state.gfwTeams.members,
+  allAnswers: state.reports.allAnswers
 });
 
 function mapDispatchToProps(dispatch: ThunkDispatch<RootState, null, any>) {

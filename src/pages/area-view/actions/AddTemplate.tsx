@@ -9,13 +9,14 @@ import { TGetTemplates } from "services/reports";
 import { Option } from "types";
 import { areaService } from "services/area";
 import { useAppDispatch } from "hooks/useRedux";
-import { getAreas } from "modules/areas";
+import { getAreas, getAreasInUsersTeams } from "modules/areas";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup/dist/yup";
 import PlusIcon from "assets/images/icons/PlusForButton.svg";
 
 interface IProps {
   templates: TGetTemplates["data"];
+  onAdd?: () => void;
 }
 
 type TAddTemplateForm = {
@@ -29,7 +30,7 @@ const addTemplateSchema = yup
   })
   .required();
 
-const AddTemplateModal: FC<IProps> = ({ templates }) => {
+const AddTemplateModal: FC<IProps> = ({ templates, onAdd }) => {
   const { areaId } = useParams<TParams>();
   const intl = useIntl();
   const history = useHistory();
@@ -52,7 +53,8 @@ const AddTemplateModal: FC<IProps> = ({ templates }) => {
     try {
       await areaService.addTemplatesToAreas(areaId, data.templates);
       toastr.success(intl.formatMessage({ id: "areas.details.templates.add.success" }), "");
-      dispatch(getAreas());
+      dispatch(getAreas(true));
+      dispatch(getAreasInUsersTeams(true));
       onClose();
     } catch (e: any) {
       toastr.error(intl.formatMessage({ id: "areas.details.templates.add.error" }), "");

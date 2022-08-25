@@ -8,7 +8,7 @@ import { TErrorResponse } from "constants/api";
 import { useAppDispatch } from "hooks/useRedux";
 import { FormattedMessage, useIntl } from "react-intl";
 import { areaService } from "services/area";
-import { getAreas } from "modules/areas";
+import { getAreas, getAreasInUsersTeams } from "modules/areas";
 
 type TParams = TAreaDetailParams & {
   templateId: string;
@@ -31,7 +31,8 @@ const RemoveTemplateModal: FC<IProps> = props => {
     setIsRemoving(true);
     try {
       await areaService.unassignTemplateFromArea(areaId, templateId);
-      dispatch(getAreas());
+      dispatch(getAreas(true));
+      dispatch(getAreasInUsersTeams(true));
       onClose();
       toastr.success(intl.formatMessage({ id: "areas.details.templates.remove.success" }), "");
     } catch (e: any) {

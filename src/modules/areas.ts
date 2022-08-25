@@ -164,12 +164,14 @@ export function deleteArea(areaId: string) {
   };
 }
 
-export function getAreas() {
+export function getAreas(isSilent = false) {
   return (dispatch: AppDispatch, state: () => RootState) => {
-    dispatch({
-      type: SET_LOADING_AREAS,
-      payload: true
-    });
+    if (!isSilent) {
+      dispatch({
+        type: SET_LOADING_AREAS,
+        payload: true
+      });
+    }
     areaService.token = state().user.token;
     return areaService
       .getAreaFW()
@@ -212,12 +214,14 @@ export function getAreaTeams(areaId: string) {
   };
 }
 
-export function getAreasInUsersTeams() {
+export function getAreasInUsersTeams(isSilent = false) {
   return (dispatch: AppDispatch, state: () => RootState) => {
-    dispatch({
-      type: SET_LOADING_AREAS_IN_USERS_TEAMS,
-      payload: true
-    });
+    if (!isSilent) {
+      dispatch({
+        type: SET_LOADING_AREAS_IN_USERS_TEAMS,
+        payload: true
+      });
+    }
     return areaService
       .getAreasInUsersTeams()
       .then(data => {
