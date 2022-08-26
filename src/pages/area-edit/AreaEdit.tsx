@@ -1,6 +1,6 @@
 import Hero from "components/layouts/Hero/Hero";
 import Map from "components/ui/Map/Map";
-import { FC, useState, MouseEvent, ChangeEvent, useEffect, useMemo } from "react";
+import { FC, useState, MouseEvent, ChangeEvent, useEffect, useMemo, useCallback } from "react";
 import { MapboxEvent, Map as MapInstance, LngLatBounds } from "mapbox-gl";
 import { FormattedMessage, useIntl } from "react-intl";
 import ReactGA from "react-ga";
@@ -26,6 +26,7 @@ import { labelStyle } from "components/ui/Map/components/layers/styles";
 import * as turf from "@turf/turf";
 import { AllGeoJSON } from "@turf/turf";
 import useUrlQuery from "hooks/useUrlQuery";
+import { checkArea } from "helpers/areas";
 
 const areaTitleKeys = {
   manage: "areas.editArea",
@@ -66,6 +67,7 @@ const AreaEdit: FC<IProps> = ({
   const [showLabel, setShowLabel] = useState(true);
   const [shouldUseChangesMade, setShouldUseChangesMade] = useState(true);
   const [showShapeFileHelpModal, setShowShapeFileHelpModal] = useState(false);
+  const [invalidGeoJsonSize, setInvalidGeojsonSize] = useState(false);
   const history = useHistory();
   const intl = useIntl();
   let { path, url } = useRouteMatch();
@@ -138,6 +140,10 @@ const AreaEdit: FC<IProps> = ({
   }, [bounds, mapRef]);
 
   const onSubmit: SubmitHandler<FormValues> = async data => {
+    if (invalidGeoJsonSize) {
+      toastr.error(intl.formatMessage({ id: "areas.tooLarge" }), intl.formatMessage({ id: "areas.tooLargeDesc" }));
+      return;
+    }
     if (mapRef && (updatedGeojson || name)) {
       setSaving(true);
       setShowLabel(false);
@@ -182,13 +188,23 @@ const AreaEdit: FC<IProps> = ({
     }
   };
 
-  const handleMapEdit = (e: FeatureCollection) => {
-    if (JSON.stringify(e) !== JSON.stringify(geojson)) {
-      setUpdatedGeojson(e);
-    } else {
-      setUpdatedGeojson(null);
-    }
-  };
+  const handleMapEdit = useCallback(
+    (e: FeatureCollection) => {
+      if (JSON.stringify(e) !== JSON.stringify(geojson)) {
+        // @ts-ignore issue with union not liking FeatureCollection. Works anyway
+        if (e?.features?.length && !checkArea(e.features.reduce(union))) {
+          toastr.error(intl.formatMessage({ id: "areas.tooLarge" }), intl.formatMessage({ id: "areas.tooLargeDesc" }));
+          setInvalidGeojsonSize(true);
+        } else {
+          setInvalidGeojsonSize(false);
+          setUpdatedGeojson(e);
+        }
+      } else {
+        setUpdatedGeojson(null);
+      }
+    },
+    [geojson, intl]
+  );
 
   const handleResetForm = (e?: MouseEvent<HTMLButtonElement>) => {
     e?.preventDefault();
@@ -234,16 +250,24 @@ const AreaEdit: FC<IProps> = ({
 
     if (shapeFile && shapeFile.size <= maxFileSize) {
       const geojson = await getGeoFromShape(shapeFile);
+
       if (geojson && geojson.features) {
         const geojsonParsed = geojson.features.reduce(union);
 
         if (geojsonParsed) {
-          handleShapefileSuccess(geojsonParsed);
-          ReactGA.event({
-            category: CATEGORY.AREA_CREATION,
-            action: ACTION.UPLOAD_SHAPEFILE,
-            label: "Shapefile upload success"
-          });
+          if (checkArea(geojsonParsed)) {
+            handleShapefileSuccess(geojsonParsed);
+            ReactGA.event({
+              category: CATEGORY.AREA_CREATION,
+              action: ACTION.UPLOAD_SHAPEFILE,
+              label: "Shapefile upload success"
+            });
+          } else {
+            toastr.error(
+              intl.formatMessage({ id: "areas.tooLarge" }),
+              intl.formatMessage({ id: "areas.uploadedTooLargeDesc" })
+            );
+          }
         }
       }
     } else {
@@ -257,6 +281,7 @@ const AreaEdit: FC<IProps> = ({
         label: "Shapefile upload failed - File too large"
       });
     }
+
     e.target.value = ""; // Reset input
     setIsValidatingShapefile(false);
   };

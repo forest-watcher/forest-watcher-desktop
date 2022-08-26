@@ -130,7 +130,10 @@ const TeamDetail: FC<IProps> = props => {
   const makeManager: TTeamsDetailDataTableAction = {
     name: "teams.details.table.actions.manager",
     value: "makeManager",
-    href: memberRow => `${match.url}/edit/${memberRow.id}/manager`
+    href: memberRow => `${match.url}/edit/${memberRow.id}/manager`,
+    shouldShow: memberRow => {
+      return memberRow.statusSuffix === "confirmed";
+    }
   };
 
   const makeMonitor: TTeamsDetailDataTableAction = {
@@ -186,14 +189,6 @@ const TeamDetail: FC<IProps> = props => {
           title="teams.details.managers"
           titleValues={{ num: manages.length }}
           size="small"
-          actions={
-            userIsManager && (
-              <Link to={`${match.url}/add/manager`} className="c-button c-button--primary">
-                <img className="c-button__inline-icon" src={PlusIcon} alt="" role="presentation" />
-                <FormattedMessage id="teams.details.add.managers" />
-              </Link>
-            )
-          }
         >
           <DataTable<TTeamDetailDataTable>
             className="u-w-100"

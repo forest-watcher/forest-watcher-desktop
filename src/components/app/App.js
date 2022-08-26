@@ -79,7 +79,7 @@ class App extends Component {
                 defaultComponent={() => <Landing locale={locale} setLocale={setLocale} translations={translations} />}
               />
               <UserNameForm isOpen={user.userHasNoLastName && location.pathname !== "/"} />
-              <ReduxToastr position="bottom-right" transitionIn="fadeIn" transitionOut="fadeOut" />
+              <ReduxToastr position="bottom-right" transitionIn="fadeIn" transitionOut="fadeOut" preventDuplicates />
             </main>
           </div>
         </ErrorBoundary>

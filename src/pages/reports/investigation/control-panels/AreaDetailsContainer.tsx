@@ -6,12 +6,15 @@ import { ThunkDispatch } from "redux-thunk";
 
 const mapStateToProps = ({ map, templates, layers }: RootState) => {
   // @ts-ignore
-  const layersOptions = Object.values(layers.selectedLayers).map(layer => ({
+  const layersOptions = Object.values(layers.selectedLayers)
     // @ts-ignore
-    option: layer.id,
-    // @ts-ignore
-    label: layer.attributes.name
-  }));
+    .filter(layer => layer.attributes.enabled)
+    .map(layer => ({
+      // @ts-ignore
+      option: layer.id,
+      // @ts-ignore
+      label: layer.attributes.name
+    }));
 
   return {
     basemaps: map.data,

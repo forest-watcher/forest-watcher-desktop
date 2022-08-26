@@ -85,7 +85,7 @@ export const DRAW_CONTROL_DISABLED = {
 };
 
 export const AREAS = {
-  maxSize: 20000000000 // square meters
+  maxSize: 1500000000 // square meters (1500 sq km)
 };
 
 const MapConfigs = {
