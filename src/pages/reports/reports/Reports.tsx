@@ -30,6 +30,7 @@ export type TReportsDataTable = {
   area: string;
   coordinates: string;
   template: string;
+  templateId: string;
   userId?: string;
 };
 
@@ -64,6 +65,7 @@ const Reports: FC<IProps> = props => {
         area: answer.attributes?.areaOfInterestName ?? "",
         // @ts-ignore - types not correct
         template: answer.attributes?.templateName ?? "",
+        templateId: answer.attributes?.report ?? "",
         coordinates: `${
           answer.attributes?.clickedPosition
             ?.map((position: any) => [position.lat, position.lon])[0]

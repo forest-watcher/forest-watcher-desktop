@@ -79,7 +79,7 @@ export class ExportSerive extends BaseService {
       fileType,
       fields,
       language: "en",
-      ids: reports.map(report => ({ templateid: report.template, reportid: report.id }))
+      ids: reports.map(report => ({ templateid: report.templateId, reportid: report.id }))
     };
 
     const resp: TExportSomeReportsResponse = await this.fetchJSON(`/reports/exportSome`, {
