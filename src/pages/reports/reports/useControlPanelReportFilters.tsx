@@ -91,7 +91,8 @@ const useControlPanelReportFilters = (answers: TGetAllAnswers["data"] = []) => {
           } else {
             return Boolean(alerts.find((alert: IAlertIdentifier) => alert.id === value));
           }
-        }
+        },
+        getShouldShow: () => alertTypeOptions.length > 2
       },
       {
         name: "filter.by.template",
@@ -115,7 +116,8 @@ const useControlPanelReportFilters = (answers: TGetAllAnswers["data"] = []) => {
           } else {
             return item.attributes.templateName === value;
           }
-        }
+        },
+        getShouldShow: () => alertTypeOptions.length > 2
       },
       {
         name: "filter.by.timeframe",
@@ -159,7 +161,8 @@ const useControlPanelReportFilters = (answers: TGetAllAnswers["data"] = []) => {
           } else {
             return item.attributes.fullName === value;
           }
-        }
+        },
+        getShouldShow: () => alertTypeOptions.length > 2
       }
     ];
   }, [alertTypeOptions, intl, templateOptions, timeFrameOptions, usernameOptions]);
