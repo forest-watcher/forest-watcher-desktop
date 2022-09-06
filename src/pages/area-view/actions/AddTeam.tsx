@@ -13,6 +13,7 @@ import { TGetTeamMembersResponse, TGetUserTeamsResponse } from "services/teams";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup/dist/yup";
 import PlusIcon from "assets/images/icons/PlusForButton.svg";
+import useGetUserId from "hooks/useGetUserId";
 
 interface IProps {
   teams: TGetUserTeamsResponse["data"];
@@ -35,15 +36,24 @@ const AddTeamModal: FC<IProps> = ({ teams, users }) => {
   const intl = useIntl();
   const history = useHistory();
   const dispatch = useAppDispatch();
+  const userId = useGetUserId();
+
   const teamOptions = useMemo<Option[] | undefined>(
     () =>
-      teams?.map(team => ({
-        label: team.attributes.name,
-        // @ts-ignore name doesn't exist yet, will be added in the future
-        secondaryLabel: users[team.id]?.map(member => member.attributes.name ?? member.id).join(", "),
-        value: team.id as string
-      })),
-    [teams, users]
+      teams
+        ?.map(team => ({
+          label: team.attributes.name,
+          // @ts-ignore name doesn't exist yet, will be added in the future
+          secondaryLabel: users[team.id]?.map(member => member.attributes.name ?? member.attributes.email).join(", "),
+          value: team.id as string,
+          metadata: {
+            canShow: Boolean(
+              users[team.id].find(member => member.attributes.userId === userId && member.attributes.role !== "monitor")
+            )
+          }
+        }))
+        .filter(team => team.metadata.canShow),
+    [teams, userId, users]
   );
 
   const onClose = () => {

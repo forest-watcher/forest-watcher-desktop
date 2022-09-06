@@ -55,7 +55,11 @@ const AreaDetailsControlPanel: FC<IProps> = props => {
 
   const isMobile = useMediaQuery({ maxWidth: breakpoints.mobile });
 
-  const { data: areas, loading: isLoadingAreas } = useAppSelector(state => state.areas);
+  const {
+    data: areas,
+    loading: isLoadingAreas,
+    loadingAreasInUsers: isLoadingTeamAreas
+  } = useAppSelector(state => state.areas);
   const { loading: isLoadingAnswers } = useAppSelector(state => state.reports);
   const area = useFindArea(areaId);
 
@@ -160,7 +164,7 @@ const AreaDetailsControlPanel: FC<IProps> = props => {
       title={intl.formatMessage({ id: "reporting.control.panel.investigation.title" }, { area: area?.attributes.name })}
       onBack={handleBackBtnClick}
     >
-      <Loader isLoading={isLoadingAreas || isLoadingAnswers} />
+      <Loader isLoading={isLoadingAreas || isLoadingAnswers || isLoadingTeamAreas} />
       <form>
         <RadioCardGroup
           className="u-margin-bottom-40"
