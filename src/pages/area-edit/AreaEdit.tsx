@@ -9,7 +9,7 @@ import { FeatureCollection } from "geojson";
 import Input from "components/ui/Form/Input";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
+import yup from "configureYup";
 import Button from "components/ui/Button/Button";
 import { toastr } from "react-redux-toastr";
 import { CATEGORY, ACTION } from "constants/analytics";

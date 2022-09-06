@@ -5,7 +5,7 @@ import { useHistory } from "react-router-dom";
 import { teamService } from "services/teams";
 import { toastr } from "react-redux-toastr";
 import { useIntl } from "react-intl";
-import * as yup from "yup";
+import yup from "configureYup";
 import { yupResolver } from "@hookform/resolvers/yup/dist/yup";
 import useUrlQuery from "hooks/useUrlQuery";
 

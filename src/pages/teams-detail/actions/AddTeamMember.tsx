@@ -3,7 +3,7 @@ import FormModal from "components/modals/FormModal";
 import { useHistory, useParams } from "react-router-dom";
 import { TParams as TTeamDetailParams } from "../TeamDetail";
 import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
+import yup from "configureYup";
 import { useIntl } from "react-intl";
 import { teamService } from "services/teams";
 import { getTeamMembers } from "modules/gfwTeams";

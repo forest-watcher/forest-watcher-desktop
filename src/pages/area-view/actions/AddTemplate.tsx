@@ -10,7 +10,7 @@ import { Option } from "types";
 import { areaService } from "services/area";
 import { useAppDispatch } from "hooks/useRedux";
 import { getAreas, getAreasInUsersTeams } from "modules/areas";
-import * as yup from "yup";
+import yup from "configureYup";
 import { yupResolver } from "@hookform/resolvers/yup/dist/yup";
 import PlusIcon from "assets/images/icons/PlusForButton.svg";
 

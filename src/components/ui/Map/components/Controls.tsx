@@ -13,7 +13,7 @@ import { FieldValues, SubmitHandler, useForm, useWatch } from "react-hook-form";
 import MapboxGeocoder from "@mapbox/mapbox-gl-geocoder";
 import * as turf from "@turf/turf";
 import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
+import yup from "configureYup";
 import { FormattedMessage, useIntl } from "react-intl";
 
 interface IProps extends HTMLAttributes<HTMLElement> {

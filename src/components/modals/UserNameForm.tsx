@@ -6,7 +6,7 @@ import { userService } from "services/user";
 import { getUser } from "modules/user";
 import { toastr } from "react-redux-toastr";
 import { useIntl } from "react-intl";
-import * as yup from "yup";
+import yup from "configureYup";
 import { yupResolver } from "@hookform/resolvers/yup/dist/yup";
 
 type TUserNameForm = {

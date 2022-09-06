@@ -9,7 +9,7 @@ import { UnpackNestedValue } from "react-hook-form";
 import { useAppDispatch } from "hooks/useRedux";
 import { getUserTeams } from "modules/gfwTeams";
 import useGetUserId from "hooks/useGetUserId";
-import * as yup from "yup";
+import yup from "configureYup";
 import { yupResolver } from "@hookform/resolvers/yup/dist/yup";
 
 type TEditTeamForm = {

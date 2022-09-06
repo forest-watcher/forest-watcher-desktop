@@ -3,7 +3,7 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
 import { TLoginBody } from "services/user";
 import Input from "components/ui/Form/Input";
-import * as yup from "yup";
+import yup from "configureYup";
 import { yupResolver } from "@hookform/resolvers/yup/dist/yup";
 import { FormattedMessage, useIntl } from "react-intl";
 import Button from "components/ui/Button/Button";
