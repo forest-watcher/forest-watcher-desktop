@@ -192,7 +192,7 @@ const UserAreasMap: FC<PropsWithChildren<IProps>> = props => {
       )}
       {planetBasemapUrl && (
         <Source id="planet-map" type="raster" tiles={[planetBasemapUrl]} key={planetBasemapUrl}>
-          <Layer id="planet-map-layer" type="raster" />
+          <Layer id="planet-map-layer" type="raster" beforeId={selectedAreaId} />
         </Source>
       )}
       {areaMap.map(area => (

@@ -3,6 +3,7 @@ export const download = (path: string, filename = "") => {
   const anchor = document.createElement("a");
   anchor.href = path;
   anchor.download = filename;
+  anchor.target = "_blank";
 
   // Append to the DOM
   document.body.appendChild(anchor);

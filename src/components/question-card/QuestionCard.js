@@ -352,7 +352,7 @@ class QuestionCard extends Component {
                 ))}
               {isConditional && canManage && (
                 <button
-                  className={"c-button add-option-button"}
+                  className="c-button c-button--secondary add-option-button"
                   type="button"
                   onClick={this.onQuestionOptionAdd}
                   disabled={!modeCreate}
