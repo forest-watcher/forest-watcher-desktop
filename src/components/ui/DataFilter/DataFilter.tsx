@@ -2,13 +2,14 @@ import classnames from "classnames";
 import { DeepPartial, UnpackNestedValue, useForm, useWatch } from "react-hook-form";
 import FormModalInput from "components/modals/FormModalInput";
 import FormModal, { TAvailableTypes } from "components/modals/FormModal";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { FormattedMessage } from "react-intl";
 
 export interface IFilter<T, OPTION_TYPE> {
   name: string;
   filterOptions: T;
   filterCallback: (item: OPTION_TYPE, value: any) => boolean;
+  getShouldShow?: () => boolean;
 }
 
 export interface IProps<T, OPTION_TYPE> {
@@ -29,6 +30,11 @@ const DataFilter = <T, OPTION_TYPE>(props: IProps<T, OPTION_TYPE>) => {
   const watcher = useWatch({ control: formhook.control });
   const [isExtrasOpen, setIsExtrasOpen] = useState(false);
   const [extrasValue, setExtrasValue] = useState<undefined | UnpackNestedValue<T>>(undefined);
+
+  const shouldShowExtraFilters = useMemo(() => {
+    const findAtleastOne = extraFilters?.find(item => (item.getShouldShow ? item.getShouldShow() : true));
+    return Boolean(findAtleastOne);
+  }, [extraFilters]);
 
   useEffect(() => {
     const keys = [...Object.keys(watcher), ...(extrasValue ? Object.keys(extrasValue) : [])];
@@ -63,11 +69,14 @@ const DataFilter = <T, OPTION_TYPE>(props: IProps<T, OPTION_TYPE>) => {
           <FormattedMessage id="filters.title" />
         </p>
         <div className="c-data-filter__filters">
-          {filters.map(item => (
-            <FormModalInput<T> key={item.filterOptions.id} input={item.filterOptions} formhook={formhook} />
-          ))}
+          {filters.map(
+            item =>
+              (item.getShouldShow ? item.getShouldShow() : true) && (
+                <FormModalInput<T> key={item.filterOptions.id} input={item.filterOptions} formhook={formhook} />
+              )
+          )}
         </div>
-        {extraFilters && (
+        {extraFilters && shouldShowExtraFilters && (
           <button
             onClick={e => {
               e.preventDefault();

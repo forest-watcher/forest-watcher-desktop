@@ -99,7 +99,8 @@ const useReportFilters = (
           } else {
             return item.area === value;
           }
-        }
+        },
+        getShouldShow: () => areaFilterOptions.length > 2
       },
       {
         name: "filter.by.template",
@@ -124,7 +125,8 @@ const useReportFilters = (
           } else {
             return item.template === value;
           }
-        }
+        },
+        getShouldShow: () => templateOptions.length > 2
       },
       {
         name: "filter.by.timeframe",
@@ -174,7 +176,8 @@ const useReportFilters = (
           } else {
             return item.alerts.find((alert: IAlertIdentifier) => alert.id === value);
           }
-        }
+        },
+        getShouldShow: () => alertTypeOptions.length > 2
       },
       // {
       //   name: "toggle.voice",
@@ -215,7 +218,8 @@ const useReportFilters = (
           } else {
             return item.monitor === value;
           }
-        }
+        },
+        getShouldShow: () => alertTypeOptions.length > 2
       }
     ];
   }, [alertTypeOptions, intl, usernameOptions]);
