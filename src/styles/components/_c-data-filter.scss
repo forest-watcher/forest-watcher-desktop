@@ -2,7 +2,7 @@
   display: flex;
   align-items: center;
   flex-wrap: wrap;
-  gap: $global-spacing-15;
+  gap: $global-spacing-6 $global-spacing-15;
   background: $white;
   border: 2px solid rgba(85, 85, 85, 0.1);
   border-radius: 4px;
@@ -19,7 +19,7 @@
   &__filters {
     display: flex;
     flex-wrap: wrap;
-    gap: $global-spacing-10;
+    gap: $global-spacing-6 $global-spacing-10;
     align-items: center;
     .c-input {
       align-items: center;
