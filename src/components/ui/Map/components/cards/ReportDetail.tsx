@@ -51,27 +51,39 @@ const ReportDetailCard: FC<IParams> = ({ answers, areasInUsersTeams }) => {
     >
       {answer && (
         <ul className="c-card__text c-card__list">
-          <li>
-            <FormattedMessage
-              id="reports.preview.dateUploaded"
-              values={{ date: intl.formatDate(answer.createdAt, { month: "short", day: "2-digit", year: "numeric" }) }}
-            />
-          </li>
-          <li>
-            <FormattedMessage
-              id="reports.preview.monitors"
-              values={{ teams: teams.map(team => team?.attributes?.name || "").join(", ") }}
-            />
-          </li>
-          <li>
-            <FormattedMessage id="reports.preview.alertType" values={{ alertType: alertTypesString }} />
-          </li>
-          <li>
-            <FormattedMessage id="reports.preview.area" values={{ name: answer.areaOfInterestName }} />
-          </li>
-          <li>
-            <FormattedMessage id="reports.preview.submittedBy" values={{ name: answer.fullName }} />
-          </li>
+          {!!answer.createdAt && (
+            <li>
+              <FormattedMessage
+                id="reports.preview.dateUploaded"
+                values={{
+                  date: intl.formatDate(answer.createdAt, { month: "short", day: "2-digit", year: "numeric" })
+                }}
+              />
+            </li>
+          )}
+          {teams.length > 0 && (
+            <li>
+              <FormattedMessage
+                id="reports.preview.monitors"
+                values={{ teams: teams.map(team => team?.attributes?.name || "").join(", ") }}
+              />
+            </li>
+          )}
+          {!!alertTypesString && (
+            <li>
+              <FormattedMessage id="reports.preview.alertType" values={{ alertType: alertTypesString }} />
+            </li>
+          )}
+          {!!answer.areaOfInterestName && (
+            <li>
+              <FormattedMessage id="reports.preview.area" values={{ name: answer.areaOfInterestName }} />
+            </li>
+          )}
+          {!!answer.fullName && (
+            <li>
+              <FormattedMessage id="reports.preview.submittedBy" values={{ name: answer.fullName }} />
+            </li>
+          )}
         </ul>
       )}
       {!answer && answers.length > 1 && (
