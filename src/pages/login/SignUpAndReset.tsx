@@ -11,6 +11,7 @@ import { TErrorResponse } from "constants/api";
 import { toastr } from "react-redux-toastr";
 import LoginLayout from "components/layouts/Login";
 import { Link, useHistory } from "react-router-dom";
+import { useSetBodyBackground } from "hooks/useSetBodyBackground";
 
 type TSignUpAndResetForm = TSignUpBody;
 
@@ -62,6 +63,7 @@ const SignUpAndReset: FC<IProps> = ({ isResetPassword = false }) => {
   const intl = useIntl();
   const history = useHistory();
   const [isLoading, setIsLoading] = useState(false);
+  useSetBodyBackground("#F2F2F2");
 
   const onSubmit: SubmitHandler<TSignUpAndResetForm> = async data => {
     setIsLoading(true);

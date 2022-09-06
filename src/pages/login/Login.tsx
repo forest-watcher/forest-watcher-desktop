@@ -1,4 +1,4 @@
-import React, { FC, useState } from "react";
+import React, { FC, useEffect, useMemo, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
 import { TLoginBody } from "services/user";
@@ -14,6 +14,7 @@ import { toastr } from "react-redux-toastr";
 import { TErrorResponse } from "constants/api";
 import LoginLayout from "components/layouts/Login";
 import SocialSignIn from "pages/login/SocialSignIn";
+import { useSetBodyBackground } from "hooks/useSetBodyBackground";
 
 type TLoginForm = TLoginBody;
 
@@ -32,11 +33,12 @@ const Login: FC<IProps> = () => {
     register,
     handleSubmit,
     reset,
-    formState: { isDirty, errors }
+    formState: { errors, dirtyFields, touchedFields }
   } = useForm<TLoginForm>({ resolver: yupResolver(loginSchema) });
   const intl = useIntl();
   const dispatch = useAppDispatch();
   const [isLoading, setIsLoading] = useState(false);
+  useSetBodyBackground("#F2F2F2");
 
   const onSubmit: SubmitHandler<TLoginForm> = async data => {
     setIsLoading(true);
@@ -53,6 +55,8 @@ const Login: FC<IProps> = () => {
       setIsLoading(false);
     }
   };
+
+  const isDirty = (dirtyFields.email && dirtyFields.password) || (touchedFields.email && touchedFields.password);
 
   return (
     <LoginLayout isLoading={isLoading} title="signIn.title" text="signIn.subTitle">
