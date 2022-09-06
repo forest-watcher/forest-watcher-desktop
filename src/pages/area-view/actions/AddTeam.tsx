@@ -10,7 +10,7 @@ import { areaService } from "services/area";
 import { useAppDispatch } from "hooks/useRedux";
 import { getAreas } from "modules/areas";
 import { TGetTeamMembersResponse, TGetUserTeamsResponse } from "services/teams";
-import * as yup from "yup";
+import yup from "configureYup";
 import { yupResolver } from "@hookform/resolvers/yup/dist/yup";
 import PlusIcon from "assets/images/icons/PlusForButton.svg";
 import useGetUserId from "hooks/useGetUserId";

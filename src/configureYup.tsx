@@ -1,6 +1,6 @@
-import { setLocale } from "yup";
+import * as yup from "yup";
 
-setLocale({
+yup.setLocale({
   // use constant translation keys for messages without values
   mixed: {
     default: values => ({ key: "errors.mixed.default", values }),
@@ -21,3 +21,5 @@ setLocale({
     min: ({ min }) => ({ key: "errors.array.min", values: { min } })
   }
 });
+
+export default yup;

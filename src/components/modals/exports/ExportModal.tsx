@@ -1,6 +1,6 @@
 import { FC, useMemo } from "react";
 import FormModal from "components/modals/FormModal";
-import * as yup from "yup";
+import yup from "configureYup";
 import { yupResolver } from "@hookform/resolvers/yup/dist/yup";
 import { IProps as IModalProps } from "components/modals/FormModal";
 import { useIntl } from "react-intl";

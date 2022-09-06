@@ -1,6 +1,6 @@
 import SocialSignIn from "pages/login/SocialSignIn";
 import React, { FC, useState } from "react";
-import * as yup from "yup";
+import yup from "configureYup";
 import Input from "components/ui/Form/Input";
 import Button from "components/ui/Button/Button";
 import { FormattedMessage, useIntl } from "react-intl";

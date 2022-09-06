@@ -10,7 +10,6 @@ import "react-redux-toastr/lib/css/react-redux-toastr.min.css";
 import Nav from "components/layouts/Nav";
 import Landing from "pages/landing/LandingContainer";
 import UserNameForm from "components/modals/UserNameForm";
-import "configureYup";
 import { ErrorBoundary } from "react-error-boundary";
 import ErrorFallback from "components/modals/ErrorFallbackModal";
 
