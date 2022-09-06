@@ -190,7 +190,7 @@ const Areas: FC<IProps> = props => {
         <Route path={`/areas/export`}>
           <ExportModal
             onSave={handleExport}
-            onClose={() => history.push("/areas")}
+            onClose={() => history.goBack()}
             isOpen
             fileTypes={AREA_EXPORT_FILE_TYPES}
             fields={[]}

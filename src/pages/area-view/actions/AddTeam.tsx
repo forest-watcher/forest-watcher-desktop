@@ -47,7 +47,7 @@ const AddTeamModal: FC<IProps> = ({ teams, users }) => {
   );
 
   const onClose = () => {
-    history.push(`/areas/${areaId}`);
+    history.goBack();
   };
 
   const onSave = async (data: UnpackNestedValue<TAddTeamForm>) => {

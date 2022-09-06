@@ -24,8 +24,8 @@ const RemoveTemplateModal: FC<IProps> = props => {
   const [isRemoving, setIsRemoving] = useState(false);
 
   const onClose = useCallback(() => {
-    history.push(`/areas/${areaId}`);
-  }, [history, areaId]);
+    history.goBack();
+  }, [history]);
 
   const removeTemplate = async () => {
     setIsRemoving(true);

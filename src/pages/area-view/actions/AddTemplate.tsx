@@ -46,7 +46,7 @@ const AddTemplateModal: FC<IProps> = ({ templates, onAdd }) => {
   );
 
   const onClose = () => {
-    history.push(`/areas/${areaId}`);
+    history.goBack();
   };
 
   const onSave = async (data: UnpackNestedValue<TAddTemplateForm>) => {
