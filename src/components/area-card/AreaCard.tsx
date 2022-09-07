@@ -18,9 +18,11 @@ const AreaCard: FC<IProps> = ({ className, area, subtitleKey, subtitleValue }) =
       <div className="c-card__content-flex">
         <div className="u-text-ellipsis u-flex-1">
           <Card.Title className="u-margin-top-none">{area.attributes.name}</Card.Title>
-          <Card.Text className="u-margin-top-tiny">
-            <FormattedMessage id={subtitleKey} values={subtitleValue} />
-          </Card.Text>
+          {subtitleKey && (
+            <Card.Text className="u-margin-top-tiny">
+              <FormattedMessage id={subtitleKey} values={subtitleValue} />
+            </Card.Text>
+          )}
         </div>
         <Card.Cta to={`/areas/${area.id}`} iconSrc={EditIcon}>
           <FormattedMessage id="common.manage" />
