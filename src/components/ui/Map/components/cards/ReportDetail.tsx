@@ -64,7 +64,7 @@ const ReportDetailCard: FC<IParams> = ({ answers, areasInUsersTeams }) => {
           {teams.length > 0 && (
             <li>
               <FormattedMessage
-                id="reports.preview.monitors"
+                id="reports.preview.teams"
                 values={{ teams: teams.map(team => team?.attributes?.name || "").join(", ") }}
               />
             </li>
