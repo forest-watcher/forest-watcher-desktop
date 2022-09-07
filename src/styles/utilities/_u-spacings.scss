@@ -15,7 +15,6 @@
  *   .u-padding-vertical-small {}
  */
 
-
 $spacing-directions: (
   null: null,
   "-top": "-top",
@@ -23,16 +22,17 @@ $spacing-directions: (
   "-bottom": "-bottom",
   "-left": "-left",
   "-horizontal": "-left" "-right",
-  "-vertical": "-top" "-bottom",
+  "-vertical": "-top" "-bottom"
 ) !default;
 
 $spacing-properties: (
   "padding": "padding",
-  "margin": "margin",
+  "margin": "margin"
 ) !default;
 
 $spacing-sizes: (
   null: $global-spacing-unit,
+  "-very-tiny": $global-spacing-unit-very-tiny,
   "-tiny": $global-spacing-unit-tiny,
   "-small": $global-spacing-unit-small,
   "-large": $global-spacing-unit-large,
@@ -41,23 +41,15 @@ $spacing-sizes: (
 ) !default;
 
 @each $property-namespace, $property in $spacing-properties {
-
   @each $direction-namespace, $direction-rules in $spacing-directions {
-
     @each $size-namespace, $size in $spacing-sizes {
-
       .u-#{$property-namespace}#{$direction-namespace}#{$size-namespace} {
-
         @each $direction in $direction-rules {
           #{$property}#{$direction}: $size !important;
         }
-
       }
-
     }
-
   }
-
 }
 
 .u-margin-bottom-40 {
