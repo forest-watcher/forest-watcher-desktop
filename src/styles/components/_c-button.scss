@@ -20,7 +20,8 @@
   outline: 0;
   text-transform: uppercase;
 
-  &:disabled {
+  &:disabled,
+  &--disabled {
     opacity: 0.5;
 
     &:hover {
@@ -31,7 +32,8 @@
   &--primary {
     background-color: $primary-500;
     box-shadow: 0 0 0 2px $primary-500;
-    &:hover, &:focus {
+    &:hover,
+    &:focus {
       background-color: $primary-600;
     }
 
@@ -41,11 +43,13 @@
     }
   }
 
-  &--secondary, &--secondary-light-text {
+  &--secondary,
+  &--secondary-light-text {
     background-color: transparent;
     box-shadow: 0 0 0 1px $primary-500;
     color: $neutral-700;
-    &:hover, &:focus {
+    &:hover,
+    &:focus {
       box-shadow: 0 0 0 2px $primary-500;
     }
 
@@ -73,7 +77,6 @@
   &__inline-icon {
     margin-right: $global-spacing-1;
   }
-
 
   // LEGACY FROM HERE
   &.-hero {

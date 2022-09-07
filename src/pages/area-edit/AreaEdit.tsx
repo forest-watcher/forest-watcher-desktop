@@ -27,6 +27,7 @@ import * as turf from "@turf/turf";
 import { AllGeoJSON } from "@turf/turf";
 import useUrlQuery from "hooks/useUrlQuery";
 import { checkArea } from "helpers/areas";
+import classNames from "classnames";
 
 const areaTitleKeys = {
   manage: "areas.editArea",
@@ -327,7 +328,13 @@ const AreaEdit: FC<IProps> = ({
         <div className="row column u-w-100">
           <div className="c-area-edit__actions">
             <div className="c-area-edit__shapefile">
-              <label className="c-button c-button--default" htmlFor="shapefile">
+              <label
+                className={classNames(
+                  "c-button c-button--default",
+                  updatedGeojson?.features.length! > 0 && "c-button--disabled"
+                )}
+                htmlFor="shapefile"
+              >
                 <FormattedMessage id={isValidatingShapefile ? "common.loading" : "areas.uploadShapefile"} />
               </label>
               <input
