@@ -24,6 +24,7 @@ import { AREA_EXPORT_FILE_TYPES } from "constants/export";
 import { sortByNumber, sortByString } from "helpers/table";
 import { toastr } from "react-redux-toastr";
 import useFindArea from "hooks/useFindArea";
+import { useGetBackLink } from "hooks/useGetBackLink";
 
 interface IProps extends TPropsFromRedux {}
 export type TParams = {
@@ -48,6 +49,7 @@ const AreasView: FC<IProps & RouteComponentProps<TParams>> = ({
   const history = useHistory();
   const intl = useIntl();
   const { areaId } = useParams<TParams>();
+  const { backLink, backLinkTextKey } = useGetBackLink({ backLinkTextKey: "areas.back", backLink: "/areas" });
 
   useEffect(() => {
     // Rare case, only other scroll tos are in routes.js for the top level nav
@@ -147,7 +149,7 @@ const AreasView: FC<IProps & RouteComponentProps<TParams>> = ({
         <Hero
           title="areas.manageAreaName"
           titleValues={{ name: area?.attributes.name ?? "" }}
-          backLink={{ name: "areas.back", to: "/areas" }}
+          backLink={{ name: backLinkTextKey, to: backLink }}
           actions={
             area ? (
               <>

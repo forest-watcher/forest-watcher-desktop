@@ -15,6 +15,7 @@ import Settings from "./pages/settings/SettingsContainer";
 import Reports from "./pages/reports/ReportsContainer";
 import Login from "./pages/login/Login";
 import SignUpAndReset from "./pages/login/SignUpAndReset";
+import { useRouteHistoryStack } from "hooks/useRouteHistoryStack";
 
 const getLoginComponent = ({ user, location }) => {
   const search = location.search || "";
@@ -43,6 +44,7 @@ const Routes = props => {
   const { match, user, location, defaultComponent } = props;
 
   const { pathname } = useLocation();
+  useRouteHistoryStack();
 
   useEffect(() => {
     // only on top level (main nav)

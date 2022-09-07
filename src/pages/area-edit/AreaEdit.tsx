@@ -28,6 +28,7 @@ import { AllGeoJSON } from "@turf/turf";
 import useUrlQuery from "hooks/useUrlQuery";
 import { checkArea } from "helpers/areas";
 import classNames from "classnames";
+import { useGetBackLink } from "hooks/useGetBackLink";
 
 const areaTitleKeys = {
   manage: "areas.editArea",
@@ -69,6 +70,7 @@ const AreaEdit: FC<IProps> = ({
   const [shouldUseChangesMade, setShouldUseChangesMade] = useState(true);
   const [showShapeFileHelpModal, setShowShapeFileHelpModal] = useState(false);
   const [invalidGeoJsonSize, setInvalidGeojsonSize] = useState(false);
+  const { backLink, backLinkTextKey } = useGetBackLink({ backLinkTextKey: "areas.back", backLink: "/areas" });
   const history = useHistory();
   const intl = useIntl();
   let { path, url } = useRouteMatch();
@@ -294,7 +296,7 @@ const AreaEdit: FC<IProps> = ({
 
         <Hero
           title={areaTitleKeys[mode as keyof typeof areaTitleKeys]}
-          backLink={{ name: "areas.back", to: "/areas" }}
+          backLink={{ name: backLinkTextKey, to: backLink }}
           actions={
             mode === "manage" ? (
               <Link

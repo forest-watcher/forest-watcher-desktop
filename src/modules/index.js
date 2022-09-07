@@ -9,6 +9,7 @@ export { default as templates } from "./templates";
 export { default as teams } from "./teams";
 export { default as gfwTeams } from "./gfwTeams";
 export { default as map } from "./map";
+export { default as routeStackHistory } from "./routeStackHistory";
 
 /* External reducers */
 export { reducer as toastr } from "react-redux-toastr";
