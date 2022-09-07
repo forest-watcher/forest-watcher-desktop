@@ -89,8 +89,8 @@ const AreaEdit: FC<IProps> = ({
   const { changesMade, changesValid } = useMemo(() => {
     const changesValid =
       formState.errors.name === undefined && (updatedGeojson ? updatedGeojson.features.length > 0 : true);
-
-    const changesMade = area?.attributes.name !== name || updatedGeojson !== null;
+    const originalName = area?.attributes.name || "";
+    const changesMade = (name && name !== originalName) || updatedGeojson !== null;
 
     return { changesMade, changesValid };
   }, [area?.attributes.name, formState.errors.name, name, updatedGeojson]);
