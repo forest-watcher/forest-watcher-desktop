@@ -20,6 +20,7 @@ import { AREA_EXPORT_FILE_TYPES } from "constants/export";
 import { exportService } from "services/exports";
 import { toastr } from "react-redux-toastr";
 import { MapboxEvent, Map as MapInstance } from "mapbox-gl";
+import classNames from "classnames";
 
 interface IProps extends TPropsFromRedux {}
 
@@ -98,7 +99,13 @@ const Areas: FC<IProps> = props => {
       <Hero
         title="areas.name"
         actions={
-          <Link className="c-button c-button--primary" to={`${url}/export`}>
+          <Link
+            className={classNames(
+              "c-button c-button--primary",
+              areaMap.length === 0 && !hasTeamAreas && "c-button--disabled"
+            )}
+            to={`${url}/export`}
+          >
             <FormattedMessage id="areas.exportAreas" />
           </Link>
         }
