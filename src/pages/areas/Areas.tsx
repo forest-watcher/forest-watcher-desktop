@@ -22,10 +22,12 @@ import { toastr } from "react-redux-toastr";
 import { MapboxEvent, Map as MapInstance } from "mapbox-gl";
 import classNames from "classnames";
 
-interface IProps extends TPropsFromRedux {}
+interface IProps extends TPropsFromRedux {
+  getTeamMembers: (teamId: string) => void;
+}
 
 const Areas: FC<IProps> = props => {
-  const { areasList, loading, loadingTeamAreas, areasInUsersTeams, allAnswers } = props;
+  const { areasList, loading, loadingTeamAreas, areasInUsersTeams, allAnswers, teamMembers, getTeamMembers } = props;
   const areaMap = useMemo<TAreasResponse[]>(() => Object.values(areasList), [areasList]);
   const [selectedArea, setSelectedArea] = useState<TAreasResponse | null>(null);
   const [mapRef, setMapRef] = useState<MapInstance | null>(null);
@@ -93,6 +95,12 @@ const Areas: FC<IProps> = props => {
       mapRef?.off("idle", onIdleHandler);
     };
   }, [mapRef]);
+
+  useEffect(() => {
+    areasInUsersTeams.forEach(team => {
+      team.team?.id && getTeamMembers(team.team?.id);
+    });
+  }, [areasInUsersTeams, getTeamMembers]);
 
   return (
     <div className="c-areas">
@@ -187,7 +195,19 @@ const Areas: FC<IProps> = props => {
                         {[...areasInTeam.areas]
                           .sort((a, b) => a.data.attributes.name.localeCompare(b.data.attributes.name.toString()))
                           .map(area => (
-                            <AreaCard area={area.data} key={area.data.id} className="c-areas__item" />
+                            <AreaCard
+                              area={area.data}
+                              key={area.data.id}
+                              className="c-areas__item"
+                              subtitleKey="teams.managedBy"
+                              subtitleValue={{
+                                name:
+                                  areasInTeam?.team?.id &&
+                                  teamMembers[areasInTeam?.team?.id].find(
+                                    member => member.attributes.role === "administrator"
+                                  )?.attributes.name
+                              }}
+                            />
                           ))}
                       </div>
                     </Fragment>
