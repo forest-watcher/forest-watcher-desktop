@@ -1,5 +1,5 @@
 .l-login-forms {
-  background: #FFFFFF;
+  background: #ffffff;
   border: 2px solid rgba(85, 85, 85, 0.1);
   border-radius: 4px;
   display: flex;
@@ -24,6 +24,7 @@
     font-size: 18px;
     line-height: 24px;
     margin-bottom: 40px;
+    text-align: center;
   }
 
   @include before(md) {
