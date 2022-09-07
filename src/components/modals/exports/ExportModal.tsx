@@ -26,6 +26,7 @@ interface IProps {
     label: string;
     value: string;
   }[];
+  defaultSelectedFields?: string[];
 }
 
 const exportSchema = yup
@@ -37,7 +38,7 @@ const exportSchema = yup
   })
   .required();
 
-const ExportModal: FC<IProps> = ({ onClose, onSave, isOpen, fileTypes, fields }) => {
+const ExportModal: FC<IProps> = ({ onClose, onSave, isOpen, fileTypes, fields, defaultSelectedFields }) => {
   const intl = useIntl();
   const inputs = useMemo<IModalProps<TExportForm>["inputs"]>(() => {
     const toReturn: IModalProps<TExportForm>["inputs"] = [
@@ -125,7 +126,10 @@ const ExportModal: FC<IProps> = ({ onClose, onSave, isOpen, fileTypes, fields })
       onSave={handleSave}
       modalTitle="export.title"
       submitBtnName="common.done"
-      useFormProps={{ resolver: yupResolver(exportSchema), defaultValues: { downloadMethod: "download" } }}
+      useFormProps={{
+        resolver: yupResolver(exportSchema),
+        defaultValues: { downloadMethod: "download", fields: defaultSelectedFields || [] }
+      }}
       inputs={inputs}
     />
   );

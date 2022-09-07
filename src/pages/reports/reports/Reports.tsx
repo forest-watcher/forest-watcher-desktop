@@ -202,6 +202,7 @@ const Reports: FC<IProps> = props => {
             onClose={() => history.push("/reporting/reports")}
             isOpen
             fileTypes={REPORT_EXPORT_FILE_TYPES}
+            defaultSelectedFields={["createdAt", "fullName", "reportName", "areaOfInterestName", "clickedPosition"]}
             fields={[
               {
                 label: intl.formatMessage({ id: "reports.reports.table.header.createdAt" }),
