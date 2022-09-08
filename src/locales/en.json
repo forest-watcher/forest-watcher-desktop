@@ -142,7 +142,7 @@
   "areas.missingValuesDesc": "Please provide an area and a name",
   "areas.intersectError": "You cannot create an area that intersects",
   "areas.tooLarge": "Area too large",
-  "areas.tooLargeDesc": "Please draw a smaller area",
+  "areas.tooLargeDesc": "Please draw a smaller area. The maximum area size is 20,000 sq km.",
   "areas.uploadedTooLargeDesc": "The max area size is 1500 km². Please upload a shapefile that covers a smaller area",
   "areas.fileTooLarge": "File too large",
   "areas.fileTooLargeDesc": "Please upload a file smaller than 1MB",
