@@ -250,7 +250,12 @@ const AreasView: FC<IProps & RouteComponentProps<TParams>> = ({
                     //@ts-ignore
                     name: team.data.attributes.name || "",
                     openAssignments: 0,
-                    reports: 0
+                    reports:
+                      allAnswers?.reduce(
+                        //@ts-ignore
+                        (total, item) => (item?.attributes?.teamId === team?.data?.id ? total + 1 : total),
+                        0
+                      ) || 0
                   })) ?? []
                 }
                 columnOrder={[
