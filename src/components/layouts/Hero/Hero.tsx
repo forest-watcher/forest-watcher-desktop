@@ -1,6 +1,6 @@
 import { FC, PropsWithChildren, ReactElement } from "react";
 import classnames from "classnames";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { FormattedMessage } from "react-intl";
 import TabGroup, { IProps as ITabGroupProps } from "components/ui/TabGroup/TabGroup";
 import ChevronRight from "assets/images/icons/ChevronRightBrandGreen.svg";
@@ -13,23 +13,34 @@ interface IProps {
   backLink?: {
     className?: string;
     name: string;
-    to: string;
+    to?: string;
     values?: { [key: string]: string | number };
   };
 }
 
 const Hero: FC<PropsWithChildren<IProps>> = props => {
   const { title, titleValues, backLink, pageTabs, children, actions } = props;
+  const history = useHistory();
 
   return (
     <aside className={classnames("c-hero", pageTabs && "c-hero--with-tabs")}>
       <div className="row column">
         {backLink && (
           <div className="c-hero__content">
-            <Link to={backLink.to} className={classnames("c-link", "c-link--hero", backLink.className)}>
-              <img src={ChevronRight} alt="" role="presentation" />
-              <FormattedMessage id={backLink.name} values={backLink.values} />
-            </Link>
+            {backLink.to ? (
+              <Link to={backLink.to} className={classnames("c-link", "c-link--hero", backLink.className)}>
+                <img src={ChevronRight} alt="" role="presentation" />
+                <FormattedMessage id={backLink.name} values={backLink.values} />
+              </Link>
+            ) : (
+              <button
+                onClick={() => history.goBack()}
+                className={classnames("c-link", "c-link--hero", backLink.className)}
+              >
+                <img src={ChevronRight} alt="" role="presentation" />
+                <FormattedMessage id={backLink.name} values={backLink.values} />
+              </button>
+            )}
           </div>
         )}
         <div className="c-hero__content">

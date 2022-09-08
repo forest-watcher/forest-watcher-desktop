@@ -70,7 +70,7 @@ const AreaEdit: FC<IProps> = ({
   const [shouldUseChangesMade, setShouldUseChangesMade] = useState(true);
   const [showShapeFileHelpModal, setShowShapeFileHelpModal] = useState(false);
   const [invalidGeoJsonSize, setInvalidGeojsonSize] = useState(false);
-  const { backLink, backLinkTextKey } = useGetBackLink({ backLinkTextKey: "areas.back", backLink: "/areas" });
+  const { backLinkTextKey } = useGetBackLink({ backLinkTextKey: "areas.back", backLink: "/areas" });
   const history = useHistory();
   const intl = useIntl();
   let { path, url } = useRouteMatch();
@@ -296,7 +296,7 @@ const AreaEdit: FC<IProps> = ({
 
         <Hero
           title={areaTitleKeys[mode as keyof typeof areaTitleKeys]}
-          backLink={{ name: backLinkTextKey, to: backLink }}
+          backLink={{ name: backLinkTextKey }}
           actions={
             mode === "manage" ? (
               <Link
