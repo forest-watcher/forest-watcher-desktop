@@ -172,6 +172,17 @@ const UserAreasMap: FC<PropsWithChildren<IProps>> = props => {
 
   return (
     <Map onMapLoad={handleMapLoad} cooperativeGestures={cooperativeGestures} {...rest}>
+      {areaMap.map(area => (
+        <Polygon
+          key={area.id}
+          id={area.id}
+          label={area.attributes.name}
+          data={area.attributes.geostore.geojson}
+          isSelected={selectedAreaId === area.id}
+          onClick={handleAreaClick}
+        />
+      ))}
+
       {hasLoaded && (
         <SquareClusterMarkers
           id="answers"
@@ -195,16 +206,6 @@ const UserAreasMap: FC<PropsWithChildren<IProps>> = props => {
           <Layer id="planet-map-layer" type="raster" beforeId={selectedAreaId} />
         </Source>
       )}
-      {areaMap.map(area => (
-        <Polygon
-          key={area.id}
-          id={area.id}
-          label={area.attributes.name}
-          data={area.attributes.geostore.geojson}
-          isSelected={selectedAreaId === area.id}
-          onClick={handleAreaClick}
-        />
-      ))}
 
       {selectedReportIds && selectedReportIds.length > 0 && (
         <ReportDetailCard
