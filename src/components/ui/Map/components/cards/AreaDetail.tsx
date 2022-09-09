@@ -47,7 +47,7 @@ const AreaDetailCard: FC<IParams> = ({
           <li>
             <FormattedMessage
               id="areas.card.size"
-              values={{ size: (area.attributes.geostore.areaHa * 10000).toFixed(0) }}
+              values={{ size: (area.attributes.geostore.areaHa / 100).toFixed(2) }}
             />
           </li>
           <li>
