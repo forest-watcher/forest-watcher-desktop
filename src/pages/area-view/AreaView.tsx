@@ -49,7 +49,7 @@ const AreasView: FC<IProps & RouteComponentProps<TParams>> = ({
   const history = useHistory();
   const intl = useIntl();
   const { areaId } = useParams<TParams>();
-  const { backLink, backLinkTextKey } = useGetBackLink({ backLinkTextKey: "areas.back", backLink: "/areas" });
+  const { backLinkTextKey } = useGetBackLink({ backLinkTextKey: "areas.back", backLink: "/areas" });
 
   useEffect(() => {
     // Rare case, only other scroll tos are in routes.js for the top level nav
@@ -149,7 +149,7 @@ const AreasView: FC<IProps & RouteComponentProps<TParams>> = ({
         <Hero
           title="areas.manageAreaName"
           titleValues={{ name: area?.attributes.name ?? "" }}
-          backLink={{ name: backLinkTextKey, to: backLink }}
+          backLink={{ name: backLinkTextKey }}
           actions={
             area ? (
               <>
