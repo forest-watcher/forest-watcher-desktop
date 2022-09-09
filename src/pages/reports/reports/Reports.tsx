@@ -199,7 +199,7 @@ const Reports: FC<IProps> = props => {
         <Route path={`${path}/export`}>
           <ExportModal
             onSave={handleExport}
-            onClose={() => history.push("/reporting/reports")}
+            onClose={() => history.goBack()}
             isOpen
             fileTypes={REPORT_EXPORT_FILE_TYPES}
             defaultSelectedFields={["createdAt", "fullName", "reportName", "areaOfInterestName", "clickedPosition"]}
