@@ -47,6 +47,7 @@ const DataFilter = <T, OPTION_TYPE>(props: IProps<T, OPTION_TYPE>) => {
 
     keys.forEach(key => {
       const filter = [...filters, ...(extraFilters ? extraFilters : [])].find(
+        //@ts-ignore
         item => item.filterOptions.registerProps.name === key
       );
       filtered = filtered.filter(item => filter?.filterCallback(item, values[key as keyof typeof values]));
