@@ -1,13 +1,13 @@
-import { FC, useEffect, useMemo, useState } from "react";
+import { FC, useMemo, useState } from "react";
 import FormModal from "components/modals/FormModal";
 import yup from "configureYup";
 import { yupResolver } from "@hookform/resolvers/yup/dist/yup";
 import { IProps as IModalProps } from "components/modals/FormModal";
 import { useIntl } from "react-intl";
-import { UnpackNestedValue, UseFormReturn } from "react-hook-form";
-import { copyToClipboard, download, openMailClient } from "helpers/exports";
-import { toastr } from "react-redux-toastr";
+import { UnpackNestedValue } from "react-hook-form";
+import { download, openMailClient } from "helpers/exports";
 import LinkPreview from "components/ui/LinkPreview/LinkPreview";
+import { bitlyService } from "services/bitly";
 
 export type TExportForm = {
   fileType: string;
@@ -105,7 +105,7 @@ const ExportModal: FC<IProps> = ({ onClose, onSave, isOpen, fileTypes, fields, d
   }, [fields, fileTypes, intl]);
 
   const handleSave = async (resp: UnpackNestedValue<TExportForm>) => {
-    setReportUrl("Generating Link...");
+    if (resp.downloadMethod === "link") onClose?.();
 
     const saveResp = await onSave(resp);
     if (saveResp) {
@@ -113,15 +113,21 @@ const ExportModal: FC<IProps> = ({ onClose, onSave, isOpen, fileTypes, fields, d
       switch (resp.downloadMethod) {
         case "download":
           download(saveResp);
-          onClose?.();
-          break;
-        case "link":
-          setReportUrl(saveResp);
           break;
         case "email":
           openMailClient(intl.formatMessage({ id: "export.subject" }), saveResp);
-          onClose?.();
+          break;
       }
+    }
+    onClose?.();
+  };
+
+  const generateShortenedLink = async (resp: UnpackNestedValue<TExportForm>) => {
+    setReportUrl("Generating Link...");
+    const saveResp = await onSave(resp);
+    if (saveResp) {
+      const shorten = await bitlyService.shorten(saveResp);
+      setReportUrl(shorten.link);
     }
   };
 
@@ -143,7 +149,7 @@ const ExportModal: FC<IProps> = ({ onClose, onSave, isOpen, fileTypes, fields, d
         setDownloadMethod(changes[0]);
 
         if (changes[0] === "link" && (await exportSchema.isValid(values))) {
-          handleSave(values);
+          generateShortenedLink(values);
         }
       }}
     >
