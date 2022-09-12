@@ -1,4 +1,4 @@
-import { ReactNode, useEffect, useState } from "react";
+import { PropsWithChildren, ReactNode, useEffect, useState } from "react";
 import Modal, { IProps as IModalProps } from "components/ui/Modal/Modal";
 import { Props as IInputProps } from "components/ui/Form/Input";
 import { Props as ISelectProps } from "components/ui/Form/Select";
@@ -11,6 +11,7 @@ import Loader from "components/ui/Loader";
 import { UseFormProps } from "react-hook-form/dist/types";
 import { FormattedMessage } from "react-intl";
 import FormModalInput from "./FormModalInput";
+import { usePrevious } from "hooks/usePrevious";
 
 export interface IInputBase<T> {
   formatErrors?: (error: any) => any; // ToDo
@@ -27,7 +28,7 @@ export type TToggle<T> = Omit<Omit<IToggleProps, "formHook">, "registered"> & II
 export type TRadioGroup<T> = Omit<Omit<IRadioChipGroupProps, "formHook">, "registered"> & IInputBase<T>;
 export type TAvailableTypes<T> = TInput<T> | TSelect<T> | TToggleGroup<T> | TToggle<T> | TRadioGroup<T>;
 
-export interface IProps<T> {
+export interface IProps<T> extends PropsWithChildren {
   isOpen: boolean;
   dismissible?: boolean;
   inputs: Array<TAvailableTypes<T>>;
@@ -40,6 +41,8 @@ export interface IProps<T> {
   useFormProps?: UseFormProps<T>;
   actions?: ReactNode;
   resetValues?: UnpackNestedValue<T>;
+  watch?: string[];
+  onChange?: (changes: any, values: any) => void;
 }
 
 /**
@@ -87,13 +90,13 @@ const FormModal = <T,>(props: IProps<T>) => {
     resetValues
   } = props;
 
-  const formhook = useForm<T>(useFormProps);
+  const formHook = useForm<T>(useFormProps);
 
   const {
     handleSubmit,
     reset,
     formState: { isDirty }
-  } = formhook;
+  } = formHook;
   const [isClosing, setIsClosing] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -123,6 +126,17 @@ const FormModal = <T,>(props: IProps<T>) => {
     modalActions.push({ name: cancelBtnName, variant: "secondary", onClick: handleCloseRequest });
   }
 
+  //@ts-ignore
+  const watchedValues = formHook.watch(props.watch);
+  const prevWatchedValues = usePrevious(watchedValues);
+
+  useEffect(() => {
+    if (JSON.stringify(watchedValues) !== JSON.stringify(prevWatchedValues)) {
+      props.onChange?.(watchedValues, formHook.getValues());
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [watchedValues]);
+
   return (
     <>
       <Modal
@@ -140,8 +154,9 @@ const FormModal = <T,>(props: IProps<T>) => {
         )}
         <form className="c-modal-form" onSubmit={handleSubmit(onSubmit)}>
           {inputs.map(item => (
-            <FormModalInput<T> key={item.id} input={item} formhook={formhook} />
+            <FormModalInput<T> key={item.id} input={item} formhook={formHook} />
           ))}
+          {props.children}
         </form>
         {actions && <div className="c-modal-dialog__extra-actions">{actions}</div>}
       </Modal>

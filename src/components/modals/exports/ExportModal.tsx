@@ -1,12 +1,13 @@
-import { FC, useMemo } from "react";
+import { FC, useMemo, useState } from "react";
 import FormModal from "components/modals/FormModal";
 import yup from "configureYup";
 import { yupResolver } from "@hookform/resolvers/yup/dist/yup";
 import { IProps as IModalProps } from "components/modals/FormModal";
 import { useIntl } from "react-intl";
 import { UnpackNestedValue } from "react-hook-form";
-import { copyToClipboard, download, openMailClient } from "helpers/exports";
-import { toastr } from "react-redux-toastr";
+import { download, openMailClient } from "helpers/exports";
+import LinkPreview from "components/ui/LinkPreview/LinkPreview";
+import { bitlyService } from "services/bitly";
 
 export type TExportForm = {
   fileType: string;
@@ -40,6 +41,8 @@ const exportSchema = yup
 
 const ExportModal: FC<IProps> = ({ onClose, onSave, isOpen, fileTypes, fields, defaultSelectedFields }) => {
   const intl = useIntl();
+  const [downloadMethod, setDownloadMethod] = useState();
+  const [reportUrl, setReportUrl] = useState("");
   const inputs = useMemo<IModalProps<TExportForm>["inputs"]>(() => {
     const toReturn: IModalProps<TExportForm>["inputs"] = [
       {
@@ -78,6 +81,7 @@ const ExportModal: FC<IProps> = ({ onClose, onSave, isOpen, fileTypes, fields, d
         registerProps: {
           name: "downloadMethod"
         },
+        className: "u-margin-bottom-medium",
         formatErrors: errors => errors.downloadMethod
       }
     ];
@@ -101,6 +105,8 @@ const ExportModal: FC<IProps> = ({ onClose, onSave, isOpen, fileTypes, fields, d
   }, [fields, fileTypes, intl]);
 
   const handleSave = async (resp: UnpackNestedValue<TExportForm>) => {
+    if (resp.downloadMethod === "link") onClose?.();
+
     const saveResp = await onSave(resp);
     if (saveResp) {
       // handle action, e.g. download
@@ -108,14 +114,20 @@ const ExportModal: FC<IProps> = ({ onClose, onSave, isOpen, fileTypes, fields, d
         case "download":
           download(saveResp);
           break;
-        case "link":
-          await copyToClipboard(saveResp);
-          toastr.success(intl.formatMessage({ id: "export.link.success" }), "");
-          break;
         case "email":
           openMailClient(intl.formatMessage({ id: "export.subject" }), saveResp);
+          break;
       }
-      onClose?.();
+    }
+    onClose?.();
+  };
+
+  const generateShortenedLink = async (resp: UnpackNestedValue<TExportForm>) => {
+    setReportUrl(intl.formatMessage({ id: "export.linkLoading" }));
+    const saveResp = await onSave(resp);
+    if (saveResp) {
+      const shorten = await bitlyService.shorten(saveResp);
+      setReportUrl(shorten.link);
     }
   };
 
@@ -127,11 +139,26 @@ const ExportModal: FC<IProps> = ({ onClose, onSave, isOpen, fileTypes, fields, d
       modalTitle="export.title"
       submitBtnName="common.done"
       useFormProps={{
+        mode: downloadMethod === "link" ? "onChange" : "onSubmit",
         resolver: yupResolver(exportSchema),
         defaultValues: { downloadMethod: "download", fields: defaultSelectedFields || [] }
       }}
       inputs={inputs}
-    />
+      watch={["downloadMethod", "fields", "fileType"]}
+      onChange={async (changes, values) => {
+        setDownloadMethod(changes[0]);
+
+        if (changes[0] === "link" && (await exportSchema.isValid(values))) {
+          generateShortenedLink(values);
+        }
+      }}
+    >
+      {downloadMethod === "link" && (
+        <LinkPreview btnCaption={intl.formatMessage({ id: "export.copyLink" })} link={reportUrl} className="">
+          {reportUrl}
+        </LinkPreview>
+      )}
+    </FormModal>
   );
 };
 
