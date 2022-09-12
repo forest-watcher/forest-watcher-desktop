@@ -2,6 +2,7 @@ import classNames from "classnames";
 import { FC, PropsWithChildren, useState } from "react";
 import { ReactComponent as CheckSVG } from "assets/images/icons/check-green.svg";
 import Chip from "../Chip/Chip";
+import { useIntl } from "react-intl";
 
 export interface IProps extends PropsWithChildren {
   className?: string;
@@ -12,7 +13,7 @@ export interface IProps extends PropsWithChildren {
 
 const LinkPreview: FC<IProps> = props => {
   const { className, children, btnCaption, link } = props;
-
+  const intl = useIntl();
   const [copied, setCopied] = useState(false);
 
   return (
@@ -20,7 +21,7 @@ const LinkPreview: FC<IProps> = props => {
       {copied && (
         <div className="c-link-preview__label">
           <CheckSVG />
-          Copied
+          {intl.formatMessage({ id: "export.copied" })}
         </div>
       )}
       <div className="c-link-preview__children u-flex-1">{children}</div>

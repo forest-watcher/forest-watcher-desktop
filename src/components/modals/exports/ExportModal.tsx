@@ -123,7 +123,7 @@ const ExportModal: FC<IProps> = ({ onClose, onSave, isOpen, fileTypes, fields, d
   };
 
   const generateShortenedLink = async (resp: UnpackNestedValue<TExportForm>) => {
-    setReportUrl("Generating Link...");
+    setReportUrl(intl.formatMessage({ id: "export.linkLoading" }));
     const saveResp = await onSave(resp);
     if (saveResp) {
       const shorten = await bitlyService.shorten(saveResp);
@@ -154,7 +154,7 @@ const ExportModal: FC<IProps> = ({ onClose, onSave, isOpen, fileTypes, fields, d
       }}
     >
       {downloadMethod === "link" && (
-        <LinkPreview btnCaption="Copy Link" link={reportUrl} className="">
+        <LinkPreview btnCaption={intl.formatMessage({ id: "export.copyLink" })} link={reportUrl} className="">
           {reportUrl}
         </LinkPreview>
       )}
