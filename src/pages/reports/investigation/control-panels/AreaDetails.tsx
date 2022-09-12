@@ -19,10 +19,12 @@ import breakpoints from "styles/utilities/_u-breakpoints.scss";
 import { useMediaQuery } from "react-responsive";
 import useZoomToGeojson from "hooks/useZoomToArea";
 import DataFilter from "components/ui/DataFilter/DataFilter";
-import { TFilterFields } from "pages/reports/reports/Reports";
 import useControlPanelReportFilters from "pages/reports/reports/useControlPanelReportFilters";
 import { TGetAllAnswers } from "services/reports";
 import useFindArea from "hooks/useFindArea";
+import { fireGAEvent } from "helpers/analytics";
+import { MapActions } from "types/analytics";
+import { TFilterFields } from "pages/reports/reports/Reports";
 
 export enum LAYERS {
   reports = "reports"
@@ -167,6 +169,7 @@ const AreaDetailsControlPanel: FC<IProps> = props => {
       <Loader isLoading={isLoadingAreas || isLoadingAnswers || isLoadingTeamAreas} />
       <form>
         <RadioCardGroup
+          id="map-styles"
           className="u-margin-bottom-40"
           error={errors.currentMap}
           registered={register("currentMap")}
@@ -177,7 +180,13 @@ const AreaDetailsControlPanel: FC<IProps> = props => {
             options: mapOptions,
             value: defaultBasemap
           }}
-          id="map-styles"
+          onChange={value => {
+            fireGAEvent({
+              category: "Map",
+              action: MapActions.Basemaps,
+              label: mapOptions.find(o => o.value === value)?.name || ""
+            });
+          }}
         />
         {watcher.currentMap === BASEMAPS.planet.key && basemaps.length && (
           <div className="u-margin-bottom-40">
@@ -256,6 +265,14 @@ const AreaDetailsControlPanel: FC<IProps> = props => {
                 label: intl.formatMessage({ id: layer.label }),
                 value: layer.option
               }))
+            }}
+            onChange={(option, enabled) => {
+              enabled &&
+                fireGAEvent({
+                  category: "Map",
+                  action: MapActions.Layers,
+                  label: option.label
+                });
             }}
           />
         )}

@@ -9,7 +9,7 @@ export interface Props extends FieldPropsBase {
   radioGroupProps: IProps;
   registered: UseFormRegisterReturn;
   formHook: UseFormReturn<any>;
-  onChange?: () => void;
+  onChange?: (v: string) => void;
 }
 
 const RadioCardGroupWrapper = (props: Props) => {
@@ -24,7 +24,7 @@ const RadioCardGroupWrapper = (props: Props) => {
   const handleChange = (v: string) => {
     formHook.setValue(registered.name, v);
     formHook.clearErrors(registered.name);
-    props.onChange?.();
+    props.onChange?.(v);
   };
 
   return (

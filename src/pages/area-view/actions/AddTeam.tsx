@@ -14,6 +14,8 @@ import yup from "configureYup";
 import { yupResolver } from "@hookform/resolvers/yup/dist/yup";
 import PlusIcon from "assets/images/icons/PlusForButton.svg";
 import useGetUserId from "hooks/useGetUserId";
+import { fireGAEvent } from "helpers/analytics";
+import { AreaActions, AreaLabel } from "types/analytics";
 
 interface IProps {
   teams: TGetUserTeamsResponse["data"];
@@ -99,7 +101,17 @@ const AddTeamModal: FC<IProps> = ({ teams }) => {
         }
       ]}
       actions={
-        <Link className="c-button c-button--secondary" to={`/teams/create?backTo=/areas/${areaId}/team`}>
+        <Link
+          className="c-button c-button--secondary"
+          to={`/teams/create?backTo=/areas/${areaId}/team`}
+          onClick={() =>
+            fireGAEvent({
+              category: "Areas",
+              action: AreaActions.Managed,
+              label: AreaLabel.CreateTeam
+            })
+          }
+        >
           <img className="c-button__inline-icon" src={PlusIcon} alt="" role="presentation" />
           <FormattedMessage id="teams.create" />
         </Link>

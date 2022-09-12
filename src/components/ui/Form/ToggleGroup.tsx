@@ -8,7 +8,11 @@ export interface Props extends FieldPropsBase {
   toggleGroupProps: ToggleGroupProps;
   registered: UseFormRegisterReturn;
   formHook: UseFormReturn<any>;
-  onChange?: () => void;
+  onChange?: (selectedOption: Option, enabled: Boolean) => void;
+}
+interface Option {
+  label: string;
+  value: string;
 }
 
 const ToggleGroup = (props: Props) => {
@@ -18,19 +22,19 @@ const ToggleGroup = (props: Props) => {
       ? toggleGroupProps.defaultValue
       : formHook.watch(props.registered.name);
 
-  const handleChange = (v: Boolean, toggleValue: string) => {
+  const handleChange = (v: Boolean, toggle: Option) => {
     const newValue = value ? [...value] : [];
-    const index = newValue.findIndex((item: string) => item === toggleValue);
+    const index = newValue.findIndex((item: string) => item === toggle.value);
     if (index > -1) {
       // Remove
       newValue.splice(index, 1);
     } else {
       // Add
-      newValue.push(toggleValue);
+      newValue.push(toggle.value);
     }
     formHook.setValue(registered.name, newValue);
     formHook.clearErrors(registered.name);
-    props.onChange?.();
+    props.onChange?.(toggle, v);
   };
 
   return (
@@ -48,7 +52,7 @@ const ToggleGroup = (props: Props) => {
               <Switch.Label className="c-input__label c-input-group__input-label">{toggle.label}</Switch.Label>
               <Switch
                 checked={checked}
-                onChange={(v: boolean) => handleChange(v, toggle.value)}
+                onChange={(v: boolean) => handleChange(v, toggle)}
                 className={classnames("c-input__toggle", checked && "c-input__toggle--on", className)}
               >
                 <span className="c-input__toggle-indicator" />

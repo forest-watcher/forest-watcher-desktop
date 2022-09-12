@@ -25,6 +25,8 @@ import { sortByNumber, sortByString } from "helpers/table";
 import { toastr } from "react-redux-toastr";
 import useFindArea from "hooks/useFindArea";
 import { useGetBackLink } from "hooks/useGetBackLink";
+import { fireGAEvent } from "helpers/analytics";
+import { AreaActions, AreaLabel } from "types/analytics";
 
 interface IProps extends TPropsFromRedux {}
 export type TParams = {
@@ -194,7 +196,17 @@ const AreasView: FC<IProps & RouteComponentProps<TParams>> = ({
             titleValues={{ num: area?.attributes.reportTemplate.length ?? 0 }}
             size="small"
             actions={
-              <Link to={`${url}/template/add`} className="c-button c-button--primary">
+              <Link
+                to={`${url}/template/add`}
+                className="c-button c-button--primary"
+                onClick={() =>
+                  fireGAEvent({
+                    category: "Areas",
+                    action: AreaActions.Managed,
+                    label: AreaLabel.AddedTemplate
+                  })
+                }
+              >
                 <img className="c-button__inline-icon" src={PlusIcon} alt="" role="presentation" />
                 <FormattedMessage id="areas.details.templates.add.title" />
               </Link>
@@ -234,7 +246,17 @@ const AreasView: FC<IProps & RouteComponentProps<TParams>> = ({
             size="small"
             actions={
               canManage && (
-                <Link to={`${url}/team/add`} className="c-button c-button--primary">
+                <Link
+                  to={`${url}/team/add`}
+                  className="c-button c-button--primary"
+                  onClick={() =>
+                    fireGAEvent({
+                      category: "Areas",
+                      action: AreaActions.Managed,
+                      label: AreaLabel.AddedTeam
+                    })
+                  }
+                >
                   <img className="c-button__inline-icon" src={PlusIcon} alt="" role="presentation" />
                   <FormattedMessage id="areas.details.teams.add.title" />
                 </Link>

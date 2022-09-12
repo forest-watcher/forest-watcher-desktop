@@ -20,6 +20,8 @@ import { REPORT_EXPORT_FILE_TYPES } from "constants/export";
 import { toastr } from "react-redux-toastr";
 import useUrlQuery from "hooks/useUrlQuery";
 import useGetUserId from "hooks/useGetUserId";
+import { fireGAEvent } from "helpers/analytics";
+import { MonitoringActions } from "types/analytics";
 
 export type TReportsDataTable = {
   id: string;
@@ -88,14 +90,20 @@ const Reports: FC<IProps> = props => {
   const handleExport = useCallback(
     async (values: UnpackNestedValue<TExportForm>) => {
       // Do request
+      let data;
       try {
         if (selectedReports.length === rows.length || selectedReports.length === 0) {
-          const { data } = await exportService.exportAllReports(values.fileType, values.fields);
-          return data;
+          data = (await exportService.exportAllReports(values.fileType, values.fields))?.data;
         } else {
-          const { data } = await exportService.exportSomeReports(values.fileType, values.fields, selectedReports);
-          return data;
+          data = (await exportService.exportSomeReports(values.fileType, values.fields, selectedReports))?.data;
         }
+
+        fireGAEvent({
+          category: "Monitoring",
+          action: MonitoringActions.ExportedReport
+        });
+
+        return data;
       } catch (err) {
         // Do toast
         toastr.error(intl.formatMessage({ id: "export.error" }), "");

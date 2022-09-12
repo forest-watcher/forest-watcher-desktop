@@ -21,6 +21,8 @@ import { exportService } from "services/exports";
 import { toastr } from "react-redux-toastr";
 import { MapboxEvent, Map as MapInstance } from "mapbox-gl";
 import classNames from "classnames";
+import { fireGAEvent } from "helpers/analytics";
+import { AreaActions, AreaLabel } from "types/analytics";
 
 interface IProps extends TPropsFromRedux {
   getTeamMembers: (teamId: string) => void;
@@ -113,6 +115,12 @@ const Areas: FC<IProps> = props => {
               areaMap.length === 0 && !hasTeamAreas && "c-button--disabled"
             )}
             to={`${url}/export`}
+            onClick={() =>
+              fireGAEvent({
+                category: "Areas",
+                action: AreaActions.Export
+              })
+            }
           >
             <FormattedMessage id="areas.exportAreas" />
           </Link>
@@ -135,6 +143,20 @@ const Areas: FC<IProps> = props => {
               area={selectedArea}
               numberOfTeams={getNumberOfTeamsInArea(selectedArea.id, areasInUsersTeams)}
               numberOfReports={answersBySelectedArea?.length}
+              onStartInvestigation={() =>
+                fireGAEvent({
+                  category: "Areas",
+                  action: AreaActions.Investigation,
+                  label: AreaLabel.StartedInvestigation
+                })
+              }
+              onManageArea={() =>
+                fireGAEvent({
+                  category: "Areas",
+                  action: AreaActions.Managed,
+                  label: AreaLabel.StartedFromAreas
+                })
+              }
             />
           )}
         </UserAreasMap>
