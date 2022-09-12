@@ -203,7 +203,7 @@ const Areas: FC<IProps> = props => {
                               subtitleValue={{
                                 name:
                                   areasInTeam?.team?.id &&
-                                  teamMembers[areasInTeam?.team?.id]?.find(
+                                  teamMembers?.[areasInTeam?.team?.id]?.find(
                                     member => member.attributes.role === "administrator"
                                   )?.attributes?.name
                               }}

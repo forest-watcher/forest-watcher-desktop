@@ -60,7 +60,7 @@ const AreasView: FC<IProps & RouteComponentProps<TParams>> = ({
 
   const canManage = useMemo(() => {
     // For Each team in the area
-    let hasPermissions = area?.attributes.userId === userId;
+    let hasPermissions = area?.attributes?.userId === userId;
     areaTeams.forEach(team => {
       if (teamMembers[team.data.id] && !hasPermissions) {
         const membersOfTeam = teamMembers[team.data.id];
