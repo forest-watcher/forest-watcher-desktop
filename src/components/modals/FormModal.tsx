@@ -1,4 +1,4 @@
-import { PropsWithChildren, ReactNode, useEffect, useState, memo } from "react";
+import { PropsWithChildren, ReactNode, useEffect, useState } from "react";
 import Modal, { IProps as IModalProps } from "components/ui/Modal/Modal";
 import { Props as IInputProps } from "components/ui/Form/Input";
 import { Props as ISelectProps } from "components/ui/Form/Select";
@@ -12,7 +12,6 @@ import { UseFormProps } from "react-hook-form/dist/types";
 import { FormattedMessage } from "react-intl";
 import FormModalInput from "./FormModalInput";
 import { usePrevious } from "hooks/usePrevious";
-import { off } from "process";
 
 export interface IInputBase<T> {
   formatErrors?: (error: any) => any; // ToDo
