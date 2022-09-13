@@ -8,7 +8,7 @@ import { TErrorResponse } from "constants/api";
 import { useAppDispatch } from "hooks/useRedux";
 import { FormattedMessage, useIntl } from "react-intl";
 import { areaService } from "services/area";
-import { getTeamAreas, getUserTeams } from "modules/gfwTeams";
+import { getUserTeams } from "modules/gfwTeams";
 
 type TParams = TAreaDetailParams & {
   teamId: string;
