@@ -47,7 +47,7 @@ export const polygonStyle = {
   },
   paint: {
     "fill-color": primary500,
-    "fill-opacity": 0.6
+    "fill-opacity": 0.3
   }
 };
 
