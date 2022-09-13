@@ -89,7 +89,13 @@ const Polygon: FC<IProps> = props => {
       )}
       <Source id={id} data={data as GeoJSONSourceOptions["data"]} type="geojson" tolerance={0.00001}>
         {/* @ts-ignore */}
-        <Layer {...polygonStyle} id={id} beforeId={`label-${id}`} />
+        <Layer
+          {...polygonStyle}
+          //@ts-ignore
+          paint={{ ...polygonStyle.paint, "fill-opacity": isSelected ? 0 : polygonStyle.paint["fill-opacity"] }}
+          id={id}
+          beforeId={`label-${id}`}
+        />
         {/* @ts-ignore */}
         <Layer {...layerStyle} id={`${id}-line`} beforeId={`label-${id}`} />
       </Source>

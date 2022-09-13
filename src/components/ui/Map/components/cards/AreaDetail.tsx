@@ -3,11 +3,12 @@ import { FC } from "react";
 import { FormattedMessage, useIntl } from "react-intl";
 import { Link } from "react-router-dom";
 import { TAreasResponse } from "services/area";
+import { TeamResponse } from "services/teams";
 import MapCard, { positions } from "./MapCard";
 
 interface IParams {
   area?: TAreasResponse;
-  numberOfTeams: number;
+  teams: TeamResponse["data"][];
   numberOfReports?: number;
   className?: string;
   position?: positions;
@@ -18,7 +19,7 @@ interface IParams {
 
 const AreaDetailCard: FC<IParams> = ({
   area,
-  numberOfTeams,
+  teams,
   className,
   position = "bottom-right",
   onBack,
@@ -27,6 +28,7 @@ const AreaDetailCard: FC<IParams> = ({
   onManageArea
 }) => {
   const intl = useIntl();
+
   return (
     <MapCard
       title={intl.formatMessage({ id: "areas.card.title" }, { name: area?.attributes.name })}
@@ -61,9 +63,14 @@ const AreaDetailCard: FC<IParams> = ({
           <li>
             <FormattedMessage id="areas.card.reports" values={{ num: numberOfReports }} />
           </li>
-          <li>
-            <FormattedMessage id="areas.card.teams" values={{ num: numberOfTeams }} />
-          </li>
+          {teams.length > 0 && (
+            <li>
+              <FormattedMessage
+                id="areas.card.teams"
+                values={{ num: teams.map(team => team?.attributes?.name).join(", ") }}
+              />
+            </li>
+          )}
         </ul>
       )}
     </MapCard>

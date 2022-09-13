@@ -1,4 +1,4 @@
-import DataTable, { Direction, IProps as IDataTableProps } from "./DataTable";
+import DataTable, { IProps as IDataTableProps } from "./DataTable";
 import { ComponentMeta, ComponentStory } from "@storybook/react";
 import { FC } from "react";
 import { sortByDateString, sortByString } from "helpers/table";

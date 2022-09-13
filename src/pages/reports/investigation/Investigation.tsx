@@ -8,7 +8,7 @@ import { TParams } from "./types";
 import { TPropsFromRedux } from "./InvestigationContainer";
 import { BASEMAPS } from "constants/mapbox";
 import AreaDetailCard from "components/ui/Map/components/cards/AreaDetail";
-import { getNumberOfTeamsInArea } from "helpers/areas";
+import { getAreaTeams } from "helpers/areas";
 import { TAreasInTeam } from "services/area";
 import { AllGeoJSON } from "@turf/turf";
 import useZoomToGeojson from "hooks/useZoomToArea";
@@ -40,13 +40,12 @@ const AreaCardWrapper: FC<IAreaCardProps> = ({ areasInUsersTeams, numberOfReport
   const selectedAreaGeoData = useMemo(() => area?.attributes.geostore.geojson, [area]);
   //@ts-ignore
   useZoomToGeojson(selectedAreaGeoData as AllGeoJSON);
-
   return (
     area && (
       <AreaDetailCard
         className="c-map-control-panel"
         area={area}
-        numberOfTeams={getNumberOfTeamsInArea(areaId, areasInUsersTeams)}
+        teams={getAreaTeams(area.id, areasInUsersTeams)}
         numberOfReports={numberOfReports}
         position="top-left"
         onBack={() =>
