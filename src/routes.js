@@ -116,6 +116,13 @@ const Routes = props => {
             path={`${match.url}teams/:teamId/remove/:memberId`}
             render={args => <TeamDetail isRemovingTeamMember {...args} />}
           />
+
+          <Route
+            exact
+            path={`${match.url}teams/:teamId/removeArea/:areaId`}
+            render={args => <TeamDetail isDeletingTeamArea {...args} />}
+          />
+
           <Route exact path={`${match.url}settings`} component={Settings} />
           <Route path="*">
             <Redirect to="/areas" />

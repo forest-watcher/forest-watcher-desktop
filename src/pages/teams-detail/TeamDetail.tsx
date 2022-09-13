@@ -5,7 +5,13 @@ import { TPropsFromRedux } from "./TeamDetailContainer";
 import Hero from "components/layouts/Hero/Hero";
 import Article from "components/layouts/Article";
 import DataTable from "components/ui/DataTable/DataTable";
-import type { TTeamDetailDataTable, TTeamsDetailDataTableColumns } from "./types";
+import type {
+  TAreaDataTable,
+  TAreaDataTableAction,
+  TAreaDataTableColumns,
+  TTeamDetailDataTable,
+  TTeamsDetailDataTableColumns
+} from "./types";
 import { FormattedMessage, useIntl } from "react-intl";
 import PlusIcon from "assets/images/icons/PlusWhite.svg";
 import useGetUserId from "hooks/useGetUserId";
@@ -18,6 +24,7 @@ import RemoveTeamMember from "./actions/RemoveTeamMember";
 import { TTeamsDetailDataTableAction } from "./types";
 import { TGFWTeamsState } from "modules/gfwTeams";
 import { sortByString } from "helpers/table";
+import RemoveAreaFromTeam from "pages/area-view/actions/RemoveAreaFromTeam";
 
 export type TParams = {
   teamId: string;
@@ -29,6 +36,7 @@ export interface IOwnProps extends RouteComponentProps<TParams> {
   isRemovingTeamMember?: boolean;
   isEditingTeam?: boolean;
   isDeletingTeam?: boolean;
+  isDeletingTeamArea?: boolean;
 }
 
 type IProps = IOwnProps & TPropsFromRedux;
@@ -43,10 +51,16 @@ const columnOrderWithStatus: TTeamsDetailDataTableColumns[] = [
   { key: "status", name: "teams.details.table.header.status", sortCompareFn: sortByString }
 ];
 
+const areaColumnOrder: TAreaDataTableColumns[] = [
+  { key: "name", name: "teams.details.table.header.name", sortCompareFn: sortByString },
+  { key: "templates", name: "teams.details.table.header.templates", sortCompareFn: sortByString }
+];
+
 const TeamDetail: FC<IProps> = props => {
   const {
     team,
     teamMembers,
+    teamAreas,
     getUserTeams,
     getTeamMembers,
     userIsManager,
@@ -57,6 +71,7 @@ const TeamDetail: FC<IProps> = props => {
     isRemovingTeamMember = false,
     isEditingTeam = false,
     isDeletingTeam = false,
+    isDeletingTeamArea = false,
     match
   } = props;
   const { teamId } = match.params;
@@ -127,6 +142,24 @@ const TeamDetail: FC<IProps> = props => {
     [intl]
   );
 
+  /**
+   * Map each area from the API to translated data table rows
+   * @param areas members from the API
+   */
+  const mapAreasToRows = useMemo(
+    () => (teamAreas: any) =>
+      teamAreas.map((area: any) => {
+        return {
+          id: area.id,
+          name: area.attributes.name,
+          templates: area.attributes.reportTemplate
+            .map((template: any) => template.name[template.defaultLanguage])
+            .join(", ")
+        };
+      }),
+    []
+  );
+
   const makeManager: TTeamsDetailDataTableAction = {
     name: "teams.details.table.actions.manager",
     value: "makeManager",
@@ -155,6 +188,12 @@ const TeamDetail: FC<IProps> = props => {
     name: "teams.details.table.actions.remove",
     value: "removeFromTeam",
     href: memberRow => `${match.url}/remove/${memberRow.id}`
+  };
+
+  const removeArea: TAreaDataTableAction = {
+    name: "areas.details.teams.removeArea.title",
+    value: "remove",
+    href: memberRow => `${match.url}/removeArea/${memberRow.id}`
   };
 
   if (!team) {
@@ -222,11 +261,28 @@ const TeamDetail: FC<IProps> = props => {
         </Article>
       </div>
 
+      <div className="l-content c-teams-details">
+        <Article
+          className="c-teams-details__heading"
+          title="teams.details.areas"
+          titleValues={{ num: teamAreas.length }}
+          size="small"
+        >
+          <DataTable<TAreaDataTable>
+            className="u-w-100"
+            rows={mapAreasToRows(teamAreas)}
+            columnOrder={areaColumnOrder}
+            rowActions={[removeArea]}
+          />
+        </Article>
+      </div>
+
       <AddTeamMember isOpen={isAddingTeamMember} />
       <EditTeamMember isOpen={isEditingTeamMember} />
       <RemoveTeamMember isOpen={isRemovingTeamMember} />
       <EditTeam isOpen={isEditingTeam} currentName={team.attributes.name} />
       <DeleteTeam isOpen={isDeletingTeam} teamId={teamId} />
+      <RemoveAreaFromTeam isOpen={isDeletingTeamArea} />
     </>
   );
 };
