@@ -9,6 +9,16 @@ export type TTeamDetailDataTable = {
   userId?: string;
 };
 
+export type TAreaDataTable = {
+  id: string;
+  name: string;
+  templates: string;
+};
+
 export type TTeamsDetailDataTableAction = IRowAction<TTeamDetailDataTable>;
 
 export type TTeamsDetailDataTableColumns = IColumnOrder<TTeamDetailDataTable>;
+
+export type TAreaDataTableColumns = IColumnOrder<TAreaDataTable>;
+
+export type TAreaDataTableAction = IRowAction<TAreaDataTable>;

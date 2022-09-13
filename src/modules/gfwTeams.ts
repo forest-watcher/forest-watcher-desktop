@@ -80,7 +80,7 @@ export default function reducer(state = initialState, action: TReducerActions) {
 }
 
 // Actions
-export const getUserTeams = (userId: string) => (dispatch: AppDispatch, getState: () => RootState) => {
+export const getUserTeams = (userId?: string) => (dispatch: AppDispatch, getState: () => RootState) => {
   teamService.token = getState().user.token;
 
   dispatch({
@@ -88,7 +88,7 @@ export const getUserTeams = (userId: string) => (dispatch: AppDispatch, getState
   });
 
   teamService
-    .getUserTeams(userId)
+    .getUserTeams(userId || getState().user.data.id)
     .then(({ data }) =>
       dispatch({
         type: GET_USER_TEAMS,
