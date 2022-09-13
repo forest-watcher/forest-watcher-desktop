@@ -8,6 +8,8 @@ import { useIntl } from "react-intl";
 import yup from "configureYup";
 import { yupResolver } from "@hookform/resolvers/yup/dist/yup";
 import useUrlQuery from "hooks/useUrlQuery";
+import { fireGAEvent } from "helpers/analytics";
+import { TeamActions, TeamLabels } from "types/analytics";
 
 type TCreateTeamForm = {
   name: string;
@@ -40,6 +42,11 @@ const CreateTeamModal: FC<IProps> = props => {
       const { data: newTeam } = await teamService.createTeam(data);
       history.push(backTo || `/teams/${newTeam.id}`);
       toastr.success(intl.formatMessage({ id: "teams.create.success" }), "");
+      fireGAEvent({
+        category: "Teams",
+        action: TeamActions.teamCreation,
+        label: TeamLabels.TeamCreationComplete
+      });
     } catch (e) {
       toastr.error(intl.formatMessage({ id: "teams.create.error" }), "");
       console.error(e);

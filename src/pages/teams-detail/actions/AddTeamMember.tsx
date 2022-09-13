@@ -11,6 +11,8 @@ import { toastr } from "react-redux-toastr";
 import { UnpackNestedValue } from "react-hook-form";
 import { useAppDispatch } from "hooks/useRedux";
 import { TErrorResponse } from "constants/api";
+import { fireGAEvent } from "helpers/analytics";
+import { TeamActions, TeamLabels } from "types/analytics";
 
 type TParams = TTeamDetailParams & {
   memberRole: "manager" | "monitor";
@@ -62,6 +64,11 @@ const AddTeamMemberModal: FC<IProps> = props => {
       // Refetch the Team members
       dispatch(getTeamMembers(teamId));
       toastr.success(intl.formatMessage({ id: "teams.details.add.member.success" }), "");
+      fireGAEvent({
+        category: "Teams",
+        action: TeamActions.teamManagement,
+        label: TeamLabels.AddedMonitor
+      });
       onClose();
     } catch (e: any) {
       const error = JSON.parse(e.message) as TErrorResponse;

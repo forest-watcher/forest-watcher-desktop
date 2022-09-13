@@ -6,6 +6,8 @@ import { toastr } from "react-redux-toastr";
 import Loader from "components/ui/Loader";
 import { FormattedMessage, useIntl } from "react-intl";
 import { TErrorResponse } from "../../../constants/api";
+import { fireGAEvent } from "helpers/analytics";
+import { TeamActions, TeamLabels } from "types/analytics";
 
 interface IProps {
   isOpen: boolean;
@@ -28,6 +30,11 @@ const DeleteTeam: FC<IProps> = props => {
       await teamService.deleteTeam(teamId);
       history.push("/teams");
       toastr.success(intl.formatMessage({ id: "teams.delete.success" }), "");
+      fireGAEvent({
+        category: "Teams",
+        action: TeamActions.teamManagement,
+        label: TeamLabels.DeletedTeam
+      });
     } catch (e: any) {
       const error = JSON.parse(e.message) as TErrorResponse;
       toastr.error(

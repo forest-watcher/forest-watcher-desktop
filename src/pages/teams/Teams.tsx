@@ -12,6 +12,8 @@ import useGetUserId from "hooks/useGetUserId";
 import CreateTeam from "./actions/CreateTeam";
 import PlusIcon from "assets/images/icons/PlusWhite.svg";
 import EmptyStateIcon from "assets/images/icons/EmptyTeams.svg";
+import { fireGAEvent } from "helpers/analytics";
+import { TeamActions, TeamLabels } from "types/analytics";
 
 interface IProps extends TPropsFromRedux, RouteComponentProps {
   isCreatingTeam: boolean;
@@ -88,7 +90,16 @@ const Teams: FC<IProps> = props => {
               title="teams.managedByMe"
               titleValues={{ num: managedTeams.length.toString() }}
               actions={
-                <Link to={`${match.path}/create`}>
+                <Link
+                  to={`${match.path}/create`}
+                  onClick={() =>
+                    fireGAEvent({
+                      category: "Teams",
+                      action: TeamActions.teamCreation,
+                      label: TeamLabels.TeamCreationStart
+                    })
+                  }
+                >
                   <Button variant="primary">
                     <img src={PlusIcon} alt="" role="presentation" className="c-button__inline-icon" />
                     <FormattedMessage id="teams.create" />

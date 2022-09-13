@@ -12,6 +12,8 @@ interface IParams {
   className?: string;
   position?: positions;
   onBack?: () => void;
+  onStartInvestigation?: () => void;
+  onManageArea?: () => void;
 }
 
 const AreaDetailCard: FC<IParams> = ({
@@ -20,7 +22,9 @@ const AreaDetailCard: FC<IParams> = ({
   className,
   position = "bottom-right",
   onBack,
-  numberOfReports
+  numberOfReports,
+  onStartInvestigation,
+  onManageArea
 }) => {
   const intl = useIntl();
   return (
@@ -31,10 +35,14 @@ const AreaDetailCard: FC<IParams> = ({
       footer={
         area && (
           <>
-            <Link to={`/reporting/investigation/${area.id}/start`} className="c-button c-button--primary">
+            <Link
+              to={`/reporting/investigation/${area.id}/start`}
+              className="c-button c-button--primary"
+              onClick={onStartInvestigation}
+            >
               <FormattedMessage id="investigation.start" />
             </Link>
-            <Link to={`/areas/${area.id}`} className="c-button c-button--secondary">
+            <Link to={`/areas/${area.id}`} className="c-button c-button--secondary" onClick={onManageArea}>
               <FormattedMessage id="areas.manageArea" />
             </Link>
           </>

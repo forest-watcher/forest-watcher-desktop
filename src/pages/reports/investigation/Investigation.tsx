@@ -18,6 +18,8 @@ import useUrlQuery from "hooks/useUrlQuery";
 import useFindArea from "hooks/useFindArea";
 import { setupMapImages } from "helpers/map";
 import { Map as MapInstance, MapboxEvent } from "mapbox-gl";
+import { fireGAEvent } from "helpers/analytics";
+import { MonitoringActions, MonitoringLabel } from "types/analytics";
 
 interface IProps extends RouteComponentProps, TPropsFromRedux {}
 
@@ -53,6 +55,20 @@ const AreaCardWrapper: FC<IAreaCardProps> = ({ areasInUsersTeams, numberOfReport
               scrollToTeamId ? `&scrollToTeamId=${scrollToTeamId}` : ""
             }`
           )
+        }
+        onStartInvestigation={() =>
+          fireGAEvent({
+            category: "Monitoring",
+            action: MonitoringActions.Investigation,
+            label: MonitoringLabel.StartedInvestigation
+          })
+        }
+        onManageArea={() =>
+          fireGAEvent({
+            category: "Monitoring",
+            action: MonitoringActions.ManagedArea,
+            label: MonitoringLabel.StartedFromMonitoring
+          })
         }
       />
     )
