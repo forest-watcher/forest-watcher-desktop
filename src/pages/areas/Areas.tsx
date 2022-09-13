@@ -12,7 +12,7 @@ import AreaCard from "components/area-card/AreaCard";
 import UserAreasMap from "components/user-areas-map/UserAreasMap";
 import AreaDetailCard from "components/ui/Map/components/cards/AreaDetail";
 import AreaIcon from "assets/images/icons/EmptyAreas.svg";
-import { getNumberOfTeamsInArea } from "helpers/areas";
+import { getAreaTeams } from "helpers/areas";
 import { Link, Route, Switch, useHistory, useRouteMatch } from "react-router-dom";
 import ExportModal, { TExportForm } from "components/modals/exports/ExportModal";
 import { UnpackNestedValue } from "react-hook-form";
@@ -133,7 +133,7 @@ const Areas: FC<IProps> = props => {
           {selectedArea && (
             <AreaDetailCard
               area={selectedArea}
-              numberOfTeams={getNumberOfTeamsInArea(selectedArea.id, areasInUsersTeams)}
+              teams={getAreaTeams(selectedArea.id, areasInUsersTeams)}
               numberOfReports={answersBySelectedArea?.length}
             />
           )}

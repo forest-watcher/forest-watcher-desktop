@@ -1,6 +1,7 @@
 import { AREAS } from "../constants/map";
 import { RootState } from "store";
 import { TAreasInTeam, TAreasResponse } from "services/area";
+import { TeamResponse } from "services/teams";
 
 const geojsonArea = require("@mapbox/geojson-area");
 
@@ -37,4 +38,17 @@ export const getNumberOfTeamsInArea = (areaId: string, areasInUsersTeams: TAreas
     })
   );
   return count;
+};
+
+export const getAreaTeams = (areaId: string, areasInUsersTeams: TAreasInTeam[]) => {
+  const teams: TeamResponse["data"][] = [];
+  areasInUsersTeams.forEach(team =>
+    team.areas.forEach(area => {
+      if (area.data.id === areaId && !!team.team) {
+        //@ts-ignore
+        teams.push(team.team);
+      }
+    })
+  );
+  return teams;
 };
