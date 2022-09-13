@@ -60,9 +60,11 @@ const AreasView: FC<IProps & RouteComponentProps<TParams>> = ({
 
   const area = useFindArea(areaId);
 
+  const isMyArea = area?.attributes?.userId === userId;
+
   const canManage = useMemo(() => {
     // For Each team in the area
-    let hasPermissions = area?.attributes?.userId === userId;
+    let hasPermissions = isMyArea;
     areaTeams.forEach(team => {
       if (teamMembers[team.data.id] && !hasPermissions) {
         const membersOfTeam = teamMembers[team.data.id];
@@ -76,7 +78,7 @@ const AreasView: FC<IProps & RouteComponentProps<TParams>> = ({
     });
 
     return hasPermissions;
-  }, [area?.attributes.userId, areaTeams, teamMembers, userId]);
+  }, [areaTeams, isMyArea, teamMembers, userId]);
 
   const geojson = useMemo(() => area?.attributes.geostore.geojson, [area]);
 
@@ -155,7 +157,7 @@ const AreasView: FC<IProps & RouteComponentProps<TParams>> = ({
           actions={
             area ? (
               <>
-                {canManage && (
+                {isMyArea && (
                   <Link to={`${url}/edit`} className="c-button c-button--primary">
                     <FormattedMessage id="common.edit" />
                   </Link>
