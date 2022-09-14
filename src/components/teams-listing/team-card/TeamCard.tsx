@@ -14,7 +14,6 @@ export type IProps = TPropsFromRedux & IOwnProps;
 
 const TeamCard: FC<IProps> = props => {
   const { team, getTeamMembers, teamMembers, getTeamAreas, teamAreas, areasDetail, canManage = false } = props;
-
   useEffect(() => {
     getTeamMembers();
     getTeamAreas();

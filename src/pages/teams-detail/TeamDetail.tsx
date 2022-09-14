@@ -61,6 +61,7 @@ const TeamDetail: FC<IProps> = props => {
     team,
     teamMembers,
     teamAreas,
+    getTeamAreas,
     getUserTeams,
     getTeamMembers,
     userIsManager,
@@ -95,9 +96,10 @@ const TeamDetail: FC<IProps> = props => {
     if (!team) {
       getUserTeams(userId);
       getTeamMembers(teamId);
+      getTeamAreas(teamId);
       setFetched(true);
     }
-  }, [getTeamMembers, teamId, userId, team, getUserTeams]);
+  }, [getTeamMembers, teamId, userId, team, getUserTeams, getTeamAreas]);
 
   // ToDo: Create a util for this
   const [manages, monitors] = useMemo(
@@ -151,8 +153,8 @@ const TeamDetail: FC<IProps> = props => {
       teamAreas.map((area: any) => {
         return {
           id: area.id,
-          name: area.attributes.name,
-          templates: area.attributes.reportTemplate
+          name: area.data.attributes.name,
+          templates: area.data.attributes.reportTemplate
             .map((template: any) => template.name[template.defaultLanguage])
             .join(", ")
         };
