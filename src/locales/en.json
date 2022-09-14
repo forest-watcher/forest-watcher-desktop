@@ -492,6 +492,7 @@
   "export.link.success": "Copied shareable link to clipboard",
   "export.subject": "Global Forest Watch Export",
   "export.error": "Failed to export, please try later",
+  "export.emailTo": "Send email to",
   "investigation.start": "Start Investigation",
   "filters.title": "Filters",
   "filters.extra": "Apply more filters",

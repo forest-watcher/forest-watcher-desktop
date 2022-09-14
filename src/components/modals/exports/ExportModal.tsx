@@ -5,7 +5,7 @@ import { yupResolver } from "@hookform/resolvers/yup/dist/yup";
 import { IProps as IModalProps } from "components/modals/FormModal";
 import { useIntl } from "react-intl";
 import { UnpackNestedValue } from "react-hook-form";
-import { download, openMailClient } from "helpers/exports";
+import { download } from "helpers/exports";
 import LinkPreview from "components/ui/LinkPreview/LinkPreview";
 import { bitlyService } from "services/bitly";
 
@@ -13,6 +13,7 @@ export type TExportForm = {
   fileType: string;
   fields: string[];
   downloadMethod: "download" | "email" | "link";
+  email?: string;
 };
 
 interface IProps {
@@ -36,6 +37,16 @@ const exportSchema = yup
     fileType: yup.string().required(),
     fields: yup.array(),
     downloadMethod: yup.string().required()
+  })
+  .required();
+
+const exportSchemaWithEmail = yup
+  .object()
+  .shape({
+    fileType: yup.string().required(),
+    fields: yup.array(),
+    downloadMethod: yup.string().required(),
+    email: yup.string().email().required()
   })
   .required();
 
@@ -101,8 +112,23 @@ const ExportModal: FC<IProps> = ({ onClose, onSave, isOpen, fileTypes, fields, d
       });
     }
 
+    if (downloadMethod === "email") {
+      toReturn.push({
+        id: "email",
+        htmlInputProps: {
+          label: intl.formatMessage({ id: "export.emailTo" }),
+          type: "email",
+          placeholder: "email placeholder"
+        },
+        registerProps: {
+          name: "email"
+        },
+        formatErrors: errors => errors.email
+      });
+    }
+
     return toReturn;
-  }, [fields, fileTypes, intl]);
+  }, [fields, fileTypes, intl, downloadMethod]);
 
   const handleSave = async (resp: UnpackNestedValue<TExportForm>) => {
     if (resp.downloadMethod === "link") {
@@ -110,16 +136,8 @@ const ExportModal: FC<IProps> = ({ onClose, onSave, isOpen, fileTypes, fields, d
     }
 
     const saveResp = await onSave(resp);
-    if (saveResp) {
-      // handle action, e.g. download
-      switch (resp.downloadMethod) {
-        case "download":
-          download(saveResp);
-          break;
-        case "email":
-          openMailClient(intl.formatMessage({ id: "export.subject" }), saveResp);
-          break;
-      }
+    if (saveResp && resp.downloadMethod === "download") {
+      download(saveResp);
     }
     onClose?.();
   };
@@ -142,7 +160,7 @@ const ExportModal: FC<IProps> = ({ onClose, onSave, isOpen, fileTypes, fields, d
       submitBtnName="common.done"
       useFormProps={{
         mode: downloadMethod === "link" ? "onChange" : "onSubmit",
-        resolver: yupResolver(exportSchema),
+        resolver: yupResolver(downloadMethod === "email" ? exportSchemaWithEmail : exportSchema),
         defaultValues: { downloadMethod: "download", fields: defaultSelectedFields || [] }
       }}
       inputs={inputs}

@@ -68,7 +68,7 @@ const Areas: FC<IProps> = props => {
     async (values: UnpackNestedValue<TExportForm>) => {
       // Do request
       try {
-        const { data } = await exportService.exportAllAreas(values.fileType);
+        const { data } = await exportService.exportAllAreas(values.fileType, values.email);
         return data;
       } catch (err) {
         // Do toast
