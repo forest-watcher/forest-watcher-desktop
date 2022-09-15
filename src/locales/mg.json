@@ -262,7 +262,7 @@
   "teams.details.back": "Back to Teams",
   "teams.details.managers": "Manager{num, plural, one { (#)} other {s (#)}}",
   "teams.details.monitors": "Monitor{num, plural, one { (#)} other {s (#)}}",
-  "teams.details.areas": "Areas{num, plural, one { (#)} other {s (#)}}",
+  "teams.details.areas": "Area{num, plural, one { (#)} other {s (#)}}",
   "teams.details.add.managers": "Add Manager",
   "teams.details.add.monitors": "Add Monitor",
   "teams.details.add.member.success": "Member invited to team",
