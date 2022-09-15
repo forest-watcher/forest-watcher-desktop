@@ -20,7 +20,16 @@ interface IProps extends TPropsFromRedux, RouteComponentProps {
 }
 
 const Teams: FC<IProps> = props => {
-  const { teams, myInvites, getUserTeams, getMyTeamInvites, numOfActiveFetches, isCreatingTeam = false, match } = props;
+  const {
+    teams,
+    myInvites,
+    getUserTeams,
+    getMyTeamInvites,
+    numOfActiveFetches,
+    isCreatingTeam = false,
+    match,
+    isLoading
+  } = props;
 
   const intl = useIntl();
   const userId = useGetUserId();
@@ -51,7 +60,7 @@ const Teams: FC<IProps> = props => {
   return (
     <div>
       <Hero title="teams.name" />
-      <Loader isLoading={numOfActiveFetches > 0} />
+      <Loader isLoading={isLoading} />
       {myInvites.length > 0 && (
         <div className="l-team-invitations l-content--neutral-400">
           <div className="row column">
