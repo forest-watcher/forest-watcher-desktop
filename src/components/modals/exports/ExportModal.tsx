@@ -118,7 +118,7 @@ const ExportModal: FC<IProps> = ({ onClose, onSave, isOpen, fileTypes, fields, d
         htmlInputProps: {
           label: intl.formatMessage({ id: "export.emailTo" }),
           type: "email",
-          placeholder: "email placeholder"
+          placeholder: ""
         },
         registerProps: {
           name: "email"
