@@ -93,9 +93,10 @@ const Reports: FC<IProps> = props => {
       let data;
       try {
         if (selectedReports.length === rows.length || selectedReports.length === 0) {
-          data = (await exportService.exportAllReports(values.fileType, values.fields))?.data;
+          data = (await exportService.exportAllReports(values.fileType, values.fields, values.email))?.data;
         } else {
-          data = (await exportService.exportSomeReports(values.fileType, values.fields, selectedReports))?.data;
+          data = (await exportService.exportSomeReports(values.fileType, values.fields, selectedReports, values.email))
+            ?.data;
         }
 
         fireGAEvent({

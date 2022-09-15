@@ -26,11 +26,12 @@ function delay(timeInMs: number) {
 }
 
 export class ExportSerive extends BaseService {
-  async exportAllAreas(fileType: string): Promise<TAreaResponse> {
+  async exportAllAreas(fileType: string, email?: string): Promise<TAreaResponse> {
     this.token = store.getState().user.token;
 
     const body = {
-      fileType
+      fileType,
+      email
     };
 
     const resp: TExportAllAreasResponse = await this.fetchJSON(`/areas/exportAll`, {
@@ -48,12 +49,13 @@ export class ExportSerive extends BaseService {
     throw Error("Failed to get export");
   }
 
-  async exportAllReports(fileType: string, fields: string[]): Promise<TReportResponse> {
+  async exportAllReports(fileType: string, fields: string[], email?: string): Promise<TReportResponse> {
     this.token = store.getState().user.token;
 
     const body = {
       fileType,
       fields,
+      email,
       language: "en"
     };
 
@@ -72,12 +74,18 @@ export class ExportSerive extends BaseService {
     throw Error("Failed to get export");
   }
 
-  async exportSomeReports(fileType: string, fields: string[], reports: TReportsDataTable[]): Promise<TReportResponse> {
+  async exportSomeReports(
+    fileType: string,
+    fields: string[],
+    reports: TReportsDataTable[],
+    email?: string
+  ): Promise<TReportResponse> {
     this.token = store.getState().user.token;
 
     const body = {
       fileType,
       fields,
+      email,
       language: "en",
       ids: reports.map(report => ({ templateid: report.templateId, reportid: report.id }))
     };
