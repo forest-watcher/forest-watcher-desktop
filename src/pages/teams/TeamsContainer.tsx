@@ -3,10 +3,11 @@ import { RootState } from "store";
 import Teams from "./Teams";
 import { getUserTeams, getMyTeamInvites } from "modules/gfwTeams";
 
-const mapStateToProps = ({ gfwTeams }: RootState) => ({
+const mapStateToProps = ({ gfwTeams, areas }: RootState) => ({
   teams: gfwTeams.data,
   myInvites: gfwTeams.myInvites,
-  numOfActiveFetches: gfwTeams.numOfActiveFetches
+  numOfActiveFetches: gfwTeams.numOfActiveFetches,
+  isLoading: areas.loadingAreasInUsers || gfwTeams.numOfActiveFetches > 0
 });
 
 const mapDispatchToProps = {
