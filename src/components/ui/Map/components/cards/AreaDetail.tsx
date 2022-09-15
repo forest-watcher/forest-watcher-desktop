@@ -64,7 +64,7 @@ const AreaDetailCard: FC<IParams> = ({
             <FormattedMessage id="areas.card.reports" values={{ num: numberOfReports }} />
           </li>
           {teams.length > 0 && (
-            <li>
+            <li className="u-text-break-word">
               <FormattedMessage
                 id="areas.card.teams"
                 values={{ num: teams.map(team => team?.attributes?.name).join(", ") }}
