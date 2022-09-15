@@ -211,7 +211,23 @@ const Reports: FC<IProps> = props => {
             onClose={() => history.goBack()}
             isOpen
             fileTypes={REPORT_EXPORT_FILE_TYPES}
-            defaultSelectedFields={["createdAt", "fullName", "reportName", "areaOfInterestName", "clickedPosition"]}
+            defaultSelectedFields={[
+              "createdAt",
+              "fullName",
+              "reportName",
+              "areaOfInterestName",
+              "clickedPosition",
+              "report",
+              "reportName",
+              "templateName",
+              "areaOfInterest",
+              "language",
+              "userPosition",
+              "startDate",
+              "endDate",
+              "layer",
+              "user"
+            ]}
             fields={[
               {
                 label: intl.formatMessage({ id: "reports.reports.table.header.createdAt" }),
@@ -232,6 +248,46 @@ const Reports: FC<IProps> = props => {
               {
                 label: intl.formatMessage({ id: "reports.reports.table.header.coordinates" }),
                 value: "clickedPosition"
+              },
+              {
+                label: intl.formatMessage({ id: "reports.reports.table.header.report" }),
+                value: "report"
+              },
+              {
+                label: intl.formatMessage({ id: "reports.reports.table.header.reportName" }),
+                value: "reportName"
+              },
+              {
+                label: intl.formatMessage({ id: "reports.reports.table.header.templateName" }),
+                value: "templateName"
+              },
+              {
+                label: intl.formatMessage({ id: "reports.reports.table.header.areaOfInterest" }),
+                value: "areaOfInterest"
+              },
+              {
+                label: intl.formatMessage({ id: "reports.reports.table.header.language" }),
+                value: "language"
+              },
+              {
+                label: intl.formatMessage({ id: "reports.reports.table.header.userPosition" }),
+                value: "userPosition"
+              },
+              {
+                label: intl.formatMessage({ id: "reports.reports.table.header.startDate" }),
+                value: "startDate"
+              },
+              {
+                label: intl.formatMessage({ id: "reports.reports.table.header.endDate" }),
+                value: "endDate"
+              },
+              {
+                label: intl.formatMessage({ id: "reports.reports.table.header.layer" }),
+                value: "layer"
+              },
+              {
+                label: intl.formatMessage({ id: "reports.reports.table.header.user" }),
+                value: "user"
               }
             ]}
           />
