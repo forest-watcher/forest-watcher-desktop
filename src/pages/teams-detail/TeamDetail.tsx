@@ -25,6 +25,7 @@ import { TTeamsDetailDataTableAction } from "./types";
 import { TGFWTeamsState } from "modules/gfwTeams";
 import { sortByString } from "helpers/table";
 import RemoveAreaFromTeam from "pages/area-view/actions/RemoveAreaFromTeam";
+import { TAreasInTeam } from "services/area";
 
 export type TParams = {
   teamId: string;
@@ -149,13 +150,15 @@ const TeamDetail: FC<IProps> = props => {
    * @param areas members from the API
    */
   const mapAreasToRows = useMemo(
-    () => (teamAreas: any) =>
-      teamAreas.map((area: any) => {
+    () => (teamAreas: TAreasInTeam["areas"]) =>
+      teamAreas.map(area => {
         return {
-          id: area.id,
+          id: area.data.id,
           name: area.data.attributes.name,
           templates: area.data.attributes.reportTemplate
-            .map((template: any) => template.name[template.defaultLanguage])
+            //@ts-ignore
+            .map(template => template.name[template.defaultLanguage] || "")
+            .filter(name => !!name)
             .join(", ")
         };
       }),
