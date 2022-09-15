@@ -136,7 +136,7 @@ const AreasView: FC<IProps & RouteComponentProps<TParams>> = ({
       // Do request
       if (area) {
         try {
-          const { data } = await exportService.exportArea(area.id, values.fileType);
+          const { data } = await exportService.exportArea(area.id, values.fileType, values.email);
           return data;
         } catch (err) {
           // Do toast

@@ -125,11 +125,12 @@ export class ExportSerive extends BaseService {
     throw Error("Failed to get export");
   }
 
-  async exportArea(id: string, fileType: string): Promise<TAreaResponse> {
+  async exportArea(id: string, fileType: string, email?: string): Promise<TAreaResponse> {
     this.token = store.getState().user.token;
 
     const body = {
-      fileType
+      fileType,
+      email
     };
 
     const resp: TExportOneAreaResponse = await this.fetchJSON(`/areas/exportOne/${id}`, {
