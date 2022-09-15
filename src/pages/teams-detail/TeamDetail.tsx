@@ -68,6 +68,7 @@ const TeamDetail: FC<IProps> = props => {
     userIsManager,
     userIsAdmin,
     numOfActiveFetches,
+    isLoading,
     isAddingTeamMember = false,
     isEditingTeamMember = false,
     isRemovingTeamMember = false,
@@ -207,7 +208,7 @@ const TeamDetail: FC<IProps> = props => {
 
   return (
     <>
-      <Loader isLoading={numOfActiveFetches > 0} />
+      <Loader isLoading={isLoading} />
       <Hero
         title="teams.details.name"
         titleValues={{ name: team.attributes.name }}

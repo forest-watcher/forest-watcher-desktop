@@ -16,7 +16,8 @@ const mapStateToProps = ({ gfwTeams, user, areas }: RootState, ownProps: IOwnPro
       areas.areasInUsersTeams.find(areasAndTeam => areasAndTeam.team?.id === ownProps.match.params.teamId)?.areas || [],
     userIsAdmin: userMember?.attributes.role === "administrator",
     userIsManager: userMember?.attributes.role === "administrator" || userMember?.attributes.role === "manager",
-    numOfActiveFetches: gfwTeams.numOfActiveFetches
+    numOfActiveFetches: gfwTeams.numOfActiveFetches,
+    isLoading: gfwTeams.numOfActiveFetches > 0 || areas.loadingAreasInUsers
   };
 };
 

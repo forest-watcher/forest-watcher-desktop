@@ -8,7 +8,7 @@ import { TErrorResponse } from "constants/api";
 import { useAppDispatch } from "hooks/useRedux";
 import { FormattedMessage, useIntl } from "react-intl";
 import { areaService } from "services/area";
-import { getUserTeams } from "modules/gfwTeams";
+import { getAreasInUsersTeams } from "modules/areas";
 
 type TParams = TAreaDetailParams & {
   teamId: string;
@@ -33,7 +33,7 @@ const RemoveAreaFromTeam: FC<IProps> = props => {
     setIsRemoving(true);
     try {
       await areaService.unassignTeamFromArea(areaId, teamId);
-      dispatch(getUserTeams());
+      dispatch(getAreasInUsersTeams());
       onClose();
       toastr.success(intl.formatMessage({ id: "areas.details.teams.remove.success" }), "");
     } catch (e: any) {
