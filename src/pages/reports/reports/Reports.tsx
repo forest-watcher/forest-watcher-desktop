@@ -159,7 +159,7 @@ const Reports: FC<IProps> = props => {
                   columnOrder={[
                     {
                       key: "createdAt",
-                      name: "reports.reports.table.header.createdAt",
+                      name: "reports.reports.table.header.createDate",
                       rowLabel: (row, value) => {
                         return !Array.isArray(value)
                           ? intl.formatDate(value, { day: "2-digit", month: "2-digit", year: "2-digit" })
