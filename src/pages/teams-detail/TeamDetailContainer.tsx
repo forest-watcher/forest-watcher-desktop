@@ -22,8 +22,8 @@ const mapStateToProps = ({ gfwTeams, user, areas }: RootState, ownProps: IOwnPro
 };
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<RootState, null, any>, ownProps: IOwnProps) => ({
-  getUserTeams,
-  getTeamMembers,
+  getUserTeams: (userId: string) => dispatch(getUserTeams(userId)),
+  getTeamMembers: (teamId: string) => dispatch(getTeamMembers(teamId)),
   getTeamAreas: (teamId: string) => dispatch(getTeamAreas(teamId))
 });
 

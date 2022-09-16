@@ -100,7 +100,7 @@ const Teams: FC<IProps> = props => {
               titleValues={{ num: managedTeams.length.toString() }}
               actions={
                 <Link
-                  to={`${match.path}/create?backTo=/teams`}
+                  to={`${match.path}/create`}
                   onClick={() =>
                     fireGAEvent({
                       category: "Teams",
