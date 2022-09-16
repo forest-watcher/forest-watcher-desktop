@@ -248,7 +248,7 @@
   "reports.preview.area": "Area: {name}",
   "reports.preview.submittedBy": "Submitted By: {name}",
   "reports.preview.view": "View Report",
-  "reporting.back": "Back to Reporting",
+  "reporting.back": "Back to Monitoring",
   "reporting.tabs.investigation": "Investigation",
   "reporting.tabs.reports": "Reports",
   "reporting.control.panel.area.list.title": "Select An Area",
