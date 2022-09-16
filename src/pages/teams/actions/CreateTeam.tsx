@@ -10,8 +10,6 @@ import { yupResolver } from "@hookform/resolvers/yup/dist/yup";
 import useUrlQuery from "hooks/useUrlQuery";
 import { fireGAEvent } from "helpers/analytics";
 import { TeamActions, TeamLabels } from "types/analytics";
-import { dispatch } from "index";
-import { getUserTeams } from "modules/gfwTeams";
 
 type TCreateTeamForm = {
   name: string;
@@ -42,7 +40,6 @@ const CreateTeamModal: FC<IProps> = props => {
   const onSave = async (data: UnpackNestedValue<TCreateTeamForm>) => {
     try {
       const { data: newTeam } = await teamService.createTeam(data);
-      dispatch(getUserTeams());
       history.push(backTo || `/teams/${newTeam.id}`);
       toastr.success(intl.formatMessage({ id: "teams.create.success" }), "");
       fireGAEvent({
