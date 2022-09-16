@@ -344,7 +344,7 @@
   "teams.edit.save": "Save Team",
   "teams.edit.success": "Team updated",
   "teams.edit.error": "Unable to Edit Team",
-  "teams.delete.body": "PLACEHOLDER teams.delete.body",
+  "teams.delete.body": "Are you sure you want to delete this team?",
   "teams.delete.success": "Team Deleted",
   "teams.delete.error": "Unable to delete Team",
   "teams.teamName": "Team name",

@@ -344,7 +344,7 @@
   "teams.edit.save": "Team opslaan",
   "teams.edit.success": "Team is bijgewerkt",
   "teams.edit.error": "Kan team niet bewerken",
-  "teams.delete.body": "PLACEHOLDER teams.delete.body",
+  "teams.delete.body": "Are you sure you want to delete this team?",
   "teams.delete.success": "Team verwijderd",
   "teams.delete.error": "Kan team niet verwijderen",
   "teams.teamName": "Teamnaam",

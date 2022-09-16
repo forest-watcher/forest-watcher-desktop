@@ -344,7 +344,7 @@
   "teams.edit.save": "Simpan Tim",
   "teams.edit.success": "Tim diperbarui",
   "teams.edit.error": "Gagal Mengedit Tim",
-  "teams.delete.body": "tim TAMPUNGAN.hapus.badan",
+  "teams.delete.body": "Are you sure you want to delete this team?",
   "teams.delete.success": "Tim Dihapus",
   "teams.delete.error": "Gagal menghapus Tim",
   "teams.teamName": "Nama tim",

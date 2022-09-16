@@ -344,7 +344,7 @@
   "teams.edit.save": "Sauvegarder l'équipe",
   "teams.edit.success": "Équipe mise à jour",
   "teams.edit.error": "Impossible de modifier l'équipe",
-  "teams.delete.body": "MARQUEUR équipe.supprimer.corps",
+  "teams.delete.body": "Are you sure you want to delete this team?",
   "teams.delete.success": "Équipe supprimée",
   "teams.delete.error": "Impossible de supprimer l'équipe",
   "teams.teamName": "Nom d'équipe",

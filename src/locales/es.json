@@ -344,7 +344,7 @@
   "teams.edit.save": "Guardar equipo",
   "teams.edit.success": "Equipo actualizado",
   "teams.edit.error": "No se puede editar el equipo",
-  "teams.delete.body": "MARCADOR DE POSICIÓN equipos.borrar.cuerpo",
+  "teams.delete.body": "Are you sure you want to delete this team?",
   "teams.delete.success": "Equipo eliminado",
   "teams.delete.error": "No se puede eliminar el equipo",
   "teams.teamName": "Nombre del equipo",
