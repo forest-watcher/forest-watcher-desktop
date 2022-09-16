@@ -212,58 +212,31 @@ const Reports: FC<IProps> = props => {
             isOpen
             fileTypes={REPORT_EXPORT_FILE_TYPES}
             defaultSelectedFields={[
-              "createdAt",
               "fullName",
-              "reportName",
               "areaOfInterestName",
-              "clickedPosition",
-              "report",
-              "reportName",
-              "templateName",
-              "areaOfInterest",
+              "createdAt",
               "language",
               "userPosition",
-              "startDate",
-              "endDate",
-              "layer",
-              "user"
+              "reportedPosition",
+              "reportName",
+              "report",
+              "templateName",
+              "teamId",
+              "areaOfInterest",
+              "clickedPosition"
             ]}
             fields={[
               {
-                label: intl.formatMessage({ id: "reports.reports.table.header.createdAt" }),
-                value: "createdAt"
-              },
-              {
-                label: intl.formatMessage({ id: "reports.reports.table.header.monitor" }),
+                label: intl.formatMessage({ id: "reports.reports.table.header.fullName" }),
                 value: "fullName"
               },
               {
-                label: intl.formatMessage({ id: "reports.reports.table.header.name" }),
-                value: "reportName"
-              },
-              {
-                label: intl.formatMessage({ id: "reports.reports.table.header.area" }),
+                label: intl.formatMessage({ id: "reports.reports.table.header.areaOfInterestName" }),
                 value: "areaOfInterestName"
               },
               {
-                label: intl.formatMessage({ id: "reports.reports.table.header.coordinates" }),
-                value: "clickedPosition"
-              },
-              {
-                label: intl.formatMessage({ id: "reports.reports.table.header.report" }),
-                value: "report"
-              },
-              {
-                label: intl.formatMessage({ id: "reports.reports.table.header.reportName" }),
-                value: "reportName"
-              },
-              {
-                label: intl.formatMessage({ id: "reports.reports.table.header.templateName" }),
-                value: "templateName"
-              },
-              {
-                label: intl.formatMessage({ id: "reports.reports.table.header.areaOfInterest" }),
-                value: "areaOfInterest"
+                label: intl.formatMessage({ id: "reports.reports.table.header.createdAt" }),
+                value: "createdAt"
               },
               {
                 label: intl.formatMessage({ id: "reports.reports.table.header.language" }),
@@ -274,20 +247,32 @@ const Reports: FC<IProps> = props => {
                 value: "userPosition"
               },
               {
-                label: intl.formatMessage({ id: "reports.reports.table.header.startDate" }),
-                value: "startDate"
+                label: intl.formatMessage({ id: "reports.reports.table.header.reportedPosition" }),
+                value: "reportedPosition"
               },
               {
-                label: intl.formatMessage({ id: "reports.reports.table.header.endDate" }),
-                value: "endDate"
+                label: intl.formatMessage({ id: "reports.reports.table.header.reportName" }),
+                value: "reportName"
               },
               {
-                label: intl.formatMessage({ id: "reports.reports.table.header.layer" }),
-                value: "layer"
+                label: intl.formatMessage({ id: "reports.reports.table.header.report" }),
+                value: "report"
               },
               {
-                label: intl.formatMessage({ id: "reports.reports.table.header.user" }),
-                value: "user"
+                label: intl.formatMessage({ id: "reports.reports.table.header.templateName" }),
+                value: "templateName"
+              },
+              {
+                label: intl.formatMessage({ id: "reports.reports.table.header.teamId" }),
+                value: "teamId"
+              },
+              {
+                label: intl.formatMessage({ id: "reports.reports.table.header.areaOfInterest" }),
+                value: "areaOfInterest"
+              },
+              {
+                label: intl.formatMessage({ id: "reports.reports.table.header.clickedPosition" }),
+                value: "clickedPosition"
               }
             ]}
           />
