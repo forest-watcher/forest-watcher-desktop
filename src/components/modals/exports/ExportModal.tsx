@@ -158,6 +158,7 @@ const ExportModal: FC<IProps> = ({ onClose, onSave, isOpen, fileTypes, fields, d
       onSave={handleSave}
       modalTitle="export.title"
       submitBtnName="common.done"
+      hideUnsavedChangesModal
       useFormProps={{
         mode: downloadMethod === "link" ? "onChange" : "onSubmit",
         resolver: yupResolver(downloadMethod === "email" ? exportSchemaWithEmail : exportSchema),
