@@ -43,6 +43,7 @@ export interface IProps<T> extends PropsWithChildren {
   resetValues?: UnpackNestedValue<T>;
   watch?: string[];
   onChange?: (changes: any, values: any) => void;
+  hideUnsavedChangesModal?: boolean;
 }
 
 /**
@@ -87,7 +88,8 @@ const FormModal = <T,>(props: IProps<T>) => {
     cancelBtnName = "common.cancel",
     modalSubtitle,
     actions,
-    resetValues
+    resetValues,
+    hideUnsavedChangesModal
   } = props;
 
   const formHook = useForm<T>(useFormProps);
@@ -161,7 +163,7 @@ const FormModal = <T,>(props: IProps<T>) => {
         {actions && <div className="c-modal-dialog__extra-actions">{actions}</div>}
       </Modal>
 
-      {onClose && (
+      {onClose && !hideUnsavedChangesModal && (
         <UnsavedChanges isOpen={isOpen && isClosing} leaveCallBack={onClose} stayCallBack={() => setIsClosing(false)} />
       )}
     </>
