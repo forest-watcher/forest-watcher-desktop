@@ -1,4 +1,4 @@
-import React from "react";
+import { Component } from "react";
 import PropTypes from "prop-types";
 
 import { FormattedMessage } from "react-intl";
@@ -13,7 +13,7 @@ import { CATEGORY, ACTION } from "../../constants/analytics";
 
 import ReactGA from "react-ga";
 
-class LayersForm extends React.Component {
+class LayersForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -28,7 +28,7 @@ class LayersForm extends React.Component {
     };
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     if (this.props.GFWLayers !== nextProps.GFWLayers) {
       this.setState({
         GFWLayers: nextProps.GFWLayers
@@ -204,7 +204,7 @@ class LayersForm extends React.Component {
                 callback={() => this.setState({ teamMode: !this.state.teamMode })}
               />
             )}
-            <button className="c-button -light -right">
+            <button className="c-button c-button--secondary -right">
               <FormattedMessage id="common.add" />
             </button>
           </div>

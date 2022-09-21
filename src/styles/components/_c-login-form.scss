@@ -1,0 +1,60 @@
+.c-login-form {
+  text-align: center;
+
+  .c-input {
+    justify-content: flex-end;
+    margin-bottom: 32px;
+
+    &__input-wrapper {
+      width: 356px;
+    }
+  }
+
+  &__social-buttons {
+    max-width: 800px;
+    width: 100%;
+    border-top: 2px solid $neutral-400;
+    margin-top: 32px;
+    padding-top: 32px;
+
+    .c-social-button:not(:last-child) {
+      margin-bottom: 16px;
+    }
+  }
+
+  &__submit-btn {
+    display: inline-flex;
+    margin-top: 0;
+  }
+
+  &__link {
+    margin-top: 24px;
+    color: $neutral-600;
+
+    &--larger-font {
+      font-weight: 400;
+      font-size: 16px;
+      line-height: 22px;
+    }
+
+    a {
+      color: $neutral-600;
+      font-weight: 500;
+      font-size: 14px;
+      line-height: 14px;
+      text-transform: uppercase;
+    }
+  }
+
+  @include before(md) {
+    .c-input {
+      &__input-wrapper {
+        width: 100%;
+      }
+
+      &__label {
+        min-width: 70px;
+      }
+    }
+  }
+}

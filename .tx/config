@@ -1,0 +1,9 @@
+[main]
+host = https://www.transifex.com
+
+[o:WRI:p:forest-watch:r:desktop]
+file_filter  = src/locales/<lang>.json
+source_file  = src/locales/en.json
+type         = KEYVALUEJSON
+minimum_perc = 0
+

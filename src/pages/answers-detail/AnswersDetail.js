@@ -1,8 +1,8 @@
-import React from "react";
+import { Component } from "react";
 import PropTypes from "prop-types";
 
-class AnswersDetail extends React.Component {
-  componentWillMount() {
+class AnswersDetail extends Component {
+  UNSAFE_componentWillMount() {
     if (!this.props.answer) {
       this.props.getReportAnswers(this.props.reportId);
     }

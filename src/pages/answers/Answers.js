@@ -1,10 +1,10 @@
-import React from "react";
+import { Component } from "react";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 import { FormattedMessage } from "react-intl";
 
-class Answers extends React.Component {
-  componentWillMount() {
+class Answers extends Component {
+  UNSAFE_componentWillMount() {
     this.props.getReportAnswers(this.props.reportId);
   }
 

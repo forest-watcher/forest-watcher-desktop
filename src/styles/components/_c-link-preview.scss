@@ -1,0 +1,42 @@
+.c-link-preview {
+  position: relative;
+  border: 1px solid $neutral-500;
+  border-radius: 24px;
+  display: flex;
+  justify-content: space-between;
+  height: 40px;
+
+  &__children {
+    padding: 6px 0 10px 20px;
+
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 22px;
+    color: $neutral-600;
+
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+
+  &__cta {
+    padding: 8px 16px;
+    cursor: pointer;
+  }
+
+  &__label {
+    position: absolute;
+    right: 0;
+    top: -42px;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 22px;
+    color: $neutral-600;
+
+    svg {
+      margin-right: 4px;
+    }
+  }
+}

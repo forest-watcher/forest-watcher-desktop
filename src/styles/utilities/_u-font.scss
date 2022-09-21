@@ -10,3 +10,47 @@
   white-space: normal;
   word-wrap: break-word;
 }
+
+.u-text-break-spaces {
+  white-space: break-spaces;
+}
+
+.u-text-700 {
+  font-family: $base-font-family;
+  font-weight: 300;
+  font-size: 36px;
+  line-height: 45px;
+}
+
+.u-text-600 {
+  font-family: $base-font-family;
+  font-weight: 400;
+  font-size: 24px;
+  line-height: 36px;
+}
+
+.u-text-neutral-300 {
+  color: $neutral-300;
+}
+
+.u-text-neutral-700 {
+  color: $neutral-700;
+}
+
+.u-text-uppercase {
+  text-transform: uppercase;
+}
+
+.u-text-capitalize {
+  text-transform: capitalize;
+}
+
+.u-text-ellipsis {
+  white-space: nowrap;
+  overflow-x: hidden;
+  text-overflow: ellipsis;
+}
+
+.u-text-left {
+  text-align: left;
+}

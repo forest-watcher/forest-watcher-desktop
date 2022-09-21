@@ -1,4 +1,3 @@
-import React from "react";
 import PropTypes from "prop-types";
 import Icon from "../ui/Icon";
 import { injectIntl } from "react-intl";

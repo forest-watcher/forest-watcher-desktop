@@ -1,0 +1,65 @@
+.c-data-filter {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: $global-spacing-6 $global-spacing-15;
+  background: $white;
+  border: 2px solid rgba(85, 85, 85, 0.1);
+  border-radius: 4px;
+  padding: $global-spacing-4 $global-spacing-6;
+
+  &__label {
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 14px;
+    color: $neutral-700;
+    text-transform: uppercase;
+  }
+
+  &__filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: $global-spacing-6 $global-spacing-10;
+    align-items: center;
+    .c-input {
+      align-items: center;
+    }
+    .c-input__label {
+      font-weight: 400;
+      font-size: 14px;
+      text-transform: capitalize;
+      margin-top: 0px;
+    }
+
+    .c-input__select-list-box--simple-green {
+      top: $global-spacing-10;
+    }
+  }
+
+  &__add-more {
+    margin-left: auto;
+  }
+
+  &--above-table {
+    margin-bottom: $global-spacing-7;
+  }
+
+  &--in-control-panel {
+    display: block;
+    border: 0px;
+    padding: 0px;
+    .c-data-filter__label {
+      @extend .u-visually-hidden;
+    }
+    .c-data-filter__filters {
+      flex-direction: column;
+      flex-wrap: nowrap;
+      align-items: flex-start;
+      gap: $global-spacing-4;
+    }
+
+    .c-input, .c-input__input-wrapper {
+      width: 100%;
+    }
+  }
+}

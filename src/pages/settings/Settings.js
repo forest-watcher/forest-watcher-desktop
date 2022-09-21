@@ -1,23 +1,21 @@
-import React from "react";
+import { Component } from "react";
 import PropTypes from "prop-types";
 
-import Hero from "../../components/layouts/Hero";
-import Article from "../../components/layouts/Article";
-import TeamsShow from "../../components/teams-show/TeamsShowContainer";
-import TeamsForm from "../../components/teams-manager/TeamsFormContainer";
+import Hero from "components/layouts/Hero/Hero";
 import LayersManager from "../../components/layers-manager/LayersManager";
 import LayersShow from "../../components/layers-show/LayersShow";
 import Loader from "../../components/ui/Loader";
-import Tab from "../../components/ui/Tab";
 import Confirm from "../../components/ui/Confirm";
 import withModal from "../../components/ui/withModal";
 import { injectIntl } from "react-intl";
 import { CATEGORY, ACTION } from "../../constants/analytics";
 import ReactGA from "react-ga";
+import { FormattedMessage } from "react-intl";
+import Button from "components/ui/Button/Button";
 
 const ConfirmModal = withModal(Confirm);
 
-class Settings extends React.Component {
+class Settings extends Component {
   constructor() {
     super();
     this.firstLoad = true;
@@ -28,9 +26,9 @@ class Settings extends React.Component {
     };
   }
 
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     if (this.firstLoad) {
-      this.props.getTeam(this.props.userId);
+      this.props.getTeamByUserId(this.props.userId);
       this.props.getGFWLayers();
       this.props.getLayers();
       this.firstLoad = false;
@@ -65,22 +63,21 @@ class Settings extends React.Component {
   };
 
   render() {
-    const { team, editing, loading, saving, isManager, publicLayers, teamLayers, userLayers, setEditing } = this.props;
+    const { editing, loading, saving, publicLayers, teamLayers, userLayers, setEditing } = this.props;
 
     const renderHero = () => {
-      const canEdit = !editing && (isManager || this.state.tabIndex === 1);
-      const action = canEdit ? { name: "common.edit", callback: this.editSettings } : null;
-      const tabStyle = !canEdit ? "-no-action" : "";
+      const canEdit = !editing;
       return (
-        <Hero title={"settings.name"} action={action}>
-          <Tab
-            pill
-            style={tabStyle}
-            options={["settings.myTeam", "settings.layers"]}
-            selectedIndex={this.state.tabIndex}
-            handleTabIndexChange={this.handleTabIndexChange}
-          />
-        </Hero>
+        <Hero
+          title={"settings.name"}
+          actions={
+            canEdit && (
+              <Button onClick={this.editSettings}>
+                <FormattedMessage id="common.edit" />
+              </Button>
+            )
+          }
+        ></Hero>
       );
     };
 
@@ -90,35 +87,19 @@ class Settings extends React.Component {
         <div className="l-content">
           {!loading && (
             <div>
-              {team && !editing ? (
+              {!editing ? (
                 <div className="settings-show">
-                  <Article>
-                    {this.state.tabIndex === 0 ? (
-                      <TeamsShow />
-                    ) : (
-                      <LayersShow
-                        isManager={isManager}
-                        publicLayers={publicLayers}
-                        teamLayers={teamLayers}
-                        userLayers={userLayers}
-                      />
-                    )}
-                  </Article>
+                  <LayersShow publicLayers={publicLayers} teamLayers={teamLayers} userLayers={userLayers} />
                 </div>
               ) : (
                 <div className="settings-edit">
-                  {this.state.tabIndex === 0 ? (
-                    <TeamsForm setEditing={setEditing} editing={editing} team={team} />
-                  ) : (
-                    <LayersManager
-                      editing={editing}
-                      setEditing={setEditing}
-                      isManager={isManager}
-                      publicLayers={publicLayers}
-                      teamLayers={teamLayers}
-                      userLayers={userLayers}
-                    />
-                  )}
+                  <LayersManager
+                    editing={editing}
+                    setEditing={setEditing}
+                    publicLayers={publicLayers}
+                    teamLayers={teamLayers}
+                    userLayers={userLayers}
+                  />
                 </div>
               )}
               <Loader isLoading={saving} />
@@ -142,7 +123,7 @@ class Settings extends React.Component {
 
 Settings.propTypes = {
   team: PropTypes.object,
-  getTeam: PropTypes.func.isRequired,
+  getTeamByUserId: PropTypes.func.isRequired,
   isManager: PropTypes.bool,
   publicLayers: PropTypes.array.isRequired,
   teamLayers: PropTypes.array.isRequired,

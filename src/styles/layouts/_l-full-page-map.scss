@@ -1,0 +1,12 @@
+.l-full-page-map {
+  position: fixed;
+  top: $nav-height;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  .c-map {
+    min-height: unset;
+  }
+}

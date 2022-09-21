@@ -1,7 +1,7 @@
-import React from "react";
+import { Component } from "react";
 import { SOCIAL_FOOTER_SCRIPT } from "../../constants/landing";
 
-class SocialFooter extends React.Component {
+class SocialFooter extends Component {
   componentDidMount() {
     this.script = document.createElement("script");
     this.script.type = "text/javascript";

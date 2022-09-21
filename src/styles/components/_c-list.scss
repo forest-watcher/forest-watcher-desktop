@@ -1,0 +1,17 @@
+.c-list {
+  &__item {
+    display: flex;
+    gap: $global-spacing-3;
+    align-items: baseline;
+    margin-bottom: $global-spacing-4;
+    &:before {
+      display: block;
+      content: "";
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background-color: $primary-500;
+      flex: 0 0 12px;
+    }
+  }
+}

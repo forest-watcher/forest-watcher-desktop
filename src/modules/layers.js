@@ -103,7 +103,7 @@ export function createLayer(layer, teamId) {
       payload: true
     });
 
-    layerService.setToken(state().user.token);
+    layerService.token = state().user.token;
     return layerService
       .createLayer(layer, teamId)
       .then(async data => {
@@ -134,7 +134,7 @@ export function toggleLayer(layer, value) {
       payload: true
     });
 
-    layerService.setToken(state().user.token);
+    layerService.token = state().user.token;
     return layerService
       .toggleLayer(layer.id, value)
       .then(async data => {
@@ -165,7 +165,7 @@ export function deleteLayer(layer) {
       payload: true
     });
 
-    layerService.setToken(state().user.token);
+    layerService.token = state().user.token;
     return layerService
       .deleteLayer(layer.id)
       .then(response => {
@@ -198,7 +198,7 @@ export function getLayers() {
       payload: true
     });
 
-    layerService.setToken(state().user.token);
+    layerService.token = state().user.token;
     return layerService
       .getLayers()
       .then(async data => {

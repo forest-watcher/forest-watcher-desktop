@@ -1,0 +1,149 @@
+
+.c-timeframe {
+  display: flex;
+  position: relative;
+  justify-content: space-between;
+  width: inherit;
+  height: 75px;
+
+  &__year-label {
+    position: absolute;
+    top: 0px;
+    color: $neutral-600;
+    z-index: 4;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 21px;
+
+    &--start {
+      left: 0px;
+    }
+
+    &--end {
+      right: 0px;
+    }
+  }
+
+  &__button {
+    position: absolute;
+    border: none;
+    z-index: 3;
+    cursor: pointer;
+    height: 30px;
+    background: transparent;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+
+    &--prev {
+      left: 0;
+      transform: translateY(-50%) rotate(180deg);
+    }
+
+    &--next {
+      right: 0;
+    }
+  }
+
+  &__timeframe {
+    position: relative;
+    height: 100%;
+    color: white;
+    flex: 1;
+    overflow: hidden;
+  }
+
+  &__line {
+    position: absolute;
+    width: 75%;
+    background: $primary-500;
+    height: $global-spacing-3;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    left: 50%;
+  }
+
+  li {
+    position: relative;
+    float: left;
+    z-index: 3;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .c-timeframe__timeline-position {
+      position: relative;
+      width: 24px;
+      height: 24px;
+      background: white;
+      border-radius: 50%;
+      box-shadow: 0px 0px 4px rgba(85, 85, 85, 0.1);
+      cursor: pointer;
+
+      &::before {
+        content: "";
+        background: $primary-500;
+        width: $global-spacing-1;
+        height: $global-spacing-1;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        border-radius: 50%;
+      }
+
+      &--active {
+        box-shadow: 0px 0px 0px 2px rgba(0, 0, 0, 0.06);
+      }
+
+      &--active::before {
+        content: "";
+        width: $global-spacing-4;
+        height: $global-spacing-4;
+      }
+
+      .c-timeframe__tooltip-label {
+        display: block;
+        width: 12px;
+        height: 12px;
+      }
+    }
+  }
+
+  &__tooltip-item {
+    width: 24px;
+    height: 24px;
+    display: block;
+    z-index: 3;
+    position: relative;
+  }
+
+  &__label {
+    color: $neutral-600;
+    position: absolute;
+    white-space: nowrap;
+    bottom: -29px;
+    background: none;
+    width: auto;
+    height: auto;
+    box-shadow: none;
+    left: 50%;
+    transform: translateX(-50%);
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 21px;
+
+    &--x-start {
+      right: 0;
+    }
+
+    &--x-end {
+      left: unset;
+      transform: translateX(0);
+      right: 0;
+    }
+  }
+}

@@ -1,6 +1,22 @@
 .c-article {
-  h2 {
-    margin-bottom: 40px;
+  &__top-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: $global-spacing-10;
+    gap: $global-spacing-3;
+    flex-wrap: wrap;
+  }
+
+  &__actions {
+    display: flex;
+    gap: $global-spacing-3;
+  }
+
+  &--size-small {
+    .c-article__top-row {
+      margin-bottom: 26px;
+    }
   }
 
   .section {

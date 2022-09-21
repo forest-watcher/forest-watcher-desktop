@@ -1,4 +1,5 @@
-import { includes, unique, diff, filterEmpty, validateEmail, equals } from "./utils";
+import { includes, unique, filterEmpty, validateEmail, equals } from "./utils";
+
 describe("includes", () =>
   it("returns true only if the value is included in the array", () => {
     expect(includes([1, 2, 3], 1)).toEqual(true);

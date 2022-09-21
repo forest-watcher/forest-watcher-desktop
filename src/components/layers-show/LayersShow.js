@@ -1,10 +1,10 @@
-import React from "react";
+import { Component } from "react";
 import PropTypes from "prop-types";
 
 import { FormattedMessage } from "react-intl";
 import Icon from "../ui/Icon";
 
-class LayersShow extends React.Component {
+class LayersShow extends Component {
   getLayerName(name) {
     if (name.match(/^layers\./) !== null) {
       return <FormattedMessage id={name} />;
@@ -13,7 +13,7 @@ class LayersShow extends React.Component {
   }
 
   render() {
-    const { publicLayers, teamLayers, userLayers, isManager } = this.props;
+    const { publicLayers, userLayers } = this.props;
     const renderLayers = (layerType, layers) => (
       <div className="layers-type">
         <div className="layers-title">
@@ -39,8 +39,7 @@ class LayersShow extends React.Component {
               <FormattedMessage id={"settings.enabled"} />
             </div>
             <div className="layers-list">
-              {isManager && renderLayers("public", publicLayers)}
-              {renderLayers("team", teamLayers)}
+              {renderLayers("public", publicLayers)}
               {renderLayers("user", userLayers)}
             </div>
           </div>

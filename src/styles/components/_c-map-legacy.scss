@@ -1,0 +1,13 @@
+.c-map-legacy {
+  height: calc(100vh - #{$nav-height} - #{$hero-height} - #{$footer-height});
+  &.-layers-container {
+    #map {
+      margin-top: 67px;
+      height: 495px;
+    }
+  }
+
+  .leaflet-control-container .leaflet-top {
+    z-index: 1000 !important; // needed to override gfw-assets
+  }
+ }

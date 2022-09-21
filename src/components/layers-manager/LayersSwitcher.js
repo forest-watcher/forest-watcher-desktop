@@ -1,11 +1,11 @@
-import React from "react";
+import { Component } from "react";
 import PropTypes from "prop-types";
 
 import Icon from "../ui/Icon";
 import { FormattedMessage } from "react-intl";
 import Switch from "react-toggle-switch";
 
-class LayersSwitcher extends React.Component {
+class LayersSwitcher extends Component {
   toggleLayer = layer => {
     this.props.toggleLayer(layer, !layer.attributes.enabled);
   };
@@ -18,7 +18,7 @@ class LayersSwitcher extends React.Component {
   }
 
   render() {
-    const { publicLayers, teamLayers, userLayers, deleteLayer, isManager } = this.props;
+    const { publicLayers, userLayers, deleteLayer, isManager } = this.props;
 
     const switchRow = (layer, i) => (
       <div className="list-row">
@@ -67,8 +67,7 @@ class LayersSwitcher extends React.Component {
           </h3>
         </div>
         <div className="layers-switchs">
-          {isManager && renderLayers("public", publicLayers)}
-          {renderLayers("team", teamLayers)}
+          {renderLayers("public", publicLayers)}
           {renderLayers("user", userLayers)}
         </div>
       </div>

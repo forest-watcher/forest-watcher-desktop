@@ -1,4 +1,4 @@
-import React from "react";
+import { Component } from "react";
 import PropTypes from "prop-types";
 import startCase from "lodash/startCase";
 import capitalize from "lodash/capitalize";
@@ -11,7 +11,7 @@ import { MANAGER, USER, CONFIRMED_USER, MY_GFW_LINK } from "../../constants/glob
 import { CATEGORY, ACTION } from "../../constants/analytics";
 import ReactGA from "react-ga";
 
-class MembersManager extends React.Component {
+class MembersManager extends Component {
   constructor(props) {
     super(props);
     this.state = {

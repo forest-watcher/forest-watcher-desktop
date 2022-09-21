@@ -4,9 +4,9 @@ import { setLocale } from "../../modules/app";
 import { checkLogged, confirmUser, logout } from "../../modules/user";
 import App from "./App";
 import ReactGA from "react-ga";
-import { GA_UA } from "../../constants/global";
+import { GA_UA, ENVIRONMENT } from "../../constants/global";
 
-ReactGA.initialize(GA_UA);
+ReactGA.initialize(GA_UA, { testMode: ENVIRONMENT === "test" });
 
 const mapStateToProps = ({ app, user }) => ({
   user,

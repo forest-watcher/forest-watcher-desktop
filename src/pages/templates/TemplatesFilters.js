@@ -1,4 +1,4 @@
-import React from "react";
+import { Component } from "react";
 import PropTypes from "prop-types";
 
 import Select from "react-select";
@@ -7,7 +7,7 @@ import DropdownIndicator from "../../components/ui/SelectDropdownIndicator";
 
 import qs from "query-string";
 
-class TemplatesFilters extends React.Component {
+class TemplatesFilters extends Component {
   redirectWith(searchParams) {
     this.props.history.push({
       pathname: `/templates`,

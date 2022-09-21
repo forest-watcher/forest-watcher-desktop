@@ -1,7 +1,7 @@
-import React from "react";
+import { Component } from "react";
 import PropTypes from "prop-types";
 
-import Hero from "../../components/layouts/Hero";
+import Hero from "components/layouts/Hero/Hero";
 import Article from "../../components/layouts/Article";
 import ReactTable from "react-table";
 import { FormattedMessage } from "react-intl";
@@ -14,15 +14,12 @@ import { TABLE_PAGE_SIZE } from "../../constants/global";
 import { CATEGORY, ACTION } from "../../constants/analytics";
 import ReactGA from "react-ga";
 
-class Templates extends React.Component {
+class Templates extends Component {
   createTemplate = () => {
-    const { history } = this.props;
     ReactGA.event({
       category: CATEGORY.TEMPLATES,
       action: ACTION.NEW_TEMPLATE
     });
-
-    history.push("/templates/create");
   };
 
   handlePageChange = page => {
@@ -66,7 +63,7 @@ class Templates extends React.Component {
         accessor: "count",
         className: "report-link",
         Cell: props => (
-          <Link className="text -x-small-title" to={`/reports/${props.original.id}`}>
+          <Link className="text -x-small-title" to={`/reporting/reports?defaultTemplateFilter=${props.row.title}`}>
             <span>{props.value}</span>
             <span className="link text -x-small-title">
               {this.props.intl.formatMessage({ id: "templates.showReports" })}
@@ -78,7 +75,14 @@ class Templates extends React.Component {
     const isLoading = this.props.loadingTemplates || this.props.loadingReports;
     return (
       <div>
-        <Hero title="templates.title" action={{ name: "templates.create", callback: this.createTemplate }} />
+        <Hero
+          title="templates.title"
+          actions={
+            <Link onClick={this.createTemplate} to="/templates/create" className="c-button c-button--primary">
+              <FormattedMessage id="templates.create" />
+            </Link>
+          }
+        />
         <div className="l-content">
           <Article>
             <TemplatesFilters areasOptions={this.props.areasOptions} />

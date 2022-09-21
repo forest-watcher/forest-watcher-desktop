@@ -1,52 +1,94 @@
 {
   "name": "forest-watcher-web",
-  "version": "1.1.6",
+  "version": "1.1.7",
   "private": true,
   "dependencies": {
+    "@headlessui/react": "^1.6.4",
+    "@hookform/resolvers": "^2.8.8",
     "@mapbox/geojson-area": "^0.2.2",
+    "@mapbox/mapbox-gl-draw": "^1.3.0",
+    "@mapbox/mapbox-gl-geocoder": "^5.0.0",
     "@sentry/browser": "^4.6.4",
+    "@szhsin/react-menu": "^3.0.2",
+    "@turf/turf": "^6.5.0",
     "@turf/union": "^6.0.3",
+    "@types/jest": "^27.4.1",
+    "@types/mapbox__mapbox-gl-draw": "^1.2.3",
+    "@types/node": "^17.0.29",
+    "@types/react": "^18.0.8",
+    "@types/react-dom": "^18.0.0",
     "add": "^2.0.6",
     "classnames": "^2.2.6",
+    "date-fns": "^2.28.0",
     "dom-to-image": "^2.6.0",
     "fecha": "^3.0.2",
     "file-saver": "^2.0.1",
-    "history": "^4.9.0",
+    "history": "^5.3.0",
     "is-valid-coordinates": "^1.0.0",
-    "json-api-normalizer": "^0.4.14",
+    "json-api-normalizer": "^1.0.4",
     "leaflet": "1.4.0",
     "leaflet-draw": "^1.0.4",
     "leaflet-search": "^2.9.8",
     "lodash": "^4.17.11",
+    "lodash.get": "^4.4.2",
+    "lodash.isempty": "^4.4.0",
+    "lodash.sortby": "^4.7.0",
+    "mapbox-gl": "^2.10.0",
     "moment": "^2.24.0",
-    "node-fetch": "^2.3.0",
     "prop-types": "^15.7.2",
     "query-string": "^6.4.0",
     "querystringify": "^2.1.0",
-    "react": "17.0.1",
+    "react": "^18.1.0",
     "react-datepicker": "^2.2.0",
-    "react-dom": "17.0.1",
+    "react-dom": "^18.1.0",
+    "react-error-boundary": "^3.1.4",
     "react-ga": "2.5.7",
     "react-google-places-autocomplete": "^1.3.1",
-    "react-intl": "^2.8.0",
+    "react-hook-form": "^7.30.0",
+    "react-intl": "~5.25.1",
     "react-load-script": "0.0.6",
-    "react-redux": "^6.0.1",
+    "react-map-gl": "^7.0.19",
+    "react-redux": "^8.0.1",
     "react-redux-toastr": "7.4.8",
-    "react-router-dom": "^5.0.0",
-    "react-select": "^2.4.2",
+    "react-responsive": "^9.0.0-beta.10",
+    "react-router-dom": "5.3.1",
+    "react-select": "^5.3.0",
+    "react-spring": "^9.4.5",
     "react-table": "^6.9.2",
+    "react-tippy": "^1.4.0",
     "react-toggle-switch": "^3.0.4",
     "react-transition-group": "^2.6.1",
     "react-validation": "^3.0.7",
     "redux": "^4.0.1",
     "redux-persist": "4.10.2",
     "redux-thunk": "^2.3.0",
-    "validator": "^10.11.0"
+    "typescript": "^4.6.3",
+    "validator": "^10.11.0",
+    "yup": "^0.32.11"
   },
   "devDependencies": {
     "@3sidedcube/prettier-config": "^1.0.0",
+    "@storybook/addon-actions": "^6.5.8",
+    "@storybook/addon-essentials": "^6.5.8",
+    "@storybook/addon-interactions": "^6.5.8",
+    "@storybook/addon-links": "^6.5.8",
+    "@storybook/builder-webpack5": "^6.5.8",
+    "@storybook/manager-webpack5": "^6.5.8",
+    "@storybook/node-logger": "^6.5.8",
+    "@storybook/preset-create-react-app": "^4.1.2",
+    "@storybook/react": "^6.5.8",
+    "@storybook/testing-library": "^0.0.12",
+    "@testing-library/react": "^13.1.1",
+    "@types/dom-to-image": "^2.6.4",
+    "@types/history": "^5.0.0",
+    "@types/leaflet": "^1.7.10",
+    "@types/lodash.get": "^4.4.7",
+    "@types/mapbox-gl": "^2.7.5",
+    "@types/mapbox__mapbox-gl-geocoder": "^4.7.2",
+    "@types/react-redux": "^7.1.24",
+    "@types/react-redux-toastr": "^7.6.2",
+    "@types/react-router-dom": "^5.3.3",
     "eslint-config-prettier": "^8.3.0",
-    "eslint-plugin-babel": "^5.3.0",
     "eslint-plugin-import": "^2.16.0",
     "eslint-plugin-prettier": "^4.0.0",
     "eslint-plugin-react": "^7.28.0",
@@ -54,10 +96,13 @@
     "gh-pages": "^2.0.1",
     "husky": "^1.3.1",
     "lint-staged": "11.0.0",
-    "node-sass": "6.0.1",
+    "node-fetch": "^3.2.4",
     "npm-run-all": "^4.1.5",
     "prettier": "^2.5.1",
-    "react-scripts": "4.0.3"
+    "react-scripts": "5.0.1",
+    "sass": "^1.53.0",
+    "unzipper": "^0.10.11",
+    "webpack": "5"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -65,10 +110,17 @@
     "deploy": "npm run build&&gh-pages -d build",
     "test": "react-scripts test --env=jsdom",
     "lint-staged": "lint-staged",
-    "lint": "eslint --fix --ext .",
-    "precommit": "npm run lint-staged",
-    "transifex:push": "node transifex/transifex-push.js",
-    "transifex:pull": "node transifex/transifex-pull.js"
+    "lint": "eslint --fix --ext .js,.jsx,.ts,.tsx ./src --fix",
+    "precommit": "yarn run lint-staged",
+    "transifex:push": "tx push",
+    "transifex:pull": "tx pull -f && yarn transifex:prettier",
+    "generate-interface:teams": "npx openapi-typescript https://raw.githubusercontent.com/wri/fw_teams/dev/docs/fw_teams.yaml --output ./src/interfaces/teams.ts",
+    "generate-interface:api": "npx openapi-typescript https://raw.githubusercontent.com/wri/fw_api/dev/docs/fw_api.yaml --output ./src/interfaces/api.ts",
+    "generate-interface:forms": "npx openapi-typescript https://raw.githubusercontent.com/wri/fw_forms/dev/docs/fw_forms.yaml --output ./src/interfaces/forms.ts",
+    "generate-interface:exports": "npx openapi-typescript https://raw.githubusercontent.com/wri/fw_exports/dev/docs/fw_exports.yaml --output ./src/interfaces/exports.ts",
+    "storybook": "start-storybook -p 6006 -s src/assets",
+    "build-storybook": "build-storybook -s src/assets",
+    "transifex:prettier": "prettier --ignore-path .gitignore \"src/locales/*.+(json)\" --write"
   },
   "prettier": "@3sidedcube/prettier-config",
   "eslintConfig": {
@@ -79,16 +131,36 @@
     ],
     "plugins": [
       "jsx-a11y"
+    ],
+    "overrides": [
+      {
+        "files": [
+          "**/*.stories.*"
+        ],
+        "rules": {
+          "import/no-anonymous-default-export": "off"
+        }
+      }
     ]
   },
   "homepage": ".",
   "lint-staged": {
-    "src/**/*.js": "eslint --fix"
+    "src/**/*.{js,jsx,ts,tsx}": "eslint --fix"
   },
-  "browserslist": [
-    ">0.2%",
-    "not dead",
-    "not ie <= 11",
-    "not op_mini all"
-  ]
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all",
+      "not ie 11",
+      "not chrome < 51",
+      "not safari < 10",
+      "not android < 51"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
 }

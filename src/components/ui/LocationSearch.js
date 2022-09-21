@@ -1,4 +1,4 @@
-import React from "react";
+import { Component } from "react";
 import PropTypes from "prop-types";
 import GooglePlacesAutocomplete from "react-google-places-autocomplete";
 import isValidCoordinates from "is-valid-coordinates";
@@ -6,7 +6,7 @@ import { GOOGLE_PLACES_API_KEY } from "../../constants/global";
 import CountrySearch from "../country-search/CountrySearchContainer";
 import Icon from "./Icon";
 
-export default class LocationSearchInput extends React.Component {
+export default class LocationSearchInput extends Component {
   static propTypes = {
     intl: PropTypes.func.isRequired
   };

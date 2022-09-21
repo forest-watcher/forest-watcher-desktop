@@ -14,6 +14,8 @@ export const GA_UA = process.env.REACT_APP_GA_UA;
 export const SENTRY_DSN = process.env.REACT_APP_SENTRY_DSN;
 export const ENVIRONMENT = process.env.NODE_ENV;
 export const GOOGLE_PLACES_API_KEY = process.env.REACT_APP_GOOGLE_PLACES_API_KEY;
+export const API_BITLY_TOKEN = process.env.REACT_APP_API_BITLY_TOKEN;
+export const API_BITLY_BASE_URL = process.env.REACT_APP_API_BITLY_BASE_URL || "https://api-ssl.bitly.com/v4";
 
 // constants
 export const DEFAULT_LANGUAGE = "en";
@@ -24,7 +26,7 @@ export const CONFIRMED_USER = "CONFIRMED_USER";
 export const MAX_NUMBER_OF_LAYERS = 2;
 export const TABLE_PAGE_SIZE = 8;
 export const MANAGER = "MANAGER";
-export const MY_GFW_LINK = "https://www.globalforestwatch.org/my-gfw";
+export const MY_GFW_LINK = `${process.env.REACT_APP_FLAGSHIP_URL}/my-gfw/`;
 
 export const LAYERS_BLACKLIST = [6];
 
