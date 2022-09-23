@@ -217,7 +217,6 @@ const Reports: FC<IProps> = props => {
               "createdAt",
               "language",
               "userPosition",
-              "reportedPosition",
               "reportName",
               "report",
               "templateName",
@@ -245,10 +244,6 @@ const Reports: FC<IProps> = props => {
               {
                 label: intl.formatMessage({ id: "reports.reports.table.header.userPosition" }),
                 value: "userPosition"
-              },
-              {
-                label: intl.formatMessage({ id: "reports.reports.table.header.reportedPosition" }),
-                value: "reportedPosition"
               },
               {
                 label: intl.formatMessage({ id: "reports.reports.table.header.reportName" }),
