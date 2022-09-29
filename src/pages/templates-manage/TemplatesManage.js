@@ -237,7 +237,7 @@ class TemplatesManage extends Component {
                   )}
 
                   <div className="column small-12 medium-5 medium-offset-1 large-4 large-offset-2">
-                    {/* ToDo: This Table will be re-written in v3.1 */}
+                    {/* ToDo: This Table will be re-written in v3.1   */}
                     <div className="input-group is-hidden" aria-hidden>
                       <label htmlFor="areas-select" className="text -gray">
                         <FormattedMessage id={"templates.assignArea"} />:
