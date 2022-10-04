@@ -1,7 +1,7 @@
-import React from "react";
+import { Component } from "react";
 import PropTypes from "prop-types";
 
-import Hero from "../../components/layouts/Hero";
+import Hero from "components/layouts/Hero/Hero";
 import { FormattedMessage, injectIntl } from "react-intl";
 import { Form } from "../../components/form/Form";
 import Select from "react-select";
@@ -21,33 +21,36 @@ import { CATEGORY, ACTION } from "../../constants/analytics";
 import ReactGA from "react-ga";
 
 import "react-toggle-switch/dist/css/switch.min.css";
+import Button from "components/ui/Button/Button";
 
-class TemplatesManage extends React.Component {
+class TemplatesManage extends Component {
   constructor(props) {
     super(props);
     this.state = {};
     this.canSubmit = true;
+    this.urlParams = new URLSearchParams(props.location.search);
+    this.backLink = this.urlParams.get("backTo") || "/templates";
   }
 
   ///////////////////////////////
   // life cycle
   ///////////////////////////////
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     if (this.props.template) this.setPropsToState(this.props);
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     const { history } = this.props;
     if (nextProps.template !== this.props.template && this.props.mode === "manage") this.setPropsToState(nextProps);
     if (this.props.saving && !nextProps.saving && !nextProps.error) {
-      history.push("/templates");
+      history.push(this.backLink);
       toastr.success(this.props.intl.formatMessage({ id: "templates.saved" }));
     }
     if (nextProps.error) {
       toastr.error(this.props.intl.formatMessage({ id: "templates.errorSaving" }));
     }
     if (this.props.deleting && !nextProps.deleting && !nextProps.error) {
-      history.push("/templates");
+      history.push(this.backLink);
       toastr.info(this.props.intl.formatMessage({ id: "templates.deleted" }));
     }
     if (nextProps.error) {
@@ -212,7 +215,14 @@ class TemplatesManage extends React.Component {
       <div>
         <Hero
           title={mode === "manage" ? "templates.manage" : "templates.create"}
-          action={canEdit && mode === "manage" ? { name: "templates.delete", callback: this.deleteTemplate } : null}
+          actions={
+            canEdit &&
+            mode === "manage" && (
+              <Button onClick={this.deleteTemplate}>
+                <FormattedMessage id="templates.delete" />
+              </Button>
+            )
+          }
         />
         <div className="l-template">
           <Loader isLoading={isLoading} />
@@ -227,7 +237,8 @@ class TemplatesManage extends React.Component {
                   )}
 
                   <div className="column small-12 medium-5 medium-offset-1 large-4 large-offset-2">
-                    <div className="input-group">
+                    {/* ToDo: This Table will be re-written in v3.1 */}
+                    <div className="input-group is-hidden" aria-hidden>
                       <label htmlFor="areas-select" className="text -gray">
                         <FormattedMessage id={"templates.assignArea"} />:
                       </label>
@@ -336,19 +347,19 @@ class TemplatesManage extends React.Component {
                 <div className="row">
                   <div className="column small-12 medium-10 medium-offset-1 large-8 large-offset-2">
                     <div className="add-button">
-                      <button className="c-button" onClick={this.handleQuestionAdd} disabled={isLoading}>
+                      <Button onClick={this.handleQuestionAdd} disabled={isLoading}>
                         <FormattedMessage id="templates.addQuestion" />
-                      </button>
+                      </Button>
                     </div>
                   </div>
                 </div>
               )}
             </div>
             <FormFooter>
-              <Link to="/templates">
-                <button className="c-button -light" disabled={isLoading}>
+              <Link to={this.backLink}>
+                <Button variant="secondary" disabled={isLoading}>
                   <FormattedMessage id="forms.cancel" />
-                </button>
+                </Button>
               </Link>
               <div className="template-status">
                 <span className="status-label text -x-small-title">
@@ -364,9 +375,9 @@ class TemplatesManage extends React.Component {
                   {this.props.intl.formatMessage({ id: "templates.statusPublished" })}
                 </span>
               </div>
-              <button className="c-button" disabled={isLoading || userCannotEditTemplate || !canSave}>
+              <Button disabled={isLoading || userCannotEditTemplate || !canSave}>
                 <FormattedMessage id="forms.save" />
-              </button>
+              </Button>
             </FormFooter>
           </Form>
         </div>

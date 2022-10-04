@@ -1,10 +1,10 @@
-import React from "react";
+import { Component } from "react";
 import PropTypes from "prop-types";
 import Icon from "./Icon";
 import { toastr } from "react-redux-toastr";
 import { injectIntl } from "react-intl";
 
-class LocateUser extends React.Component {
+class LocateUser extends Component {
   setLocation = () => {
     this.props.setLoading(true);
     this.props.map

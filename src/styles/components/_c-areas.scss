@@ -1,0 +1,58 @@
+.c-areas {
+  &__area-listing {
+    display: flex;
+    flex-wrap: wrap;
+    gap: $global-spacing-10;
+    margin-bottom: 50px;
+  }
+
+  &__item {
+    flex: 1 1 333px;
+  }
+}
+
+.c-area-edit {
+  &__actions {
+    display: flex;
+    padding: $global-spacing-10 0;
+    gap: $global-spacing-10;
+  }
+
+  &__form {
+    display: flex;
+    flex: 1 1 auto;
+    justify-content: space-between;
+    align-items: baseline;
+  }
+
+  &__form-actions {
+    display: flex;
+    gap: $global-spacing-3;
+  }
+
+  &__shapefile {
+    display: flex;
+    gap: $global-spacing-3;
+    align-items: center;
+  }
+
+  @include before(md) {
+    &__actions {
+      flex-direction: column;
+    }
+  }
+  @include before(sm) {
+    &__form {
+      flex-direction: column;
+      gap: $global-spacing-10;
+    }
+  }
+}
+
+.c-area-card {
+  &__image {
+    height: 160px;
+    width: 100%;
+    object-fit: cover;
+  }
+}

@@ -1,10 +1,43 @@
 .c-hero {
+  $this: &;
+
   background-color: $theme-secondary;
 
-  .hero-content {
-    height: $hero-height;
+  &__content {
+    padding-top: $global-spacing-7;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    gap: $global-spacing-3;
+
+    &:last-child {
+      padding-bottom: $global-spacing-7;
+    }
+  }
+
+  &__actions {
+    display: flex;
+    gap: $global-spacing-3;
+  }
+
+  &--with-tabs {
+    #{$this}__spacer {
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    #{$this}__title, #{$this}__spacer {
+      flex: 0 1 100%;
+    }
+
+    #{$this}__tabs {
+      flex: 0 0 auto;
+    }
+  }
+
+  @include before(md) {
+    &__actions, &__content {
+      flex-wrap: wrap;
+    }
   }
 }

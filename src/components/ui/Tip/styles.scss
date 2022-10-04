@@ -1,0 +1,31 @@
+
+.c-tip {
+  padding: rem(10px);
+  background-color: white;
+  font-size: 12px;
+  color: grey;
+
+  &.dynamic-content {
+    max-height: calc(100vh - 40px);
+    overflow: scroll;
+    text-align: left;
+
+    p {
+      margin-bottom: 5px;
+    }
+
+    em {
+      font-style: italic;
+    }
+
+    strong {
+      font-weight: bold;
+    }
+  }
+
+  &.tooltip-dark {
+    background-color: grey;
+    color: white;
+    opacity: 0.8;
+  }
+}

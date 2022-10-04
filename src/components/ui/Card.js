@@ -1,11 +1,10 @@
-import React from "react";
 import PropTypes from "prop-types";
 import classnames from "classnames";
 import Icon from "./Icon";
 
 function Card({ className, children, title, fields, actions }) {
   return (
-    <div className={classnames(["c-card", className])}>
+    <div className={classnames(["c-card__LEGACY", className])}>
       <div className="card-content">
         <h3 className="text -x-small-title">{title}</h3>
         {fields.map(field => (

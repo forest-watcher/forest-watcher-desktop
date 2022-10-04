@@ -55,14 +55,14 @@ pipelines:
     '**':
       - step: *install_and_test
       - parallel:
-          - step: *build
-          - step: *build_storybook
+        - step: *build
+        - step: *build_storybook
   branches:
     develop:
       - step: *install_and_test
       - parallel:
-          - step: *build
-          - step: *build_storybook
+        - step: *build
+        - step: *build_storybook
       - step: *deploy_test
     master:
       - step: *install_and_test

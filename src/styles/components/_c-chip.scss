@@ -1,0 +1,93 @@
+.c-chip {
+  display: inline-block;
+  padding: $global-spacing-1 $global-spacing-4; // TODO: Get spacings
+  border-radius: 24px;
+  color: $neutral-300;
+
+  font-weight: 400;
+  font-family: $base-font-family;
+  font-size: $base-font-size;
+  line-height: 21px;
+
+  outline: 0;
+
+  &:disabled {
+    opacity: 0.5;
+
+    &:hover {
+      cursor: not-allowed;
+    }
+  }
+
+  &--is-selectable {
+    cursor: pointer;
+  }
+
+  &--primary {
+    background-color: $primary-500;
+    box-shadow: 0 0 0 2px $primary-500;
+    &.c-chip--is-selectable {
+      &:hover, &:focus {
+        background-color: $primary-600;
+      }
+
+      &:active {
+        background-color: $primary-500;
+        box-shadow: 0 0 0 2px $primary-600;
+      }
+    }
+
+  }
+
+  &--secondary {
+    background-color: transparent;
+    box-shadow: 0 0 0 1px $primary-500;
+    color: $neutral-700;
+    &.c-chip--is-selectable {
+      &:hover, &:focus {
+        box-shadow: 0 0 0 2px $primary-500;
+      }
+
+      &:active {
+        box-shadow: 0 0 0 2px $primary-600;
+      }
+    }
+  }
+
+  &--secondary-light-text {
+    background-color: transparent;
+    box-shadow: 0 0 0 1px $primary-500;
+    color: $neutral-300;
+    &.c-chip--is-selectable {
+      box-shadow: none;
+      &:hover, &:focus {
+        background-color: rgba($white, 0.05);
+      }
+
+      &:active, &.c-chip--is-selected {
+        background-color: $white;
+        color: #404040;
+      }
+    }
+  }
+}
+
+.c-radio-chip-group {
+
+  &__options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: $global-spacing-3;
+  }
+
+  &__label {
+    margin-bottom: $global-spacing-4;
+    display: inline-block;
+  }
+
+  &__item {
+    // Fix for chrome border radius overflow issue
+    position: relative;
+    left: 2px;
+  }
+}

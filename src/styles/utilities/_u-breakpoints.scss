@@ -1,0 +1,34 @@
+$grid-breakpoints: (
+  xs: 0,
+  sm: 576px,
+  md: 768px,
+  lg: 992px,
+  xl: 1200px,
+  xxl: 1400px
+);
+
+@mixin after($name) {
+  $min: map-get($grid-breakpoints, $name);
+
+  @if $min != 0 {
+    @media (min-width: $min) {
+      @content;
+    }
+  } @else {
+    @content;
+  }
+}
+
+@mixin before($name) {
+  $min: map-get($grid-breakpoints, $name);
+
+  @if $min != 0 {
+    @media (max-width: $min) {
+      @content;
+    }
+  } @else {
+    @content;
+  }
+}
+
+:export { mobile: map-get($grid-breakpoints, md) };

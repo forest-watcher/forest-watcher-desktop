@@ -8,7 +8,8 @@ const mapCountriesToOptions = countries => {
     if (JSON.parse(country.bbox)) {
       countriesOptions.push({
         option: country.iso,
-        label: country.name_engli
+        label: country.name_engli,
+        value: country.iso
       });
     }
   });

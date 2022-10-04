@@ -1,0 +1,18 @@
+$heights: 10, 20, 30, 40, 50, 60, 70, 80, 90, 100;
+
+@each $height in $heights {
+  .u-h-#{$height} {
+    height: $height * 1%;
+  }
+
+  .u-h-min-#{$height} {
+    min-height: $height * 1%;
+  }
+}
+
+.u-h-min-unset {
+  min-height: unset;
+}
+.u-h-unset {
+  height: unset;
+}

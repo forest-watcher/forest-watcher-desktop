@@ -1,4 +1,4 @@
-import React from "react";
+import { Component } from "react";
 import PropTypes from "prop-types";
 import { FormattedMessage, injectIntl } from "react-intl";
 import { prettyNum } from "../../helpers/utils";
@@ -11,7 +11,7 @@ import { filterBy } from "../../helpers/filters";
 import Switch from "react-toggle-switch";
 import DropdownIndicator from "../ui/SelectDropdownIndicator";
 
-class QuestionCard extends React.Component {
+class QuestionCard extends Component {
   constructor(props) {
     super(props);
     this.question = { ...props.question };
@@ -19,7 +19,7 @@ class QuestionCard extends React.Component {
   }
 
   // life cycle
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     if (nextProps.question !== this.props.question) {
       this.question = { ...nextProps.question };
     }
@@ -352,7 +352,7 @@ class QuestionCard extends React.Component {
                 ))}
               {isConditional && canManage && (
                 <button
-                  className={"c-button add-option-button"}
+                  className="c-button c-button--secondary add-option-button"
                   type="button"
                   onClick={this.onQuestionOptionAdd}
                   disabled={!modeCreate}

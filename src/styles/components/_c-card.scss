@@ -1,4 +1,119 @@
+$c-card-border-width:   2px;
+$c-card-border-radius:  $global-spacing-1;
+
 .c-card {
+  position: relative;
+  outline: none;
+  display: inline-block;
+  background: $neutral-300;
+  border-radius: $c-card-border-radius;
+  border: $c-card-border-width solid rgba(85, 85, 85, 0.1);
+
+  &--large {
+    padding: $global-spacing-5;
+    max-width: 333px;
+    .c-card__image {
+      border-radius: $global-spacing-1;
+    }
+    .c-card__title {
+      font-weight: 400;
+      font-size: 18px;
+      line-height: 24px;
+      margin-top: $global-spacing-4;
+    }
+    .c-card__text {
+      font-weight: 400;
+      font-size: 16px;
+      line-height: 22px;
+      margin-top: $global-spacing-1;
+    }
+    .c-card__list {
+      li:not(:last-child) {
+        margin-bottom: 6px;
+      }
+    }
+  }
+
+  &--small {
+    padding: $global-spacing-3;
+    max-width: 174px;
+    .c-card__title {
+      font-weight: 400;
+      font-size: 16px;
+      line-height: 22px;
+      margin-top: $global-spacing-2;
+    }
+    .c-card__text {
+      font-weight: 400;
+      font-size: 14px;
+      line-height: 21px;
+    }
+  }
+
+  &__title, &__text {
+    color: $neutral-700;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  &__text {
+    &:first-child {
+      margin-top: 0;
+    }
+  }
+
+  &__content-flex {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: $global-spacing-1;
+    margin-top: $global-spacing-4;
+    .c-card__title {
+      margin-top: 0;
+    }
+  }
+
+  &__cta {
+    text-transform: uppercase;
+    color: $neutral-600;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: $global-spacing-1;
+
+    &:after {
+      content: "";
+      position: absolute;
+      top: -$c-card-border-width;
+      left: -$c-card-border-width;
+      width: calc(100% + #{$c-card-border-width * 2});
+      height: calc(100% + #{$c-card-border-width * 2});
+      border: $c-card-border-width solid transparent;
+      border-radius: $c-card-border-radius;
+      z-index: 1;
+    }
+
+    &:hover:after, &:focus:after {
+      border-color: $primary-400;
+    }
+
+    &:active:after {
+      border-color: $primary-500;
+    }
+  }
+
+  &__cta-image {
+    width: 16px;
+    height: 16px;
+  }
+
+  &--checked {
+    border-color: $primary-500;
+  }
+}
+
+.c-card__LEGACY {
   display: flex;
   justify-content: space-between;
   padding: 15px;
@@ -40,6 +155,94 @@
       &:active {
         opacity: 1;
       }
+    }
+  }
+}
+
+.c-map-card {
+  padding: 0;
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  &__header {
+    display: flex;
+    align-items: center;
+    gap: $global-spacing-2;
+  }
+
+  &__back-button {
+    width: 16px;
+    min-width: 16px;
+    height: 16px;
+    background-image: url("../../assets/images/icons/ChevronRightSmall.svg");
+    background-size: contain;
+    background-repeat: no-repeat;
+    transform: rotate(180deg);
+    flex: 0 1 16px;
+
+    @include before(md) {
+      flex: 1 0 16px;
+    }
+  }
+
+  &__title {
+    margin-top: 0 !important;
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 24px;
+  }
+
+  &__header, &__footer, &__content {
+    padding: $global-spacing-5;
+  }
+
+  &__header {
+    border-bottom: 2px solid $neutral-400;
+    padding-bottom: $global-spacing-3;
+  }
+
+  &__content {
+    overflow: auto;
+    height: 100%;
+  }
+
+  &__footer {
+    border-top: 2px solid $neutral-400;
+    display: flex;
+    flex-direction: column;
+    gap: $global-spacing-3;
+    .c-button {
+      width: 100%;
+    }
+  }
+
+  &--top-left {
+    left: $global-spacing-10;
+    top: $global-spacing-10;
+  }
+
+  &--bottom-left {
+    left: $global-spacing-10;
+    bottom: $global-spacing-10;
+  }
+
+  &--top-right {
+    right: 160px; // Avoid map controls
+    top: $global-spacing-10;
+  }
+
+  &--bottom-right {
+    right: $global-spacing-10;
+    bottom: $global-spacing-10;
+  }
+
+  &--area-detail {
+    max-width: 400px;
+    width: 100%;
+    @media screen and (max-width: 480px) {
+      left: $global-spacing-5;
+      right: $global-spacing-5;
+      width: unset;
     }
   }
 }

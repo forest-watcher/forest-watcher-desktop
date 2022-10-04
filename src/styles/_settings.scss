@@ -1,5 +1,5 @@
 // layout
-$nav-height: 50px;
+$nav-height: 56px;
 $hero-height: 100px;
 $footer-height: 60px;
 $max-width: 1080px;
@@ -37,17 +37,19 @@ $font-weight-regular: 400;
 $font-weight-bold: 700;
 
 // base settings
-$base-font-family: 'Fira Sans', sans-serif;
+$base-font-family: "Fira Sans", sans-serif;
 $base-font-size: $font-size-regular;
 $base-font-color: $gray;
 $disabled-font-color: #999;
 
 // eases
-$ease-out-cubic: cubic-bezier(0.215, 0.610, 0.355, 1.000);
+$ease-out-cubic: cubic-bezier(0.215, 0.61, 0.355, 1);
 
 // size settings
-$global-spacing-unit:       24px;
-$global-spacing-unit-tiny:  6px;
+$global-spacing-unit: 24px;
+$global-spacing-unit-very-tiny: 4px;
+$global-spacing-unit-tiny: 6px;
 $global-spacing-unit-small: 12px;
+$global-spacing-unit-medium: 16px;
 $global-spacing-unit-large: 48px;
-$global-spacing-unit-huge:  96px;
+$global-spacing-unit-huge: 96px;

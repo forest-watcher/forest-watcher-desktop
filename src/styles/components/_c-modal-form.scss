@@ -1,0 +1,30 @@
+.c-modal-form {
+  .c-input {
+    justify-content: space-between;
+
+    &__input-wrapper {
+      flex: 0 1 50%;
+    }
+  }
+
+  .c-input-group, .c-input {
+    &:not(:last-child) {
+      margin-bottom: $global-spacing-10;
+    }
+  }
+
+  .c-input-group {
+    .c-input {
+      margin-bottom: $global-spacing-4;
+    }
+  }
+
+  .c-input__select, .c-input__select ~ .c-input__error-message {
+    max-width: 356px;
+    margin-left: auto;
+  }
+
+  .c-input__select--multiple, .c-input__select--multiple ~ .c-input__error-message {
+    max-width: unset;
+  }
+}

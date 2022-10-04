@@ -3,10 +3,6 @@ import { API_BASE_URL_V1 } from "../constants/global";
 import { BaseService } from "./baseService";
 
 export class LayerService extends BaseService {
-  setToken(token) {
-    this.token = token;
-  }
-
   createLayer(layer, teamId) {
     let url = teamId ? `/team/${teamId}` : `/`;
 

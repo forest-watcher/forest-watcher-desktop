@@ -1,4 +1,4 @@
-import React from "react";
+import { Component } from "react";
 import PropTypes from "prop-types";
 
 import { Input, Form, Button } from "../form/Form";
@@ -10,7 +10,7 @@ import { MANAGER, USER, CONFIRMED_USER } from "../../constants/global";
 import { required } from "../../constants/validation-rules";
 import DropdownIndicator from "../ui/SelectDropdownIndicator";
 
-class TeamsForm extends React.Component {
+class TeamsForm extends Component {
   constructor(props) {
     super(props);
     const selectedManagers = (props.team && props.team.attributes.managers) || [];
@@ -35,7 +35,7 @@ class TeamsForm extends React.Component {
     this.form = Object.assign({}, this.form, updatedForm);
   }
 
-  componentWillReceiveProps(nextProps) {
+  UNSAFE_componentWillReceiveProps(nextProps) {
     if (this.props.team !== nextProps.team) {
       this.updateForm(nextProps.team);
       if (nextProps.team) this.resetSelection(nextProps.team);

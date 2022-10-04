@@ -1,0 +1,31 @@
+.c-link {
+  font-weight: 500;
+  font-family: $base-font-family;
+  font-size: $base-font-size;
+  text-transform: uppercase;
+  text-decoration: underline;
+  color: $neutral-600;
+
+  &:hover, &:focus {
+    color: $primary-500
+  }
+
+  &:active {
+    color: $primary-600;
+  }
+
+  &--hero {
+    display: flex;
+    align-items: center;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 22px;
+    color: $primary-500;
+    text-transform: none;
+    text-decoration: none;
+
+    > img {
+      margin-right: 8px;
+    }
+  }
+}

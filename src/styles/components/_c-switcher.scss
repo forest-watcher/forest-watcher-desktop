@@ -1,12 +1,12 @@
 .c-switcher {
-  height: 20px;
-  border-radius: 10px;
-  width: 40px;
-  border: 1px solid $border-light-gray;
-  background: $light-gray;
+  height: 20px !important;
+  border-radius: 10px !important;
+  width: 40px !important;
+  border: 1px solid $border-light-gray !important;
+  background: $light-gray !important;
 
   &.on {
-    background: $theme-accent;
+    background: $theme-accent !important;
   }
 
   &.disabled {

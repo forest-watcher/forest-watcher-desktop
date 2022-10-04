@@ -1,4 +1,3 @@
-import React from "react";
 import { MAP_CONFIG } from "../../constants/map";
 
 function Attribution() {

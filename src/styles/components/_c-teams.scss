@@ -1,0 +1,92 @@
+.c-teams {
+  padding-top: 60px;
+  min-height: unset;
+
+  &__heading {
+    > .c-article__top-row {
+      margin-bottom: 28px;
+    }
+  }
+
+  &__listing {
+    display: flex;
+    margin-top: -40px;
+    margin-left: -20px;
+    margin-right: -20px;
+    flex-wrap: wrap;
+  }
+
+  &__grid-item {
+    flex: 0 0 100%;
+    width: 100%;
+    margin-top: 40px;
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+
+  @include after(md) {
+    &__grid-item {
+      flex: 0 0 33.33%;
+      width: 33.33%;
+    }
+  }
+
+  &__card {
+    width: 100%;
+    height: 100%;
+    padding: 27px 24px 24px;
+    display: flex;
+    flex-direction: column;
+
+    > *:not(:first-child) {
+      margin-top: 12px;
+    }
+  }
+
+  // The flex column will "grow" as far as it can before it bunches up with the CTA button
+  // Meaning text that overflows will ellipsis as expected
+  &__area-text, &__title-text {
+    flex: 1 0 0px;
+    width: 0px;
+  }
+
+  &--nested-card-people {
+    flex-grow: 1;
+  }
+
+  &--nested-card {
+    padding: 16px;
+    height: auto;
+    min-height: 74px;
+
+    > *:not(:first-child) {
+      margin-top: 16px;
+    }
+
+    h3 {
+      color: $neutral-700;
+      font-weight: 500;
+      font-size: 14px;
+      line-height: 14px;
+      padding: 0;
+      text-transform: uppercase;
+    }
+
+    p:not(:empty) {
+      color: $neutral-600;
+      font-weight: 400;
+      font-size: 16px;
+      line-height: 22px;
+      margin-top: 6px;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
+    }
+  }
+
+  &__title {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 6px;
+  }
+}
