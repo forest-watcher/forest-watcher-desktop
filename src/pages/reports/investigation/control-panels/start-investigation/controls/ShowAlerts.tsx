@@ -6,7 +6,6 @@ import { useIntl } from "react-intl";
 export interface IProps {}
 
 const ShowAlertsControl: FC<IProps> = props => {
-  const {} = props;
   const methods = useFormContext();
   const intl = useIntl();
 
