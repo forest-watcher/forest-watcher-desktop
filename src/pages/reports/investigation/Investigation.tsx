@@ -1,8 +1,8 @@
 import { FC, useCallback, useEffect, useMemo, useState } from "react";
 import { Route, RouteComponentProps, Switch, useHistory, useParams, useRouteMatch } from "react-router-dom";
 import UserAreasMap from "components/user-areas-map/UserAreasMap";
-import AreaDetailsControlPanel from "./control-panels/AreaDetailsContainer";
-import { FormValues, LAYERS } from "./control-panels/AreaDetails";
+import AreaDetailsControlPanel from "pages/reports/investigation/control-panels/start-investigation/StartInvestigationContainer";
+import { FormValues, LAYERS } from "pages/reports/investigation/control-panels/start-investigation/StartInvestigation";
 import AreaListControlPanel from "./control-panels/AreaList";
 import { TParams } from "./types";
 import { TPropsFromRedux } from "./InvestigationContainer";

@@ -1,5 +1,5 @@
 import { connect, ConnectedProps } from "react-redux";
-import AreaDetails from "./AreaDetails";
+import AreaDetails from "pages/reports/investigation/control-panels/start-investigation/StartInvestigation";
 import { RootState } from "store";
 import { getLayers } from "modules/layers";
 import { ThunkDispatch } from "redux-thunk";

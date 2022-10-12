@@ -3,7 +3,7 @@ import { FC, useCallback, useEffect, useMemo, useState } from "react";
 import { toastr } from "react-redux-toastr";
 import { AllGeoJSON } from "@turf/turf";
 import { useAppSelector } from "hooks/useRedux";
-import { TParams } from "../types";
+import { TParams } from "pages/reports/investigation/types";
 import MapCard from "components/ui/Map/components/cards/MapCard";
 import Loader from "components/ui/Loader";
 import { useIntl } from "react-intl";
@@ -12,7 +12,7 @@ import { useForm, useWatch } from "react-hook-form";
 import RadioCardGroup from "components/ui/Form/RadioCardGroup";
 import { BASEMAPS } from "constants/mapbox";
 import Select from "components/ui/Form/Select";
-import { TPropsFromRedux } from "./AreaDetailsContainer";
+import { TPropsFromRedux } from "pages/reports/investigation/control-panels/start-investigation/StartInvestigationContainer";
 import Timeframe from "components/ui/Timeframe";
 //@ts-ignore
 import breakpoints from "styles/utilities/_u-breakpoints.scss";
