@@ -1,5 +1,5 @@
 import { connect, ConnectedProps } from "react-redux";
-import AreaDetails from "pages/reports/investigation/control-panels/start-investigation/StartInvestigation";
+import StartInvestigationControlPanel from "pages/reports/investigation/control-panels/start-investigation/StartInvestigation";
 import { RootState } from "store";
 import { getLayers } from "modules/layers";
 import { ThunkDispatch } from "redux-thunk";
@@ -31,4 +31,4 @@ const connector = connect(mapStateToProps, mapDispatchToProps);
 
 export type TPropsFromRedux = ConnectedProps<typeof connector>;
 
-export default connector(AreaDetails);
+export default connector(StartInvestigationControlPanel);

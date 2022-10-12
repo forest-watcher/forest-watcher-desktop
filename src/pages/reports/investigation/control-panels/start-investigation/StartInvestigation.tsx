@@ -45,7 +45,7 @@ interface IProps extends TPropsFromRedux {
   defaultBasemap?: string;
 }
 
-const AreaDetailsControlPanel: FC<IProps> = props => {
+const StartInvestigationControlPanel: FC<IProps> = props => {
   const history = useHistory();
   const { areaId } = useParams<TParams>();
   const { onChange, basemaps, answers, onFilterUpdate, layersOptions, getLayers, defaultBasemap } = props;
@@ -281,4 +281,4 @@ const AreaDetailsControlPanel: FC<IProps> = props => {
   );
 };
 
-export default AreaDetailsControlPanel;
+export default StartInvestigationControlPanel;
