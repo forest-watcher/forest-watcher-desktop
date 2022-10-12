@@ -10,6 +10,7 @@
     "@mapbox/mapbox-gl-geocoder": "^5.0.0",
     "@sentry/browser": "^4.6.4",
     "@szhsin/react-menu": "^3.0.2",
+    "@tanstack/react-query": "^4.10.3",
     "@turf/turf": "^6.5.0",
     "@turf/union": "^6.0.3",
     "@types/jest": "^27.4.1",
@@ -68,6 +69,8 @@
   },
   "devDependencies": {
     "@3sidedcube/prettier-config": "^1.0.0",
+    "@openapi-codegen/cli": "^2.0.0",
+    "@openapi-codegen/typescript": "^6.0.0",
     "@storybook/addon-actions": "^6.5.8",
     "@storybook/addon-essentials": "^6.5.8",
     "@storybook/addon-interactions": "^6.5.8",
@@ -120,7 +123,12 @@
     "generate-interface:exports": "npx openapi-typescript https://raw.githubusercontent.com/wri/fw_exports/dev/docs/fw_exports.yaml --output ./src/interfaces/exports.ts",
     "storybook": "start-storybook -p 6006 -s src/assets",
     "build-storybook": "build-storybook -s src/assets",
-    "transifex:prettier": "prettier --ignore-path .gitignore \"src/locales/*.+(json)\" --write"
+    "transifex:prettier": "prettier --ignore-path .gitignore \"src/locales/*.+(json)\" --write",
+    "generate:api": "npx openapi-codegen gen api",
+    "generate:teams": "npx openapi-codegen gen teams",
+    "generate:exports": "npx openapi-codegen gen exports",
+    "generate:forms": "npx openapi-codegen gen forms",
+    "generate:new": "npx openapi-codegen init"
   },
   "prettier": "@3sidedcube/prettier-config",
   "eslintConfig": {
