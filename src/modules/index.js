@@ -2,6 +2,7 @@
 export { default as app } from "./app";
 export { default as user } from "./user";
 export { default as areas } from "./areas";
+export { default as alerts } from "./alerts";
 export { default as geostores } from "./geostores";
 export { default as layers } from "./layers";
 export { default as reports } from "./reports";

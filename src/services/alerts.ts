@@ -32,12 +32,17 @@ export class AlertsService extends BaseService {
     });
   }
 
-  getAlertsForArea(area: any) {
+  async getAlertsForArea(area: any) {
     const geostoreId = area.attributes.geostore.id;
 
-    return Promise.all(
-      Object.values(DATASETS).map(async datasetConfig => await this.getAlertsByGeoStoreId(geostoreId, datasetConfig))
-    );
+    const alerts = {};
+    for (const datasetConfig of Object.values(DATASETS)) {
+      Object.assign(alerts, {
+        [datasetConfig.id]: (await this.getAlertsByGeoStoreId(geostoreId, datasetConfig))["data"]
+      });
+    }
+
+    return alerts;
   }
 }
 

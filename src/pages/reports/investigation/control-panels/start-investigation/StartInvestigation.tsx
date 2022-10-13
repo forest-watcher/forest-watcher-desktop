@@ -1,3 +1,4 @@
+import UserAlertsMap from "components/user-areas-map/UserAlertsMap";
 import ShowAlertsControl from "pages/reports/investigation/control-panels/start-investigation/controls/ShowAlerts";
 import { useHistory, useParams } from "react-router-dom";
 import { FC, useCallback, useEffect, useMemo, useState } from "react";
@@ -296,9 +297,7 @@ const StartInvestigationControlPanel: FC<IProps> = props => {
         </FormProvider>
       </MapCard>
 
-      {getValues("layers")?.includes("show-alerts") && (
-        <div className="u-visually-hidden">ToDo: Render 'Alerts' map Source component</div>
-      )}
+      {[...getValues("showAlerts")!].includes("true") && <UserAlertsMap area={area} />}
     </>
   );
 };
