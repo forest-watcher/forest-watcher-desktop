@@ -37,6 +37,7 @@ export type FormValues = {
   currentPlanetPeriod?: string;
   currentPlanetImageType?: "nat" | "cir";
   contextualLayers?: string[];
+  showAlerts?: ["true"] | [];
 };
 
 interface IProps extends TPropsFromRedux {
@@ -77,7 +78,8 @@ const StartInvestigationControlPanel: FC<IProps> = props => {
   const formhook = useForm<FormValues>({
     defaultValues: {
       layers: [LAYERS.reports],
-      currentMap: defaultBasemap
+      currentMap: defaultBasemap,
+      showAlerts: ["true"]
     }
   });
   const {
