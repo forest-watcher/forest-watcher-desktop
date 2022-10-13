@@ -297,7 +297,7 @@ const StartInvestigationControlPanel: FC<IProps> = props => {
         </FormProvider>
       </MapCard>
 
-      {[...getValues("showAlerts")!].includes("true") && <UserAlertsMap area={area} />}
+      {[...getValues("showAlerts")!].includes("true") && <UserAlertsMap areaId={areaId} />}
     </>
   );
 };

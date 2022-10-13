@@ -1,12 +1,11 @@
 import * as turf from "@turf/turf";
-import { useAppDispatch, useAppSelector } from "hooks/useRedux";
-import { getAlertsForArea } from "modules/alerts";
 import React, { FC, useEffect, useMemo, useState } from "react";
 import { Layer, Source, useMap } from "react-map-gl";
 import { TAreasResponse } from "services/area";
+import useGetAlertsForArea from "hooks/querys/alerts/useGetAlertsForArea";
 
 interface IProps {
-  area: any;
+  areaId: string;
 }
 
 const alertLayerStyle = {
@@ -45,11 +44,10 @@ const alertPointText = {
 };
 
 const UserAlertsMap: FC<IProps> = props => {
-  const { area } = props;
+  const { areaId } = props;
   const { current: map } = useMap();
-  const dispatch = useAppDispatch();
   const [alertHoverId, setAlertHoverId] = useState<number | string | undefined>(undefined);
-  const alerts = useAppSelector(state => state.alerts);
+  const { data: alerts } = useGetAlertsForArea(areaId);
 
   useEffect(() => {
     map?.on("mouseenter", "unclustered-point", e => {
@@ -86,23 +84,13 @@ const UserAlertsMap: FC<IProps> = props => {
     });
   }, [map]);
 
-  useEffect(() => {
-    if (area) {
-      dispatch(getAlertsForArea(area));
-    }
-  }, [area, dispatch]);
-
   const alertFeatures = useMemo(() => {
     const alertPoints = [];
-    for (const areaId in alerts) {
-      const alert = alerts[areaId];
-
-      for (const alertType in alert) {
-        for (let i = 0; i < alert[alertType].length; i++) {
-          alertPoints.push(
-            turf.point([alert[alertType][i].longitude, alert[alertType][i].latitude], { name: alertType })
-          );
-        }
+    for (const alertType in alerts) {
+      for (let i = 0; i < alerts[alertType].length; i++) {
+        alertPoints.push(
+          turf.point([alerts[alertType][i].longitude, alerts[alertType][i].latitude], { name: alertType })
+        );
       }
     }
 
