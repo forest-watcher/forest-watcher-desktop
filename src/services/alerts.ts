@@ -24,8 +24,6 @@ export class AlertsService extends BaseService {
 
     URL += ` ORDER BY ${dateKey} DESC LIMIT 10000`;
 
-    console.log(URL);
-
     return this.fetchJSON(URL, {
       headers: {
         Origin: "com.wri.forestwatcher",
