@@ -38,6 +38,8 @@ export type FormValues = {
   currentPlanetImageType?: "nat" | "cir";
   contextualLayers?: string[];
   showAlerts?: ["true"] | [];
+  alertTypesShown?: string;
+  alertTypesTimeframes?: string;
 };
 
 interface IProps extends TPropsFromRedux {
