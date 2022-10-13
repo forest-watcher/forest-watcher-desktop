@@ -43,7 +43,7 @@ const alertPointText = {
   }
 };
 
-const UserAlertsMap: FC<IProps> = props => {
+const AreaAlertsSource: FC<IProps> = props => {
   const { areaId } = props;
   const { current: map } = useMap();
   const [alertHoverId, setAlertHoverId] = useState<number | string | undefined>(undefined);
@@ -111,4 +111,4 @@ const UserAlertsMap: FC<IProps> = props => {
   );
 };
 
-export default UserAlertsMap;
+export default AreaAlertsSource;

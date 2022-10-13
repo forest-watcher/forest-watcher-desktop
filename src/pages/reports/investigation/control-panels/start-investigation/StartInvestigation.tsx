@@ -1,4 +1,4 @@
-import UserAlertsMap from "components/user-areas-map/UserAlertsMap";
+import AreaAlertsSource from "components/ui/Map/components/layers/AreaAlerts";
 import ShowAlertsControl from "pages/reports/investigation/control-panels/start-investigation/controls/ShowAlerts";
 import { useHistory, useParams } from "react-router-dom";
 import { FC, useCallback, useEffect, useMemo, useState } from "react";
@@ -297,7 +297,7 @@ const StartInvestigationControlPanel: FC<IProps> = props => {
         </FormProvider>
       </MapCard>
 
-      {[...getValues("showAlerts")!].includes("true") && <UserAlertsMap areaId={areaId} />}
+      {[...getValues("showAlerts")!].includes("true") && <AreaAlertsSource areaId={areaId} />}
     </>
   );
 };
