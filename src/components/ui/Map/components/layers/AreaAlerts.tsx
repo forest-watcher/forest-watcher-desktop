@@ -53,7 +53,7 @@ const AreaAlertsSource: FC<IProps> = props => {
             ...pointStyle,
             layout: {
               ...pointStyle.layout,
-              "icon-size": ["interpolate", ["linear"], ["zoom"], 14, 0.2, 30, 2],
+              "icon-size": ["interpolate", ["exponential", 2], ["zoom"], 14, 0.1, 22, 32],
               "icon-pitch-alignment": "auto",
               "icon-rotation-alignment": "map"
             }
