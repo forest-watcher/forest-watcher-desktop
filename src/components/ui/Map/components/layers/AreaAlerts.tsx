@@ -2,7 +2,7 @@ import * as turf from "@turf/turf";
 import { getAlertImage } from "helpers/map";
 import React, { FC, useEffect, useMemo, useState } from "react";
 import { Layer, Source, useMap } from "react-map-gl";
-import { pointStyle, clusterCountStyle } from "./styles";
+import { pointStyle, clusterStyle, clusterCountStyle } from "./styles";
 import useGetAlertsForArea from "hooks/querys/alerts/useGetAlertsForArea";
 
 interface IProps {
@@ -60,6 +60,8 @@ const AreaAlertsSource: FC<IProps> = props => {
           }}
           id={"unclustered-point"}
         />
+        {/* @ts-ignore */}
+        <Layer {...clusterStyle} />
         {/* @ts-ignore */}
         <Layer {...clusterCountStyle} />
       </Source>
