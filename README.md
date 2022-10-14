@@ -93,6 +93,46 @@ const {
 
 ```
 
+# Icons
+
+Easy peasy way to use icons:
+
+When adding a new icon create a `svg` file inside `src/assets/images/icons` and paste the icon svg code.
+
+Remove all colors hex code from all elements attributes (just do CMD+F to search and select all)
+
+replace the hex codes with `currentColor`
+
+example:
+
+```
+// BEFORE
+<svg width="16" height="13" viewBox="0 0 16 13" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M1 6.55556L5.30769 11L15 1" stroke="#FFFFF" stroke-width="1.75" />
+</svg>
+
+// AFTER
+<svg width="16" height="13" viewBox="0 0 16 13" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <path d="M1 6.55556L5.30769 11L15 1" stroke="currentColor" stroke-width="1.75" />
+</svg>
+
+```
+
+To use icon:
+
+```
+// !IMPORTANT: make sure this is where you import the Icon component from
+import Icon from "components/extensive/Icon";
+
+
+// Full control over size and color through props.
+
+// Icon color will be given by the text-color tailwindcss classname.
+// Name prop needs to be equal to the svg filename you saved under assets folder. in this case: check.svg
+<Icon name="check" size={22} className="text-gray-300" />
+
+```
+
 # Transifex
 
 Locales are managed with transifex.
