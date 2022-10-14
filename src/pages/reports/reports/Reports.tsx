@@ -159,10 +159,7 @@ const Reports: FC<IProps> = props => {
                     },
                     {
                       name: "View",
-                      href: row => {
-                        console.log(row);
-                        return `${url}/${row.templateId}/answers/${row.id}`;
-                      }
+                      href: row => `${url}/${row.templateId}/answers/${row.id}`
                     }
                   ]}
                   columnOrder={[
