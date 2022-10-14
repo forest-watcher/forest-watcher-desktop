@@ -16,9 +16,9 @@ const AreaAlertsSource: FC<IProps> = props => {
   const { data: alerts } = useGetAlertsForArea(areaId);
 
   useEffect(() => {
-    map?.on("mouseenter", "unclustered-point", e => {
-      if (e.features && e.features.length && e.features[0].id) {
-        setAlertHoverId(e.features[0].id);
+    map?.on("mousemove", "unclustered-point", e => {
+      if (e.features && e.features.length && e.features[0].properties?.id) {
+        setAlertHoverId(e.features[0].properties?.id);
       }
     });
 
@@ -42,7 +42,7 @@ const AreaAlertsSource: FC<IProps> = props => {
     }
 
     return turf.featureCollection(alertPoints);
-  }, [alerts]);
+  }, [alertHoverId, alerts]);
 
   return (
     <>
@@ -53,7 +53,7 @@ const AreaAlertsSource: FC<IProps> = props => {
             ...pointStyle,
             layout: {
               ...pointStyle.layout,
-              "icon-size": ["interpolate", ["exponential", 2], ["zoom"], 14, 0.1, 22, 32],
+              "icon-size": ["interpolate", ["exponential", 2], ["zoom"], 14, 0.05, 21, 6.2],
               "icon-pitch-alignment": "auto",
               "icon-rotation-alignment": "map"
             }
