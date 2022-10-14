@@ -49,6 +49,7 @@ const SquareClusterMarkers: FC<IProps> = props => {
     if (props.goToPoints) {
       goToGeojson(mapRef, featureCollection, true, { zoom: 5 });
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mapRef]);
 
   useEffect(() => {

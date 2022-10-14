@@ -34,7 +34,7 @@ const Carousel = ({ slides }: CarouselProps) => {
     carousel.on("select", onSelect);
   }, [carousel, onSelect]);
 
-  if (!slides || slides.length == 0) {
+  if (!slides || slides.length === 0) {
     return <p>No Images</p>;
   }
 

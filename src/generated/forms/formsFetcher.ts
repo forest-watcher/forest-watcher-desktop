@@ -61,6 +61,7 @@ export async function formsFetch<
       return (await response.blob()) as unknown as TData;
     }
   } catch (e) {
+    // eslint-disable-next-line
     throw {
       status: "unknown" as const,
       payload: e instanceof Error ? `Network error (${e.message})` : "Network error"

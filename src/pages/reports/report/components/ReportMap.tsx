@@ -1,8 +1,6 @@
-import { goToGeojson } from "helpers/map";
 import Map from "components/ui/Map/Map";
-import Polygon from "components/ui/Map/components/layers/Polygon";
-import { GeoJSONSourceOptions, MapboxEvent, Map as MapInstance } from "mapbox-gl";
-import { useCallback, useEffect, useState } from "react";
+import { MapboxEvent, Map as MapInstance } from "mapbox-gl";
+import { useCallback, useState } from "react";
 import { Answer } from "generated/forms/formsResponses";
 import SquareClusterMarkers from "components/ui/Map/components/layers/SquareClusterMarkers";
 import { getReportAlertsByName } from "helpers/reports";
@@ -13,7 +11,7 @@ type ReportMapProps = {
 
 const ReportMap = ({ answer }: ReportMapProps) => {
   const [mapRef, setMapRef] = useState<MapInstance | null>(null);
-  const [selectedPoint, setSelectedPoint] = useState<mapboxgl.Point | null>(null);
+  const [, setSelectedPoint] = useState<mapboxgl.Point | null>(null);
   const [selectedReportIds, setSelectedReportIds] = useState<string[] | null>(null);
 
   const handleMapLoad = (e: MapboxEvent) => {

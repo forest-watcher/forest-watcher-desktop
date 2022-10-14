@@ -1,8 +1,6 @@
 import IconCard from "components/icon-card/IconCard";
 import { Answer, Report } from "generated/forms/formsResponses";
-import useGetUserId from "hooks/useGetUserId";
 import moment from "moment";
-import { useSelector } from "react-redux";
 
 type ReportDetailsProps = {
   answer?: Answer;
@@ -11,7 +9,7 @@ type ReportDetailsProps = {
 
 const ReportDetails = ({ answer, report }: ReportDetailsProps) => {
   // @ts-expect-error
-  const { createdAt, username, clickedPosition, areaOfInterestName, fullName } = answer?.data[0].attributes;
+  const { createdAt, clickedPosition, areaOfInterestName, fullName } = answer?.data[0].attributes;
   const coordinates = `${clickedPosition[0].lat}, ${clickedPosition[0].lon}`;
 
   return (
