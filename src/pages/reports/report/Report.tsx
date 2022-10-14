@@ -27,7 +27,7 @@ const Report = () => {
     <LoadingWrapper loading={reportLoading || answerLoading}>
       <ReportHeader />
       <ReportMap answer={answer} />
-      <ReportDetails />
+      <ReportDetails answer={answer} report={report} />
       <ReportResponses
         questions={report?.data.attributes.questions ?? []}
         // @ts-expect-error

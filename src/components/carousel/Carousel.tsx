@@ -2,15 +2,6 @@ import { useState, useEffect, useCallback } from "react";
 import useEmblaCarousel from "embla-carousel-react";
 import CarouselThumb from "./CarouselThumb";
 
-const slides = [
-  "https://via.placeholder.com/600/92c952",
-  "https://via.placeholder.com/600/771796",
-  "https://via.placeholder.com/600/24f355",
-  "https://via.placeholder.com/600/d32776",
-  "https://via.placeholder.com/600/f66b97",
-  "https://via.placeholder.com/600/f66b97"
-];
-
 type CarouselProps = {
   slides: string[];
 };
@@ -42,6 +33,10 @@ const Carousel = ({ slides }: CarouselProps) => {
     onSelect();
     carousel.on("select", onSelect);
   }, [carousel, onSelect]);
+
+  if (!slides || slides.length == 0) {
+    return <p>No Images</p>;
+  }
 
   return (
     <>

@@ -15,10 +15,7 @@ const ReportHeader = () => {
 
         <div className="flex justify-between items-center mt-5">
           <h1 className="font-base text-[36px] font-light text-gray-300">Report Detail</h1>
-          <div className="flex gap-4">
-            <Button>Share</Button>
-            <Button variant="secondary-light-text">Export</Button>
-          </div>
+          <Button>Export</Button>
         </div>
       </section>
     </div>

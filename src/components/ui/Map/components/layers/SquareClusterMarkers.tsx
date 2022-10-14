@@ -3,7 +3,7 @@ import { Layer, Source, useMap } from "react-map-gl";
 import { pointStyle, clusterCountStyle } from "./styles";
 import * as turf from "@turf/turf";
 import { Marker } from "mapbox-gl";
-import { clusterZoom, createLayeredClusterSVG, getReportImage } from "helpers/map";
+import { clusterZoom, createLayeredClusterSVG, getReportImage, goToGeojson } from "helpers/map";
 import { IMarkers, IPoint, ReportLayerColours, ReportLayers } from "types/map";
 import { Map as MapInstance } from "mapbox-gl";
 
@@ -13,6 +13,7 @@ export interface IProps {
   onSquareSelect?: (ids: string[], point: mapboxgl.Point) => void;
   selectedSquareIds: string[] | null;
   mapRef: MapInstance | null;
+  goToPoints?: boolean;
 }
 
 const LAYER_EXPRESSION_FILTERS = {
@@ -43,6 +44,12 @@ const SquareClusterMarkers: FC<IProps> = props => {
       ),
     [hoveredPoint, points, selectedPoints]
   );
+
+  useEffect(() => {
+    if (props.goToPoints) {
+      goToGeojson(mapRef, featureCollection, true, { zoom: 5 });
+    }
+  }, [mapRef]);
 
   useEffect(() => {
     map?.on("mouseenter", id, e => {

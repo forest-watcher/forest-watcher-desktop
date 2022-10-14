@@ -12,9 +12,9 @@ const ReportResponse = ({ question, response, type }: ReportResponseProps) => {
   const _renderResponse = () => {
     switch (type) {
       case "blob":
-        return <Carousel slides={[response]} />;
+        return <Carousel slides={response ? [response] : []} />;
       default:
-        return <p className="text-gray-700">{response}</p>;
+        return <p className="text-gray-700">{response ?? "N/A"}</p>;
     }
   };
 
@@ -25,7 +25,9 @@ const ReportResponse = ({ question, response, type }: ReportResponseProps) => {
         <p className="text-[24px] text-gray-700">{question}</p>
       </div>
       {/* Response */}
-      <div className={`${type !== "blob" ? "bg-gray-300 py-7 px-6" : ""}`}>{_renderResponse()}</div>
+      <div className={`${type === "blob" && response !== null ? "" : "bg-gray-300 py-7 px-6"}`}>
+        {_renderResponse()}
+      </div>
     </section>
   );
 };

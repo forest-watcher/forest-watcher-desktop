@@ -1,0 +1,10 @@
+<svg width="34" height="34" viewBox="0 0 34 34" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <circle cx="17" cy="4.27194" r="3" transform="rotate(45 17 4.27194)" stroke="currentColor" stroke-width="2" />
+  <circle cx="29.7275" cy="17" r="3" transform="rotate(45 29.7275 17)" stroke="currentColor" stroke-width="2" />
+  <circle cx="4.27246" cy="17" r="3" transform="rotate(45 4.27246 17)" stroke="currentColor" stroke-width="2" />
+  <circle cx="17" cy="29.728" r="3" transform="rotate(45 17 29.728)" stroke="currentColor" stroke-width="2" />
+  <path d="M14.8785 6.3931L6.39317 14.8784" stroke="currentColor" stroke-width="2" />
+  <path d="M19.1212 27.6064L27.6065 19.1211" stroke="currentColor" stroke-width="2" />
+  <path d="M6.39352 19.1211L14.8788 27.6064" stroke="currentColor" stroke-width="2" />
+  <path d="M19.1215 6.3931L27.6068 14.8784" stroke="currentColor" stroke-width="2" />
+</svg>

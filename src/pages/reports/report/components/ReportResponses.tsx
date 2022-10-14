@@ -10,9 +10,6 @@ type ReportResponsesProps = {
 };
 
 const ReportResponses = ({ questions, responses }: ReportResponsesProps) => {
-  console.log("Q: ", questions);
-  console.log("R: ", responses);
-
   const data = useMemo(() => {
     return questions
       .map(q => {
@@ -27,7 +24,7 @@ const ReportResponses = ({ questions, responses }: ReportResponsesProps) => {
         return {
           // @ts-expect-error
           question: `${formattedQuestion}: ${q.label.en}`,
-          response: response.value ?? "N/A",
+          response: response.value ?? null,
           type: q.type
         };
       })
