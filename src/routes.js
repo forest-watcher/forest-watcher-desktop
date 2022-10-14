@@ -16,6 +16,7 @@ import Reports from "./pages/reports/ReportsContainer";
 import Login from "./pages/login/Login";
 import SignUpAndReset from "./pages/login/SignUpAndReset";
 import { useRouteHistoryStack } from "hooks/useRouteHistoryStack";
+import Report from "pages/reports/report/Report";
 
 const getLoginComponent = ({ user, location }) => {
   const search = location.search || "";
@@ -84,6 +85,7 @@ const Routes = props => {
           <Route exact path={`${match.url}templates/create`} component={TemplatesManage} />
           <Route exact path={`${match.url}templates/:templateId`} component={TemplatesManage} />
 
+          <Route path={`${match.url}reporting/reports/:reportId/answers/:answerId`} component={Report} />
           <Route path={[`${match.url}reporting/:reportingTab?`]} component={Reports} />
 
           {/* TODO update these routes to use nested routes */}

@@ -34,6 +34,7 @@ export type TReportsDataTable = {
   template: string;
   templateId: string;
   userId?: string;
+  view?: string;
 };
 
 export type TFilterFields = {
@@ -78,6 +79,7 @@ const Reports: FC<IProps> = props => {
       })) ?? [],
     [allAnswers]
   );
+
   const [filteredRows, setFilteredRows] = useState<TReportsDataTable[]>(rows);
   const intl = useIntl();
 
@@ -154,6 +156,13 @@ const Reports: FC<IProps> = props => {
                       name: "common.delete",
                       href: row => `${url}/${row.template}/${row.id}/delete/`,
                       shouldShow: row => row.userId === userId
+                    },
+                    {
+                      name: "View",
+                      href: row => {
+                        console.log(row);
+                        return `${url}/${row.templateId}/answers/${row.id}`;
+                      }
                     }
                   ]}
                   columnOrder={[
