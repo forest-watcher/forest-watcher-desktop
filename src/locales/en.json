@@ -433,7 +433,8 @@
     "blob": "image",
     "radio": "single selection",
     "select": "multiple selection",
-    "number": "number"
+    "number": "number",
+    "audio": "Text & Voice Recording"
   },
   "customLayers.title": "How to add a custom layer",
   "customLayers.intro": "The custom datasets feature works through linking tiles, hosted on an external web service, to Forest Watcher. Using that URL, the system will query the tile and receive just the data related to your Areas of Interest. To configure this, go to the settings tab, select data layers and paste the URL for the relevant tile service. If you have any trouble, contact forestwatcher@wri.org for help.",
