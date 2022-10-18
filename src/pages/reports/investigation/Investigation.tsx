@@ -1,78 +1,21 @@
 import { FC, useCallback, useEffect, useMemo, useState } from "react";
-import { Route, RouteComponentProps, Switch, useHistory, useParams, useRouteMatch } from "react-router-dom";
+import { Route, RouteComponentProps, Switch, useHistory, useRouteMatch } from "react-router-dom";
 import UserAreasMap from "components/user-areas-map/UserAreasMap";
-import AreaDetailsControlPanel from "./control-panels/AreaDetailsContainer";
-import { FormValues, LAYERS } from "./control-panels/AreaDetails";
-import AreaListControlPanel from "./control-panels/AreaList";
+import { FormValues, LAYERS } from "pages/reports/investigation/control-panels/start-investigation/StartInvestigation";
 import { TParams } from "./types";
 import { TPropsFromRedux } from "./InvestigationContainer";
 import { BASEMAPS } from "constants/mapbox";
-import AreaDetailCard from "components/ui/Map/components/cards/AreaDetail";
-import { getAreaTeams } from "helpers/areas";
-import { TAreasInTeam } from "services/area";
-import { AllGeoJSON } from "@turf/turf";
-import useZoomToGeojson from "hooks/useZoomToArea";
 import { TGetAllAnswers } from "services/reports";
 import { Layer, Source } from "react-map-gl";
-import useUrlQuery from "hooks/useUrlQuery";
-import useFindArea from "hooks/useFindArea";
 import { setupMapImages } from "helpers/map";
 import { Map as MapInstance, MapboxEvent } from "mapbox-gl";
-import { fireGAEvent } from "helpers/analytics";
-import { MonitoringActions, MonitoringLabel } from "types/analytics";
+
+// Control Panel Views
+import AreaListControlPanel from "./control-panels/AreaList";
+import AreaDetailControlPanel from "pages/reports/investigation/control-panels/AreaDetail";
+import StartInvestigationControlPanel from "pages/reports/investigation/control-panels/start-investigation/StartInvestigationContainer";
 
 interface IProps extends RouteComponentProps, TPropsFromRedux {}
-
-interface IAreaCardProps {
-  areasInUsersTeams: TAreasInTeam[];
-  numberOfReports?: number;
-}
-
-const AreaCardWrapper: FC<IAreaCardProps> = ({ areasInUsersTeams, numberOfReports }) => {
-  const { areaId } = useParams<TParams>();
-  const urlQuery = useUrlQuery();
-  const scrollToTeamId = useMemo(() => urlQuery.get("scrollToTeamId"), [urlQuery]);
-
-  const history = useHistory();
-
-  const area = useFindArea(areaId);
-
-  const selectedAreaGeoData = useMemo(() => area?.attributes.geostore.geojson, [area]);
-  //@ts-ignore
-  useZoomToGeojson(selectedAreaGeoData as AllGeoJSON);
-  return (
-    area && (
-      <AreaDetailCard
-        className="c-map-control-panel"
-        area={area}
-        teams={getAreaTeams(area.id, areasInUsersTeams)}
-        numberOfReports={numberOfReports}
-        position="top-left"
-        onBack={() =>
-          history.push(
-            `/reporting/investigation?scrollToAreaId=${areaId}${
-              scrollToTeamId ? `&scrollToTeamId=${scrollToTeamId}` : ""
-            }`
-          )
-        }
-        onStartInvestigation={() =>
-          fireGAEvent({
-            category: "Monitoring",
-            action: MonitoringActions.Investigation,
-            label: MonitoringLabel.StartedInvestigation
-          })
-        }
-        onManageArea={() =>
-          fireGAEvent({
-            category: "Monitoring",
-            action: MonitoringActions.ManagedArea,
-            label: MonitoringLabel.StartedFromMonitoring
-          })
-        }
-      />
-    )
-  );
-};
 
 const InvestigationPage: FC<IProps> = props => {
   const { match, allAnswers, basemaps, areasInUsersTeams, selectedLayers } = props;
@@ -173,10 +116,13 @@ const InvestigationPage: FC<IProps> = props => {
       <Switch>
         <Route exact path={`${match.url}`} component={AreaListControlPanel} />
         <Route exact path={`${match.url}/:areaId`}>
-          <AreaCardWrapper areasInUsersTeams={areasInUsersTeams} numberOfReports={answersBySelectedArea?.length} />
+          <AreaDetailControlPanel
+            areasInUsersTeams={areasInUsersTeams}
+            numberOfReports={answersBySelectedArea?.length}
+          />
         </Route>
         <Route exact path={`${match.url}/:areaId/start`}>
-          <AreaDetailsControlPanel
+          <StartInvestigationControlPanel
             onChange={handleControlPanelChange}
             answers={answersBySelectedArea}
             onFilterUpdate={handleFiltersChange}
