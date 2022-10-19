@@ -1,6 +1,6 @@
 import * as turf from "@turf/turf";
 import { EAlertTypes } from "constants/alerts";
-import { createLayeredClusterSVG, getAlertImage } from "helpers/map";
+import { clusterZoom, createLayeredClusterSVG, getAlertImage } from "helpers/map";
 import { Marker } from "mapbox-gl";
 import React, { FC, useEffect, useMemo, useState } from "react";
 import { Layer, Source, useMap } from "react-map-gl";
@@ -66,6 +66,8 @@ const AreaAlertsSource: FC<IProps> = props => {
           const el = createLayeredClusterSVG(props, colours);
 
           if (el) {
+            // Handle cluster zoom
+            el.onclick = () => clusterZoom(map, clusterId, MAP_SOURCE_ID, coords);
             // Create a new marker
             marker = markers[clusterId] = new Marker({
               element: el
