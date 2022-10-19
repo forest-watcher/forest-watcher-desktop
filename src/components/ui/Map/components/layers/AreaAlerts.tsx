@@ -1,13 +1,21 @@
 import * as turf from "@turf/turf";
-import { getAlertImage } from "helpers/map";
+import { EAlertTypes } from "constants/alerts";
+import { createLayeredClusterSVG, getAlertImage } from "helpers/map";
+import { Marker } from "mapbox-gl";
 import React, { FC, useEffect, useMemo, useState } from "react";
 import { Layer, Source, useMap } from "react-map-gl";
-import { pointStyle, clusterStyle, clusterCountStyle } from "./styles";
+import { AlertLayerColours, IMarkers } from "types/map";
+import { pointStyle, clusterCountStyle } from "./styles";
 import useGetAlertsForArea from "hooks/querys/alerts/useGetAlertsForArea";
 
 interface IProps {
   areaId: string;
 }
+
+const MAP_SOURCE_ID = "areaAlerts";
+
+const markers: IMarkers = {};
+let markersOnScreen: IMarkers = {};
 
 const AreaAlertsSource: FC<IProps> = props => {
   const { areaId } = props;
@@ -24,6 +32,62 @@ const AreaAlertsSource: FC<IProps> = props => {
 
     map?.on("mouseleave", "unclustered-point", e => {
       setAlertHoverId(undefined);
+    });
+
+    map?.on("render", () => {
+      // ToDo: Avoid repeated Code, see src/components/ui/Map/components/layers/SquareClusterMarkers.tsx
+      const mapInstance = map.getMap();
+
+      // Render custom cluster icons
+      const newMarkers: IMarkers = {};
+      const features = mapInstance.querySourceFeatures(MAP_SOURCE_ID);
+
+      for (const feature of features) {
+        // @ts-ignore
+        const coords = feature.geometry.coordinates;
+        const props = feature.properties;
+        if (!props || !props.cluster) {
+          continue;
+        }
+
+        const clusterId = props.cluster_id;
+        let marker = markers[clusterId];
+
+        const colours = [];
+        if (props.viirs) {
+          colours.push(AlertLayerColours.VIIRS);
+        }
+
+        if (props.default) {
+          colours.push(AlertLayerColours.DEFAULT);
+        }
+
+        if (!marker) {
+          const el = createLayeredClusterSVG(props, colours);
+
+          if (el) {
+            // Create a new marker
+            marker = markers[clusterId] = new Marker({
+              element: el
+            }).setLngLat(coords);
+          }
+        }
+
+        newMarkers[clusterId] = marker;
+
+        if (!markersOnScreen[clusterId]) {
+          // Add to map
+          marker.addTo(mapInstance);
+        }
+      }
+
+      // for every marker we've added previously, remove those that are no longer visible
+      for (const toRemoveid in markersOnScreen) {
+        if (!newMarkers[toRemoveid]) {
+          markersOnScreen[toRemoveid].remove();
+        }
+      }
+      markersOnScreen = newMarkers;
     });
   }, [map]);
 
@@ -46,7 +110,19 @@ const AreaAlertsSource: FC<IProps> = props => {
 
   return (
     <>
-      <Source id="alerts" data={alertFeatures} type="geojson" cluster clusterMaxZoom={14} clusterRadius={50} generateId>
+      <Source
+        id={MAP_SOURCE_ID}
+        data={alertFeatures}
+        type="geojson"
+        cluster
+        clusterMaxZoom={14}
+        clusterRadius={50}
+        generateId
+        clusterProperties={{
+          default: ["+", ["case", ["!", ["==", EAlertTypes.viirs, ["get", "alertType"]]], 1, 0]],
+          viirs: ["+", ["case", ["==", EAlertTypes.viirs, ["get", "alertType"]], 1, 0]]
+        }}
+      >
         {/* @ts-ignore */}
         <Layer
           {...{
@@ -60,8 +136,6 @@ const AreaAlertsSource: FC<IProps> = props => {
           }}
           id={"unclustered-point"}
         />
-        {/* @ts-ignore */}
-        <Layer {...clusterStyle} />
         {/* @ts-ignore */}
         <Layer {...clusterCountStyle} />
       </Source>
