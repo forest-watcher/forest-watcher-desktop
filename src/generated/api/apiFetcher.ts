@@ -1,6 +1,6 @@
 import { ApiContext } from "./apiContext";
 
-const baseUrl = "https://api.resourcewatch.org";
+const baseUrl = process.env.REACT_APP_API_CUBE_URL;
 
 export type ErrorWrapper<TError> = TError | { status: "unknown"; payload: string };
 
