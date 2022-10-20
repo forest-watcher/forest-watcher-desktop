@@ -1,4 +1,5 @@
 import ShowAlertsControl from "pages/reports/investigation/control-panels/start-investigation/controls/ShowAlerts";
+import ShowOpenAssignments from "pages/reports/investigation/control-panels/start-investigation/controls/ShowOpenAssignments";
 import { useHistory, useParams } from "react-router-dom";
 import { FC, useCallback, useEffect, useMemo, useState } from "react";
 import { toastr } from "react-redux-toastr";
@@ -38,6 +39,7 @@ export type FormValues = {
   currentPlanetImageType?: "nat" | "cir";
   contextualLayers?: string[];
   showAlerts?: ["true"] | [];
+  showOpenAssignments?: ["true"] | [];
   alertTypesShown?: string;
   alertTypesTimeframes?: string;
 };
@@ -269,6 +271,9 @@ const StartInvestigationControlPanel: FC<IProps> = props => {
                 className="c-data-filter--in-control-panel u-margin-bottom-20"
               />
             )}
+
+            <ShowOpenAssignments />
+
             {layersOptions.length && (
               <ToggleGroup
                 id="contextual-layer-toggles"
@@ -298,6 +303,10 @@ const StartInvestigationControlPanel: FC<IProps> = props => {
 
       {getValues("layers")?.includes("show-alerts") && (
         <div className="u-visually-hidden">ToDo: Render 'Alerts' map Source component</div>
+      )}
+
+      {[...getValues("showOpenAssignments")!].includes("true") && (
+        <div className="u-visually-hidden">ToDo: Render 'Open Assignments' map Source component</div>
       )}
     </>
   );
