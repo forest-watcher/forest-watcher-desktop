@@ -47,7 +47,8 @@ export function useExportsContext<
             .split("/")
             .filter(Boolean)
             .map(i => resolvePathParam(i, operation.variables.pathParams))
-        : operation.path.split("/").filter(Boolean);
+        : // @ts-expect-error
+          operation.path.split("/").filter(Boolean);
 
       if (hasQueryParams(operation)) {
         queryKey.push(operation.variables.queryParams);

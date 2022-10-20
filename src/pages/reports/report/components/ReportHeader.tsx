@@ -1,8 +1,13 @@
 import Icon from "components/extensive/Icon";
 import Button from "components/ui/Button/Button";
+import { Dispatch, SetStateAction } from "react";
 import { useHistory } from "react-router-dom";
 
-const ReportHeader = () => {
+type ReportHeaderProps = {
+  setShowExportModal: Dispatch<SetStateAction<boolean>>;
+};
+
+const ReportHeader = ({ setShowExportModal }: ReportHeaderProps) => {
   const history = useHistory();
 
   return (
@@ -15,7 +20,7 @@ const ReportHeader = () => {
 
         <div className="flex justify-between items-center mt-5">
           <h1 className="font-base text-[36px] font-light text-gray-300">Report Detail</h1>
-          <Button>Export</Button>
+          <Button onClick={() => setShowExportModal(true)}>Export</Button>
         </div>
       </section>
     </div>
