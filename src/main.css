@@ -4,27 +4,27 @@
 
 /* IMAGE CAROUSEL STYLES */
 
-.carousel {
+.c-carousel {
   position: relative;
   margin-left: auto;
   margin-right: auto;
 }
 
-.carousel__viewport {
+.c-carousel__viewport {
   overflow: hidden;
   width: 100%;
 }
 
-.carousel__viewport.is-draggable {
+.c-carousel__viewport.is-draggable {
   cursor: move;
   cursor: grab;
 }
 
-.carousel__viewport.is-dragging {
+.c-carousel__viewport.is-dragging {
   cursor: grabbing;
 }
 
-.carousel__container {
+.c-carousel__container {
   display: flex;
   user-select: none;
   -webkit-touch-callout: none;
@@ -33,19 +33,19 @@
   margin-left: -10px;
 }
 
-.carousel__slide {
+.c-carousel__slide {
   padding-left: 10px;
   min-width: 100%;
   position: relative;
 }
 
-.carousel__slide__inner {
+.c-carousel__slide__inner {
   position: relative;
   overflow: hidden;
   height: 450px;
 }
 
-.carousel__slide__img {
+.c-carousel__slide__img {
   position: absolute;
   display: block;
   top: 50%;
@@ -57,23 +57,23 @@
   transform: translate(-50%, -50%);
 }
 
-.carousel--thumb {
+.c-carousel--thumb {
   padding-top: 0;
   margin-top: -12px;
 }
 
-.carousel__container--thumb {
+.c-carousel__container--thumb {
   cursor: default;
   margin-left: -8px;
 }
 
-.carousel__slide--thumb {
+.c-carousel__slide--thumb {
   padding-left: 8px;
   padding-right: 4px;
   min-width: 16.6666%;
 }
 
-.carousel__slide__inner--thumb {
+.c-carousel__slide__inner--thumb {
   touch-action: manipulation;
   cursor: pointer;
   border: 0;
@@ -88,7 +88,7 @@
   overflow: hidden;
 }
 
-.carousel__slide__thumbnail {
+.c-carousel__slide__thumbnail {
   position: absolute;
   /* opacity: 0.2; */
   top: 0;
@@ -102,7 +102,3 @@
   transform: scale(0.1);
   transition: opacity 0.2s;
 }
-
-/* .carousel__slide--thumb.is-selected .carousel__slide__thumbnail {
-  opacity: 1;
-} */
