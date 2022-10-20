@@ -1,5 +1,3 @@
-import { Fragment } from "react";
-
 type ListProps<T> = {
   items: T[];
   render: (item: T, index: number) => JSX.Element | null;
@@ -9,11 +7,11 @@ type ListProps<T> = {
 
 const List = <T extends Record<any, any>>({ items, render, className }: ListProps<T>) => {
   return (
-    <div className={className}>
+    <ul className={className}>
       {items.map((item, i) => (
-        <Fragment key={i}>{render(item, i)}</Fragment>
+        <li key={i}>{render(item, i)}</li>
       ))}
-    </div>
+    </ul>
   );
 };
 

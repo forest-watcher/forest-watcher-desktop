@@ -40,13 +40,13 @@ const Carousel = ({ slides }: CarouselProps) => {
 
   return (
     <>
-      <div className="carousel pb-[25px]">
-        <div className="carousel__viewport" ref={mainViewportRef}>
-          <div className="carousel__container">
+      <div className="c-carousel pb-[25px]">
+        <div className="c-carousel__viewport" ref={mainViewportRef}>
+          <div className="c-carousel__container">
             {slides.map((src, index) => (
-              <div className="carousel__slide" key={index}>
-                <div className="carousel__slide__inner">
-                  <img className="carousel__slide__img" src={src} alt="A cool cat." />
+              <div className="c-carousel__slide" key={index}>
+                <div className="c-carousel__slide__inner">
+                  <img className="c-carousel__slide__img" src={src} alt="A cool cat." />
                 </div>
               </div>
             ))}
@@ -54,9 +54,9 @@ const Carousel = ({ slides }: CarouselProps) => {
         </div>
       </div>
 
-      <div className="carousel carousel--thumb">
-        <div className="carousel__viewport" ref={thumbViewportRef}>
-          <div className="carousel__container carousel__container--thumb">
+      <div className="c-carousel c-carousel--thumb">
+        <div className="c-carousel__viewport" ref={thumbViewportRef}>
+          <div className="c-carousel__container c-carousel__container--thumb">
             {slides.map((src, index) => (
               <CarouselThumb
                 onClick={() => onThumbClick(index)}

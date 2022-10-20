@@ -2,7 +2,7 @@ import { PropsWithChildren, ReactNode, useEffect, useState } from "react";
 import Modal, { IProps as IModalProps } from "components/ui/Modal/Modal";
 import { Props as IInputProps } from "components/ui/Form/Input";
 import { Props as ISelectProps } from "components/ui/Form/Select";
-import { Props as IToggleGroupProps } from "components/ui/Form/ToggleGroup";
+import { IProps as IToggleGroupProps } from "components/ui/Form/ToggleGroup";
 import { Props as IToggleProps } from "components/ui/Form/Toggle";
 import { Props as IRadioChipGroupProps } from "components/ui/Form/RadioChipGroup";
 import { useForm, SubmitHandler, RegisterOptions, UnpackNestedValue, FieldPath } from "react-hook-form";
