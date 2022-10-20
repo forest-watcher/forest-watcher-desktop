@@ -183,7 +183,7 @@ const StartInvestigationControlPanel: FC<IProps> = props => {
         footer={
           <Link to={`${location.pathname}/assignment`} className="c-button c-button--primary">
             <Icon name="PlusWhite" className="pr-[6px]" />
-            <FormattedMessage id="assignment.create" />
+            <FormattedMessage id="assignment.create.new" />
           </Link>
         }
       >
