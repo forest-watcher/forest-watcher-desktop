@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from "react";
+import { FC, useEffect } from "react";
 import { Redirect, Route, RouteComponentProps, Switch } from "react-router-dom";
 import { TPropsFromRedux } from "./ReportsContainer";
 import Hero from "components/layouts/Hero/Hero";
@@ -6,8 +6,7 @@ import { IProps as ITabGroupProps } from "components/ui/TabGroup/TabGroup";
 import InvestigationPage from "./investigation/InvestigationContainer";
 import ReportsPage from "./reports/ReportsContainer";
 import classnames from "classnames";
-import OptionalWrapper from "components/extensive/OptionalWrapper";
-import OnboardingModal from "components/onboarding/OnboardingModal";
+import MonitoringOnboarding from "components/onboarding/monitoring/MonitoringOnboarding";
 
 type TParams = {
   reportingTab: string;
@@ -34,7 +33,6 @@ const pageTabs: ITabGroupProps["options"] = [
 const Reports: FC<IProps> = props => {
   const { match, getAllReports } = props;
   const { reportingTab } = match.params;
-  const [onboarding] = useState<boolean>(true);
 
   useEffect(() => {
     getAllReports();
@@ -44,16 +42,8 @@ const Reports: FC<IProps> = props => {
     <Redirect to={INVESTIGATION_PATH} />
   ) : (
     <div className={classnames(match.url.includes(INVESTIGATION_PATH) && "l-full-page-map")}>
+      <MonitoringOnboarding />
       <Hero title="reports.name" pageTabs={{ value: reportingTab, options: pageTabs }} />
-
-      <OptionalWrapper data={onboarding}>
-        <OnboardingModal
-          isOpen
-          onClose={() => console.log("asdsad")}
-          steps={[{ heading: "New in this version", title: "Add Areas", text: "asdasdasd", imageUrl: "asd" }]}
-        />
-      </OptionalWrapper>
-
       <Switch>
         <Route path={INVESTIGATION_PATH} component={InvestigationPage} />
         <Route path={REPORTS_PATH} component={ReportsPage} />
