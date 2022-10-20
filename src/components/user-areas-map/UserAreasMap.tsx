@@ -212,7 +212,7 @@ const UserAreasMap: FC<PropsWithChildren<IProps>> = props => {
           answers={
             answers
               ?.filter(answer => selectedReportIds.findIndex(id => id === answer.id) > -1)
-              .map(answer => answer.attributes) as TAnswer[]
+              .map(answer => answer) as TAnswer[]
           }
         />
       )}
