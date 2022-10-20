@@ -513,6 +513,7 @@
   "export.error": "Failed to export, please try later",
   "export.emailTo": "Send email to",
   "investigation.start": "Start Investigation",
+  "assignment.create": "Create New Assignment",
   "filters.title": "Filters",
   "filters.extra": "Apply more filters",
   "filters.clearAll": "Clear all",
