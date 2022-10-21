@@ -1,4 +1,5 @@
 import Map from "components/ui/Map/Map";
+import { getReportImage } from "helpers/map";
 import { MapboxEvent, Map as MapInstance } from "mapbox-gl";
 import { useCallback, useState } from "react";
 import { Answer } from "generated/forms/formsResponses";
@@ -33,6 +34,7 @@ const ReportMap = ({ answer }: ReportMapProps) => {
           id: a.id || "",
           alertTypes: getReportAlertsByName(a.attributes?.reportName)
         }))}
+        iconGenerator={getReportImage}
         onSquareSelect={handleSquareSelect}
         selectedSquareIds={selectedReportIds}
         mapRef={mapRef}

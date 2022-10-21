@@ -1,4 +1,5 @@
 import OptionalWrapper from "components/extensive/OptionalWrapper";
+import AreaAssignmentSource from "pages/reports/investigation/components/AreaAssignmentSource";
 import { FC, useCallback, useEffect, useMemo, useState } from "react";
 import { useForm, FormProvider } from "react-hook-form";
 import { Route, RouteComponentProps, Switch, useHistory, useRouteMatch } from "react-router-dom";
@@ -184,9 +185,7 @@ const InvestigationPage: FC<IProps> = props => {
 
           {watcher.showAlerts.includes("true") && <AreaAlertsSource areaId={investigationMatch?.params.areaId} />}
 
-          {watcher.showOpenAssignments.includes("true") && (
-            <div className="u-visually-hidden">ToDo: Render 'Open Assignments' map Source component</div>
-          )}
+          {watcher.showOpenAssignments.includes("true") && <AreaAssignmentSource />}
         </OptionalWrapper>
       </FormProvider>
     </UserAreasMap>

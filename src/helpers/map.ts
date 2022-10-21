@@ -15,7 +15,7 @@ import L from "leaflet";
 import * as turf from "@turf/turf";
 import { GeoJsonProperties } from "geojson";
 import { MapRef } from "react-map-gl";
-import { IPoint, ReportLayers } from "types/map";
+import { ReportLayers } from "types/map";
 
 export enum MapImages {
   label = "label",
@@ -185,18 +185,18 @@ export const clusterZoom = (map: MapRef, clusterId: any, sourceId: string, coord
   });
 };
 
-export const getReportImage = (point: IPoint, hoveredPoint: string | null, selectedPoint: string | null) => {
-  const firstAlert = point.alertTypes?.length ? point.alertTypes[0].id : "";
+export type TMapIconGenerator = (alertType: string, isHovered?: boolean, isSelected?: boolean) => MapImages;
 
-  if (point.id === selectedPoint) {
-    switch (firstAlert) {
+export const getReportImage: TMapIconGenerator = (alertType, isHovered, isSelected) => {
+  if (isSelected) {
+    switch (alertType) {
       default:
         return MapImages.reportSelected;
     }
   }
 
-  if (point.id === hoveredPoint) {
-    switch (firstAlert) {
+  if (isHovered) {
+    switch (alertType) {
       case ReportLayers.VIIRS:
         return MapImages.reportViirsHover;
       default:
@@ -204,7 +204,7 @@ export const getReportImage = (point: IPoint, hoveredPoint: string | null, selec
     }
   }
 
-  switch (firstAlert) {
+  switch (alertType) {
     case ReportLayers.VIIRS:
       return MapImages.reportViirsDefault;
     default:
@@ -212,7 +212,7 @@ export const getReportImage = (point: IPoint, hoveredPoint: string | null, selec
   }
 };
 
-export const getAlertImage = (alertType: string, isHover: boolean) => {
+export const getAlertImage: TMapIconGenerator = (alertType, isHover) => {
   if (isHover) {
     switch (alertType) {
       case EAlertTypes.viirs:

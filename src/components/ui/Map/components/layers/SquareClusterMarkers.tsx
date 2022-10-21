@@ -3,13 +3,14 @@ import { Layer, Source, useMap } from "react-map-gl";
 import { pointStyle, clusterCountStyle } from "./styles";
 import * as turf from "@turf/turf";
 import { Marker } from "mapbox-gl";
-import { clusterZoom, createLayeredClusterSVG, getReportImage, goToGeojson } from "helpers/map";
+import { clusterZoom, createLayeredClusterSVG, goToGeojson, TMapIconGenerator } from "helpers/map";
 import { IMarkers, IPoint, ReportLayerColours, ReportLayers } from "types/map";
 import { Map as MapInstance } from "mapbox-gl";
 
 export interface IProps {
   id: string;
   points: IPoint[];
+  iconGenerator: TMapIconGenerator;
   onSquareSelect?: (ids: string[], point: mapboxgl.Point) => void;
   selectedSquareIds: string[] | null;
   mapRef: MapInstance | null;
@@ -25,7 +26,7 @@ const markers: IMarkers = {};
 let markersOnScreen: IMarkers = {};
 
 const SquareClusterMarkers: FC<IProps> = props => {
-  const { id, points, onSquareSelect, selectedSquareIds, mapRef } = props;
+  const { id, points, onSquareSelect, selectedSquareIds, iconGenerator, mapRef } = props;
   const { current: map } = useMap();
   const [hoveredPoint, setHoveredPoint] = useState<string | null>(null);
   const [selectedPoints, setSelectedPoints] = useState<string[] | null>(null);
@@ -37,11 +38,17 @@ const SquareClusterMarkers: FC<IProps> = props => {
         points.map(point =>
           turf.point(point.position, {
             id: point.id,
-            icon: getReportImage(point, hoveredPoint, selectedPoints?.length ? selectedPoints[0] : null),
+            icon: iconGenerator(
+              point.alertTypes?.length ? point.alertTypes[0].id : "",
+              point.id === hoveredPoint,
+              selectedPoints?.length ? point.id === selectedPoints[0] : false
+            ),
             alertType: point.alertTypes?.length ? point.alertTypes[0].id : ""
           })
         )
       ),
+    // iconGenerator shouldn't be in the dependency array
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [hoveredPoint, points, selectedPoints]
   );
 
