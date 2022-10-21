@@ -72,10 +72,8 @@ const StartInvestigationControlPanel: FC<IProps> = props => {
   const methods = useFormContext<TFormValues>();
   const {
     register,
-    reset,
     resetField,
     setValue,
-    getValues,
     watch,
     formState: { errors }
   } = methods;
@@ -123,9 +121,8 @@ const StartInvestigationControlPanel: FC<IProps> = props => {
   }, [basemaps, watcher.currentPlanetImageType]);
 
   const handleBackBtnClick = useCallback(() => {
-    reset();
     history.push(`/reporting/investigation/${areaId}`);
-  }, [history, reset, areaId]);
+  }, [history, areaId]);
 
   useEffect(() => {
     // If the areas has been fetched, and the selected Area Geo Data hasn't

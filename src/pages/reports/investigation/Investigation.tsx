@@ -84,14 +84,19 @@ const InvestigationPage: FC<IProps> = props => {
     }
   }, [history, investigationMatch]);
 
-  // Investigation Panel Form
-  const formhook = useForm<TFormValues>({
-    defaultValues: {
+  const defaultValues = useMemo<TFormValues>(
+    () => ({
       layers: [LAYERS.reports],
       currentMap: basemapKey,
       showAlerts: ["true"],
       showOpenAssignments: ["true"]
-    }
+    }),
+    [basemapKey]
+  );
+
+  // Investigation Panel Form
+  const formhook = useForm<TFormValues>({
+    defaultValues
   });
 
   const watcher = formhook.watch();
@@ -115,6 +120,12 @@ const InvestigationPage: FC<IProps> = props => {
 
     return () => subscription.unsubscribe();
   }, [formhook, selectedLayers]);
+
+  useEffect(() => {
+    if (!investigationMatch) {
+      formhook.reset(defaultValues);
+    }
+  }, [defaultValues, formhook, investigationMatch]);
 
   const handleFiltersChange = (filters: TGetAllAnswers["data"]) => {
     if (filters?.length === answersBySelectedArea?.length) {
