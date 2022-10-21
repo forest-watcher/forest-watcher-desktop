@@ -94,24 +94,26 @@ const InvestigationPage: FC<IProps> = props => {
     }
   });
 
-  const watcher = formhook.watch();
-
   useEffect(() => {
-    setShowReports(Boolean(watcher.layers && watcher.layers?.indexOf(LAYERS.reports) > -1));
-    const basemapKey = Object.keys(BASEMAPS).find(
-      key => BASEMAPS[key as keyof typeof BASEMAPS].key === watcher.currentMap
-    );
-    const basemap = BASEMAPS[basemapKey as keyof typeof BASEMAPS];
-    if (basemap) {
-      setMapStyle(basemap.style);
-      setIsPlanet(watcher.currentMap === BASEMAPS.planet.key);
-    }
+    const subscription = formhook.watch(values => {
+      setShowReports(Boolean(values.layers && values.layers?.indexOf(LAYERS.reports) > -1));
+      const basemapKey = Object.keys(BASEMAPS).find(
+        key => BASEMAPS[key as keyof typeof BASEMAPS].key === values.currentMap
+      );
+      const basemap = BASEMAPS[basemapKey as keyof typeof BASEMAPS];
+      if (basemap) {
+        setMapStyle(basemap.style);
+        setIsPlanet(values.currentMap === BASEMAPS.planet.key);
+      }
 
-    setCurrentPlanetPeriod(watcher.currentPlanetPeriod || "");
-    setCurrentProc(watcher.currentPlanetImageType === "nat" ? "" : watcher.currentPlanetImageType || "");
-    setContextualLayerUrls(watcher.contextualLayers?.map(layer => selectedLayers[layer].attributes.url) || []);
-    setBasemapKey(watcher.currentMap);
-  }, [selectedLayers, watcher]);
+      setCurrentPlanetPeriod(values.currentPlanetPeriod || "");
+      setCurrentProc(values.currentPlanetImageType === "nat" ? "" : values.currentPlanetImageType || "");
+      setContextualLayerUrls(values.contextualLayers?.map(layer => selectedLayers[layer].attributes.url) || []);
+      setBasemapKey(values.currentMap);
+    });
+
+    return () => subscription.unsubscribe();
+  }, [formhook, selectedLayers]);
 
   const handleFiltersChange = (filters: TGetAllAnswers["data"]) => {
     if (filters?.length === answersBySelectedArea?.length) {

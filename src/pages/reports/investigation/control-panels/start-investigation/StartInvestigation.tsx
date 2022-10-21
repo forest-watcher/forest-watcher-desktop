@@ -11,7 +11,7 @@ import MapCard from "components/ui/Map/components/cards/MapCard";
 import Loader from "components/ui/Loader";
 import { FormattedMessage, useIntl } from "react-intl";
 import ToggleGroup from "components/ui/Form/ToggleGroup";
-import { useForm, useWatch, FormProvider, useFormContext } from "react-hook-form";
+import { useFormContext } from "react-hook-form";
 import RadioCardGroup from "components/ui/Form/RadioCardGroup";
 import { BASEMAPS } from "constants/mapbox";
 import Select from "components/ui/Form/Select";
