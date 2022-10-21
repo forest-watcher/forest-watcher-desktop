@@ -33,7 +33,6 @@ export type TFormValues = {
 
 const InvestigationPage: FC<IProps> = props => {
   const { match, allAnswers, basemaps, areasInUsersTeams, selectedLayers } = props;
-  const [showReports, setShowReports] = useState(true);
   const [mapStyle, setMapStyle] = useState<string | undefined>(undefined);
   const [isPlanet, setIsPlanet] = useState(false);
   const [mapRef, setMapRef] = useState<MapInstance | null>(null);
@@ -94,9 +93,10 @@ const InvestigationPage: FC<IProps> = props => {
     }
   });
 
+  const watcher = formhook.watch();
+
   useEffect(() => {
     const subscription = formhook.watch(values => {
-      setShowReports(Boolean(values.layers && values.layers?.indexOf(LAYERS.reports) > -1));
       const basemapKey = Object.keys(BASEMAPS).find(
         key => BASEMAPS[key as keyof typeof BASEMAPS].key === values.currentMap
       );
@@ -130,7 +130,7 @@ const InvestigationPage: FC<IProps> = props => {
       onMapLoad={handleMapLoad}
       focusAllAreas={!selectedAreaMatch}
       selectedAreaId={selectedAreaMatch?.params.areaId}
-      showReports={showReports && !!selectedAreaMatch}
+      showReports={watcher.layers?.includes(LAYERS.reports) && !!selectedAreaMatch}
       answers={filteredAnswers || answersBySelectedArea}
       mapStyle={mapStyle}
       currentPlanetBasemap={
