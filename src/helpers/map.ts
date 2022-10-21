@@ -141,7 +141,7 @@ export const createLayeredClusterSVG = (props: GeoJsonProperties, colours = ["#9
   let svgWidth = w;
   let svgHeight = w;
 
-  colours.reverse().forEach((colour, index) => {
+  colours.forEach((colour, index) => {
     const xOffset = (colours.length - (index + 1)) * 10;
     const yOffset = (colours.length - (index + 1)) * 3;
     const cx = r + xOffset;

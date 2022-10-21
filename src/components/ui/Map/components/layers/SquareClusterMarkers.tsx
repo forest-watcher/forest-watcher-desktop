@@ -10,6 +10,7 @@ import { Map as MapInstance } from "mapbox-gl";
 export interface IProps {
   id: string;
   points: IPoint[];
+  clusterTypeColourMap: { type: string; hex: string; not?: true }[];
   iconGenerator: TMapIconGenerator;
   onSquareSelect?: (ids: string[], point: mapboxgl.Point) => void;
   selectedSquareIds: string[] | null;
@@ -26,7 +27,7 @@ const markers: IMarkers = {};
 let markersOnScreen: IMarkers = {};
 
 const SquareClusterMarkers: FC<IProps> = props => {
-  const { id, points, onSquareSelect, selectedSquareIds, iconGenerator, mapRef } = props;
+  const { id, points, onSquareSelect, selectedSquareIds, iconGenerator, clusterTypeColourMap, mapRef } = props;
   const { current: map } = useMap();
   const [hoveredPoint, setHoveredPoint] = useState<string | null>(null);
   const [selectedPoints, setSelectedPoints] = useState<string[] | null>(null);
@@ -92,15 +93,20 @@ const SquareClusterMarkers: FC<IProps> = props => {
 
         let marker = markers[clusterId];
 
-        const colours = [];
+        const colours: string[] = [];
+        clusterTypeColourMap.forEach(({ type, hex }) => {
+          if (props[type]) {
+            colours.push(hex);
+          }
+        });
 
-        if (props.viirs) {
-          colours.push(ReportLayerColours.VIIRS);
-        }
-
-        if (props.default) {
-          colours.push(ReportLayerColours.DEFAULT);
-        }
+        // if (props.viirs) {
+        //   colours.push(ReportLayerColours.VIIRS);
+        // }
+        //
+        // if (props.default) {
+        //   colours.push(ReportLayerColours.DEFAULT);
+        // }
 
         if (!marker) {
           const el = createLayeredClusterSVG(props, colours);
@@ -174,10 +180,19 @@ const SquareClusterMarkers: FC<IProps> = props => {
         type="geojson"
         cluster
         clusterRadius={40}
-        clusterProperties={{
-          default: ["+", ["case", LAYER_EXPRESSION_FILTERS.default, 1, 0]],
-          viirs: ["+", ["case", LAYER_EXPRESSION_FILTERS.viirs, 1, 0]]
-        }}
+        clusterProperties={clusterTypeColourMap.reduce(
+          (acc, { type, not }) => ({
+            ...acc,
+            [type]: not
+              ? ["+", ["case", ["!", ["==", type, ["get", "type"]]], 1, 0]]
+              : ["+", ["case", ["==", type, ["get", "type"]], 1, 0]]
+          }),
+          {}
+        )}
+        // clusterProperties={{
+        //   default: ["+", ["case", LAYER_EXPRESSION_FILTERS.default, 1, 0]],
+        //   viirs: ["+", ["case", LAYER_EXPRESSION_FILTERS.viirs, 1, 0]]
+        // }}
       >
         {/* @ts-ignore */}
         <Layer {...pointStyle} id={id} />
