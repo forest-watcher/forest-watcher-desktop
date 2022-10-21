@@ -182,7 +182,7 @@ const InvestigationPage: FC<IProps> = props => {
             </Source>
           ))}
 
-          {watcher.showAlerts.includes("true") && <AreaAlertsSource areaId={investigationMatch!.params.areaId} />}
+          {watcher.showAlerts.includes("true") && <AreaAlertsSource areaId={investigationMatch?.params.areaId} />}
 
           {watcher.showOpenAssignments.includes("true") && (
             <div className="u-visually-hidden">ToDo: Render 'Open Assignments' map Source component</div>

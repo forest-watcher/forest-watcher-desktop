@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import useFindArea from "hooks/useFindArea";
 import { alertsService } from "services/alerts";
 
-const useGetAlertsForArea = (areaId: string) => {
+const useGetAlertsForArea = (areaId?: string) => {
   const area = useFindArea(areaId);
 
   return useQuery(["areaAlerts", areaId], () => alertsService.getAlertsForArea(area) as Promise<any>, {

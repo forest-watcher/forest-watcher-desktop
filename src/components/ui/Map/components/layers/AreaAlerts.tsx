@@ -9,7 +9,7 @@ import { pointStyle, clusterCountStyle } from "./styles";
 import useGetAlertsForArea from "hooks/querys/alerts/useGetAlertsForArea";
 
 interface IProps {
-  areaId: string;
+  areaId?: string;
 }
 
 const MAP_SOURCE_ID = "areaAlerts";
