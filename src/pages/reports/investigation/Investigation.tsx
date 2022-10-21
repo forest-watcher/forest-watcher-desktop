@@ -1,3 +1,4 @@
+import OptionalWrapper from "components/extensive/OptionalWrapper";
 import { FC, useCallback, useEffect, useMemo, useState } from "react";
 import { useForm, FormProvider } from "react-hook-form";
 import { Route, RouteComponentProps, Switch, useHistory, useRouteMatch } from "react-router-dom";
@@ -25,8 +26,8 @@ export type TFormValues = {
   currentPlanetPeriod?: string;
   currentPlanetImageType?: "nat" | "cir";
   contextualLayers?: string[];
-  showAlerts?: ["true"] | [];
-  showOpenAssignments?: ["true"] | [];
+  showAlerts: ["true"];
+  showOpenAssignments: ["true"];
   alertTypesShown?: string;
   alertTypesTimeframes?: string;
 };
@@ -43,7 +44,7 @@ const InvestigationPage: FC<IProps> = props => {
   const history = useHistory();
   const [filteredAnswers, setFilteredAnswers] = useState<TGetAllAnswers["data"] | null>(null);
   let selectedAreaMatch = useRouteMatch<TParams>({ path: "/reporting/investigation/:areaId", exact: false });
-  let investigationMatch = useRouteMatch<TParams>({ path: "/reporting/investigation/:areaId/start", exact: true });
+  let investigationMatch = useRouteMatch<TParams>({ path: "/reporting/investigation/:areaId/start", exact: false });
 
   const handleMapLoad = (evt: MapboxEvent) => {
     setMapRef(evt.target);
@@ -140,33 +141,44 @@ const InvestigationPage: FC<IProps> = props => {
       showTeamAreas
       cooperativeGestures={false}
     >
-      <Switch>
-        <Route exact path={`${match.url}`} component={AreaListControlPanel} />
-        <Route exact path={`${match.url}/:areaId`}>
-          <AreaDetailControlPanel
-            areasInUsersTeams={areasInUsersTeams}
-            numberOfReports={answersBySelectedArea?.length}
-          />
-        </Route>
-        <FormProvider {...formhook}>
+      <FormProvider {...formhook}>
+        <Switch>
+          <Route exact path={`${match.url}`} component={AreaListControlPanel} />
+          <Route exact path={`${match.url}/:areaId`}>
+            <AreaDetailControlPanel
+              areasInUsersTeams={areasInUsersTeams}
+              numberOfReports={answersBySelectedArea?.length}
+            />
+          </Route>
           <Route exact path={`${match.url}/:areaId/start`}>
             <StartInvestigationControlPanel
               answers={answersBySelectedArea}
               onFilterUpdate={handleFiltersChange}
               defaultBasemap={basemapKey}
             />
-            {contextualLayerUrls.map(url => (
-              <Source id={url} type="raster" tiles={[url]} key={url}>
-                <Layer id={`${url}-layer`} type="raster" />
-              </Source>
-            ))}
           </Route>
 
           <Route exact path={`${match.url}/:areaId/start/assignment`}>
             <AddAssignmentControlPanel />
           </Route>
-        </FormProvider>
-      </Switch>
+        </Switch>
+
+        <OptionalWrapper data={!!investigationMatch}>
+          {contextualLayerUrls.map(url => (
+            <Source id={url} type="raster" tiles={[url]} key={url}>
+              <Layer id={`${url}-layer`} type="raster" />
+            </Source>
+          ))}
+
+          {watcher.showAlerts.includes("true") && (
+            <div className="u-visually-hidden">ToDo: Render 'Alerts' map Source component</div>
+          )}
+
+          {watcher.showOpenAssignments.includes("true") && (
+            <div className="u-visually-hidden">ToDo: Render 'Open Assignments' map Source component</div>
+          )}
+        </OptionalWrapper>
+      </FormProvider>
     </UserAreasMap>
   );
 };
