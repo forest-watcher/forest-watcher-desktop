@@ -83,7 +83,8 @@ const StartInvestigationControlPanel: FC<IProps> = props => {
     defaultValues: {
       layers: [LAYERS.reports],
       currentMap: defaultBasemap,
-      showAlerts: ["true"]
+      showAlerts: ["true"],
+      showOpenAssignments: ["true"]
     }
   });
   const {
