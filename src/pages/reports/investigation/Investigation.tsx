@@ -1,7 +1,9 @@
+import OptionalWrapper from "components/extensive/OptionalWrapper";
 import { FC, useCallback, useEffect, useMemo, useState } from "react";
+import { useForm, FormProvider } from "react-hook-form";
 import { Route, RouteComponentProps, Switch, useHistory, useRouteMatch } from "react-router-dom";
 import UserAreasMap from "components/user-areas-map/UserAreasMap";
-import { FormValues, LAYERS } from "pages/reports/investigation/control-panels/start-investigation/StartInvestigation";
+import { LAYERS } from "pages/reports/investigation/control-panels/start-investigation/StartInvestigation";
 import { TParams } from "./types";
 import { TPropsFromRedux } from "./InvestigationContainer";
 import { BASEMAPS } from "constants/mapbox";
@@ -14,12 +16,24 @@ import { Map as MapInstance, MapboxEvent } from "mapbox-gl";
 import AreaListControlPanel from "./control-panels/AreaList";
 import AreaDetailControlPanel from "pages/reports/investigation/control-panels/AreaDetail";
 import StartInvestigationControlPanel from "pages/reports/investigation/control-panels/start-investigation/StartInvestigationContainer";
+import AddAssignmentControlPanel from "pages/reports/investigation/control-panels/AddAssignment/AddAssignment";
 
 interface IProps extends RouteComponentProps, TPropsFromRedux {}
 
+export type TFormValues = {
+  layers?: string[];
+  currentMap?: string;
+  currentPlanetPeriod?: string;
+  currentPlanetImageType?: "nat" | "cir";
+  contextualLayers?: string[];
+  showAlerts: ["true"];
+  showOpenAssignments: ["true"];
+  alertTypesShown?: string;
+  alertTypesTimeframes?: string;
+};
+
 const InvestigationPage: FC<IProps> = props => {
   const { match, allAnswers, basemaps, areasInUsersTeams, selectedLayers } = props;
-  const [showReports, setShowReports] = useState(true);
   const [mapStyle, setMapStyle] = useState<string | undefined>(undefined);
   const [isPlanet, setIsPlanet] = useState(false);
   const [mapRef, setMapRef] = useState<MapInstance | null>(null);
@@ -30,7 +44,7 @@ const InvestigationPage: FC<IProps> = props => {
   const history = useHistory();
   const [filteredAnswers, setFilteredAnswers] = useState<TGetAllAnswers["data"] | null>(null);
   let selectedAreaMatch = useRouteMatch<TParams>({ path: "/reporting/investigation/:areaId", exact: false });
-  let investigationMatch = useRouteMatch<TParams>({ path: "/reporting/investigation/:areaId/start", exact: true });
+  let investigationMatch = useRouteMatch<TParams>({ path: "/reporting/investigation/:areaId/start", exact: false });
 
   const handleMapLoad = (evt: MapboxEvent) => {
     setMapRef(evt.target);
@@ -38,7 +52,6 @@ const InvestigationPage: FC<IProps> = props => {
 
   useEffect(() => {
     if (mapRef) {
-      console.log("setting images");
       try {
         setupMapImages(mapRef);
       } catch (err) {
@@ -71,22 +84,48 @@ const InvestigationPage: FC<IProps> = props => {
     }
   }, [history, investigationMatch]);
 
-  const handleControlPanelChange = (resp: FormValues) => {
-    setShowReports(Boolean(resp.layers && resp.layers?.indexOf(LAYERS.reports) > -1));
-    const basemapKey = Object.keys(BASEMAPS).find(
-      key => BASEMAPS[key as keyof typeof BASEMAPS].key === resp.currentMap
-    );
-    const basemap = BASEMAPS[basemapKey as keyof typeof BASEMAPS];
-    if (basemap) {
-      setMapStyle(basemap.style);
-      setIsPlanet(resp.currentMap === BASEMAPS.planet.key);
-    }
+  const defaultValues = useMemo<TFormValues>(
+    () => ({
+      layers: [LAYERS.reports],
+      currentMap: basemapKey,
+      showAlerts: ["true"],
+      showOpenAssignments: ["true"]
+    }),
+    [basemapKey]
+  );
 
-    setCurrentPlanetPeriod(resp.currentPlanetPeriod || "");
-    setCurrentProc(resp.currentPlanetImageType === "nat" ? "" : resp.currentPlanetImageType || "");
-    setContextualLayerUrls(resp.contextualLayers?.map(layer => selectedLayers[layer].attributes.url) || []);
-    setBasemapKey(resp.currentMap);
-  };
+  // Investigation Panel Form
+  const formhook = useForm<TFormValues>({
+    defaultValues
+  });
+
+  const watcher = formhook.watch();
+
+  useEffect(() => {
+    const subscription = formhook.watch(values => {
+      const basemapKey = Object.keys(BASEMAPS).find(
+        key => BASEMAPS[key as keyof typeof BASEMAPS].key === values.currentMap
+      );
+      const basemap = BASEMAPS[basemapKey as keyof typeof BASEMAPS];
+      if (basemap) {
+        setMapStyle(basemap.style);
+        setIsPlanet(values.currentMap === BASEMAPS.planet.key);
+      }
+
+      setCurrentPlanetPeriod(values.currentPlanetPeriod || "");
+      setCurrentProc(values.currentPlanetImageType === "nat" ? "" : values.currentPlanetImageType || "");
+      setContextualLayerUrls(values.contextualLayers?.map(layer => selectedLayers[layer].attributes.url) || []);
+      setBasemapKey(values.currentMap);
+    });
+
+    return () => subscription.unsubscribe();
+  }, [formhook, selectedLayers]);
+
+  useEffect(() => {
+    if (!investigationMatch) {
+      formhook.reset(defaultValues);
+    }
+  }, [defaultValues, formhook, investigationMatch]);
 
   const handleFiltersChange = (filters: TGetAllAnswers["data"]) => {
     if (filters?.length === answersBySelectedArea?.length) {
@@ -103,7 +142,7 @@ const InvestigationPage: FC<IProps> = props => {
       onMapLoad={handleMapLoad}
       focusAllAreas={!selectedAreaMatch}
       selectedAreaId={selectedAreaMatch?.params.areaId}
-      showReports={showReports && !!selectedAreaMatch}
+      showReports={watcher.layers?.includes(LAYERS.reports) && !!selectedAreaMatch}
       answers={filteredAnswers || answersBySelectedArea}
       mapStyle={mapStyle}
       currentPlanetBasemap={
@@ -113,28 +152,44 @@ const InvestigationPage: FC<IProps> = props => {
       showTeamAreas
       cooperativeGestures={false}
     >
-      <Switch>
-        <Route exact path={`${match.url}`} component={AreaListControlPanel} />
-        <Route exact path={`${match.url}/:areaId`}>
-          <AreaDetailControlPanel
-            areasInUsersTeams={areasInUsersTeams}
-            numberOfReports={answersBySelectedArea?.length}
-          />
-        </Route>
-        <Route exact path={`${match.url}/:areaId/start`}>
-          <StartInvestigationControlPanel
-            onChange={handleControlPanelChange}
-            answers={answersBySelectedArea}
-            onFilterUpdate={handleFiltersChange}
-            defaultBasemap={basemapKey}
-          />
+      <FormProvider {...formhook}>
+        <Switch>
+          <Route exact path={`${match.url}`} component={AreaListControlPanel} />
+          <Route exact path={`${match.url}/:areaId`}>
+            <AreaDetailControlPanel
+              areasInUsersTeams={areasInUsersTeams}
+              numberOfReports={answersBySelectedArea?.length}
+            />
+          </Route>
+          <Route exact path={`${match.url}/:areaId/start`}>
+            <StartInvestigationControlPanel
+              answers={answersBySelectedArea}
+              onFilterUpdate={handleFiltersChange}
+              defaultBasemap={basemapKey}
+            />
+          </Route>
+
+          <Route exact path={`${match.url}/:areaId/start/assignment`}>
+            <AddAssignmentControlPanel />
+          </Route>
+        </Switch>
+
+        <OptionalWrapper data={!!investigationMatch}>
           {contextualLayerUrls.map(url => (
             <Source id={url} type="raster" tiles={[url]} key={url}>
               <Layer id={`${url}-layer`} type="raster" />
             </Source>
           ))}
-        </Route>
-      </Switch>
+
+          {watcher.showAlerts.includes("true") && (
+            <div className="u-visually-hidden">ToDo: Render 'Alerts' map Source component</div>
+          )}
+
+          {watcher.showOpenAssignments.includes("true") && (
+            <div className="u-visually-hidden">ToDo: Render 'Open Assignments' map Source component</div>
+          )}
+        </OptionalWrapper>
+      </FormProvider>
     </UserAreasMap>
   );
 };
