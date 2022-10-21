@@ -12,7 +12,6 @@ import { useHistory, useLocation, useParams } from "react-router-dom";
 export interface IProps {}
 
 const AddAssignmentControlPanel: FC<IProps> = props => {
-  const {} = props;
   const intl = useIntl();
   const history = useHistory();
   const location = useLocation();

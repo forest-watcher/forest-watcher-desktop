@@ -8,7 +8,6 @@ import { FormattedMessage, useIntl } from "react-intl";
 export interface IProps {}
 
 const OpenAssignmentEmptyState: FC<IProps> = props => {
-  const {} = props;
   const intl = useIntl();
 
   return (
