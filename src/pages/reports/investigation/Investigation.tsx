@@ -11,6 +11,7 @@ import { TGetAllAnswers } from "services/reports";
 import { Layer, Source } from "react-map-gl";
 import { setupMapImages } from "helpers/map";
 import { Map as MapInstance, MapboxEvent } from "mapbox-gl";
+import AreaAlertsSource from "components/ui/Map/components/layers/AreaAlerts";
 
 // Control Panel Views
 import AreaListControlPanel from "./control-panels/AreaList";
@@ -181,9 +182,7 @@ const InvestigationPage: FC<IProps> = props => {
             </Source>
           ))}
 
-          {watcher.showAlerts.includes("true") && (
-            <div className="u-visually-hidden">ToDo: Render 'Alerts' map Source component</div>
-          )}
+          {watcher.showAlerts.includes("true") && <AreaAlertsSource areaId={investigationMatch!.params.areaId} />}
 
           {watcher.showOpenAssignments.includes("true") && (
             <div className="u-visually-hidden">ToDo: Render 'Open Assignments' map Source component</div>
