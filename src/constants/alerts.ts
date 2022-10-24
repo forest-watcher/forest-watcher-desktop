@@ -7,6 +7,12 @@ export enum EAlertTypes {
   "viirs" = "viirs"
 }
 
+export const allDeforestationAlerts = [
+  EAlertTypes.umd_as_it_happens,
+  EAlertTypes.glad_sentinel_2,
+  EAlertTypes.wur_radd_alerts
+];
+
 export interface IAlertIdentifier {
   id: EAlertTypes;
   reportNameId: string;

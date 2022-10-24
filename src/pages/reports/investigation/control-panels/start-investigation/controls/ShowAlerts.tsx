@@ -1,10 +1,22 @@
 import ToggleGroup from "components/ui/Form/ToggleGroup";
 import Select from "components/ui/Form/Select";
+import { EAlertTypes } from "constants/alerts";
 import { FC } from "react";
 import { useFormContext } from "react-hook-form";
 import { useIntl } from "react-intl";
 
 export interface IProps {}
+
+const alertTypesShownOptions = [
+  {
+    label: "All Deforestation Alerts",
+    value: "all"
+  },
+  ...Object.values(EAlertTypes).map(alertType => ({
+    label: alertType,
+    value: alertType
+  }))
+];
 
 const ShowAlertsControl: FC<IProps> = props => {
   const methods = useFormContext();
@@ -37,24 +49,39 @@ const ShowAlertsControl: FC<IProps> = props => {
             registered={methods.register("alertTypesShown")}
             selectProps={{
               placeholder: intl.formatMessage({ id: "maps.period" }),
-              options: [{ label: "Test", value: 1 }],
+              options: alertTypesShownOptions,
               alternateLabelStyle: true,
-              defaultValue: { label: "Test", value: 1 }
+              defaultValue: alertTypesShownOptions[0]
             }}
           />
 
-          <Select
-            id="alert-types-timeframes"
-            className="u-margin-bottom"
-            formHook={methods}
-            registered={methods.register("alertTypesTimeframes")}
-            selectProps={{
-              placeholder: intl.formatMessage({ id: "maps.period" }),
-              options: [{ label: "Test", value: 1 }],
-              alternateLabelStyle: true,
-              defaultValue: { label: "Test", value: 1 }
-            }}
-          />
+          {methods.getValues("alertTypesShown") !== EAlertTypes.viirs ? (
+            <Select
+              id="alert-types-timeframes"
+              className="u-margin-bottom"
+              formHook={methods}
+              registered={methods.register("alertTypesTimeframes")}
+              selectProps={{
+                placeholder: intl.formatMessage({ id: "maps.period" }),
+                options: [{ label: "Test", value: 1 }],
+                alternateLabelStyle: true,
+                defaultValue: { label: "Test", value: 1 }
+              }}
+            />
+          ) : (
+            <Select
+              id="alert-types-viirs-timeframes"
+              className="u-margin-bottom"
+              formHook={methods}
+              registered={methods.register("alertTypesViirsTimeframes")}
+              selectProps={{
+                placeholder: intl.formatMessage({ id: "maps.period" }),
+                options: [{ label: "Test2", value: 1 }],
+                alternateLabelStyle: true,
+                defaultValue: { label: "Test2", value: 1 }
+              }}
+            />
+          )}
         </>
       )}
     </>

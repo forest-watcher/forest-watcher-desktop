@@ -1,5 +1,5 @@
 import { ALERTS_API_URL, ALERTS_API_TOKEN } from "constants/global";
-import { alertTypes as DATASETS } from "constants/alerts";
+import { alertTypes as DATASETS, EAlertTypes } from "constants/alerts";
 import { BaseService } from "services/baseService";
 import { formatDate } from "helpers/dates";
 import { IAlertIdentifier } from "constants/alerts";
@@ -32,11 +32,20 @@ export class AlertsService extends BaseService {
     });
   }
 
-  async getAlertsForArea(area: any) {
+  async getAlertForArea(area: any, alertTypeKey: EAlertTypes) {
+    const geostoreId = area.attributes.geostore.id;
+
+    return { type: alertTypeKey, data: (await this.getAlertsByGeoStoreId(geostoreId, DATASETS[alertTypeKey]))["data"] };
+  }
+
+  // ToDo: remove this one
+  async getAlertsForArea(area: any, alertTypesToShow: EAlertTypes[]) {
     const geostoreId = area.attributes.geostore.id;
 
     const alerts = {};
-    for (const datasetConfig of Object.values(DATASETS)) {
+    for (const alertType of alertTypesToShow) {
+      const datasetConfig = DATASETS[alertType];
+
       Object.assign(alerts, {
         [datasetConfig.id]: (await this.getAlertsByGeoStoreId(geostoreId, datasetConfig))["data"]
       });
