@@ -1,5 +1,4 @@
 import OptionalWrapper from "components/extensive/OptionalWrapper";
-import AreaAssignmentSource from "pages/reports/investigation/components/AreaAssignmentSource";
 import { FC, useCallback, useEffect, useMemo, useState } from "react";
 import { useForm, FormProvider } from "react-hook-form";
 import { Route, RouteComponentProps, Switch, useHistory, useRouteMatch } from "react-router-dom";
@@ -12,7 +11,9 @@ import { TGetAllAnswers } from "services/reports";
 import { Layer, Source } from "react-map-gl";
 import { setupMapImages } from "helpers/map";
 import { Map as MapInstance, MapboxEvent } from "mapbox-gl";
-import AreaAlertsSource from "components/ui/Map/components/layers/AreaAlerts";
+
+import AreaAssignmentSource from "pages/reports/investigation/components/AreaAssignmentSource";
+import AreaAlertsSource from "pages/reports/investigation/components/AreaAlertSource";
 
 // Control Panel Views
 import AreaListControlPanel from "./control-panels/AreaList";

@@ -230,7 +230,11 @@ export const getReportImage: TMapIconGenerator = (alertType, isHovered, isSelect
   }
 };
 
-export const getAlertImage: TMapIconGenerator = (alertType, isHover) => {
+export const getAlertImage: TMapIconGenerator = (alertType, isHover, isSelected) => {
+  if (isSelected) {
+    return MapImages.reportSelected;
+  }
+
   if (isHover) {
     switch (alertType) {
       case EAlertTypes.viirs:

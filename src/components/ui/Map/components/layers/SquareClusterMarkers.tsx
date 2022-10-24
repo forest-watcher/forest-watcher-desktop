@@ -1,6 +1,6 @@
 import { FC, useEffect, useMemo, useState } from "react";
 import { Layer, Source, useMap } from "react-map-gl";
-import { pointStyle, clusterCountStyle } from "./styles";
+import { pointStyle as defaultPointStyle, clusterCountStyle } from "./styles";
 import * as turf from "@turf/turf";
 import { Marker } from "mapbox-gl";
 import {
@@ -29,6 +29,7 @@ export interface IProps {
   id: string;
   pointDataType: EPointDataTypes;
   points: IPoint[];
+  pointStyle?: Record<any, any>;
   onSquareSelect?: (ids: string[], point: mapboxgl.Point) => void;
   selectedSquareIds: string[] | null;
   mapRef: MapInstance | null;
@@ -39,7 +40,15 @@ const markers: IMarkers = {};
 let markersOnScreen: IMarkers = {};
 
 const SquareClusterMarkers: FC<IProps> = props => {
-  const { id, pointDataType = EPointDataTypes.Reports, points, onSquareSelect, selectedSquareIds, mapRef } = props;
+  const {
+    id,
+    pointDataType = EPointDataTypes.Reports,
+    points,
+    onSquareSelect,
+    selectedSquareIds,
+    mapRef,
+    pointStyle = defaultPointStyle
+  } = props;
   const { current: map } = useMap();
   const [hoveredPoint, setHoveredPoint] = useState<string | null>(null);
   const [selectedPoints, setSelectedPoints] = useState<string[] | null>(null);
