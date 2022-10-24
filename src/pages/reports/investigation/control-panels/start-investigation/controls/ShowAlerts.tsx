@@ -1,6 +1,6 @@
 import ToggleGroup from "components/ui/Form/ToggleGroup";
 import Select from "components/ui/Form/Select";
-import { EAlertTypes } from "constants/alerts";
+import { DefaultRequestThresholds, EAlertTypes, ViirsRequestThresholds } from "constants/alerts";
 import { FC } from "react";
 import { useFormContext } from "react-hook-form";
 import { useIntl } from "react-intl";
@@ -13,10 +13,21 @@ const alertTypesShownOptions = [
     value: "all"
   },
   ...Object.values(EAlertTypes).map(alertType => ({
-    label: alertType,
+    label: alertType, // ToDo: Translate
     value: alertType
   }))
 ];
+
+const alertTypesRequestThresholdOptions = {
+  default: DefaultRequestThresholds.map(requestThreshold => ({
+    label: requestThreshold.labelKey, // ToDo: Translate
+    value: requestThreshold.requestThreshold
+  })),
+  viirs: ViirsRequestThresholds.map(requestThreshold => ({
+    label: requestThreshold.labelKey, // ToDo: Translate
+    value: requestThreshold.requestThreshold
+  }))
+};
 
 const ShowAlertsControl: FC<IProps> = props => {
   const methods = useFormContext();
@@ -60,12 +71,12 @@ const ShowAlertsControl: FC<IProps> = props => {
               id="alert-types-timeframes"
               className="u-margin-bottom"
               formHook={methods}
-              registered={methods.register("alertTypesTimeframes")}
+              registered={methods.register("alertTypesRequestThreshold")}
               selectProps={{
                 placeholder: intl.formatMessage({ id: "maps.period" }),
-                options: [{ label: "Test", value: 1 }],
+                options: alertTypesRequestThresholdOptions.default,
                 alternateLabelStyle: true,
-                defaultValue: { label: "Test", value: 1 }
+                defaultValue: alertTypesRequestThresholdOptions.default[0]
               }}
             />
           ) : (
@@ -73,12 +84,12 @@ const ShowAlertsControl: FC<IProps> = props => {
               id="alert-types-viirs-timeframes"
               className="u-margin-bottom"
               formHook={methods}
-              registered={methods.register("alertTypesViirsTimeframes")}
+              registered={methods.register("alertTypesViirsRequestThreshold")}
               selectProps={{
                 placeholder: intl.formatMessage({ id: "maps.period" }),
-                options: [{ label: "Test2", value: 1 }],
+                options: alertTypesRequestThresholdOptions.viirs,
                 alternateLabelStyle: true,
-                defaultValue: { label: "Test2", value: 1 }
+                defaultValue: alertTypesRequestThresholdOptions.viirs[0]
               }}
             />
           )}

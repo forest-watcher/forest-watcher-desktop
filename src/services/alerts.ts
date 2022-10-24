@@ -5,12 +5,21 @@ import { formatDate } from "helpers/dates";
 import { IAlertIdentifier } from "constants/alerts";
 
 export class AlertsService extends BaseService {
-  async getAlertsByGeoStoreId(geostoreId: string, DATASET: IAlertIdentifier): Promise<any> {
+  async getAlertsByGeoStoreId(
+    geostoreId: string,
+    DATASET: IAlertIdentifier,
+    alertRequestThreshold?: number
+  ): Promise<any> {
     const { confidenceKey, dateKey, tableName, requiresMaxDate } = DATASET.api.query;
 
     const now = new Date();
     const minDate = new Date(now);
-    minDate.setDate(minDate.getDate() - DATASET.requestThreshold);
+
+    if (alertRequestThreshold && alertRequestThreshold < DATASET.requestThreshold) {
+      minDate.setDate(minDate.getDate() - alertRequestThreshold);
+    } else {
+      minDate.setDate(minDate.getDate() - DATASET.requestThreshold);
+    }
 
     let URL = `/${
       DATASET.api.datastoreId
@@ -32,10 +41,13 @@ export class AlertsService extends BaseService {
     });
   }
 
-  async getAlertForArea(area: any, alertTypeKey: EAlertTypes) {
+  async getAlertForArea(area: any, alertTypeKey: EAlertTypes, alertRequestThreshold?: number) {
     const geostoreId = area.attributes.geostore.id;
 
-    return { type: alertTypeKey, data: (await this.getAlertsByGeoStoreId(geostoreId, DATASETS[alertTypeKey]))["data"] };
+    return {
+      type: alertTypeKey,
+      data: (await this.getAlertsByGeoStoreId(geostoreId, DATASETS[alertTypeKey], alertRequestThreshold))["data"]
+    };
   }
 
   // ToDo: remove this one

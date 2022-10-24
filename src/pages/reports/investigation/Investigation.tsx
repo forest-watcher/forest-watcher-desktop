@@ -1,5 +1,10 @@
 import OptionalWrapper from "components/extensive/OptionalWrapper";
-import { allDeforestationAlerts, EAlertTypes } from "constants/alerts";
+import {
+  allDeforestationAlerts,
+  DefaultRequestThresholds,
+  EAlertTypes,
+  ViirsRequestThresholds
+} from "constants/alerts";
 import { FC, useCallback, useEffect, useMemo, useState } from "react";
 import { useForm, FormProvider } from "react-hook-form";
 import { Route, RouteComponentProps, Switch, useHistory, useRouteMatch } from "react-router-dom";
@@ -34,8 +39,8 @@ export type TFormValues = {
   showAlerts: ["true"];
   showOpenAssignments: ["true"];
   alertTypesShown: "all" | EAlertTypes;
-  alertTypesTimeframes?: string;
-  alertTypesViirsTimeframes?: string;
+  alertTypesRequestThreshold: number;
+  alertTypesViirsRequestThreshold: number;
 };
 
 const InvestigationPage: FC<IProps> = props => {
@@ -96,7 +101,9 @@ const InvestigationPage: FC<IProps> = props => {
       currentMap: basemapKey,
       showAlerts: ["true"],
       showOpenAssignments: ["true"],
-      alertTypesShown: "all"
+      alertTypesShown: "all",
+      alertTypesRequestThreshold: DefaultRequestThresholds[0].requestThreshold,
+      alertTypesViirsRequestThreshold: ViirsRequestThresholds[0].requestThreshold
     }),
     [basemapKey]
   );
@@ -192,6 +199,11 @@ const InvestigationPage: FC<IProps> = props => {
             <AreaAlertsSource
               areaId={investigationMatch?.params.areaId}
               alertTypesToShow={watcher.alertTypesShown === "all" ? allDeforestationAlerts : [watcher.alertTypesShown]}
+              alertRequestThreshold={
+                watcher.alertTypesShown !== EAlertTypes.viirs
+                  ? watcher.alertTypesRequestThreshold
+                  : watcher.alertTypesViirsRequestThreshold
+              }
             />
           )}
 

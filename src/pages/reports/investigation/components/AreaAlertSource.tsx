@@ -9,12 +9,13 @@ import { IPoint } from "types/map";
 export interface IProps {
   areaId?: string;
   alertTypesToShow?: EAlertTypes[];
+  alertRequestThreshold?: number;
 }
 
 const AreaAssignmentMapSource: FC<IProps> = props => {
-  const { areaId, alertTypesToShow } = props;
+  const { areaId, alertTypesToShow, alertRequestThreshold } = props;
   const { current: mapRef } = useMap();
-  const alerts = useGetAlertsForArea(areaId, alertTypesToShow);
+  const alerts = useGetAlertsForArea(areaId, alertTypesToShow, alertRequestThreshold);
   const [, setSelectedPoint] = useState<mapboxgl.Point | null>(null);
   const [selectedAlertIds, setSelectedAlertIds] = useState<string[] | null>(null);
 

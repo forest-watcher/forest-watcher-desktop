@@ -90,4 +90,51 @@ const alertTypes: IAlertTypes = {
   }
 };
 
+export type TRequestThreshold = {
+  labelKey: string;
+  requestThreshold: number;
+};
+
+export const DefaultRequestThresholds: readonly TRequestThreshold[] = [
+  {
+    labelKey: "14",
+    requestThreshold: 14 // 7 days * 2
+  },
+  {
+    labelKey: "31",
+    requestThreshold: 31 // 31 days
+  },
+  {
+    labelKey: "62",
+    requestThreshold: 62 // 31 days * 2
+  },
+  {
+    labelKey: "186",
+    requestThreshold: 186 // 31 days * 6
+  },
+  {
+    labelKey: "365",
+    requestThreshold: 365 // a year
+  }
+];
+
+export const ViirsRequestThresholds: readonly TRequestThreshold[] = [
+  {
+    labelKey: "1",
+    requestThreshold: 1
+  },
+  {
+    labelKey: "2",
+    requestThreshold: 2
+  },
+  {
+    labelKey: "6",
+    requestThreshold: 6
+  },
+  {
+    labelKey: "12",
+    requestThreshold: 12
+  }
+];
+
 export { alertTypes };
