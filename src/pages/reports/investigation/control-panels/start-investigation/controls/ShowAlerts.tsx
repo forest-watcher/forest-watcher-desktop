@@ -1,37 +1,43 @@
 import ToggleGroup from "components/ui/Form/ToggleGroup";
 import Select from "components/ui/Form/Select";
 import { DefaultRequestThresholds, EAlertTypes, ViirsRequestThresholds } from "constants/alerts";
-import { FC } from "react";
+import { FC, useMemo } from "react";
 import { useFormContext } from "react-hook-form";
 import { useIntl } from "react-intl";
 
 export interface IProps {}
 
-const alertTypesShownOptions = [
-  {
-    label: "All Deforestation Alerts",
-    value: "all"
-  },
-  ...Object.values(EAlertTypes).map(alertType => ({
-    label: alertType, // ToDo: Translate
-    value: alertType
-  }))
-];
-
-const alertTypesRequestThresholdOptions = {
-  default: DefaultRequestThresholds.map(requestThreshold => ({
-    label: requestThreshold.labelKey, // ToDo: Translate
-    value: requestThreshold.requestThreshold
-  })),
-  viirs: ViirsRequestThresholds.map(requestThreshold => ({
-    label: requestThreshold.labelKey, // ToDo: Translate
-    value: requestThreshold.requestThreshold
-  }))
-};
-
 const ShowAlertsControl: FC<IProps> = props => {
   const methods = useFormContext();
   const intl = useIntl();
+
+  const alertTypesShownOptions = useMemo(
+    () => [
+      {
+        label: intl.formatMessage({ id: "alerts.all.deforestation.alerts" }),
+        value: "all"
+      },
+      ...Object.values(EAlertTypes).map(alertType => ({
+        label: intl.formatMessage({ id: `alerts.${alertType}` }),
+        value: alertType
+      }))
+    ],
+    [intl]
+  );
+
+  const alertTypesRequestThresholdOptions = useMemo(
+    () => ({
+      default: DefaultRequestThresholds.map(requestThreshold => ({
+        label: intl.formatMessage({ id: requestThreshold.labelKey }),
+        value: requestThreshold.requestThreshold
+      })),
+      viirs: ViirsRequestThresholds.map(requestThreshold => ({
+        label: intl.formatMessage({ id: requestThreshold.labelKey }),
+        value: requestThreshold.requestThreshold
+      }))
+    }),
+    [intl]
+  );
 
   return (
     <>

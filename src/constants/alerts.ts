@@ -97,42 +97,42 @@ export type TRequestThreshold = {
 
 export const DefaultRequestThresholds: readonly TRequestThreshold[] = [
   {
-    labelKey: "14",
+    labelKey: "timeframes.2weeks",
     requestThreshold: 14 // 7 days * 2
   },
   {
-    labelKey: "31",
+    labelKey: "timeframes.1month",
     requestThreshold: 31 // 31 days
   },
   {
-    labelKey: "62",
+    labelKey: "timeframes.2months",
     requestThreshold: 62 // 31 days * 2
   },
   {
-    labelKey: "186",
+    labelKey: "timeframes.6months",
     requestThreshold: 186 // 31 days * 6
   },
   {
-    labelKey: "365",
+    labelKey: "timeframes.12months",
     requestThreshold: 365 // a year
   }
 ];
 
 export const ViirsRequestThresholds: readonly TRequestThreshold[] = [
   {
-    labelKey: "1",
+    labelKey: "timeframes.1day",
     requestThreshold: 1
   },
   {
-    labelKey: "2",
+    labelKey: "timeframes.2days",
     requestThreshold: 2
   },
   {
-    labelKey: "6",
+    labelKey: "timeframes.6days",
     requestThreshold: 6
   },
   {
-    labelKey: "12",
+    labelKey: "timeframes.12days",
     requestThreshold: 12
   }
 ];
