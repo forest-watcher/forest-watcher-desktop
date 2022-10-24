@@ -15,11 +15,11 @@ const AreaAssignmentMapSource: FC<IProps> = props => {
   const { current: mapRef } = useMap();
   const { data: alerts } = useGetAlertsForArea(areaId);
   const [, setSelectedPoint] = useState<mapboxgl.Point | null>(null);
-  const [selectedAssignmentIds, setSelectedAssignmentIds] = useState<string[] | null>(null);
+  const [selectedAlertIds, setSelectedAlertIds] = useState<string[] | null>(null);
 
   const handleSquareSelect = useCallback((ids: string[], point: mapboxgl.Point) => {
     setSelectedPoint(point);
-    setSelectedAssignmentIds(ids);
+    setSelectedAlertIds(ids);
   }, []);
 
   const alertPoints = useMemo(() => {
@@ -53,7 +53,7 @@ const AreaAssignmentMapSource: FC<IProps> = props => {
           }
         }}
         onSquareSelect={handleSquareSelect}
-        selectedSquareIds={selectedAssignmentIds}
+        selectedSquareIds={selectedAlertIds}
         mapRef={mapRef?.getMap() || null}
       />
     </>

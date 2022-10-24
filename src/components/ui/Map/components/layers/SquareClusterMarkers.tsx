@@ -92,7 +92,7 @@ const SquareClusterMarkers: FC<IProps> = props => {
   }, [mapRef]);
 
   useEffect(() => {
-    map?.on("mouseenter", id, e => {
+    map?.on("mousemove", id, e => {
       const { features } = e;
       if (features && features[0]?.source === id) {
         setHoveredPoint(features[0]?.properties?.id);
