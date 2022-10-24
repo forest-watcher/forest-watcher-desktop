@@ -5,9 +5,9 @@ import Map, { IProps as IMapProps } from "../ui/Map/Map";
 import { TAreasResponse } from "services/area";
 import { Map as MapInstance, MapboxEvent } from "mapbox-gl";
 import * as turf from "@turf/turf";
-import { getReportImage, goToGeojson } from "helpers/map";
+import { goToGeojson } from "helpers/map";
 import { TGetAllAnswers } from "services/reports";
-import SquareClusterMarkers from "components/ui/Map/components/layers/SquareClusterMarkers";
+import SquareClusterMarkers, { EPointDataTypes } from "components/ui/Map/components/layers/SquareClusterMarkers";
 import { Layer, Source } from "react-map-gl";
 import { BASEMAPS } from "constants/mapbox";
 import { IPlanetBasemap } from "helpers/basemap";
@@ -186,6 +186,7 @@ const UserAreasMap: FC<PropsWithChildren<IProps>> = props => {
       {hasLoaded && (
         <SquareClusterMarkers
           id="answers"
+          pointDataType={EPointDataTypes.Reports}
           points={
             answers && showReports
               ? answers.map(answer => ({
@@ -196,7 +197,6 @@ const UserAreasMap: FC<PropsWithChildren<IProps>> = props => {
                 }))
               : []
           }
-          iconGenerator={getReportImage}
           onSquareSelect={handleSquareSelect}
           selectedSquareIds={selectedReportIds}
           mapRef={mapRef}

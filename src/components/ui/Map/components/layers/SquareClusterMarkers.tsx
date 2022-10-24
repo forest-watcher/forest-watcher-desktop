@@ -3,35 +3,55 @@ import { Layer, Source, useMap } from "react-map-gl";
 import { pointStyle, clusterCountStyle } from "./styles";
 import * as turf from "@turf/turf";
 import { Marker } from "mapbox-gl";
-import { clusterZoom, createLayeredClusterSVG, goToGeojson, TMapIconGenerator } from "helpers/map";
-import { IMarkers, IPoint, ReportLayerColours, ReportLayers } from "types/map";
+import {
+  alertClusterTypeColourMap,
+  clusterZoom,
+  createLayeredClusterSVG,
+  getAlertImage,
+  getReportImage,
+  goToGeojson,
+  reportClusterTypeColourMap,
+  TClusterTypeColourMap,
+  TMapIconGenerator
+} from "helpers/map";
+import { IMarkers, IPoint } from "types/map";
 import { Map as MapInstance } from "mapbox-gl";
+
+export enum EPointDataTypes {
+  Reports,
+  Alerts,
+  Assignments
+}
 
 export interface IProps {
   id: string;
+  pointDataType: EPointDataTypes;
   points: IPoint[];
-  clusterTypeColourMap: { type: string; hex: string; not?: true }[];
-  iconGenerator: TMapIconGenerator;
   onSquareSelect?: (ids: string[], point: mapboxgl.Point) => void;
   selectedSquareIds: string[] | null;
   mapRef: MapInstance | null;
   goToPoints?: boolean;
 }
 
-const LAYER_EXPRESSION_FILTERS = {
-  default: ["!", ["==", ReportLayers.VIIRS, ["get", "alertType"]]],
-  viirs: ["==", ReportLayers.VIIRS, ["get", "alertType"]]
-};
-
 const markers: IMarkers = {};
 let markersOnScreen: IMarkers = {};
 
 const SquareClusterMarkers: FC<IProps> = props => {
-  const { id, points, onSquareSelect, selectedSquareIds, iconGenerator, clusterTypeColourMap, mapRef } = props;
+  const { id, pointDataType = EPointDataTypes.Reports, points, onSquareSelect, selectedSquareIds, mapRef } = props;
   const { current: map } = useMap();
   const [hoveredPoint, setHoveredPoint] = useState<string | null>(null);
   const [selectedPoints, setSelectedPoints] = useState<string[] | null>(null);
   const [hasMoved, setHasMoved] = useState(false);
+
+  const [iconGenerator, clusterTypeColourMap] = useMemo<[TMapIconGenerator, TClusterTypeColourMap]>(() => {
+    switch (pointDataType) {
+      case EPointDataTypes.Alerts:
+        return [getAlertImage, alertClusterTypeColourMap];
+      default:
+        // EPointDataTypes.Reports
+        return [getReportImage, reportClusterTypeColourMap];
+    }
+  }, [pointDataType]);
 
   const featureCollection = useMemo(
     () =>
@@ -48,9 +68,7 @@ const SquareClusterMarkers: FC<IProps> = props => {
           })
         )
       ),
-    // iconGenerator shouldn't be in the dependency array
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [hoveredPoint, points, selectedPoints]
+    [hoveredPoint, iconGenerator, points, selectedPoints]
   );
 
   useEffect(() => {
@@ -100,14 +118,6 @@ const SquareClusterMarkers: FC<IProps> = props => {
           }
         });
 
-        // if (props.viirs) {
-        //   colours.push(ReportLayerColours.VIIRS);
-        // }
-        //
-        // if (props.default) {
-        //   colours.push(ReportLayerColours.DEFAULT);
-        // }
-
         if (!marker) {
           const el = createLayeredClusterSVG(props, colours);
 
@@ -135,7 +145,7 @@ const SquareClusterMarkers: FC<IProps> = props => {
       }
       markersOnScreen = newMarkers;
     });
-  }, [id, map, onSquareSelect]);
+  }, [clusterTypeColourMap, id, map, onSquareSelect]);
 
   useEffect(() => {
     const click = (
@@ -181,18 +191,14 @@ const SquareClusterMarkers: FC<IProps> = props => {
         cluster
         clusterRadius={40}
         clusterProperties={clusterTypeColourMap.reduce(
-          (acc, { type, not }) => ({
+          (acc, { prop, type, not }) => ({
             ...acc,
-            [type]: not
+            [prop]: not
               ? ["+", ["case", ["!", ["==", type, ["get", "type"]]], 1, 0]]
               : ["+", ["case", ["==", type, ["get", "type"]], 1, 0]]
           }),
           {}
         )}
-        // clusterProperties={{
-        //   default: ["+", ["case", LAYER_EXPRESSION_FILTERS.default, 1, 0]],
-        //   viirs: ["+", ["case", LAYER_EXPRESSION_FILTERS.viirs, 1, 0]]
-        // }}
       >
         {/* @ts-ignore */}
         <Layer {...pointStyle} id={id} />

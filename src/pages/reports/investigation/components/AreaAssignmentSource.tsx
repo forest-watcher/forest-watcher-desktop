@@ -1,5 +1,4 @@
-import SquareClusterMarkers from "components/ui/Map/components/layers/SquareClusterMarkers";
-import { getReportImage } from "helpers/map";
+import SquareClusterMarkers, { EPointDataTypes } from "components/ui/Map/components/layers/SquareClusterMarkers";
 import { FC, useCallback, useState } from "react";
 import { useMap } from "react-map-gl";
 
@@ -19,7 +18,7 @@ const AreaAssignmentMapSource: FC<IProps> = props => {
     <>
       <SquareClusterMarkers
         id="assignments"
-        iconGenerator={getReportImage}
+        pointDataType={EPointDataTypes.Alerts}
         points={[{ position: [47.30005, -19.33615], id: "0" }]}
         onSquareSelect={handleSquareSelect}
         selectedSquareIds={selectedAssignmentIds}

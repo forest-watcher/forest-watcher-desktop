@@ -15,7 +15,7 @@ import L from "leaflet";
 import * as turf from "@turf/turf";
 import { GeoJsonProperties } from "geojson";
 import { MapRef } from "react-map-gl";
-import { ReportLayers } from "types/map";
+import { AlertLayerColours, ReportLayerColours, ReportLayers } from "types/map";
 
 export enum MapImages {
   label = "label",
@@ -229,3 +229,33 @@ export const getAlertImage: TMapIconGenerator = (alertType, isHover) => {
       return MapImages.alertViirsDefault;
   }
 };
+
+export type TClusterTypeColourMap = { type: string; hex: string; prop: string; not?: true }[];
+
+export const reportClusterTypeColourMap: TClusterTypeColourMap = [
+  {
+    prop: "default",
+    not: true,
+    type: "viirs",
+    hex: ReportLayerColours.DEFAULT
+  },
+  {
+    prop: "viirs",
+    type: "viirs",
+    hex: ReportLayerColours.VIIRS
+  }
+];
+
+export const alertClusterTypeColourMap: TClusterTypeColourMap = [
+  {
+    prop: "default",
+    not: true,
+    type: "viirs",
+    hex: AlertLayerColours.DEFAULT
+  },
+  {
+    prop: "viirs",
+    type: "viirs",
+    hex: AlertLayerColours.VIIRS
+  }
+];
