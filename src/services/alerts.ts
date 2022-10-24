@@ -1,8 +1,7 @@
-import { ALERTS_API_URL, ALERTS_API_TOKEN } from "constants/global";
-import { alertTypes as DATASETS, EAlertTypes } from "constants/alerts";
-import { BaseService } from "services/baseService";
+import { alertTypes as DATASETS, EAlertTypes, IAlertIdentifier } from "constants/alerts";
+import { ALERTS_API_TOKEN, ALERTS_API_URL } from "constants/global";
 import { formatDate } from "helpers/dates";
-import { IAlertIdentifier } from "constants/alerts";
+import { BaseService } from "services/baseService";
 
 export class AlertsService extends BaseService {
   async getAlertsByGeoStoreId(

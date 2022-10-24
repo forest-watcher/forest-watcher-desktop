@@ -207,8 +207,8 @@ const SquareClusterMarkers: FC<IProps> = props => {
           (acc, { prop, type, not }) => ({
             ...acc,
             [prop]: not
-              ? ["+", ["case", ["!", ["==", type, ["get", "type"]]], 1, 0]]
-              : ["+", ["case", ["==", type, ["get", "type"]], 1, 0]]
+              ? ["+", ["case", ["!", ["==", type, ["get", "alertType"]]], 1, 0]]
+              : ["+", ["case", ["==", type, ["get", "alertType"]], 1, 0]]
           }),
           {}
         )}
