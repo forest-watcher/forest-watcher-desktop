@@ -15,6 +15,11 @@ export enum AlertLayerColours {
   DEFAULT = "#FF6799"
 }
 
+export enum AssignmentLayerColours {
+  CREATOR = "#4489CE",
+  DEFAULT = "#EEBD37"
+}
+
 export interface IPoint {
   position: [number, number];
   id: string;

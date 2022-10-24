@@ -18,7 +18,7 @@ const AreaAssignmentMapSource: FC<IProps> = props => {
     <>
       <SquareClusterMarkers
         id="assignments"
-        pointDataType={EPointDataTypes.Alerts}
+        pointDataType={EPointDataTypes.Assignments}
         // ToDo: Fetch assignment points from API
         points={[{ position: [47.30005, -19.33615], id: "0" }]}
         onSquareSelect={handleSquareSelect}

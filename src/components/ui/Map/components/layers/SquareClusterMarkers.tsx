@@ -5,9 +5,11 @@ import * as turf from "@turf/turf";
 import { Marker } from "mapbox-gl";
 import {
   alertClusterTypeColourMap,
+  assignmentClusterTypeColourMap,
   clusterZoom,
   createLayeredClusterSVG,
   getAlertImage,
+  getAssignmentImage,
   getReportImage,
   goToGeojson,
   reportClusterTypeColourMap,
@@ -45,6 +47,8 @@ const SquareClusterMarkers: FC<IProps> = props => {
 
   const [iconGenerator, clusterTypeColourMap] = useMemo<[TMapIconGenerator, TClusterTypeColourMap]>(() => {
     switch (pointDataType) {
+      case EPointDataTypes.Assignments:
+        return [getAssignmentImage, assignmentClusterTypeColourMap];
       case EPointDataTypes.Alerts:
         return [getAlertImage, alertClusterTypeColourMap];
       default:
