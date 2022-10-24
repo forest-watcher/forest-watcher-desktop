@@ -3,6 +3,7 @@ import Button from "components/ui/Button/Button";
 import MapCard from "components/ui/Map/components/cards/MapCard";
 import useFindArea from "hooks/useFindArea";
 import useZoomToGeojson from "hooks/useZoomToArea";
+import CreateAssignmentForm from "pages/reports/investigation/control-panels/CreateAssignment/states/CreateAssignmentForm";
 import OpenAssignmentEmptyState from "pages/reports/investigation/control-panels/CreateAssignment/states/EmptyState";
 import { TParams } from "pages/reports/investigation/types";
 import { FC, useMemo } from "react";
@@ -39,7 +40,7 @@ const CreateAssignmentControlPanel: FC<IProps> = props => {
       {/* ToDo: Currently always displays */}
       {/*<OpenAssignmentEmptyState />*/}
 
-      <CreateAssignmentControlPanel />
+      <CreateAssignmentForm />
     </MapCard>
   );
 };
