@@ -112,8 +112,8 @@ const SquareClusterMarkers: FC<IProps> = props => {
         let marker = markers[clusterId];
 
         const colours: string[] = [];
-        clusterTypeColourMap.forEach(({ type, hex }) => {
-          if (props[type]) {
+        clusterTypeColourMap.forEach(({ prop, hex }) => {
+          if (props[prop]) {
             colours.push(hex);
           }
         });
