@@ -1,5 +1,6 @@
 import { ComponentStory, ComponentMeta } from "@storybook/react";
-import { FC } from "react";
+import OptionalWrapper from "components/extensive/OptionalWrapper";
+import { FC, useState } from "react";
 import { useForm } from "react-hook-form";
 import MultiSelectDialog, { IProps } from "./MultiSelectDialog";
 
@@ -63,6 +64,35 @@ const PreviewTemplate: ComponentStory<typeof MultiSelectDialog.Preview> = args =
   );
 };
 
+const Combined: ComponentStory<typeof MultiSelectDialog.Preview> = args => {
+  const { control } = useForm<TMultiSelectDialogFormFields>({
+    defaultValues: {
+      monitors: ["Me", "1", "4", "6"]
+    }
+  });
+
+  const [isDialogOpen, setOpenDialog] = useState(false);
+
+  return (
+    <div className="w-[300px]">
+      <OptionalWrapper
+        data={isDialogOpen}
+        elseComponent={
+          <MultiSelectDialog.Preview<TMultiSelectDialogFormFields>
+            {...args}
+            onAdd={() => setOpenDialog(open => !open)}
+            control={control}
+            name="monitors"
+          />
+        }
+      >
+        <button className="c-map-card__back-button mb-4" onClick={() => setOpenDialog(open => !open)} />
+        <MultiSelectDialog<TMultiSelectDialogFormFields> groups={args.groups} control={control} name="monitors" />
+      </OptionalWrapper>
+    </div>
+  );
+};
+
 export const Standard = EmptyTemplate.bind({});
 Standard.args = {
   groups: [
@@ -108,4 +138,9 @@ EmptyPreview.args = {
 export const PopulatedPreview = PreviewTemplate.bind({});
 PopulatedPreview.args = {
   ...EmptyPreview.args
+};
+
+export const AsDialog = Combined.bind({});
+AsDialog.args = {
+  ...PopulatedPreview.args
 };

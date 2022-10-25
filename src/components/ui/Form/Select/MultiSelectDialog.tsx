@@ -25,6 +25,7 @@ export interface IMultiSelectDialogPreviewProps<T> {
   emptyLabel: string;
   emptyIcon: string;
   addButtonLabel: string;
+  onAdd?: () => void;
 }
 
 interface IMultiSelectDialogComposition {
@@ -84,7 +85,7 @@ const MultiSelectDialog: (<T>(props: IProps & UseControllerProps<T>) => JSX.Elem
 };
 
 const MultiSelectDialogPreview = <T,>(props: IMultiSelectDialogPreviewProps<T>) => {
-  const { label, emptyLabel, emptyIcon, addButtonLabel, groups, control, name } = props;
+  const { label, emptyLabel, emptyIcon, addButtonLabel, groups, control, name, onAdd } = props;
   const intl = useIntl();
   const watcher = useWatch({
     control,
@@ -121,7 +122,7 @@ const MultiSelectDialogPreview = <T,>(props: IMultiSelectDialogPreviewProps<T>) 
             <FormattedMessage id={emptyLabel} />
           </h2>
 
-          <Button className="w-full" variant="secondary">
+          <Button className="w-full" variant="secondary" onClick={onAdd}>
             <Icon name="PlusForButton" className="pr-[6px]" />
             <FormattedMessage id={addButtonLabel} />
           </Button>
@@ -145,7 +146,7 @@ const MultiSelectDialogPreview = <T,>(props: IMultiSelectDialogPreviewProps<T>) 
           ))}
         </ul>
 
-        <Button className="w-full" variant="secondary">
+        <Button className="w-full" variant="secondary" onClick={onAdd}>
           <Icon name="PlusForButton" className="pr-[6px]" />
           <FormattedMessage id={addButtonLabel} />
         </Button>
