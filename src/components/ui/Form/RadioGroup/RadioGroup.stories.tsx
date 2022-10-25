@@ -4,7 +4,7 @@ import { UseControllerProps, useForm } from "react-hook-form";
 import RadioGroup, { IProps } from "./RadioGroup";
 
 export default {
-  title: "ui/RadioGroup",
+  title: "ui/Form/RadioGroup",
   component: RadioGroup
 } as ComponentMeta<typeof RadioGroup>;
 
