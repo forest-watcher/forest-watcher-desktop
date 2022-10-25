@@ -15,9 +15,7 @@ export default {
 
 const Template: ComponentStory<FC<IProps>> = args => {
   const { control } = useForm<TMultiSelectDialogFormFields>({
-    defaultValues: {
-      monitors: ["Me"]
-    }
+    defaultValues: { monitors: [] }
   });
 
   return <MultiSelectDialog<TMultiSelectDialogFormFields> {...args} control={control} name="monitors" />;

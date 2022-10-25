@@ -2,8 +2,9 @@ import Icon from "components/extensive/Icon";
 import OptionalWrapper from "components/extensive/OptionalWrapper";
 import Button from "components/ui/Button/Button";
 import IconBubble from "components/ui/Icon/IconBubble";
-import { FC, useMemo } from "react";
+import { FC, useMemo, useState } from "react";
 import { FormattedMessage, useIntl } from "react-intl";
+import { Switch } from "@headlessui/react";
 import {
   Control,
   Path,
@@ -42,12 +43,44 @@ const MultiSelectDialog: (<T>(props: IProps & UseControllerProps<T>) => JSX.Elem
   IMultiSelectDialogComposition = props => {
   const { groups, ...controlProps } = props;
   const { field } = useController(controlProps);
+  const [controlledValue, setControlledValue] = useState(field.value || []);
+
+  const handleChange = (checked: boolean, value: string) => {
+    let copyControlledValue;
+    if (checked) {
+      // @ts-ignore
+      copyControlledValue = [...controlledValue, value];
+    } else {
+      // @ts-ignore
+      copyControlledValue = controlledValue.filter(i => i !== value);
+    }
+
+    // Send data to react hook form
+    field.onChange(copyControlledValue);
+
+    setControlledValue(copyControlledValue);
+  };
 
   return (
     <div>
       {groups.map(group => (
         <div key={group.label}>
-          {group.label}, {JSON.stringify(group.options)}
+          <span>
+            <FormattedMessage id={group.label} />
+          </span>
+
+          {group.options.map(option => (
+            <Switch.Group>
+              <Switch.Label>
+                <FormattedMessage id={option.label} />
+              </Switch.Label>
+              <Switch
+                // @ts-ignore
+                checked={controlledValue.includes(option.value)}
+                onChange={checked => handleChange(checked, option.value)}
+              />
+            </Switch.Group>
+          ))}
         </div>
       ))}
     </div>
