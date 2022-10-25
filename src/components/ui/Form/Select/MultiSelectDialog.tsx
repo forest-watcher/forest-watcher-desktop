@@ -2,18 +2,10 @@ import Icon from "components/extensive/Icon";
 import OptionalWrapper from "components/extensive/OptionalWrapper";
 import Button from "components/ui/Button/Button";
 import IconBubble from "components/ui/Icon/IconBubble";
-import { FC, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { FormattedMessage, useIntl } from "react-intl";
 import { Switch } from "@headlessui/react";
-import {
-  Control,
-  Path,
-  PathValue,
-  UnpackNestedValue,
-  useController,
-  UseControllerProps,
-  useWatch
-} from "react-hook-form";
+import { Control, Path, useController, UseControllerProps, useWatch } from "react-hook-form";
 
 type TMultiSelectDialogGroups = {
   options: { value: string; label: string }[];
@@ -62,24 +54,28 @@ const MultiSelectDialog: (<T>(props: IProps & UseControllerProps<T>) => JSX.Elem
   };
 
   return (
-    <div>
+    <div className="flex flex-col gap-10">
       {groups.map(group => (
         <div key={group.label}>
-          <span>
+          <span className="block text-[14px] font-medium uppercase text-gray-700">
             <FormattedMessage id={group.label} />
           </span>
 
           {group.options.map(option => (
-            <Switch.Group>
-              <Switch.Label>
-                <FormattedMessage id={option.label} />
-              </Switch.Label>
-              <Switch
-                // @ts-ignore
-                checked={controlledValue.includes(option.value)}
-                onChange={checked => handleChange(checked, option.value)}
-              />
-            </Switch.Group>
+            <div className="flex justify-between w-full mt-4">
+              <Switch.Group>
+                <Switch.Label className="cursor-pointer">
+                  <FormattedMessage id={option.label} />
+                </Switch.Label>
+                <Switch
+                  // @ts-ignore
+                  checked={controlledValue.includes(option.value)}
+                  onChange={checked => handleChange(checked, option.value)}
+                >
+                  {({ checked }) => (checked ? <Icon name="RadioOn" /> : <Icon name="RadioOff" />)}
+                </Switch>
+              </Switch.Group>
+            </div>
           ))}
         </div>
       ))}
@@ -142,7 +138,7 @@ const MultiSelectDialogPreview = <T,>(props: IMultiSelectDialogPreviewProps<T>) 
             <li key={group.label}>
               <FormattedMessage id={group.label}>
                 {txt => (
-                  <>{`${txt}: ${group.options.map(option => intl.formatMessage({ id: option.label })).join(",")}`}</>
+                  <>{`${txt}: ${group.options.map(option => intl.formatMessage({ id: option.label })).join(", ")}`}</>
                 )}
               </FormattedMessage>
             </li>

@@ -1,7 +1,7 @@
 import { ComponentStory, ComponentMeta } from "@storybook/react";
 import { FC } from "react";
-import { UseControllerProps, useForm } from "react-hook-form";
-import MultiSelectDialog, { IProps, IMultiSelectDialogPreviewProps } from "./MultiSelectDialog";
+import { useForm } from "react-hook-form";
+import MultiSelectDialog, { IProps } from "./MultiSelectDialog";
 
 type TMultiSelectDialogFormFields = {
   monitors: string[];
@@ -13,12 +13,30 @@ export default {
   subcomponents: { Preview: MultiSelectDialog.Preview }
 } as ComponentMeta<typeof MultiSelectDialog>;
 
-const Template: ComponentStory<FC<IProps>> = args => {
+const EmptyTemplate: ComponentStory<FC<IProps>> = args => {
   const { control } = useForm<TMultiSelectDialogFormFields>({
     defaultValues: { monitors: [] }
   });
 
-  return <MultiSelectDialog<TMultiSelectDialogFormFields> {...args} control={control} name="monitors" />;
+  return (
+    <div className="w-[300px]">
+      <MultiSelectDialog<TMultiSelectDialogFormFields> {...args} control={control} name="monitors" />
+    </div>
+  );
+};
+
+const Template: ComponentStory<FC<IProps>> = args => {
+  const { control } = useForm<TMultiSelectDialogFormFields>({
+    defaultValues: {
+      monitors: ["Me", "1", "4", "6"]
+    }
+  });
+
+  return (
+    <div className="w-[300px]">
+      <MultiSelectDialog<TMultiSelectDialogFormFields> {...args} control={control} name="monitors" />
+    </div>
+  );
 };
 
 const EmptyPreviewTemplate: ComponentStory<typeof MultiSelectDialog.Preview> = args => {
@@ -34,7 +52,7 @@ const EmptyPreviewTemplate: ComponentStory<typeof MultiSelectDialog.Preview> = a
 const PreviewTemplate: ComponentStory<typeof MultiSelectDialog.Preview> = args => {
   const { control } = useForm<TMultiSelectDialogFormFields>({
     defaultValues: {
-      monitors: ["Me"]
+      monitors: ["Me", "1", "4", "6"]
     }
   });
 
@@ -45,24 +63,42 @@ const PreviewTemplate: ComponentStory<typeof MultiSelectDialog.Preview> = args =
   );
 };
 
-export const Standard = Template.bind({});
+export const Standard = EmptyTemplate.bind({});
 Standard.args = {
   groups: [
     {
       label: "Default",
-      options: [{ value: "Me", label: "Me" }]
+      options: [{ value: "Me", label: "Myself (Default)" }]
+    },
+    {
+      label: "Team 1",
+      options: [
+        { value: "1", label: "Paula Storm" },
+        { value: "2", label: "Horacio Cruz" },
+        { value: "3", label: "Tom Cortes" },
+        { value: "4", label: "Emilia Cuaron" }
+      ]
+    },
+    {
+      label: "Team 2",
+      options: [
+        { value: "5", label: "Paula Storm" },
+        { value: "6", label: "Horacio Cruz" },
+        { value: "7", label: "Tom Cortes" },
+        { value: "8", label: "Emilia Cuaron" }
+      ]
     }
   ]
 };
 
+export const Populated = Template.bind({});
+Populated.args = {
+  ...Standard.args
+};
+
 export const EmptyPreview = EmptyPreviewTemplate.bind({});
 EmptyPreview.args = {
-  groups: [
-    {
-      label: "Default",
-      options: [{ value: "Me", label: "Me" }]
-    }
-  ],
+  ...Standard.args,
   label: "Monitors",
   addButtonLabel: "Add Monitor",
   emptyLabel: "No Monitors Selected",
