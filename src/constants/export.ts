@@ -23,6 +23,11 @@ export const PDF_EXPORT_FILE_TYPE = {
   value: "pdf"
 };
 
+export const ZIP_EXPORT_FILE_TYPE = {
+  label: "ZIP",
+  value: "zip"
+};
+
 export const AREA_EXPORT_FILE_TYPES = [
   CSV_EXPORT_FILE_TYPE,
   GEOJSON_EXPORT_FILE_TYPE,
@@ -37,3 +42,5 @@ export const REPORT_EXPORT_FILE_TYPES = [
   FWBUNDLE_EXPORT_FILE_TYPE,
   PDF_EXPORT_FILE_TYPE
 ];
+
+export const REPORT_EXPORT_IMAGES_TYPES = [ZIP_EXPORT_FILE_TYPE, PDF_EXPORT_FILE_TYPE];

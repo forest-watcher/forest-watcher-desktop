@@ -1,13 +1,18 @@
 import { useState, useEffect, useCallback } from "react";
 import useEmblaCarousel from "embla-carousel-react";
 import CarouselThumb from "./CarouselThumb";
+import Icon from "components/extensive/Icon";
+import OptionalWrapper from "components/extensive/OptionalWrapper";
+import CarouselImageDownloadModal from "./modal/CarouselImageDownloadModal";
 
 type CarouselProps = {
   slides: string[];
+  downloadable?: boolean;
 };
 
-const Carousel = ({ slides }: CarouselProps) => {
+const Carousel = ({ slides, downloadable }: CarouselProps) => {
   const [selectedIndex, setSelectedIndex] = useState(0);
+  const [imageToDownload, setImageToDownload] = useState<string>("");
   const [mainViewportRef, carousel] = useEmblaCarousel({ skipSnaps: false });
   const [thumbViewportRef, carouselThumbs] = useEmblaCarousel({
     containScroll: "keepSnaps",
@@ -40,12 +45,23 @@ const Carousel = ({ slides }: CarouselProps) => {
 
   return (
     <>
+      <OptionalWrapper data={!!imageToDownload}>
+        <CarouselImageDownloadModal onClose={() => setImageToDownload("")} imageToDownload={imageToDownload} />
+      </OptionalWrapper>
       <div className="c-carousel pb-[25px]">
         <div className="c-carousel__viewport" ref={mainViewportRef}>
           <div className="c-carousel__container">
             {slides.map((src, index) => (
               <div className="c-carousel__slide" key={index}>
                 <div className="c-carousel__slide__inner">
+                  <OptionalWrapper data={downloadable}>
+                    <button
+                      className="absolute top-6 right-6 bg-green-500 p-1 rounded-lg z-10"
+                      onClick={() => setImageToDownload(src)}
+                    >
+                      <Icon name="download" size={32} />
+                    </button>
+                  </OptionalWrapper>
                   <img className="c-carousel__slide__img" src={src} alt="A cool cat." />
                 </div>
               </div>

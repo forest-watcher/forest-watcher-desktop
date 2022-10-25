@@ -15,6 +15,7 @@ export interface IProps {
     variant?: IButtonVariants;
     onClick: () => void;
   }[];
+  className?: string;
 }
 
 const Modal: FC<PropsWithChildren<IProps>> = props => {
@@ -28,7 +29,10 @@ const Modal: FC<PropsWithChildren<IProps>> = props => {
       enterFrom="c-modal-dialog--animate"
       leaveTo="c-modal-dialog--animate"
     >
-      <Dialog className="c-modal-dialog__container" onClose={dismissible && onClose ? onClose : () => {}}>
+      <Dialog
+        className={`c-modal-dialog__container ${props.className}`}
+        onClose={dismissible && onClose ? onClose : () => {}}
+      >
         <div className="c-modal-dialog__backdrop" aria-hidden="true" />
 
         <Dialog.Panel className="c-modal-dialog">
