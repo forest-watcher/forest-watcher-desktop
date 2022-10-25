@@ -2,13 +2,32 @@ import Icon from "components/extensive/Icon";
 import OptionalWrapper from "components/extensive/OptionalWrapper";
 import Button from "components/ui/Button/Button";
 import IconBubble from "components/ui/Icon/IconBubble";
-import { FC } from "react";
-import { FormattedMessage } from "react-intl";
-import { Path, PathValue, UnpackNestedValue, useController, UseControllerProps } from "react-hook-form";
+import { FC, useMemo } from "react";
+import { FormattedMessage, useIntl } from "react-intl";
+import {
+  Control,
+  Path,
+  PathValue,
+  UnpackNestedValue,
+  useController,
+  UseControllerProps,
+  useWatch
+} from "react-hook-form";
 
-export interface IProps {}
+type TMultiSelectDialogGroups = {
+  options: { value: string; label: string }[];
+  label: string;
+}[];
 
-export interface IMultiSelectDialogPreviewProps {
+export interface IProps {
+  groups: TMultiSelectDialogGroups;
+}
+
+export interface IMultiSelectDialogPreviewProps<T> {
+  // Maybe UseWatcherProps<T>
+  control: Control<T>;
+  name: Path<T>;
+  groups: TMultiSelectDialogGroups;
   label: string;
   emptyLabel: string;
   emptyIcon: string;
@@ -19,20 +38,51 @@ interface IMultiSelectDialogComposition {
   Preview: typeof MultiSelectDialogPreview;
 }
 
-const MultiSelectDialog: FC<IProps> & IMultiSelectDialogComposition = props => {
-  const {} = props;
-
-  return <div></div>;
-};
-
-const MultiSelectDialogPreview = <T,>(props: IMultiSelectDialogPreviewProps & UseControllerProps<T>) => {
-  const { label, emptyLabel, emptyIcon, addButtonLabel, ...controlProps } = props;
+const MultiSelectDialog: (<T>(props: IProps & UseControllerProps<T>) => JSX.Element) &
+  IMultiSelectDialogComposition = props => {
+  const { groups, ...controlProps } = props;
   const { field } = useController(controlProps);
 
   return (
+    <div>
+      {groups.map(group => (
+        <div key={group.label}>
+          {group.label}, {JSON.stringify(group.options)}
+        </div>
+      ))}
+    </div>
+  );
+};
+
+const MultiSelectDialogPreview = <T,>(props: IMultiSelectDialogPreviewProps<T>) => {
+  const { label, emptyLabel, emptyIcon, addButtonLabel, groups, control, name } = props;
+  const intl = useIntl();
+  const watcher = useWatch({
+    control,
+    name
+  });
+
+  const activeGroups = useMemo(
+    () =>
+      groups.reduce<TMultiSelectDialogGroups>((acc, group) => {
+        const activeGroup = {
+          ...group,
+          // @ts-ignore
+          options: group.options.filter(option => watcher?.includes(option.value))
+        };
+
+        if (activeGroup.options.length === 0) {
+          return acc;
+        } else {
+          return [...acc, activeGroup];
+        }
+      }, []),
+    [groups, watcher]
+  );
+
+  return (
     <OptionalWrapper
-      // @ts-ignore
-      data={field.value && field.value.length > 0}
+      data={activeGroups.length > 0}
       elseComponent={
         // Empty State
         <div className="flex flex-col justify-center items-center rounded-md bg-gray-400 px-4 py-6">
@@ -55,9 +105,14 @@ const MultiSelectDialogPreview = <T,>(props: IMultiSelectDialogPreviewProps & Us
         </span>
 
         <ul className="text-gray-700 font-base mb-3">
-          {/*@ts-ignore*/}
-          {field.value?.map(value => (
-            <li>{value}</li>
+          {activeGroups.map(group => (
+            <li key={group.label}>
+              <FormattedMessage id={group.label}>
+                {txt => (
+                  <>{`${txt}: ${group.options.map(option => intl.formatMessage({ id: option.label })).join(",")}`}</>
+                )}
+              </FormattedMessage>
+            </li>
           ))}
         </ul>
 

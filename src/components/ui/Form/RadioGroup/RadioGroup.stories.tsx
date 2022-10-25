@@ -9,14 +9,14 @@ export default {
 } as ComponentMeta<typeof RadioGroup>;
 
 type TRadioGroupFrom = { radioGroup?: number };
-type IComponentStoryProps = FC<IProps<TRadioGroupFrom> & Omit<UseControllerProps<TRadioGroupFrom>, "name">>;
+type IComponentStoryProps = FC<IProps<TRadioGroupFrom> & UseControllerProps<TRadioGroupFrom>>;
 
 const Template: ComponentStory<IComponentStoryProps> = args => {
   const { control } = useForm<TRadioGroupFrom>();
 
   return (
     <div className="w-[375px]">
-      <RadioGroup<TRadioGroupFrom> control={control} name="radioGroup" {...args} />
+      <RadioGroup<TRadioGroupFrom> {...args} control={control} name="radioGroup" />
     </div>
   );
 };
