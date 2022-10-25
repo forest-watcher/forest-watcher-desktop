@@ -44,7 +44,7 @@ const EmptyPreviewTemplate: ComponentStory<typeof MultiSelectDialog.Preview> = a
   const { control } = useForm<TMultiSelectDialogFormFields>();
 
   return (
-    <div className="w-[375px]">
+    <div className="w-[300px]">
       <MultiSelectDialog.Preview<TMultiSelectDialogFormFields> {...args} name="monitors" control={control} />
     </div>
   );
@@ -58,7 +58,7 @@ const PreviewTemplate: ComponentStory<typeof MultiSelectDialog.Preview> = args =
   });
 
   return (
-    <div className="w-[375px]">
+    <div className="w-[300px]">
       <MultiSelectDialog.Preview<TMultiSelectDialogFormFields> {...args} name="monitors" control={control} />
     </div>
   );

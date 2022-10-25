@@ -2,6 +2,7 @@ import Icon from "components/extensive/Icon";
 import OptionalWrapper from "components/extensive/OptionalWrapper";
 import Button from "components/ui/Button/Button";
 import IconBubble from "components/ui/Icon/IconBubble";
+import classnames from "classnames";
 import { useMemo, useState } from "react";
 import { FormattedMessage, useIntl } from "react-intl";
 import { Switch } from "@headlessui/react";
@@ -17,6 +18,7 @@ export interface IProps {
 }
 
 export interface IMultiSelectDialogPreviewProps<T> {
+  className?: string;
   // Maybe UseWatcherProps<T>
   control: Control<T>;
   name: Path<T>;
@@ -65,7 +67,7 @@ const MultiSelectDialog: (<T>(props: IProps & UseControllerProps<T>) => JSX.Elem
           {group.options.map(option => (
             <div className="flex justify-between w-full mt-4">
               <Switch.Group>
-                <Switch.Label className="cursor-pointer">
+                <Switch.Label className="cursor-pointer text-base">
                   <FormattedMessage id={option.label} />
                 </Switch.Label>
                 <Switch
@@ -85,7 +87,7 @@ const MultiSelectDialog: (<T>(props: IProps & UseControllerProps<T>) => JSX.Elem
 };
 
 const MultiSelectDialogPreview = <T,>(props: IMultiSelectDialogPreviewProps<T>) => {
-  const { label, emptyLabel, emptyIcon, addButtonLabel, groups, control, name, onAdd } = props;
+  const { className, label, emptyLabel, emptyIcon, addButtonLabel, groups, control, name, onAdd } = props;
   const intl = useIntl();
   const watcher = useWatch({
     control,
@@ -115,7 +117,12 @@ const MultiSelectDialogPreview = <T,>(props: IMultiSelectDialogPreviewProps<T>) 
       data={activeGroups.length > 0}
       elseComponent={
         // Empty State
-        <div className="flex flex-col justify-center items-center rounded-md bg-gray-400 px-4 py-6">
+        <div
+          className={classnames(
+            className,
+            "flex flex-col justify-center items-center rounded-md bg-gray-400 px-4 py-6"
+          )}
+        >
           <IconBubble className="mb-3" name={emptyIcon} size={22} />
 
           <h2 className="text-lg text-gray-700 mb-6">
@@ -129,12 +136,12 @@ const MultiSelectDialogPreview = <T,>(props: IMultiSelectDialogPreviewProps<T>) 
         </div>
       }
     >
-      <div>
+      <div className={className}>
         <span className="block mb-3 text-[14px] font-medium uppercase text-gray-700">
           <FormattedMessage id={label} />
         </span>
 
-        <ul className="text-gray-700 font-base mb-3">
+        <ul className="text-gray-700 text-base mb-3">
           {activeGroups.map(group => (
             <li key={group.label}>
               <FormattedMessage id={group.label}>

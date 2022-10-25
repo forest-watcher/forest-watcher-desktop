@@ -24,25 +24,26 @@ const CreateAssignmentControlPanel: FC<IProps> = props => {
   //@ts-ignore
   useZoomToGeojson(selectedAreaGeoData as AllGeoJSON);
 
-  return (
-    <MapCard
-      className="c-map-control-panel"
-      title={intl.formatMessage({ id: "assignment.create.new" })}
-      onBack={() => {
-        history.push(location.pathname.replace("/assignment", ""));
-      }}
-      footer={
-        <Button disabled>
-          <FormattedMessage id="assignment.create" />
-        </Button>
-      }
-    >
-      {/* ToDo: Currently always displays */}
-      {/*<OpenAssignmentEmptyState />*/}
+  // ToDo: When Alerts are selectable, show empty state if no alerts are selected
+  // return (
+  //   <MapCard
+  //     className="c-map-control-panel"
+  //     title={intl.formatMessage({ id: "assignment.create.new" })}
+  //     onBack={() => {
+  //       history.push(location.pathname.replace("/assignment", ""));
+  //     }}
+  //     footer={
+  //       <Button disabled>
+  //         <FormattedMessage id="assignment.create" />
+  //       </Button>
+  //     }
+  //   >
+  //     {/* ToDo: Currently always displays */}
+  //     <OpenAssignmentEmptyState />
+  //   </MapCard>
+  // );
 
-      <CreateAssignmentForm />
-    </MapCard>
-  );
+  return <CreateAssignmentForm />;
 };
 
 export default CreateAssignmentControlPanel;
