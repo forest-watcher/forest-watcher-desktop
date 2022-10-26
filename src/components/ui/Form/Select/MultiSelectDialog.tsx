@@ -60,16 +60,12 @@ const MultiSelectDialog: (<T>(props: IProps & UseControllerProps<T>) => JSX.Elem
     <div className="flex flex-col gap-10">
       {groups.map(group => (
         <div key={group.label}>
-          <span className="block text-[14px] font-medium uppercase text-gray-700">
-            <FormattedMessage id={group.label} />
-          </span>
+          <span className="block text-[14px] font-medium uppercase text-gray-700">{group.label}</span>
 
           {group.options.map(option => (
             <div className="flex justify-between w-full mt-4">
               <Switch.Group>
-                <Switch.Label className="cursor-pointer text-base">
-                  <FormattedMessage id={option.label} />
-                </Switch.Label>
+                <Switch.Label className="cursor-pointer text-base">{option.label}</Switch.Label>
                 <Switch
                   // @ts-ignore
                   checked={controlledValue.includes(option.value)}
@@ -144,11 +140,7 @@ const MultiSelectDialogPreview = <T,>(props: IMultiSelectDialogPreviewProps<T>) 
         <ul className="text-gray-700 text-base mb-3">
           {activeGroups.map(group => (
             <li key={group.label}>
-              <FormattedMessage id={group.label}>
-                {txt => (
-                  <>{`${txt}: ${group.options.map(option => intl.formatMessage({ id: option.label })).join(", ")}`}</>
-                )}
-              </FormattedMessage>
+              {group.label}: {group.options.map(option => option.label).join(", ")}
             </li>
           ))}
         </ul>

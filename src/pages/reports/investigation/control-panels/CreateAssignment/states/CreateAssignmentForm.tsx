@@ -85,62 +85,60 @@ const CreateAssignmentForm: FC<IProps> = props => {
         ) : null
       }
     >
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <OptionalWrapper data={openDialogName === EDialogsNames.None}>
-          <RadioGroup<TCreateAssignmentFormFields>
-            control={control}
-            name="priority"
-            label="assignment.create.form.priority.label"
-            options={[
-              { key: "normal", label: "assignment.create.form.priority.normal", value: 0 },
-              { key: "high", label: "assignment.create.form.priority.high", value: 1 }
-            ]}
-          />
+      <OptionalWrapper data={openDialogName === EDialogsNames.None}>
+        <RadioGroup<TCreateAssignmentFormFields>
+          control={control}
+          name="priority"
+          label="assignment.create.form.priority.label"
+          options={[
+            { key: "normal", label: "assignment.create.form.priority.normal", value: 0 },
+            { key: "high", label: "assignment.create.form.priority.high", value: 1 }
+          ]}
+        />
 
-          <MultiSelectDialog.Preview
-            className="mt-10"
-            groups={GROUPS}
-            control={control}
-            name="monitors"
-            label="assignment.create.form.monitor.label"
-            emptyLabel="assignment.create.form.monitor.empty"
-            emptyIcon="white-foot"
-            addButtonLabel="assignment.create.form.monitor.add"
-            onAdd={() => setOpenDialogName(EDialogsNames.Monitors)}
-          />
+        <MultiSelectDialog.Preview
+          className="mt-10"
+          groups={GROUPS}
+          control={control}
+          name="monitors"
+          label="assignment.create.form.monitor.label"
+          emptyLabel="assignment.create.form.monitor.empty"
+          emptyIcon="white-foot"
+          addButtonLabel="assignment.create.form.monitor.add"
+          onAdd={() => setOpenDialogName(EDialogsNames.Monitors)}
+        />
 
-          <OptionalWrapper data={monitorsWatcher.length > 0}>
-            <TextArea
-              wrapperClassName="mt-6"
-              id="monitor-notes"
-              label="assignment.create.form.notesForMonitors"
-              altLabel
-              control={control}
-              name="monitorNotes"
-            />
-          </OptionalWrapper>
-
-          <MultiSelectDialog.Preview
-            className="mt-10"
-            groups={GROUPS}
+        <OptionalWrapper data={monitorsWatcher.length > 0}>
+          <TextArea
+            wrapperClassName="mt-6"
+            id="monitor-notes"
+            label="assignment.create.form.notesForMonitors"
+            altLabel
             control={control}
-            name="templates"
-            label="assignment.create.form.template.label"
-            emptyLabel="assignment.create.form.template.empty"
-            emptyIcon="FactCheck"
-            addButtonLabel="assignment.create.form.template.add"
-            onAdd={() => setOpenDialogName(EDialogsNames.Templates)}
+            name="monitorNotes"
           />
         </OptionalWrapper>
 
-        <OptionalWrapper data={openDialogName === EDialogsNames.Monitors}>
-          <MultiSelectDialog groups={GROUPS} control={control} name="monitors" />
-        </OptionalWrapper>
+        <MultiSelectDialog.Preview
+          className="mt-10"
+          groups={GROUPS}
+          control={control}
+          name="templates"
+          label="assignment.create.form.template.label"
+          emptyLabel="assignment.create.form.template.empty"
+          emptyIcon="FactCheck"
+          addButtonLabel="assignment.create.form.template.add"
+          onAdd={() => setOpenDialogName(EDialogsNames.Templates)}
+        />
+      </OptionalWrapper>
 
-        <OptionalWrapper data={openDialogName === EDialogsNames.Templates}>
-          <MultiSelectDialog groups={GROUPS} control={control} name="templates" />
-        </OptionalWrapper>
-      </form>
+      <OptionalWrapper data={openDialogName === EDialogsNames.Monitors}>
+        <MultiSelectDialog groups={GROUPS} control={control} name="monitors" />
+      </OptionalWrapper>
+
+      <OptionalWrapper data={openDialogName === EDialogsNames.Templates}>
+        <MultiSelectDialog groups={GROUPS} control={control} name="templates" />
+      </OptionalWrapper>
     </MapCard>
   );
 };

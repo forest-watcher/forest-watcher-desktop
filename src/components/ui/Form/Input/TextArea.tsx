@@ -52,7 +52,7 @@ const TextAreaControlled = <T extends Record<any, any>>(
         className={classnames("c-input__input w-full resize-y", className)}
         rows={rows}
         id={id}
-        placeholder={intl.formatMessage({ id: placeholder })}
+        placeholder={placeholder ? intl.formatMessage({ id: placeholder }) : undefined}
         {...field}
         {...rest}
       />
