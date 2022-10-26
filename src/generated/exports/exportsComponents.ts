@@ -207,6 +207,68 @@ export const useGetV3ExportsReportsId = <TData = GetV3ExportsReportsIdResponse>(
   );
 };
 
+export type PostV3ExportsReportsIdPathParams = {
+  id: string;
+};
+
+export type PostV3ExportsReportsIdError = Fetcher.ErrorWrapper<{
+  status: 401;
+  payload: Responses.Error;
+}>;
+
+export type PostV3ExportsReportsIdResponse = {
+  data?: string;
+};
+
+export type PostV3ExportsReportsIdRequestBody = {
+  /**
+   * Can be the string 'zip' or 'pdf' which dictates the file type of the exports response
+   */
+  fileType?: string;
+};
+
+export type PostV3ExportsReportsIdVariables = {
+  body?: PostV3ExportsReportsIdRequestBody;
+  pathParams: PostV3ExportsReportsIdPathParams;
+} & ExportsContext["fetcherOptions"];
+
+/**
+ * Returns the id token for the exports file of the report (answer) images
+ */
+export const fetchPostV3ExportsReportsId = (variables: PostV3ExportsReportsIdVariables, signal?: AbortSignal) =>
+  exportsFetch<
+    PostV3ExportsReportsIdResponse,
+    PostV3ExportsReportsIdError,
+    PostV3ExportsReportsIdRequestBody,
+    {},
+    {},
+    PostV3ExportsReportsIdPathParams
+  >({ url: "/v3/exports/reports/{id}/images", method: "post", ...variables, signal });
+
+/**
+ * Returns the id token for the exports file of the report (answer) images
+ */
+export const usePostV3ExportsReportsId = (
+  options?: Omit<
+    reactQuery.UseMutationOptions<
+      PostV3ExportsReportsIdResponse,
+      PostV3ExportsReportsIdError,
+      PostV3ExportsReportsIdVariables
+    >,
+    "mutationFn"
+  >
+) => {
+  const { fetcherOptions } = useExportsContext();
+  return reactQuery.useMutation<
+    PostV3ExportsReportsIdResponse,
+    PostV3ExportsReportsIdError,
+    PostV3ExportsReportsIdVariables
+  >(
+    (variables: PostV3ExportsReportsIdVariables) => fetchPostV3ExportsReportsId({ ...fetcherOptions, ...variables }),
+    options
+  );
+};
+
 export type PostV3AreasExportOneAreaIdPathParams = {
   areaId: string;
 };

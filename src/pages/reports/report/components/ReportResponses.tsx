@@ -1,7 +1,9 @@
 import List from "components/extensive/List";
+import OptionalWrapper from "components/extensive/OptionalWrapper";
 import Button from "components/ui/Button/Button";
 import { AnswerResponse, ReportsQuestion } from "generated/forms/formsSchemas";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
+import ReportExportImagesModal from "./modal/ReportExportImagesModal";
 import ReportResponse, { IReportResponse } from "./ReportResponse";
 
 type ReportResponsesProps = {
@@ -10,6 +12,8 @@ type ReportResponsesProps = {
 };
 
 const ReportResponses = ({ questions, responses }: ReportResponsesProps) => {
+  const [showImagesModal, setShowImagesModal] = useState<boolean>(false);
+
   const data = useMemo(() => {
     return questions
       .map(q => {
@@ -31,16 +35,25 @@ const ReportResponses = ({ questions, responses }: ReportResponsesProps) => {
       .filter(x => x) as IReportResponse[];
   }, [questions, responses]);
 
+  const hasImages = useMemo(() => !!responses[0].value, [responses]);
+
   return (
-    <div className="bg-gray-400">
-      <section className="row column py-section">
-        <div className="flex items-center justify-between">
-          <h1 className="font-base text-[36px] font-light text-gray-700">Report Responses</h1>
-          <Button>Export Images</Button>
-        </div>
-        <List items={data} render={item => <ReportResponse {...item} />} />
-      </section>
-    </div>
+    <>
+      <OptionalWrapper data={showImagesModal}>
+        <ReportExportImagesModal onClose={() => setShowImagesModal(false)} />
+      </OptionalWrapper>
+      <div className="bg-gray-400">
+        <section className="row column py-section">
+          <div className="flex items-center justify-between">
+            <h1 className="font-base text-[36px] font-light text-gray-700">Report Responses</h1>
+            <OptionalWrapper data={hasImages}>
+              <Button onClick={() => setShowImagesModal(true)}>Export Images</Button>
+            </OptionalWrapper>
+          </div>
+          <List items={data} render={item => <ReportResponse {...item} />} />
+        </section>
+      </div>
+    </>
   );
 };
 
