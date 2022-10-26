@@ -4,7 +4,8 @@ import TextArea from "components/ui/Form/Input/TextArea";
 import RadioGroup from "components/ui/Form/RadioGroup/RadioGroup";
 import MultiSelectDialog from "components/ui/Form/Select/MultiSelectDialog";
 import MapCard from "components/ui/Map/components/cards/MapCard";
-import { FC, useState } from "react";
+import useGetUserTeamsWithActiveMembers from "hooks/querys/teams/useGetUserTeamsWithActiveMembers";
+import { FC, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { FormattedMessage, useIntl } from "react-intl";
 import { useHistory, useLocation } from "react-router-dom";
@@ -53,12 +54,26 @@ const CreateAssignmentForm: FC<IProps> = props => {
   const intl = useIntl();
   const history = useHistory();
   const location = useLocation();
+  const { data } = useGetUserTeamsWithActiveMembers();
   const { control, watch } = useForm<TCreateAssignmentFormFields>({
     defaultValues: {
       priority: 0,
       monitors: ["Me"]
     }
   });
+
+  const teamGroups = useMemo(
+    () =>
+      data?.map(team => ({
+        label: team?.attributes?.name || "",
+        options:
+          team?.attributes?.members?.map(member => ({
+            label: member.name || member.email,
+            value: member.userId!
+          })) || []
+      })),
+    [data]
+  );
 
   const monitorsWatcher = watch("monitors");
 
@@ -96,7 +111,7 @@ const CreateAssignmentForm: FC<IProps> = props => {
 
         <MultiSelectDialog.Preview
           className="mt-10"
-          groups={GROUPS}
+          groups={teamGroups || []}
           control={control}
           name="monitors"
           label="assignment.create.form.monitor.label"
@@ -131,7 +146,7 @@ const CreateAssignmentForm: FC<IProps> = props => {
       </OptionalWrapper>
 
       <OptionalWrapper data={openDialogName === EDialogsNames.Monitors}>
-        <MultiSelectDialog groups={GROUPS} control={control} name="monitors" />
+        <MultiSelectDialog groups={teamGroups || []} control={control} name="monitors" />
       </OptionalWrapper>
 
       <OptionalWrapper data={openDialogName === EDialogsNames.Templates}>
