@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import SVG from "react-inlinesvg";
 
-type IconProps = {
+export type IconProps = {
   name: string;
   size?: number;
   className?: string;

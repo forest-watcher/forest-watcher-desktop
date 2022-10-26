@@ -134,6 +134,7 @@
     "generate:teams": "npx openapi-codegen gen teams",
     "generate:exports": "npx openapi-codegen gen exports",
     "generate:forms": "npx openapi-codegen gen forms",
+    "generate:core": "npx openapi-codegen gen core",
     "generate:new": "npx openapi-codegen init"
   },
   "prettier": "@3sidedcube/prettier-config",

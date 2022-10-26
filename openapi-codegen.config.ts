@@ -68,5 +68,22 @@ export default defineConfig({
         schemasFiles
       });
     }
+  },
+  core: {
+    from: {
+      source: "url",
+      url: "https://raw.githubusercontent.com/wri/fw_core/feature/assignmentGeostore/docs/fw_core.yaml"
+    },
+    outputDir: "src/generated/core",
+    to: async context => {
+      const filenamePrefix = "core";
+      const { schemasFiles } = await generateSchemaTypes(context, {
+        filenamePrefix
+      });
+      await generateReactQueryComponents(context, {
+        filenamePrefix,
+        schemasFiles
+      });
+    }
   }
 });

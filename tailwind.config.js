@@ -6,6 +6,7 @@ module.exports = {
       base: ["Fira Sans", "sans-serif"]
     },
     colors: {
+      white: "#FFF",
       green: {
         400: "#E3ECC6",
         500: "#94BE43",
