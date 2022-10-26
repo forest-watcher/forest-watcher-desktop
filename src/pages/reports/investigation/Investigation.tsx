@@ -12,6 +12,9 @@ import { Layer, Source } from "react-map-gl";
 import { setupMapImages } from "helpers/map";
 import { Map as MapInstance, MapboxEvent } from "mapbox-gl";
 
+import AreaAssignmentSource from "pages/reports/investigation/components/AreaAssignmentSource";
+import AreaAlertsSource from "pages/reports/investigation/components/AreaAlertSource";
+
 // Control Panel Views
 import AreaListControlPanel from "./control-panels/AreaList";
 import AreaDetailControlPanel from "pages/reports/investigation/control-panels/AreaDetail";
@@ -181,13 +184,9 @@ const InvestigationPage: FC<IProps> = props => {
             </Source>
           ))}
 
-          {watcher.showAlerts.includes("true") && (
-            <div className="u-visually-hidden">ToDo: Render 'Alerts' map Source component</div>
-          )}
+          {watcher.showAlerts.includes("true") && <AreaAlertsSource areaId={investigationMatch?.params.areaId} />}
 
-          {watcher.showOpenAssignments.includes("true") && (
-            <div className="u-visually-hidden">ToDo: Render 'Open Assignments' map Source component</div>
-          )}
+          {watcher.showOpenAssignments.includes("true") && <AreaAssignmentSource />}
         </OptionalWrapper>
       </FormProvider>
     </UserAreasMap>

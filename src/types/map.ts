@@ -10,6 +10,16 @@ export enum ReportLayerColours {
   DEFAULT = "#94BE43"
 }
 
+export enum AlertLayerColours {
+  VIIRS = "#F74848",
+  DEFAULT = "#FF6799"
+}
+
+export enum AssignmentLayerColours {
+  CREATOR = "#4489CE",
+  DEFAULT = "#EEBD37"
+}
+
 export interface IPoint {
   position: [number, number];
   id: string;

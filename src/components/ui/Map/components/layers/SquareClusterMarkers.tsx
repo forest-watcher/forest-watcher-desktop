@@ -1,35 +1,70 @@
 import { FC, useEffect, useMemo, useState } from "react";
 import { Layer, Source, useMap } from "react-map-gl";
-import { pointStyle, clusterCountStyle } from "./styles";
+import { pointStyle as defaultPointStyle, clusterCountStyle } from "./styles";
 import * as turf from "@turf/turf";
 import { Marker } from "mapbox-gl";
-import { clusterZoom, createLayeredClusterSVG, getReportImage, goToGeojson } from "helpers/map";
-import { IMarkers, IPoint, ReportLayerColours, ReportLayers } from "types/map";
+import {
+  alertClusterTypeColourMap,
+  assignmentClusterTypeColourMap,
+  clusterZoom,
+  createLayeredClusterSVG,
+  getAlertImage,
+  getAssignmentImage,
+  getReportImage,
+  goToGeojson,
+  reportClusterTypeColourMap,
+  TClusterTypeColourMap,
+  TMapIconGenerator
+} from "helpers/map";
+import { IMarkers, IPoint } from "types/map";
 import { Map as MapInstance } from "mapbox-gl";
+
+export enum EPointDataTypes {
+  Reports,
+  Alerts,
+  Assignments
+}
 
 export interface IProps {
   id: string;
+  pointDataType: EPointDataTypes;
   points: IPoint[];
+  pointStyle?: Record<any, any>;
   onSquareSelect?: (ids: string[], point: mapboxgl.Point) => void;
   selectedSquareIds: string[] | null;
   mapRef: MapInstance | null;
   goToPoints?: boolean;
 }
 
-const LAYER_EXPRESSION_FILTERS = {
-  default: ["!", ["==", ReportLayers.VIIRS, ["get", "alertType"]]],
-  viirs: ["==", ReportLayers.VIIRS, ["get", "alertType"]]
-};
-
 const markers: IMarkers = {};
 let markersOnScreen: IMarkers = {};
 
 const SquareClusterMarkers: FC<IProps> = props => {
-  const { id, points, onSquareSelect, selectedSquareIds, mapRef } = props;
+  const {
+    id,
+    pointDataType = EPointDataTypes.Reports,
+    points,
+    onSquareSelect,
+    selectedSquareIds,
+    mapRef,
+    pointStyle = defaultPointStyle
+  } = props;
   const { current: map } = useMap();
   const [hoveredPoint, setHoveredPoint] = useState<string | null>(null);
   const [selectedPoints, setSelectedPoints] = useState<string[] | null>(null);
   const [hasMoved, setHasMoved] = useState(false);
+
+  const [iconGenerator, clusterTypeColourMap] = useMemo<[TMapIconGenerator, TClusterTypeColourMap]>(() => {
+    switch (pointDataType) {
+      case EPointDataTypes.Assignments:
+        return [getAssignmentImage, assignmentClusterTypeColourMap];
+      case EPointDataTypes.Alerts:
+        return [getAlertImage, alertClusterTypeColourMap];
+      default:
+        // EPointDataTypes.Reports
+        return [getReportImage, reportClusterTypeColourMap];
+    }
+  }, [pointDataType]);
 
   const featureCollection = useMemo(
     () =>
@@ -37,12 +72,16 @@ const SquareClusterMarkers: FC<IProps> = props => {
         points.map(point =>
           turf.point(point.position, {
             id: point.id,
-            icon: getReportImage(point, hoveredPoint, selectedPoints?.length ? selectedPoints[0] : null),
+            icon: iconGenerator(
+              point.alertTypes?.length ? point.alertTypes[0].id : "",
+              point.id === hoveredPoint,
+              selectedPoints?.length ? point.id === selectedPoints[0] : false
+            ),
             alertType: point.alertTypes?.length ? point.alertTypes[0].id : ""
           })
         )
       ),
-    [hoveredPoint, points, selectedPoints]
+    [hoveredPoint, iconGenerator, points, selectedPoints]
   );
 
   useEffect(() => {
@@ -53,7 +92,7 @@ const SquareClusterMarkers: FC<IProps> = props => {
   }, [mapRef]);
 
   useEffect(() => {
-    map?.on("mouseenter", id, e => {
+    map?.on("mousemove", id, e => {
       const { features } = e;
       if (features && features[0]?.source === id) {
         setHoveredPoint(features[0]?.properties?.id);
@@ -85,15 +124,12 @@ const SquareClusterMarkers: FC<IProps> = props => {
 
         let marker = markers[clusterId];
 
-        const colours = [];
-
-        if (props.viirs) {
-          colours.push(ReportLayerColours.VIIRS);
-        }
-
-        if (props.default) {
-          colours.push(ReportLayerColours.DEFAULT);
-        }
+        const colours: string[] = [];
+        clusterTypeColourMap.forEach(({ prop, hex }) => {
+          if (props[prop]) {
+            colours.push(hex);
+          }
+        });
 
         if (!marker) {
           const el = createLayeredClusterSVG(props, colours);
@@ -122,7 +158,7 @@ const SquareClusterMarkers: FC<IProps> = props => {
       }
       markersOnScreen = newMarkers;
     });
-  }, [id, map, onSquareSelect]);
+  }, [clusterTypeColourMap, id, map, onSquareSelect]);
 
   useEffect(() => {
     const click = (
@@ -167,10 +203,15 @@ const SquareClusterMarkers: FC<IProps> = props => {
         type="geojson"
         cluster
         clusterRadius={40}
-        clusterProperties={{
-          default: ["+", ["case", LAYER_EXPRESSION_FILTERS.default, 1, 0]],
-          viirs: ["+", ["case", LAYER_EXPRESSION_FILTERS.viirs, 1, 0]]
-        }}
+        clusterProperties={clusterTypeColourMap.reduce(
+          (acc, { prop, type, not }) => ({
+            ...acc,
+            [prop]: not
+              ? ["+", ["case", ["!", ["==", type, ["get", "type"]]], 1, 0]]
+              : ["+", ["case", ["==", type, ["get", "type"]], 1, 0]]
+          }),
+          {}
+        )}
       >
         {/* @ts-ignore */}
         <Layer {...pointStyle} id={id} />

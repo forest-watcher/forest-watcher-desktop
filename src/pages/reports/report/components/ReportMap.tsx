@@ -1,9 +1,9 @@
+import SquareClusterMarkers, { EPointDataTypes } from "components/ui/Map/components/layers/SquareClusterMarkers";
 import Map from "components/ui/Map/Map";
-import { MapboxEvent, Map as MapInstance } from "mapbox-gl";
-import { useCallback, useState } from "react";
 import { Answer } from "generated/forms/formsResponses";
-import SquareClusterMarkers from "components/ui/Map/components/layers/SquareClusterMarkers";
 import { getReportAlertsByName } from "helpers/reports";
+import { Map as MapInstance, MapboxEvent } from "mapbox-gl";
+import { useCallback, useState } from "react";
 
 type ReportMapProps = {
   answer?: Answer;
@@ -27,6 +27,7 @@ const ReportMap = ({ answer }: ReportMapProps) => {
     <Map className="c-map--within-hero" onMapLoad={handleMapLoad}>
       <SquareClusterMarkers
         id="answers"
+        pointDataType={EPointDataTypes.Reports}
         // @ts-ignore
         points={answer?.data.map(a => ({
           position: [a.attributes.clickedPosition[0].lon, a.attributes.clickedPosition[0].lat],

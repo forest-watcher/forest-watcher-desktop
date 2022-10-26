@@ -1,3 +1,4 @@
+import { EAlertTypes } from "constants/alerts";
 import { Map as MapInstance, LngLatBoundsLike, GeoJSONSource } from "mapbox-gl";
 import labelBackgroundIcon from "assets/images/icons/MapLabelFrame.png";
 import reportNotSelectedIcon from "assets/images/icons/alertIcons/ReportNotSelected.png";
@@ -5,12 +6,19 @@ import reportHoverIcon from "assets/images/icons/alertIcons/ReportHover.png";
 import reportSelectedIcon from "assets/images/icons/alertIcons/ReportSelected.png";
 import reportViirsNotSelectedIcon from "assets/images/icons/alertIcons/ReportViirsDefault.png";
 import reportViirsHoverIcon from "assets/images/icons/alertIcons/ReportViirsHover.png";
+import alertNotSelectedIcon from "assets/images/icons/alertIcons/AlertNotSelected.png";
+import alertHoverIcon from "assets/images/icons/alertIcons/AlertHover.png";
+import alertViirsNotSelectedIcon from "assets/images/icons/alertIcons/AlertViirsNotSelected.png";
+import alerViirsHoverIcon from "assets/images/icons/alertIcons/AlertViirsHover.png";
+import assignmentAssignedToBeIcon from "assets/images/icons/alertIcons/AssignmentAssignedToMe.png";
+import assignmentCreateByMeIcon from "assets/images/icons/alertIcons/AssignmentCreatedByMe.png";
+import assignmentSelectedIcon from "assets/images/icons/alertIcons/AssignmentSelected.png";
 
 import L from "leaflet";
 import * as turf from "@turf/turf";
 import { GeoJsonProperties } from "geojson";
 import { MapRef } from "react-map-gl";
-import { IPoint, ReportLayers } from "types/map";
+import { AlertLayerColours, AssignmentLayerColours, ReportLayerColours, ReportLayers } from "types/map";
 
 export enum MapImages {
   label = "label",
@@ -18,7 +26,14 @@ export enum MapImages {
   reportHover = "report-hover",
   reportSelected = "report-selected",
   reportViirsHover = "report-viirs-hover",
-  reportViirsDefault = "report-viirs-default"
+  reportViirsDefault = "report-viirs-default",
+  alertDefault = "alert-default",
+  alertHover = "alert-hover",
+  alertViirsDefault = "alert-viirs-default",
+  alertViirsHover = "alert-viirs-hover",
+  assignmentAssignedToMe = "assignment-assigned-to-me",
+  assignmentCreatedByMe = "assignment-created-by-me",
+  assignmentSelected = "assignment-selected"
 }
 
 export const mapImagesArr = [
@@ -55,6 +70,34 @@ export const mapImagesArr = [
   {
     type: MapImages.reportViirsDefault,
     image: reportViirsNotSelectedIcon
+  },
+  {
+    type: MapImages.alertDefault,
+    image: alertNotSelectedIcon
+  },
+  {
+    type: MapImages.alertHover,
+    image: alertHoverIcon
+  },
+  {
+    type: MapImages.alertViirsDefault,
+    image: alertViirsNotSelectedIcon
+  },
+  {
+    type: MapImages.alertViirsHover,
+    image: alerViirsHoverIcon
+  },
+  {
+    type: MapImages.assignmentAssignedToMe,
+    image: assignmentAssignedToBeIcon
+  },
+  {
+    type: MapImages.assignmentCreatedByMe,
+    image: assignmentCreateByMeIcon
+  },
+  {
+    type: MapImages.assignmentSelected,
+    image: assignmentSelectedIcon
   }
 ];
 
@@ -116,7 +159,7 @@ export const createLayeredClusterSVG = (props: GeoJsonProperties, colours = ["#9
   let svgWidth = w;
   let svgHeight = w;
 
-  colours.reverse().forEach((colour, index) => {
+  colours.forEach((colour, index) => {
     const xOffset = (colours.length - (index + 1)) * 10;
     const yOffset = (colours.length - (index + 1)) * 3;
     const cx = r + xOffset;
@@ -160,18 +203,18 @@ export const clusterZoom = (map: MapRef, clusterId: any, sourceId: string, coord
   });
 };
 
-export const getReportImage = (point: IPoint, hoveredPoint: string | null, selectedPoint: string | null) => {
-  const firstAlert = point.alertTypes?.length ? point.alertTypes[0].id : "";
+export type TMapIconGenerator = (alertType: string, isHovered?: boolean, isSelected?: boolean) => MapImages;
 
-  if (point.id === selectedPoint) {
-    switch (firstAlert) {
+export const getReportImage: TMapIconGenerator = (alertType, isHovered, isSelected) => {
+  if (isSelected) {
+    switch (alertType) {
       default:
         return MapImages.reportSelected;
     }
   }
 
-  if (point.id === hoveredPoint) {
-    switch (firstAlert) {
+  if (isHovered) {
+    switch (alertType) {
       case ReportLayers.VIIRS:
         return MapImages.reportViirsHover;
       default:
@@ -179,10 +222,89 @@ export const getReportImage = (point: IPoint, hoveredPoint: string | null, selec
     }
   }
 
-  switch (firstAlert) {
+  switch (alertType) {
     case ReportLayers.VIIRS:
       return MapImages.reportViirsDefault;
     default:
       return MapImages.reportDefault;
   }
 };
+
+export const getAlertImage: TMapIconGenerator = (alertType, isHover, isSelected) => {
+  if (isSelected) {
+    return MapImages.reportSelected;
+  }
+
+  if (isHover) {
+    switch (alertType) {
+      case EAlertTypes.viirs:
+        return MapImages.alertViirsHover;
+      default:
+        return MapImages.alertHover;
+    }
+  }
+
+  switch (alertType) {
+    case EAlertTypes.viirs:
+      return MapImages.alertDefault;
+    default:
+      return MapImages.alertViirsDefault;
+  }
+};
+
+export const getAssignmentImage: TMapIconGenerator = (alertType, isHover, isSelected) => {
+  if (isSelected) {
+    return MapImages.assignmentSelected;
+  }
+
+  switch (alertType) {
+    case "creator": // ToDo: move to enum
+      return MapImages.assignmentCreatedByMe;
+    default:
+      return MapImages.assignmentAssignedToMe;
+  }
+};
+
+export type TClusterTypeColourMap = { type: string; hex: string; prop: string; not?: true }[];
+
+export const reportClusterTypeColourMap: TClusterTypeColourMap = [
+  {
+    prop: "default",
+    not: true,
+    type: "viirs",
+    hex: ReportLayerColours.DEFAULT
+  },
+  {
+    prop: "viirs",
+    type: "viirs",
+    hex: ReportLayerColours.VIIRS
+  }
+];
+
+export const alertClusterTypeColourMap: TClusterTypeColourMap = [
+  {
+    prop: "default",
+    not: true,
+    type: "viirs",
+    hex: AlertLayerColours.DEFAULT
+  },
+  {
+    prop: "viirs",
+    type: "viirs",
+    hex: AlertLayerColours.VIIRS
+  }
+];
+
+export const assignmentClusterTypeColourMap: TClusterTypeColourMap = [
+  {
+    prop: "default",
+    not: true,
+    type: "creator",
+    hex: AssignmentLayerColours.DEFAULT
+  },
+  {
+    prop: "creator",
+    type: "creator",
+    hex: AssignmentLayerColours.CREATOR
+  }
+];
