@@ -8,7 +8,7 @@ import ReportResponses from "./components/ReportResponses";
 import ReportMap from "./components/ReportMap";
 import { useState } from "react";
 import OptionalWrapper from "components/extensive/OptionalWrapper";
-import ReportExportModal from "./components/ReportExportModal";
+import ReportExportModal from "./components/modal/ReportExportModal";
 import { TExportForm } from "components/modals/exports/ExportModal";
 import { UnpackNestedValue } from "react-hook-form";
 import { usePostV3ReportsTemplateIdExportSome } from "generated/exports/exportsComponents";
@@ -61,7 +61,7 @@ const Report = () => {
       <ReportMap answer={answer} />
       <ReportDetails answer={answer} report={report} />
       <ReportResponses
-        questions={report?.data.attributes.questions ?? []}
+        questions={report?.data?.attributes.questions ?? []}
         // @ts-expect-error
         responses={answer?.data[0].attributes?.responses ?? []}
       />

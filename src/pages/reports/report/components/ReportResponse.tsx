@@ -12,7 +12,7 @@ const ReportResponse = ({ question, response, type }: ReportResponseProps) => {
   const _renderResponse = () => {
     switch (type) {
       case "blob":
-        return <Carousel slides={response ? [response] : []} />;
+        return <Carousel downloadable slides={response ? [response] : []} />;
       default:
         return <p className="text-gray-700">{response ?? "N/A"}</p>;
     }
