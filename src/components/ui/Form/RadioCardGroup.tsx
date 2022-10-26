@@ -19,7 +19,8 @@ const RadioCardGroupWrapper = (props: Props) => {
     if (radioGroupProps.value) {
       formHook.setValue(registered.name, radioGroupProps.value);
     }
-  }, [formHook, radioGroupProps.value, registered.name]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [radioGroupProps.value, registered.name]);
 
   const handleChange = (v: string) => {
     formHook.setValue(registered.name, v);
