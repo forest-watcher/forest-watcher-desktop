@@ -1,6 +1,7 @@
 import ToggleGroup from "components/ui/Form/ToggleGroup";
 import Select from "components/ui/Form/Select";
-import { FC } from "react";
+import { DefaultRequestThresholds, EAlertTypes, ViirsRequestThresholds } from "constants/alerts";
+import { FC, useMemo } from "react";
 import { useFormContext } from "react-hook-form";
 import { useIntl } from "react-intl";
 
@@ -9,6 +10,34 @@ export interface IProps {}
 const ShowAlertsControl: FC<IProps> = props => {
   const methods = useFormContext();
   const intl = useIntl();
+
+  const alertTypesShownOptions = useMemo(
+    () => [
+      {
+        label: intl.formatMessage({ id: "alerts.all.deforestation.alerts" }),
+        value: "all"
+      },
+      ...Object.values(EAlertTypes).map(alertType => ({
+        label: intl.formatMessage({ id: `alerts.${alertType}` }),
+        value: alertType
+      }))
+    ],
+    [intl]
+  );
+
+  const alertTypesRequestThresholdOptions = useMemo(
+    () => ({
+      default: DefaultRequestThresholds.map(requestThreshold => ({
+        label: intl.formatMessage({ id: requestThreshold.labelKey }),
+        value: requestThreshold.requestThreshold
+      })),
+      viirs: ViirsRequestThresholds.map(requestThreshold => ({
+        label: intl.formatMessage({ id: requestThreshold.labelKey }),
+        value: requestThreshold.requestThreshold
+      }))
+    }),
+    [intl]
+  );
 
   return (
     <>
@@ -37,24 +66,39 @@ const ShowAlertsControl: FC<IProps> = props => {
             registered={methods.register("alertTypesShown")}
             selectProps={{
               placeholder: intl.formatMessage({ id: "maps.period" }),
-              options: [{ label: "Test", value: 1 }],
+              options: alertTypesShownOptions,
               alternateLabelStyle: true,
-              defaultValue: { label: "Test", value: 1 }
+              defaultValue: alertTypesShownOptions[0]
             }}
           />
 
-          <Select
-            id="alert-types-timeframes"
-            className="u-margin-bottom"
-            formHook={methods}
-            registered={methods.register("alertTypesTimeframes")}
-            selectProps={{
-              placeholder: intl.formatMessage({ id: "maps.period" }),
-              options: [{ label: "Test", value: 1 }],
-              alternateLabelStyle: true,
-              defaultValue: { label: "Test", value: 1 }
-            }}
-          />
+          {methods.getValues("alertTypesShown") !== EAlertTypes.viirs ? (
+            <Select
+              id="alert-types-timeframes"
+              className="u-margin-bottom"
+              formHook={methods}
+              registered={methods.register("alertTypesRequestThreshold")}
+              selectProps={{
+                placeholder: intl.formatMessage({ id: "maps.period" }),
+                options: alertTypesRequestThresholdOptions.default,
+                alternateLabelStyle: true,
+                defaultValue: alertTypesRequestThresholdOptions.default[0]
+              }}
+            />
+          ) : (
+            <Select
+              id="alert-types-viirs-timeframes"
+              className="u-margin-bottom"
+              formHook={methods}
+              registered={methods.register("alertTypesViirsRequestThreshold")}
+              selectProps={{
+                placeholder: intl.formatMessage({ id: "maps.period" }),
+                options: alertTypesRequestThresholdOptions.viirs,
+                alternateLabelStyle: true,
+                defaultValue: alertTypesRequestThresholdOptions.viirs[0]
+              }}
+            />
+          )}
         </>
       )}
     </>

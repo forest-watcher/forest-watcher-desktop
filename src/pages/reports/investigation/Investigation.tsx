@@ -1,4 +1,10 @@
 import OptionalWrapper from "components/extensive/OptionalWrapper";
+import {
+  allDeforestationAlerts,
+  DefaultRequestThresholds,
+  EAlertTypes,
+  ViirsRequestThresholds
+} from "constants/alerts";
 import { FC, useCallback, useEffect, useMemo, useState } from "react";
 import { useForm, FormProvider } from "react-hook-form";
 import { Route, RouteComponentProps, Switch, useHistory, useRouteMatch } from "react-router-dom";
@@ -12,6 +18,7 @@ import { Layer, Source } from "react-map-gl";
 import { setupMapImages } from "helpers/map";
 import { Map as MapInstance, MapboxEvent } from "mapbox-gl";
 
+// Map Sources
 import AreaAssignmentSource from "pages/reports/investigation/components/AreaAssignmentSource";
 import AreaAlertsSource from "pages/reports/investigation/components/AreaAlertSource";
 
@@ -31,8 +38,9 @@ export type TFormValues = {
   contextualLayers?: string[];
   showAlerts: ["true"];
   showOpenAssignments: ["true"];
-  alertTypesShown?: string;
-  alertTypesTimeframes?: string;
+  alertTypesShown: "all" | EAlertTypes;
+  alertTypesRequestThreshold: number;
+  alertTypesViirsRequestThreshold: number;
 };
 
 const InvestigationPage: FC<IProps> = props => {
@@ -92,7 +100,10 @@ const InvestigationPage: FC<IProps> = props => {
       layers: [LAYERS.reports],
       currentMap: basemapKey,
       showAlerts: ["true"],
-      showOpenAssignments: ["true"]
+      showOpenAssignments: ["true"],
+      alertTypesShown: "all",
+      alertTypesRequestThreshold: DefaultRequestThresholds[0].requestThreshold,
+      alertTypesViirsRequestThreshold: ViirsRequestThresholds[0].requestThreshold
     }),
     [basemapKey]
   );
@@ -184,7 +195,17 @@ const InvestigationPage: FC<IProps> = props => {
             </Source>
           ))}
 
-          {watcher.showAlerts.includes("true") && <AreaAlertsSource areaId={investigationMatch?.params.areaId} />}
+          {watcher.showAlerts.includes("true") && (
+            <AreaAlertsSource
+              areaId={investigationMatch?.params.areaId}
+              alertTypesToShow={watcher.alertTypesShown === "all" ? allDeforestationAlerts : [watcher.alertTypesShown]}
+              alertRequestThreshold={
+                watcher.alertTypesShown !== EAlertTypes.viirs
+                  ? watcher.alertTypesRequestThreshold
+                  : watcher.alertTypesViirsRequestThreshold
+              }
+            />
+          )}
 
           {watcher.showOpenAssignments.includes("true") && <AreaAssignmentSource />}
         </OptionalWrapper>

@@ -7,6 +7,12 @@ export enum EAlertTypes {
   "viirs" = "viirs"
 }
 
+export const allDeforestationAlerts = [
+  EAlertTypes.umd_as_it_happens,
+  EAlertTypes.glad_sentinel_2,
+  EAlertTypes.wur_radd_alerts
+];
+
 export interface IAlertIdentifier {
   id: EAlertTypes;
   reportNameId: string;
@@ -83,5 +89,52 @@ const alertTypes: IAlertTypes = {
     requestThreshold: 7
   }
 };
+
+export type TRequestThreshold = {
+  labelKey: string;
+  requestThreshold: number;
+};
+
+export const DefaultRequestThresholds: readonly TRequestThreshold[] = [
+  {
+    labelKey: "timeframes.2weeks",
+    requestThreshold: 14 // 7 days * 2
+  },
+  {
+    labelKey: "timeframes.1month",
+    requestThreshold: 31 // 31 days
+  },
+  {
+    labelKey: "timeframes.2months",
+    requestThreshold: 62 // 31 days * 2
+  },
+  {
+    labelKey: "timeframes.6months",
+    requestThreshold: 186 // 31 days * 6
+  },
+  {
+    labelKey: "timeframes.12months",
+    requestThreshold: 365 // a year
+  }
+];
+
+export const ViirsRequestThresholds: readonly TRequestThreshold[] = [
+  {
+    labelKey: "timeframes.1day",
+    requestThreshold: 1
+  },
+  {
+    labelKey: "timeframes.2days",
+    requestThreshold: 2
+  },
+  {
+    labelKey: "timeframes.6days",
+    requestThreshold: 6
+  },
+  {
+    labelKey: "timeframes.12days",
+    requestThreshold: 12
+  }
+];
 
 export { alertTypes };

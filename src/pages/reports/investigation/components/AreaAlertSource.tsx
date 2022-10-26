@@ -1,6 +1,6 @@
 import SquareClusterMarkers, { EPointDataTypes } from "components/ui/Map/components/layers/SquareClusterMarkers";
 import { pointStyle } from "components/ui/Map/components/layers/styles";
-import { alertTypes } from "constants/alerts";
+import { alertTypes, EAlertTypes } from "constants/alerts";
 import useGetAlertsForArea from "hooks/querys/alerts/useGetAlertsForArea";
 import { FC, useCallback, useMemo, useState } from "react";
 import { useMap } from "react-map-gl";
@@ -8,12 +8,14 @@ import { IPoint } from "types/map";
 
 export interface IProps {
   areaId?: string;
+  alertTypesToShow?: EAlertTypes[];
+  alertRequestThreshold?: number;
 }
 
 const AreaAssignmentMapSource: FC<IProps> = props => {
-  const { areaId } = props;
+  const { areaId, alertTypesToShow, alertRequestThreshold } = props;
   const { current: mapRef } = useMap();
-  const { data: alerts } = useGetAlertsForArea(areaId);
+  const alerts = useGetAlertsForArea(areaId, alertTypesToShow, alertRequestThreshold);
   const [, setSelectedPoint] = useState<mapboxgl.Point | null>(null);
   const [selectedAlertIds, setSelectedAlertIds] = useState<string[] | null>(null);
 
@@ -24,12 +26,16 @@ const AreaAssignmentMapSource: FC<IProps> = props => {
 
   const alertPoints = useMemo(() => {
     const points: IPoint[] = [];
-    for (const alertType in alerts) {
-      for (let i = 0; i < alerts[alertType].length; i++) {
+    for (const alert of alerts) {
+      if (alert.isLoading) continue;
+
+      const { type, data } = alert.data;
+
+      for (let i = 0; i < data.length; i++) {
         points.push({
-          id: alertType + i,
-          position: [alerts[alertType][i].longitude, alerts[alertType][i].latitude],
-          alertTypes: [alertTypes[alertType]]
+          id: type + i,
+          position: [data[i].longitude, data[i].latitude],
+          alertTypes: [alertTypes[type]]
         });
       }
     }
