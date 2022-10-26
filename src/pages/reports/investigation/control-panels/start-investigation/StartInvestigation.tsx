@@ -1,6 +1,6 @@
 import ShowAlertsControl from "pages/reports/investigation/control-panels/start-investigation/controls/ShowAlerts";
 import ShowOpenAssignments from "pages/reports/investigation/control-panels/start-investigation/controls/ShowOpenAssignments";
-import { useHistory, useParams } from "react-router-dom";
+import { Link, useHistory, useLocation, useParams } from "react-router-dom";
 import { FC, useCallback, useEffect, useMemo, useState } from "react";
 import { toastr } from "react-redux-toastr";
 import { AllGeoJSON } from "@turf/turf";
@@ -8,7 +8,7 @@ import { useAppSelector } from "hooks/useRedux";
 import { TParams } from "pages/reports/investigation/types";
 import MapCard from "components/ui/Map/components/cards/MapCard";
 import Loader from "components/ui/Loader";
-import { useIntl } from "react-intl";
+import { FormattedMessage, useIntl } from "react-intl";
 import ToggleGroup from "components/ui/Form/ToggleGroup";
 import { useForm, useWatch, FormProvider } from "react-hook-form";
 import RadioCardGroup from "components/ui/Form/RadioCardGroup";
@@ -27,6 +27,7 @@ import useFindArea from "hooks/useFindArea";
 import { fireGAEvent } from "helpers/analytics";
 import { MapActions } from "types/analytics";
 import { TFilterFields } from "pages/reports/reports/Reports";
+import Icon from "components/extensive/Icon";
 
 export enum LAYERS {
   reports = "reports"
@@ -53,6 +54,7 @@ interface IProps extends TPropsFromRedux {
 
 const StartInvestigationControlPanel: FC<IProps> = props => {
   const history = useHistory();
+  const location = useLocation();
   const { areaId } = useParams<TParams>();
   const { onChange, basemaps, answers, onFilterUpdate, layersOptions, getLayers, defaultBasemap } = props;
   const [filteredRows, setFilteredRows] = useState<any>(answers);
@@ -178,6 +180,12 @@ const StartInvestigationControlPanel: FC<IProps> = props => {
           { area: area?.attributes.name }
         )}
         onBack={handleBackBtnClick}
+        footer={
+          <Link to={`${location.pathname}/assignment`} className="c-button c-button--primary">
+            <Icon name="PlusWhite" className="pr-[6px]" />
+            <FormattedMessage id="assignment.create.new" />
+          </Link>
+        }
       >
         <Loader isLoading={isLoadingAreas || isLoadingAnswers || isLoadingTeamAreas} />
 

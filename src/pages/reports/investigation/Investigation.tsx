@@ -1,3 +1,4 @@
+import AddAssignmentControlPanel from "pages/reports/investigation/control-panels/AddAssignment/AddAssignment";
 import { FC, useCallback, useEffect, useMemo, useState } from "react";
 import { Route, RouteComponentProps, Switch, useHistory, useRouteMatch } from "react-router-dom";
 import UserAreasMap from "components/user-areas-map/UserAreasMap";
@@ -133,6 +134,10 @@ const InvestigationPage: FC<IProps> = props => {
               <Layer id={`${url}-layer`} type="raster" />
             </Source>
           ))}
+        </Route>
+
+        <Route exact path={`${match.url}/:areaId/start/assignment`}>
+          <AddAssignmentControlPanel />
         </Route>
       </Switch>
     </UserAreasMap>
