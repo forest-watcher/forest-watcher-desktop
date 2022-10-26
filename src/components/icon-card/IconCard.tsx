@@ -13,7 +13,11 @@ const IconCard = ({ iconName, title, text, textLink }: IconCardProps) => {
   const _renderText = () => {
     switch (true) {
       case !!textLink:
-        return <Link to={textLink ?? ""}>{text}</Link>;
+        return (
+          <Link to={textLink ?? ""} className="text-gray-700">
+            {text}
+          </Link>
+        );
       default:
         return text;
     }

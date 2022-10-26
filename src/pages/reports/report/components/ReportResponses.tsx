@@ -35,6 +35,8 @@ const ReportResponses = ({ questions, responses }: ReportResponsesProps) => {
       .filter(x => x) as IReportResponse[];
   }, [questions, responses]);
 
+  const hasImages = useMemo(() => !!responses[0].value, [responses]);
+
   return (
     <>
       <OptionalWrapper data={showImagesModal}>
@@ -44,7 +46,9 @@ const ReportResponses = ({ questions, responses }: ReportResponsesProps) => {
         <section className="row column py-section">
           <div className="flex items-center justify-between">
             <h1 className="font-base text-[36px] font-light text-gray-700">Report Responses</h1>
-            <Button onClick={() => setShowImagesModal(true)}>Export Images</Button>
+            <OptionalWrapper data={hasImages}>
+              <Button onClick={() => setShowImagesModal(true)}>Export Images</Button>
+            </OptionalWrapper>
           </div>
           <List items={data} render={item => <ReportResponse {...item} />} />
         </section>
