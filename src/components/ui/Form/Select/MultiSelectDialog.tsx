@@ -4,7 +4,7 @@ import Button from "components/ui/Button/Button";
 import IconBubble from "components/ui/Icon/IconBubble";
 import classnames from "classnames";
 import { useMemo, useState } from "react";
-import { FormattedMessage, useIntl } from "react-intl";
+import { FormattedMessage } from "react-intl";
 import { Switch } from "@headlessui/react";
 import { Control, Path, useController, UseControllerProps, useWatch } from "react-hook-form";
 
@@ -84,7 +84,6 @@ const MultiSelectDialog: (<T>(props: IProps & UseControllerProps<T>) => JSX.Elem
 
 const MultiSelectDialogPreview = <T,>(props: IMultiSelectDialogPreviewProps<T>) => {
   const { className, label, emptyLabel, emptyIcon, addButtonLabel, groups, control, name, onAdd } = props;
-  const intl = useIntl();
   const watcher = useWatch({
     control,
     name

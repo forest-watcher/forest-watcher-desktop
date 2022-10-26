@@ -53,7 +53,7 @@ const CreateAssignmentForm: FC<IProps> = props => {
   const intl = useIntl();
   const history = useHistory();
   const location = useLocation();
-  const { handleSubmit, control, watch } = useForm<TCreateAssignmentFormFields>({
+  const { control, watch } = useForm<TCreateAssignmentFormFields>({
     defaultValues: {
       priority: 0,
       monitors: ["Me"]
@@ -63,8 +63,6 @@ const CreateAssignmentForm: FC<IProps> = props => {
   const monitorsWatcher = watch("monitors");
 
   const [openDialogName, setOpenDialogName] = useState<EDialogsNames>(EDialogsNames.None);
-
-  const onSubmit = (data: any) => console.log(data);
 
   return (
     <MapCard
