@@ -1,5 +1,6 @@
 import OptionalWrapper from "components/extensive/OptionalWrapper";
 import Button from "components/ui/Button/Button";
+import TextArea from "components/ui/Form/Input/TextArea";
 import RadioGroup from "components/ui/Form/RadioGroup/RadioGroup";
 import MultiSelectDialog from "components/ui/Form/Select/MultiSelectDialog";
 import MapCard from "components/ui/Map/components/cards/MapCard";
@@ -39,6 +40,7 @@ type TCreateAssignmentFormFields = {
   priority: number;
   monitors: string[];
   templates: string[];
+  monitorNotes: string;
 };
 
 enum EDialogsNames {
@@ -48,16 +50,17 @@ enum EDialogsNames {
 }
 
 const CreateAssignmentForm: FC<IProps> = props => {
-  const {} = props;
   const intl = useIntl();
   const history = useHistory();
   const location = useLocation();
-  const { handleSubmit, control } = useForm<TCreateAssignmentFormFields>({
+  const { handleSubmit, control, watch } = useForm<TCreateAssignmentFormFields>({
     defaultValues: {
       priority: 0,
       monitors: ["Me"]
     }
   });
+
+  const monitorsWatcher = watch("monitors");
 
   const [openDialogName, setOpenDialogName] = useState<EDialogsNames>(EDialogsNames.None);
 
@@ -105,6 +108,17 @@ const CreateAssignmentForm: FC<IProps> = props => {
             addButtonLabel="assignment.create.form.monitor.add"
             onAdd={() => setOpenDialogName(EDialogsNames.Monitors)}
           />
+
+          <OptionalWrapper data={monitorsWatcher.length > 0}>
+            <TextArea
+              wrapperClassName="mt-6"
+              id="monitor-notes"
+              label="assignment.create.form.notesForMonitors"
+              altLabel
+              control={control}
+              name="monitorNotes"
+            />
+          </OptionalWrapper>
 
           <MultiSelectDialog.Preview
             className="mt-10"

@@ -1,21 +1,17 @@
 import { AllGeoJSON } from "@turf/turf";
-import Button from "components/ui/Button/Button";
-import MapCard from "components/ui/Map/components/cards/MapCard";
 import useFindArea from "hooks/useFindArea";
 import useZoomToGeojson from "hooks/useZoomToArea";
 import CreateAssignmentForm from "pages/reports/investigation/control-panels/CreateAssignment/states/CreateAssignmentForm";
-import OpenAssignmentEmptyState from "pages/reports/investigation/control-panels/CreateAssignment/states/EmptyState";
 import { TParams } from "pages/reports/investigation/types";
 import { FC, useMemo } from "react";
-import { FormattedMessage, useIntl } from "react-intl";
-import { useHistory, useLocation, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
 export interface IProps {}
 
 const CreateAssignmentControlPanel: FC<IProps> = props => {
-  const intl = useIntl();
-  const history = useHistory();
-  const location = useLocation();
+  // const intl = useIntl();
+  // const history = useHistory();
+  // const location = useLocation();
   const { areaId } = useParams<TParams>();
 
   // ToDo: Move this to src/pages/reports/investigation/Investigation.tsx to avoid boiler plate code
