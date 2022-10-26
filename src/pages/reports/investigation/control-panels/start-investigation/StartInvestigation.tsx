@@ -28,6 +28,7 @@ import useFindArea from "hooks/useFindArea";
 import { fireGAEvent } from "helpers/analytics";
 import { MapActions } from "types/analytics";
 import { TFilterFields } from "pages/reports/reports/Reports";
+import ShowRoutesControl from "./controls/ShowRoutesControl";
 import Icon from "components/extensive/Icon";
 
 export enum LAYERS {
@@ -226,7 +227,6 @@ const StartInvestigationControlPanel: FC<IProps> = props => {
         )}
 
         <ShowAlertsControl />
-
         <ToggleGroup
           id="layer-toggles"
           registered={register("layers")}
@@ -252,6 +252,7 @@ const StartInvestigationControlPanel: FC<IProps> = props => {
         )}
 
         <ShowOpenAssignments />
+        <ShowRoutesControl />
 
         {layersOptions.length && (
           <ToggleGroup
