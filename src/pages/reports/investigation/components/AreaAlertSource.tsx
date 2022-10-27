@@ -27,7 +27,9 @@ const AreaAssignmentMapSource: FC<IProps> = props => {
   const alertPoints = useMemo(() => {
     const points: IPoint[] = [];
     for (const alert of alerts) {
-      if (alert.isLoading) continue;
+      if (alert.isLoading || !alert.data) {
+        continue;
+      }
 
       const { type, data } = alert.data;
 

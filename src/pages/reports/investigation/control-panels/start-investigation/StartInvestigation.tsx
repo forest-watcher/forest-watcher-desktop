@@ -13,7 +13,7 @@ import { FormattedMessage, useIntl } from "react-intl";
 import ToggleGroup from "components/ui/Form/ToggleGroup";
 import { useFormContext } from "react-hook-form";
 import RadioCardGroup from "components/ui/Form/RadioCardGroup";
-import { BASEMAPS } from "constants/mapbox";
+import { BASEMAPS, PLANET_BASEMAP } from "constants/mapbox";
 import Select from "components/ui/Form/Select";
 import { TPropsFromRedux } from "pages/reports/investigation/control-panels/start-investigation/StartInvestigationContainer";
 import Timeframe from "components/ui/Timeframe";
@@ -30,6 +30,7 @@ import { MapActions } from "types/analytics";
 import { TFilterFields } from "pages/reports/reports/Reports";
 import ShowRoutesControl from "./controls/ShowRoutesControl";
 import Icon from "components/extensive/Icon";
+import Toggle from "components/ui/Form/Toggle";
 
 export enum LAYERS {
   reports = "reports"
@@ -88,7 +89,7 @@ const StartInvestigationControlPanel: FC<IProps> = props => {
       return {
         value: BASEMAPS[key as keyof typeof BASEMAPS].key,
         name: intl.formatMessage({ id: BASEMAPS[key as keyof typeof BASEMAPS].key }),
-        className: "c-map-control-panel__grid-item",
+        className: "c-map-control-panel__grid-item c-map-control-panel__grid-item--slim",
         image: BASEMAPS[key as keyof typeof BASEMAPS].image
       };
     });
@@ -164,7 +165,7 @@ const StartInvestigationControlPanel: FC<IProps> = props => {
       <form>
         <RadioCardGroup
           id="map-styles"
-          className="u-margin-bottom-40"
+          className="u-margin-bottom-24"
           error={errors.currentMap}
           registered={register("currentMap")}
           formHook={methods}
@@ -182,49 +183,66 @@ const StartInvestigationControlPanel: FC<IProps> = props => {
             });
           }}
         />
-        {watcher.currentMap === BASEMAPS.planet.key && basemaps.length && (
-          <div className="u-margin-bottom-40">
-            <Select
-              id="period"
-              formHook={methods}
-              registered={register("currentPlanetPeriod")}
-              selectProps={{
-                placeholder: intl.formatMessage({ id: "maps.period" }),
-                options: baseMapPeriods,
-                label: intl.formatMessage({ id: "maps.period" }),
-                alternateLabelStyle: true,
-                defaultValue: baseMapPeriods[baseMapPeriods.length - 1]
-              }}
-              key={watcher.currentPlanetImageType}
-              className="u-margin-bottom-20"
-            />
-            {!isMobile && (
-              <div className="u-margin-bottom-40">
-                <Timeframe
-                  periods={baseMapPeriods}
-                  selected={baseMapPeriods.findIndex(bmp => {
-                    return bmp.value === watcher.currentPlanetPeriod;
-                  })}
-                  onChange={value => setValue("currentPlanetPeriod", value.value)}
-                  labelGetter="metadata.label"
-                  yearGetter="metadata.year"
-                />
-              </div>
-            )}
-            <Select
-              id="colour"
-              formHook={methods}
-              registered={register("currentPlanetImageType")}
-              selectProps={{
-                placeholder: intl.formatMessage({ id: "maps.imageType" }),
-                options: imageTypeOptions,
-                label: intl.formatMessage({ id: "maps.imageType" }),
-                alternateLabelStyle: true,
-                defaultValue: imageTypeOptions[0]
-              }}
-            />
-          </div>
-        )}
+        <div className="u-margin-bottom-40 bg-gray-200 mx-[-20px] pt-6 pb-2 px-5">
+          <ToggleGroup
+            id="planet"
+            registered={register("showPlanetImagery")}
+            formHook={methods}
+            hideLabel
+            toggleGroupProps={{
+              options: [
+                {
+                  label: intl.formatMessage({ id: "maps.planet" }),
+                  value: PLANET_BASEMAP.key
+                }
+              ]
+            }}
+          />
+
+          {watcher.showPlanetImagery?.includes(PLANET_BASEMAP.key) && basemaps.length && (
+            <div className="u-margin-bottom-40">
+              <Select
+                id="period"
+                formHook={methods}
+                registered={register("currentPlanetPeriod")}
+                selectProps={{
+                  placeholder: intl.formatMessage({ id: "maps.period" }),
+                  options: baseMapPeriods,
+                  label: intl.formatMessage({ id: "maps.period" }),
+                  alternateLabelStyle: true,
+                  defaultValue: baseMapPeriods[baseMapPeriods.length - 1]
+                }}
+                key={watcher.currentPlanetImageType}
+                className="u-margin-bottom-20"
+              />
+              {!isMobile && (
+                <div className="u-margin-bottom-40">
+                  <Timeframe
+                    periods={baseMapPeriods}
+                    selected={baseMapPeriods.findIndex(bmp => {
+                      return bmp.value === watcher.currentPlanetPeriod;
+                    })}
+                    onChange={value => setValue("currentPlanetPeriod", value.value)}
+                    labelGetter="metadata.label"
+                    yearGetter="metadata.year"
+                  />
+                </div>
+              )}
+              <Select
+                id="colour"
+                formHook={methods}
+                registered={register("currentPlanetImageType")}
+                selectProps={{
+                  placeholder: intl.formatMessage({ id: "maps.imageType" }),
+                  options: imageTypeOptions,
+                  label: intl.formatMessage({ id: "maps.imageType" }),
+                  alternateLabelStyle: true,
+                  defaultValue: imageTypeOptions[0]
+                }}
+              />
+            </div>
+          )}
+        </div>
 
         <ShowAlertsControl />
         <ToggleGroup
