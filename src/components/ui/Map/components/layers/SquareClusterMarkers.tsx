@@ -180,7 +180,19 @@ const SquareClusterMarkers: FC<IProps> = props => {
 
       const pointIds = features?.map(feature => feature.properties?.id) || [];
 
-      setSelectedPoints(i => (i && canMultiSelect ? [...i, ...pointIds] : pointIds));
+      setSelectedPoints(state => {
+        if (!state) return pointIds;
+
+        const isCurrentlySelected = state.findIndex(i => pointIds.includes(i)) !== -1 || false;
+
+        if (isCurrentlySelected) {
+          return [...state.filter(i => !pointIds.includes(i))];
+        } else if (canMultiSelect) {
+          return [...state, ...pointIds];
+        } else {
+          return pointIds;
+        }
+      });
       onSquareSelect?.(pointIds, e.point);
     };
 
