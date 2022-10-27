@@ -19,10 +19,11 @@ export interface IProps<T, OPTION_TYPE> {
   options: OPTION_TYPE[];
   onFiltered?: (arr: OPTION_TYPE[]) => void;
   defaults?: UnpackNestedValue<DeepPartial<T>>;
+  children?: React.ReactNode;
 }
 
 const DataFilter = <T, OPTION_TYPE>(props: IProps<T, OPTION_TYPE>) => {
-  const { filters, className, options, onFiltered, extraFilters, defaults } = props;
+  const { filters, className, options, onFiltered, extraFilters, defaults, children } = props;
 
   const formhook = useForm<T>({
     defaultValues: defaults
@@ -88,6 +89,7 @@ const DataFilter = <T, OPTION_TYPE>(props: IProps<T, OPTION_TYPE>) => {
             <FormattedMessage id="filters.extra" />
           </button>
         )}
+        {children ? children : <></>}
       </form>
       <FormModal<T>
         isOpen={isExtrasOpen}

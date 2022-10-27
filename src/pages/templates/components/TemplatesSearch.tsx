@@ -1,0 +1,43 @@
+import Input from "components/ui/Form/Input";
+import { useEffect } from "react";
+import { useForm } from "react-hook-form";
+import { TemplateTableRowData } from "../Templates";
+
+type TemplateSearchProps = {
+  onSearch: (res: TemplateTableRowData[]) => void;
+  data: TemplateTableRowData[];
+};
+
+const TemplatesSearch = ({ onSearch, data }: TemplateSearchProps) => {
+  const { register, watch } = useForm<{ search: string }>();
+
+  const value = watch("search");
+
+  useEffect(() => {
+    if (!value) return onSearch(data);
+    const newData = data
+      .map(item => {
+        console.log(item?.templateName);
+        const lowercaseValue = value.toLowerCase();
+        const lowercaseTemplateName = item?.templateName?.toLowerCase();
+        if (lowercaseTemplateName.includes(lowercaseValue)) return item;
+        return null;
+      })
+      .filter(valid => valid) as TemplateTableRowData[];
+
+    onSearch(newData);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [value]);
+
+  return (
+    <div className="ml-auto">
+      <Input
+        id="search"
+        registered={register("search")}
+        htmlInputProps={{ type: "text", label: "Search", placeholder: "Enter template name" }}
+      />
+    </div>
+  );
+};
+
+export default TemplatesSearch;

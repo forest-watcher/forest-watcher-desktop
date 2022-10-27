@@ -6,7 +6,6 @@ import querystring from "query-string";
 import Areas from "./pages/areas/AreasContainer";
 import AreasManage from "./pages/area-view/AreaViewContainer";
 import AreaEdit from "./pages/area-edit/AreaEditContainer";
-import Templates from "./pages/templates/TemplatesContainer";
 import TemplatesManage from "./pages/templates-manage/TemplatesManageContainer";
 import Teams from "./pages/teams/TeamsContainer";
 import TeamsInvitations from "pages/teams/invitation/InvitationContainer";
@@ -17,6 +16,7 @@ import Login from "./pages/login/Login";
 import SignUpAndReset from "./pages/login/SignUpAndReset";
 import { useRouteHistoryStack } from "hooks/useRouteHistoryStack";
 import Report from "pages/reports/report/Report";
+import Templates from "pages/templates/Templates";
 
 const getLoginComponent = ({ user, location }) => {
   const search = location.search || "";
