@@ -1,3 +1,5 @@
+import OptionalWrapper from "components/extensive/OptionalWrapper";
+import AlertsDetailCard from "components/ui/Map/components/cards/AlertsDetail";
 import SquareClusterMarkers, { EPointDataTypes } from "components/ui/Map/components/layers/SquareClusterMarkers";
 import { pointStyle } from "components/ui/Map/components/layers/styles";
 import { alertTypes, EAlertTypes } from "constants/alerts";
@@ -12,34 +14,58 @@ export interface IProps {
   alertRequestThreshold?: number;
 }
 
+type TAlertsById = {
+  id: string;
+  data: Record<any, any>;
+};
+
 const AreaAssignmentMapSource: FC<IProps> = props => {
   const { areaId, alertTypesToShow, alertRequestThreshold } = props;
   const { current: mapRef } = useMap();
   const alerts = useGetAlertsForArea(areaId, alertTypesToShow, alertRequestThreshold);
-  const [, setSelectedAlertIds] = useState<string[] | null>(null);
+  const [selectedAlerts, setSelectedAlerts] = useState<TAlertsById[]>();
 
-  const handleAlertSelectionChange = useCallback((ids: string[] | null) => {
-    setSelectedAlertIds(ids);
-  }, []);
+  const [alertPoints, alertsById] = useMemo(
+    () => {
+      const copyAlerts = [...alerts];
 
-  const alertPoints = useMemo(() => {
-    const points: IPoint[] = [];
-    for (const alert of alerts) {
-      if (alert.isLoading) continue;
+      const pointData: IPoint[] = [];
+      const pointsById: TAlertsById[] = [];
+      for (const alert of copyAlerts) {
+        if (alert.isLoading) continue;
 
-      const { type, data } = alert.data;
+        const { type, data } = alert.data;
 
-      for (let i = 0; i < data.length; i++) {
-        points.push({
-          id: type + i,
-          position: [data[i].longitude, data[i].latitude],
-          alertTypes: [alertTypes[type]]
-        });
+        for (let i = 0; i < data.length; i++) {
+          const alertId = (type + i) as string;
+
+          pointData.push({
+            id: alertId,
+            position: [data[i].longitude, data[i].latitude],
+            alertTypes: [alertTypes[type]]
+          });
+
+          pointsById.push({
+            id: alertId,
+            data: { ...data[i], alertType: type }
+          });
+        }
       }
-    }
 
-    return points;
-  }, [alerts]);
+      console.log("point recalc");
+
+      return [pointData, pointsById];
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    alerts.map(queryAlert => queryAlert.data) // ToDo: update when using fw_alerts endpoint
+  );
+
+  const handleAlertSelectionChange = useCallback(
+    (ids: string[] | null) => {
+      setSelectedAlerts([...alertsById].filter(alert => ids?.includes(alert.id)));
+    },
+    [alertsById]
+  );
 
   return (
     <>
@@ -60,6 +86,10 @@ const AreaAssignmentMapSource: FC<IProps> = props => {
         onSelectionChange={handleAlertSelectionChange}
         canMultiSelect
       />
+
+      <OptionalWrapper data={(selectedAlerts?.length && selectedAlerts.length > 0) || false}>
+        <AlertsDetailCard selectedAlerts={alerts} />
+      </OptionalWrapper>
     </>
   );
 };
