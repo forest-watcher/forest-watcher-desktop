@@ -1,4 +1,3 @@
-import OptionalWrapper from "components/extensive/OptionalWrapper";
 import AlertsDetailCard from "components/ui/Map/components/cards/AlertsDetail";
 import SquareClusterMarkers, { EPointDataTypes } from "components/ui/Map/components/layers/SquareClusterMarkers";
 import { pointStyle } from "components/ui/Map/components/layers/styles";
@@ -7,17 +6,13 @@ import useGetAlertsForArea from "hooks/querys/alerts/useGetAlertsForArea";
 import { FC, useCallback, useMemo, useState } from "react";
 import { useMap } from "react-map-gl";
 import { IPoint } from "types/map";
+import { TAlertsById } from "components/ui/Map/components/cards/AlertsDetail";
 
 export interface IProps {
   areaId?: string;
   alertTypesToShow?: EAlertTypes[];
   alertRequestThreshold?: number;
 }
-
-type TAlertsById = {
-  id: string;
-  data: Record<any, any>;
-};
 
 const AreaAssignmentMapSource: FC<IProps> = props => {
   const { areaId, alertTypesToShow, alertRequestThreshold } = props;
@@ -87,9 +82,7 @@ const AreaAssignmentMapSource: FC<IProps> = props => {
         canMultiSelect
       />
 
-      <OptionalWrapper data={(selectedAlerts?.length && selectedAlerts.length > 0) || false}>
-        <AlertsDetailCard selectedAlerts={alerts} />
-      </OptionalWrapper>
+      <AlertsDetailCard selectedAlerts={selectedAlerts} />
     </>
   );
 };
