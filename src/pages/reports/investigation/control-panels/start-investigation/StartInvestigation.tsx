@@ -183,7 +183,7 @@ const StartInvestigationControlPanel: FC<IProps> = props => {
             });
           }}
         />
-        <div className="u-margin-bottom-40 bg-gray-200 mx-[-20px] pt-6 pb-2 px-5">
+        <div className="u-margin-bottom-40 bg-gray-400/40 mx-[-20px] pt-6 pb-2 px-5">
           <ToggleGroup
             id="planet"
             registered={register("showPlanetImagery")}
