@@ -31,9 +31,11 @@ export interface IProps {
   points: IPoint[];
   pointStyle?: Record<any, any>;
   onSquareSelect?: (ids: string[], point: mapboxgl.Point) => void;
-  selectedSquareIds: string[] | null;
+  selectedSquareIds?: string[] | null;
   mapRef: MapInstance | null;
   goToPoints?: boolean;
+  canMultiSelect?: boolean;
+  onSelectionChange?: (selectedIds: string[] | null) => void;
 }
 
 const markers: IMarkers = {};
@@ -47,7 +49,9 @@ const SquareClusterMarkers: FC<IProps> = props => {
     onSquareSelect,
     selectedSquareIds,
     mapRef,
-    pointStyle = defaultPointStyle
+    pointStyle = defaultPointStyle,
+    canMultiSelect = false,
+    onSelectionChange
   } = props;
   const { current: map } = useMap();
   const [hoveredPoint, setHoveredPoint] = useState<string | null>(null);
@@ -75,13 +79,17 @@ const SquareClusterMarkers: FC<IProps> = props => {
             icon: iconGenerator(
               point.alertTypes?.length ? point.alertTypes[0].id : "",
               point.id === hoveredPoint,
-              selectedPoints?.length ? point.id === selectedPoints[0] : false
+              selectedPoints?.length
+                ? canMultiSelect
+                  ? selectedPoints.includes(point.id)
+                  : point.id === selectedPoints[0]
+                : false
             ),
             alertType: point.alertTypes?.length ? point.alertTypes[0].id : ""
           })
         )
       ),
-    [hoveredPoint, iconGenerator, points, selectedPoints]
+    [hoveredPoint, iconGenerator, points, selectedPoints, canMultiSelect]
   );
 
   useEffect(() => {
@@ -172,7 +180,7 @@ const SquareClusterMarkers: FC<IProps> = props => {
 
       const pointIds = features?.map(feature => feature.properties?.id) || [];
 
-      setSelectedPoints(pointIds);
+      setSelectedPoints(i => (i && canMultiSelect ? [...i, ...pointIds] : pointIds));
       onSquareSelect?.(pointIds, e.point);
     };
 
@@ -181,10 +189,14 @@ const SquareClusterMarkers: FC<IProps> = props => {
     return () => {
       map?.off("click", id, click);
     };
-  }, [id, map, onSquareSelect]);
+  }, [id, map, onSquareSelect, canMultiSelect]);
 
   useEffect(() => {
-    setSelectedPoints(selectedSquareIds);
+    onSelectionChange?.(selectedPoints);
+  }, [selectedPoints, onSelectionChange]);
+
+  useEffect(() => {
+    if (selectedSquareIds) setSelectedPoints(selectedSquareIds);
   }, [selectedSquareIds]);
 
   useEffect(() => {

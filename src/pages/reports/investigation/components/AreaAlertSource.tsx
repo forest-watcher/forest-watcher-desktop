@@ -16,11 +16,9 @@ const AreaAssignmentMapSource: FC<IProps> = props => {
   const { areaId, alertTypesToShow, alertRequestThreshold } = props;
   const { current: mapRef } = useMap();
   const alerts = useGetAlertsForArea(areaId, alertTypesToShow, alertRequestThreshold);
-  const [, setSelectedPoint] = useState<mapboxgl.Point | null>(null);
-  const [selectedAlertIds, setSelectedAlertIds] = useState<string[] | null>(null);
+  const [, setSelectedAlertIds] = useState<string[] | null>(null);
 
-  const handleSquareSelect = useCallback((ids: string[], point: mapboxgl.Point) => {
-    setSelectedPoint(point);
+  const handleAlertSelectionChange = useCallback((ids: string[] | null) => {
     setSelectedAlertIds(ids);
   }, []);
 
@@ -58,9 +56,9 @@ const AreaAssignmentMapSource: FC<IProps> = props => {
             "icon-rotation-alignment": "map"
           }
         }}
-        onSquareSelect={handleSquareSelect}
-        selectedSquareIds={selectedAlertIds}
         mapRef={mapRef?.getMap() || null}
+        onSelectionChange={handleAlertSelectionChange}
+        canMultiSelect
       />
     </>
   );
