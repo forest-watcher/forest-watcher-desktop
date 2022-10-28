@@ -46,8 +46,6 @@ const AlertsDetailCard: FC<IProps> = props => {
 
   const alertToShow = selectedAlerts[0];
 
-  console.log(alertToShow);
-
   return (
     <MapCard
       className="min-w-[400px]"
