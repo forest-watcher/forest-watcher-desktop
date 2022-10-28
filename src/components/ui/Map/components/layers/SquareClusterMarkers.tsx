@@ -206,7 +206,7 @@ const SquareClusterMarkers: FC<IProps> = props => {
         onSquareSelect?.(pointIds, e.point);
       };
 
-      // Trigger a de-select event is a <Source id={id} /> isn't clicked within 50ms
+      // Trigger a de-select event if a <Source id={id} /> isn't clicked within 50ms
       if (!timeId) {
         timeId = setTimeout(() => {
           timeId = undefined;
