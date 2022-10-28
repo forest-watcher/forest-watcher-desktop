@@ -27,7 +27,7 @@ const AreaAssignmentMapSource: FC<IProps> = props => {
       const pointData: IPoint[] = [];
       const pointsById: TAlertsById[] = [];
       for (const alert of copyAlerts) {
-        if (alert.isLoading) continue;
+        if (alert.isLoading || !alert.data) continue;
 
         const { type, data } = alert.data;
 
@@ -46,8 +46,6 @@ const AreaAssignmentMapSource: FC<IProps> = props => {
           });
         }
       }
-
-      console.log("point recalc");
 
       return [pointData, pointsById];
     },

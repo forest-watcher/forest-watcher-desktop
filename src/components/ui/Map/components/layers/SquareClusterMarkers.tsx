@@ -169,37 +169,59 @@ const SquareClusterMarkers: FC<IProps> = props => {
   }, [clusterTypeColourMap, id, map, onSquareSelect]);
 
   useEffect(() => {
-    const click = (
-      e: mapboxgl.MapMouseEvent & {
-        features?: mapboxgl.MapboxGeoJSONFeature[] | undefined;
-      } & mapboxgl.EventData
-    ) => {
-      const features = map?.queryRenderedFeatures(e.point, {
-        layers: [id]
-      });
+    const handlePreClick = () => {
+      let timeId: any;
 
-      const pointIds = features?.map(feature => feature.properties?.id) || [];
+      const handleSourceMouseClick = (
+        e: mapboxgl.MapMouseEvent & {
+          features?: mapboxgl.MapboxGeoJSONFeature[] | undefined;
+        } & mapboxgl.EventData
+      ) => {
+        // Cancel the de-select timeout
+        clearTimeout(timeId);
+        timeId = undefined;
 
-      setSelectedPoints(state => {
-        if (!state) return pointIds;
+        const features = map?.queryRenderedFeatures(e.point, {
+          layers: [id]
+        });
 
-        const isCurrentlySelected = state.findIndex(i => pointIds.includes(i)) !== -1 || false;
+        const pointIds = features?.map(feature => feature.properties?.id) || [];
 
-        if (isCurrentlySelected) {
-          return [...state.filter(i => !pointIds.includes(i))];
-        } else if (canMultiSelect) {
-          return [...state, ...pointIds];
-        } else {
-          return pointIds;
-        }
-      });
-      onSquareSelect?.(pointIds, e.point);
+        setSelectedPoints(state => {
+          if (!state) return pointIds;
+
+          const isCurrentlySelected = state.findIndex(i => pointIds.includes(i)) !== -1 || false;
+
+          if (isCurrentlySelected) {
+            return [...state.filter(i => !pointIds.includes(i))];
+          } else if (canMultiSelect) {
+            return [...state, ...pointIds];
+          } else {
+            return pointIds;
+          }
+        });
+        onSquareSelect?.(pointIds, e.point);
+      };
+
+      // Trigger a de-select event is a <Source id={id} /> isn't clicked within 50ms
+      if (!timeId) {
+        timeId = setTimeout(() => {
+          timeId = undefined;
+
+          setSelectedPoints([]);
+        }, 50);
+      }
+
+      // The current function was evoked by a "preclick" event
+      // The next event will be "click"
+      // Evoke handleSourceMouseClick() if this next click is on our <Source id={id} />
+      map?.once("click", id, handleSourceMouseClick);
     };
 
-    map?.on("click", id, click);
+    map?.on("preclick", handlePreClick);
 
     return () => {
-      map?.off("click", id, click);
+      map?.off("preclick", handlePreClick);
     };
   }, [id, map, onSquareSelect, canMultiSelect]);
 
