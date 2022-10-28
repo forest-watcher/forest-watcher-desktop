@@ -78,6 +78,7 @@ const AreaAssignmentMapSource: FC<IProps> = props => {
         mapRef={mapRef?.getMap() || null}
         onSelectionChange={handleAlertSelectionChange}
         canMultiSelect
+        canMapDeselect
       />
 
       <AlertsDetailCard selectedAlerts={selectedAlerts} />

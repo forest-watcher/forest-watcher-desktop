@@ -35,6 +35,8 @@ export interface IProps {
   mapRef: MapInstance | null;
   goToPoints?: boolean;
   canMultiSelect?: boolean;
+  // Will a click on the map, de-select the selectedIds?
+  canMapDeselect?: boolean;
   onSelectionChange?: (selectedIds: string[] | null) => void;
 }
 
@@ -51,6 +53,7 @@ const SquareClusterMarkers: FC<IProps> = props => {
     mapRef,
     pointStyle = defaultPointStyle,
     canMultiSelect = false,
+    canMapDeselect = false,
     onSelectionChange
   } = props;
   const { current: map } = useMap();
@@ -208,7 +211,7 @@ const SquareClusterMarkers: FC<IProps> = props => {
         timeId = setTimeout(() => {
           timeId = undefined;
 
-          setSelectedPoints([]);
+          if (canMapDeselect) setSelectedPoints([]);
         }, 50);
       }
 
@@ -223,7 +226,7 @@ const SquareClusterMarkers: FC<IProps> = props => {
     return () => {
       map?.off("preclick", handlePreClick);
     };
-  }, [id, map, onSquareSelect, canMultiSelect]);
+  }, [id, map, onSquareSelect, canMultiSelect, canMapDeselect]);
 
   useEffect(() => {
     onSelectionChange?.(selectedPoints);
