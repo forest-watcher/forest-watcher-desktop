@@ -196,22 +196,10 @@ const SquareClusterMarkers: FC<IProps> = props => {
       onSquareSelect?.(pointIds, e.point);
     };
 
-    const handleDeselect = (e: any) => {
-      const features = map?.queryRenderedFeatures(e.point, {
-        layers: [id]
-      });
-
-      if (features && features.length === 0) {
-        console.log("deselect");
-      }
-    };
-
     map?.on("click", id, click);
-    map?.on("click", handleDeselect);
 
     return () => {
       map?.off("click", id, click);
-      map?.off("click", handleDeselect);
     };
   }, [id, map, onSquareSelect, canMultiSelect]);
 
@@ -220,7 +208,7 @@ const SquareClusterMarkers: FC<IProps> = props => {
   }, [selectedPoints, onSelectionChange]);
 
   useEffect(() => {
-    if (selectedSquareIds) setSelectedPoints(selectedSquareIds);
+    if (typeof selectedSquareIds !== "undefined") setSelectedPoints(selectedSquareIds);
   }, [selectedSquareIds]);
 
   useEffect(() => {
