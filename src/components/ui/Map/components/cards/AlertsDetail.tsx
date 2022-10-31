@@ -50,8 +50,6 @@ const AlertsDetailCard: FC<IProps> = props => {
       Number(moment(b.data[ALERT_API_KEY_MAP.date(b.data.alertType)]).format("X"))
   );
 
-  const alertToShow = selectedAlerts[0];
-
   const firstAlertDate = moment(alertsToShow[0].data[ALERT_API_KEY_MAP.date(alertsToShow[0].data.alertType)]);
   const lastAlertDate = moment(
     alertsToShow[alertsToShow.length - 1].data[
@@ -60,6 +58,10 @@ const AlertsDetailCard: FC<IProps> = props => {
   );
 
   const showLastDate = Number(firstAlertDate.format("X")) !== Number(lastAlertDate.format("X"));
+  // @ts-ignore
+  const allAlertTypes = [...new Set(alertsToShow.map(alert => alert.data.alertType))];
+  const showIsHighConfidence =
+    alertsToShow.findIndex(alert => alert.data[ALERT_API_KEY_MAP.confidence(alert.data.alertType)] === "high") !== -1;
 
   return (
     <MapCard
@@ -71,17 +73,19 @@ const AlertsDetailCard: FC<IProps> = props => {
       <div className="text-gray-700 text-base">
         <p className="mt-1">
           {intl.formatMessage({ id: "alerts.detail.issued" })}: {firstAlertDate.format("MMM DD, YYYY")}
-          {showLastDate ? " - " + lastAlertDate.format("MMM DD, YYYY") : ""}
+          {showLastDate && " - " + lastAlertDate.format("MMM DD, YYYY")}
         </p>
         <p className="mt-1">
           {intl.formatMessage({ id: "alerts.detail.alertType" })}:{" "}
-          {intl.formatMessage({ id: `alerts.${alertToShow.data.alertType}` })}
+          {allAlertTypes.map(alertType => intl.formatMessage({ id: `alerts.${alertType}` })).join(", ")}
         </p>
 
-        {alertToShow.data[ALERT_API_KEY_MAP.confidence(alertToShow.data.alertType)] === "high" && (
+        {showIsHighConfidence && (
           <p className="mt-1">
             {intl.formatMessage({ id: "alerts.detail.confidenceLevel" })}:{" "}
-            {intl.formatMessage({ id: "alerts.detail.confidenceLevel.high" })}
+            {intl.formatMessage({
+              id: `alerts.detail.confidenceLevel.${alertsToShow.length > 1 ? "high.multiple" : "high"}`
+            })}
           </p>
         )}
       </div>
