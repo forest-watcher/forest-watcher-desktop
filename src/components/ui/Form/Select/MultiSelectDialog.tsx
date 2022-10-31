@@ -63,7 +63,7 @@ const MultiSelectDialog: (<T>(props: IProps & UseControllerProps<T>) => JSX.Elem
           <span className="block text-[14px] font-medium uppercase text-gray-700">{group.label}</span>
 
           {group.options.map(option => (
-            <div className="flex justify-between w-full mt-4">
+            <div key={option.value} className="flex justify-between w-full mt-4">
               <Switch.Group>
                 <Switch.Label className="cursor-pointer text-base">{option.label}</Switch.Label>
                 <Switch
