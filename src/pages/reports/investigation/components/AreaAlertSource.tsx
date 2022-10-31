@@ -55,7 +55,7 @@ const AreaAssignmentMapSource: FC<IProps> = props => {
 
   const handleAlertSelectionChange = useCallback(
     (ids: string[] | null) => {
-      setSelectedAlerts([...alertsById].filter(alert => ids?.includes(alert.id)));
+      setSelectedAlerts(alertsById.filter(alert => ids?.includes(alert.id)));
     },
     [alertsById]
   );
