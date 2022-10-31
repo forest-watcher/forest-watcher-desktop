@@ -1,4 +1,4 @@
-import { FC, useEffect, useMemo, useState } from "react";
+import { FC, useEffect, useMemo, useRef, useState } from "react";
 import { Layer, Source, useMap } from "react-map-gl";
 import { pointStyle as defaultPointStyle, clusterCountStyle } from "./styles";
 import * as turf from "@turf/turf";
@@ -40,9 +40,6 @@ export interface IProps {
   onSelectionChange?: (selectedIds: string[] | null) => void;
 }
 
-const markers: IMarkers = {};
-let markersOnScreen: IMarkers = {};
-
 const SquareClusterMarkers: FC<IProps> = props => {
   const {
     id,
@@ -60,6 +57,9 @@ const SquareClusterMarkers: FC<IProps> = props => {
   const [hoveredPoint, setHoveredPoint] = useState<string | null>(null);
   const [selectedPoints, setSelectedPoints] = useState<string[] | null>(null);
   const [hasMoved, setHasMoved] = useState(false);
+
+  const markers = useRef<IMarkers>({});
+  const markersOnScreen = useRef<IMarkers>({});
 
   const [iconGenerator, clusterTypeColourMap] = useMemo<[TMapIconGenerator, TClusterTypeColourMap]>(() => {
     switch (pointDataType) {
@@ -133,7 +133,7 @@ const SquareClusterMarkers: FC<IProps> = props => {
 
         const clusterId = props.cluster_id;
 
-        let marker = markers[clusterId];
+        let marker = markers.current[clusterId];
 
         const colours: string[] = [];
         clusterTypeColourMap.forEach(({ prop, hex }) => {
@@ -149,25 +149,25 @@ const SquareClusterMarkers: FC<IProps> = props => {
             // Handle cluster zoom
             el.onclick = () => clusterZoom(map, clusterId, id, coords);
             // Create a new marker
-            marker = markers[clusterId] = new Marker({
+            marker = markers.current[clusterId] = new Marker({
               element: el
             }).setLngLat(coords);
           }
         }
         newMarkers[clusterId] = marker;
 
-        if (!markersOnScreen[clusterId]) {
+        if (!markersOnScreen.current[clusterId]) {
           // Add to map
           marker.addTo(mapInstance);
         }
       }
       // for every marker we've added previously, remove those that are no longer visible
-      for (const toRemoveid in markersOnScreen) {
+      for (const toRemoveid in markersOnScreen.current) {
         if (!newMarkers[toRemoveid]) {
-          markersOnScreen[toRemoveid].remove();
+          markersOnScreen.current[toRemoveid].remove();
         }
       }
-      markersOnScreen = newMarkers;
+      markersOnScreen.current = newMarkers;
     });
   }, [clusterTypeColourMap, id, map, onSquareSelect]);
 
