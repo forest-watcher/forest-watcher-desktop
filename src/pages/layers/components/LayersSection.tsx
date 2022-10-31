@@ -11,9 +11,20 @@ export interface ILayersSection {
   className?: string;
 }
 
-interface ILayersSectionProps extends ILayersSection {}
+interface ILayersSectionProps extends ILayersSection {
+  refetchLayers: () => void;
+  layersLoading: boolean;
+}
 
-const LayersSection = ({ title, subtitle, cardTitle, cardItems, className }: ILayersSectionProps) => {
+const LayersSection = ({
+  title,
+  subtitle,
+  cardTitle,
+  cardItems,
+  className,
+  refetchLayers,
+  layersLoading
+}: ILayersSectionProps) => {
   return (
     <OptionalWrapper data={cardItems.length > 0} elseComponent={<></>}>
       <section className={className}>
@@ -21,7 +32,12 @@ const LayersSection = ({ title, subtitle, cardTitle, cardItems, className }: ILa
           <div className="row">
             <div className="column">
               <LayersSectionHeader title={title} subtitle={subtitle} />
-              <LayersCard title={cardTitle} items={cardItems} />
+              <LayersCard
+                title={cardTitle}
+                items={cardItems}
+                refetchLayers={refetchLayers}
+                layersLoading={layersLoading}
+              />
             </div>
           </div>
         </div>
