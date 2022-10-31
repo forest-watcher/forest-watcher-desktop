@@ -18,6 +18,8 @@ const ALERT_API_KEY_MAP = {
     switch (alertType) {
       case EAlertTypes.umd_as_it_happens:
         return "umd_glad_landsat_alerts__date";
+      case EAlertTypes.glad_sentinel_2:
+        return "umd_glad_sentinel2_alerts__date";
       case EAlertTypes.wur_radd_alerts:
         return "wur_radd_alerts__date";
       default:
@@ -28,6 +30,8 @@ const ALERT_API_KEY_MAP = {
     switch (alertType) {
       case EAlertTypes.umd_as_it_happens:
         return "umd_glad_landsat_alerts__confidence";
+      case EAlertTypes.glad_sentinel_2:
+        return "umd_glad_sentinel2_alerts__confidence";
       case EAlertTypes.wur_radd_alerts:
         return "wur_radd_alerts__confidence";
       default:
