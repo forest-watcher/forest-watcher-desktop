@@ -44,7 +44,22 @@ const AlertsDetailCard: FC<IProps> = props => {
     return null;
   }
 
+  const alertsToShow = selectedAlerts.sort(
+    (a, b) =>
+      Number(moment(a.data[ALERT_API_KEY_MAP.date(a.data.alertType)]).format("X")) -
+      Number(moment(b.data[ALERT_API_KEY_MAP.date(b.data.alertType)]).format("X"))
+  );
+
   const alertToShow = selectedAlerts[0];
+
+  const firstAlertDate = moment(alertsToShow[0].data[ALERT_API_KEY_MAP.date(alertsToShow[0].data.alertType)]);
+  const lastAlertDate = moment(
+    alertsToShow[alertsToShow.length - 1].data[
+      ALERT_API_KEY_MAP.date(alertsToShow[alertsToShow.length - 1].data.alertType)
+    ]
+  );
+
+  const showLastDate = Number(firstAlertDate.format("X")) !== Number(lastAlertDate.format("X"));
 
   return (
     <MapCard
@@ -55,8 +70,8 @@ const AlertsDetailCard: FC<IProps> = props => {
     >
       <div className="text-gray-700 text-base">
         <p className="mt-1">
-          {intl.formatMessage({ id: "alerts.detail.issued" })}:{" "}
-          {moment(alertToShow.data[ALERT_API_KEY_MAP.date(alertToShow.data.alertType)]).format("MMM Do YYYY")}
+          {intl.formatMessage({ id: "alerts.detail.issued" })}: {firstAlertDate.format("MMM DD, YYYY")}
+          {showLastDate ? " - " + lastAlertDate.format("MMM DD, YYYY") : ""}
         </p>
         <p className="mt-1">
           {intl.formatMessage({ id: "alerts.detail.alertType" })}:{" "}
