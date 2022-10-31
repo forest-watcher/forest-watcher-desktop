@@ -92,7 +92,7 @@ const NavLinks: FC<INavLinks> = ({ loggedIn, formHook, languages, user, logout, 
             </li>
             <li className="c-nav__link-wrapper">
               <NavLink
-                to="/settings"
+                to="/layers"
                 className="c-nav__link"
                 activeClassName="c-nav__link--active"
                 onClick={() => onLinkSelect?.()}
