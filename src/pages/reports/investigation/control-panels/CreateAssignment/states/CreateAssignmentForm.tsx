@@ -81,7 +81,6 @@ const CreateAssignmentForm: FC<IProps> = props => {
 
   useEffect(() => {
     if (userId) {
-      console.log("Hello");
       setValue("monitors", [userId]);
     }
   }, [setValue, userId]);
