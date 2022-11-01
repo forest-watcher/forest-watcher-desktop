@@ -3,6 +3,7 @@ import Button from "components/ui/Button/Button";
 import TextArea from "components/ui/Form/Input/TextArea";
 import RadioGroup from "components/ui/Form/RadioGroup/RadioGroup";
 import MultiSelectDialog from "components/ui/Form/Select/MultiSelectDialog";
+import Loader from "components/ui/Loader";
 import { TAlertsById } from "components/ui/Map/components/cards/AlertsDetail";
 import MapCard from "components/ui/Map/components/cards/MapCard";
 import { DEFAULT_TEMPLATE_ID } from "constants/global";
@@ -15,6 +16,7 @@ import { FC, useEffect, useMemo, useState } from "react";
 import { useForm, useFormContext } from "react-hook-form";
 import useGetUserTeamsWithActiveMembers from "hooks/querys/teams/useGetUserTeamsWithActiveMembers";
 import { FormattedMessage, useIntl } from "react-intl";
+import { toastr } from "react-redux-toastr";
 import { useHistory, useLocation, useParams } from "react-router-dom";
 
 export interface IProps {}
@@ -68,7 +70,7 @@ const CreateAssignmentForm: FC<IProps> = props => {
 
   // Mutations - Create Assignment
   const { httpAuthHeader } = useAccessToken();
-  const { mutateAsync: postAssignment } = usePostV3GfwAssignments();
+  const { mutateAsync: postAssignment, isLoading } = usePostV3GfwAssignments();
 
   const handlePostAssignment = async () => {
     const assignmentFormValues = getAssignmentValues();
@@ -86,17 +88,23 @@ const CreateAssignmentForm: FC<IProps> = props => {
       monitors: [...new Set(assignmentFormValues.monitors)],
       notes: assignmentFormValues.notes,
       areaId: areaId,
-      // @ts-ignore ToDo: update when endpoint is updated
-      templateId: assignmentFormValues.templates
+      templateIds: assignmentFormValues.templates,
+      status: "open" // Default
     };
 
-    console.log(body);
+    // Submit assignment to endpoint
+    try {
+      await postAssignment({
+        body,
+        headers: httpAuthHeader
+      });
 
-    // ToDo: submit when endpoint is updated
-    // const res = await postAssignment({
-    //   body,
-    //   headers: httpAuthHeader
-    // });
+      // ToDo: redirect to Assignment Detail page
+      // Redirecting to "Start Investigation" panel for now
+      history.push(location.pathname.replace("/assignment", ""));
+    } catch (e) {
+      toastr.error(intl.formatMessage({ id: "assignment.create.form.error" }), "");
+    }
   };
 
   const teamGroups = useMemo(() => {
@@ -162,6 +170,7 @@ const CreateAssignmentForm: FC<IProps> = props => {
         ) : null
       }
     >
+      <Loader isLoading={isLoading} />
       <OptionalWrapper data={openDialogName === EDialogsNames.None}>
         <RadioGroup<TCreateAssignmentFormFields>
           control={control}
