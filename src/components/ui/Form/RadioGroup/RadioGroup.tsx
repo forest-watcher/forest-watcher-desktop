@@ -18,7 +18,7 @@ const RadioGroup = <T,>(props: IProps<T> & UseControllerProps<T>) => {
     <>
       <HeadlessRadioGroup className="text-gray-700 w-full" {...field}>
         <OptionalWrapper data={!!label}>
-          <HeadlessRadioGroup.Label className="block mb-3 text-[14px] font-medium uppercase">
+          <HeadlessRadioGroup.Label className="block mb-3 text-sm font-medium uppercase">
             <FormattedMessage id={label} />
           </HeadlessRadioGroup.Label>
         </OptionalWrapper>

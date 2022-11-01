@@ -62,7 +62,7 @@ const MultiSelectDialog: (<T>(props: IProps & UseControllerProps<T>) => JSX.Elem
     <div className="flex flex-col gap-10">
       {groups.map(group => (
         <div key={group.label} className="flex flex-col gap-4">
-          {group.label && <span className="block text-[14px] font-medium uppercase text-gray-700">{group.label}</span>}
+          {group.label && <span className="block text-sm font-medium uppercase text-gray-700">{group.label}</span>}
 
           {group.options.map((option, id) => (
             <div key={option.value || id} className="flex justify-between w-full">
@@ -158,7 +158,7 @@ const MultiSelectDialogPreview = <T,>(props: IMultiSelectDialogPreviewProps<T>) 
       }
     >
       <div className={className}>
-        <span className="block mb-3 text-[14px] font-medium uppercase text-gray-700">
+        <span className="block mb-3 text-sm font-medium uppercase text-gray-700">
           <FormattedMessage id={label} />
         </span>
 
