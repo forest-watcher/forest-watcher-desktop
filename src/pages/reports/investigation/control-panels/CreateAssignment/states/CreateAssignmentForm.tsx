@@ -8,7 +8,8 @@ import MapCard from "components/ui/Map/components/cards/MapCard";
 import { usePostV3GfwAssignments } from "generated/core/coreComponents";
 import { AssignmentBody } from "generated/core/coreRequestBodies";
 import { useAccessToken } from "hooks/useAccessToken";
-import { FC, useMemo, useState } from "react";
+import useGetUserId from "hooks/useGetUserId";
+import { FC, useEffect, useMemo, useState } from "react";
 import { useForm, useFormContext } from "react-hook-form";
 import useGetUserTeamsWithActiveMembers from "hooks/querys/teams/useGetUserTeamsWithActiveMembers";
 import { FormattedMessage, useIntl } from "react-intl";
@@ -58,6 +59,7 @@ const CreateAssignmentForm: FC<IProps> = props => {
   const intl = useIntl();
   const history = useHistory();
   const location = useLocation();
+  const userId = useGetUserId();
   const { areaId } = useParams<{ areaId: string }>();
   const [openDialogName, setOpenDialogName] = useState<EDialogsNames>(EDialogsNames.None);
 
@@ -66,6 +68,7 @@ const CreateAssignmentForm: FC<IProps> = props => {
   const {
     control,
     watch,
+    setValue,
     getValues: getAssignmentValues
   } = useForm<TCreateAssignmentFormFields>({
     defaultValues: {
@@ -75,6 +78,13 @@ const CreateAssignmentForm: FC<IProps> = props => {
       notes: ""
     }
   });
+
+  useEffect(() => {
+    if (userId) {
+      console.log("Hello");
+      setValue("monitors", [userId]);
+    }
+  }, [setValue, userId]);
 
   // Queries - Teams Members
   const { data } = useGetUserTeamsWithActiveMembers();
@@ -112,8 +122,8 @@ const CreateAssignmentForm: FC<IProps> = props => {
     // });
   };
 
-  const teamGroups = useMemo(
-    () =>
+  const teamGroups = useMemo(() => {
+    const managedTeamGroups =
       data?.map(team => ({
         label: team?.attributes?.name || "",
         options:
@@ -121,9 +131,21 @@ const CreateAssignmentForm: FC<IProps> = props => {
             label: member.name || member.email,
             value: member.userId!
           })) || []
-      })),
-    [data]
-  );
+      })) || [];
+
+    return [
+      {
+        label: intl.formatMessage({ id: "assignment.create.dialog.monitors.default.label" }),
+        options: [
+          {
+            value: `${userId}`,
+            label: intl.formatMessage({ id: "assignment.create.dialog.monitors.default.self.label" })
+          }
+        ]
+      },
+      ...managedTeamGroups
+    ];
+  }, [data, intl, userId]);
 
   const monitorsWatcher = watch("monitors");
 

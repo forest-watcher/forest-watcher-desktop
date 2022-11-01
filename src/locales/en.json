@@ -522,6 +522,8 @@
   "assignment.create.new": "Create New Assignment",
   "assignment.create.dialog.title.none": "Create New Assignment",
   "assignment.create.dialog.title.monitors": "Add Monitor",
+  "assignment.create.dialog.monitors.default.label": "Default",
+  "assignment.create.dialog.monitors.default.self.label": "Myself (Default)",
   "assignment.create.dialog.title.templates": "Add Template",
   "assignment.create.form.priority.label": "Priority",
   "assignment.create.form.priority.normal": "Normal",
