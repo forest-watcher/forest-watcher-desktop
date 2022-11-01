@@ -8,8 +8,9 @@ import MapCard from "components/ui/Map/components/cards/MapCard";
 import { usePostV3GfwAssignments } from "generated/core/coreComponents";
 import { AssignmentBody } from "generated/core/coreRequestBodies";
 import { useAccessToken } from "hooks/useAccessToken";
-import { FC, useState } from "react";
+import { FC, useMemo, useState } from "react";
 import { useForm, useFormContext } from "react-hook-form";
+import useGetUserTeamsWithActiveMembers from "hooks/querys/teams/useGetUserTeamsWithActiveMembers";
 import { FormattedMessage, useIntl } from "react-intl";
 import { useHistory, useLocation, useParams } from "react-router-dom";
 
@@ -73,6 +74,8 @@ const CreateAssignmentForm: FC<IProps> = props => {
     }
   });
 
+  const { data } = useGetUserTeamsWithActiveMembers();
+
   // Mutations - Create Assignment
   const { httpAuthHeader } = useAccessToken();
   const { mutateAsync: postAssignment } = usePostV3GfwAssignments();
@@ -105,6 +108,19 @@ const CreateAssignmentForm: FC<IProps> = props => {
     //   headers: httpAuthHeader
     // });
   };
+
+  const teamGroups = useMemo(
+    () =>
+      data?.map(team => ({
+        label: team?.attributes?.name || "",
+        options:
+          team?.attributes?.members?.map(member => ({
+            label: member.name || member.email,
+            value: member.userId!
+          })) || []
+      })),
+    [data]
+  );
 
   const monitorsWatcher = watch("monitors");
 
@@ -140,7 +156,7 @@ const CreateAssignmentForm: FC<IProps> = props => {
 
         <MultiSelectDialog.Preview
           className="mt-10"
-          groups={GROUPS}
+          groups={teamGroups || []}
           control={control}
           name="monitors"
           label="assignment.create.form.monitor.label"
@@ -175,7 +191,7 @@ const CreateAssignmentForm: FC<IProps> = props => {
       </OptionalWrapper>
 
       <OptionalWrapper data={openDialogName === EDialogsNames.Monitors}>
-        <MultiSelectDialog groups={GROUPS} control={control} name="monitors" />
+        <MultiSelectDialog groups={teamGroups || []} control={control} name="monitors" />
       </OptionalWrapper>
 
       <OptionalWrapper data={openDialogName === EDialogsNames.Templates}>

@@ -19,7 +19,7 @@ export interface IProps {
 
 export interface IMultiSelectDialogPreviewProps<T> {
   className?: string;
-  // Maybe UseWatcherProps<T>
+  // ToDo: Maybe UseWatcherProps<T>
   control: Control<T>;
   name: Path<T>;
   groups: TMultiSelectDialogGroups;
