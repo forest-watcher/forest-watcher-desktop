@@ -23,7 +23,7 @@ export enum AssignmentLayerColours {
 export interface IPoint {
   position: [number, number];
   id: string;
-  alertTypes?: IAlertIdentifier[];
+  alertTypes?: IAlertIdentifier[] | [{ id: "default" }] | [{ id: "creator" }];
 }
 
 export interface IMarkers {
