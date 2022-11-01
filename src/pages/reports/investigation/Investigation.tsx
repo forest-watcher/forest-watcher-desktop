@@ -1,4 +1,5 @@
 import OptionalWrapper from "components/extensive/OptionalWrapper";
+import { TAlertsById } from "components/ui/Map/components/cards/AlertsDetail";
 import {
   allDeforestationAlerts,
   DefaultRequestThresholds,
@@ -41,6 +42,7 @@ export type TFormValues = {
   alertTypesShown: "all" | EAlertTypes;
   alertTypesRequestThreshold: number;
   alertTypesViirsRequestThreshold: number;
+  selectedAlerts: TAlertsById[];
 };
 
 const InvestigationPage: FC<IProps> = props => {
@@ -103,7 +105,8 @@ const InvestigationPage: FC<IProps> = props => {
       showOpenAssignments: ["true"],
       alertTypesShown: "all",
       alertTypesRequestThreshold: DefaultRequestThresholds[0].requestThreshold,
-      alertTypesViirsRequestThreshold: ViirsRequestThresholds[0].requestThreshold
+      alertTypesViirsRequestThreshold: ViirsRequestThresholds[0].requestThreshold,
+      selectedAlerts: []
     }),
     [basemapKey]
   );

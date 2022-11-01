@@ -3,44 +3,29 @@ import Button from "components/ui/Button/Button";
 import TextArea from "components/ui/Form/Input/TextArea";
 import RadioGroup from "components/ui/Form/RadioGroup/RadioGroup";
 import MultiSelectDialog from "components/ui/Form/Select/MultiSelectDialog";
+import Loader from "components/ui/Loader";
+import { TAlertsById } from "components/ui/Map/components/cards/AlertsDetail";
 import MapCard from "components/ui/Map/components/cards/MapCard";
-import { FC, useState } from "react";
-import { useForm } from "react-hook-form";
+import { DEFAULT_TEMPLATE_ID } from "constants/global";
+import { usePostV3GfwAssignments } from "generated/core/coreComponents";
+import { AssignmentBody } from "generated/core/coreRequestBodies";
+import { useAccessToken } from "hooks/useAccessToken";
+import useFindArea from "hooks/useFindArea";
+import useGetUserId from "hooks/useGetUserId";
+import { FC, useEffect, useMemo, useState } from "react";
+import { useForm, useFormContext } from "react-hook-form";
+import useGetUserTeamsWithActiveMembers from "hooks/querys/teams/useGetUserTeamsWithActiveMembers";
 import { FormattedMessage, useIntl } from "react-intl";
-import { useHistory, useLocation } from "react-router-dom";
+import { toastr } from "react-redux-toastr";
+import { useHistory, useLocation, useParams } from "react-router-dom";
 
 export interface IProps {}
-
-const GROUPS = [
-  {
-    label: "Default",
-    options: [{ value: "Me", label: "Myself (Default)" }]
-  },
-  {
-    label: "Team 1",
-    options: [
-      { value: "1", label: "Paula Storm" },
-      { value: "2", label: "Horacio Cruz" },
-      { value: "3", label: "Tom Cortes" },
-      { value: "4", label: "Emilia Cuaron" }
-    ]
-  },
-  {
-    label: "Team 2",
-    options: [
-      { value: "5", label: "Paula Storm" },
-      { value: "6", label: "Horacio Cruz" },
-      { value: "7", label: "Tom Cortes" },
-      { value: "8", label: "Emilia Cuaron" }
-    ]
-  }
-];
 
 type TCreateAssignmentFormFields = {
   priority: number;
   monitors: string[];
   templates: string[];
-  monitorNotes: string;
+  notes: string;
 };
 
 enum EDialogsNames {
@@ -53,16 +38,118 @@ const CreateAssignmentForm: FC<IProps> = props => {
   const intl = useIntl();
   const history = useHistory();
   const location = useLocation();
-  const { control, watch } = useForm<TCreateAssignmentFormFields>({
+  const userId = useGetUserId();
+  const { areaId } = useParams<{ areaId: string }>();
+  const selectedAreaDetails = useFindArea(areaId);
+  const [openDialogName, setOpenDialogName] = useState<EDialogsNames>(EDialogsNames.None);
+
+  // FormData
+  const { getValues: getParentValues } = useFormContext();
+  const {
+    control,
+    watch,
+    setValue,
+    getValues: getAssignmentValues
+  } = useForm<TCreateAssignmentFormFields>({
     defaultValues: {
       priority: 0,
-      monitors: ["Me"]
+      monitors: [],
+      templates: DEFAULT_TEMPLATE_ID ? [DEFAULT_TEMPLATE_ID] : [],
+      notes: ""
     }
   });
 
-  const monitorsWatcher = watch("monitors");
+  useEffect(() => {
+    if (userId) {
+      setValue("monitors", [userId]);
+    }
+  }, [setValue, userId]);
 
-  const [openDialogName, setOpenDialogName] = useState<EDialogsNames>(EDialogsNames.None);
+  // Queries - Teams Members
+  const { data } = useGetUserTeamsWithActiveMembers();
+
+  // Mutations - Create Assignment
+  const { httpAuthHeader } = useAccessToken();
+  const { mutateAsync: postAssignment, isLoading } = usePostV3GfwAssignments();
+
+  const handlePostAssignment = async () => {
+    const assignmentFormValues = getAssignmentValues();
+    const selectedAlerts = getParentValues("selectedAlerts") as TAlertsById[];
+
+    const body: AssignmentBody = {
+      // @ts-ignore ToDo: update when endpoint is updated
+      location: selectedAlerts.map(alert => ({
+        lat: alert.data.latitude,
+        lon: alert.data.longitude,
+        alertType: alert.data.alertType
+      })),
+      priority: assignmentFormValues.priority,
+      // @ts-ignore
+      monitors: [...new Set(assignmentFormValues.monitors)],
+      notes: assignmentFormValues.notes,
+      areaId: areaId,
+      templateIds: assignmentFormValues.templates,
+      status: "open" // Default
+    };
+
+    // Submit assignment to endpoint
+    try {
+      await postAssignment({
+        body,
+        headers: httpAuthHeader
+      });
+
+      // ToDo: redirect to Assignment Detail page
+      // Redirecting to "Start Investigation" panel for now
+      history.push(location.pathname.replace("/assignment", ""));
+    } catch (e) {
+      toastr.error(intl.formatMessage({ id: "assignment.create.form.error" }), "");
+    }
+  };
+
+  const teamGroups = useMemo(() => {
+    const managedTeamGroups =
+      data?.map(team => ({
+        label: team?.attributes?.name || "",
+        options:
+          team?.attributes?.members?.map(member => ({
+            label: member.name || member.email,
+            value: member.userId!
+          })) || []
+      })) || [];
+
+    return [
+      {
+        label: intl.formatMessage({ id: "assignment.create.dialog.monitors.default.label" }),
+        options: [
+          {
+            value: `${userId}`,
+            label: intl.formatMessage({ id: "assignment.create.dialog.monitors.default.self.label" })
+          }
+        ]
+      },
+      ...managedTeamGroups
+    ];
+  }, [data, intl, userId]);
+
+  const templateGroups = useMemo(
+    () => [
+      {
+        options:
+          selectedAreaDetails?.attributes.reportTemplate
+            // Default template should be first in the list!
+            .sort(a => (a.id === DEFAULT_TEMPLATE_ID ? -1 : 0))
+            .map(template => ({
+              // @ts-ignore
+              label: template.name[template.defaultLanguage],
+              value: template.id
+            })) || []
+      }
+    ],
+    [selectedAreaDetails]
+  );
+
+  const monitorsWatcher = watch("monitors");
 
   return (
     <MapCard
@@ -77,12 +164,13 @@ const CreateAssignmentForm: FC<IProps> = props => {
       }}
       footer={
         openDialogName === EDialogsNames.None ? (
-          <Button disabled>
+          <Button onClick={handlePostAssignment}>
             <FormattedMessage id="assignment.create" />
           </Button>
         ) : null
       }
     >
+      <Loader isLoading={isLoading} />
       <OptionalWrapper data={openDialogName === EDialogsNames.None}>
         <RadioGroup<TCreateAssignmentFormFields>
           control={control}
@@ -96,7 +184,7 @@ const CreateAssignmentForm: FC<IProps> = props => {
 
         <MultiSelectDialog.Preview
           className="mt-10"
-          groups={GROUPS}
+          groups={teamGroups}
           control={control}
           name="monitors"
           label="assignment.create.form.monitor.label"
@@ -113,13 +201,13 @@ const CreateAssignmentForm: FC<IProps> = props => {
             label="assignment.create.form.notesForMonitors"
             altLabel
             control={control}
-            name="monitorNotes"
+            name="notes"
           />
         </OptionalWrapper>
 
         <MultiSelectDialog.Preview
           className="mt-10"
-          groups={GROUPS}
+          groups={templateGroups}
           control={control}
           name="templates"
           label="assignment.create.form.template.label"
@@ -127,15 +215,16 @@ const CreateAssignmentForm: FC<IProps> = props => {
           emptyIcon="FactCheck"
           addButtonLabel="assignment.create.form.template.add"
           onAdd={() => setOpenDialogName(EDialogsNames.Templates)}
+          shouldDisplayAllLabel={false}
         />
       </OptionalWrapper>
 
       <OptionalWrapper data={openDialogName === EDialogsNames.Monitors}>
-        <MultiSelectDialog groups={GROUPS} control={control} name="monitors" />
+        <MultiSelectDialog groups={teamGroups} control={control} name="monitors" />
       </OptionalWrapper>
 
       <OptionalWrapper data={openDialogName === EDialogsNames.Templates}>
-        <MultiSelectDialog groups={GROUPS} control={control} name="templates" />
+        <MultiSelectDialog groups={templateGroups} control={control} name="templates" />
       </OptionalWrapper>
     </MapCard>
   );

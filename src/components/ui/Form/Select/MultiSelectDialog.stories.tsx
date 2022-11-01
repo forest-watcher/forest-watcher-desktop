@@ -67,7 +67,7 @@ const PreviewTemplate: ComponentStory<typeof MultiSelectDialog.Preview> = args =
 const Combined: ComponentStory<typeof MultiSelectDialog.Preview> = args => {
   const { control } = useForm<TMultiSelectDialogFormFields>({
     defaultValues: {
-      monitors: ["Me", "1", "4", "6"]
+      monitors: ["Me", "1", "2", "3", "4", "6"]
     }
   });
 

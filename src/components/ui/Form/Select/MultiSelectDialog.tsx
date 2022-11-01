@@ -10,7 +10,7 @@ import { Control, Path, useController, UseControllerProps, useWatch } from "reac
 
 type TMultiSelectDialogGroups = {
   options: { value: string; label: string }[];
-  label: string;
+  label?: string;
 }[];
 
 export interface IProps {
@@ -19,7 +19,7 @@ export interface IProps {
 
 export interface IMultiSelectDialogPreviewProps<T> {
   className?: string;
-  // Maybe UseWatcherProps<T>
+  // ToDo: Maybe UseWatcherProps<T>
   control: Control<T>;
   name: Path<T>;
   groups: TMultiSelectDialogGroups;
@@ -27,6 +27,8 @@ export interface IMultiSelectDialogPreviewProps<T> {
   emptyLabel: string;
   emptyIcon: string;
   addButtonLabel: string;
+  // If all options in a group is selected, should the group show "All"
+  shouldDisplayAllLabel?: boolean;
   onAdd?: () => void;
 }
 
@@ -59,11 +61,11 @@ const MultiSelectDialog: (<T>(props: IProps & UseControllerProps<T>) => JSX.Elem
   return (
     <div className="flex flex-col gap-10">
       {groups.map(group => (
-        <div key={group.label}>
-          <span className="block text-[14px] font-medium uppercase text-gray-700">{group.label}</span>
+        <div key={group.label} className="flex flex-col gap-4">
+          {group.label && <span className="block text-sm font-medium uppercase text-gray-700">{group.label}</span>}
 
-          {group.options.map(option => (
-            <div key={option.value} className="flex justify-between w-full mt-4">
+          {group.options.map((option, id) => (
+            <div key={option.value || id} className="flex justify-between w-full">
               <Switch.Group>
                 <Switch.Label className="cursor-pointer text-base">{option.label}</Switch.Label>
                 <Switch
@@ -83,7 +85,18 @@ const MultiSelectDialog: (<T>(props: IProps & UseControllerProps<T>) => JSX.Elem
 };
 
 const MultiSelectDialogPreview = <T,>(props: IMultiSelectDialogPreviewProps<T>) => {
-  const { className, label, emptyLabel, emptyIcon, addButtonLabel, groups, control, name, onAdd } = props;
+  const {
+    className,
+    label,
+    emptyLabel,
+    emptyIcon,
+    addButtonLabel,
+    groups,
+    control,
+    name,
+    onAdd,
+    shouldDisplayAllLabel = true
+  } = props;
   const watcher = useWatch({
     control,
     name
@@ -92,11 +105,24 @@ const MultiSelectDialogPreview = <T,>(props: IMultiSelectDialogPreviewProps<T>) 
   const activeGroups = useMemo(
     () =>
       groups.reduce<TMultiSelectDialogGroups>((acc, group) => {
-        const activeGroup = {
+        let activeGroup = {
           ...group,
           // @ts-ignore
           options: group.options.filter(option => watcher?.includes(option.value))
         };
+
+        // If all the options in this group are selected (and there was more than one option)
+        if (group.options.length > 1 && activeGroup.options.length === group.options.length && shouldDisplayAllLabel) {
+          activeGroup = {
+            ...activeGroup,
+            options: [
+              {
+                value: "",
+                label: "All"
+              }
+            ]
+          };
+        }
 
         if (activeGroup.options.length === 0) {
           return acc;
@@ -104,7 +130,7 @@ const MultiSelectDialogPreview = <T,>(props: IMultiSelectDialogPreviewProps<T>) 
           return [...acc, activeGroup];
         }
       }, []),
-    [groups, watcher]
+    [groups, watcher, shouldDisplayAllLabel]
   );
 
   return (
@@ -132,14 +158,15 @@ const MultiSelectDialogPreview = <T,>(props: IMultiSelectDialogPreviewProps<T>) 
       }
     >
       <div className={className}>
-        <span className="block mb-3 text-[14px] font-medium uppercase text-gray-700">
+        <span className="block mb-3 text-sm font-medium uppercase text-gray-700">
           <FormattedMessage id={label} />
         </span>
 
         <ul className="text-gray-700 text-base mb-3">
-          {activeGroups.map(group => (
-            <li key={group.label}>
-              {group.label}: {group.options.map(option => option.label).join(", ")}
+          {activeGroups.map((group, id) => (
+            <li key={group.label || id}>
+              {group.label && <>{group.label}: </>}
+              {group.options.map(option => option.label).join(", ")}
             </li>
           ))}
         </ul>
