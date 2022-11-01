@@ -1,45 +1,26 @@
-import { AllGeoJSON } from "@turf/turf";
-import useFindArea from "hooks/useFindArea";
-import useZoomToGeojson from "hooks/useZoomToArea";
 import CreateAssignmentForm from "pages/reports/investigation/control-panels/CreateAssignment/states/CreateAssignmentForm";
-import { TParams } from "pages/reports/investigation/types";
-import { FC, useMemo } from "react";
-import { useParams } from "react-router-dom";
+import { FC, useEffect, useState } from "react";
+import { useFormContext } from "react-hook-form";
+import OpenAssignmentEmptyState from "pages/reports/investigation/control-panels/CreateAssignment/states/EmptyState";
 
 export interface IProps {}
 
 const CreateAssignmentControlPanel: FC<IProps> = props => {
-  // const intl = useIntl();
-  // const history = useHistory();
-  // const location = useLocation();
-  const { areaId } = useParams<TParams>();
+  const { getValues } = useFormContext();
+  const [showCreateAssignmentForm, setShowCreateAssignmentForm] = useState(false);
 
-  // ToDo: Move this to src/pages/reports/investigation/Investigation.tsx to avoid boiler plate code
-  const area = useFindArea(areaId);
-  const selectedAreaGeoData = useMemo(() => area?.attributes.geostore.geojson, [area]);
-  //@ts-ignore
-  useZoomToGeojson(selectedAreaGeoData as AllGeoJSON);
+  useEffect(() => {
+    if (getValues("selectedAlerts") && getValues("selectedAlerts").length) {
+      // Skip the Empty state on initial render, if alerts have already been selected
+      setShowCreateAssignmentForm(true);
+    }
+  }, [getValues]);
 
-  // ToDo: When Alerts are selectable, show empty state if no alerts are selected
-  // return (
-  //   <MapCard
-  //     className="c-map-control-panel"
-  //     title={intl.formatMessage({ id: "assignment.create.new" })}
-  //     onBack={() => {
-  //       history.push(location.pathname.replace("/assignment", ""));
-  //     }}
-  //     footer={
-  //       <Button disabled>
-  //         <FormattedMessage id="assignment.create" />
-  //       </Button>
-  //     }
-  //   >
-  //     {/* ToDo: Currently always displays */}
-  //     <OpenAssignmentEmptyState />
-  //   </MapCard>
-  // );
-
-  return <CreateAssignmentForm />;
+  return !showCreateAssignmentForm ? (
+    <OpenAssignmentEmptyState setShowCreateAssignmentForm={setShowCreateAssignmentForm} />
+  ) : (
+    <CreateAssignmentForm />
+  );
 };
 
 export default CreateAssignmentControlPanel;
