@@ -26,6 +26,11 @@ export interface IPoint {
   alertTypes?: IAlertIdentifier[];
 }
 
+export type TAlertsById = {
+  id: string;
+  data: Record<any, any>;
+};
+
 export interface IMarkers {
   [key: string]: Marker;
 }

@@ -2,11 +2,12 @@ import AlertsDetailCard from "components/ui/Map/components/cards/AlertsDetail";
 import SquareClusterMarkers, { EPointDataTypes } from "components/ui/Map/components/layers/SquareClusterMarkers";
 import { pointStyle } from "components/ui/Map/components/layers/styles";
 import { alertTypes, EAlertTypes } from "constants/alerts";
+import { findNeighboringPoints } from "helpers/map";
 import useGetAlertsForArea from "hooks/querys/alerts/useGetAlertsForArea";
 import { FC, useCallback, useMemo, useState } from "react";
 import { useMap } from "react-map-gl";
-import { IPoint } from "types/map";
-import { TAlertsById } from "components/ui/Map/components/cards/AlertsDetail";
+import KDBush from "kdbush";
+import { IPoint, TAlertsById } from "types/map";
 
 export interface IProps {
   areaId?: string;
@@ -20,7 +21,7 @@ const AreaAssignmentMapSource: FC<IProps> = props => {
   const alerts = useGetAlertsForArea(areaId, alertTypesToShow, alertRequestThreshold);
   const [selectedAlerts, setSelectedAlerts] = useState<TAlertsById[]>();
 
-  const [alertPoints, alertsById] = useMemo(
+  const [alertPoints, alertsById, pointsIndex] = useMemo(
     () => {
       const copyAlerts = [...alerts];
 
@@ -47,11 +48,23 @@ const AreaAssignmentMapSource: FC<IProps> = props => {
         }
       }
 
-      return [pointData, pointsById];
+      const pointsIndex = new KDBush(
+        pointsById,
+        p => p.data.longitude,
+        p => p.data.latitude
+      );
+
+      return [pointData, pointsById, pointsIndex];
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     alerts.map(queryAlert => queryAlert.data) // ToDo: update when using fw_alerts endpoint
   );
+
+  const handleSelectNeighboringPoints = () => {
+    if (selectedAlerts && selectedAlerts?.length > 0) {
+      findNeighboringPoints(pointsIndex, selectedAlerts);
+    }
+  };
 
   const handleAlertSelectionChange = useCallback(
     (ids: string[] | null) => {

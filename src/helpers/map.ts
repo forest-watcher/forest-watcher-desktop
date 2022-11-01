@@ -1,4 +1,6 @@
 import { EAlertTypes } from "constants/alerts";
+import KDBush from "kdbush";
+import geoKDBush from "geokdbush";
 import { Map as MapInstance, LngLatBoundsLike, GeoJSONSource } from "mapbox-gl";
 import labelBackgroundIcon from "assets/images/icons/MapLabelFrame.png";
 import reportNotSelectedIcon from "assets/images/icons/alertIcons/ReportNotSelected.png";
@@ -18,7 +20,7 @@ import L from "leaflet";
 import * as turf from "@turf/turf";
 import { GeoJsonProperties } from "geojson";
 import { MapRef } from "react-map-gl";
-import { AlertLayerColours, AssignmentLayerColours, ReportLayerColours, ReportLayers } from "types/map";
+import { AlertLayerColours, AssignmentLayerColours, ReportLayerColours, ReportLayers, TAlertsById } from "types/map";
 
 export enum MapImages {
   label = "label",
@@ -123,6 +125,16 @@ export const setupMapImages = (map: MapInstance) => {
       }
     })
   );
+};
+
+export const findNeighboringPoints = (pointsIndex: KDBush<TAlertsById>, pointsToSearch: TAlertsById[]) => {
+  const getNeighbours = () => {};
+
+  geoKDBush.around(pointsIndex, -119.7051, 34.4363, 8, 0.3);
+
+  for (let i = 0; i < pointsToSearch.length; i++) {
+    const point = pointsToSearch[i];
+  }
 };
 
 export const getBoundFromGeoJSON = (geoJSON: any, padding = [15, 15]) => {

@@ -1,17 +1,14 @@
+import Button from "components/ui/Button/Button";
 import MapCard from "components/ui/Map/components/cards/MapCard";
 import { EAlertTypes } from "constants/alerts";
 import moment from "moment";
 import { FC } from "react";
 import { useIntl } from "react-intl";
+import { TAlertsById } from "types/map";
 
 export interface IProps {
   selectedAlerts?: TAlertsById[];
 }
-
-export type TAlertsById = {
-  id: string;
-  data: Record<any, any>;
-};
 
 const ALERT_API_KEY_MAP = {
   date: (alertType: EAlertTypes) => {
@@ -73,6 +70,7 @@ const AlertsDetailCard: FC<IProps> = props => {
       title={intl.formatMessage({ id: "alerts.deforestation.alerts" })}
       titleIconName="Deforestation"
       position="bottom-right"
+      footer={<Button variant="secondary">Select All Connected Alerts</Button>}
     >
       <div className="text-gray-700 text-base">
         <p className="mt-1">
