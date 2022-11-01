@@ -19,31 +19,6 @@ import { useHistory, useLocation, useParams } from "react-router-dom";
 
 export interface IProps {}
 
-const GROUPS = [
-  {
-    label: "Default",
-    options: [{ value: "Me", label: "Myself (Default)" }]
-  },
-  {
-    label: "Team 1",
-    options: [
-      { value: "1", label: "Paula Storm" },
-      { value: "2", label: "Horacio Cruz" },
-      { value: "3", label: "Tom Cortes" },
-      { value: "4", label: "Emilia Cuaron" }
-    ]
-  },
-  {
-    label: "Team 2",
-    options: [
-      { value: "5", label: "Paula Storm" },
-      { value: "6", label: "Horacio Cruz" },
-      { value: "7", label: "Tom Cortes" },
-      { value: "8", label: "Emilia Cuaron" }
-    ]
-  }
-];
-
 type TCreateAssignmentFormFields = {
   priority: number;
   monitors: string[];
@@ -77,7 +52,7 @@ const CreateAssignmentForm: FC<IProps> = props => {
     defaultValues: {
       priority: 0,
       monitors: [],
-      templates: [],
+      templates: DEFAULT_TEMPLATE_ID ? [DEFAULT_TEMPLATE_ID] : [],
       notes: ""
     }
   });
