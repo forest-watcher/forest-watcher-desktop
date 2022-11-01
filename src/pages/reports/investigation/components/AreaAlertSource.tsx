@@ -39,7 +39,7 @@ const AreaAlertMapSource: FC<IProps> = props => {
           pointData.push({
             id: alertId,
             position: [data[i].longitude, data[i].latitude],
-            alertType: type
+            type: type
           });
 
           pointsById.push({

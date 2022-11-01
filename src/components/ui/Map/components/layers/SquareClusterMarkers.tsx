@@ -80,7 +80,7 @@ const SquareClusterMarkers: FC<IProps> = props => {
           turf.point(point.position, {
             id: point.id,
             icon: iconGenerator(
-              point.alertType || "",
+              point.type || "",
               point.id === hoveredPoint,
               selectedPoints?.length
                 ? canMultiSelect
@@ -88,7 +88,7 @@ const SquareClusterMarkers: FC<IProps> = props => {
                   : point.id === selectedPoints[0]
                 : false
             ),
-            alertType: point.alertType || ""
+            alertType: point.type || ""
           })
         )
       ),

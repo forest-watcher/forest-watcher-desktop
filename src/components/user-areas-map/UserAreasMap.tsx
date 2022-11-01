@@ -193,7 +193,7 @@ const UserAreasMap: FC<PropsWithChildren<IProps>> = props => {
                   // @ts-ignore
                   position: [answer.attributes.clickedPosition[0].lon, answer.attributes.clickedPosition[0].lat],
                   id: answer.id || "",
-                  alertType:
+                  type:
                     getReportAlertsByName(answer.attributes?.reportName)[0] &&
                     getReportAlertsByName(answer.attributes?.reportName)[0].id
                 }))

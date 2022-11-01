@@ -28,7 +28,7 @@ export enum AssignmentLayerColours {
 export interface IPoint {
   position: [number, number];
   id: string;
-  alertType?: EAlertTypes | AssignmentLayerType;
+  type?: EAlertTypes | AssignmentLayerType;
 }
 
 export interface IMarkers {
