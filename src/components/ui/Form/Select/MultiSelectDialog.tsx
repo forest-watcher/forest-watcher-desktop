@@ -10,7 +10,7 @@ import { Control, Path, useController, UseControllerProps, useWatch } from "reac
 
 type TMultiSelectDialogGroups = {
   options: { value: string; label: string }[];
-  label: string;
+  label?: string;
 }[];
 
 export interface IProps {
@@ -59,11 +59,11 @@ const MultiSelectDialog: (<T>(props: IProps & UseControllerProps<T>) => JSX.Elem
   return (
     <div className="flex flex-col gap-10">
       {groups.map(group => (
-        <div key={group.label}>
-          <span className="block text-[14px] font-medium uppercase text-gray-700">{group.label}</span>
+        <div key={group.label} className="flex flex-col gap-4">
+          {group.label && <span className="block text-[14px] font-medium uppercase text-gray-700">{group.label}</span>}
 
-          {group.options.map(option => (
-            <div key={option.value} className="flex justify-between w-full mt-4">
+          {group.options.map((option, id) => (
+            <div key={option.value || id} className="flex justify-between w-full">
               <Switch.Group>
                 <Switch.Label className="cursor-pointer text-base">{option.label}</Switch.Label>
                 <Switch
@@ -137,9 +137,10 @@ const MultiSelectDialogPreview = <T,>(props: IMultiSelectDialogPreviewProps<T>) 
         </span>
 
         <ul className="text-gray-700 text-base mb-3">
-          {activeGroups.map(group => (
-            <li key={group.label}>
-              {group.label}: {group.options.map(option => option.label).join(", ")}
+          {activeGroups.map((group, id) => (
+            <li key={group.label || id}>
+              {group.label && <>{group.label}: </>}
+              {group.options.map(option => option.label).join(", ")}
             </li>
           ))}
         </ul>

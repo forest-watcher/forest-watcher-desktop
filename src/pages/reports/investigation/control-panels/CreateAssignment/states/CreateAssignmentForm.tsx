@@ -5,9 +5,11 @@ import RadioGroup from "components/ui/Form/RadioGroup/RadioGroup";
 import MultiSelectDialog from "components/ui/Form/Select/MultiSelectDialog";
 import { TAlertsById } from "components/ui/Map/components/cards/AlertsDetail";
 import MapCard from "components/ui/Map/components/cards/MapCard";
+import { DEFAULT_TEMPLATE_ID } from "constants/global";
 import { usePostV3GfwAssignments } from "generated/core/coreComponents";
 import { AssignmentBody } from "generated/core/coreRequestBodies";
 import { useAccessToken } from "hooks/useAccessToken";
+import useFindArea from "hooks/useFindArea";
 import useGetUserId from "hooks/useGetUserId";
 import { FC, useEffect, useMemo, useState } from "react";
 import { useForm, useFormContext } from "react-hook-form";
@@ -61,6 +63,7 @@ const CreateAssignmentForm: FC<IProps> = props => {
   const location = useLocation();
   const userId = useGetUserId();
   const { areaId } = useParams<{ areaId: string }>();
+  const selectedAreaDetails = useFindArea(areaId);
   const [openDialogName, setOpenDialogName] = useState<EDialogsNames>(EDialogsNames.None);
 
   // FormData
@@ -146,6 +149,23 @@ const CreateAssignmentForm: FC<IProps> = props => {
     ];
   }, [data, intl, userId]);
 
+  const templateGroups = useMemo(
+    () => [
+      {
+        options:
+          selectedAreaDetails?.attributes.reportTemplate
+            // Default template should be first in the list!
+            .sort(a => (a.id === DEFAULT_TEMPLATE_ID ? -1 : 0))
+            .map(template => ({
+              // @ts-ignore
+              label: template.name[template.defaultLanguage],
+              value: template.id
+            })) || []
+      }
+    ],
+    [selectedAreaDetails]
+  );
+
   const monitorsWatcher = watch("monitors");
 
   return (
@@ -180,7 +200,7 @@ const CreateAssignmentForm: FC<IProps> = props => {
 
         <MultiSelectDialog.Preview
           className="mt-10"
-          groups={teamGroups || []}
+          groups={teamGroups}
           control={control}
           name="monitors"
           label="assignment.create.form.monitor.label"
@@ -203,7 +223,7 @@ const CreateAssignmentForm: FC<IProps> = props => {
 
         <MultiSelectDialog.Preview
           className="mt-10"
-          groups={GROUPS}
+          groups={templateGroups}
           control={control}
           name="templates"
           label="assignment.create.form.template.label"
@@ -215,11 +235,11 @@ const CreateAssignmentForm: FC<IProps> = props => {
       </OptionalWrapper>
 
       <OptionalWrapper data={openDialogName === EDialogsNames.Monitors}>
-        <MultiSelectDialog groups={teamGroups || []} control={control} name="monitors" />
+        <MultiSelectDialog groups={teamGroups} control={control} name="monitors" />
       </OptionalWrapper>
 
       <OptionalWrapper data={openDialogName === EDialogsNames.Templates}>
-        <MultiSelectDialog groups={GROUPS} control={control} name="templates" />
+        <MultiSelectDialog groups={templateGroups} control={control} name="templates" />
       </OptionalWrapper>
     </MapCard>
   );
