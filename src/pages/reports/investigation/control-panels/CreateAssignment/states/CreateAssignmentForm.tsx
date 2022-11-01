@@ -70,7 +70,9 @@ const CreateAssignmentForm: FC<IProps> = props => {
   } = useForm<TCreateAssignmentFormFields>({
     defaultValues: {
       priority: 0,
-      monitors: ["Me"]
+      monitors: [],
+      templates: [],
+      notes: ""
     }
   });
 
