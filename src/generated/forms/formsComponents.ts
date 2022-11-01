@@ -737,19 +737,22 @@ export type GetAnswerForReportV3Variables = {
 } & FormsContext["fetcherOptions"];
 
 export const fetchGetAnswerForReportV3 = (variables: GetAnswerForReportV3Variables, signal?: AbortSignal) =>
-  formsFetch<Responses.Answer, GetAnswerForReportV3Error, undefined, {}, {}, GetAnswerForReportV3PathParams>({
+  formsFetch<Responses.Answers, GetAnswerForReportV3Error, undefined, {}, {}, GetAnswerForReportV3PathParams>({
     url: "/v3/reports/{reportId}/answers/{id}",
     method: "get",
     ...variables,
     signal
   });
 
-export const useGetAnswerForReportV3 = <TData = Responses.Answer>(
+export const useGetAnswerForReportV3 = <TData = Responses.Answers>(
   variables: GetAnswerForReportV3Variables,
-  options?: Omit<reactQuery.UseQueryOptions<Responses.Answer, GetAnswerForReportV3Error, TData>, "queryKey" | "queryFn">
+  options?: Omit<
+    reactQuery.UseQueryOptions<Responses.Answers, GetAnswerForReportV3Error, TData>,
+    "queryKey" | "queryFn"
+  >
 ) => {
   const { fetcherOptions, queryOptions, queryKeyFn } = useFormsContext(options);
-  return reactQuery.useQuery<Responses.Answer, GetAnswerForReportV3Error, TData>(
+  return reactQuery.useQuery<Responses.Answers, GetAnswerForReportV3Error, TData>(
     queryKeyFn({ path: "/v3/reports/{reportId}/answers/{id}", operationId: "getAnswerForReportV3", variables }),
     ({ signal }) => fetchGetAnswerForReportV3({ ...fetcherOptions, ...variables }, signal),
     {

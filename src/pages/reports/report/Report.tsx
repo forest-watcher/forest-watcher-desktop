@@ -13,6 +13,7 @@ import { TExportForm } from "components/modals/exports/ExportModal";
 import { UnpackNestedValue } from "react-hook-form";
 import { usePostV3ReportsTemplateIdExportSome } from "generated/exports/exportsComponents";
 import { exportService } from "services/exports";
+import { Answer } from "generated/forms/formsResponses";
 
 const Report = () => {
   const { httpAuthHeader } = useAccessToken();
@@ -26,7 +27,7 @@ const Report = () => {
   });
 
   // Queries - Get Answer
-  const { data: answer, isLoading: answerLoading } = useGetAnswerForReportV3({
+  const { data: answers, isLoading: answersLoading } = useGetAnswerForReportV3({
     pathParams: { reportId, id: answerId },
     headers: httpAuthHeader
   });
@@ -52,19 +53,19 @@ const Report = () => {
     return report.data;
   };
 
+  const _responses = answers?.data ? answers.data[0].attributes?.responses : [];
+  const responses = _responses ?? [];
+  const answer = answers?.data && (answers.data[0] as Answer["data"]);
+
   return (
-    <LoadingWrapper loading={reportLoading || answerLoading}>
+    <LoadingWrapper loading={reportLoading || answersLoading}>
       <OptionalWrapper data={showExportModal}>
         <ReportExportModal onClose={() => setShowExportModal(false)} onSave={handleExport} />
       </OptionalWrapper>
       <ReportHeader setShowExportModal={setShowExportModal} />
       <ReportMap answer={answer} />
       <ReportDetails answer={answer} report={report} />
-      <ReportResponses
-        questions={report?.data?.attributes.questions ?? []}
-        // @ts-expect-error
-        responses={answer?.data[0].attributes?.responses ?? []}
-      />
+      <ReportResponses questions={report?.data?.attributes.questions ?? []} responses={responses} />
     </LoadingWrapper>
   );
 };
