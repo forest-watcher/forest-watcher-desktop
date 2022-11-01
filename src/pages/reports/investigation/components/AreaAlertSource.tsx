@@ -14,7 +14,7 @@ export interface IProps {
   alertRequestThreshold?: number;
 }
 
-const AreaAssignmentMapSource: FC<IProps> = props => {
+const AreaAlertMapSource: FC<IProps> = props => {
   const { areaId, alertTypesToShow, alertRequestThreshold } = props;
   const { current: mapRef } = useMap();
   const alerts = useGetAlertsForArea(areaId, alertTypesToShow, alertRequestThreshold);
@@ -86,4 +86,4 @@ const AreaAssignmentMapSource: FC<IProps> = props => {
   );
 };
 
-export default AreaAssignmentMapSource;
+export default AreaAlertMapSource;
