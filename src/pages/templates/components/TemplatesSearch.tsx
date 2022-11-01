@@ -1,6 +1,7 @@
 import Input from "components/ui/Form/Input";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
+import { useIntl } from "react-intl";
 import { TemplateTableRowData } from "../Templates";
 
 type TemplateSearchProps = {
@@ -9,6 +10,7 @@ type TemplateSearchProps = {
 };
 
 const TemplatesSearch = ({ onSearch, data }: TemplateSearchProps) => {
+  const intl = useIntl();
   const { register, watch } = useForm<{ search: string }>();
 
   const value = watch("search");
@@ -17,7 +19,6 @@ const TemplatesSearch = ({ onSearch, data }: TemplateSearchProps) => {
     if (!value) return onSearch(data);
     const newData = data
       .map(item => {
-        console.log(item?.templateName);
         const lowercaseValue = value.toLowerCase();
         const lowercaseTemplateName = item?.templateName?.toLowerCase();
         if (lowercaseTemplateName.includes(lowercaseValue)) return item;
@@ -34,7 +35,11 @@ const TemplatesSearch = ({ onSearch, data }: TemplateSearchProps) => {
       <Input
         id="search"
         registered={register("search")}
-        htmlInputProps={{ type: "text", label: "Search", placeholder: "Enter template name" }}
+        htmlInputProps={{
+          type: "text",
+          label: intl.formatMessage({ id: "filters.search" }),
+          placeholder: intl.formatMessage({ id: "templates.search.placeholder" })
+        }}
       />
     </div>
   );

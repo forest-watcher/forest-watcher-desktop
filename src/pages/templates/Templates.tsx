@@ -1,6 +1,6 @@
 import { useAccessToken } from "hooks/useAccessToken";
 import { useMemo, useState } from "react";
-import { useGetV3GfwAreasUser, useGetV3GfwTemplates } from "../../generated/core/coreComponents";
+import { useGetV3GfwAreasUser, useGetV3GfwTemplates } from "generated/core/coreComponents";
 import { LOCALES_LIST } from "../../constants/locales";
 import LoadingWrapper from "components/extensive/LoadingWrapper";
 import Article from "components/layouts/Article";
@@ -76,7 +76,12 @@ const _Templates = () => {
         <Article className="mt-10">
           <OptionalWrapper
             data={rows.length > 0}
-            elseComponent={<EmptyState title="No Templates Added" text="Create a template in the mobile app" />}
+            elseComponent={
+              <EmptyState
+                title={intl.formatMessage({ id: "templates.list.empty.title" })}
+                text={intl.formatMessage({ id: "templates.list.empty.text" })}
+              />
+            }
           >
             <DataFilter
               filters={filters}
@@ -94,12 +99,12 @@ const _Templates = () => {
               columnOrder={[
                 {
                   key: "templateName",
-                  name: "Template",
+                  name: intl.formatMessage({ id: "templates.table.template" }),
                   sortCompareFn: sortByDateString
                 },
                 {
                   key: "version",
-                  name: "Version",
+                  name: intl.formatMessage({ id: "templates.table.version" }),
                   rowLabel: (_, value) => {
                     return !Array.isArray(value)
                       ? intl.formatDate(value, { day: "2-digit", month: "2-digit", year: "2-digit" })
@@ -109,23 +114,23 @@ const _Templates = () => {
                 },
                 {
                   key: "area",
-                  name: "Area",
+                  name: intl.formatMessage({ id: "templates.table.area" }),
                   sortCompareFn: sortByString
                 },
                 {
                   key: "language",
-                  name: "Language",
+                  name: intl.formatMessage({ id: "templates.table.language" }),
                   sortCompareFn: sortByString
                 },
                 {
                   key: "status",
-                  name: "Status",
+                  name: intl.formatMessage({ id: "templates.table.status" }),
                   rowLabel: ({ status }) => status[0].toUpperCase() + status.slice(1),
                   sortCompareFn: sortByString
                 },
                 {
                   key: "reports",
-                  name: "Reports",
+                  name: intl.formatMessage({ id: "templates.table.reports" }),
                   sortCompareFn: sortByString
                 },
                 {

@@ -60,8 +60,8 @@ const useTemplatesFilter = (templates: TemplateTableRowData[] = []) => {
         id: "search",
         htmlInputProps: {
           type: "text",
-          placeholder: "Search for template",
-          label: "Search"
+          placeholder: intl.formatMessage({ id: "templates.search.placeholder" }),
+          label: intl.formatMessage({ id: "filters.search" })
         }
       },
       filterCallback: (item, value) => {
