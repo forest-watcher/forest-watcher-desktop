@@ -18,6 +18,8 @@ const ALERT_API_KEY_MAP = {
     switch (alertType) {
       case EAlertTypes.umd_as_it_happens:
         return "umd_glad_landsat_alerts__date";
+      case EAlertTypes.glad_sentinel_2:
+        return "umd_glad_sentinel2_alerts__date";
       case EAlertTypes.wur_radd_alerts:
         return "wur_radd_alerts__date";
       default:
@@ -28,6 +30,8 @@ const ALERT_API_KEY_MAP = {
     switch (alertType) {
       case EAlertTypes.umd_as_it_happens:
         return "umd_glad_landsat_alerts__confidence";
+      case EAlertTypes.glad_sentinel_2:
+        return "umd_glad_sentinel2_alerts__confidence";
       case EAlertTypes.wur_radd_alerts:
         return "wur_radd_alerts__confidence";
       default:
@@ -44,7 +48,24 @@ const AlertsDetailCard: FC<IProps> = props => {
     return null;
   }
 
-  const alertToShow = selectedAlerts[0];
+  const alertsToShow = selectedAlerts.sort(
+    (a, b) =>
+      Number(moment(a.data[ALERT_API_KEY_MAP.date(a.data.alertType)]).format("X")) -
+      Number(moment(b.data[ALERT_API_KEY_MAP.date(b.data.alertType)]).format("X"))
+  );
+
+  const firstAlertDate = moment(alertsToShow[0].data[ALERT_API_KEY_MAP.date(alertsToShow[0].data.alertType)]);
+  const lastAlertDate = moment(
+    alertsToShow[alertsToShow.length - 1].data[
+      ALERT_API_KEY_MAP.date(alertsToShow[alertsToShow.length - 1].data.alertType)
+    ]
+  );
+
+  const showLastDate = Number(firstAlertDate.format("X")) !== Number(lastAlertDate.format("X"));
+  // @ts-ignore
+  const allAlertTypes = [...new Set(alertsToShow.map(alert => alert.data.alertType))];
+  const showIsHighConfidence =
+    alertsToShow.findIndex(alert => alert.data[ALERT_API_KEY_MAP.confidence(alert.data.alertType)] === "high") !== -1;
 
   return (
     <MapCard
@@ -55,18 +76,20 @@ const AlertsDetailCard: FC<IProps> = props => {
     >
       <div className="text-gray-700 text-base">
         <p className="mt-1">
-          {intl.formatMessage({ id: "alerts.detail.issued" })}:{" "}
-          {moment(alertToShow.data[ALERT_API_KEY_MAP.date(alertToShow.data.alertType)]).format("MMM Do YYYY")}
+          {intl.formatMessage({ id: "alerts.detail.issued" })}: {firstAlertDate.format("MMM DD, YYYY")}
+          {showLastDate && " - " + lastAlertDate.format("MMM DD, YYYY")}
         </p>
         <p className="mt-1">
           {intl.formatMessage({ id: "alerts.detail.alertType" })}:{" "}
-          {intl.formatMessage({ id: `alerts.${alertToShow.data.alertType}` })}
+          {allAlertTypes.map(alertType => intl.formatMessage({ id: `alerts.${alertType}` })).join(", ")}
         </p>
 
-        {alertToShow.data[ALERT_API_KEY_MAP.confidence(alertToShow.data.alertType)] === "high" && (
+        {showIsHighConfidence && (
           <p className="mt-1">
             {intl.formatMessage({ id: "alerts.detail.confidenceLevel" })}:{" "}
-            {intl.formatMessage({ id: "alerts.detail.confidenceLevel.high" })}
+            {intl.formatMessage({
+              id: `alerts.detail.confidenceLevel.${alertsToShow.length > 1 ? "high.multiple" : "high"}`
+            })}
           </p>
         )}
       </div>
