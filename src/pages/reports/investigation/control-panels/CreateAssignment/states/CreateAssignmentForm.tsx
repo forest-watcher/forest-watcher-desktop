@@ -3,11 +3,15 @@ import Button from "components/ui/Button/Button";
 import TextArea from "components/ui/Form/Input/TextArea";
 import RadioGroup from "components/ui/Form/RadioGroup/RadioGroup";
 import MultiSelectDialog from "components/ui/Form/Select/MultiSelectDialog";
+import { TAlertsById } from "components/ui/Map/components/cards/AlertsDetail";
 import MapCard from "components/ui/Map/components/cards/MapCard";
+import { usePostV3GfwAssignments } from "generated/core/coreComponents";
+import { AssignmentBody } from "generated/core/coreRequestBodies";
+import { useAccessToken } from "hooks/useAccessToken";
 import { FC, useState } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, useFormContext } from "react-hook-form";
 import { FormattedMessage, useIntl } from "react-intl";
-import { useHistory, useLocation } from "react-router-dom";
+import { useHistory, useLocation, useParams } from "react-router-dom";
 
 export interface IProps {}
 
@@ -40,7 +44,7 @@ type TCreateAssignmentFormFields = {
   priority: number;
   monitors: string[];
   templates: string[];
-  monitorNotes: string;
+  notes: string;
 };
 
 enum EDialogsNames {
@@ -53,16 +57,56 @@ const CreateAssignmentForm: FC<IProps> = props => {
   const intl = useIntl();
   const history = useHistory();
   const location = useLocation();
-  const { control, watch } = useForm<TCreateAssignmentFormFields>({
+  const { areaId } = useParams<{ areaId: string }>();
+  const [openDialogName, setOpenDialogName] = useState<EDialogsNames>(EDialogsNames.None);
+
+  // FormData
+  const { getValues: getParentValues } = useFormContext();
+  const {
+    control,
+    watch,
+    getValues: getAssignmentValues
+  } = useForm<TCreateAssignmentFormFields>({
     defaultValues: {
       priority: 0,
       monitors: ["Me"]
     }
   });
 
-  const monitorsWatcher = watch("monitors");
+  // Mutations - Create Assignment
+  const { httpAuthHeader } = useAccessToken();
+  const { mutateAsync: postAssignment } = usePostV3GfwAssignments();
 
-  const [openDialogName, setOpenDialogName] = useState<EDialogsNames>(EDialogsNames.None);
+  const handlePostAssignment = async () => {
+    const assignmentFormValues = getAssignmentValues();
+    const selectedAlerts = getParentValues("selectedAlerts") as TAlertsById[];
+
+    const body: AssignmentBody = {
+      // @ts-ignore ToDo: update when endpoint is updated
+      location: selectedAlerts.map(alert => ({
+        lat: alert.data.latitude,
+        lon: alert.data.longitude,
+        alertType: alert.data.alertType
+      })),
+      priority: assignmentFormValues.priority,
+      // @ts-ignore
+      monitors: [...new Set(assignmentFormValues.monitors)],
+      notes: assignmentFormValues.notes,
+      areaId: areaId,
+      // @ts-ignore ToDo: update when endpoint is updated
+      templateId: assignmentFormValues.templates
+    };
+
+    console.log(body);
+
+    // ToDo: submit when endpoint is updated
+    // const res = await postAssignment({
+    //   body,
+    //   headers: httpAuthHeader
+    // });
+  };
+
+  const monitorsWatcher = watch("monitors");
 
   return (
     <MapCard
@@ -77,7 +121,7 @@ const CreateAssignmentForm: FC<IProps> = props => {
       }}
       footer={
         openDialogName === EDialogsNames.None ? (
-          <Button disabled>
+          <Button onClick={handlePostAssignment}>
             <FormattedMessage id="assignment.create" />
           </Button>
         ) : null
@@ -113,7 +157,7 @@ const CreateAssignmentForm: FC<IProps> = props => {
             label="assignment.create.form.notesForMonitors"
             altLabel
             control={control}
-            name="monitorNotes"
+            name="notes"
           />
         </OptionalWrapper>
 
