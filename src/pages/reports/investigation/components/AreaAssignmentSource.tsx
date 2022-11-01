@@ -1,11 +1,11 @@
+import * as turf from "@turf/turf";
 import SquareClusterMarkers, { EPointDataTypes } from "components/ui/Map/components/layers/SquareClusterMarkers";
 import { useGetV3GfwAssignmentsAllOpenUserForAreaAreaId } from "generated/core/coreComponents";
 import { useAccessToken } from "hooks/useAccessToken";
 import useGetUserId from "hooks/useGetUserId";
 import { FC, useCallback, useMemo, useState } from "react";
 import { useMap } from "react-map-gl";
-import * as turf from "@turf/turf";
-import { IPoint } from "types/map";
+import { AssignmentLayerType, IPoint } from "types/map";
 
 export interface IProps {
   areaId?: string;
@@ -48,7 +48,8 @@ const AreaAssignmentMapSource: FC<IProps> = props => {
       assignmentCenters.push({
         id: assignment.id!,
         position: [calculatedCenter.geometry.coordinates[0], calculatedCenter.geometry.coordinates[1]],
-        alertTypes: assignment.attributes?.createdBy === userId ? [{ id: "creator" }] : [{ id: "default" }]
+        alertType:
+          assignment.attributes?.createdBy === userId ? AssignmentLayerType.creator : AssignmentLayerType.default
       });
     }
 

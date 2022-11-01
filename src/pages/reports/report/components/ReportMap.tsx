@@ -32,7 +32,8 @@ const ReportMap = ({ answer }: ReportMapProps) => {
         points={answer?.data.map(a => ({
           position: [a.attributes.clickedPosition[0].lon, a.attributes.clickedPosition[0].lat],
           id: a.id || "",
-          alertTypes: getReportAlertsByName(a.attributes?.reportName)
+          alertType:
+            getReportAlertsByName(a.attributes?.reportName)[0] && getReportAlertsByName(a.attributes?.reportName)[0].id
         }))}
         onSquareSelect={handleSquareSelect}
         selectedSquareIds={selectedReportIds}
