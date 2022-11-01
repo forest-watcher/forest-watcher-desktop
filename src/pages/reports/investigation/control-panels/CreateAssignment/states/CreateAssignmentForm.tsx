@@ -215,6 +215,7 @@ const CreateAssignmentForm: FC<IProps> = props => {
           emptyIcon="FactCheck"
           addButtonLabel="assignment.create.form.template.add"
           onAdd={() => setOpenDialogName(EDialogsNames.Templates)}
+          shouldDisplayAllLabel={false}
         />
       </OptionalWrapper>
 

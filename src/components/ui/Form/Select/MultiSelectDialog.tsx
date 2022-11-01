@@ -27,6 +27,8 @@ export interface IMultiSelectDialogPreviewProps<T> {
   emptyLabel: string;
   emptyIcon: string;
   addButtonLabel: string;
+  // If all options in a group is selected, should the group show "All"
+  shouldDisplayAllLabel?: boolean;
   onAdd?: () => void;
 }
 
@@ -83,7 +85,18 @@ const MultiSelectDialog: (<T>(props: IProps & UseControllerProps<T>) => JSX.Elem
 };
 
 const MultiSelectDialogPreview = <T,>(props: IMultiSelectDialogPreviewProps<T>) => {
-  const { className, label, emptyLabel, emptyIcon, addButtonLabel, groups, control, name, onAdd } = props;
+  const {
+    className,
+    label,
+    emptyLabel,
+    emptyIcon,
+    addButtonLabel,
+    groups,
+    control,
+    name,
+    onAdd,
+    shouldDisplayAllLabel = true
+  } = props;
   const watcher = useWatch({
     control,
     name
@@ -92,11 +105,24 @@ const MultiSelectDialogPreview = <T,>(props: IMultiSelectDialogPreviewProps<T>) 
   const activeGroups = useMemo(
     () =>
       groups.reduce<TMultiSelectDialogGroups>((acc, group) => {
-        const activeGroup = {
+        let activeGroup = {
           ...group,
           // @ts-ignore
           options: group.options.filter(option => watcher?.includes(option.value))
         };
+
+        // If all the options in this group are selected (and there was more than one option)
+        if (group.options.length > 1 && activeGroup.options.length === group.options.length && shouldDisplayAllLabel) {
+          activeGroup = {
+            ...activeGroup,
+            options: [
+              {
+                value: "",
+                label: "All"
+              }
+            ]
+          };
+        }
 
         if (activeGroup.options.length === 0) {
           return acc;
@@ -104,7 +130,7 @@ const MultiSelectDialogPreview = <T,>(props: IMultiSelectDialogPreviewProps<T>) 
           return [...acc, activeGroup];
         }
       }, []),
-    [groups, watcher]
+    [groups, watcher, shouldDisplayAllLabel]
   );
 
   return (
