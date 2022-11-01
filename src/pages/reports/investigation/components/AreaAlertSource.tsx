@@ -3,7 +3,8 @@ import SquareClusterMarkers, { EPointDataTypes } from "components/ui/Map/compone
 import { pointStyle } from "components/ui/Map/components/layers/styles";
 import { alertTypes, EAlertTypes } from "constants/alerts";
 import useGetAlertsForArea from "hooks/querys/alerts/useGetAlertsForArea";
-import { FC, useCallback, useMemo, useState } from "react";
+import { FC, useCallback, useMemo } from "react";
+import { useFormContext } from "react-hook-form";
 import { useMap } from "react-map-gl";
 import { IPoint } from "types/map";
 import { TAlertsById } from "components/ui/Map/components/cards/AlertsDetail";
@@ -17,8 +18,9 @@ export interface IProps {
 const AreaAlertMapSource: FC<IProps> = props => {
   const { areaId, alertTypesToShow, alertRequestThreshold } = props;
   const { current: mapRef } = useMap();
+  const { setValue, watch } = useFormContext();
+  const selectedAlerts = watch("selectedAlerts");
   const alerts = useGetAlertsForArea(areaId, alertTypesToShow, alertRequestThreshold);
-  const [selectedAlerts, setSelectedAlerts] = useState<TAlertsById[]>();
 
   const [alertPoints, alertsById] = useMemo(
     () => {
@@ -55,9 +57,12 @@ const AreaAlertMapSource: FC<IProps> = props => {
 
   const handleAlertSelectionChange = useCallback(
     (ids: string[] | null) => {
-      setSelectedAlerts(alertsById.filter(alert => ids?.includes(alert.id)));
+      setValue(
+        "selectedAlerts",
+        alertsById.filter(alert => ids?.includes(alert.id))
+      );
     },
-    [alertsById]
+    [alertsById, setValue]
   );
 
   return (
