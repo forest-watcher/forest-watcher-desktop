@@ -83,7 +83,7 @@ const CreateAssignmentForm: FC<IProps> = props => {
 
   const { httpAuthHeader } = useAccessToken();
   // Queries - Teams Members
-  const { data: teamData } = useGetUserTeamsWithActiveMembers();
+  const { data: teamData, isLoading: isTeamDataLoading } = useGetUserTeamsWithActiveMembers();
   // Queries - User Templates
   const { data: templateData, isLoading: isTemplateDataLoading } = useGetV3GfwTemplates({
     headers: httpAuthHeader
@@ -223,7 +223,7 @@ const CreateAssignmentForm: FC<IProps> = props => {
         ) : null
       }
     >
-      <Loader isLoading={isSubmitting || isTemplateDataLoading} />
+      <Loader isLoading={isSubmitting || isTemplateDataLoading || isTeamDataLoading} />
       <OptionalWrapper data={openDialogName === EDialogsNames.None}>
         <RadioGroup<TCreateAssignmentFormFields>
           control={control}
