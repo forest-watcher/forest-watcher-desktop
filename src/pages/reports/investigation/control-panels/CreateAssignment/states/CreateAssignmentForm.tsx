@@ -176,8 +176,6 @@ const CreateAssignmentForm: FC<IProps> = props => {
         // Refactor object so it matches areaTemplates
         .map(t => ({ id: t.id, ...t.attributes })) || [];
 
-    console.log([...areaTemplates, ...nonDuplicateUserTemplates]);
-
     return [
       {
         options: [...areaTemplates, ...nonDuplicateUserTemplates]
