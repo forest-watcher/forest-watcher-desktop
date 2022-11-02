@@ -1,7 +1,7 @@
 import AlertsDetailCard from "components/ui/Map/components/cards/AlertsDetail";
 import SquareClusterMarkers, { EPointDataTypes } from "components/ui/Map/components/layers/SquareClusterMarkers";
 import { pointStyle } from "components/ui/Map/components/layers/styles";
-import { alertTypes, EAlertTypes } from "constants/alerts";
+import { EAlertTypes } from "constants/alerts";
 import useGetAlertsForArea from "hooks/querys/alerts/useGetAlertsForArea";
 import { FC, useCallback, useMemo } from "react";
 import { useFormContext } from "react-hook-form";
@@ -39,7 +39,7 @@ const AreaAlertMapSource: FC<IProps> = props => {
           pointData.push({
             id: alertId,
             position: [data[i].longitude, data[i].latitude],
-            alertTypes: [alertTypes[type]]
+            type: type
           });
 
           pointsById.push({

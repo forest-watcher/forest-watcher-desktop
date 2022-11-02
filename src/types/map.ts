@@ -1,4 +1,4 @@
-import { alertTypes, IAlertIdentifier } from "constants/alerts";
+import { alertTypes, EAlertTypes } from "constants/alerts";
 import { Marker } from "mapbox-gl";
 
 export const ReportLayers = {
@@ -15,6 +15,11 @@ export enum AlertLayerColours {
   DEFAULT = "#FF6799"
 }
 
+export enum AssignmentLayerType {
+  default = "default",
+  creator = "creator"
+}
+
 export enum AssignmentLayerColours {
   CREATOR = "#4489CE",
   DEFAULT = "#EEBD37"
@@ -23,7 +28,7 @@ export enum AssignmentLayerColours {
 export interface IPoint {
   position: [number, number];
   id: string;
-  alertTypes?: IAlertIdentifier[];
+  type?: EAlertTypes | AssignmentLayerType;
 }
 
 export interface IMarkers {

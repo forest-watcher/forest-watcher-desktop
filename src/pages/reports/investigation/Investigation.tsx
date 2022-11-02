@@ -211,7 +211,9 @@ const InvestigationPage: FC<IProps> = props => {
             />
           )}
 
-          {watcher.showOpenAssignments.includes("true") && <AreaAssignmentSource />}
+          {watcher.showOpenAssignments.includes("true") && (
+            <AreaAssignmentSource areaId={investigationMatch?.params.areaId} />
+          )}
         </OptionalWrapper>
       </FormProvider>
     </UserAreasMap>
