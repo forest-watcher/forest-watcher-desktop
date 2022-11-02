@@ -16,38 +16,29 @@ const Layers = () => {
     refetch: refetchLayers
   } = useGetContextualLayer({ headers: httpAuthHeader });
 
-  const layers: { pub?: ILayers["data"]; team?: ILayers["data"]; user?: ILayers["data"] } = useMemo(() => {
+  const layers: { pub?: ILayers["data"]; user?: ILayers["data"] } = useMemo(() => {
     const pub = layersData?.data.filter(l => l.attributes && l.attributes.isPublic);
-    const team = layersData?.data.filter(
-      l => l.attributes && !l.attributes.isPublic && l.attributes.owner.type === "TEAM"
-    );
     const user = layersData?.data.filter(
       l => l.attributes && !l.attributes.isPublic && l.attributes.owner.type === "USER"
     );
 
-    return { pub, team, user };
+    return { pub, user };
   }, [layersData]);
 
   const sections = useMemo(
     () =>
       [
         {
-          title: "settings.publicLayers",
-          subtitle: "Public layers are always available in the map.",
-          cardTitle: "Available Layers:",
+          title: "layers.publicLayers.title",
+          subtitle: "layers.publicLayers.subtitle",
+          cardTitle: "layers.publicLayers.card.title",
           cardItems: layers.pub ?? []
         },
         {
-          title: "settings.userLayers",
-          subtitle: "Select up to 3 additional contextual layers.",
-          cardTitle: "My Layers",
+          title: "layers.userLayers.title",
+          subtitle: "layers.userLayers.subtitle",
+          cardTitle: "layers.userLayers.card.title",
           cardItems: layers.user ?? []
-        },
-        {
-          title: "settings.teamLayers",
-          subtitle: "Select up to 3 additional contextual layers to show to your teams.",
-          cardTitle: "Team 1",
-          cardItems: layers.team ?? []
         }
       ] as ILayersSection[],
     [layers]

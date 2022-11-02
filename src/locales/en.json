@@ -438,6 +438,12 @@
     "number": "number",
     "audio": "Text & Voice Recording"
   },
+  "layers.publicLayers.title": "Public Layers",
+  "layers.publicLayers.subtitle": "Public layers are always available in the map.",
+  "layers.publicLayers.card.title": "Available Layers:",
+  "layers.userLayers.title": "My Layers",
+  "layers.userLayers.subtitle": "Select up to 3 additional contextual layers to show to your teams.",
+  "layers.userLayers.card.title": "My Layers:",
   "customLayers.title": "How to add a custom layer",
   "customLayers.intro": "The custom datasets feature works through linking tiles, hosted on an external web service, to Forest Watcher. Using that URL, the system will query the tile and receive just the data related to your Areas of Interest. To configure this, go to the settings tab, select data layers and paste the URL for the relevant tile service. If you have any trouble, contact forestwatcher@wri.org for help.",
   "customLayers.step1": "Upload your dataset to a web service that supports tile sharing. Things like Carto or Mapbox would be good.",
