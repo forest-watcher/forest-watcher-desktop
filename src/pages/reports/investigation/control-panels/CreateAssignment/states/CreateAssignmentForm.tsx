@@ -7,7 +7,7 @@ import Loader from "components/ui/Loader";
 import { TAlertsById } from "components/ui/Map/components/cards/AlertsDetail";
 import MapCard from "components/ui/Map/components/cards/MapCard";
 import { DEFAULT_TEMPLATE_ID } from "constants/global";
-import { usePostV3GfwAssignments } from "generated/core/coreComponents";
+import { useGetV3GfwTemplates, usePostV3GfwAssignments } from "generated/core/coreComponents";
 import { AssignmentBody } from "generated/core/coreRequestBodies";
 import { useAccessToken } from "hooks/useAccessToken";
 import useFindArea from "hooks/useFindArea";
@@ -81,12 +81,16 @@ const CreateAssignmentForm: FC<IProps> = props => {
     }
   }, [setValue, userId]);
 
+  const { httpAuthHeader } = useAccessToken();
   // Queries - Teams Members
-  const { data } = useGetUserTeamsWithActiveMembers();
+  const { data: teamData } = useGetUserTeamsWithActiveMembers();
+  // Queries - User Templates
+  const { data: templateData, isLoading: isTemplateDataLoading } = useGetV3GfwTemplates({
+    headers: httpAuthHeader
+  });
 
   // Mutations - Create Assignment
-  const { httpAuthHeader } = useAccessToken();
-  const { mutateAsync: postAssignment, isLoading } = usePostV3GfwAssignments();
+  const { mutateAsync: postAssignment, isLoading: isSubmitting } = usePostV3GfwAssignments();
 
   const handleBack = () => {
     // Clear selected Alerts
@@ -131,7 +135,7 @@ const CreateAssignmentForm: FC<IProps> = props => {
 
   const teamGroups = useMemo(() => {
     const managedTeamGroups =
-      data?.map(team => ({
+      teamData?.map(team => ({
         label: team?.attributes?.name || "",
         options:
           team?.attributes?.members?.map(member => ({
@@ -152,34 +156,51 @@ const CreateAssignmentForm: FC<IProps> = props => {
       },
       ...managedTeamGroups
     ];
-  }, [data, intl, userId]);
+  }, [teamData, intl, userId]);
 
-  const templateGroups = useMemo(
-    () => [
+  const templateGroups = useMemo(() => {
+    // Wait for user templates to be fetched
+    if (isTemplateDataLoading) {
+      return [];
+    }
+
+    const areaTemplates = selectedAreaDetails?.attributes.reportTemplate || [];
+
+    const nonDuplicateUserTemplates =
+      templateData?.data
+        ?.filter(
+          userTemplate =>
+            // Templates not already included on the Area, and templates created by the Auth User
+            areaTemplates.findIndex(r => r.id === userTemplate.id) === -1 && userTemplate.attributes?.user === userId
+        )
+        // Refactor object so it matches areaTemplates
+        .map(t => ({ id: t.id, ...t.attributes })) || [];
+
+    console.log([...areaTemplates, ...nonDuplicateUserTemplates]);
+
+    return [
       {
-        options:
-          selectedAreaDetails?.attributes.reportTemplate
-            // Default template should be first in the list!
-            .sort(a => (a.id === DEFAULT_TEMPLATE_ID ? -1 : 0))
-            .map(template => {
-              if (template.id === DEFAULT_TEMPLATE_ID) {
-                // For the default template, change translation its label
-                return {
-                  label: intl.formatMessage({ id: "assignment.create.form.template.default.label" }),
-                  value: template.id
-                };
-              }
-
+        options: [...areaTemplates, ...nonDuplicateUserTemplates]
+          // Default template should be first in the list!
+          .sort(a => (a.id === DEFAULT_TEMPLATE_ID ? -1 : 0))
+          .map(template => {
+            if (template.id === DEFAULT_TEMPLATE_ID) {
+              // For the default template, change translation its label
               return {
-                // @ts-ignore
-                label: template.name[template.defaultLanguage],
+                label: intl.formatMessage({ id: "assignment.create.form.template.default.label" }),
                 value: template.id
               };
-            }) || []
+            }
+
+            return {
+              // @ts-ignore
+              label: template.name[template.defaultLanguage],
+              value: template.id!
+            };
+          })
       }
-    ],
-    [selectedAreaDetails, intl]
-  );
+    ];
+  }, [templateData, isTemplateDataLoading, selectedAreaDetails, intl, userId]);
 
   const monitorsWatcher = watch("monitors");
 
@@ -202,7 +223,7 @@ const CreateAssignmentForm: FC<IProps> = props => {
         ) : null
       }
     >
-      <Loader isLoading={isLoading} />
+      <Loader isLoading={isSubmitting || isTemplateDataLoading} />
       <OptionalWrapper data={openDialogName === EDialogsNames.None}>
         <RadioGroup<TCreateAssignmentFormFields>
           control={control}
