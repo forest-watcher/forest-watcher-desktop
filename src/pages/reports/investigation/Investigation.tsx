@@ -126,15 +126,16 @@ const InvestigationPage: FC<IProps> = props => {
         key => BASEMAPS[key as keyof typeof BASEMAPS].key === values.currentMap
       );
       const basemap = BASEMAPS[basemapKey as keyof typeof BASEMAPS];
+
       if (basemap) {
         setMapStyle(basemap.style);
-        setIsPlanet(values.currentMap === PLANET_BASEMAP.key);
       }
 
       setCurrentPlanetPeriod(values.currentPlanetPeriod || "");
       setCurrentProc(values.currentPlanetImageType === "nat" ? "" : values.currentPlanetImageType || "");
       setContextualLayerUrls(values.contextualLayers?.map(layer => selectedLayers[layer].attributes.url) || []);
       setBasemapKey(values.currentMap);
+      setIsPlanet(values.showPlanetImagery?.[0] === PLANET_BASEMAP.key);
     });
 
     return () => subscription.unsubscribe();
