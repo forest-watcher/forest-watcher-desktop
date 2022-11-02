@@ -18,6 +18,8 @@ import useGetUserTeamsWithActiveMembers from "hooks/querys/teams/useGetUserTeams
 import { FormattedMessage, useIntl } from "react-intl";
 import { toastr } from "react-redux-toastr";
 import { useHistory, useLocation, useParams } from "react-router-dom";
+import yup from "configureYup";
+import { yupResolver } from "@hookform/resolvers/yup/dist/yup";
 
 export interface IProps {}
 
@@ -34,6 +36,16 @@ enum EDialogsNames {
   Templates = "templates"
 }
 
+const createAssignmentFormSchema = yup
+  .object()
+  .shape({
+    priority: yup.number().min(0).max(1).integer().required(),
+    monitors: yup.array().of(yup.string()).min(1).required(),
+    templates: yup.array().of(yup.string()).min(1).required(),
+    notes: yup.string()
+  })
+  .required();
+
 const CreateAssignmentForm: FC<IProps> = props => {
   const intl = useIntl();
   const history = useHistory();
@@ -49,14 +61,18 @@ const CreateAssignmentForm: FC<IProps> = props => {
     control,
     watch,
     setValue,
-    getValues: getAssignmentValues
+    getValues: getAssignmentValues,
+    handleSubmit,
+    formState
   } = useForm<TCreateAssignmentFormFields>({
+    mode: "onChange",
     defaultValues: {
       priority: 0,
       monitors: [],
       templates: DEFAULT_TEMPLATE_ID ? [DEFAULT_TEMPLATE_ID] : [],
       notes: ""
-    }
+    },
+    resolver: yupResolver(createAssignmentFormSchema)
   });
 
   useEffect(() => {
@@ -164,7 +180,7 @@ const CreateAssignmentForm: FC<IProps> = props => {
       }}
       footer={
         openDialogName === EDialogsNames.None ? (
-          <Button onClick={handlePostAssignment}>
+          <Button disabled={!formState.isValid} onClick={handleSubmit(handlePostAssignment)}>
             <FormattedMessage id="assignment.create" />
           </Button>
         ) : null
@@ -187,6 +203,7 @@ const CreateAssignmentForm: FC<IProps> = props => {
           groups={teamGroups}
           control={control}
           name="monitors"
+          error={formState.errors.monitors}
           label="assignment.create.form.monitor.label"
           emptyLabel="assignment.create.form.monitor.empty"
           emptyIcon="white-foot"
@@ -210,6 +227,7 @@ const CreateAssignmentForm: FC<IProps> = props => {
           groups={templateGroups}
           control={control}
           name="templates"
+          error={formState.errors.templates}
           label="assignment.create.form.template.label"
           emptyLabel="assignment.create.form.template.empty"
           emptyIcon="FactCheck"
