@@ -10,7 +10,7 @@ const LoadingWrapper = ({ loading, children, className }: LoadingWrapperProps) =
   if (loading)
     return (
       <div className={className}>
-        <Loader isLoading={loading} />;
+        <Loader isLoading={loading} />
       </div>
     );
   return <>{children}</>;
