@@ -19,6 +19,7 @@ const useTemplatesFilter = (templates: TemplateTableRowData[] = []) => {
       .filter(area => area.value);
 
     return [{ label: intl.formatMessage({ id: "common.all" }), value: ALL_VALUE }, ...uniqueAreas];
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [templates, intl]);
 
   const filters = useMemo<IFilter<TAvailableTypes<TemplatesFilterFields>, any>[]>(() => {
@@ -48,6 +49,7 @@ const useTemplatesFilter = (templates: TemplateTableRowData[] = []) => {
         getShouldShow: () => areaFilterOptions.length > 2
       }
     ];
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [areaFilterOptions, intl]);
 
   const search = useMemo<IFilter<TAvailableTypes<TemplatesFilterFields>, any>>(() => {
@@ -70,6 +72,7 @@ const useTemplatesFilter = (templates: TemplateTableRowData[] = []) => {
         return values.some(x => x.includes(value));
       }
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return { filters, search };
