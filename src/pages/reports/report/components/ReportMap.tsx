@@ -6,7 +6,7 @@ import { Map as MapInstance, MapboxEvent } from "mapbox-gl";
 import { useCallback, useState } from "react";
 
 type ReportMapProps = {
-  answer?: Answer;
+  answer?: Answer["data"];
 };
 
 const ReportMap = ({ answer }: ReportMapProps) => {
@@ -23,17 +23,22 @@ const ReportMap = ({ answer }: ReportMapProps) => {
     setSelectedReportIds(ids);
   }, []);
 
+  const position: [number, number] = answer?.attributes?.clickedPosition
+    ? [answer.attributes.clickedPosition[0].lon, answer.attributes.clickedPosition[0].lat]
+    : [0, 0];
+
   return (
     <Map className="c-map--within-hero" onMapLoad={handleMapLoad}>
       <SquareClusterMarkers
         id="answers"
         pointDataType={EPointDataTypes.Reports}
-        // @ts-ignore
-        points={answer?.data.map(a => ({
-          position: [a.attributes.clickedPosition[0].lon, a.attributes.clickedPosition[0].lat],
-          id: a.id || "",
-          alertTypes: getReportAlertsByName(a.attributes?.reportName)
-        }))}
+        points={[
+          {
+            id: answer?.id ?? "",
+            alertTypes: getReportAlertsByName(answer?.attributes?.reportName),
+            position
+          }
+        ]}
         onSquareSelect={handleSquareSelect}
         selectedSquareIds={selectedReportIds}
         mapRef={mapRef}

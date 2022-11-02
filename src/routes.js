@@ -17,6 +17,7 @@ import SignUpAndReset from "./pages/login/SignUpAndReset";
 import { useRouteHistoryStack } from "hooks/useRouteHistoryStack";
 import Report from "pages/reports/report/Report";
 import Templates from "pages/templates/Templates";
+import Layers from "pages/layers/Layers";
 
 const getLoginComponent = ({ user, location }) => {
   const search = location.search || "";
@@ -84,10 +85,8 @@ const Routes = props => {
           <Route exact path={`${match.url}templates`} component={Templates} />
           <Route exact path={`${match.url}templates/create`} component={TemplatesManage} />
           <Route exact path={`${match.url}templates/:templateId`} component={TemplatesManage} />
-
           <Route path={`${match.url}reporting/reports/:reportId/answers/:answerId`} component={Report} />
           <Route path={[`${match.url}reporting/:reportingTab?`]} component={Reports} />
-
           {/* TODO update these routes to use nested routes */}
           <Route exact path={`${match.url}teams`} component={Teams} />
           <Route path={`${match.url}teams/invitations`} component={TeamsInvitations} />
@@ -118,13 +117,13 @@ const Routes = props => {
             path={`${match.url}teams/:teamId/remove/:memberId`}
             render={args => <TeamDetail isRemovingTeamMember {...args} />}
           />
-
           <Route
             exact
             path={`${match.url}teams/:teamId/removeArea/:areaId`}
             render={args => <TeamDetail isDeletingTeamArea {...args} />}
           />
-
+          <Route exact path={`${match.url}layers`} component={Layers} />
+          {/* !! TODO: To Be Removed as /layers has replaced /settings !! */}
           <Route exact path={`${match.url}settings`} component={Settings} />
           <Route path="*">
             <Redirect to="/areas" />
