@@ -17,13 +17,14 @@ const OpenAssignmentEmptyState: FC<IProps> = props => {
   const intl = useIntl();
   const history = useHistory();
   const location = useLocation();
-  const { getValues } = useFormContext();
+  const { getValues, setValue } = useFormContext();
 
   return (
     <MapCard
       className="c-map-control-panel"
       title={intl.formatMessage({ id: "assignment.create.new" })}
       onBack={() => {
+        setValue("selectedAlerts", []);
         history.push(location.pathname.replace("/assignment", ""));
       }}
       footer={

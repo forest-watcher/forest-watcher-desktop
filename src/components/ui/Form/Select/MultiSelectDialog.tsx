@@ -1,6 +1,7 @@
 import Icon from "components/extensive/Icon";
 import OptionalWrapper from "components/extensive/OptionalWrapper";
 import Button from "components/ui/Button/Button";
+import { FieldError } from "components/ui/Form/FieldError";
 import IconBubble from "components/ui/Icon/IconBubble";
 import classnames from "classnames";
 import { useMemo, useState } from "react";
@@ -22,6 +23,7 @@ export interface IMultiSelectDialogPreviewProps<T> {
   // ToDo: Maybe UseWatcherProps<T>
   control: Control<T>;
   name: Path<T>;
+  error?: any;
   groups: TMultiSelectDialogGroups;
   label: string;
   emptyLabel: string;
@@ -95,7 +97,8 @@ const MultiSelectDialogPreview = <T,>(props: IMultiSelectDialogPreviewProps<T>) 
     control,
     name,
     onAdd,
-    shouldDisplayAllLabel = true
+    shouldDisplayAllLabel = true,
+    error
   } = props;
   const watcher = useWatch({
     control,
@@ -134,49 +137,54 @@ const MultiSelectDialogPreview = <T,>(props: IMultiSelectDialogPreviewProps<T>) 
   );
 
   return (
-    <OptionalWrapper
-      data={activeGroups.length > 0}
-      elseComponent={
-        // Empty State
-        <div
-          className={classnames(
-            className,
-            "flex flex-col justify-center items-center rounded-md bg-gray-400 px-4 py-6"
-          )}
-        >
-          <IconBubble className="mb-3" name={emptyIcon} size={22} />
+    <>
+      <OptionalWrapper
+        data={activeGroups.length > 0}
+        elseComponent={
+          // Empty State
+          <div
+            className={classnames(
+              className,
+              "flex flex-col justify-center items-center rounded-md bg-gray-400 px-4 py-6 relative"
+            )}
+          >
+            <IconBubble className="mb-3" name={emptyIcon} size={22} />
 
-          <h2 className="text-lg text-gray-700 mb-6">
-            <FormattedMessage id={emptyLabel} />
-          </h2>
+            <h2 className="text-lg text-gray-700 mb-6">
+              <FormattedMessage id={emptyLabel} />
+            </h2>
+
+            <Button className="w-full" variant="secondary" onClick={onAdd}>
+              <Icon name="PlusForButton" className="pr-[6px]" />
+              <FormattedMessage id={addButtonLabel} />
+            </Button>
+
+            {error && <Icon className="c-input__error-icon" name="Error" />}
+          </div>
+        }
+      >
+        <div className={className}>
+          <span className="block mb-3 text-sm font-medium uppercase text-gray-700">
+            <FormattedMessage id={label} />
+          </span>
+
+          <ul className="text-gray-700 text-base mb-3">
+            {activeGroups.map((group, id) => (
+              <li key={group.label || id}>
+                {group.label && <>{group.label}: </>}
+                {group.options.map(option => option.label).join(", ")}
+              </li>
+            ))}
+          </ul>
 
           <Button className="w-full" variant="secondary" onClick={onAdd}>
             <Icon name="PlusForButton" className="pr-[6px]" />
             <FormattedMessage id={addButtonLabel} />
           </Button>
         </div>
-      }
-    >
-      <div className={className}>
-        <span className="block mb-3 text-sm font-medium uppercase text-gray-700">
-          <FormattedMessage id={label} />
-        </span>
-
-        <ul className="text-gray-700 text-base mb-3">
-          {activeGroups.map((group, id) => (
-            <li key={group.label || id}>
-              {group.label && <>{group.label}: </>}
-              {group.options.map(option => option.label).join(", ")}
-            </li>
-          ))}
-        </ul>
-
-        <Button className="w-full" variant="secondary" onClick={onAdd}>
-          <Icon name="PlusForButton" className="pr-[6px]" />
-          <FormattedMessage id={addButtonLabel} />
-        </Button>
-      </div>
-    </OptionalWrapper>
+      </OptionalWrapper>
+      <FieldError error={error} id="error" />
+    </>
   );
 };
 

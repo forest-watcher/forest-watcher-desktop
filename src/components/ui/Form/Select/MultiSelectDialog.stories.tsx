@@ -135,6 +135,12 @@ EmptyPreview.args = {
   emptyIcon: "white-foot"
 };
 
+export const ErrorPreview = EmptyPreviewTemplate.bind({});
+ErrorPreview.args = {
+  ...EmptyPreview.args,
+  error: { message: "At least 1 item is required" }
+};
+
 export const PopulatedPreview = PreviewTemplate.bind({});
 PopulatedPreview.args = {
   ...EmptyPreview.args

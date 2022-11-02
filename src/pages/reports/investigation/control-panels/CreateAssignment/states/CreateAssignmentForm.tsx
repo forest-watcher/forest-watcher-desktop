@@ -18,6 +18,8 @@ import useGetUserTeamsWithActiveMembers from "hooks/querys/teams/useGetUserTeams
 import { FormattedMessage, useIntl } from "react-intl";
 import { toastr } from "react-redux-toastr";
 import { useHistory, useLocation, useParams } from "react-router-dom";
+import yup from "configureYup";
+import { yupResolver } from "@hookform/resolvers/yup/dist/yup";
 
 export interface IProps {}
 
@@ -34,6 +36,16 @@ enum EDialogsNames {
   Templates = "templates"
 }
 
+const createAssignmentFormSchema = yup
+  .object()
+  .shape({
+    priority: yup.number().min(0).max(1).integer().required(),
+    monitors: yup.array().of(yup.string()).min(1).required(),
+    templates: yup.array().of(yup.string()).min(1).required(),
+    notes: yup.string()
+  })
+  .required();
+
 const CreateAssignmentForm: FC<IProps> = props => {
   const intl = useIntl();
   const history = useHistory();
@@ -44,19 +56,23 @@ const CreateAssignmentForm: FC<IProps> = props => {
   const [openDialogName, setOpenDialogName] = useState<EDialogsNames>(EDialogsNames.None);
 
   // FormData
-  const { getValues: getParentValues } = useFormContext();
+  const { getValues: getParentValues, setValue: setParentValue } = useFormContext();
   const {
     control,
     watch,
     setValue,
-    getValues: getAssignmentValues
+    getValues: getAssignmentValues,
+    handleSubmit,
+    formState
   } = useForm<TCreateAssignmentFormFields>({
+    mode: "onChange",
     defaultValues: {
       priority: 0,
       monitors: [],
       templates: DEFAULT_TEMPLATE_ID ? [DEFAULT_TEMPLATE_ID] : [],
       notes: ""
-    }
+    },
+    resolver: yupResolver(createAssignmentFormSchema)
   });
 
   useEffect(() => {
@@ -71,6 +87,12 @@ const CreateAssignmentForm: FC<IProps> = props => {
   // Mutations - Create Assignment
   const { httpAuthHeader } = useAccessToken();
   const { mutateAsync: postAssignment, isLoading } = usePostV3GfwAssignments();
+
+  const handleBack = () => {
+    // Clear selected Alerts
+    setParentValue("selectedAlerts", []);
+    history.push(location.pathname.replace("/assignment", ""));
+  };
 
   const handlePostAssignment = async () => {
     const assignmentFormValues = getAssignmentValues();
@@ -101,7 +123,7 @@ const CreateAssignmentForm: FC<IProps> = props => {
 
       // ToDo: redirect to Assignment Detail page
       // Redirecting to "Start Investigation" panel for now
-      history.push(location.pathname.replace("/assignment", ""));
+      handleBack();
     } catch (e) {
       toastr.error(intl.formatMessage({ id: "assignment.create.form.error" }), "");
     }
@@ -139,14 +161,24 @@ const CreateAssignmentForm: FC<IProps> = props => {
           selectedAreaDetails?.attributes.reportTemplate
             // Default template should be first in the list!
             .sort(a => (a.id === DEFAULT_TEMPLATE_ID ? -1 : 0))
-            .map(template => ({
-              // @ts-ignore
-              label: template.name[template.defaultLanguage],
-              value: template.id
-            })) || []
+            .map(template => {
+              if (template.id === DEFAULT_TEMPLATE_ID) {
+                // For the default template, change translation its label
+                return {
+                  label: intl.formatMessage({ id: "assignment.create.form.template.default.label" }),
+                  value: template.id
+                };
+              }
+
+              return {
+                // @ts-ignore
+                label: template.name[template.defaultLanguage],
+                value: template.id
+              };
+            }) || []
       }
     ],
-    [selectedAreaDetails]
+    [selectedAreaDetails, intl]
   );
 
   const monitorsWatcher = watch("monitors");
@@ -157,14 +189,14 @@ const CreateAssignmentForm: FC<IProps> = props => {
       title={intl.formatMessage({ id: `assignment.create.dialog.title.${openDialogName}` })}
       onBack={() => {
         if (openDialogName === EDialogsNames.None) {
-          history.push(location.pathname.replace("/assignment", ""));
+          handleBack();
         } else {
           setOpenDialogName(EDialogsNames.None);
         }
       }}
       footer={
         openDialogName === EDialogsNames.None ? (
-          <Button onClick={handlePostAssignment}>
+          <Button disabled={!formState.isValid} onClick={handleSubmit(handlePostAssignment)}>
             <FormattedMessage id="assignment.create" />
           </Button>
         ) : null
@@ -187,6 +219,7 @@ const CreateAssignmentForm: FC<IProps> = props => {
           groups={teamGroups}
           control={control}
           name="monitors"
+          error={formState.errors.monitors}
           label="assignment.create.form.monitor.label"
           emptyLabel="assignment.create.form.monitor.empty"
           emptyIcon="white-foot"
@@ -210,6 +243,7 @@ const CreateAssignmentForm: FC<IProps> = props => {
           groups={templateGroups}
           control={control}
           name="templates"
+          error={formState.errors.templates}
           label="assignment.create.form.template.label"
           emptyLabel="assignment.create.form.template.empty"
           emptyIcon="FactCheck"

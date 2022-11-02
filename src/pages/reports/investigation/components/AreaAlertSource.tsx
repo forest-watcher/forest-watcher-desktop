@@ -3,8 +3,8 @@ import SquareClusterMarkers, { EPointDataTypes } from "components/ui/Map/compone
 import { pointStyle } from "components/ui/Map/components/layers/styles";
 import { EAlertTypes } from "constants/alerts";
 import useGetAlertsForArea from "hooks/querys/alerts/useGetAlertsForArea";
-import { FC, useCallback, useMemo } from "react";
-import { useFormContext } from "react-hook-form";
+import { FC, useCallback, useEffect, useMemo, useState } from "react";
+import { useFormContext, useWatch } from "react-hook-form";
 import { useMap } from "react-map-gl";
 import { IPoint } from "types/map";
 import { TAlertsById } from "components/ui/Map/components/cards/AlertsDetail";
@@ -18,8 +18,9 @@ export interface IProps {
 const AreaAlertMapSource: FC<IProps> = props => {
   const { areaId, alertTypesToShow, alertRequestThreshold } = props;
   const { current: mapRef } = useMap();
-  const { setValue, watch } = useFormContext();
-  const selectedAlerts = watch("selectedAlerts");
+  const { setValue, control } = useFormContext();
+  const selectedAlerts = useWatch({ control, name: "selectedAlerts" });
+  const [selectedAlertIds, setSelectedAlertIds] = useState<string[] | null>(null);
   const alerts = useGetAlertsForArea(areaId, alertTypesToShow, alertRequestThreshold);
 
   const [alertPoints, alertsById] = useMemo(
@@ -61,9 +62,18 @@ const AreaAlertMapSource: FC<IProps> = props => {
         "selectedAlerts",
         alertsById.filter(alert => ids?.includes(alert.id))
       );
+      setSelectedAlertIds(ids);
     },
     [alertsById, setValue]
   );
+
+  useEffect(() => {
+    // If all selected Alerts for parent form are removed
+    // Set SelectedAlertIds to null so that the SquareClusterMarkers are cleared too
+    if (selectedAlerts && selectedAlerts.length === 0) {
+      setSelectedAlertIds(null);
+    }
+  }, [selectedAlerts]);
 
   return (
     <>
@@ -71,6 +81,7 @@ const AreaAlertMapSource: FC<IProps> = props => {
         id="alerts"
         pointDataType={EPointDataTypes.Alerts}
         points={alertPoints}
+        selectedSquareIds={selectedAlertIds}
         pointStyle={{
           ...pointStyle,
           layout: {
