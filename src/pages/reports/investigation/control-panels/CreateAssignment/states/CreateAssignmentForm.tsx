@@ -56,7 +56,7 @@ const CreateAssignmentForm: FC<IProps> = props => {
   const [openDialogName, setOpenDialogName] = useState<EDialogsNames>(EDialogsNames.None);
 
   // FormData
-  const { getValues: getParentValues } = useFormContext();
+  const { getValues: getParentValues, setValue: setParentValue } = useFormContext();
   const {
     control,
     watch,
@@ -114,6 +114,9 @@ const CreateAssignmentForm: FC<IProps> = props => {
         body,
         headers: httpAuthHeader
       });
+
+      // Clear selected Alerts
+      setParentValue("selectedAlerts", []);
 
       // ToDo: redirect to Assignment Detail page
       // Redirecting to "Start Investigation" panel for now
