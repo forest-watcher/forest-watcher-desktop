@@ -16,6 +16,7 @@ module.exports = {
         500: "#F74848"
       },
       gray: {
+        // TODO - rename to match designs - should be neutral (same with others too)
         300: "#FFFFFF",
         400: "#F2F2F2",
         500: "#DCDCDC",

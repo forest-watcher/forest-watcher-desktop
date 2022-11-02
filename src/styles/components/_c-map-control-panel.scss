@@ -48,6 +48,21 @@
     width: 50%;
     flex: 0 0 50%;
     padding: 12px 6px 0;
+    &--slim {
+      // padding: 12px;
+      .c-card {
+        display: flex;
+        gap: 12px;
+        align-items: center;
+      }
+      .c-card__image {
+        width: 52px;
+        height: 52px;
+      }
+      .c-card__title {
+        margin-top: 0px;
+      }
+    }
   }
 
   &__area-card {
