@@ -12,8 +12,6 @@ const ReportDetails = ({ answer, report }: ReportDetailsProps) => {
   const { createdAt, clickedPosition, areaOfInterestName, fullName } = answer?.attributes;
   const coordinates = `${clickedPosition[0].lat.toFixed(4)}, ${clickedPosition[0].lon.toFixed(4)}`;
 
-  console.log(answer?.attributes);
-
   return (
     <section className="row column py-section">
       <h1 className="font-base text-[36px] font-light text-gray-700 mb-10">{answer?.attributes?.reportName}</h1>
