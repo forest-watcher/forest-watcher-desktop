@@ -85,5 +85,22 @@ export default defineConfig({
         schemasFiles
       });
     }
+  },
+  clayers: {
+    from: {
+      source: "url",
+      url: "https://raw.githubusercontent.com/wri/fw_contextual_layers/dev/docs/fw_contextual_layers.yaml"
+    },
+    outputDir: "src/generated/clayers",
+    to: async context => {
+      const filenamePrefix = "clayers";
+      const { schemasFiles } = await generateSchemaTypes(context, {
+        filenamePrefix
+      });
+      await generateReactQueryComponents(context, {
+        filenamePrefix,
+        schemasFiles
+      });
+    }
   }
 });

@@ -9,13 +9,11 @@ import { goToGeojson } from "helpers/map";
 import { TGetAllAnswers } from "services/reports";
 import SquareClusterMarkers, { EPointDataTypes } from "components/ui/Map/components/layers/SquareClusterMarkers";
 import { Layer, Source } from "react-map-gl";
-import { BASEMAPS } from "constants/mapbox";
+import { PLANET_BASEMAP } from "constants/mapbox";
 import { IPlanetBasemap } from "helpers/basemap";
 import ReportDetailCard from "components/ui/Map/components/cards/ReportDetailContainer";
 import { getReportAlertsByName } from "helpers/reports";
 import { TAnswer } from "components/ui/Map/components/cards/ReportDetail";
-
-const basemap = BASEMAPS["planet"];
 
 interface IProps extends IMapProps {
   // Should be a memorised function! useCallBack()
@@ -81,7 +79,7 @@ const UserAreasMap: FC<PropsWithChildren<IProps>> = props => {
 
   const planetBasemapUrl = useMemo(() => {
     if (currentPlanetBasemap) {
-      return basemap.url.replace("{name}", currentPlanetBasemap.name).replace("{proc}", currentProc);
+      return PLANET_BASEMAP.url.replace("{name}", currentPlanetBasemap.name).replace("{proc}", currentProc);
     }
     return null;
   }, [currentPlanetBasemap, currentProc]);

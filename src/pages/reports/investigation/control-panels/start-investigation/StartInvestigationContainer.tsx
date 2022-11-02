@@ -4,7 +4,7 @@ import { RootState } from "store";
 import { getLayers } from "modules/layers";
 import { ThunkDispatch } from "redux-thunk";
 
-const mapStateToProps = ({ map, templates, layers }: RootState) => {
+const mapStateToProps = ({ templates, layers }: RootState) => {
   // @ts-ignore
   const layersOptions = Object.values(layers.selectedLayers)
     // @ts-ignore
@@ -17,7 +17,6 @@ const mapStateToProps = ({ map, templates, layers }: RootState) => {
     }));
 
   return {
-    basemaps: map.data,
     templates: templates.templates,
     layersOptions
   };

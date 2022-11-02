@@ -13,7 +13,7 @@ import UserAreasMap from "components/user-areas-map/UserAreasMap";
 import { LAYERS } from "pages/reports/investigation/control-panels/start-investigation/StartInvestigation";
 import { TParams } from "./types";
 import { TPropsFromRedux } from "./InvestigationContainer";
-import { BASEMAPS } from "constants/mapbox";
+import { BASEMAPS, PLANET_BASEMAP } from "constants/mapbox";
 import { TGetAllAnswers } from "services/reports";
 import { Layer, Source } from "react-map-gl";
 import { setupMapImages } from "helpers/map";
@@ -34,6 +34,7 @@ interface IProps extends RouteComponentProps, TPropsFromRedux {}
 export type TFormValues = {
   layers?: string[];
   currentMap?: string;
+  showPlanetImagery?: string[];
   currentPlanetPeriod?: string;
   currentPlanetImageType?: "nat" | "cir";
   contextualLayers?: string[];
@@ -126,7 +127,7 @@ const InvestigationPage: FC<IProps> = props => {
       const basemap = BASEMAPS[basemapKey as keyof typeof BASEMAPS];
       if (basemap) {
         setMapStyle(basemap.style);
-        setIsPlanet(values.currentMap === BASEMAPS.planet.key);
+        setIsPlanet(values.currentMap === PLANET_BASEMAP.key);
       }
 
       setCurrentPlanetPeriod(values.currentPlanetPeriod || "");
