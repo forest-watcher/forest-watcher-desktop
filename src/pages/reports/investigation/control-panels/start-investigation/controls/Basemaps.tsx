@@ -68,8 +68,11 @@ const Basemaps: FC<IProps> = ({ defaultBasemap }) => {
   }, [basemaps, watcher.currentPlanetImageType]);
 
   useEffect(() => {
-    methods.resetField("currentPlanetPeriod", { defaultValue: baseMapPeriods[baseMapPeriods.length - 1]?.value });
-  }, [methods, baseMapPeriods]);
+    return () => {
+      methods.resetField("currentPlanetPeriod", { defaultValue: baseMapPeriods[baseMapPeriods.length - 1]?.value });
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <>
