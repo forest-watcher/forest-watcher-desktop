@@ -3,13 +3,13 @@ import { Answer, Report } from "generated/forms/formsResponses";
 import moment from "moment";
 
 type ReportDetailsProps = {
-  answer?: Answer;
+  answer?: Answer["data"];
   report?: Report;
 };
 
 const ReportDetails = ({ answer, report }: ReportDetailsProps) => {
   // @ts-expect-error
-  const { createdAt, clickedPosition, areaOfInterestName, fullName } = answer?.data[0].attributes;
+  const { createdAt, clickedPosition, areaOfInterestName, fullName } = answer?.attributes;
   const coordinates = `${clickedPosition[0].lat.toFixed(4)}, ${clickedPosition[0].lon.toFixed(4)}`;
 
   return (
