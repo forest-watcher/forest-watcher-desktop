@@ -88,6 +88,12 @@ const CreateAssignmentForm: FC<IProps> = props => {
   const { httpAuthHeader } = useAccessToken();
   const { mutateAsync: postAssignment, isLoading } = usePostV3GfwAssignments();
 
+  const handleBack = () => {
+    // Clear selected Alerts
+    setParentValue("selectedAlerts", []);
+    history.push(location.pathname.replace("/assignment", ""));
+  };
+
   const handlePostAssignment = async () => {
     const assignmentFormValues = getAssignmentValues();
     const selectedAlerts = getParentValues("selectedAlerts") as TAlertsById[];
@@ -115,12 +121,9 @@ const CreateAssignmentForm: FC<IProps> = props => {
         headers: httpAuthHeader
       });
 
-      // Clear selected Alerts
-      setParentValue("selectedAlerts", []);
-
       // ToDo: redirect to Assignment Detail page
       // Redirecting to "Start Investigation" panel for now
-      history.push(location.pathname.replace("/assignment", ""));
+      handleBack();
     } catch (e) {
       toastr.error(intl.formatMessage({ id: "assignment.create.form.error" }), "");
     }
@@ -186,7 +189,7 @@ const CreateAssignmentForm: FC<IProps> = props => {
       title={intl.formatMessage({ id: `assignment.create.dialog.title.${openDialogName}` })}
       onBack={() => {
         if (openDialogName === EDialogsNames.None) {
-          history.push(location.pathname.replace("/assignment", ""));
+          handleBack();
         } else {
           setOpenDialogName(EDialogsNames.None);
         }
