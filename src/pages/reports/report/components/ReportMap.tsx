@@ -35,9 +35,9 @@ const ReportMap = ({ answer }: ReportMapProps) => {
         points={[
           {
             id: answer?.id ?? "",
-            alertType:
-              getReportAlertsByName(a.attributes?.reportName)[0] &&
-              getReportAlertsByName(a.attributes?.reportName)[0].id,
+            type:
+              getReportAlertsByName(answer?.attributes?.reportName)[0] &&
+              getReportAlertsByName(answer?.attributes?.reportName)[0].id,
             position
           }
         ]}
