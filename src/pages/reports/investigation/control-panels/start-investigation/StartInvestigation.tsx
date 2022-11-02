@@ -30,7 +30,6 @@ import { MapActions } from "types/analytics";
 import { TFilterFields } from "pages/reports/reports/Reports";
 import ShowRoutesControl from "./controls/ShowRoutesControl";
 import Icon from "components/extensive/Icon";
-import Toggle from "components/ui/Form/Toggle";
 
 export enum LAYERS {
   reports = "reports"

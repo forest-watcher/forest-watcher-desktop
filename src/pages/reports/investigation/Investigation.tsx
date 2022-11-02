@@ -1,4 +1,5 @@
 import OptionalWrapper from "components/extensive/OptionalWrapper";
+import { TAlertsById } from "components/ui/Map/components/cards/AlertsDetail";
 import {
   allDeforestationAlerts,
   DefaultRequestThresholds,
@@ -26,7 +27,7 @@ import AreaAlertsSource from "pages/reports/investigation/components/AreaAlertSo
 import AreaListControlPanel from "./control-panels/AreaList";
 import AreaDetailControlPanel from "pages/reports/investigation/control-panels/AreaDetail";
 import StartInvestigationControlPanel from "pages/reports/investigation/control-panels/start-investigation/StartInvestigationContainer";
-import AddAssignmentControlPanel from "pages/reports/investigation/control-panels/AddAssignment/AddAssignment";
+import CreateAssignmentControlPanel from "pages/reports/investigation/control-panels/CreateAssignment/CreateAssignment";
 
 interface IProps extends RouteComponentProps, TPropsFromRedux {}
 
@@ -42,6 +43,7 @@ export type TFormValues = {
   alertTypesShown: "all" | EAlertTypes;
   alertTypesRequestThreshold: number;
   alertTypesViirsRequestThreshold: number;
+  selectedAlerts: TAlertsById[];
 };
 
 const InvestigationPage: FC<IProps> = props => {
@@ -104,7 +106,8 @@ const InvestigationPage: FC<IProps> = props => {
       showOpenAssignments: ["true"],
       alertTypesShown: "all",
       alertTypesRequestThreshold: DefaultRequestThresholds[0].requestThreshold,
-      alertTypesViirsRequestThreshold: ViirsRequestThresholds[0].requestThreshold
+      alertTypesViirsRequestThreshold: ViirsRequestThresholds[0].requestThreshold,
+      selectedAlerts: []
     }),
     [basemapKey]
   );
@@ -185,7 +188,7 @@ const InvestigationPage: FC<IProps> = props => {
           </Route>
 
           <Route exact path={`${match.url}/:areaId/start/assignment`}>
-            <AddAssignmentControlPanel />
+            <CreateAssignmentControlPanel />
           </Route>
         </Switch>
 

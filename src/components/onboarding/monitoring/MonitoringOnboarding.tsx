@@ -32,25 +32,19 @@ const MonitoringOnboarding = () => {
   const [show, setShow] = useState<boolean>(false);
 
   /**
-   * Handles check app version and conditionally show Monitoring onboarding.
+   * Handles check onboarded in LS and conditionally show Monitoring onboarding.
    */
   useEffect(() => {
-    const storedKey = "monitoring-version";
-    const currentVersion = process.env.REACT_APP_VERSION ?? "";
-    const storedVersion = get(storedKey);
+    const storedKey = "monitoring-onboarding";
+    const onboarded = get(storedKey);
 
-    // If version is not present in LS -> set version to LS and show modal.
-    // If version is present in LS but it is different from current version -> set version to LS and show modal.
-    if (!storedVersion || (storedVersion && storedVersion !== currentVersion)) {
+    if (!onboarded) {
       setShow(true);
-      return set(storedKey, currentVersion);
+      return set(storedKey, "true");
     }
-    // Else
     return setShow(false);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  // quando carica fa un check della versione (process.env)
 
   return (
     <OptionalWrapper data={show} elseComponent={<></>}>

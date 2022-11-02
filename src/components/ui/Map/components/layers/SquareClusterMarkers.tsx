@@ -1,4 +1,4 @@
-import { FC, useEffect, useMemo, useState } from "react";
+import { FC, useEffect, useMemo, useRef, useState } from "react";
 import { Layer, Source, useMap } from "react-map-gl";
 import { pointStyle as defaultPointStyle, clusterCountStyle } from "./styles";
 import * as turf from "@turf/turf";
@@ -31,13 +31,14 @@ export interface IProps {
   points: IPoint[];
   pointStyle?: Record<any, any>;
   onSquareSelect?: (ids: string[], point: mapboxgl.Point) => void;
-  selectedSquareIds: string[] | null;
+  selectedSquareIds?: string[] | null;
   mapRef: MapInstance | null;
   goToPoints?: boolean;
+  canMultiSelect?: boolean;
+  // Will a click on the map, de-select the selectedIds?
+  canMapDeselect?: boolean;
+  onSelectionChange?: (selectedIds: string[] | null) => void;
 }
-
-const markers: IMarkers = {};
-let markersOnScreen: IMarkers = {};
 
 const SquareClusterMarkers: FC<IProps> = props => {
   const {
@@ -47,12 +48,18 @@ const SquareClusterMarkers: FC<IProps> = props => {
     onSquareSelect,
     selectedSquareIds,
     mapRef,
-    pointStyle = defaultPointStyle
+    pointStyle = defaultPointStyle,
+    canMultiSelect = false,
+    canMapDeselect = false,
+    onSelectionChange
   } = props;
   const { current: map } = useMap();
   const [hoveredPoint, setHoveredPoint] = useState<string | null>(null);
   const [selectedPoints, setSelectedPoints] = useState<string[] | null>(null);
   const [hasMoved, setHasMoved] = useState(false);
+
+  const markers = useRef<IMarkers>({});
+  const markersOnScreen = useRef<IMarkers>({});
 
   const [iconGenerator, clusterTypeColourMap] = useMemo<[TMapIconGenerator, TClusterTypeColourMap]>(() => {
     switch (pointDataType) {
@@ -75,13 +82,17 @@ const SquareClusterMarkers: FC<IProps> = props => {
             icon: iconGenerator(
               point.alertTypes?.length ? point.alertTypes[0].id : "",
               point.id === hoveredPoint,
-              selectedPoints?.length ? point.id === selectedPoints[0] : false
+              selectedPoints?.length
+                ? canMultiSelect
+                  ? selectedPoints.includes(point.id)
+                  : point.id === selectedPoints[0]
+                : false
             ),
             alertType: point.alertTypes?.length ? point.alertTypes[0].id : ""
           })
         )
       ),
-    [hoveredPoint, iconGenerator, points, selectedPoints]
+    [hoveredPoint, iconGenerator, points, selectedPoints, canMultiSelect]
   );
 
   useEffect(() => {
@@ -122,7 +133,7 @@ const SquareClusterMarkers: FC<IProps> = props => {
 
         const clusterId = props.cluster_id;
 
-        let marker = markers[clusterId];
+        let marker = markers.current[clusterId];
 
         const colours: string[] = [];
         clusterTypeColourMap.forEach(({ prop, hex }) => {
@@ -138,53 +149,91 @@ const SquareClusterMarkers: FC<IProps> = props => {
             // Handle cluster zoom
             el.onclick = () => clusterZoom(map, clusterId, id, coords);
             // Create a new marker
-            marker = markers[clusterId] = new Marker({
+            marker = markers.current[clusterId] = new Marker({
               element: el
             }).setLngLat(coords);
           }
         }
         newMarkers[clusterId] = marker;
 
-        if (!markersOnScreen[clusterId]) {
+        if (!markersOnScreen.current[clusterId]) {
           // Add to map
           marker.addTo(mapInstance);
         }
       }
       // for every marker we've added previously, remove those that are no longer visible
-      for (const toRemoveid in markersOnScreen) {
+      for (const toRemoveid in markersOnScreen.current) {
         if (!newMarkers[toRemoveid]) {
-          markersOnScreen[toRemoveid].remove();
+          markersOnScreen.current[toRemoveid].remove();
         }
       }
-      markersOnScreen = newMarkers;
+      markersOnScreen.current = newMarkers;
     });
   }, [clusterTypeColourMap, id, map, onSquareSelect]);
 
   useEffect(() => {
-    const click = (
-      e: mapboxgl.MapMouseEvent & {
-        features?: mapboxgl.MapboxGeoJSONFeature[] | undefined;
-      } & mapboxgl.EventData
-    ) => {
-      const features = map?.queryRenderedFeatures(e.point, {
-        layers: [id]
-      });
+    const handlePreClick = () => {
+      let timeId: any;
 
-      const pointIds = features?.map(feature => feature.properties?.id) || [];
+      const handleSourceMouseClick = (
+        e: mapboxgl.MapMouseEvent & {
+          features?: mapboxgl.MapboxGeoJSONFeature[] | undefined;
+        } & mapboxgl.EventData
+      ) => {
+        // Cancel the de-select timeout
+        clearTimeout(timeId);
+        timeId = undefined;
 
-      setSelectedPoints(pointIds);
-      onSquareSelect?.(pointIds, e.point);
+        const features = map?.queryRenderedFeatures(e.point, {
+          layers: [id]
+        });
+
+        const pointIds = features?.map(feature => feature.properties?.id) || [];
+
+        setSelectedPoints(state => {
+          if (!state) return pointIds;
+
+          const isCurrentlySelected = state.findIndex(i => pointIds.includes(i)) !== -1 || false;
+
+          if (isCurrentlySelected) {
+            return [...state.filter(i => !pointIds.includes(i))];
+          } else if (canMultiSelect) {
+            return [...state, ...pointIds];
+          } else {
+            return pointIds;
+          }
+        });
+        onSquareSelect?.(pointIds, e.point);
+      };
+
+      // Trigger a de-select event if a <Source id={id} /> isn't clicked within 50ms
+      if (!timeId) {
+        timeId = setTimeout(() => {
+          timeId = undefined;
+
+          if (canMapDeselect) setSelectedPoints([]);
+        }, 50);
+      }
+
+      // The current function was evoked by a "preclick" event
+      // The next event will be "click"
+      // Evoke handleSourceMouseClick() if this next click is on our <Source id={id} />
+      map?.once("click", id, handleSourceMouseClick);
     };
 
-    map?.on("click", id, click);
+    map?.on("preclick", handlePreClick);
 
     return () => {
-      map?.off("click", id, click);
+      map?.off("preclick", handlePreClick);
     };
-  }, [id, map, onSquareSelect]);
+  }, [id, map, onSquareSelect, canMultiSelect, canMapDeselect]);
 
   useEffect(() => {
-    setSelectedPoints(selectedSquareIds);
+    onSelectionChange?.(selectedPoints);
+  }, [selectedPoints, onSelectionChange]);
+
+  useEffect(() => {
+    if (typeof selectedSquareIds !== "undefined") setSelectedPoints(selectedSquareIds);
   }, [selectedSquareIds]);
 
   useEffect(() => {
