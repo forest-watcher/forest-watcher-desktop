@@ -158,14 +158,24 @@ const CreateAssignmentForm: FC<IProps> = props => {
           selectedAreaDetails?.attributes.reportTemplate
             // Default template should be first in the list!
             .sort(a => (a.id === DEFAULT_TEMPLATE_ID ? -1 : 0))
-            .map(template => ({
-              // @ts-ignore
-              label: template.name[template.defaultLanguage],
-              value: template.id
-            })) || []
+            .map(template => {
+              if (template.id === DEFAULT_TEMPLATE_ID) {
+                // For the default template, change translation its label
+                return {
+                  label: intl.formatMessage({ id: "assignment.create.form.template.default.label" }),
+                  value: template.id
+                };
+              }
+
+              return {
+                // @ts-ignore
+                label: template.name[template.defaultLanguage],
+                value: template.id
+              };
+            }) || []
       }
     ],
-    [selectedAreaDetails]
+    [selectedAreaDetails, intl]
   );
 
   const monitorsWatcher = watch("monitors");

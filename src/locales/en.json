@@ -532,6 +532,7 @@
   "assignment.create.form.monitor.label": "Monitors",
   "assignment.create.form.monitor.add": "Add Monitor",
   "assignment.create.form.template.empty": "No Templates Selected",
+  "assignment.create.form.template.default.label": "Default (Standard GFW deforestation)",
   "assignment.create.form.template.label": "Templates",
   "assignment.create.form.template.add": "Add Template",
   "assignment.create.form.notesForMonitors": "Notes for monitors",
