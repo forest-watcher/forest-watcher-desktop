@@ -1,3 +1,4 @@
+import { useQueryClient } from "@tanstack/react-query";
 import OptionalWrapper from "components/extensive/OptionalWrapper";
 import Button from "components/ui/Button/Button";
 import TextArea from "components/ui/Form/Input/TextArea";
@@ -8,6 +9,7 @@ import { TAlertsById } from "components/ui/Map/components/cards/AlertsDetail";
 import MapCard from "components/ui/Map/components/cards/MapCard";
 import { DEFAULT_TEMPLATE_ID } from "constants/global";
 import { useGetV3GfwTemplates, usePostV3GfwAssignments } from "generated/core/coreComponents";
+import { useCoreContext } from "generated/core/coreContext";
 import { AssignmentBody } from "generated/core/coreRequestBodies";
 import { GeojsonModel } from "generated/core/coreSchemas";
 import { useAccessToken } from "hooks/useAccessToken";
@@ -86,6 +88,8 @@ const CreateAssignmentForm: FC<IProps> = props => {
   }, [setValue, userId]);
 
   const { httpAuthHeader } = useAccessToken();
+  const queryClient = useQueryClient();
+  const { queryKeyFn } = useCoreContext();
   // Queries - Teams Members
   const { data: teamData, isLoading: isTeamDataLoading } = useGetUserTeamsWithActiveMembers();
   // Queries - User Templates
@@ -94,7 +98,22 @@ const CreateAssignmentForm: FC<IProps> = props => {
   });
 
   // Mutations - Create Assignment
-  const { mutateAsync: postAssignment, isLoading: isSubmitting } = usePostV3GfwAssignments();
+  const { mutateAsync: postAssignment, isLoading: isSubmitting } = usePostV3GfwAssignments({
+    onSuccess: () => {
+      queryClient.invalidateQueries(
+        queryKeyFn({
+          path: "/v3/gfw/assignments/allOpenUserForArea/{areaId}",
+          operationId: "getV3GfwAssignmentsAllOpenUserForAreaAreaId",
+          variables: {
+            pathParams: {
+              areaId: areaId!
+            },
+            headers: httpAuthHeader
+          }
+        })
+      );
+    }
+  });
 
   const handleBack = () => {
     // Clear selected Alerts
