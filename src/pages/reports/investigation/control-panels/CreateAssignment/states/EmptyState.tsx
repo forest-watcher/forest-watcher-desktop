@@ -1,23 +1,57 @@
+import * as turf from "@turf/turf";
 import Icon from "components/extensive/Icon";
 import List from "components/extensive/List";
 import Button from "components/ui/Button/Button";
 import IconBubble from "components/ui/Icon/IconBubble";
-import { Dispatch, FC, SetStateAction } from "react";
+import useFindArea from "hooks/useFindArea";
+import { useAppDispatch } from "hooks/useRedux";
+import { GeoJSONSourceOptions } from "mapbox-gl";
+import { getGeoFromShape } from "modules/geostores";
+import { ChangeEvent, Dispatch, FC, SetStateAction, useRef } from "react";
 import { useFormContext } from "react-hook-form";
 import { FormattedMessage, useIntl } from "react-intl";
-import { useHistory, useLocation } from "react-router-dom";
+import { useHistory, useLocation, useParams } from "react-router-dom";
 import MapCard from "components/ui/Map/components/cards/MapCard";
 
 export interface IProps {
   setShowCreateAssignmentForm: Dispatch<SetStateAction<boolean>>;
+  setShapeFileGeoJSON: Dispatch<SetStateAction<GeoJSONSourceOptions["data"]>>;
 }
 
 const OpenAssignmentEmptyState: FC<IProps> = props => {
-  const { setShowCreateAssignmentForm } = props;
+  const { setShowCreateAssignmentForm, setShapeFileGeoJSON } = props;
   const intl = useIntl();
   const history = useHistory();
   const location = useLocation();
+  const { areaId } = useParams<{ areaId: string }>();
+  const selectedAreaDetails = useFindArea(areaId);
+  const fileInputRef = useRef<HTMLInputElement | null>(null);
   const { getValues, setValue } = useFormContext();
+  const dispatch = useAppDispatch();
+
+  const handleShapeFileUpload = async (e: ChangeEvent<HTMLInputElement>) => {
+    const shapeFile = e.target.files && e.target.files[0];
+    const maxFileSize = 1000000; //1MB
+
+    if (shapeFile && shapeFile.size <= maxFileSize) {
+      const geojson = (await dispatch(getGeoFromShape(shapeFile))) as any;
+
+      if (geojson && geojson.features && selectedAreaDetails) {
+        // https://turfjs.org/docs/#union
+        const geojsonParsed = geojson.features.reduce(turf.union);
+        // @ts-ignore
+        const selectedAreaParsed = selectedAreaDetails?.attributes?.geostore?.geojson.features.reduce(turf.union);
+
+        // @ts-ignore
+        const isWithin = turf.booleanWithin(geojsonParsed, selectedAreaParsed);
+
+        if (isWithin) {
+          setShapeFileGeoJSON(geojsonParsed);
+          setShowCreateAssignmentForm(true);
+        }
+      }
+    }
+  };
 
   return (
     <MapCard
@@ -58,7 +92,15 @@ const OpenAssignmentEmptyState: FC<IProps> = props => {
           )}
         />
 
-        <Button className="bg-white w-full" variant="secondary">
+        <input
+          ref={fileInputRef}
+          onChange={handleShapeFileUpload}
+          id="shapefile-input"
+          type="file"
+          className="hidden"
+          accept=".kml"
+        />
+        <Button className="bg-white w-full" variant="secondary" onClick={() => fileInputRef.current?.click()}>
           <FormattedMessage id="assignments.empty.upload.shapefile" />
         </Button>
       </div>
