@@ -7,7 +7,7 @@ import {
   ViirsRequestThresholds
 } from "constants/alerts";
 import { FC, useCallback, useEffect, useMemo, useState } from "react";
-import { useForm, FormProvider, useWatch } from "react-hook-form";
+import { useForm, FormProvider } from "react-hook-form";
 import { Route, RouteComponentProps, Switch, useHistory, useRouteMatch } from "react-router-dom";
 import UserAreasMap from "components/user-areas-map/UserAreasMap";
 import { LAYERS } from "pages/reports/investigation/control-panels/start-investigation/StartInvestigation";
