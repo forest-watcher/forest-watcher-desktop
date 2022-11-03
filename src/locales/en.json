@@ -386,6 +386,7 @@
   "template.details": "Template Details",
   "template.version": "Template Version",
   "template.language": "Default Language",
+  "template.areas": "Areas assigned to this template",
   "templates.table.template": "Template",
   "templates.table.version": "Version",
   "templates.table.area": "Area",
