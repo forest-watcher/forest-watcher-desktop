@@ -4,14 +4,16 @@ import { GeojsonModel } from "generated/core/coreSchemas";
 import useZoomToGeojson from "hooks/useZoomToArea";
 import CreateAssignmentForm from "pages/reports/investigation/control-panels/CreateAssignment/states/CreateAssignmentForm";
 import { FC, useCallback, useEffect, useState } from "react";
-import { useFormContext } from "react-hook-form";
+import { useFormContext, useWatch } from "react-hook-form";
 import OpenAssignmentEmptyState from "pages/reports/investigation/control-panels/CreateAssignment/states/EmptyState";
+import { LngLat } from "react-map-gl";
 import { useParams } from "react-router-dom";
 
 export interface IProps {}
 
 const CreateAssignmentControlPanel: FC<IProps> = props => {
-  const { getValues } = useFormContext();
+  const { control, getValues, setValue } = useFormContext();
+  const selectedAlertsWatcher = useWatch({ control, name: "selectedAlerts" });
   const { areaId } = useParams<{ areaId: string }>();
   const [showCreateAssignmentForm, setShowCreateAssignmentForm] = useState(false);
   const [shapeFileGeoJSON, setShapeFileGeoJSON] = useState<GeojsonModel>();
@@ -20,13 +22,16 @@ const CreateAssignmentControlPanel: FC<IProps> = props => {
   useZoomToGeojson(shapeFileGeoJSON);
 
   useEffect(() => {
+    // Skip the Empty state on initial render, if alerts have already been selected
     if (getValues("selectedAlerts") && getValues("selectedAlerts").length) {
-      // Skip the Empty state on initial render, if alerts have already been selected
       setShowCreateAssignmentForm(true);
     }
   }, [getValues]);
 
-  const handleSingleLocationSelect = useCallback((e: any) => console.log(e), []);
+  const handleSingleLocationSelect = useCallback(
+    (location?: LngLat) => setValue("singleSelectedLocation", location),
+    [setValue]
+  );
 
   return (
     <>

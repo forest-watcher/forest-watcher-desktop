@@ -7,13 +7,13 @@ import * as turf from "@turf/turf";
 export interface IProps {
   id: string;
   withinLayerId: string;
-  onSelectedLocationChange?: (point: LngLat | null) => void;
+  onSelectedLocationChange?: (point?: LngLat) => void;
 }
 
 const SingleLocationLayer: FC<IProps> = props => {
   const { id, withinLayerId, onSelectedLocationChange } = props;
   const { current: map } = useMap();
-  const [selectedLocationPoint, setSelectedLocationPoint] = useState<LngLat | null>(null);
+  const [selectedLocationPoint, setSelectedLocationPoint] = useState<LngLat>();
 
   useEffect(() => {
     onSelectedLocationChange?.(selectedLocationPoint);
@@ -35,7 +35,7 @@ const SingleLocationLayer: FC<IProps> = props => {
       if (allMouseFeatures && withInFeatures && allMouseFeatures.length === withInFeatures.length) {
         setSelectedLocationPoint(e.lngLat);
       } else {
-        setSelectedLocationPoint(null);
+        setSelectedLocationPoint(undefined);
       }
     };
 

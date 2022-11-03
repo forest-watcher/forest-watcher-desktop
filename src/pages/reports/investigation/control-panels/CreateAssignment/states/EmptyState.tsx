@@ -72,11 +72,14 @@ const OpenAssignmentEmptyState: FC<IProps> = props => {
       title={intl.formatMessage({ id: "assignment.create.new" })}
       onBack={() => {
         setValue("selectedAlerts", []);
+        setValue("singleSelectedLocation", undefined);
         history.push(location.pathname.replace("/assignment", ""));
       }}
       footer={
         <Button
-          disabled={!(getValues("selectedAlerts") && getValues("selectedAlerts").length)}
+          disabled={
+            !(getValues("selectedAlerts") && getValues("selectedAlerts").length) && !getValues("singleSelectedLocation")
+          }
           onClick={() => setShowCreateAssignmentForm(true)}
         >
           <FormattedMessage id="assignment.create" />

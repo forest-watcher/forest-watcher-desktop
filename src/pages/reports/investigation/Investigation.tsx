@@ -15,7 +15,7 @@ import { TParams } from "./types";
 import { TPropsFromRedux } from "./InvestigationContainer";
 import { BASEMAPS, PLANET_BASEMAP } from "constants/mapbox";
 import { TGetAllAnswers } from "services/reports";
-import { Layer, Source } from "react-map-gl";
+import { Layer, LngLat, Source } from "react-map-gl";
 import { setupMapImages } from "helpers/map";
 import { Map as MapInstance, MapboxEvent } from "mapbox-gl";
 
@@ -44,6 +44,7 @@ export type TFormValues = {
   alertTypesRequestThreshold: number;
   alertTypesViirsRequestThreshold: number;
   selectedAlerts: TAlertsById[];
+  singleSelectedLocation?: LngLat;
 };
 
 const InvestigationPage: FC<IProps> = props => {

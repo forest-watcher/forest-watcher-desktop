@@ -118,6 +118,7 @@ const CreateAssignmentForm: FC<IProps> = props => {
   const handleBack = () => {
     // Clear selected Alerts
     setParentValue("selectedAlerts", []);
+    setParentValue("singleSelectedLocation", undefined);
     history.push(location.pathname.replace("/assignment", ""));
   };
 
