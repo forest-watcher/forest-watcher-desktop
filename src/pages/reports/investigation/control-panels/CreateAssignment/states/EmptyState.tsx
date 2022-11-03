@@ -10,6 +10,7 @@ import { getGeoFromShape } from "modules/geostores";
 import { ChangeEvent, Dispatch, FC, SetStateAction, useRef } from "react";
 import { useFormContext } from "react-hook-form";
 import { FormattedMessage, useIntl } from "react-intl";
+import { toastr } from "react-redux-toastr";
 import { useHistory, useLocation, useParams } from "react-router-dom";
 import MapCard from "components/ui/Map/components/cards/MapCard";
 
@@ -48,8 +49,20 @@ const OpenAssignmentEmptyState: FC<IProps> = props => {
         if (isWithin) {
           setShapeFileGeoJSON(geojsonParsed);
           setShowCreateAssignmentForm(true);
+        } else {
+          toastr.error(
+            intl.formatMessage({ id: "areas.shapeFile.not.within" }),
+            intl.formatMessage({ id: "areas.shapeFile.not.within.desc" })
+          );
         }
+      } else {
+        toastr.error(intl.formatMessage({ id: "areas.fileInvalid" }), "");
       }
+    } else {
+      toastr.error(
+        intl.formatMessage({ id: "areas.fileTooLarge" }),
+        intl.formatMessage({ id: "areas.fileTooLargeDesc" })
+      );
     }
   };
 
