@@ -3,9 +3,9 @@ import Icon from "components/extensive/Icon";
 import List from "components/extensive/List";
 import Button from "components/ui/Button/Button";
 import IconBubble from "components/ui/Icon/IconBubble";
+import { GeojsonModel } from "generated/core/coreSchemas";
 import useFindArea from "hooks/useFindArea";
 import { useAppDispatch } from "hooks/useRedux";
-import { GeoJSONSourceOptions } from "mapbox-gl";
 import { getGeoFromShape } from "modules/geostores";
 import { ChangeEvent, Dispatch, FC, SetStateAction, useRef } from "react";
 import { useFormContext } from "react-hook-form";
@@ -16,7 +16,7 @@ import MapCard from "components/ui/Map/components/cards/MapCard";
 
 export interface IProps {
   setShowCreateAssignmentForm: Dispatch<SetStateAction<boolean>>;
-  setShapeFileGeoJSON: Dispatch<SetStateAction<GeoJSONSourceOptions["data"]>>;
+  setShapeFileGeoJSON: Dispatch<SetStateAction<GeojsonModel | undefined>>;
 }
 
 const OpenAssignmentEmptyState: FC<IProps> = props => {

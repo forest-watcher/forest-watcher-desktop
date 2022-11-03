@@ -9,6 +9,7 @@ import MapCard from "components/ui/Map/components/cards/MapCard";
 import { DEFAULT_TEMPLATE_ID } from "constants/global";
 import { useGetV3GfwTemplates, usePostV3GfwAssignments } from "generated/core/coreComponents";
 import { AssignmentBody } from "generated/core/coreRequestBodies";
+import { GeojsonModel } from "generated/core/coreSchemas";
 import { useAccessToken } from "hooks/useAccessToken";
 import useFindArea from "hooks/useFindArea";
 import useGetUserId from "hooks/useGetUserId";
@@ -21,7 +22,9 @@ import { useHistory, useLocation, useParams } from "react-router-dom";
 import yup from "configureYup";
 import { yupResolver } from "@hookform/resolvers/yup/dist/yup";
 
-export interface IProps {}
+export interface IProps {
+  shapeFileGeoJSON?: GeojsonModel;
+}
 
 type TCreateAssignmentFormFields = {
   priority: number;
@@ -47,6 +50,7 @@ const createAssignmentFormSchema = yup
   .required();
 
 const CreateAssignmentForm: FC<IProps> = props => {
+  const { shapeFileGeoJSON } = props;
   const intl = useIntl();
   const history = useHistory();
   const location = useLocation();
@@ -103,20 +107,28 @@ const CreateAssignmentForm: FC<IProps> = props => {
     const selectedAlerts = getParentValues("selectedAlerts") as TAlertsById[];
 
     const body: AssignmentBody = {
-      // @ts-ignore ToDo: update when endpoint is updated
-      location: selectedAlerts.map(alert => ({
-        lat: alert.data.latitude,
-        lon: alert.data.longitude,
-        alertType: alert.data.alertType
-      })),
       priority: assignmentFormValues.priority,
       // @ts-ignore
       monitors: [...new Set(assignmentFormValues.monitors)],
       notes: assignmentFormValues.notes,
       areaId: areaId,
+      // @ts-ignore ToDo: update when endpoint is updated
       templateIds: assignmentFormValues.templates,
       status: "open" // Default
     };
+
+    if (shapeFileGeoJSON) {
+      // Assign the custom shape file to the Assignment
+      body.geostore = shapeFileGeoJSON;
+    } else if (selectedAlerts) {
+      // Else use the selected Alerts on Map
+      // @ts-ignore ToDo: update when endpoint is updated
+      body.location = selectedAlerts.map(alert => ({
+        lat: alert.data.latitude,
+        lon: alert.data.longitude,
+        alertType: alert.data.alertType
+      }));
+    }
 
     // Submit assignment to endpoint
     try {
