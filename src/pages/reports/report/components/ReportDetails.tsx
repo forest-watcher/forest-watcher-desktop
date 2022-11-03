@@ -14,18 +14,14 @@ const ReportDetails = ({ answer, report }: ReportDetailsProps) => {
 
   return (
     <section className="row column py-section">
-      <h1 className="font-base text-[36px] font-light text-gray-700 mb-10">
-        {
-          // @ts-expect-error
-          report?.data.attributes.name.en
-        }
-      </h1>
+      <h1 className="font-base text-4xl font-light text-gray-700 mb-10">{answer?.attributes?.reportName}</h1>
       <section className="grid md:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-4">
         <IconCard iconName={"check"} title="Completed Date" text={moment(createdAt).format("MMM DD, YYYY")} />
         <IconCard iconName={"footprint"} title="Monitor" text={fullName} />
         <IconCard iconName={"target"} title="Monitor Coordinates" text={coordinates} />
         <IconCard iconName={"area"} title="Area" text={areaOfInterestName} />
-        <IconCard iconName={"flag"} textLink="/" title="Original Assignment" text="Assignment Name" />
+        {/* // TODO: Show this back once we understand how the assignments will be attached to answer/report response.  */}
+        {/* <IconCard iconName={"flag"} textLink="/" title="Original Assignment" text="Assignment Name" /> */}
       </section>
     </section>
   );
