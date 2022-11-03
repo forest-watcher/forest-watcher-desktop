@@ -7,7 +7,7 @@ import {
   ViirsRequestThresholds
 } from "constants/alerts";
 import { FC, useCallback, useEffect, useMemo, useState } from "react";
-import { useForm, FormProvider } from "react-hook-form";
+import { useForm, FormProvider, useWatch } from "react-hook-form";
 import { Route, RouteComponentProps, Switch, useHistory, useRouteMatch } from "react-router-dom";
 import UserAreasMap from "components/user-areas-map/UserAreasMap";
 import { LAYERS } from "pages/reports/investigation/control-panels/start-investigation/StartInvestigation";
@@ -102,6 +102,7 @@ const InvestigationPage: FC<IProps> = props => {
     () => ({
       layers: [LAYERS.reports],
       currentMap: basemapKey,
+      showPlanetImagery: [],
       showAlerts: ["true"],
       showOpenAssignments: ["true"],
       alertTypesShown: "all",
@@ -125,15 +126,16 @@ const InvestigationPage: FC<IProps> = props => {
         key => BASEMAPS[key as keyof typeof BASEMAPS].key === values.currentMap
       );
       const basemap = BASEMAPS[basemapKey as keyof typeof BASEMAPS];
+
       if (basemap) {
         setMapStyle(basemap.style);
-        setIsPlanet(values.currentMap === PLANET_BASEMAP.key);
       }
 
       setCurrentPlanetPeriod(values.currentPlanetPeriod || "");
       setCurrentProc(values.currentPlanetImageType === "nat" ? "" : values.currentPlanetImageType || "");
       setContextualLayerUrls(values.contextualLayers?.map(layer => selectedLayers[layer].attributes.url) || []);
       setBasemapKey(values.currentMap);
+      setIsPlanet(values.showPlanetImagery?.[0] === PLANET_BASEMAP.key);
     });
 
     return () => subscription.unsubscribe();

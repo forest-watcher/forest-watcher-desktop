@@ -68,8 +68,11 @@ const Basemaps: FC<IProps> = ({ defaultBasemap }) => {
   }, [basemaps, watcher.currentPlanetImageType]);
 
   useEffect(() => {
-    methods.resetField("currentPlanetPeriod", { defaultValue: baseMapPeriods[baseMapPeriods.length - 1]?.value });
-  }, [methods, baseMapPeriods]);
+    return () => {
+      methods.resetField("currentPlanetPeriod", { defaultValue: baseMapPeriods[baseMapPeriods.length - 1]?.value });
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <>
@@ -125,7 +128,7 @@ const Basemaps: FC<IProps> = ({ defaultBasemap }) => {
               key={watcher.currentPlanetImageType}
               className="u-margin-bottom-20"
             />
-            {!isMobile && (
+            <OptionalWrapper data={!isMobile}>
               <div className="u-margin-bottom-40">
                 <Timeframe
                   periods={baseMapPeriods}
@@ -137,7 +140,7 @@ const Basemaps: FC<IProps> = ({ defaultBasemap }) => {
                   yearGetter="metadata.year"
                 />
               </div>
-            )}
+            </OptionalWrapper>
             <Select
               id="colour"
               formHook={methods}
