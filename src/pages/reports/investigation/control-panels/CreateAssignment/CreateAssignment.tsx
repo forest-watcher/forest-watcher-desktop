@@ -4,7 +4,7 @@ import { GeojsonModel } from "generated/core/coreSchemas";
 import useZoomToGeojson from "hooks/useZoomToArea";
 import CreateAssignmentForm from "pages/reports/investigation/control-panels/CreateAssignment/states/CreateAssignmentForm";
 import { FC, useCallback, useEffect, useState } from "react";
-import { useFormContext, useWatch } from "react-hook-form";
+import { useFormContext } from "react-hook-form";
 import OpenAssignmentEmptyState from "pages/reports/investigation/control-panels/CreateAssignment/states/EmptyState";
 import { LngLat } from "react-map-gl";
 import { useParams } from "react-router-dom";
@@ -12,8 +12,7 @@ import { useParams } from "react-router-dom";
 export interface IProps {}
 
 const CreateAssignmentControlPanel: FC<IProps> = props => {
-  const { control, getValues, setValue } = useFormContext();
-  const selectedAlertsWatcher = useWatch({ control, name: "selectedAlerts" });
+  const { getValues, setValue } = useFormContext();
   const { areaId } = useParams<{ areaId: string }>();
   const [showCreateAssignmentForm, setShowCreateAssignmentForm] = useState(false);
   const [shapeFileGeoJSON, setShapeFileGeoJSON] = useState<GeojsonModel>();
@@ -44,12 +43,13 @@ const CreateAssignmentControlPanel: FC<IProps> = props => {
         <CreateAssignmentForm shapeFileGeoJSON={shapeFileGeoJSON} />
       )}
 
+      {/* User is able to add a shapefile */}
       {shapeFileGeoJSON && (
         // @ts-ignore
         <Polygon key="assignment-shape-file" id="assignment-shape-file" label="" data={shapeFileGeoJSON} />
       )}
 
-      {/* User is also able to select a single location */}
+      {/* User is able to select a single location */}
       <SingleLocationLayer
         id="create-assignment-single-location"
         withinLayerId={areaId}
