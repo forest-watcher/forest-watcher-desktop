@@ -40,16 +40,28 @@ const AreaAssignmentMapSource: FC<IProps> = props => {
     for (let i = 0; i < data.data.length; i++) {
       const assignment = data.data[i];
 
-      // @ts-ignore
-      const pointFeatures = turf.points(assignment.attributes?.location?.map(location => [location.lon, location.lat]));
+      let calculatedCenter;
+      if (assignment.attributes?.location) {
+        // Alerts are assigned to the Assignment
+        const pointFeatures = turf.points(
+          // @ts-ignore
+          assignment.attributes?.location?.map(location => [location.lon, location.lat])
+        );
 
-      // Find center of all the Alerts
-      const calculatedCenter = turf.center(pointFeatures);
-      assignmentCenters.push({
-        id: assignment.id!,
-        position: [calculatedCenter.geometry.coordinates[0], calculatedCenter.geometry.coordinates[1]],
-        type: assignment.attributes?.createdBy === userId ? AssignmentLayerType.creator : AssignmentLayerType.default
-      });
+        // Find center of all the Alerts
+        calculatedCenter = turf.center(pointFeatures);
+      } else if (assignment.attributes?.geostore?.geojson) {
+        // A GeoStore location is assigned to the Assignment
+        calculatedCenter = turf.centerOfMass(assignment.attributes?.geostore?.geojson);
+      }
+
+      if (calculatedCenter) {
+        assignmentCenters.push({
+          id: assignment.id!,
+          position: [calculatedCenter.geometry.coordinates[0], calculatedCenter.geometry.coordinates[1]],
+          type: assignment.attributes?.createdBy === userId ? AssignmentLayerType.creator : AssignmentLayerType.default
+        });
+      }
     }
 
     return assignmentCenters;
