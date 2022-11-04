@@ -128,8 +128,6 @@ const CreateAssignmentForm: FC<IProps> = props => {
     const selectedAlerts = getParentValues("selectedAlerts") as TAlertsById[];
     const singleSelectedLocation = getParentValues("singleSelectedLocation") as LngLat;
 
-    console.log(selectedAlerts, singleSelectedLocation);
-
     const body: AssignmentBody = {
       priority: assignmentFormValues.priority,
       // @ts-ignore
