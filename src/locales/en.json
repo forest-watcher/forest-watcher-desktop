@@ -576,6 +576,8 @@
   "assignments.details.title": "Open Assignment: {name}",
   "assignments.details.createAt": "Date Created",
   "assignments.details.assigned.to.user": "This assignment is assigned to you",
+  "assignments.details.edit.btn": "Edit Assignment",
+  "assignments.details.view.btn": "View Assignment",
   "assignment.create.form.monitor.empty": "No Monitors Selected",
   "assignment.create.form.monitor.label": "Monitors",
   "assignment.create.form.monitor.add": "Add Monitor",

@@ -6,6 +6,7 @@ import { FC } from "react";
 import { useIntl } from "react-intl";
 import MapCard from "components/ui/Map/components/cards/MapCard";
 import moment from "moment";
+import { Link, useLocation } from "react-router-dom";
 
 export interface IProps {
   selectedAssignment?: AssignmentResponse["data"];
@@ -15,6 +16,7 @@ const AssignmentDetailCard: FC<IProps> = props => {
   const { selectedAssignment } = props;
   const intl = useIntl();
   const userId = useGetUserId();
+  const { pathname } = useLocation();
 
   if (!selectedAssignment) return null;
 
@@ -24,6 +26,18 @@ const AssignmentDetailCard: FC<IProps> = props => {
       title={intl.formatMessage({ id: "assignments.details.title" }, { name: selectedAssignment?.attributes?.name })}
       titleIconName="AssignmentFlag"
       position="bottom-right"
+      footer={
+        <>
+          {selectedAssignment?.attributes?.createdBy === userId && (
+            <Link className="c-button c-button--secondary" to={pathname}>
+              {intl.formatMessage({ id: "assignments.details.edit.btn" })}
+            </Link>
+          )}
+          <Link className="c-button c-button--primary" to={pathname}>
+            {intl.formatMessage({ id: "assignments.details.view.btn" })}
+          </Link>
+        </>
+      }
     >
       <OptionalWrapper data={selectedAssignment?.attributes?.monitors.findIndex(monitor => monitor === userId) !== -1}>
         <div className="text-gray-700 text-base p-4 bg-gray-400 rounded-md mb-6 mt-1">
