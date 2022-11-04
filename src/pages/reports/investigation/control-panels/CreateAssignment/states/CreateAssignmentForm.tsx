@@ -19,6 +19,7 @@ import { FC, useEffect, useMemo, useState } from "react";
 import { useForm, useFormContext } from "react-hook-form";
 import useGetUserTeamsWithActiveMembers from "hooks/querys/teams/useGetUserTeamsWithActiveMembers";
 import { FormattedMessage, useIntl } from "react-intl";
+import { LngLat } from "react-map-gl";
 import { toastr } from "react-redux-toastr";
 import { useHistory, useLocation, useParams } from "react-router-dom";
 import yup from "configureYup";
@@ -118,12 +119,14 @@ const CreateAssignmentForm: FC<IProps> = props => {
   const handleBack = () => {
     // Clear selected Alerts
     setParentValue("selectedAlerts", []);
+    setParentValue("singleSelectedLocation", undefined);
     history.push(location.pathname.replace("/assignment", ""));
   };
 
   const handlePostAssignment = async () => {
     const assignmentFormValues = getAssignmentValues();
     const selectedAlerts = getParentValues("selectedAlerts") as TAlertsById[];
+    const singleSelectedLocation = getParentValues("singleSelectedLocation") as LngLat;
 
     const body: AssignmentBody = {
       priority: assignmentFormValues.priority,
@@ -139,6 +142,15 @@ const CreateAssignmentForm: FC<IProps> = props => {
     if (shapeFileGeoJSON) {
       // Assign the custom shape file to the Assignment
       body.geostore = shapeFileGeoJSON;
+    } else if (singleSelectedLocation) {
+      // Else use the Single Selected Location
+      // @ts-ignore ToDo: update when endpoint is updated
+      body.location = [
+        {
+          lat: singleSelectedLocation.lat,
+          lon: singleSelectedLocation.lng
+        }
+      ];
     } else if (selectedAlerts) {
       // Else use the selected Alerts on Map
       // @ts-ignore ToDo: update when endpoint is updated
