@@ -59,9 +59,6 @@ const StartInvestigationControlPanel: FC<IProps> = props => {
 
   const { filters } = useControlPanelReportFilters(answers);
 
-  // @ts-ignore
-  useZoomToGeojson(selectedAreaGeoData as AllGeoJSON);
-
   const methods = useFormContext<TFormValues>();
   const { register, control } = methods;
 
