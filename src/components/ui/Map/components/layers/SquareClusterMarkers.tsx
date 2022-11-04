@@ -38,6 +38,7 @@ export interface IProps {
   // Will a click on the map, de-select the selectedIds?
   canMapDeselect?: boolean;
   onSelectionChange?: (selectedIds: string[] | null) => void;
+  locked?: boolean;
 }
 
 const SquareClusterMarkers: FC<IProps> = props => {
@@ -51,7 +52,8 @@ const SquareClusterMarkers: FC<IProps> = props => {
     pointStyle = defaultPointStyle,
     canMultiSelect = false,
     canMapDeselect = false,
-    onSelectionChange
+    onSelectionChange,
+    locked = false
   } = props;
   const { current: map } = useMap();
   const [hoveredPoint, setHoveredPoint] = useState<string | null>(null);
@@ -221,12 +223,14 @@ const SquareClusterMarkers: FC<IProps> = props => {
       map?.once("click", id, handleSourceMouseClick);
     };
 
-    map?.on("preclick", handlePreClick);
+    if (!locked) {
+      map?.on("preclick", handlePreClick);
+    }
 
     return () => {
       map?.off("preclick", handlePreClick);
     };
-  }, [id, map, onSquareSelect, canMultiSelect, canMapDeselect]);
+  }, [id, map, onSquareSelect, canMultiSelect, canMapDeselect, locked]);
 
   useEffect(() => {
     onSelectionChange?.(selectedPoints);
