@@ -58,6 +58,7 @@ const InvestigationPage: FC<IProps> = props => {
   const [basemapKey, setBasemapKey] = useState<undefined | string>();
   const history = useHistory();
   const [filteredAnswers, setFilteredAnswers] = useState<TGetAllAnswers["data"] | null>(null);
+  const [lockAlertSelections, setLockAlertSelections] = useState(false);
   let selectedAreaMatch = useRouteMatch<TParams>({ path: "/reporting/investigation/:areaId", exact: false });
   let investigationMatch = useRouteMatch<TParams>({ path: "/reporting/investigation/:areaId/start", exact: false });
 
@@ -189,7 +190,7 @@ const InvestigationPage: FC<IProps> = props => {
           </Route>
 
           <Route exact path={`${match.url}/:areaId/start/assignment`}>
-            <CreateAssignmentControlPanel />
+            <CreateAssignmentControlPanel setLockAlertSelections={setLockAlertSelections} />
           </Route>
         </Switch>
 
@@ -209,6 +210,7 @@ const InvestigationPage: FC<IProps> = props => {
                   ? watcher.alertTypesRequestThreshold
                   : watcher.alertTypesViirsRequestThreshold
               }
+              locked={lockAlertSelections}
             />
           )}
 

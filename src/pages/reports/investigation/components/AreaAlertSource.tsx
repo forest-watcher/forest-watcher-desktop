@@ -13,10 +13,11 @@ export interface IProps {
   areaId?: string;
   alertTypesToShow?: EAlertTypes[];
   alertRequestThreshold?: number;
+  locked?: boolean;
 }
 
 const AreaAlertMapSource: FC<IProps> = props => {
-  const { areaId, alertTypesToShow, alertRequestThreshold } = props;
+  const { areaId, alertTypesToShow, alertRequestThreshold, locked = false } = props;
   const { current: mapRef } = useMap();
   const { setValue, control } = useFormContext();
   const selectedAlerts = useWatch({ control, name: "selectedAlerts" });
@@ -95,6 +96,7 @@ const AreaAlertMapSource: FC<IProps> = props => {
         onSelectionChange={handleAlertSelectionChange}
         canMultiSelect
         canMapDeselect
+        locked={locked}
       />
 
       <AlertsDetailCard selectedAlerts={selectedAlerts} />

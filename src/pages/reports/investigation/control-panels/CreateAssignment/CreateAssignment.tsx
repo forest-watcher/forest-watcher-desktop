@@ -3,15 +3,18 @@ import Polygon from "components/ui/Map/components/layers/Polygon";
 import { GeojsonModel } from "generated/core/coreSchemas";
 import useZoomToGeojson from "hooks/useZoomToArea";
 import CreateAssignmentForm from "pages/reports/investigation/control-panels/CreateAssignment/states/CreateAssignmentForm";
-import { FC, useCallback, useEffect, useState } from "react";
+import { Dispatch, FC, SetStateAction, useCallback, useEffect, useState } from "react";
 import { useFormContext } from "react-hook-form";
 import OpenAssignmentEmptyState from "pages/reports/investigation/control-panels/CreateAssignment/states/EmptyState";
 import { LngLat } from "react-map-gl";
 import { useParams } from "react-router-dom";
 
-export interface IProps {}
+export interface IProps {
+  setLockAlertSelections: Dispatch<SetStateAction<boolean>>;
+}
 
 const CreateAssignmentControlPanel: FC<IProps> = props => {
+  const { setLockAlertSelections } = props;
   const { getValues, setValue } = useFormContext();
   const { areaId } = useParams<{ areaId: string }>();
   const [showCreateAssignmentForm, setShowCreateAssignmentForm] = useState(false);
@@ -26,6 +29,12 @@ const CreateAssignmentControlPanel: FC<IProps> = props => {
       setShowCreateAssignmentForm(true);
     }
   }, [getValues]);
+
+  useEffect(() => {
+    setLockAlertSelections(showCreateAssignmentForm);
+
+    return () => setLockAlertSelections(false);
+  }, [setLockAlertSelections, showCreateAssignmentForm]);
 
   const handleSingleLocationSelect = useCallback(
     (location?: LngLat) => setValue("singleSelectedLocation", location),
@@ -54,6 +63,7 @@ const CreateAssignmentControlPanel: FC<IProps> = props => {
         id="create-assignment-single-location"
         withinLayerId={areaId}
         onSelectedLocationChange={handleSingleLocationSelect}
+        locked={showCreateAssignmentForm}
       />
     </>
   );

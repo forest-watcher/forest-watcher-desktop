@@ -8,10 +8,11 @@ export interface IProps {
   id: string;
   withinLayerId: string;
   onSelectedLocationChange?: (point?: LngLat) => void;
+  locked?: boolean;
 }
 
 const SingleLocationLayer: FC<IProps> = props => {
-  const { id, withinLayerId, onSelectedLocationChange } = props;
+  const { id, withinLayerId, onSelectedLocationChange, locked = false } = props;
   const { current: map } = useMap();
   const [selectedLocationPoint, setSelectedLocationPoint] = useState<LngLat>();
 
@@ -39,12 +40,14 @@ const SingleLocationLayer: FC<IProps> = props => {
       }
     };
 
-    map?.on("click", withinLayerId, handlePreClick);
+    if (!locked) {
+      map?.on("click", withinLayerId, handlePreClick);
+    }
 
     return () => {
       map?.off("click", withinLayerId, handlePreClick);
     };
-  }, [map, withinLayerId]);
+  }, [map, withinLayerId, locked]);
 
   const featureData = selectedLocationPoint
     ? turf.point([selectedLocationPoint?.lng, selectedLocationPoint?.lat], {
