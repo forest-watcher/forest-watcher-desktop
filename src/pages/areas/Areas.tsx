@@ -23,6 +23,7 @@ import { MapboxEvent, Map as MapInstance } from "mapbox-gl";
 import classNames from "classnames";
 import { fireGAEvent } from "helpers/analytics";
 import { AreaActions, AreaLabel } from "types/analytics";
+import AreasOnboarding from "components/onboarding/monitoring/AreasOnboarding";
 
 interface IProps extends TPropsFromRedux {
   getTeamMembers: (teamId: string) => void;
@@ -106,6 +107,7 @@ const Areas: FC<IProps> = props => {
 
   return (
     <div className="c-areas">
+      <AreasOnboarding />
       <Hero
         title="areas.name"
         actions={

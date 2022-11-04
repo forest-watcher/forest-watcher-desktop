@@ -27,7 +27,7 @@ const steps: OnboardingStep[] = [
   }
 ];
 
-const MonitoringOnboarding = () => {
+const AreasOnboarding = () => {
   const { get, set } = useLocalStorage();
   const [show, setShow] = useState<boolean>(false);
 
@@ -35,7 +35,7 @@ const MonitoringOnboarding = () => {
    * Handles check onboarded in LS and conditionally show Monitoring onboarding.
    */
   useEffect(() => {
-    const storedKey = "monitoring-onboarding";
+    const storedKey = "onboarding";
     const onboarded = get(storedKey);
 
     if (!onboarded) {
@@ -53,4 +53,4 @@ const MonitoringOnboarding = () => {
   );
 };
 
-export default MonitoringOnboarding;
+export default AreasOnboarding;
