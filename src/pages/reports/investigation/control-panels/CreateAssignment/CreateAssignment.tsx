@@ -49,7 +49,11 @@ const CreateAssignmentControlPanel: FC<IProps> = props => {
           setShapeFileGeoJSON={setShapeFileGeoJSON}
         />
       ) : (
-        <CreateAssignmentForm shapeFileGeoJSON={shapeFileGeoJSON} />
+        <CreateAssignmentForm
+          setShowCreateAssignmentForm={setShowCreateAssignmentForm}
+          setShapeFileGeoJSON={setShapeFileGeoJSON}
+          shapeFileGeoJSON={shapeFileGeoJSON}
+        />
       )}
 
       {/* User is able to add a shapefile */}

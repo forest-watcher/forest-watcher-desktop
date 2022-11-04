@@ -4,7 +4,6 @@ import { TFormValues } from "pages/reports/investigation/Investigation";
 import { Link, useHistory, useLocation, useParams } from "react-router-dom";
 import { FC, useCallback, useEffect, useMemo, useState } from "react";
 import { toastr } from "react-redux-toastr";
-import { AllGeoJSON } from "@turf/turf";
 import { useAppSelector } from "hooks/useRedux";
 import { TParams } from "pages/reports/investigation/types";
 import MapCard from "components/ui/Map/components/cards/MapCard";
@@ -13,7 +12,6 @@ import { FormattedMessage, useIntl } from "react-intl";
 import ToggleGroup from "components/ui/Form/ToggleGroup";
 import { useFormContext, useWatch } from "react-hook-form";
 import { TPropsFromRedux } from "pages/reports/investigation/control-panels/start-investigation/StartInvestigationContainer";
-import useZoomToGeojson from "hooks/useZoomToArea";
 import DataFilter from "components/ui/DataFilter/DataFilter";
 import useControlPanelReportFilters from "pages/reports/reports/useControlPanelReportFilters";
 import { TGetAllAnswers } from "services/reports";
@@ -58,9 +56,6 @@ const StartInvestigationControlPanel: FC<IProps> = props => {
   const intl = useIntl();
 
   const { filters } = useControlPanelReportFilters(answers);
-
-  // @ts-ignore
-  useZoomToGeojson(selectedAreaGeoData as AllGeoJSON);
 
   const methods = useFormContext<TFormValues>();
   const { register, control } = methods;
