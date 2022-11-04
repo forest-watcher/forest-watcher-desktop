@@ -6,7 +6,6 @@ import { IProps as ITabGroupProps } from "components/ui/TabGroup/TabGroup";
 import InvestigationPage from "./investigation/InvestigationContainer";
 import ReportsPage from "./reports/ReportsContainer";
 import classnames from "classnames";
-import MonitoringOnboarding from "components/onboarding/monitoring/MonitoringOnboarding";
 import Assignments from "./assignments/Assignments";
 
 type TParams = {
@@ -49,7 +48,6 @@ const Reports: FC<IProps> = props => {
     <Redirect to={INVESTIGATION_PATH} />
   ) : (
     <div className={classnames(match.url.includes(INVESTIGATION_PATH) && "l-full-page-map")}>
-      <MonitoringOnboarding />
       <Hero title="reports.name" pageTabs={{ value: reportingTab, options: pageTabs }} />
       <Switch>
         <Route path={INVESTIGATION_PATH} component={InvestigationPage} />
