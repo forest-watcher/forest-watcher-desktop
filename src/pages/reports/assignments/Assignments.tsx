@@ -1,12 +1,14 @@
 import LoadingWrapper from "components/extensive/LoadingWrapper";
 import Article from "components/layouts/Article";
 import Button from "components/ui/Button/Button";
+import DataFilter from "components/ui/DataFilter/DataFilter";
 import DataTable from "components/ui/DataTable/DataTable";
 import { useGetV3GfwUser } from "generated/core/coreComponents";
 import { sortByDateString, sortByString } from "helpers/table";
 import { useAccessToken } from "hooks/useAccessToken";
 import { useMemo, useState } from "react";
 import { FormattedMessage, useIntl } from "react-intl";
+import useAssignmentsFilters from "./useAssignmentsFilter";
 
 export type TAssignmentsDataTable = {
   id: string;
@@ -14,6 +16,14 @@ export type TAssignmentsDataTable = {
   area: string;
   alertType: any;
   status: string;
+  priority: string;
+};
+
+export type TAssignmentsFilterFields = {
+  area: string;
+  status: string;
+  timeFrame: string;
+  alertType: string;
   priority: string;
 };
 
@@ -31,11 +41,14 @@ const Assignments = () => {
       id: assignment.id ?? "",
       createdAt: assignment.attributes?.createdAt ?? "",
       area: assignment.attributes?.areaName ?? "-",
-      alertType: assignment.attributes?.location,
+      alertType: assignment.attributes?.location ?? [],
       priority: assignment.attributes?.priority ?? "",
       status: assignment.attributes?.status ?? ""
     })) as TAssignmentsDataTable[];
   }, [assignmentsData]);
+
+  const [filteredRows, setFilteredRows] = useState<TAssignmentsDataTable[]>(rows);
+  const { filters, extraFilters } = useAssignmentsFilters(assignmentsData?.data);
 
   return (
     <div className="l-content">
@@ -49,9 +62,16 @@ const Assignments = () => {
             </Button>
           }
         >
+          <DataFilter
+            filters={filters}
+            extraFilters={extraFilters}
+            onFiltered={(resp: TAssignmentsDataTable[]) => setFilteredRows(resp)}
+            options={rows}
+            className="c-data-filter--above-table"
+          />
           <DataTable
             className="u-w-100"
-            rows={rows}
+            rows={filteredRows}
             isPaginated
             onSelect={setSelectedAssignments}
             selectFindGetter="id"
