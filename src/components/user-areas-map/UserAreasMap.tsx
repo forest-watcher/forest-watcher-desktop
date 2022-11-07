@@ -14,8 +14,9 @@ import { IPlanetBasemap } from "helpers/basemap";
 import ReportDetailCard from "components/ui/Map/components/cards/ReportDetailContainer";
 import { getReportAlertsByName } from "helpers/reports";
 import { TAnswer } from "components/ui/Map/components/cards/ReportDetail";
+import { ProcTypes } from "pages/reports/investigation/Investigation";
 
-interface IProps extends IMapProps {
+export interface IProps extends IMapProps {
   // Should be a memorised function! useCallBack()
   onAreaSelect?: IPolygonProps["onClick"];
   // Should be a memorised function! useCallBack()
@@ -25,7 +26,7 @@ interface IProps extends IMapProps {
   showReports?: boolean;
   answers?: TGetAllAnswers["data"];
   currentPlanetBasemap?: IPlanetBasemap;
-  currentProc?: "" | "cir";
+  currentProc?: ProcTypes;
   showTeamAreas?: boolean;
   cooperativeGestures?: boolean;
 }
