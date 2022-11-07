@@ -301,6 +301,7 @@ const CreateAssignmentForm: FC<IProps> = props => {
         <MultiSelectDialog.Preview
           className="mt-10"
           groups={templateGroups}
+          shouldDisplayGroupOptionsOnSeparateLines
           control={control}
           name="templates"
           error={formState.errors.templates}
