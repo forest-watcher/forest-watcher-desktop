@@ -23,6 +23,7 @@ const AreaAlertMapSource: FC<IProps> = props => {
   const { setValue, control } = useFormContext();
   const selectedAlerts = useWatch({ control, name: "selectedAlerts" });
   const [selectedAlertIds, setSelectedAlertIds] = useState<string[] | null>(null);
+  const [neighboringAlertIds, setNeighboringAlertIds] = useState<string[]>();
   const alerts = useGetAlertsForArea(areaId, alertTypesToShow, alertRequestThreshold);
 
   const [alertPoints, alertsById, pointsIndex] = useMemo(
@@ -64,12 +65,6 @@ const AreaAlertMapSource: FC<IProps> = props => {
     alerts.map(queryAlert => queryAlert.data) // ToDo: update when using fw_alerts endpoint
   );
 
-  const handleSelectNeighboringPoints = () => {
-    if (selectedAlerts && selectedAlerts?.length > 0) {
-      findNeighboringPoints(pointsIndex, selectedAlerts);
-    }
-  };
-
   const handleAlertSelectionChange = useCallback(
     (ids: string[] | null) => {
       setValue(
@@ -81,13 +76,23 @@ const AreaAlertMapSource: FC<IProps> = props => {
     [alertsById, setValue]
   );
 
+  const handleSelectNeighboringPoints = () => {
+    if (!neighboringAlertIds || !selectedAlertIds) return;
+
+    handleAlertSelectionChange([...selectedAlertIds, ...neighboringAlertIds]);
+  };
+
   useEffect(() => {
     // If all selected Alerts for parent form are removed
     // Set SelectedAlertIds to null so that the SquareClusterMarkers are cleared too
     if (selectedAlerts && selectedAlerts.length === 0) {
       setSelectedAlertIds(null);
     }
-  }, [selectedAlerts]);
+
+    if (selectedAlerts && selectedAlerts?.length > 0) {
+      setNeighboringAlertIds(findNeighboringPoints(pointsIndex, selectedAlerts).map(point => point.id));
+    }
+  }, [pointsIndex, selectedAlerts]);
 
   return (
     <>
@@ -112,7 +117,11 @@ const AreaAlertMapSource: FC<IProps> = props => {
         locked={locked}
       />
 
-      <AlertsDetailCard selectedAlerts={selectedAlerts} />
+      <AlertsDetailCard
+        selectedAlerts={selectedAlerts}
+        handleSelectNeighboringPoints={handleSelectNeighboringPoints}
+        canSelectNeighboringAlert={neighboringAlertIds?.length! > 0}
+      />
     </>
   );
 };
