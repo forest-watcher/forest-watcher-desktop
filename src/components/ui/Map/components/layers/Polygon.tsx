@@ -84,7 +84,10 @@ const Polygon: FC<IProps> = props => {
       {centrePoint && (
         <Source id={`label-${id}`} type="geojson" data={centrePoint} tolerance={0.00001}>
           {/* @ts-ignore */}
-          <Layer {...labelStyle} id={`label-${id}`} />
+          <Layer
+            {...{ ...labelStyle, layout: { ...labelStyle.layout, visibility: label ? "visible" : "none" } }}
+            id={`label-${id}`}
+          />
         </Source>
       )}
       <Source id={id} data={data as GeoJSONSourceOptions["data"]} type="geojson" tolerance={0.00001}>

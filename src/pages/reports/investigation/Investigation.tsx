@@ -1,4 +1,5 @@
 import OptionalWrapper from "components/extensive/OptionalWrapper";
+import { TAlertsById } from "components/ui/Map/components/cards/AlertsDetail";
 import {
   allDeforestationAlerts,
   DefaultRequestThresholds,
@@ -12,9 +13,9 @@ import UserAreasMap from "components/user-areas-map/UserAreasMap";
 import { LAYERS } from "pages/reports/investigation/control-panels/start-investigation/StartInvestigation";
 import { TParams } from "./types";
 import { TPropsFromRedux } from "./InvestigationContainer";
-import { BASEMAPS } from "constants/mapbox";
+import { BASEMAPS, PLANET_BASEMAP } from "constants/mapbox";
 import { TGetAllAnswers } from "services/reports";
-import { Layer, Source } from "react-map-gl";
+import { Layer, LngLat, Source } from "react-map-gl";
 import { setupMapImages } from "helpers/map";
 import { Map as MapInstance, MapboxEvent } from "mapbox-gl";
 
@@ -26,13 +27,14 @@ import AreaAlertsSource from "pages/reports/investigation/components/AreaAlertSo
 import AreaListControlPanel from "./control-panels/AreaList";
 import AreaDetailControlPanel from "pages/reports/investigation/control-panels/AreaDetail";
 import StartInvestigationControlPanel from "pages/reports/investigation/control-panels/start-investigation/StartInvestigationContainer";
-import AddAssignmentControlPanel from "pages/reports/investigation/control-panels/AddAssignment/AddAssignment";
+import CreateAssignmentControlPanel from "pages/reports/investigation/control-panels/CreateAssignment/CreateAssignment";
 
 interface IProps extends RouteComponentProps, TPropsFromRedux {}
 
 export type TFormValues = {
   layers?: string[];
   currentMap?: string;
+  showPlanetImagery?: string[];
   currentPlanetPeriod?: string;
   currentPlanetImageType?: "nat" | "cir";
   contextualLayers?: string[];
@@ -41,6 +43,8 @@ export type TFormValues = {
   alertTypesShown: "all" | EAlertTypes;
   alertTypesRequestThreshold: number;
   alertTypesViirsRequestThreshold: number;
+  selectedAlerts: TAlertsById[];
+  singleSelectedLocation?: LngLat;
 };
 
 const InvestigationPage: FC<IProps> = props => {
@@ -54,6 +58,7 @@ const InvestigationPage: FC<IProps> = props => {
   const [basemapKey, setBasemapKey] = useState<undefined | string>();
   const history = useHistory();
   const [filteredAnswers, setFilteredAnswers] = useState<TGetAllAnswers["data"] | null>(null);
+  const [lockAlertSelections, setLockAlertSelections] = useState(false);
   let selectedAreaMatch = useRouteMatch<TParams>({ path: "/reporting/investigation/:areaId", exact: false });
   let investigationMatch = useRouteMatch<TParams>({ path: "/reporting/investigation/:areaId/start", exact: false });
 
@@ -99,11 +104,13 @@ const InvestigationPage: FC<IProps> = props => {
     () => ({
       layers: [LAYERS.reports],
       currentMap: basemapKey,
+      showPlanetImagery: [],
       showAlerts: ["true"],
       showOpenAssignments: ["true"],
       alertTypesShown: "all",
       alertTypesRequestThreshold: DefaultRequestThresholds[0].requestThreshold,
-      alertTypesViirsRequestThreshold: ViirsRequestThresholds[0].requestThreshold
+      alertTypesViirsRequestThreshold: ViirsRequestThresholds[0].requestThreshold,
+      selectedAlerts: []
     }),
     [basemapKey]
   );
@@ -121,15 +128,16 @@ const InvestigationPage: FC<IProps> = props => {
         key => BASEMAPS[key as keyof typeof BASEMAPS].key === values.currentMap
       );
       const basemap = BASEMAPS[basemapKey as keyof typeof BASEMAPS];
+
       if (basemap) {
         setMapStyle(basemap.style);
-        setIsPlanet(values.currentMap === BASEMAPS.planet.key);
       }
 
       setCurrentPlanetPeriod(values.currentPlanetPeriod || "");
       setCurrentProc(values.currentPlanetImageType === "nat" ? "" : values.currentPlanetImageType || "");
       setContextualLayerUrls(values.contextualLayers?.map(layer => selectedLayers[layer].attributes.url) || []);
       setBasemapKey(values.currentMap);
+      setIsPlanet(values.showPlanetImagery?.[0] === PLANET_BASEMAP.key);
     });
 
     return () => subscription.unsubscribe();
@@ -184,7 +192,7 @@ const InvestigationPage: FC<IProps> = props => {
           </Route>
 
           <Route exact path={`${match.url}/:areaId/start/assignment`}>
-            <AddAssignmentControlPanel />
+            <CreateAssignmentControlPanel setLockAlertSelections={setLockAlertSelections} />
           </Route>
         </Switch>
 
@@ -204,10 +212,13 @@ const InvestigationPage: FC<IProps> = props => {
                   ? watcher.alertTypesRequestThreshold
                   : watcher.alertTypesViirsRequestThreshold
               }
+              locked={lockAlertSelections}
             />
           )}
 
-          {watcher.showOpenAssignments.includes("true") && <AreaAssignmentSource />}
+          {watcher.showOpenAssignments.includes("true") && (
+            <AreaAssignmentSource areaId={investigationMatch?.params.areaId} />
+          )}
         </OptionalWrapper>
       </FormProvider>
     </UserAreasMap>

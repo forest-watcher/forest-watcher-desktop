@@ -1,4 +1,5 @@
 import "../src/index.scss";
+import "../src/main.css";
 import { DEFAULT_LANGUAGE } from "constants/global";
 import { IntlProvider } from "react-intl";
 import translations from "locales/index.js";
@@ -11,18 +12,19 @@ export const parameters = {
   controls: {
     matchers: {
       color: /(background|color)$/i,
-      date: /Date$/,
-    },
-  },
-}
+      date: /Date$/
+    }
+  }
+};
 
 export const decorators = [
-  (Story) => {
+  Story => {
     return (
-    <Provider store={store}>
-      <IntlProvider locale={DEFAULT_LANGUAGE} messages={translations[DEFAULT_LANGUAGE]}>
-        <Story />
-      </IntlProvider>
-    </Provider>
-  )},
+      <Provider store={store}>
+        <IntlProvider locale={DEFAULT_LANGUAGE} messages={translations[DEFAULT_LANGUAGE]}>
+          <Story />
+        </IntlProvider>
+      </Provider>
+    );
+  }
 ];

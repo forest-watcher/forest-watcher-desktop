@@ -52,22 +52,22 @@ const NavLinks: FC<INavLinks> = ({ loggedIn, formHook, languages, user, logout, 
           <ul className="c-nav__subsection c-nav__subsection--links">
             <li className="c-nav__link-wrapper">
               <NavLink
-                to="/reporting"
-                className="c-nav__link"
-                activeClassName="c-nav__link--active"
-                onClick={() => onLinkSelect?.()}
-              >
-                <FormattedMessage id="reports.name" />
-              </NavLink>
-            </li>
-            <li className="c-nav__link-wrapper">
-              <NavLink
                 to="/areas"
                 className="c-nav__link"
                 activeClassName="c-nav__link--active"
                 onClick={() => onLinkSelect?.()}
               >
                 <FormattedMessage id="areas.name" />
+              </NavLink>
+            </li>
+            <li className="c-nav__link-wrapper">
+              <NavLink
+                to="/reporting"
+                className="c-nav__link"
+                activeClassName="c-nav__link--active"
+                onClick={() => onLinkSelect?.()}
+              >
+                <FormattedMessage id="reports.name" />
               </NavLink>
             </li>
             <li className="c-nav__link-wrapper">
@@ -92,7 +92,7 @@ const NavLinks: FC<INavLinks> = ({ loggedIn, formHook, languages, user, logout, 
             </li>
             <li className="c-nav__link-wrapper">
               <NavLink
-                to="/settings"
+                to="/layers"
                 className="c-nav__link"
                 activeClassName="c-nav__link--active"
                 onClick={() => onLinkSelect?.()}

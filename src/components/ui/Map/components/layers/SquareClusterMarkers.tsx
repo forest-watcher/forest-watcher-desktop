@@ -38,6 +38,7 @@ export interface IProps {
   // Will a click on the map, de-select the selectedIds?
   canMapDeselect?: boolean;
   onSelectionChange?: (selectedIds: string[] | null) => void;
+  locked?: boolean;
 }
 
 const SquareClusterMarkers: FC<IProps> = props => {
@@ -51,7 +52,8 @@ const SquareClusterMarkers: FC<IProps> = props => {
     pointStyle = defaultPointStyle,
     canMultiSelect = false,
     canMapDeselect = false,
-    onSelectionChange
+    onSelectionChange,
+    locked = false
   } = props;
   const { current: map } = useMap();
   const [hoveredPoint, setHoveredPoint] = useState<string | null>(null);
@@ -80,7 +82,7 @@ const SquareClusterMarkers: FC<IProps> = props => {
           turf.point(point.position, {
             id: point.id,
             icon: iconGenerator(
-              point.alertTypes?.length ? point.alertTypes[0].id : "",
+              point.type || "",
               point.id === hoveredPoint,
               selectedPoints?.length
                 ? canMultiSelect
@@ -88,7 +90,7 @@ const SquareClusterMarkers: FC<IProps> = props => {
                   : point.id === selectedPoints[0]
                 : false
             ),
-            alertType: point.alertTypes?.length ? point.alertTypes[0].id : ""
+            alertType: point.type || ""
           })
         )
       ),
@@ -221,12 +223,14 @@ const SquareClusterMarkers: FC<IProps> = props => {
       map?.once("click", id, handleSourceMouseClick);
     };
 
-    map?.on("preclick", handlePreClick);
+    if (!locked) {
+      map?.on("preclick", handlePreClick);
+    }
 
     return () => {
       map?.off("preclick", handlePreClick);
     };
-  }, [id, map, onSquareSelect, canMultiSelect, canMapDeselect]);
+  }, [id, map, onSquareSelect, canMultiSelect, canMapDeselect, locked]);
 
   useEffect(() => {
     onSelectionChange?.(selectedPoints);

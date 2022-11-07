@@ -4,7 +4,8 @@ import { pointStyle } from "components/ui/Map/components/layers/styles";
 import { alertTypes, EAlertTypes } from "constants/alerts";
 import { findNeighboringPoints } from "helpers/map";
 import useGetAlertsForArea from "hooks/querys/alerts/useGetAlertsForArea";
-import { FC, useCallback, useMemo, useState } from "react";
+import { FC, useCallback, useEffect, useMemo, useState } from "react";
+import { useFormContext, useWatch } from "react-hook-form";
 import { useMap } from "react-map-gl";
 import KDBush from "kdbush";
 import { IPoint, TAlertsById } from "types/map";
@@ -13,13 +14,16 @@ export interface IProps {
   areaId?: string;
   alertTypesToShow?: EAlertTypes[];
   alertRequestThreshold?: number;
+  locked?: boolean;
 }
 
-const AreaAssignmentMapSource: FC<IProps> = props => {
-  const { areaId, alertTypesToShow, alertRequestThreshold } = props;
+const AreaAlertMapSource: FC<IProps> = props => {
+  const { areaId, alertTypesToShow, alertRequestThreshold, locked = false } = props;
   const { current: mapRef } = useMap();
+  const { setValue, control } = useFormContext();
+  const selectedAlerts = useWatch({ control, name: "selectedAlerts" });
+  const [selectedAlertIds, setSelectedAlertIds] = useState<string[] | null>(null);
   const alerts = useGetAlertsForArea(areaId, alertTypesToShow, alertRequestThreshold);
-  const [selectedAlerts, setSelectedAlerts] = useState<TAlertsById[]>();
 
   const [alertPoints, alertsById, pointsIndex] = useMemo(
     () => {
@@ -38,7 +42,7 @@ const AreaAssignmentMapSource: FC<IProps> = props => {
           pointData.push({
             id: alertId,
             position: [data[i].longitude, data[i].latitude],
-            alertTypes: [alertTypes[type]]
+            type: type
           });
 
           pointsById.push({
@@ -68,10 +72,22 @@ const AreaAssignmentMapSource: FC<IProps> = props => {
 
   const handleAlertSelectionChange = useCallback(
     (ids: string[] | null) => {
-      setSelectedAlerts(alertsById.filter(alert => ids?.includes(alert.id)));
+      setValue(
+        "selectedAlerts",
+        alertsById.filter(alert => ids?.includes(alert.id))
+      );
+      setSelectedAlertIds(ids);
     },
-    [alertsById]
+    [alertsById, setValue]
   );
+
+  useEffect(() => {
+    // If all selected Alerts for parent form are removed
+    // Set SelectedAlertIds to null so that the SquareClusterMarkers are cleared too
+    if (selectedAlerts && selectedAlerts.length === 0) {
+      setSelectedAlertIds(null);
+    }
+  }, [selectedAlerts]);
 
   return (
     <>
@@ -79,6 +95,7 @@ const AreaAssignmentMapSource: FC<IProps> = props => {
         id="alerts"
         pointDataType={EPointDataTypes.Alerts}
         points={alertPoints}
+        selectedSquareIds={selectedAlertIds}
         pointStyle={{
           ...pointStyle,
           layout: {
@@ -92,6 +109,7 @@ const AreaAssignmentMapSource: FC<IProps> = props => {
         onSelectionChange={handleAlertSelectionChange}
         canMultiSelect
         canMapDeselect
+        locked={locked}
       />
 
       <AlertsDetailCard selectedAlerts={selectedAlerts} />
@@ -99,4 +117,4 @@ const AreaAssignmentMapSource: FC<IProps> = props => {
   );
 };
 
-export default AreaAssignmentMapSource;
+export default AreaAlertMapSource;

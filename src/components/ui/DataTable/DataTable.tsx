@@ -23,6 +23,8 @@ export interface IColumnOrder<T> {
   rowHref?: string | ((row: T, value?: string) => string);
   rowLabel?: string | ((row: T, value?: string | number | any[]) => string);
   sortCompareFn?: (a: string | number | any[], b: string | number | any[], direction: Direction) => number;
+  rowHrefClassNames?: string;
+  rowCellClassNames?: string;
 }
 
 export interface IProps<T> {
@@ -210,10 +212,10 @@ const DataTable = <T extends { [key: string]: string | number | any[] }>(props: 
                   </td>
                 )}
                 {columnOrder.map(column => (
-                  <td key={column.key.toString()}>
+                  <td key={column.key.toString()} className={column.rowCellClassNames}>
                     {column.rowHref ? (
                       <Link
-                        className="u-link-unstyled"
+                        className={`u-link-unstyled ${column.rowHrefClassNames}`}
                         to={typeof column.rowHref === "function" ? column.rowHref(row) : column.rowHref}
                       >
                         {typeof column.rowLabel === "function"

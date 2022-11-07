@@ -6,7 +6,7 @@ import { IProps as ITabGroupProps } from "components/ui/TabGroup/TabGroup";
 import InvestigationPage from "./investigation/InvestigationContainer";
 import ReportsPage from "./reports/ReportsContainer";
 import classnames from "classnames";
-import MonitoringOnboarding from "components/onboarding/monitoring/MonitoringOnboarding";
+import Assignments from "./assignments/Assignments";
 
 type TParams = {
   reportingTab: string;
@@ -16,17 +16,23 @@ interface IProps extends TPropsFromRedux, RouteComponentProps<TParams> {}
 
 const INVESTIGATION_PATH = "/reporting/investigation";
 const REPORTS_PATH = "/reporting/reports";
+const ASSIGNMENTS_PATH = "/reporting/assignments";
 
 const pageTabs: ITabGroupProps["options"] = [
   {
     value: "investigation",
     name: "reporting.tabs.investigation",
-    href: "/reporting/investigation"
+    href: INVESTIGATION_PATH
   },
   {
     value: "reports",
     name: "reporting.tabs.reports",
-    href: "/reporting/reports"
+    href: REPORTS_PATH
+  },
+  {
+    value: "assignments",
+    name: "reporting.tabs.assignments",
+    href: ASSIGNMENTS_PATH
   }
 ];
 
@@ -42,11 +48,11 @@ const Reports: FC<IProps> = props => {
     <Redirect to={INVESTIGATION_PATH} />
   ) : (
     <div className={classnames(match.url.includes(INVESTIGATION_PATH) && "l-full-page-map")}>
-      <MonitoringOnboarding />
       <Hero title="reports.name" pageTabs={{ value: reportingTab, options: pageTabs }} />
       <Switch>
         <Route path={INVESTIGATION_PATH} component={InvestigationPage} />
         <Route path={REPORTS_PATH} component={ReportsPage} />
+        <Route path={ASSIGNMENTS_PATH} component={Assignments} />
       </Switch>
     </div>
   );

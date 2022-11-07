@@ -18,6 +18,7 @@ export const ENVIRONMENT = process.env.NODE_ENV;
 export const GOOGLE_PLACES_API_KEY = process.env.REACT_APP_GOOGLE_PLACES_API_KEY;
 export const API_BITLY_TOKEN = process.env.REACT_APP_API_BITLY_TOKEN;
 export const API_BITLY_BASE_URL = process.env.REACT_APP_API_BITLY_BASE_URL || "https://api-ssl.bitly.com/v4";
+export const DEFAULT_TEMPLATE_ID = process.env.REACT_APP_DEFAULT_TEMPLATE_ID || "";
 
 // constants
 export const DEFAULT_LANGUAGE = "en";

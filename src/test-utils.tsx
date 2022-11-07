@@ -15,8 +15,18 @@ interface WrapperProps {
 function render(ui: JSX.Element, { storeConfig = store, ...renderOptions } = {}) {
   const Wrapper: FC<WrapperProps> = ({ children }) => {
     return (
-      // @ts-ignore
-      <IntlProvider locale={DEFAULT_LANGUAGE} messages={translations[DEFAULT_LANGUAGE]}>
+      <IntlProvider
+        locale={DEFAULT_LANGUAGE}
+        // @ts-ignore
+        messages={translations[DEFAULT_LANGUAGE]}
+        onError={err => {
+          // Hide missing translations on test
+          if (err.code === "MISSING_TRANSLATION") {
+            return;
+          }
+          throw err;
+        }}
+      >
         <Provider store={storeConfig}>
           <Router>{children}</Router>
         </Provider>
