@@ -7,7 +7,7 @@ export type TGetAreasByTeamId =
 
 export class APIService extends BaseService {
   getAreasByTeamId(teamId: string): Promise<TGetAreasByTeamId> {
-    return this.fetchJSON(`/teamAreas/${teamId}`);
+    return this.fetchJSON(`/teamAreas/${teamId}`); // ToDo: switch to fw_core
   }
 }
 

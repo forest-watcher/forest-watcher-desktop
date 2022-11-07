@@ -1,5 +1,5 @@
 import OptionalWrapper from "components/extensive/OptionalWrapper";
-import { TAlertsById } from "components/ui/Map/components/cards/AlertsDetail";
+import { TAlertsById } from "types/map";
 import {
   allDeforestationAlerts,
   DefaultRequestThresholds,
