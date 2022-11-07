@@ -1,3 +1,4 @@
+import classNames from "classnames";
 import { Map } from "mapbox-gl";
 // @ts-ignore;
 import Compare from "mapbox-gl-compare";
@@ -11,7 +12,7 @@ interface IProps {
 }
 
 const MapComparison = (props: IProps) => {
-  const { renderBefore, renderAfter } = props;
+  const { renderBefore, renderAfter, className } = props;
   const [beforeMapRef, setBeforeMapRef] = useState<null | Map>(null);
   const [afterMapRef, setAfterMapRef] = useState<null | Map>(null);
 
@@ -33,7 +34,7 @@ const MapComparison = (props: IProps) => {
   }, [renderAfter]);
 
   return (
-    <div id="map-container" className="relative min-h-[500px] c-map-comparison">
+    <div id="map-container" className={classNames(className, "relative min-h-[500px] c-map-comparison")}>
       {beforeMap}
       {afterMap}
     </div>
