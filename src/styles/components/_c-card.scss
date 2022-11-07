@@ -192,7 +192,11 @@ $c-card-border-radius:  $global-spacing-1;
     line-height: 24px;
   }
 
-  &__header, &__footer, &__content {
+  &__content {
+    padding: 24px $global-spacing-5;
+  }
+
+  &__header, &__footer {
     padding: $global-spacing-5;
   }
 

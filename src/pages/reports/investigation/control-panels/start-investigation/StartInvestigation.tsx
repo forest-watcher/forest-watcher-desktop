@@ -105,9 +105,7 @@ const StartInvestigationControlPanel: FC<IProps> = props => {
           id="layer-toggles"
           registered={register("layers")}
           formHook={methods}
-          hideLabel
           toggleGroupProps={{
-            label: intl.formatMessage({ id: "layers.name" }),
             options: [
               {
                 label: intl.formatMessage({ id: "reporting.control.panel.investigation.options.completedReports" }),
