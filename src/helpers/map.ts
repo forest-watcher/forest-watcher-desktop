@@ -169,15 +169,6 @@ const getAllNeighbours = (
 
   getNeighbours(firstPoint);
 
-  // return array of siblings without the first point
-  if (
-    neighbours?.length &&
-    neighbours[0]?.data.latitude === firstPoint.data.latitude &&
-    neighbours[0]?.data.longitude === firstPoint.data.longitude
-  ) {
-    neighbours.shift();
-  }
-
   return neighbours;
 };
 
