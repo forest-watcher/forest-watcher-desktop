@@ -136,6 +136,13 @@ const MultiSelectDialogPreview = <T,>(props: IMultiSelectDialogPreviewProps<T>) 
     [groups, watcher, shouldDisplayAllLabel]
   );
 
+  const AddBtn = () => (
+    <Button className="w-full bg-white text-gray-600" variant="secondary" onClick={onAdd}>
+      <Icon size={13} name="GreenPlus" className="mr-3 my-[-1px]" />
+      <FormattedMessage id={addButtonLabel} />
+    </Button>
+  );
+
   return (
     <>
       <OptionalWrapper
@@ -154,10 +161,7 @@ const MultiSelectDialogPreview = <T,>(props: IMultiSelectDialogPreviewProps<T>) 
               <FormattedMessage id={emptyLabel} />
             </h2>
 
-            <Button className="w-full" variant="secondary" onClick={onAdd}>
-              <Icon name="PlusForButton" className="pr-[6px]" />
-              <FormattedMessage id={addButtonLabel} />
-            </Button>
+            <AddBtn />
 
             {error && <Icon className="c-input__error-icon" name="Error" />}
           </div>
@@ -177,10 +181,7 @@ const MultiSelectDialogPreview = <T,>(props: IMultiSelectDialogPreviewProps<T>) 
             ))}
           </ul>
 
-          <Button className="w-full" variant="secondary" onClick={onAdd}>
-            <Icon name="PlusForButton" className="pr-[6px]" />
-            <FormattedMessage id={addButtonLabel} />
-          </Button>
+          <AddBtn />
         </div>
       </OptionalWrapper>
       <FieldError error={error} id="error" />
