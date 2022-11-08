@@ -45,6 +45,7 @@ const ShowAlertsControl: FC<IProps> = props => {
       <ToggleGroup
         id="show-alerts-toggle"
         toggleGroupProps={{
+          label: intl.formatMessage({ id: "layers.name" }),
           options: [
             {
               label: intl.formatMessage({ id: "reporting.control.panel.investigation.toggle.alert" }),

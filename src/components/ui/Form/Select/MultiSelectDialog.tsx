@@ -31,6 +31,8 @@ export interface IMultiSelectDialogPreviewProps<T> {
   addButtonLabel: string;
   // If all options in a group is selected, should the group show "All"
   shouldDisplayAllLabel?: boolean;
+  // Each group option will be on Separate lines, instead of comma separated
+  shouldDisplayGroupOptionsOnSeparateLines?: boolean;
   onAdd?: () => void;
 }
 
@@ -98,6 +100,7 @@ const MultiSelectDialogPreview = <T,>(props: IMultiSelectDialogPreviewProps<T>) 
     name,
     onAdd,
     shouldDisplayAllLabel = true,
+    shouldDisplayGroupOptionsOnSeparateLines = false,
     error
   } = props;
   const watcher = useWatch({
@@ -136,6 +139,13 @@ const MultiSelectDialogPreview = <T,>(props: IMultiSelectDialogPreviewProps<T>) 
     [groups, watcher, shouldDisplayAllLabel]
   );
 
+  const AddBtn = () => (
+    <Button className="w-full bg-white text-gray-600" variant="secondary" onClick={onAdd}>
+      <Icon size={13} name="GreenPlus" className="mr-3 my-[-1px]" />
+      <FormattedMessage id={addButtonLabel} />
+    </Button>
+  );
+
   return (
     <>
       <OptionalWrapper
@@ -154,10 +164,7 @@ const MultiSelectDialogPreview = <T,>(props: IMultiSelectDialogPreviewProps<T>) 
               <FormattedMessage id={emptyLabel} />
             </h2>
 
-            <Button className="w-full" variant="secondary" onClick={onAdd}>
-              <Icon name="PlusForButton" className="pr-[6px]" />
-              <FormattedMessage id={addButtonLabel} />
-            </Button>
+            <AddBtn />
 
             {error && <Icon className="c-input__error-icon" name="Error" />}
           </div>
@@ -169,18 +176,24 @@ const MultiSelectDialogPreview = <T,>(props: IMultiSelectDialogPreviewProps<T>) 
           </span>
 
           <ul className="text-gray-700 text-base mb-3">
-            {activeGroups.map((group, id) => (
-              <li key={group.label || id}>
-                {group.label && <>{group.label}: </>}
-                {group.options.map(option => option.label).join(", ")}
-              </li>
-            ))}
+            {activeGroups.map((group, groupId) => {
+              return shouldDisplayGroupOptionsOnSeparateLines ? (
+                group.options.map((option, optionId) => (
+                  <li key={group.label || optionId}>
+                    {group.label && <>{group.label}: </>}
+                    {option.label}
+                  </li>
+                ))
+              ) : (
+                <li key={group.label || groupId}>
+                  {group.label && <>{group.label}: </>}
+                  {group.options.map(option => option.label).join(", ")}
+                </li>
+              );
+            })}
           </ul>
 
-          <Button className="w-full" variant="secondary" onClick={onAdd}>
-            <Icon name="PlusForButton" className="pr-[6px]" />
-            <FormattedMessage id={addButtonLabel} />
-          </Button>
+          <AddBtn />
         </div>
       </OptionalWrapper>
       <FieldError error={error} id="error" />

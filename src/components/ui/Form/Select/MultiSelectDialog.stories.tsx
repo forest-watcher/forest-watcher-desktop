@@ -143,7 +143,9 @@ ErrorPreview.args = {
 
 export const PopulatedPreview = PreviewTemplate.bind({});
 PopulatedPreview.args = {
-  ...EmptyPreview.args
+  ...EmptyPreview.args,
+  shouldDisplayAllLabel: true,
+  shouldDisplayGroupOptionsOnSeparateLines: false
 };
 
 export const AsDialog = Combined.bind({});

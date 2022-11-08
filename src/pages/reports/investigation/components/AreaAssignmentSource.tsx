@@ -1,4 +1,5 @@
 import * as turf from "@turf/turf";
+import AssignmentDetailCard from "components/ui/Map/components/cards/AssignmentDetail";
 import SquareClusterMarkers, { EPointDataTypes } from "components/ui/Map/components/layers/SquareClusterMarkers";
 import { useGetV3GfwAssignmentsAllOpenUserForAreaAreaId } from "generated/core/coreComponents";
 import { useAccessToken } from "hooks/useAccessToken";
@@ -15,8 +16,7 @@ const AreaAssignmentMapSource: FC<IProps> = props => {
   const { areaId } = props;
   const { current: mapRef } = useMap();
   const userId = useGetUserId();
-  const [, setSelectedPoint] = useState<mapboxgl.Point | null>(null);
-  const [selectedAssignmentIds, setSelectedAssignmentIds] = useState<string[] | null>(null);
+  const [selectedAssignmentId, setSelectedAssignmentId] = useState<string | null>(null);
 
   const { httpAuthHeader } = useAccessToken();
   const { data } = useGetV3GfwAssignmentsAllOpenUserForAreaAreaId(
@@ -67,9 +67,8 @@ const AreaAssignmentMapSource: FC<IProps> = props => {
     return assignmentCenters;
   }, [data, userId]);
 
-  const handleSquareSelect = useCallback((ids: string[], point: mapboxgl.Point) => {
-    setSelectedPoint(point);
-    setSelectedAssignmentIds(ids);
+  const handleSquareSelect = useCallback((ids: string[] | null) => {
+    setSelectedAssignmentId(ids && ids[0] ? ids[0] : null);
   }, []);
 
   return (
@@ -78,10 +77,16 @@ const AreaAssignmentMapSource: FC<IProps> = props => {
         id="assignments"
         pointDataType={EPointDataTypes.Assignments}
         points={assignmentPoints}
-        onSquareSelect={handleSquareSelect}
-        selectedSquareIds={selectedAssignmentIds}
+        onSelectionChange={handleSquareSelect}
+        selectedSquareIds={selectedAssignmentId ? [selectedAssignmentId] : null}
         mapRef={mapRef?.getMap() || null}
         canMapDeselect
+      />
+
+      <AssignmentDetailCard
+        selectedAssignment={
+          selectedAssignmentId && data?.data ? data.data.find(i => i.id === selectedAssignmentId) : undefined
+        }
       />
     </>
   );

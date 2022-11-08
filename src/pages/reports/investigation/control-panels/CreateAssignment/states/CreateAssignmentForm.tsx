@@ -15,7 +15,7 @@ import { GeojsonModel } from "generated/core/coreSchemas";
 import { useAccessToken } from "hooks/useAccessToken";
 import useFindArea from "hooks/useFindArea";
 import useGetUserId from "hooks/useGetUserId";
-import { FC, useEffect, useMemo, useState } from "react";
+import { Dispatch, FC, SetStateAction, useEffect, useMemo, useState } from "react";
 import { useForm, useFormContext } from "react-hook-form";
 import useGetUserTeamsWithActiveMembers from "hooks/querys/teams/useGetUserTeamsWithActiveMembers";
 import { FormattedMessage, useIntl } from "react-intl";
@@ -26,6 +26,8 @@ import yup from "configureYup";
 import { yupResolver } from "@hookform/resolvers/yup/dist/yup";
 
 export interface IProps {
+  setShowCreateAssignmentForm: Dispatch<SetStateAction<boolean>>;
+  setShapeFileGeoJSON: Dispatch<SetStateAction<GeojsonModel | undefined>>;
   shapeFileGeoJSON?: GeojsonModel;
 }
 
@@ -53,7 +55,7 @@ const createAssignmentFormSchema = yup
   .required();
 
 const CreateAssignmentForm: FC<IProps> = props => {
-  const { shapeFileGeoJSON } = props;
+  const { setShowCreateAssignmentForm, setShapeFileGeoJSON, shapeFileGeoJSON } = props;
   const intl = useIntl();
   const history = useHistory();
   const location = useLocation();
@@ -116,13 +118,6 @@ const CreateAssignmentForm: FC<IProps> = props => {
     }
   });
 
-  const handleBack = () => {
-    // Clear selected Alerts
-    setParentValue("selectedAlerts", []);
-    setParentValue("singleSelectedLocation", undefined);
-    history.push(location.pathname.replace("/assignment", ""));
-  };
-
   const handlePostAssignment = async () => {
     const assignmentFormValues = getAssignmentValues();
     const selectedAlerts = getParentValues("selectedAlerts") as TAlertsById[];
@@ -170,7 +165,9 @@ const CreateAssignmentForm: FC<IProps> = props => {
 
       // ToDo: redirect to Assignment Detail page
       // Redirecting to "Start Investigation" panel for now
-      handleBack();
+      setParentValue("selectedAlerts", []);
+      setParentValue("singleSelectedLocation", undefined);
+      history.push(location.pathname.replace("/assignment", ""));
     } catch (e) {
       toastr.error(intl.formatMessage({ id: "assignment.create.form.error" }), "");
     }
@@ -251,7 +248,8 @@ const CreateAssignmentForm: FC<IProps> = props => {
       title={intl.formatMessage({ id: `assignment.create.dialog.title.${openDialogName}` })}
       onBack={() => {
         if (openDialogName === EDialogsNames.None) {
-          handleBack();
+          setShapeFileGeoJSON(undefined);
+          setShowCreateAssignmentForm(false);
         } else {
           setOpenDialogName(EDialogsNames.None);
         }
@@ -303,6 +301,7 @@ const CreateAssignmentForm: FC<IProps> = props => {
         <MultiSelectDialog.Preview
           className="mt-10"
           groups={templateGroups}
+          shouldDisplayGroupOptionsOnSeparateLines
           control={control}
           name="templates"
           error={formState.errors.templates}

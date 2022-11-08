@@ -43,7 +43,10 @@ const TextAreaControlled = <T extends Record<any, any>>(
   return (
     <div className={classnames("c-input", altLabel && "c-input--alt-label", wrapperClassName)}>
       {label && (
-        <label htmlFor={id} className={classnames("c-input__label", hideLabel && "u-visually-hidden")}>
+        <label
+          htmlFor={id}
+          className={classnames("c-input__label", hideLabel && "u-visually-hidden", altLabel && "mt-0")}
+        >
           <FormattedMessage id={label} />
         </label>
       )}
