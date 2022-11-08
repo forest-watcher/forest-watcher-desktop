@@ -4,7 +4,10 @@ import Map from "components/ui/Map/Map";
 import MapComparison from "./MapComparison";
 import ReactMap from "react-map-gl";
 import Polygon from "components/ui/Map/components/layers/Polygon";
-import { CSSProperties } from "react";
+import { CSSProperties, useState } from "react";
+import Button from "components/ui/Button/Button";
+import Card from "components/ui/Card/Card";
+import MapCard from "components/ui/Map/components/cards/MapCard";
 
 const polygon = {
   type: "FeatureCollection",
@@ -40,10 +43,18 @@ const style: CSSProperties = { position: "absolute", top: 0, bottom: 0, width: "
 
 // More on component templates: https://storybook.js.org/docs/react/writing-stories/introduction#using-args
 const DefaultTemplate: ComponentStory<typeof MapComparison> = args => {
+  const [showAfter, setShowAfter] = useState(false);
   return (
     <>
+      <div className="mb-4">
+        {showAfter && <Button onClick={() => setShowAfter(false)}>Hide Comparison</Button>}
+        {!showAfter && <Button onClick={() => setShowAfter(true)}>Show Comparison</Button>}
+      </div>
+
       <MapComparison
         {...args}
+        className="select-none"
+        minLeftSlide={360}
         renderBefore={cb => (
           <Map
             mapStyle="mapbox://styles/3sidedcube/cl5axl8ha002c14o5exjzmdlb"
@@ -52,18 +63,26 @@ const DefaultTemplate: ComponentStory<typeof MapComparison> = args => {
             style={style}
             cooperativeGestures={false}
             uncontrolled
-          />
+          >
+            <MapCard title="Example Popup" position="top-left">
+              <Card.Text>Example pop up in a comparison</Card.Text>
+            </MapCard>
+          </Map>
         )}
-        renderAfter={cb => (
-          <Map
-            mapStyle="mapbox://styles/3sidedcube/cl5s9e9d8000814rvhgohedy4"
-            onMapLoad={e => cb(e.target)}
-            shouldWrapContainer={false}
-            style={style}
-            cooperativeGestures={false}
-            uncontrolled
-          />
-        )}
+        renderAfter={
+          showAfter
+            ? cb => (
+                <Map
+                  mapStyle="mapbox://styles/3sidedcube/cl5s9e9d8000814rvhgohedy4"
+                  onMapLoad={e => cb(e.target)}
+                  shouldWrapContainer={false}
+                  style={style}
+                  cooperativeGestures={false}
+                  uncontrolled
+                />
+              )
+            : undefined
+        }
       />
     </>
   );
