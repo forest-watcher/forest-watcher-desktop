@@ -43,6 +43,10 @@ const MapComparison = (props: IProps) => {
         })
       );
 
+      // Set the original position so both maps match
+      const center = beforeMapRef.getCenter();
+      afterMapRef.setCenter(center);
+
       setIsReady(true);
     }
 
