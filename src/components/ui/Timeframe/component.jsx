@@ -12,7 +12,7 @@ const DOT_SIZE = 24;
 
 const TimeSlider = ({
   dotSize = DOT_SIZE,
-  selected,
+  selected = 0,
   periods = [],
   onChange,
   labelGetter = "label",
@@ -46,8 +46,6 @@ const TimeSlider = ({
       setPreviousOffset(offset);
     }
   }, [offset, initialized, setAnim, previousOffset]);
-
-  console.log({ selected });
 
   return (
     <>
