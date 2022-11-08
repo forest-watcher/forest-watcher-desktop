@@ -2,8 +2,6 @@
 import PropTypes from "prop-types";
 import { useEffect, useRef, useState } from "react";
 import { useSpring, animated } from "react-spring";
-import { Tooltip } from "react-tippy";
-import Tip from "components/ui/Tip";
 import ChevronIcon from "assets/images/icons/ChevronRightSmall.svg";
 import { useIntl } from "react-intl";
 import get from "lodash.get";
@@ -107,15 +105,6 @@ const TimeSlider = ({
                     height: `${dotSize}px`
                   }}
                 >
-                  <Tooltip
-                    trigger="mouseenter"
-                    position="top"
-                    theme="tip"
-                    html={<Tip text={d.period} className="tooltip-dark" />}
-                    distance={5}
-                  >
-                    <span className="c-timeframe__tooltip-item" />
-                  </Tooltip>
                   <span
                     className={`c-timeframe__label
                       ${i === 0 ? "c-timeframe__label--x-start" : ""}

@@ -31,13 +31,14 @@ interface IProps extends TPropsFromRedux {
   onFilterUpdate: (answers: TGetAllAnswers["data"]) => void;
   answers?: TGetAllAnswers["data"];
   defaultBasemap?: string;
+  onComparison: (value: boolean) => void;
 }
 
 const StartInvestigationControlPanel: FC<IProps> = props => {
   const history = useHistory();
   const location = useLocation();
   const { areaId } = useParams<TParams>();
-  const { answers, onFilterUpdate, layersOptions, getLayers, defaultBasemap } = props;
+  const { answers, onFilterUpdate, layersOptions, getLayers, defaultBasemap, onComparison } = props;
   const [filteredRows, setFilteredRows] = useState<any>(answers);
 
   useEffect(() => {
@@ -99,7 +100,7 @@ const StartInvestigationControlPanel: FC<IProps> = props => {
       <Loader isLoading={isLoadingAreas || isLoadingAnswers || isLoadingTeamAreas} />
 
       <form>
-        <Basemaps defaultBasemap={defaultBasemap} />
+        <Basemaps defaultBasemap={defaultBasemap} onComparison={onComparison} />
         <ShowAlertsControl />
         <ToggleGroup
           id="layer-toggles"

@@ -28,6 +28,8 @@ export interface IProps extends HTMLAttributes<HTMLElement> {
   shouldWrapContainer?: boolean;
   uncontrolled?: boolean;
   style?: CSSProperties;
+  controlsPortalDom?: HTMLElement;
+  hideControls?: boolean;
 }
 
 const Map: FC<IProps> = props => {
@@ -49,6 +51,8 @@ const Map: FC<IProps> = props => {
     cooperativeGestures = true,
     shouldWrapContainer = true,
     uncontrolled = false,
+    hideControls = false,
+    controlsPortalDom,
     ...rest
   } = props;
   const classes = classnames("c-map", className);
@@ -87,41 +91,27 @@ const Map: FC<IProps> = props => {
 
   const actualViewState = setMapViewState ? mapViewState : uncontrolled ? undefined : viewState;
 
-  return (
-    <OptionalWrapper
-      data={shouldWrapContainer}
-      elseComponent={
-        <ReactMap
-          {...actualViewState}
-          onMove={evt => (setMapViewState ? setMapViewState(evt.viewState) : setViewState(evt.viewState))}
-          mapStyle={mapStyle}
-          onLoad={handleMapLoad}
-          preserveDrawingBuffer // Allows canvas.toDataURL to work
-          cooperativeGestures={cooperativeGestures}
-          maxZoom={20}
-          style={style}
-        >
-          <MapControls />
-          {drawRef && mapRef && <MapEditControls draw={drawRef} map={mapRef} onUpdate={onMapEdit} />}
-          {children}
-        </ReactMap>
-      }
+  const mapElement = (
+    <ReactMap
+      {...actualViewState}
+      onMove={evt => (setMapViewState ? setMapViewState(evt.viewState) : setViewState(evt.viewState))}
+      mapStyle={mapStyle}
+      onLoad={handleMapLoad}
+      preserveDrawingBuffer // Allows canvas.toDataURL to work
+      cooperativeGestures={cooperativeGestures}
+      maxZoom={20}
+      style={style}
     >
+      {!hideControls && <MapControls portalDom={controlsPortalDom} />}
+      {drawRef && mapRef && <MapEditControls draw={drawRef} map={mapRef} onUpdate={onMapEdit} />}
+      {children}
+    </ReactMap>
+  );
+
+  return (
+    <OptionalWrapper data={shouldWrapContainer} elseComponent={mapElement}>
       <div className={classes} data-testid="map-container" {...rest}>
-        <ReactMap
-          {...actualViewState}
-          onMove={evt => (setMapViewState ? setMapViewState(evt.viewState) : setViewState(evt.viewState))}
-          mapStyle={mapStyle}
-          onLoad={handleMapLoad}
-          preserveDrawingBuffer // Allows canvas.toDataURL to work
-          cooperativeGestures={cooperativeGestures}
-          maxZoom={20}
-          style={style}
-        >
-          <MapControls />
-          {drawRef && mapRef && <MapEditControls draw={drawRef} map={mapRef} onUpdate={onMapEdit} />}
-          {children}
-        </ReactMap>
+        {mapElement}
       </div>
     </OptionalWrapper>
   );
