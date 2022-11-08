@@ -5,7 +5,7 @@ import { useMediaQuery } from "react-responsive";
 //@ts-ignore
 import breakpoints from "styles/utilities/_u-breakpoints.scss";
 import Timeframe from "components/ui/Timeframe";
-import { FC, useEffect, useMemo, useState } from "react";
+import { FC, useCallback, useEffect, useMemo, useState } from "react";
 import { BASEMAPS, PLANET_BASEMAP } from "constants/mapbox";
 import { fireGAEvent } from "helpers/analytics";
 import { MapActions } from "types/analytics";
@@ -58,18 +58,51 @@ const Basemaps: FC<IProps> = ({ defaultBasemap, onComparison }) => {
     [intl]
   );
 
-  const baseMapPeriods = useMemo(() => {
-    const currentProc = watcher.currentPlanetImageType === "nat" ? "" : watcher.currentPlanetImageType || "";
-    const imageType = currentProc === "cir" ? "analytic" : "visual";
-    return basemaps
-      .filter(bm => bm.imageType === imageType)
-      .map(bm => ({
-        label: bm.period,
-        value: bm.name,
-        metadata: bm
-      }))
-      .reverse();
-  }, [basemaps, watcher.currentPlanetImageType]);
+  const getBaseMapPeriods = useCallback(
+    (proc: string) => {
+      const currentProc = proc === "nat" ? "" : proc || "";
+      const imageType = currentProc === "cir" ? "analytic" : "visual";
+      return basemaps
+        .filter(bm => bm.imageType === imageType)
+        .map(bm => ({
+          label: bm.period,
+          value: bm.name,
+          metadata: bm
+        }))
+        .reverse();
+    },
+    [basemaps]
+  );
+
+  const beforeMapPeriods = useMemo(() => {
+    return getBaseMapPeriods(watcher.currentPlanetImageTypeBefore);
+  }, [getBaseMapPeriods, watcher.currentPlanetImageTypeBefore]);
+
+  const afterMapPeriods = useMemo(() => {
+    return getBaseMapPeriods(watcher.currentPlanetImageTypeAfter);
+  }, [getBaseMapPeriods, watcher.currentPlanetImageTypeAfter]);
+
+  const resetBeforeFields = useCallback(() => {
+    methods.resetField("currentPlanetPeriodBefore", {
+      defaultValue: beforeMapPeriods[beforeMapPeriods.length - 1]?.value
+    });
+  }, [beforeMapPeriods, methods]);
+
+  const resetAfterFields = useCallback(() => {
+    methods.resetField("currentPlanetPeriodAfter", {
+      defaultValue: afterMapPeriods[afterMapPeriods.length - 1]?.value
+    });
+  }, [afterMapPeriods, methods]);
+
+  useEffect(() => {
+    resetBeforeFields();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [watcher.currentPlanetImageTypeBefore]);
+
+  useEffect(() => {
+    resetAfterFields();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [watcher.currentPlanetImageTypeAfter]);
 
   const handleComparison = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     event.preventDefault();
@@ -96,7 +129,8 @@ const Basemaps: FC<IProps> = ({ defaultBasemap, onComparison }) => {
 
   useEffect(() => {
     return () => {
-      methods.resetField("currentPlanetPeriod", { defaultValue: baseMapPeriods[baseMapPeriods.length - 1]?.value });
+      resetBeforeFields();
+      resetAfterFields();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -126,6 +160,7 @@ const Basemaps: FC<IProps> = ({ defaultBasemap, onComparison }) => {
       {basemapKeys.map((item, index) => {
         const isAfter = item === "After";
         const isLast = index === basemapKeys.length - 1;
+        const baseMapPeriods = isAfter ? afterMapPeriods : beforeMapPeriods;
 
         return (
           <div
