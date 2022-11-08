@@ -36,12 +36,7 @@ const MapComparison = (props: IProps) => {
       // const afterMapEl = afterMapRef.getContainer();
       // afterMapEl.style.opacity = "0";
 
-      setCompareMapRef(
-        new Compare(beforeMapRef, afterMapRef, "#map-container", {
-          // Set this to enable comparing two maps by mouse movement:
-          // mousemove: true
-        })
-      );
+      setCompareMapRef(new Compare(beforeMapRef, afterMapRef, "#map-container", {}));
 
       // Set the original position so both maps match
       const bounds = beforeMapRef.getBounds();
