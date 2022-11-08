@@ -4,7 +4,6 @@ import { TFormValues } from "pages/reports/investigation/Investigation";
 import { Link, useHistory, useLocation, useParams } from "react-router-dom";
 import { FC, useCallback, useEffect, useMemo, useState } from "react";
 import { toastr } from "react-redux-toastr";
-import { AllGeoJSON } from "@turf/turf";
 import { useAppSelector } from "hooks/useRedux";
 import { TParams } from "pages/reports/investigation/types";
 import MapCard from "components/ui/Map/components/cards/MapCard";
@@ -13,7 +12,6 @@ import { FormattedMessage, useIntl } from "react-intl";
 import ToggleGroup from "components/ui/Form/ToggleGroup";
 import { useFormContext, useWatch } from "react-hook-form";
 import { TPropsFromRedux } from "pages/reports/investigation/control-panels/start-investigation/StartInvestigationContainer";
-import useZoomToGeojson from "hooks/useZoomToArea";
 import DataFilter from "components/ui/DataFilter/DataFilter";
 import useControlPanelReportFilters from "pages/reports/reports/useControlPanelReportFilters";
 import { TGetAllAnswers } from "services/reports";
@@ -60,9 +58,6 @@ const StartInvestigationControlPanel: FC<IProps> = props => {
 
   const { filters } = useControlPanelReportFilters(answers);
 
-  // @ts-ignore
-  useZoomToGeojson(selectedAreaGeoData as AllGeoJSON);
-
   const methods = useFormContext<TFormValues>();
   const { register, control } = methods;
 
@@ -97,7 +92,7 @@ const StartInvestigationControlPanel: FC<IProps> = props => {
       onBack={handleBackBtnClick}
       footer={
         <Link to={`${location.pathname}/assignment`} className="c-button c-button--primary">
-          <Icon name="PlusWhite" className="pr-[6px]" />
+          <Icon size={18} name="PlusWhite" className="pr-[6px] my-[-1px]" />
           <FormattedMessage id="assignment.create.new" />
         </Link>
       }
@@ -111,9 +106,7 @@ const StartInvestigationControlPanel: FC<IProps> = props => {
           id="layer-toggles"
           registered={register("layers")}
           formHook={methods}
-          hideLabel
           toggleGroupProps={{
-            label: intl.formatMessage({ id: "layers.name" }),
             options: [
               {
                 label: intl.formatMessage({ id: "reporting.control.panel.investigation.options.completedReports" }),

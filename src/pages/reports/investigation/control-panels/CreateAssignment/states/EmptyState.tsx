@@ -3,11 +3,12 @@ import Icon from "components/extensive/Icon";
 import List from "components/extensive/List";
 import Button from "components/ui/Button/Button";
 import IconBubble from "components/ui/Icon/IconBubble";
+import Loader from "components/ui/Loader";
 import { GeojsonModel } from "generated/core/coreSchemas";
 import useFindArea from "hooks/useFindArea";
 import { useAppDispatch } from "hooks/useRedux";
 import { getGeoFromShape } from "modules/geostores";
-import { ChangeEvent, Dispatch, FC, SetStateAction, useRef } from "react";
+import { ChangeEvent, Dispatch, FC, SetStateAction, useRef, useState } from "react";
 import { useFormContext } from "react-hook-form";
 import { FormattedMessage, useIntl } from "react-intl";
 import { toastr } from "react-redux-toastr";
@@ -28,9 +29,11 @@ const OpenAssignmentEmptyState: FC<IProps> = props => {
   const selectedAreaDetails = useFindArea(areaId);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const { getValues, setValue } = useFormContext();
+  const [isUploadingShapeFile, setIsUploadingShapeFile] = useState(false);
   const dispatch = useAppDispatch();
 
   const handleShapeFileUpload = async (e: ChangeEvent<HTMLInputElement>) => {
+    setIsUploadingShapeFile(true);
     const shapeFile = e.target.files && e.target.files[0];
     const maxFileSize = 1000000; //1MB
 
@@ -48,6 +51,8 @@ const OpenAssignmentEmptyState: FC<IProps> = props => {
 
         if (isWithin) {
           setShapeFileGeoJSON(geojsonParsed);
+          setValue("selectedAlerts", []);
+          setValue("singleSelectedLocation", undefined);
           setShowCreateAssignmentForm(true);
         } else {
           toastr.error(
@@ -64,6 +69,8 @@ const OpenAssignmentEmptyState: FC<IProps> = props => {
         intl.formatMessage({ id: "areas.fileTooLargeDesc" })
       );
     }
+
+    setIsUploadingShapeFile(false);
   };
 
   return (
@@ -71,7 +78,6 @@ const OpenAssignmentEmptyState: FC<IProps> = props => {
       className="c-map-control-panel"
       title={intl.formatMessage({ id: "assignment.create.new" })}
       onBack={() => {
-        setValue("selectedAlerts", []);
         setValue("singleSelectedLocation", undefined);
         history.push(location.pathname.replace("/assignment", ""));
       }}
@@ -86,6 +92,7 @@ const OpenAssignmentEmptyState: FC<IProps> = props => {
         </Button>
       }
     >
+      <Loader isLoading={isUploadingShapeFile} />
       <div className="rounded-md bg-gray-400 px-4 py-6 flex flex-col items-center">
         <IconBubble className="mb-3" name="flag-white" size={22} />
 
