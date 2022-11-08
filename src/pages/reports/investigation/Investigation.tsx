@@ -155,8 +155,15 @@ const InvestigationPage: FC<IProps> = props => {
   useEffect(() => {
     if (!investigationMatch) {
       formhook.reset(defaultValues);
+      setShowComparison(false);
     }
   }, [defaultValues, formhook, investigationMatch]);
+
+  useEffect(() => {
+    if (!isPlanet) {
+      setShowComparison(false);
+    }
+  }, [isPlanet]);
 
   const handleFiltersChange = (filters: TGetAllAnswers["data"]) => {
     if (filters?.length === answersBySelectedArea?.length) {
@@ -191,8 +198,6 @@ const InvestigationPage: FC<IProps> = props => {
       watcher.layers
     ]
   );
-
-  console.log({ currentPlanetPeriod, currentProc, currentPlanetPeriodAfter, currentProcAfter });
 
   return (
     <>

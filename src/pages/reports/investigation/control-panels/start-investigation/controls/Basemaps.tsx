@@ -89,6 +89,12 @@ const Basemaps: FC<IProps> = ({ defaultBasemap, onComparison }) => {
   }, [isComparison]);
 
   useEffect(() => {
+    if (!watcher.showPlanetImagery.length) {
+      setIsComparison(false);
+    }
+  }, [watcher.showPlanetImagery]);
+
+  useEffect(() => {
     return () => {
       methods.resetField("currentPlanetPeriod", { defaultValue: baseMapPeriods[baseMapPeriods.length - 1]?.value });
     };
@@ -124,9 +130,10 @@ const Basemaps: FC<IProps> = ({ defaultBasemap, onComparison }) => {
         return (
           <div
             className={classNames(
-              "mx-[-20px] py-6 px-5",
+              "mx-[-20px] pt-6 px-5",
               isAfter ? "bg-gray-400/70 border-solid border-t-gray-500 border-t-2" : "bg-gray-400/40",
-              isLast && "mb-10"
+              isLast && "mb-10",
+              watcher.showPlanetImagery.length ? "pb-6" : "pb-2"
             )}
             key={item}
           >
