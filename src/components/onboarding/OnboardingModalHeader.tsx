@@ -1,23 +1,27 @@
-import CloseIcon from "assets/images/icons/CloseLg.svg";
+import CloseIcon from "assets/images/icons/CloseLgWithPadding.svg";
 import Icon from "components/extensive/Icon";
+import { useIntl } from "react-intl";
 
 type OnboardingModalHeaderProps = {
   onClose: () => void;
 };
 
 const OnboardingModalHeader = ({ onClose }: OnboardingModalHeaderProps) => {
+  const intl = useIntl();
   return (
-    <>
-      <div className="flex justify-end items-center px-[60px] pt-[40px]">
-        <button className="c-button c-modal-dialog__close-btn" onClick={onClose}>
-          <img alt="" src={CloseIcon} role="presentation" />
-        </button>
-      </div>
+    <div className="w-full relative">
+      <button
+        className="absolute top-8 right-10"
+        onClick={onClose}
+        aria-label={intl.formatMessage({ id: "common.close" })}
+      >
+        <img alt="" src={CloseIcon} role="presentation" />
+      </button>
 
-      <div className="flex items-center justify-center">
+      <div className="flex items-center justify-center w-full pt-10">
         <Icon name="logo" size={70} />
       </div>
-    </>
+    </div>
   );
 };
 
