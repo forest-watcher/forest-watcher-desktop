@@ -1,42 +1,44 @@
-import OptionalWrapper from "components/extensive/OptionalWrapper";
-import { TAlertsById } from "types/map";
-import {
-  allDeforestationAlerts,
-  DefaultRequestThresholds,
-  EAlertTypes,
-  ViirsRequestThresholds
-} from "constants/alerts";
-import { FC, useCallback, useEffect, useMemo, useState } from "react";
+import { TAlertsById } from "components/ui/Map/components/cards/AlertsDetail";
+import { DefaultRequestThresholds, EAlertTypes, ViirsRequestThresholds } from "constants/alerts";
+import { CSSProperties, FC, useCallback, useEffect, useMemo, useState } from "react";
 import { useForm, FormProvider } from "react-hook-form";
 import { Route, RouteComponentProps, Switch, useHistory, useRouteMatch } from "react-router-dom";
-import UserAreasMap from "components/user-areas-map/UserAreasMap";
+import UserAreasMap, { IProps as UserAreasMapProps } from "components/user-areas-map/UserAreasMap";
 import { LAYERS } from "pages/reports/investigation/control-panels/start-investigation/StartInvestigation";
 import { TParams } from "./types";
 import { TPropsFromRedux } from "./InvestigationContainer";
 import { BASEMAPS, PLANET_BASEMAP } from "constants/mapbox";
 import { TGetAllAnswers } from "services/reports";
-import { Layer, LngLat, Source } from "react-map-gl";
+import { LngLat } from "react-map-gl";
 import { setupMapImages } from "helpers/map";
 import { Map as MapInstance, MapboxEvent } from "mapbox-gl";
-
-// Map Sources
-import AreaAssignmentSource from "pages/reports/investigation/components/AreaAssignmentSource";
-import AreaAlertsSource from "pages/reports/investigation/components/AreaAlertSource";
+//@ts-ignore
+import breakpoints from "styles/utilities/_u-breakpoints.scss";
 
 // Control Panel Views
 import AreaListControlPanel from "./control-panels/AreaList";
 import AreaDetailControlPanel from "pages/reports/investigation/control-panels/AreaDetail";
 import StartInvestigationControlPanel from "pages/reports/investigation/control-panels/start-investigation/StartInvestigationContainer";
 import CreateAssignmentControlPanel from "pages/reports/investigation/control-panels/CreateAssignment/CreateAssignment";
+import Layers from "./components/Layers";
+import MapComparison from "components/map-comparison/MapComparison";
+import classNames from "classnames";
+import { useMediaQuery } from "react-responsive";
 
 interface IProps extends RouteComponentProps, TPropsFromRedux {}
+
+const mapContainerStyle: CSSProperties = { position: "absolute", top: 0, bottom: 0, width: "100%" };
+
+export type ProcTypes = "nat" | "cir" | "";
 
 export type TFormValues = {
   layers?: string[];
   currentMap?: string;
   showPlanetImagery?: string[];
-  currentPlanetPeriod?: string;
-  currentPlanetImageType?: "nat" | "cir";
+  currentPlanetPeriodBefore?: string;
+  currentPlanetImageTypeBefore?: ProcTypes;
+  currentPlanetPeriodAfter?: string;
+  currentPlanetImageTypeAfter?: ProcTypes;
   contextualLayers?: string[];
   showAlerts: ["true"];
   showOpenAssignments: ["true"];
@@ -53,14 +55,19 @@ const InvestigationPage: FC<IProps> = props => {
   const [isPlanet, setIsPlanet] = useState(false);
   const [mapRef, setMapRef] = useState<MapInstance | null>(null);
   const [currentPlanetPeriod, setCurrentPlanetPeriod] = useState("");
-  const [currentProc, setCurrentProc] = useState<"" | "cir">("");
+  const [currentProc, setCurrentProc] = useState<ProcTypes>("");
+  const [currentPlanetPeriodAfter, setCurrentPlanetPeriodAfter] = useState("");
+  const [currentProcAfter, setCurrentProcAfter] = useState<ProcTypes>("");
   const [contextualLayerUrls, setContextualLayerUrls] = useState<string[]>([]);
   const [basemapKey, setBasemapKey] = useState<undefined | string>();
   const history = useHistory();
   const [filteredAnswers, setFilteredAnswers] = useState<TGetAllAnswers["data"] | null>(null);
   const [lockAlertSelections, setLockAlertSelections] = useState(false);
+  const [showComparison, setShowComparison] = useState(false);
   let selectedAreaMatch = useRouteMatch<TParams>({ path: "/reporting/investigation/:areaId", exact: false });
   let investigationMatch = useRouteMatch<TParams>({ path: "/reporting/investigation/:areaId/start", exact: false });
+  const isMobile = useMediaQuery({ maxWidth: breakpoints.mobile });
+  const [controlsPortal, setControlsPortal] = useState<HTMLElement | undefined>(undefined);
 
   const handleMapLoad = (evt: MapboxEvent) => {
     setMapRef(evt.target);
@@ -133,8 +140,10 @@ const InvestigationPage: FC<IProps> = props => {
         setMapStyle(basemap.style);
       }
 
-      setCurrentPlanetPeriod(values.currentPlanetPeriod || "");
-      setCurrentProc(values.currentPlanetImageType === "nat" ? "" : values.currentPlanetImageType || "");
+      setCurrentPlanetPeriod(values.currentPlanetPeriodBefore || "");
+      setCurrentProc(values.currentPlanetImageTypeBefore === "nat" ? "" : values.currentPlanetImageTypeBefore || "");
+      setCurrentPlanetPeriodAfter(values.currentPlanetPeriodAfter || "");
+      setCurrentProcAfter(values.currentPlanetImageTypeAfter === "nat" ? "" : values.currentPlanetImageTypeAfter || "");
       setContextualLayerUrls(values.contextualLayers?.map(layer => selectedLayers[layer].attributes.url) || []);
       setBasemapKey(values.currentMap);
       setIsPlanet(values.showPlanetImagery?.[0] === PLANET_BASEMAP.key);
@@ -146,8 +155,15 @@ const InvestigationPage: FC<IProps> = props => {
   useEffect(() => {
     if (!investigationMatch) {
       formhook.reset(defaultValues);
+      setShowComparison(false);
     }
   }, [defaultValues, formhook, investigationMatch]);
+
+  useEffect(() => {
+    if (!isPlanet) {
+      setShowComparison(false);
+    }
+  }, [isPlanet]);
 
   const handleFiltersChange = (filters: TGetAllAnswers["data"]) => {
     if (filters?.length === answersBySelectedArea?.length) {
@@ -157,71 +173,110 @@ const InvestigationPage: FC<IProps> = props => {
     }
   };
 
+  const sharedMapProps = useMemo<UserAreasMapProps>(
+    () => ({
+      onAreaSelect: handleAreaSelect,
+      onAreaDeselect: handleAreaDeselect,
+      focusAllAreas: !selectedAreaMatch,
+      selectedAreaId: selectedAreaMatch?.params.areaId,
+      showReports: watcher.layers?.includes(LAYERS.reports) && !!selectedAreaMatch,
+      answers: filteredAnswers || answersBySelectedArea,
+      mapStyle: mapStyle,
+      showTeamAreas: true,
+      cooperativeGestures: false,
+      shouldWrapContainer: false,
+      style: mapContainerStyle,
+      uncontrolled: true
+    }),
+    [
+      answersBySelectedArea,
+      filteredAnswers,
+      handleAreaDeselect,
+      handleAreaSelect,
+      mapStyle,
+      selectedAreaMatch,
+      watcher.layers
+    ]
+  );
+
   return (
-    <UserAreasMap
-      onAreaSelect={handleAreaSelect}
-      onAreaDeselect={handleAreaDeselect}
-      onMapLoad={handleMapLoad}
-      focusAllAreas={!selectedAreaMatch}
-      selectedAreaId={selectedAreaMatch?.params.areaId}
-      showReports={watcher.layers?.includes(LAYERS.reports) && !!selectedAreaMatch}
-      answers={filteredAnswers || answersBySelectedArea}
-      mapStyle={mapStyle}
-      currentPlanetBasemap={
-        basemaps.length && isPlanet ? basemaps.find(bm => bm.name === currentPlanetPeriod) || basemaps[0] : undefined
-      }
-      currentProc={currentProc}
-      showTeamAreas
-      cooperativeGestures={false}
-    >
-      <FormProvider {...formhook}>
-        <Switch>
-          <Route exact path={`${match.url}`} component={AreaListControlPanel} />
-          <Route exact path={`${match.url}/:areaId`}>
-            <AreaDetailControlPanel
-              areasInUsersTeams={areasInUsersTeams}
-              numberOfReports={answersBySelectedArea?.length}
-            />
-          </Route>
-          <Route exact path={`${match.url}/:areaId/start`}>
-            <StartInvestigationControlPanel
-              answers={answersBySelectedArea}
-              onFilterUpdate={handleFiltersChange}
-              defaultBasemap={basemapKey}
-            />
-          </Route>
-
-          <Route exact path={`${match.url}/:areaId/start/assignment`}>
-            <CreateAssignmentControlPanel setLockAlertSelections={setLockAlertSelections} />
-          </Route>
-        </Switch>
-
-        <OptionalWrapper data={!!investigationMatch}>
-          {contextualLayerUrls.map(url => (
-            <Source id={url} type="raster" tiles={[url]} key={url}>
-              <Layer id={`${url}-layer`} type="raster" />
-            </Source>
-          ))}
-
-          {watcher.showAlerts.includes("true") && (
-            <AreaAlertsSource
-              areaId={investigationMatch?.params.areaId}
-              alertTypesToShow={watcher.alertTypesShown === "all" ? allDeforestationAlerts : [watcher.alertTypesShown]}
-              alertRequestThreshold={
-                watcher.alertTypesShown !== EAlertTypes.viirs
-                  ? watcher.alertTypesRequestThreshold
-                  : watcher.alertTypesViirsRequestThreshold
+    <>
+      <div className="c-map z-auto h-auto" ref={e => setControlsPortal(e || undefined)}></div>
+      <MapComparison
+        className={classNames("h-full", showComparison && "select-none")}
+        minLeftSlide={isMobile ? 300 : 500}
+        renderBefore={cb => {
+          return (
+            <UserAreasMap
+              {...sharedMapProps}
+              onMapLoad={e => {
+                handleMapLoad(e);
+                cb(e.target);
+              }}
+              hideControls
+              currentPlanetBasemap={
+                basemaps.length && isPlanet
+                  ? basemaps.find(bm => bm.name === currentPlanetPeriod) || basemaps[0]
+                  : undefined
               }
-              locked={lockAlertSelections}
-            />
-          )}
+              currentProc={currentProc}
+            >
+              <FormProvider {...formhook}>
+                <Switch>
+                  <Route exact path={`${match.url}`} component={AreaListControlPanel} />
+                  <Route exact path={`${match.url}/:areaId`}>
+                    <AreaDetailControlPanel
+                      areasInUsersTeams={areasInUsersTeams}
+                      numberOfReports={answersBySelectedArea?.length}
+                    />
+                  </Route>
+                  <Route exact path={`${match.url}/:areaId/start`}>
+                    <StartInvestigationControlPanel
+                      answers={answersBySelectedArea}
+                      onFilterUpdate={handleFiltersChange}
+                      defaultBasemap={basemapKey}
+                      onComparison={(value: boolean) => setShowComparison(value)}
+                    />
+                  </Route>
 
-          {watcher.showOpenAssignments.includes("true") && (
-            <AreaAssignmentSource areaId={investigationMatch?.params.areaId} />
-          )}
-        </OptionalWrapper>
-      </FormProvider>
-    </UserAreasMap>
+                  <Route exact path={`${match.url}/:areaId/start/assignment`}>
+                    <CreateAssignmentControlPanel setLockAlertSelections={setLockAlertSelections} />
+                  </Route>
+                </Switch>
+
+                <Layers contextualLayerUrls={contextualLayerUrls} lockAlertSelections={lockAlertSelections} />
+              </FormProvider>
+            </UserAreasMap>
+          );
+        }}
+        renderAfter={
+          showComparison
+            ? cb => {
+                return (
+                  <UserAreasMap
+                    {...sharedMapProps}
+                    onMapLoad={e => {
+                      handleMapLoad(e);
+                      cb(e.target);
+                    }}
+                    controlsPortalDom={controlsPortal}
+                    currentPlanetBasemap={
+                      basemaps.length && isPlanet
+                        ? basemaps.find(bm => bm.name === currentPlanetPeriodAfter) || basemaps[0]
+                        : undefined
+                    }
+                    currentProc={currentProcAfter}
+                  >
+                    <FormProvider {...formhook}>
+                      <Layers contextualLayerUrls={contextualLayerUrls} lockAlertSelections={lockAlertSelections} />
+                    </FormProvider>
+                  </UserAreasMap>
+                );
+              }
+            : undefined
+        }
+      />
+    </>
   );
 };
 

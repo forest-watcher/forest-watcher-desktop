@@ -627,6 +627,8 @@
   "maps.imageType": "Image type",
   "maps.imageType.natural": "Natural color",
   "maps.imageType.cir": "False color (NIR)",
+  "maps.addComparison": "Compare",
+  "maps.removeComparison": "Remove Comparison",
   "filters.all.alerts": "All Alerts",
   "filters.all.templates": "All Templates",
   "filters.all.timeframes": "All Time Frames",

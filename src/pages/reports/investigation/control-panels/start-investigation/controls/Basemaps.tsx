@@ -1,11 +1,11 @@
 import RadioCardGroup from "components/ui/Form/RadioCardGroup";
 import { useFormContext, useWatch } from "react-hook-form";
-import { useIntl } from "react-intl";
+import { FormattedMessage, useIntl } from "react-intl";
 import { useMediaQuery } from "react-responsive";
 //@ts-ignore
 import breakpoints from "styles/utilities/_u-breakpoints.scss";
 import Timeframe from "components/ui/Timeframe";
-import { FC, useEffect, useMemo } from "react";
+import { FC, useCallback, useEffect, useMemo, useState } from "react";
 import { BASEMAPS, PLANET_BASEMAP } from "constants/mapbox";
 import { fireGAEvent } from "helpers/analytics";
 import { MapActions } from "types/analytics";
@@ -14,18 +14,22 @@ import OptionalWrapper from "components/extensive/OptionalWrapper";
 import Select from "components/ui/Form/Select";
 import { useSelector } from "react-redux";
 import { RootState } from "store";
+import Button from "components/ui/Button/Button";
+import classNames from "classnames";
 
 interface IProps {
   defaultBasemap?: string;
+  onComparison: (value: boolean) => void;
 }
 
-const Basemaps: FC<IProps> = ({ defaultBasemap }) => {
+const Basemaps: FC<IProps> = ({ defaultBasemap, onComparison }) => {
   const methods = useFormContext();
   const { errors } = methods.formState;
   const intl = useIntl();
   const isMobile = useMediaQuery({ maxWidth: breakpoints.mobile });
   const watcher = useWatch({ control: methods.control });
   const basemaps = useSelector((state: RootState) => state.map.data);
+  const [isComparison, setIsComparison] = useState(false);
 
   const mapOptions = useMemo(() => {
     const keys = Object.keys(BASEMAPS);
@@ -54,22 +58,79 @@ const Basemaps: FC<IProps> = ({ defaultBasemap }) => {
     [intl]
   );
 
-  const baseMapPeriods = useMemo(() => {
-    const currentProc = watcher.currentPlanetImageType === "nat" ? "" : watcher.currentPlanetImageType || "";
-    const imageType = currentProc === "cir" ? "analytic" : "visual";
-    return basemaps
-      .filter(bm => bm.imageType === imageType)
-      .map(bm => ({
-        label: bm.period,
-        value: bm.name,
-        metadata: bm
-      }))
-      .reverse();
-  }, [basemaps, watcher.currentPlanetImageType]);
+  const getBaseMapPeriods = useCallback(
+    (proc: string) => {
+      const currentProc = proc === "nat" ? "" : proc || "";
+      const imageType = currentProc === "cir" ? "analytic" : "visual";
+      return basemaps
+        .filter(bm => bm.imageType === imageType)
+        .map(bm => ({
+          label: bm.period,
+          value: bm.name,
+          metadata: bm
+        }))
+        .reverse();
+    },
+    [basemaps]
+  );
+
+  const beforeMapPeriods = useMemo(() => {
+    return getBaseMapPeriods(watcher.currentPlanetImageTypeBefore);
+  }, [getBaseMapPeriods, watcher.currentPlanetImageTypeBefore]);
+
+  const afterMapPeriods = useMemo(() => {
+    return getBaseMapPeriods(watcher.currentPlanetImageTypeAfter);
+  }, [getBaseMapPeriods, watcher.currentPlanetImageTypeAfter]);
+
+  const resetBeforeFields = useCallback(() => {
+    methods.resetField("currentPlanetPeriodBefore", {
+      defaultValue: beforeMapPeriods[beforeMapPeriods.length - 1]?.value
+    });
+  }, [beforeMapPeriods, methods]);
+
+  const resetAfterFields = useCallback(() => {
+    methods.resetField("currentPlanetPeriodAfter", {
+      defaultValue: afterMapPeriods[afterMapPeriods.length - 1]?.value
+    });
+  }, [afterMapPeriods, methods]);
+
+  useEffect(() => {
+    resetBeforeFields();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [watcher.currentPlanetImageTypeBefore]);
+
+  useEffect(() => {
+    resetAfterFields();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [watcher.currentPlanetImageTypeAfter]);
+
+  const handleComparison = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    event.preventDefault();
+    setIsComparison(prev => !prev);
+  };
+
+  useEffect(() => {
+    onComparison(isComparison);
+  }, [onComparison, isComparison]);
+
+  const basemapKeys = useMemo(() => {
+    if (isComparison) {
+      return ["Before", "After"];
+    }
+
+    return ["Before"];
+  }, [isComparison]);
+
+  useEffect(() => {
+    if (!watcher.showPlanetImagery.length) {
+      setIsComparison(false);
+    }
+  }, [watcher.showPlanetImagery]);
 
   useEffect(() => {
     return () => {
-      methods.resetField("currentPlanetPeriod", { defaultValue: baseMapPeriods[baseMapPeriods.length - 1]?.value });
+      resetBeforeFields();
+      resetAfterFields();
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -96,66 +157,93 @@ const Basemaps: FC<IProps> = ({ defaultBasemap }) => {
           });
         }}
       />
-      <div className="u-margin-bottom-40 bg-gray-400/40 mx-[-20px] pt-6 pb-2 px-5">
-        <ToggleGroup
-          id="planet"
-          registered={methods.register("showPlanetImagery")}
-          formHook={methods}
-          hideLabel
-          toggleGroupProps={{
-            options: [
-              {
-                label: intl.formatMessage({ id: "maps.planet" }),
-                value: PLANET_BASEMAP.key
-              }
-            ]
-          }}
-        />
+      {basemapKeys.map((item, index) => {
+        const isAfter = item === "After";
+        const isLast = index === basemapKeys.length - 1;
+        const baseMapPeriods = isAfter ? afterMapPeriods : beforeMapPeriods;
 
-        <OptionalWrapper data={watcher.showPlanetImagery?.includes(PLANET_BASEMAP.key) && basemaps.length}>
-          <div className="u-margin-bottom-40">
-            <Select
-              id="period"
-              formHook={methods}
-              registered={methods.register("currentPlanetPeriod")}
-              selectProps={{
-                placeholder: intl.formatMessage({ id: "maps.period" }),
-                options: baseMapPeriods,
-                label: intl.formatMessage({ id: "maps.period" }),
-                alternateLabelStyle: true,
-                defaultValue: baseMapPeriods[baseMapPeriods.length - 1]
-              }}
-              key={watcher.currentPlanetImageType}
-              className="u-margin-bottom-20"
-            />
-            <OptionalWrapper data={!isMobile}>
-              <div className="u-margin-bottom-40">
-                <Timeframe
-                  periods={baseMapPeriods}
-                  selected={baseMapPeriods.findIndex(bmp => {
-                    return bmp.value === watcher.currentPlanetPeriod;
-                  })}
-                  onChange={value => methods.setValue("currentPlanetPeriod", value.value)}
-                  labelGetter="metadata.label"
-                  yearGetter="metadata.year"
+        return (
+          <div
+            className={classNames(
+              "mx-[-20px] pt-6 px-5",
+              isAfter ? "bg-gray-400/70 border-solid border-t-gray-500 border-t-2" : "bg-gray-400/40",
+              isLast && "mb-10",
+              watcher.showPlanetImagery.length ? "pb-6" : "pb-2"
+            )}
+            key={item}
+          >
+            {!isAfter && (
+              <ToggleGroup
+                id="planet"
+                registered={methods.register("showPlanetImagery")}
+                formHook={methods}
+                hideLabel
+                toggleGroupProps={{
+                  options: [
+                    {
+                      label: intl.formatMessage({ id: "maps.planet" }),
+                      value: PLANET_BASEMAP.key
+                    }
+                  ]
+                }}
+              />
+            )}
+
+            <OptionalWrapper data={watcher.showPlanetImagery?.includes(PLANET_BASEMAP.key) && basemaps.length}>
+              <div key={item} className={classNames(!isLast && "mb-6")}>
+                <Select
+                  id="period"
+                  formHook={methods}
+                  registered={methods.register(`currentPlanetPeriod${item}`)}
+                  selectProps={{
+                    placeholder: intl.formatMessage({ id: "maps.period" }),
+                    options: baseMapPeriods,
+                    label: intl.formatMessage({ id: "maps.period" }),
+                    alternateLabelStyle: true,
+                    defaultValue: baseMapPeriods[baseMapPeriods.length - 1]
+                  }}
+                  key={watcher.currentPlanetImageType}
+                  className="u-margin-bottom-20"
                 />
+                <OptionalWrapper data={!isMobile}>
+                  <div className="u-margin-bottom-40">
+                    <Timeframe
+                      periods={baseMapPeriods}
+                      selected={
+                        watcher[`currentPlanetPeriod${item}`]
+                          ? baseMapPeriods.findIndex(bmp => {
+                              return bmp.value === watcher[`currentPlanetPeriod${item}`];
+                            })
+                          : baseMapPeriods.length - 1
+                      }
+                      onChange={value => methods.setValue(`currentPlanetPeriod${item}`, value.value)}
+                      labelGetter="metadata.label"
+                      yearGetter="metadata.year"
+                    />
+                  </div>
+                </OptionalWrapper>
+                <Select
+                  id="colour"
+                  formHook={methods}
+                  registered={methods.register(`currentPlanetImageType${item}`)}
+                  selectProps={{
+                    placeholder: intl.formatMessage({ id: "maps.imageType" }),
+                    options: imageTypeOptions,
+                    label: intl.formatMessage({ id: "maps.imageType" }),
+                    alternateLabelStyle: true,
+                    defaultValue: imageTypeOptions[0]
+                  }}
+                />
+                {isLast && (
+                  <Button variant="secondary" className="w-full bg-gray-300 mt-6" onClick={e => handleComparison(e)}>
+                    <FormattedMessage id={isComparison ? "maps.removeComparison" : "maps.addComparison"} />
+                  </Button>
+                )}
               </div>
             </OptionalWrapper>
-            <Select
-              id="colour"
-              formHook={methods}
-              registered={methods.register("currentPlanetImageType")}
-              selectProps={{
-                placeholder: intl.formatMessage({ id: "maps.imageType" }),
-                options: imageTypeOptions,
-                label: intl.formatMessage({ id: "maps.imageType" }),
-                alternateLabelStyle: true,
-                defaultValue: imageTypeOptions[0]
-              }}
-            />
           </div>
-        </OptionalWrapper>
-      </div>
+        );
+      })}
     </>
   );
 };

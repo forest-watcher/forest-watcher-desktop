@@ -15,6 +15,7 @@ import * as turf from "@turf/turf";
 import { yupResolver } from "@hookform/resolvers/yup";
 import yup from "configureYup";
 import { FormattedMessage, useIntl } from "react-intl";
+import ReactDOM from "react-dom";
 
 interface IProps extends HTMLAttributes<HTMLElement> {
   countriesOptions?: Array<{
@@ -23,6 +24,7 @@ interface IProps extends HTMLAttributes<HTMLElement> {
   }>;
   getCountries: () => void;
   countries: Array<any>;
+  portalDom?: HTMLElement;
 }
 
 const schema = yup
@@ -40,7 +42,7 @@ enum inputs {
 }
 
 const MapControls: FC<IProps> = props => {
-  const { className, countriesOptions = [], getCountries, countries, ...rest } = props;
+  const { className, countriesOptions = [], getCountries, countries, portalDom, ...rest } = props;
   const classes = classnames("c-map__controls", className);
   const [panelOpen, setPanelOpen] = useState(false);
   const { current: map } = useMap();
@@ -145,7 +147,7 @@ const MapControls: FC<IProps> = props => {
     }
   }, [countries, map, selectedCountry]);
 
-  return (
+  const controls = (
     <div className={classes} {...rest}>
       <Popover className="c-map__search-controls">
         <Popover.Button
@@ -245,6 +247,8 @@ const MapControls: FC<IProps> = props => {
       </div>
     </div>
   );
+
+  return portalDom ? ReactDOM.createPortal(controls, portalDom) : controls;
 };
 
 export default MapControls;
