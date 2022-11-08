@@ -44,7 +44,7 @@ export class AlertsService extends BaseService {
     const geostoreId = area.attributes.geostore.id;
 
     return {
-      type: alertTypeKey,
+      type: alertTypeKey === EAlertTypes.umd_as_it_happens ? EAlertTypes.viirs : alertTypeKey,
       data: (await this.getAlertsByGeoStoreId(geostoreId, DATASETS[alertTypeKey], alertRequestThreshold))["data"]
     };
   }
