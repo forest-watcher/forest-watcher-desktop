@@ -64,8 +64,9 @@ const AlertsDetailCard: FC<IProps> = props => {
   const showLastDate = Number(firstAlertDate.format("X")) !== Number(lastAlertDate.format("X"));
   // @ts-ignore
   const allAlertTypes = [...new Set(alertsToShow.map(alert => alert.data.alertType))];
-  const showIsHighConfidence =
-    alertsToShow.findIndex(alert => alert.data[ALERT_API_KEY_MAP.confidence(alert.data.alertType)] === "high") !== -1;
+  const numOfHighConfidenceAlerts = alertsToShow.filter(
+    alert => alert.data[ALERT_API_KEY_MAP.confidence(alert.data.alertType)] === "high"
+  ).length;
 
   return (
     <MapCard
@@ -84,11 +85,13 @@ const AlertsDetailCard: FC<IProps> = props => {
           {allAlertTypes.map(alertType => intl.formatMessage({ id: `alerts.${alertType}` })).join(", ")}
         </p>
 
-        {showIsHighConfidence && (
+        {numOfHighConfidenceAlerts > 0 && (
           <p className="mt-1">
             {intl.formatMessage({ id: "alerts.detail.confidenceLevel" })}:{" "}
             {intl.formatMessage({
-              id: `alerts.detail.confidenceLevel.${alertsToShow.length > 1 ? "high.multiple" : "high"}`
+              id: `alerts.detail.confidenceLevel.${
+                numOfHighConfidenceAlerts === alertsToShow.length ? "high" : "high.multiple"
+              }`
             })}
           </p>
         )}
