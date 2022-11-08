@@ -1,4 +1,4 @@
-import { FC, HTMLAttributes, useEffect, useState } from "react";
+import { CSSProperties, FC, HTMLAttributes, useEffect, useState } from "react";
 import classnames from "classnames";
 import ReactMap, { MapboxEvent } from "react-map-gl";
 import { Map as MapInstance } from "mapbox-gl";
@@ -8,6 +8,7 @@ import MapEditControls from "./components/EditControls";
 import { goToGeojson, setupMapImages } from "helpers/map";
 import { editStyles } from "./components/layers/styles";
 import { FeatureCollection } from "geojson";
+import OptionalWrapper from "components/extensive/OptionalWrapper";
 
 export interface IMapViewState {
   longitude: number;
@@ -24,6 +25,9 @@ export interface IProps extends HTMLAttributes<HTMLElement> {
   geojsonToEdit?: GeoJSON.FeatureCollection<GeoJSON.Geometry>;
   mapStyle?: string;
   cooperativeGestures?: boolean;
+  shouldWrapContainer?: boolean;
+  uncontrolled?: boolean;
+  style?: CSSProperties;
 }
 
 const Map: FC<IProps> = props => {
@@ -41,7 +45,10 @@ const Map: FC<IProps> = props => {
     geojsonToEdit,
     onDrawLoad,
     mapStyle = "mapbox://styles/3sidedcube/cl5axl8ha002c14o5exjzmdlb",
+    style,
     cooperativeGestures = true,
+    shouldWrapContainer = true,
+    uncontrolled = false,
     ...rest
   } = props;
   const classes = classnames("c-map", className);
@@ -78,24 +85,45 @@ const Map: FC<IProps> = props => {
     setMapRef(evt.target);
   };
 
-  const actualViewState = setMapViewState ? mapViewState : viewState;
+  const actualViewState = setMapViewState ? mapViewState : uncontrolled ? undefined : viewState;
 
   return (
-    <div className={classes} data-testid="map-container" {...rest}>
-      <ReactMap
-        {...actualViewState}
-        onMove={evt => (setMapViewState ? setMapViewState(evt.viewState) : setViewState(evt.viewState))}
-        mapStyle={mapStyle}
-        onLoad={handleMapLoad}
-        preserveDrawingBuffer // Allows canvas.toDataURL to work
-        cooperativeGestures={cooperativeGestures}
-        maxZoom={20}
-      >
-        <MapControls />
-        {drawRef && mapRef && <MapEditControls draw={drawRef} map={mapRef} onUpdate={onMapEdit} />}
-        {children}
-      </ReactMap>
-    </div>
+    <OptionalWrapper
+      data={shouldWrapContainer}
+      elseComponent={
+        <ReactMap
+          {...actualViewState}
+          onMove={evt => (setMapViewState ? setMapViewState(evt.viewState) : setViewState(evt.viewState))}
+          mapStyle={mapStyle}
+          onLoad={handleMapLoad}
+          preserveDrawingBuffer // Allows canvas.toDataURL to work
+          cooperativeGestures={cooperativeGestures}
+          maxZoom={20}
+          style={style}
+        >
+          <MapControls />
+          {drawRef && mapRef && <MapEditControls draw={drawRef} map={mapRef} onUpdate={onMapEdit} />}
+          {children}
+        </ReactMap>
+      }
+    >
+      <div className={classes} data-testid="map-container" {...rest}>
+        <ReactMap
+          {...actualViewState}
+          onMove={evt => (setMapViewState ? setMapViewState(evt.viewState) : setViewState(evt.viewState))}
+          mapStyle={mapStyle}
+          onLoad={handleMapLoad}
+          preserveDrawingBuffer // Allows canvas.toDataURL to work
+          cooperativeGestures={cooperativeGestures}
+          maxZoom={20}
+          style={style}
+        >
+          <MapControls />
+          {drawRef && mapRef && <MapEditControls draw={drawRef} map={mapRef} onUpdate={onMapEdit} />}
+          {children}
+        </ReactMap>
+      </div>
+    </OptionalWrapper>
   );
 };
 
