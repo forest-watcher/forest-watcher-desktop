@@ -5,7 +5,7 @@ import { useMediaQuery } from "react-responsive";
 //@ts-ignore
 import breakpoints from "styles/utilities/_u-breakpoints.scss";
 import Timeframe from "components/ui/Timeframe";
-import { FC, Fragment, MouseEventHandler, useEffect, useMemo, useState } from "react";
+import { FC, useEffect, useMemo, useState } from "react";
 import { BASEMAPS, PLANET_BASEMAP } from "constants/mapbox";
 import { fireGAEvent } from "helpers/analytics";
 import { MapActions } from "types/analytics";
