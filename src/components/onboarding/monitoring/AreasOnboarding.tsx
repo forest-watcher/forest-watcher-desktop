@@ -47,7 +47,7 @@ const AreasOnboarding = () => {
   }, []);
 
   return (
-    <OptionalWrapper data={true} elseComponent={<></>}>
+    <OptionalWrapper data={show} elseComponent={<></>}>
       <OnboardingModal isOpen onClose={() => setShow(false)} steps={steps} />
     </OptionalWrapper>
   );
