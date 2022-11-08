@@ -18,7 +18,7 @@ const MapComparison = (props: IProps) => {
 
   useEffect(() => {
     if (afterMapRef && beforeMapRef) {
-      const map = new Compare(beforeMapRef, afterMapRef, "#map-container", {
+      new Compare(beforeMapRef, afterMapRef, "#map-container", {
         // Set this to enable comparing two maps by mouse movement:
         // mousemove: true
       });
