@@ -1,7 +1,7 @@
 import AlertsDetailCard from "components/ui/Map/components/cards/AlertsDetail";
 import SquareClusterMarkers, { EPointDataTypes } from "components/ui/Map/components/layers/SquareClusterMarkers";
 import { pointStyle } from "components/ui/Map/components/layers/styles";
-import { alertTypes, EAlertTypes } from "constants/alerts";
+import { EAlertTypes } from "constants/alerts";
 import { findNeighboringPoints } from "helpers/map";
 import useGetAlertsForArea from "hooks/querys/alerts/useGetAlertsForArea";
 import { FC, useCallback, useEffect, useMemo, useState } from "react";
