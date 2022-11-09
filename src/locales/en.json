@@ -604,7 +604,7 @@
   "alerts.detail.alertType": "Alert Type",
   "alerts.detail.confidenceLevel": "Confidence Level",
   "alerts.detail.confidenceLevel.high": "High",
-  "alerts.detail.confidenceLevel.high.multiple": "Some alerts selected are high",
+  "alerts.detail.confidenceLevel.high.multiple": "Some high confidence alerts",
   "voiceRecordings.toggleBy": "Voice recordings only",
   "submittedBy.name": "Submitted by",
   "submittedBy.filterBy": "Filter by submitter",
