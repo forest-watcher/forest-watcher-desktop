@@ -144,3 +144,7 @@ export type TeamMembersResponse = {
     attributes?: Schemas.TeamMemberModel;
   }[];
 };
+
+export type StringArrayResponse = {
+  data?: string[];
+};

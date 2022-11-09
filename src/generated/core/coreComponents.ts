@@ -89,45 +89,6 @@ export const useGetV3GfwUser = <TData = Responses.AssignmentsResponse>(
   );
 };
 
-export type GetV3GfwAssignmentsTeamsError = Fetcher.ErrorWrapper<{
-  status: 401;
-  payload: Responses.Error;
-}>;
-
-export type GetV3GfwAssignmentsTeamsVariables = CoreContext["fetcherOptions"];
-
-/**
- * Returns all assignments relating to the user's teams
- */
-export const fetchGetV3GfwAssignmentsTeams = (variables: GetV3GfwAssignmentsTeamsVariables, signal?: AbortSignal) =>
-  coreFetch<Responses.AssignmentsResponse, GetV3GfwAssignmentsTeamsError, undefined, {}, {}, {}>({
-    url: "/v3/gfw/assignments/teams",
-    method: "get",
-    ...variables,
-    signal
-  });
-
-/**
- * Returns all assignments relating to the user's teams
- */
-export const useGetV3GfwAssignmentsTeams = <TData = Responses.AssignmentsResponse>(
-  variables: GetV3GfwAssignmentsTeamsVariables,
-  options?: Omit<
-    reactQuery.UseQueryOptions<Responses.AssignmentsResponse, GetV3GfwAssignmentsTeamsError, TData>,
-    "queryKey" | "queryFn"
-  >
-) => {
-  const { fetcherOptions, queryOptions, queryKeyFn } = useCoreContext(options);
-  return reactQuery.useQuery<Responses.AssignmentsResponse, GetV3GfwAssignmentsTeamsError, TData>(
-    queryKeyFn({ path: "/v3/gfw/assignments/teams", operationId: "getV3GfwAssignmentsTeams", variables }),
-    ({ signal }) => fetchGetV3GfwAssignmentsTeams({ ...fetcherOptions, ...variables }, signal),
-    {
-      ...options,
-      ...queryOptions
-    }
-  );
-};
-
 export type GetV3GfwAssignmentsOpenError = Fetcher.ErrorWrapper<{
   status: 401;
   payload: Responses.Error;
@@ -757,7 +718,7 @@ export type PatchV3GfwTemplatesTemplateIdVariables = {
 } & CoreContext["fetcherOptions"];
 
 /**
- * Updates the template with the given id
+ * Creates a new version of the template that shares the same `editGroupId` with the template.
  */
 export const fetchPatchV3GfwTemplatesTemplateId = (
   variables: PatchV3GfwTemplatesTemplateIdVariables,
@@ -773,7 +734,7 @@ export const fetchPatchV3GfwTemplatesTemplateId = (
   >({ url: "/v3/gfw/templates/{templateId}", method: "patch", ...variables, signal });
 
 /**
- * Updates the template with the given id
+ * Creates a new version of the template that shares the same `editGroupId` with the template.
  */
 export const usePatchV3GfwTemplatesTemplateId = (
   options?: Omit<
@@ -2609,16 +2570,504 @@ export const useGetV3GfwAssignmentsAllOpenUserForAreaAreaId = <TData = Responses
   );
 };
 
+export type GetV3GfwTemplatesVersionsIdLatestPathParams = {
+  /**
+   * Edit group id for which the latest version is to be fetched
+   */
+  editGroupId: string;
+};
+
+export type GetV3GfwTemplatesVersionsIdLatestError = Fetcher.ErrorWrapper<undefined>;
+
+export type GetV3GfwTemplatesVersionsIdLatestVariables = {
+  pathParams: GetV3GfwTemplatesVersionsIdLatestPathParams;
+} & CoreContext["fetcherOptions"];
+
+/**
+ * Fetches the latest version in a given template group
+ */
+export const fetchGetV3GfwTemplatesVersionsIdLatest = (
+  variables: GetV3GfwTemplatesVersionsIdLatestVariables,
+  signal?: AbortSignal
+) =>
+  coreFetch<
+    Responses.AssignmentResponse,
+    GetV3GfwTemplatesVersionsIdLatestError,
+    undefined,
+    {},
+    {},
+    GetV3GfwTemplatesVersionsIdLatestPathParams
+  >({ url: "/v3/gfw/templates/versions/{editGroupId}/latest", method: "get", ...variables, signal });
+
+/**
+ * Fetches the latest version in a given template group
+ */
+export const useGetV3GfwTemplatesVersionsIdLatest = <TData = Responses.AssignmentResponse>(
+  variables: GetV3GfwTemplatesVersionsIdLatestVariables,
+  options?: Omit<
+    reactQuery.UseQueryOptions<Responses.AssignmentResponse, GetV3GfwTemplatesVersionsIdLatestError, TData>,
+    "queryKey" | "queryFn"
+  >
+) => {
+  const { fetcherOptions, queryOptions, queryKeyFn } = useCoreContext(options);
+  return reactQuery.useQuery<Responses.AssignmentResponse, GetV3GfwTemplatesVersionsIdLatestError, TData>(
+    queryKeyFn({
+      path: "/v3/gfw/templates/versions/{editGroupId}/latest",
+      operationId: "getV3GfwTemplatesVersionsIdLatest",
+      variables
+    }),
+    ({ signal }) => fetchGetV3GfwTemplatesVersionsIdLatest({ ...fetcherOptions, ...variables }, signal),
+    {
+      ...options,
+      ...queryOptions
+    }
+  );
+};
+
+export type GetV3GfwTemplatesLatestError = Fetcher.ErrorWrapper<undefined>;
+
+export type GetV3GfwTemplatesLatestVariables = CoreContext["fetcherOptions"];
+
+/**
+ * Returns a list of all user templates with the latest version of each template. The answer count refers to the sum of the answers for the edit group the template is in.
+ */
+export const fetchGetV3GfwTemplatesLatest = (variables: GetV3GfwTemplatesLatestVariables, signal?: AbortSignal) =>
+  coreFetch<Responses.TemplatesResponse, GetV3GfwTemplatesLatestError, undefined, {}, {}, {}>({
+    url: "/v3/gfw/templates/latest",
+    method: "get",
+    ...variables,
+    signal
+  });
+
+/**
+ * Returns a list of all user templates with the latest version of each template. The answer count refers to the sum of the answers for the edit group the template is in.
+ */
+export const useGetV3GfwTemplatesLatest = <TData = Responses.TemplatesResponse>(
+  variables: GetV3GfwTemplatesLatestVariables,
+  options?: Omit<
+    reactQuery.UseQueryOptions<Responses.TemplatesResponse, GetV3GfwTemplatesLatestError, TData>,
+    "queryKey" | "queryFn"
+  >
+) => {
+  const { fetcherOptions, queryOptions, queryKeyFn } = useCoreContext(options);
+  return reactQuery.useQuery<Responses.TemplatesResponse, GetV3GfwTemplatesLatestError, TData>(
+    queryKeyFn({ path: "/v3/gfw/templates/latest", operationId: "getV3GfwTemplatesLatest", variables }),
+    ({ signal }) => fetchGetV3GfwTemplatesLatest({ ...fetcherOptions, ...variables }, signal),
+    {
+      ...options,
+      ...queryOptions
+    }
+  );
+};
+
+export type GetV3GfwTemplatesVersionEditGroupIdPathParams = {
+  /**
+   * The edit group id for the template group
+   */
+  editGroupId: string;
+};
+
+export type GetV3GfwTemplatesVersionEditGroupIdError = Fetcher.ErrorWrapper<undefined>;
+
+export type GetV3GfwTemplatesVersionEditGroupIdVariables = {
+  pathParams: GetV3GfwTemplatesVersionEditGroupIdPathParams;
+} & CoreContext["fetcherOptions"];
+
+/**
+ * Get a list of templates which are all the versions for the given edit group id. The answer counts on each templates refer to the answer count per individual version.
+ */
+export const fetchGetV3GfwTemplatesVersionEditGroupId = (
+  variables: GetV3GfwTemplatesVersionEditGroupIdVariables,
+  signal?: AbortSignal
+) =>
+  coreFetch<
+    Responses.TemplatesResponse,
+    GetV3GfwTemplatesVersionEditGroupIdError,
+    undefined,
+    {},
+    {},
+    GetV3GfwTemplatesVersionEditGroupIdPathParams
+  >({ url: "/v3/gfw/templates/versions/{editGroupId}", method: "get", ...variables, signal });
+
+/**
+ * Get a list of templates which are all the versions for the given edit group id. The answer counts on each templates refer to the answer count per individual version.
+ */
+export const useGetV3GfwTemplatesVersionEditGroupId = <TData = Responses.TemplatesResponse>(
+  variables: GetV3GfwTemplatesVersionEditGroupIdVariables,
+  options?: Omit<
+    reactQuery.UseQueryOptions<Responses.TemplatesResponse, GetV3GfwTemplatesVersionEditGroupIdError, TData>,
+    "queryKey" | "queryFn"
+  >
+) => {
+  const { fetcherOptions, queryOptions, queryKeyFn } = useCoreContext(options);
+  return reactQuery.useQuery<Responses.TemplatesResponse, GetV3GfwTemplatesVersionEditGroupIdError, TData>(
+    queryKeyFn({
+      path: "/v3/gfw/templates/versions/{editGroupId}",
+      operationId: "getV3GfwTemplatesVersionEditGroupId",
+      variables
+    }),
+    ({ signal }) => fetchGetV3GfwTemplatesVersionEditGroupId({ ...fetcherOptions, ...variables }, signal),
+    {
+      ...options,
+      ...queryOptions
+    }
+  );
+};
+
+export type PatchV3TemplatesTemplateIdStatusPathParams = {
+  /**
+   * Id for the template to be updated
+   */
+  templateId: string;
+};
+
+export type PatchV3TemplatesTemplateIdStatusError = Fetcher.ErrorWrapper<undefined>;
+
+export type PatchV3TemplatesTemplateIdStatusRequestBody = {
+  status: "published" | "unpublished";
+};
+
+export type PatchV3TemplatesTemplateIdStatusVariables = {
+  body: PatchV3TemplatesTemplateIdStatusRequestBody;
+  pathParams: PatchV3TemplatesTemplateIdStatusPathParams;
+} & CoreContext["fetcherOptions"];
+
+/**
+ * Update the status of a given template
+ */
+export const fetchPatchV3TemplatesTemplateIdStatus = (
+  variables: PatchV3TemplatesTemplateIdStatusVariables,
+  signal?: AbortSignal
+) =>
+  coreFetch<
+    Responses.TemplateResponse,
+    PatchV3TemplatesTemplateIdStatusError,
+    PatchV3TemplatesTemplateIdStatusRequestBody,
+    {},
+    {},
+    PatchV3TemplatesTemplateIdStatusPathParams
+  >({ url: "/v3/templates/{templateId}/status", method: "patch", ...variables, signal });
+
+/**
+ * Update the status of a given template
+ */
+export const usePatchV3TemplatesTemplateIdStatus = (
+  options?: Omit<
+    reactQuery.UseMutationOptions<
+      Responses.TemplateResponse,
+      PatchV3TemplatesTemplateIdStatusError,
+      PatchV3TemplatesTemplateIdStatusVariables
+    >,
+    "mutationFn"
+  >
+) => {
+  const { fetcherOptions } = useCoreContext();
+  return reactQuery.useMutation<
+    Responses.TemplateResponse,
+    PatchV3TemplatesTemplateIdStatusError,
+    PatchV3TemplatesTemplateIdStatusVariables
+  >(
+    (variables: PatchV3TemplatesTemplateIdStatusVariables) =>
+      fetchPatchV3TemplatesTemplateIdStatus({ ...fetcherOptions, ...variables }),
+    options
+  );
+};
+
+export type GetV3GfwTemplatesPublicError = Fetcher.ErrorWrapper<undefined>;
+
+export type GetV3GfwTemplatesPublicVariables = CoreContext["fetcherOptions"];
+
+/**
+ * Returns a list of all public templates
+ */
+export const fetchGetV3GfwTemplatesPublic = (variables: GetV3GfwTemplatesPublicVariables, signal?: AbortSignal) =>
+  coreFetch<Responses.TemplatesResponse, GetV3GfwTemplatesPublicError, undefined, {}, {}, {}>({
+    url: "/v3/gfw/templates/public",
+    method: "get",
+    ...variables,
+    signal
+  });
+
+/**
+ * Returns a list of all public templates
+ */
+export const useGetV3GfwTemplatesPublic = <TData = Responses.TemplatesResponse>(
+  variables: GetV3GfwTemplatesPublicVariables,
+  options?: Omit<
+    reactQuery.UseQueryOptions<Responses.TemplatesResponse, GetV3GfwTemplatesPublicError, TData>,
+    "queryKey" | "queryFn"
+  >
+) => {
+  const { fetcherOptions, queryOptions, queryKeyFn } = useCoreContext(options);
+  return reactQuery.useQuery<Responses.TemplatesResponse, GetV3GfwTemplatesPublicError, TData>(
+    queryKeyFn({ path: "/v3/gfw/templates/public", operationId: "getV3GfwTemplatesPublic", variables }),
+    ({ signal }) => fetchGetV3GfwTemplatesPublic({ ...fetcherOptions, ...variables }, signal),
+    {
+      ...options,
+      ...queryOptions
+    }
+  );
+};
+
+export type GetV3GfwAreaTeamsAreaIdPathParams = {
+  areaId: string;
+};
+
+export type GetV3GfwAreaTeamsAreaIdError = Fetcher.ErrorWrapper<
+  | {
+      status: 401;
+      payload: Responses.Error;
+    }
+  | {
+      status: 404;
+      payload: Responses.Error;
+    }
+>;
+
+export type GetV3GfwAreaTeamsAreaIdVariables = {
+  pathParams: GetV3GfwAreaTeamsAreaIdPathParams;
+} & CoreContext["fetcherOptions"];
+
+/**
+ * Returns an array of team ids associated with the area
+ */
+export const fetchGetV3GfwAreaTeamsAreaId = (variables: GetV3GfwAreaTeamsAreaIdVariables, signal?: AbortSignal) =>
+  coreFetch<
+    Responses.StringArrayResponse,
+    GetV3GfwAreaTeamsAreaIdError,
+    undefined,
+    {},
+    {},
+    GetV3GfwAreaTeamsAreaIdPathParams
+  >({ url: "/v3/gfw/arearelations/teams/areaTeams/{areaId}", method: "get", ...variables, signal });
+
+/**
+ * Returns an array of team ids associated with the area
+ */
+export const useGetV3GfwAreaTeamsAreaId = <TData = Responses.StringArrayResponse>(
+  variables: GetV3GfwAreaTeamsAreaIdVariables,
+  options?: Omit<
+    reactQuery.UseQueryOptions<Responses.StringArrayResponse, GetV3GfwAreaTeamsAreaIdError, TData>,
+    "queryKey" | "queryFn"
+  >
+) => {
+  const { fetcherOptions, queryOptions, queryKeyFn } = useCoreContext(options);
+  return reactQuery.useQuery<Responses.StringArrayResponse, GetV3GfwAreaTeamsAreaIdError, TData>(
+    queryKeyFn({
+      path: "/v3/gfw/arearelations/teams/areaTeams/{areaId}",
+      operationId: "getV3GfwAreaTeamsAreaId",
+      variables
+    }),
+    ({ signal }) => fetchGetV3GfwAreaTeamsAreaId({ ...fetcherOptions, ...variables }, signal),
+    {
+      ...options,
+      ...queryOptions
+    }
+  );
+};
+
+export type GetV3GfwArearelationsTeamsTeamAreasTeamIdPathParams = {
+  teamId: string;
+};
+
+export type GetV3GfwArearelationsTeamsTeamAreasTeamIdError = Fetcher.ErrorWrapper<
+  | {
+      status: 401;
+      payload: Responses.Error;
+    }
+  | {
+      status: 404;
+      payload: Responses.Error;
+    }
+>;
+
+export type GetV3GfwArearelationsTeamsTeamAreasTeamIdVariables = {
+  pathParams: GetV3GfwArearelationsTeamsTeamAreasTeamIdPathParams;
+} & CoreContext["fetcherOptions"];
+
+/**
+ * Returns an array of area ids relating to a team
+ */
+export const fetchGetV3GfwArearelationsTeamsTeamAreasTeamId = (
+  variables: GetV3GfwArearelationsTeamsTeamAreasTeamIdVariables,
+  signal?: AbortSignal
+) =>
+  coreFetch<
+    Responses.StringArrayResponse,
+    GetV3GfwArearelationsTeamsTeamAreasTeamIdError,
+    undefined,
+    {},
+    {},
+    GetV3GfwArearelationsTeamsTeamAreasTeamIdPathParams
+  >({ url: "/v3/gfw/arearelations/teams/teamAreas/{teamId}", method: "get", ...variables, signal });
+
+/**
+ * Returns an array of area ids relating to a team
+ */
+export const useGetV3GfwArearelationsTeamsTeamAreasTeamId = <TData = Responses.StringArrayResponse>(
+  variables: GetV3GfwArearelationsTeamsTeamAreasTeamIdVariables,
+  options?: Omit<
+    reactQuery.UseQueryOptions<Responses.StringArrayResponse, GetV3GfwArearelationsTeamsTeamAreasTeamIdError, TData>,
+    "queryKey" | "queryFn"
+  >
+) => {
+  const { fetcherOptions, queryOptions, queryKeyFn } = useCoreContext(options);
+  return reactQuery.useQuery<Responses.StringArrayResponse, GetV3GfwArearelationsTeamsTeamAreasTeamIdError, TData>(
+    queryKeyFn({
+      path: "/v3/gfw/arearelations/teams/teamAreas/{teamId}",
+      operationId: "getV3GfwArearelationsTeamsTeamAreasTeamId",
+      variables
+    }),
+    ({ signal }) => fetchGetV3GfwArearelationsTeamsTeamAreasTeamId({ ...fetcherOptions, ...variables }, signal),
+    {
+      ...options,
+      ...queryOptions
+    }
+  );
+};
+
+export type GetV3GfwArearelationsTemplatesAreaTemplatesAreaIdPathParams = {
+  areaId: string;
+};
+
+export type GetV3GfwArearelationsTemplatesAreaTemplatesAreaIdError = Fetcher.ErrorWrapper<
+  | {
+      status: 401;
+      payload: Responses.Error;
+    }
+  | {
+      status: 404;
+      payload: Responses.StringArrayResponse;
+    }
+>;
+
+export type GetV3GfwArearelationsTemplatesAreaTemplatesAreaIdVariables = {
+  pathParams: GetV3GfwArearelationsTemplatesAreaTemplatesAreaIdPathParams;
+} & CoreContext["fetcherOptions"];
+
+/**
+ * Returns an array of template ids related to an area
+ */
+export const fetchGetV3GfwArearelationsTemplatesAreaTemplatesAreaId = (
+  variables: GetV3GfwArearelationsTemplatesAreaTemplatesAreaIdVariables,
+  signal?: AbortSignal
+) =>
+  coreFetch<
+    Responses.StringArrayResponse,
+    GetV3GfwArearelationsTemplatesAreaTemplatesAreaIdError,
+    undefined,
+    {},
+    {},
+    GetV3GfwArearelationsTemplatesAreaTemplatesAreaIdPathParams
+  >({ url: "/v3/gfw/arearelations/templates/areaTemplates/{areaId}", method: "get", ...variables, signal });
+
+/**
+ * Returns an array of template ids related to an area
+ */
+export const useGetV3GfwArearelationsTemplatesAreaTemplatesAreaId = <TData = Responses.StringArrayResponse>(
+  variables: GetV3GfwArearelationsTemplatesAreaTemplatesAreaIdVariables,
+  options?: Omit<
+    reactQuery.UseQueryOptions<
+      Responses.StringArrayResponse,
+      GetV3GfwArearelationsTemplatesAreaTemplatesAreaIdError,
+      TData
+    >,
+    "queryKey" | "queryFn"
+  >
+) => {
+  const { fetcherOptions, queryOptions, queryKeyFn } = useCoreContext(options);
+  return reactQuery.useQuery<
+    Responses.StringArrayResponse,
+    GetV3GfwArearelationsTemplatesAreaTemplatesAreaIdError,
+    TData
+  >(
+    queryKeyFn({
+      path: "/v3/gfw/arearelations/templates/areaTemplates/{areaId}",
+      operationId: "getV3GfwArearelationsTemplatesAreaTemplatesAreaId",
+      variables
+    }),
+    ({ signal }) => fetchGetV3GfwArearelationsTemplatesAreaTemplatesAreaId({ ...fetcherOptions, ...variables }, signal),
+    {
+      ...options,
+      ...queryOptions
+    }
+  );
+};
+
+export type GetV3GfwArearelationsTemplatesTemplateAreasTemplateIdPathParams = {
+  templateId: string;
+};
+
+export type GetV3GfwArearelationsTemplatesTemplateAreasTemplateIdError = Fetcher.ErrorWrapper<
+  | {
+      status: 401;
+      payload: Responses.Error;
+    }
+  | {
+      status: 404;
+      payload: Responses.Error;
+    }
+>;
+
+export type GetV3GfwArearelationsTemplatesTemplateAreasTemplateIdVariables = {
+  pathParams: GetV3GfwArearelationsTemplatesTemplateAreasTemplateIdPathParams;
+} & CoreContext["fetcherOptions"];
+
+/**
+ * Returns an array of area ids related to a template
+ */
+export const fetchGetV3GfwArearelationsTemplatesTemplateAreasTemplateId = (
+  variables: GetV3GfwArearelationsTemplatesTemplateAreasTemplateIdVariables,
+  signal?: AbortSignal
+) =>
+  coreFetch<
+    Responses.StringArrayResponse,
+    GetV3GfwArearelationsTemplatesTemplateAreasTemplateIdError,
+    undefined,
+    {},
+    {},
+    GetV3GfwArearelationsTemplatesTemplateAreasTemplateIdPathParams
+  >({ url: "/v3/gfw/arearelations/templates/templateAreas/{templateId}", method: "get", ...variables, signal });
+
+/**
+ * Returns an array of area ids related to a template
+ */
+export const useGetV3GfwArearelationsTemplatesTemplateAreasTemplateId = <TData = Responses.StringArrayResponse>(
+  variables: GetV3GfwArearelationsTemplatesTemplateAreasTemplateIdVariables,
+  options?: Omit<
+    reactQuery.UseQueryOptions<
+      Responses.StringArrayResponse,
+      GetV3GfwArearelationsTemplatesTemplateAreasTemplateIdError,
+      TData
+    >,
+    "queryKey" | "queryFn"
+  >
+) => {
+  const { fetcherOptions, queryOptions, queryKeyFn } = useCoreContext(options);
+  return reactQuery.useQuery<
+    Responses.StringArrayResponse,
+    GetV3GfwArearelationsTemplatesTemplateAreasTemplateIdError,
+    TData
+  >(
+    queryKeyFn({
+      path: "/v3/gfw/arearelations/templates/templateAreas/{templateId}",
+      operationId: "getV3GfwArearelationsTemplatesTemplateAreasTemplateId",
+      variables
+    }),
+    ({ signal }) =>
+      fetchGetV3GfwArearelationsTemplatesTemplateAreasTemplateId({ ...fetcherOptions, ...variables }, signal),
+    {
+      ...options,
+      ...queryOptions
+    }
+  );
+};
+
 export type QueryOperation =
   | {
       path: "/v3/gfw/assignments/user";
       operationId: "getV3GfwUser";
       variables: GetV3GfwUserVariables;
-    }
-  | {
-      path: "/v3/gfw/assignments/teams";
-      operationId: "getV3GfwAssignmentsTeams";
-      variables: GetV3GfwAssignmentsTeamsVariables;
     }
   | {
       path: "/v3/gfw/assignments/open";
@@ -2719,4 +3168,44 @@ export type QueryOperation =
       path: "/v3/gfw/assignments/allOpenUserForArea/{areaId}";
       operationId: "getV3GfwAssignmentsAllOpenUserForAreaAreaId";
       variables: GetV3GfwAssignmentsAllOpenUserForAreaAreaIdVariables;
+    }
+  | {
+      path: "/v3/gfw/templates/versions/{editGroupId}/latest";
+      operationId: "getV3GfwTemplatesVersionsIdLatest";
+      variables: GetV3GfwTemplatesVersionsIdLatestVariables;
+    }
+  | {
+      path: "/v3/gfw/templates/latest";
+      operationId: "getV3GfwTemplatesLatest";
+      variables: GetV3GfwTemplatesLatestVariables;
+    }
+  | {
+      path: "/v3/gfw/templates/versions/{editGroupId}";
+      operationId: "getV3GfwTemplatesVersionEditGroupId";
+      variables: GetV3GfwTemplatesVersionEditGroupIdVariables;
+    }
+  | {
+      path: "/v3/gfw/templates/public";
+      operationId: "getV3GfwTemplatesPublic";
+      variables: GetV3GfwTemplatesPublicVariables;
+    }
+  | {
+      path: "/v3/gfw/arearelations/teams/areaTeams/{areaId}";
+      operationId: "getV3GfwAreaTeamsAreaId";
+      variables: GetV3GfwAreaTeamsAreaIdVariables;
+    }
+  | {
+      path: "/v3/gfw/arearelations/teams/teamAreas/{teamId}";
+      operationId: "getV3GfwArearelationsTeamsTeamAreasTeamId";
+      variables: GetV3GfwArearelationsTeamsTeamAreasTeamIdVariables;
+    }
+  | {
+      path: "/v3/gfw/arearelations/templates/areaTemplates/{areaId}";
+      operationId: "getV3GfwArearelationsTemplatesAreaTemplatesAreaId";
+      variables: GetV3GfwArearelationsTemplatesAreaTemplatesAreaIdVariables;
+    }
+  | {
+      path: "/v3/gfw/arearelations/templates/templateAreas/{templateId}";
+      operationId: "getV3GfwArearelationsTemplatesTemplateAreasTemplateId";
+      variables: GetV3GfwArearelationsTemplatesTemplateAreasTemplateIdVariables;
     };

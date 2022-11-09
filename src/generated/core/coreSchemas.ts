@@ -11,20 +11,24 @@ export type AssignmentModel = {
   location?: {
     lat?: number;
     lon?: number;
-    alertType?: string;
-  };
+    arrayType?: string;
+  }[];
   priority: number;
   monitors: string[];
   notes: string;
   status: "open" | "on hold" | "completed";
-  alert?: string;
   areaId: string;
-  templateId: string;
-  teamIds: string[];
+  templateIds: string[];
   createdAt?: number;
   createdBy?: string;
   areaName?: string;
   geostore?: GeostoreModel;
+  templates?: TemplateModel[];
+  monitorNames?: {
+    id?: string;
+    name?: string;
+  }[];
+  image?: string;
 };
 
 export type RouteModel = {
@@ -65,6 +69,12 @@ export type TemplateModel = {
   createdAt?: string;
   questions?: QuestionModel[];
   answersCount?: number;
+  isLatest?: boolean;
+  editGroupId?: string;
+  areas?: {
+    id?: string;
+    name?: string;
+  }[];
 };
 
 export type ChildQuestionModel = {
@@ -120,6 +130,7 @@ export type TeamModel = {
   createdAt: string;
   members?: TeamMemberModel[];
   areas?: string[];
+  layers?: string[];
 };
 
 export type AreaModel = {
