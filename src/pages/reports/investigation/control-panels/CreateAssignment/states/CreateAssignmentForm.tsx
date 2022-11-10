@@ -182,7 +182,7 @@ const CreateAssignmentForm: FC<IProps> = props => {
 
     // Submit assignment to endpoint
     try {
-      await postAssignment({
+      const resp = await postAssignment({
         // @ts-ignore postAssignment doesn't accept form data but the fetcher library handles it
         body: formData,
         headers: httpAuthHeader
@@ -192,7 +192,7 @@ const CreateAssignmentForm: FC<IProps> = props => {
       // Redirecting to "Start Investigation" panel for now
       setParentValue("selectedAlerts", []);
       setParentValue("singleSelectedLocation", undefined);
-      history.push(location.pathname.replace("/assignment", ""));
+      history.push(`/assignment/${resp.data?.id}`);
     } catch (e) {
       toastr.error(intl.formatMessage({ id: "assignment.create.form.error" }), "");
     }
