@@ -46,7 +46,7 @@ const Assignments = () => {
       priority: intl.formatMessage({ id: priorityToString(assignment.attributes?.priority) }),
       status: assignment.attributes?.status.toUpperCase() ?? ""
     })) as TAssignmentsDataTable[];
-  }, [assignmentsData]);
+  }, [assignmentsData?.data, intl]);
 
   const [filteredRows, setFilteredRows] = useState<TAssignmentsDataTable[]>(rows);
   const { filters, extraFilters } = useAssignmentsFilters(assignmentsData?.data);
