@@ -26,6 +26,8 @@ import yup from "configureYup";
 import { yupResolver } from "@hookform/resolvers/yup/dist/yup";
 import { Map } from "mapbox-gl";
 import { serialize } from "object-to-formdata";
+import { goToGeojson } from "helpers/map";
+import * as turf from "@turf/turf";
 export interface IProps {
   setShowCreateAssignmentForm: Dispatch<SetStateAction<boolean>>;
   setShapeFileGeoJSON: Dispatch<SetStateAction<GeojsonModel | undefined>>;
@@ -135,17 +137,12 @@ const CreateAssignmentForm: FC<IProps> = props => {
       templateIds: assignmentFormValues.templates
     };
 
-    if (map) {
-      const node = map?.getCanvas();
-      const dataUrl = node.toDataURL("image/jpeg");
-      const blob = await (await fetch(dataUrl)).blob();
-      const imageFile = new File([blob], `${encodeURIComponent("assignment")}.jpg`, { type: "image/jpeg" });
-      body.image = imageFile;
-    }
-
     if (shapeFileGeoJSON) {
       // Assign the custom shape file to the Assignment
       body.geostore = shapeFileGeoJSON;
+      if (map) {
+        goToGeojson(map, shapeFileGeoJSON, false);
+      }
     } else if (singleSelectedLocation) {
       // Else use the Single Selected Location
       body.location = [
@@ -154,6 +151,10 @@ const CreateAssignmentForm: FC<IProps> = props => {
           lon: singleSelectedLocation.lng
         }
       ];
+      if (map) {
+        map.flyTo({ center: [singleSelectedLocation.lng, singleSelectedLocation.lat], animate: false });
+      }
+      // go to point on the map
     } else if (selectedAlerts) {
       // Else use the selected Alerts on Map
       body.location = selectedAlerts.map(alert => ({
@@ -161,6 +162,20 @@ const CreateAssignmentForm: FC<IProps> = props => {
         lon: alert.data.longitude,
         alertType: alert.data.alertType
       }));
+
+      const polygon = turf.polygon([selectedAlerts.map(alert => [alert.data.longitude, alert.data.latitude])]);
+
+      if (map) {
+        goToGeojson(map, polygon, false);
+      }
+    }
+
+    if (map) {
+      const node = map?.getCanvas();
+      const dataUrl = node.toDataURL("image/jpeg");
+      const blob = await (await fetch(dataUrl)).blob();
+      const imageFile = new File([blob], `${encodeURIComponent("assignment")}.jpg`, { type: "image/jpeg" });
+      body.image = imageFile;
     }
 
     const formData = serialize(body, { indices: true });
