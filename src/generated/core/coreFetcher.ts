@@ -17,7 +17,7 @@ export type CoreFetcherOptions<TBody, THeaders, TQueryParams, TPathParams> = {
 export async function coreFetch<
   TData,
   TError,
-  TBody extends {} | undefined | null,
+  TBody extends {} | undefined | null | FormData,
   THeaders extends {},
   TQueryParams extends {},
   TPathParams extends {}
@@ -34,11 +34,12 @@ export async function coreFetch<
     const response = await window.fetch(`${baseUrl}${resolveUrl(url, queryParams, pathParams)}`, {
       signal,
       method: method.toUpperCase(),
-      body: body ? JSON.stringify(body) : undefined,
-      headers: {
-        "Content-Type": "application/json",
-        ...headers
-      }
+      body: body ? (body instanceof FormData ? body : JSON.stringify(body)) : undefined,
+      headers: headers
+        ? headers
+        : {
+            "Content-Type": "application/json"
+          }
     });
     if (!response.ok) {
       let error: ErrorWrapper<TError>;

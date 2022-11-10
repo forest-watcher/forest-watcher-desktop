@@ -24,11 +24,13 @@ import { toastr } from "react-redux-toastr";
 import { useHistory, useLocation, useParams } from "react-router-dom";
 import yup from "configureYup";
 import { yupResolver } from "@hookform/resolvers/yup/dist/yup";
-
+import { Map } from "mapbox-gl";
+import { serialize } from "object-to-formdata";
 export interface IProps {
   setShowCreateAssignmentForm: Dispatch<SetStateAction<boolean>>;
   setShapeFileGeoJSON: Dispatch<SetStateAction<GeojsonModel | undefined>>;
   shapeFileGeoJSON?: GeojsonModel;
+  map?: Map;
 }
 
 type TCreateAssignmentFormFields = {
@@ -55,7 +57,7 @@ const createAssignmentFormSchema = yup
   .required();
 
 const CreateAssignmentForm: FC<IProps> = props => {
-  const { setShowCreateAssignmentForm, setShapeFileGeoJSON, shapeFileGeoJSON } = props;
+  const { setShowCreateAssignmentForm, setShapeFileGeoJSON, shapeFileGeoJSON, map } = props;
   const intl = useIntl();
   const history = useHistory();
   const location = useLocation();
@@ -122,22 +124,30 @@ const CreateAssignmentForm: FC<IProps> = props => {
     const assignmentFormValues = getAssignmentValues();
     const selectedAlerts = getParentValues("selectedAlerts") as TAlertsById[];
     const singleSelectedLocation = getParentValues("singleSelectedLocation") as LngLat;
-
     const body: AssignmentBody = {
       priority: assignmentFormValues.priority,
       // @ts-ignore
       monitors: [...new Set(assignmentFormValues.monitors)],
       notes: assignmentFormValues.notes,
       areaId: areaId,
+      // @ts-ignore issue with openapi spec, remove ignore when fixed
+      status: "open", // Default
       templateIds: assignmentFormValues.templates
     };
+
+    if (map) {
+      const node = map?.getCanvas();
+      const dataUrl = node.toDataURL("image/jpeg");
+      const blob = await (await fetch(dataUrl)).blob();
+      const imageFile = new File([blob], `${encodeURIComponent("assignment")}.jpg`, { type: "image/jpeg" });
+      body.image = imageFile;
+    }
 
     if (shapeFileGeoJSON) {
       // Assign the custom shape file to the Assignment
       body.geostore = shapeFileGeoJSON;
     } else if (singleSelectedLocation) {
       // Else use the Single Selected Location
-      // @ts-ignore ToDo: update when endpoint is updated
       body.location = [
         {
           lat: singleSelectedLocation.lat,
@@ -146,7 +156,6 @@ const CreateAssignmentForm: FC<IProps> = props => {
       ];
     } else if (selectedAlerts) {
       // Else use the selected Alerts on Map
-      // @ts-ignore ToDo: update when endpoint is updated
       body.location = selectedAlerts.map(alert => ({
         lat: alert.data.latitude,
         lon: alert.data.longitude,
@@ -154,10 +163,13 @@ const CreateAssignmentForm: FC<IProps> = props => {
       }));
     }
 
+    const formData = serialize(body, { indices: true });
+
     // Submit assignment to endpoint
     try {
       await postAssignment({
-        body,
+        // @ts-ignore postAssignment doesn't accept form data but the fetcher library handles it
+        body: formData,
         headers: httpAuthHeader
       });
 
