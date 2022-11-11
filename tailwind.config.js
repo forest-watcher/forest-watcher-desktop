@@ -32,6 +32,9 @@ module.exports = {
       },
       spacing: {
         15: "3.75rem"
+      },
+      fontFamily: {
+        fira: "'Fira Sans', sans-serif"
       }
     }
   },
