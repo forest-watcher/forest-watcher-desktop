@@ -140,7 +140,7 @@ const MultiSelectDialogPreview = <T,>(props: IMultiSelectDialogPreviewProps<T>) 
   );
 
   const AddBtn = () => (
-    <Button className="w-full bg-white text-neutral-600" variant="secondary" onClick={onAdd}>
+    <Button className="w-full bg-neutral-300 text-neutral-600" variant="secondary" onClick={onAdd}>
       <Icon size={13} name="GreenPlus" className="mr-3 my-[-1px]" />
       <FormattedMessage id={addButtonLabel} />
     </Button>

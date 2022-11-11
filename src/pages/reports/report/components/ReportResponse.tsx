@@ -21,7 +21,7 @@ const ReportResponse = ({ question, response, type }: ReportResponseProps) => {
   return (
     <section className="my-10">
       {/* Question */}
-      <div className="bg-green-400 border-2 border-solid border-green-500 py-7 px-6 rounded-t-[4px] border-opacity-20">
+      <div className="bg-primary-400 border-2 border-solid border-primary-500 py-7 px-6 rounded-t-[4px] border-opacity-20">
         <p className="text-[24px] text-neutral-700">{question}</p>
       </div>
       {/* Response */}

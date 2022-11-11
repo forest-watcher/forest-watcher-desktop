@@ -123,7 +123,7 @@ const OpenAssignmentEmptyState: FC<IProps> = props => {
           className="hidden"
           accept=".zip, .csv, .json, .geojson, .kml, .kmz"
         />
-        <Button className="bg-white w-full" variant="secondary" onClick={() => fileInputRef.current?.click()}>
+        <Button className="bg-neutral-300 w-full" variant="secondary" onClick={() => fileInputRef.current?.click()}>
           <FormattedMessage id="assignments.empty.upload.shapefile" />
         </Button>
       </div>

@@ -25,7 +25,7 @@ const IconCard = ({ iconName, title, text, textLink }: IconCardProps) => {
 
   return (
     <Card className="max-w-none flex items-center gap-3 bg-neutral-400">
-      <div className="flex justify-center items-center h-[48px] w-[48px] rounded-full bg-green-500 p-3">
+      <div className="flex justify-center items-center h-[48px] w-[48px] rounded-full bg-primary-500 p-3">
         <Icon name={iconName} className="text-neutral-300" size={22} />
       </div>
 

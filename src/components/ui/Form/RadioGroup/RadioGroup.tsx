@@ -31,7 +31,7 @@ const RadioGroup = <T,>(props: IProps<T> & UseControllerProps<T>) => {
                   className={classnames(
                     "border border-solid py-[9px] px-4 rounded-md flex-1 text-center cursor-pointer text-base",
                     !checked && "border-neutral-500",
-                    checked && "border-green-500 bg-green-400"
+                    checked && "border-primary-500 bg-primary-400"
                   )}
                 >
                   <FormattedMessage id={option.label} />

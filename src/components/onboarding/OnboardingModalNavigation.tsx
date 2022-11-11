@@ -15,7 +15,7 @@ const OnboardingModalNavigation = ({ steps, currentStep }: OnboardingModalNaviga
         render={(_, index) => (
           <div
             className={`h-[10px] transition-all duration-300 rounded-lg ${
-              currentStep === index ? "bg-green-500 w-8" : "bg-neutral-500 w-3"
+              currentStep === index ? "bg-primary-500 w-8" : "bg-neutral-500 w-3"
             }`}
           />
         )}

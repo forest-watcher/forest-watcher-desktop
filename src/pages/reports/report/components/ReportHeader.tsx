@@ -14,8 +14,8 @@ const ReportHeader = ({ setShowExportModal }: ReportHeaderProps) => {
     <div className="bg-neutral-700">
       <section className="row column py-7">
         <button onClick={() => history.goBack()} className="flex items-center gap-1">
-          <Icon name="chevron-left" className="text-green-500" size={10} />
-          <p className="text-green-500">Back to Reports</p>
+          <Icon name="chevron-left" className="text-primary-500" size={10} />
+          <p className="text-primary-500">Back to Reports</p>
         </button>
 
         <div className="flex justify-between items-center mt-5">

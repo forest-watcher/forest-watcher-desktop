@@ -39,7 +39,7 @@ const TemplateQuestion = ({ question, defaultLanguage, getConditional }: Templat
   return (
     <section className="my-10">
       {/* Title */}
-      <div className="bg-green-400 border-2 border-solid border-green-500 py-7 px-6 rounded-t-[4px] border-opacity-20">
+      <div className="bg-primary-400 border-2 border-solid border-primary-500 py-7 px-6 rounded-t-[4px] border-opacity-20">
         <p className="text-[24px] text-neutral-700 capitalize">{formattedQuestionName}</p>
       </div>
       {/* Data */}

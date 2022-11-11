@@ -44,7 +44,7 @@ const TemplateAreas = ({ areas }: TemplateAreasProps) => {
             name: "   ",
             rowLabel: () => "View",
             rowHref: ({ id }) => `/areas/${id}`,
-            rowHrefClassNames: "text-green-500 font-medium uppercase",
+            rowHrefClassNames: "text-primary-500 font-medium uppercase",
             rowCellClassNames: "!text-right"
           }
         ]}

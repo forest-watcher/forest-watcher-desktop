@@ -9,7 +9,7 @@ const OnboardingModalContent = ({ step }: OnboardingModalContentProps) => {
     <div className="c-modal-dialog__body border-b-0">
       <h3 className="text-3xl font-[300] text-neutral-700 text-center capitalize p-0 mb-6">{step.heading}</h3>
 
-      <div className="bg-green-500 py-[21.5px] rounded-md mb-10 flex items-center justify-center">
+      <div className="bg-primary-500 py-[21.5px] rounded-md mb-10 flex items-center justify-center">
         <img src={step.imageUrl} alt={step.title} className="max-h-[197px]" />
       </div>
 
