@@ -31,15 +31,26 @@ export async function coreFetch<
   signal
 }: CoreFetcherOptions<TBody, THeaders, TQueryParams, TPathParams>): Promise<TData> {
   try {
+    const requestHeaders: HeadersInit = {
+      "Content-Type": "application/json",
+      ...headers
+    };
+
+    /**
+     * As the fetch API is being used, when multipart/form-data is specified
+     * the Content-Type header must be deleted so that the browser can set
+     * the correct boundary.
+     * https://developer.mozilla.org/en-US/docs/Web/API/FormData/Using_FormData_Objects#sending_files_using_a_formdata_object
+     */
+    if (requestHeaders["Content-Type"].toLowerCase().includes("multipart/form-data")) {
+      delete requestHeaders["Content-Type"];
+    }
+
     const response = await window.fetch(`${baseUrl}${resolveUrl(url, queryParams, pathParams)}`, {
       signal,
       method: method.toUpperCase(),
       body: body ? (body instanceof FormData ? body : JSON.stringify(body)) : undefined,
-      headers: headers
-        ? headers
-        : {
-            "Content-Type": "application/json"
-          }
+      headers: requestHeaders
     });
     if (!response.ok) {
       let error: ErrorWrapper<TError>;

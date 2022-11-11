@@ -185,7 +185,7 @@ const CreateAssignmentForm: FC<IProps> = props => {
       const resp = await postAssignment({
         // @ts-ignore postAssignment doesn't accept form data but the fetcher library handles it
         body: formData,
-        headers: httpAuthHeader
+        headers: { ...httpAuthHeader, "Content-Type": "multipart/form-data" }
       });
 
       // ToDo: redirect to Assignment Detail page
