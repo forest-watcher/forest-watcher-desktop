@@ -1,4 +1,4 @@
-import { TAlertsById } from "components/ui/Map/components/cards/AlertsDetail";
+import { TAlertsById } from "types/map";
 import { DefaultRequestThresholds, EAlertTypes, ViirsRequestThresholds } from "constants/alerts";
 import { CSSProperties, FC, useCallback, useEffect, useMemo, useState } from "react";
 import { useForm, FormProvider } from "react-hook-form";

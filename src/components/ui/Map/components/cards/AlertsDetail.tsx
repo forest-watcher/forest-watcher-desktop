@@ -1,17 +1,18 @@
+import Icon from "components/extensive/Icon";
+import OptionalWrapper from "components/extensive/OptionalWrapper";
+import Button from "components/ui/Button/Button";
 import MapCard from "components/ui/Map/components/cards/MapCard";
 import { EAlertTypes } from "constants/alerts";
 import moment from "moment";
 import { FC } from "react";
 import { useIntl } from "react-intl";
+import { TAlertsById } from "types/map";
 
 export interface IProps {
   selectedAlerts?: TAlertsById[];
+  handleSelectNeighboringPoints?: () => void;
+  canSelectNeighboringAlert?: boolean;
 }
-
-export type TAlertsById = {
-  id: string;
-  data: Record<any, any>;
-};
 
 const ALERT_API_KEY_MAP = {
   date: (alertType: EAlertTypes) => {
@@ -41,7 +42,7 @@ const ALERT_API_KEY_MAP = {
 };
 
 const AlertsDetailCard: FC<IProps> = props => {
-  const { selectedAlerts } = props;
+  const { selectedAlerts, handleSelectNeighboringPoints, canSelectNeighboringAlert = false } = props;
   const intl = useIntl();
 
   if (!selectedAlerts || selectedAlerts?.length === 0) {
@@ -74,6 +75,13 @@ const AlertsDetailCard: FC<IProps> = props => {
       title={intl.formatMessage({ id: "alerts.deforestation.alerts" })}
       titleIconName="Deforestation"
       position="bottom-right"
+      footer={
+        canSelectNeighboringAlert ? (
+          <Button variant="secondary" onClick={handleSelectNeighboringPoints}>
+            Select All Connected Alerts
+          </Button>
+        ) : null
+      }
     >
       <div className="text-neutral-700 text-base">
         <p className="mt-1">
@@ -96,6 +104,13 @@ const AlertsDetailCard: FC<IProps> = props => {
           </p>
         )}
       </div>
+
+      <OptionalWrapper data={!canSelectNeighboringAlert}>
+        <div className="text-gray-700 text-base p-4 bg-gray-400 rounded-md mt-6">
+          <Icon className="align-middle mr-2" name="InfoBubble" size={20} />
+          <span>{intl.formatMessage({ id: "alerts.detail.select.neighboring.alerts" })}</span>
+        </div>
+      </OptionalWrapper>
     </MapCard>
   );
 };
