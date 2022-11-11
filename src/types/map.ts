@@ -31,6 +31,11 @@ export interface IPoint {
   type?: EAlertTypes | AssignmentLayerType;
 }
 
+export type TAlertsById = {
+  id: string;
+  data: Record<any, any>;
+};
+
 export interface IMarkers {
   [key: string]: Marker;
 }

@@ -1,4 +1,6 @@
 import { EAlertTypes } from "constants/alerts";
+import KDBush from "kdbush";
+import geoKDBush from "geokdbush";
 import { Map as MapInstance, LngLatBoundsLike, GeoJSONSource } from "mapbox-gl";
 import labelBackgroundIcon from "assets/images/icons/MapLabelFrame.png";
 import reportNotSelectedIcon from "assets/images/icons/alertIcons/ReportNotSelected.png";
@@ -19,7 +21,7 @@ import L from "leaflet";
 import * as turf from "@turf/turf";
 import { GeoJsonProperties } from "geojson";
 import { MapRef } from "react-map-gl";
-import { AlertLayerColours, AssignmentLayerColours, ReportLayerColours, ReportLayers } from "types/map";
+import { AlertLayerColours, AssignmentLayerColours, ReportLayerColours, ReportLayers, TAlertsById } from "types/map";
 
 export enum MapImages {
   label = "label",
@@ -129,6 +131,85 @@ export const setupMapImages = (map: MapInstance) => {
       }
     })
   );
+};
+
+const getAllNeighbours = (
+  pointsIndex: KDBush<TAlertsById>,
+  firstPoint: TAlertsById,
+  pointsToSearch: TAlertsById[],
+  distance: number
+) => {
+  const neighbours: TAlertsById[] = [];
+
+  function isIncluded(result: TAlertsById) {
+    for (let i = 0; i < neighbours.length; i++) {
+      if (
+        result.data.latitude === neighbours[i].data.latitude &&
+        result.data.longitude === neighbours[i].data.longitude
+      ) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  function checkSiblings(results: TAlertsById[]) {
+    for (let i = 0; i < results.length; i++) {
+      if (!isIncluded(results[i])) {
+        neighbours.push(results[i]);
+        getNeighbours(results[i]);
+      }
+    }
+  }
+
+  function getNeighbours(point: TAlertsById) {
+    const data = geoKDBush.around(pointsIndex, point.data.longitude, point.data.latitude, 8, distance);
+    checkSiblings(data);
+  }
+
+  getNeighbours(firstPoint);
+
+  return neighbours;
+};
+
+export const findNeighboringPoints = (pointsIndex: KDBush<TAlertsById>, pointsToSearch: TAlertsById[]) => {
+  let pointsToSearchCopy = [...pointsToSearch];
+  let neighbours: TAlertsById[] = [];
+
+  while (pointsToSearchCopy.length > 0) {
+    // We get the last point so we can use `.pop()` which is more performant
+    // than `.shift()`
+    const point = pointsToSearchCopy[pointsToSearchCopy.length - 1];
+
+    neighbours = [...neighbours, ...getAllNeighbours(pointsIndex, point, pointsToSearch, 0.02)];
+
+    // Remove the current alert from the array
+    pointsToSearchCopy.pop();
+
+    // Remove selected alerts that were already detected in neighbours as we will have
+    // already also found those alert's neighbours in the original search!
+    // eslint-disable-next-line no-loop-func
+    pointsToSearchCopy = pointsToSearchCopy.filter((pointToSearch: TAlertsById) => {
+      return (
+        neighbours.findIndex(
+          t => t.data.latitude === pointToSearch.data.latitude && t.data.longitude === pointToSearch.data.longitude
+        ) === -1
+      );
+    });
+  }
+
+  // Remove duplicates
+  // https://stackoverflow.com/questions/2218999/how-to-remove-all-duplicates-from-an-array-of-objects#answer-36744732
+  neighbours = neighbours.filter(
+    (point: TAlertsById, index: number, self) =>
+      self.findIndex(t => t.data.latitude === point.data.latitude && t.data.longitude === point.data.longitude) ===
+      index
+  );
+
+  // Remove any points that were already selected
+  neighbours = neighbours.filter(point => pointsToSearch.findIndex(i => i.id === point.id) === -1);
+
+  return neighbours;
 };
 
 export const getBoundFromGeoJSON = (geoJSON: any, padding = [15, 15]) => {

@@ -608,6 +608,7 @@
   "alerts.detail.confidenceLevel": "Confidence Level",
   "alerts.detail.confidenceLevel.high": "High",
   "alerts.detail.confidenceLevel.high.multiple": "Some high confidence alerts",
+  "alerts.detail.select.neighboring.alerts": "Select additional alerts to add to group",
   "voiceRecordings.toggleBy": "Voice recordings only",
   "submittedBy.name": "Submitted by",
   "submittedBy.filterBy": "Filter by submitter",
