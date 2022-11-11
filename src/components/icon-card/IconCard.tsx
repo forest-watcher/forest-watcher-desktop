@@ -14,7 +14,7 @@ const IconCard = ({ iconName, title, text, textLink }: IconCardProps) => {
     switch (true) {
       case !!textLink:
         return (
-          <Link to={textLink ?? ""} className="text-gray-700">
+          <Link to={textLink ?? ""} className="text-neutral-700">
             {text}
           </Link>
         );
@@ -24,14 +24,16 @@ const IconCard = ({ iconName, title, text, textLink }: IconCardProps) => {
   };
 
   return (
-    <Card className="max-w-none flex items-center gap-3 bg-gray-400">
+    <Card className="max-w-none flex items-center gap-3 bg-neutral-400">
       <div className="flex justify-center items-center h-[48px] w-[48px] rounded-full bg-green-500 p-3">
-        <Icon name={iconName} className="text-gray-300" size={22} />
+        <Icon name={iconName} className="text-neutral-300" size={22} />
       </div>
 
       <div className="flex min-h-[48px] flex-col justify-between">
-        <p className="font-medium text-sm text-gray-700 uppercase">{title}</p>
-        <p className={`font-normal text-base text-gray-700 line-clamp-1 ${textLink && "underline"}`}>{_renderText()}</p>
+        <p className="font-medium text-sm text-neutral-700 uppercase">{title}</p>
+        <p className={`font-normal text-base text-neutral-700 line-clamp-1 ${textLink && "underline"}`}>
+          {_renderText()}
+        </p>
       </div>
     </Card>
   );

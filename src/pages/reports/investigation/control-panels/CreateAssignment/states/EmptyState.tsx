@@ -93,15 +93,15 @@ const OpenAssignmentEmptyState: FC<IProps> = props => {
       }
     >
       <Loader isLoading={isUploadingShapeFile} />
-      <div className="rounded-md bg-gray-400 px-4 py-6 flex flex-col items-center">
+      <div className="rounded-md bg-neutral-400 px-4 py-6 flex flex-col items-center">
         <IconBubble className="mb-3" name="flag-white" size={22} />
 
-        <h1 className="text-lg text-gray-700 text-center mb-6">
+        <h1 className="text-lg text-neutral-700 text-center mb-6">
           <FormattedMessage id="assignments.empty.title" />
         </h1>
 
         <List<{ text: string }>
-          className="flex flex-col text-base text-gray-700 gap-y-4 mb-6"
+          className="flex flex-col text-base text-neutral-700 gap-y-4 mb-6"
           items={[
             { text: intl.formatMessage({ id: "assignments.empty.content.list.item.1" }) },
             { text: intl.formatMessage({ id: "assignments.empty.content.list.item.2" }) },

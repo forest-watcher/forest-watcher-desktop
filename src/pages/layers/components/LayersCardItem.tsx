@@ -33,7 +33,7 @@ const LayersCardItem = ({ item, isLast, refetchLayers, updateLayer }: LayersSect
         <button
           onClick={handleLayerUpdate}
           className={`border-[1.75px] border-solid rounded-full w-7 h-7 flex items-center justify-center ${
-            item.attributes.enabled ? "border-green-500" : "border-gray-500"
+            item.attributes.enabled ? "border-green-500" : "border-neutral-500"
           }`}
         >
           <OptionalWrapper data={item.attributes.enabled}>
@@ -41,7 +41,7 @@ const LayersCardItem = ({ item, isLast, refetchLayers, updateLayer }: LayersSect
           </OptionalWrapper>
         </button>
       </OptionalWrapper>
-      <p className="text-gray-700 uppercase text-sm font-[500]">
+      <p className="text-neutral-700 uppercase text-sm font-[500]">
         <FormattedMessage id={`${item.attributes.name}`} />
       </p>
     </div>

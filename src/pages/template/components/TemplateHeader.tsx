@@ -13,7 +13,7 @@ const TemplateHeader = ({ editable = false, onEdit }: TemplateHeaderProps) => {
   const history = useHistory();
 
   return (
-    <div className="bg-gray-700">
+    <div className="bg-neutral-700">
       <section className="row column py-7">
         <button onClick={() => history.goBack()} className="flex items-center gap-1">
           <Icon name="chevron-left" className="text-green-500" size={10} />
@@ -23,7 +23,7 @@ const TemplateHeader = ({ editable = false, onEdit }: TemplateHeaderProps) => {
         </button>
 
         <div className="flex justify-between items-center mt-5">
-          <h1 className="font-base text-[36px] font-light text-gray-300">
+          <h1 className="font-base text-[36px] font-light text-neutral-300">
             <FormattedMessage id={"template.details"} />
           </h1>
           <OptionalWrapper data={editable}>

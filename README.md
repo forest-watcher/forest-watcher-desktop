@@ -129,7 +129,7 @@ import Icon from "components/extensive/Icon";
 
 // Icon color will be given by the text-color tailwindcss classname.
 // Name prop needs to be equal to the svg filename you saved under assets folder. in this case: check.svg
-<Icon name="check" size={22} className="text-gray-300" />
+<Icon name="check" size={22} className="text-neutral-300" />
 
 ```
 

@@ -42,10 +42,10 @@ const ReportResponses = ({ questions, responses }: ReportResponsesProps) => {
       <OptionalWrapper data={showImagesModal}>
         <ReportExportImagesModal onClose={() => setShowImagesModal(false)} />
       </OptionalWrapper>
-      <div className="bg-gray-400">
+      <div className="bg-neutral-400">
         <section className="row column py-section">
           <div className="flex items-center justify-between">
-            <h1 className="font-base text-[36px] font-light text-gray-700">Report Responses</h1>
+            <h1 className="font-base text-[36px] font-light text-neutral-700">Report Responses</h1>
             <OptionalWrapper data={hasImages}>
               <Button onClick={() => setShowImagesModal(true)}>Export Images</Button>
             </OptionalWrapper>

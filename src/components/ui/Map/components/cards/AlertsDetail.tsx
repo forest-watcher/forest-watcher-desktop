@@ -75,7 +75,7 @@ const AlertsDetailCard: FC<IProps> = props => {
       titleIconName="Deforestation"
       position="bottom-right"
     >
-      <div className="text-gray-700 text-base">
+      <div className="text-neutral-700 text-base">
         <p className="mt-1">
           {intl.formatMessage({ id: "alerts.detail.issued" })}: {firstAlertDate.format("MMM DD, YYYY")}
           {showLastDate && " - " + lastAlertDate.format("MMM DD, YYYY")}

@@ -8,14 +8,14 @@ type OnboardingModalNavigationProps = {
 
 const OnboardingModalNavigation = ({ steps, currentStep }: OnboardingModalNavigationProps) => {
   return (
-    <div className="flex gap-2 bg-gray-300 rounded-xl mx-auto">
+    <div className="flex gap-2 bg-neutral-300 rounded-xl mx-auto">
       <List
         items={steps}
         className="flex gap-2"
         render={(_, index) => (
           <div
             className={`h-[10px] transition-all duration-300 rounded-lg ${
-              currentStep === index ? "bg-green-500 w-8" : "bg-gray-500 w-3"
+              currentStep === index ? "bg-green-500 w-8" : "bg-neutral-500 w-3"
             }`}
           />
         )}
