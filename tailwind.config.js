@@ -31,6 +31,9 @@ module.exports = {
     extend: {
       padding: {
         section: "60px"
+      },
+      spacing: {
+        15: "3.75rem"
       }
     }
   },

@@ -4,6 +4,7 @@ import Button from "components/ui/Button/Button";
 import DataFilter from "components/ui/DataFilter/DataFilter";
 import DataTable from "components/ui/DataTable/DataTable";
 import { useGetV3GfwUser } from "generated/core/coreComponents";
+import { priorityToString } from "helpers/assignments";
 import { sortByDateString, sortByString } from "helpers/table";
 import { useAccessToken } from "hooks/useAccessToken";
 import { useMemo, useState } from "react";
@@ -42,10 +43,10 @@ const Assignments = () => {
       createdAt: assignment.attributes?.createdAt ?? "",
       area: assignment.attributes?.areaName ?? "-",
       alertType: assignment.attributes?.location ?? [],
-      priority: assignment.attributes?.priority ?? "",
-      status: assignment.attributes?.status ?? ""
+      priority: intl.formatMessage({ id: priorityToString(assignment.attributes?.priority) }),
+      status: assignment.attributes?.status.toUpperCase() ?? ""
     })) as TAssignmentsDataTable[];
-  }, [assignmentsData]);
+  }, [assignmentsData?.data, intl]);
 
   const [filteredRows, setFilteredRows] = useState<TAssignmentsDataTable[]>(rows);
   const { filters, extraFilters } = useAssignmentsFilters(assignmentsData?.data);
@@ -108,7 +109,15 @@ const Assignments = () => {
                 }
               },
               { key: "status", name: "assignments.table.status", sortCompareFn: sortByString },
-              { key: "priority", name: "assignments.table.priority", sortCompareFn: sortByString }
+              { key: "priority", name: "assignments.table.priority", sortCompareFn: sortByString },
+              {
+                key: "id",
+                name: "   ",
+                rowLabel: () => "View",
+                rowHref: ({ id }) => `/assignments/${id}`,
+                rowHrefClassNames: "text-green-500 font-medium uppercase",
+                rowCellClassNames: "!text-right"
+              }
             ]}
           />
         </Article>

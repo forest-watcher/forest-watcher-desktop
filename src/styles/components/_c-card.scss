@@ -8,6 +8,7 @@ $c-card-border-radius:  $global-spacing-1;
   background: $neutral-300;
   border-radius: $c-card-border-radius;
   border: $c-card-border-width solid rgba(85, 85, 85, 0.1);
+  font-family: $base-font-family;
 
   &--large {
     padding: $global-spacing-5;

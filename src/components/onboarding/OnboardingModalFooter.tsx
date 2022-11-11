@@ -45,14 +45,22 @@ const OnboardingModalFooter = ({ onClose, steps, currentStep, setCurrentStep }: 
   }, [currentStep]);
 
   return (
-    <div className="c-modal-dialog__actions relative">
-      <Button onClick={handleNextClick}>{nextButtonText}</Button>
+    <div className="grid grid-cols-3 items-center pb-15 px-15 relative">
+      <div>
+        <OptionalWrapper data={currentStep !== 0}>
+          <Button onClick={handleBackClick} variant="secondary">
+            Back
+          </Button>
+        </OptionalWrapper>
+      </div>
+
       <OnboardingModalNavigation steps={steps} currentStep={currentStep} />
-      <OptionalWrapper data={currentStep !== 0}>
-        <Button onClick={handleBackClick} variant="secondary">
-          Back
+
+      <div>
+        <Button className="ml-auto" onClick={handleNextClick}>
+          {nextButtonText}
         </Button>
-      </OptionalWrapper>
+      </div>
     </div>
   );
 };

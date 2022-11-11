@@ -2,9 +2,9 @@ import { useEffect, useState } from "react";
 import { useLocalStorage } from "hooks/useLocalStorage";
 import OnboardingModal, { OnboardingStep } from "../OnboardingModal";
 import OptionalWrapper from "components/extensive/OptionalWrapper";
-import AddAreasImage from "../../../assets/images/onboarding/add-areas.png";
-import MonitorAreasImage from "../../../assets/images/onboarding/monitor-areas.png";
-import ReviewTeamsImage from "../../../assets/images/onboarding/review-teams.png";
+import AddAreasImage from "assets/images/onboarding/add-areas.png";
+import MonitorAreasImage from "assets/images/onboarding/monitor-areas.png";
+import ReviewTeamsImage from "assets/images/onboarding/review-teams.png";
 
 const steps: OnboardingStep[] = [
   {
