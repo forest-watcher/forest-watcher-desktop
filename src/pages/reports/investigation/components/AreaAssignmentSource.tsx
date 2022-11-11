@@ -45,7 +45,11 @@ const AreaAssignmentMapSource: FC<IProps> = props => {
         // Alerts are assigned to the Assignment
         const pointFeatures = turf.points(
           // @ts-ignore
-          assignment.attributes?.location?.map(location => [location.lon, location.lat])
+          assignment.attributes?.location?.map(location => {
+            const lon = typeof location.lon === "string" ? parseFloat(location.lon) : location.lon;
+            const lat = typeof location.lat === "string" ? parseFloat(location.lat) : location.lat;
+            return [lon, lat];
+          })
         );
 
         // Find center of all the Alerts

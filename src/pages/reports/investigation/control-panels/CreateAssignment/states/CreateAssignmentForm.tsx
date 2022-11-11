@@ -21,7 +21,7 @@ import useGetUserTeamsWithActiveMembers from "hooks/querys/teams/useGetUserTeams
 import { FormattedMessage, useIntl } from "react-intl";
 import { LngLat } from "react-map-gl";
 import { toastr } from "react-redux-toastr";
-import { useHistory, useLocation, useParams } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 import yup from "configureYup";
 import { yupResolver } from "@hookform/resolvers/yup/dist/yup";
 import { Map } from "mapbox-gl";
@@ -62,7 +62,6 @@ const CreateAssignmentForm: FC<IProps> = props => {
   const { setShowCreateAssignmentForm, setShapeFileGeoJSON, shapeFileGeoJSON, map } = props;
   const intl = useIntl();
   const history = useHistory();
-  const location = useLocation();
   const userId = useGetUserId();
   const { areaId } = useParams<{ areaId: string }>();
   const selectedAreaDetails = useFindArea(areaId);

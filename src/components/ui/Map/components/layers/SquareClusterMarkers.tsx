@@ -241,7 +241,7 @@ const SquareClusterMarkers: FC<IProps> = props => {
   }, [selectedSquareIds]);
 
   useEffect(() => {
-    if (mapRef && featureCollection.features.length > 0 && !hasMoved) {
+    if (mapRef && mapRef.isStyleLoaded() && featureCollection.features.length > 0 && !hasMoved) {
       // Move layer to the top
       mapRef.moveLayer(id);
       setHasMoved(true);
