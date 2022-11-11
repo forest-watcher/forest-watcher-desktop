@@ -106,7 +106,7 @@ const AlertsDetailCard: FC<IProps> = props => {
       </div>
 
       <OptionalWrapper data={!canSelectNeighboringAlert}>
-        <div className="text-gray-700 text-base p-4 bg-gray-400 rounded-md mt-6">
+        <div className="text-neutral-700 text-base p-4 bg-neutral-400 rounded-md mt-6">
           <Icon className="align-middle mr-2" name="InfoBubble" size={20} />
           <span>{intl.formatMessage({ id: "alerts.detail.select.neighboring.alerts" })}</span>
         </div>
