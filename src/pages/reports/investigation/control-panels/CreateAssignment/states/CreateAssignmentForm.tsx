@@ -186,8 +186,6 @@ const CreateAssignmentForm: FC<IProps> = props => {
         headers: { ...httpAuthHeader, "Content-Type": "multipart/form-data" }
       });
 
-      // ToDo: redirect to Assignment Detail page
-      // Redirecting to "Start Investigation" panel for now
       setParentValue("selectedAlerts", []);
       setParentValue("singleSelectedLocation", undefined);
       history.push(`/assignment/${resp.data?.id}`);
