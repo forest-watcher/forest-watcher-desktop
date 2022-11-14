@@ -6,8 +6,7 @@ module.exports = {
       base: ["Fira Sans", "sans-serif"]
     },
     colors: {
-      white: "#FFFFFF",
-      green: {
+      primary: {
         400: "#E3ECC6",
         500: "#94BE43",
         600: "#799D33"
@@ -15,8 +14,7 @@ module.exports = {
       red: {
         500: "#F74848"
       },
-      gray: {
-        // TODO - rename to match designs - should be neutral (same with others too)
+      neutral: {
         300: "#FFFFFF",
         400: "#F2F2F2",
         500: "#DCDCDC",

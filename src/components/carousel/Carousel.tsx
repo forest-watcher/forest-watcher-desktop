@@ -56,7 +56,7 @@ const Carousel = ({ slides, downloadable }: CarouselProps) => {
                 <div className="c-carousel__slide__inner">
                   <OptionalWrapper data={downloadable}>
                     <button
-                      className="absolute top-6 right-6 bg-green-500 p-1 rounded-lg z-10"
+                      className="absolute top-6 right-6 bg-primary-500 p-1 rounded-lg z-10"
                       onClick={() => setImageToDownload(src)}
                     >
                       <Icon name="download" size={32} />

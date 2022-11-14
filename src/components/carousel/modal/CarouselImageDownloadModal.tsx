@@ -22,7 +22,7 @@ const CarouselImageDownloadModal = ({ onClose, imageToDownload }: CarouselImageD
         { name: "common.cancel", variant: "secondary", onClick: onClose }
       ]}
     >
-      <div className="border-2 border-solid border-gray-400 rounded-lg flex items-center justify-center h-full py-4">
+      <div className="border-2 border-solid border-neutral-400 rounded-lg flex items-center justify-center h-full py-4">
         <img src={imageToDownload} alt="" className="h-full" />
       </div>
     </Modal>
