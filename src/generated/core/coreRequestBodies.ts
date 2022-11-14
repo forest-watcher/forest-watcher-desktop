@@ -20,8 +20,10 @@ export type AssignmentBody = {
   areaName?: string;
   /**
    * Image file
+   *
+   * @format binary
    */
-  image?: string;
+  image?: Blob;
 };
 
 export type RouteBody = {
@@ -92,8 +94,10 @@ export type AreaBody = {
   geojson?: Schemas.GeojsonModel;
   /**
    * Must be image file
+   *
+   * @format binary
    */
-  image?: null;
+  image?: Blob;
 };
 
 export type AreaTeamRelationBody = {
@@ -120,6 +124,8 @@ export type UpdateAssignmentBody = {
   templateIds?: string[];
   /**
    * Image file
+   *
+   * @format binary
    */
-  image?: string;
+  image?: Blob;
 };

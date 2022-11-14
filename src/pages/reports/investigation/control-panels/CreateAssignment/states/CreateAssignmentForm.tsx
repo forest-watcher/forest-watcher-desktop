@@ -19,12 +19,14 @@ import { Dispatch, FC, SetStateAction, useEffect, useMemo, useState } from "reac
 import { useForm, useFormContext } from "react-hook-form";
 import useGetUserTeamsWithActiveMembers from "hooks/querys/teams/useGetUserTeamsWithActiveMembers";
 import { FormattedMessage, useIntl } from "react-intl";
-import { LngLat } from "react-map-gl";
+import { LngLat, useMap } from "react-map-gl";
 import { toastr } from "react-redux-toastr";
-import { useHistory, useLocation, useParams } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 import yup from "configureYup";
 import { yupResolver } from "@hookform/resolvers/yup/dist/yup";
-
+import { serialize } from "object-to-formdata";
+import { goToGeojson } from "helpers/map";
+import * as turf from "@turf/turf";
 export interface IProps {
   setShowCreateAssignmentForm: Dispatch<SetStateAction<boolean>>;
   setShapeFileGeoJSON: Dispatch<SetStateAction<GeojsonModel | undefined>>;
@@ -58,7 +60,7 @@ const CreateAssignmentForm: FC<IProps> = props => {
   const { setShowCreateAssignmentForm, setShapeFileGeoJSON, shapeFileGeoJSON } = props;
   const intl = useIntl();
   const history = useHistory();
-  const location = useLocation();
+  const { current: map } = useMap();
   const userId = useGetUserId();
   const { areaId } = useParams<{ areaId: string }>();
   const selectedAreaDetails = useFindArea(areaId);
@@ -122,50 +124,71 @@ const CreateAssignmentForm: FC<IProps> = props => {
     const assignmentFormValues = getAssignmentValues();
     const selectedAlerts = getParentValues("selectedAlerts") as TAlertsById[];
     const singleSelectedLocation = getParentValues("singleSelectedLocation") as LngLat;
-
     const body: AssignmentBody = {
       priority: assignmentFormValues.priority,
       // @ts-ignore
       monitors: [...new Set(assignmentFormValues.monitors)],
       notes: assignmentFormValues.notes,
       areaId: areaId,
+      // @ts-ignore issue with openapi spec, remove ignore when fixed
+      status: "open", // Default
       templateIds: assignmentFormValues.templates
     };
 
     if (shapeFileGeoJSON) {
       // Assign the custom shape file to the Assignment
       body.geostore = shapeFileGeoJSON;
+      if (map) {
+        goToGeojson(map, shapeFileGeoJSON, false);
+      }
     } else if (singleSelectedLocation) {
       // Else use the Single Selected Location
-      // @ts-ignore ToDo: update when endpoint is updated
       body.location = [
         {
           lat: singleSelectedLocation.lat,
           lon: singleSelectedLocation.lng
         }
       ];
+      if (map) {
+        map.flyTo({ center: [singleSelectedLocation.lng, singleSelectedLocation.lat], animate: false });
+      }
+      // go to point on the map
     } else if (selectedAlerts) {
       // Else use the selected Alerts on Map
-      // @ts-ignore ToDo: update when endpoint is updated
       body.location = selectedAlerts.map(alert => ({
         lat: alert.data.latitude,
         lon: alert.data.longitude,
         alertType: alert.data.alertType
       }));
+
+      const polygon = turf.polygon([selectedAlerts.map(alert => [alert.data.longitude, alert.data.latitude])]);
+
+      if (map) {
+        goToGeojson(map, polygon, false);
+      }
     }
+
+    if (map) {
+      const node = map?.getCanvas();
+      const dataUrl = node.toDataURL("image/jpeg");
+      const blob = await (await fetch(dataUrl)).blob();
+      const imageFile = new File([blob], `${encodeURIComponent("assignment")}.jpg`, { type: "image/jpeg" });
+      body.image = imageFile;
+    }
+
+    const formData = serialize(body, { indices: true });
 
     // Submit assignment to endpoint
     try {
-      await postAssignment({
-        body,
-        headers: httpAuthHeader
+      const resp = await postAssignment({
+        // @ts-ignore postAssignment doesn't accept form data but the fetcher library handles it
+        body: formData,
+        headers: { ...httpAuthHeader, "Content-Type": "multipart/form-data" }
       });
 
-      // ToDo: redirect to Assignment Detail page
-      // Redirecting to "Start Investigation" panel for now
       setParentValue("selectedAlerts", []);
       setParentValue("singleSelectedLocation", undefined);
-      history.push(location.pathname.replace("/assignment", ""));
+      history.push(`/assignment/${resp.data?.id}`);
     } catch (e) {
       toastr.error(intl.formatMessage({ id: "assignment.create.form.error" }), "");
     }
