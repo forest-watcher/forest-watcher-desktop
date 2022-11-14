@@ -16,7 +16,7 @@ const RadioGroup = <T,>(props: IProps<T> & UseControllerProps<T>) => {
 
   return (
     <>
-      <HeadlessRadioGroup className="text-gray-700 w-full" {...field}>
+      <HeadlessRadioGroup className="text-neutral-700 w-full" {...field}>
         <OptionalWrapper data={!!label}>
           <HeadlessRadioGroup.Label className="block mb-3 text-sm font-medium uppercase">
             <FormattedMessage id={label} />
@@ -30,8 +30,8 @@ const RadioGroup = <T,>(props: IProps<T> & UseControllerProps<T>) => {
                 <span
                   className={classnames(
                     "border border-solid py-[9px] px-4 rounded-md flex-1 text-center cursor-pointer text-base",
-                    !checked && "border-gray-500",
-                    checked && "border-green-500 bg-green-400"
+                    !checked && "border-neutral-500",
+                    checked && "border-primary-500 bg-primary-400"
                   )}
                 >
                   <FormattedMessage id={option.label} />

@@ -138,7 +138,7 @@ const _Templates = () => {
                   name: "   ",
                   rowLabel: () => "View",
                   rowHref: ({ id }) => `/templates/${id}`,
-                  rowHrefClassNames: "text-green-500 font-medium"
+                  rowHrefClassNames: "text-primary-500 font-medium"
                 }
               ]}
             />

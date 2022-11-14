@@ -39,21 +39,21 @@ const TemplateQuestion = ({ question, defaultLanguage, getConditional }: Templat
   return (
     <section className="my-10">
       {/* Title */}
-      <div className="bg-green-400 border-2 border-solid border-green-500 py-7 px-6 rounded-t-[4px] border-opacity-20">
-        <p className="text-[24px] text-gray-700 capitalize">{formattedQuestionName}</p>
+      <div className="bg-primary-400 border-2 border-solid border-primary-500 py-7 px-6 rounded-t-[4px] border-opacity-20">
+        <p className="text-[24px] text-neutral-700 capitalize">{formattedQuestionName}</p>
       </div>
       {/* Data */}
-      <div className="bg-gray-300 py-7 px-6 border-2 border-solid border-gray-500 border-opacity-40 rounded-b-[4px]">
+      <div className="bg-neutral-300 py-7 px-6 border-2 border-solid border-neutral-500 border-opacity-40 rounded-b-[4px]">
         {/* Question */}
         <div className="mb-6">
-          <h4 className="uppercase font-[500] text-gray-700 pb-2">
+          <h4 className="uppercase font-[500] text-neutral-700 pb-2">
             <FormattedMessage id={"question.question"} />
           </h4>
           <p className="text-base">{questionText}</p>
         </div>
         {/* Response Type */}
         <div className="mb-6">
-          <h4 className="uppercase font-[500] text-gray-700 pb-2">
+          <h4 className="uppercase font-[500] text-neutral-700 pb-2">
             <FormattedMessage id={"question.responseType"} />
           </h4>
           <p className="text-base capitalize">
@@ -63,7 +63,7 @@ const TemplateQuestion = ({ question, defaultLanguage, getConditional }: Templat
         {/* Response Options */}
         <OptionalWrapper data={!!responseOptions}>
           <div className="mb-6">
-            <h4 className="uppercase font-[500] text-gray-700 pb-2">
+            <h4 className="uppercase font-[500] text-neutral-700 pb-2">
               <FormattedMessage id={"question.responseOptions"} />
             </h4>
             <List
@@ -78,13 +78,13 @@ const TemplateQuestion = ({ question, defaultLanguage, getConditional }: Templat
           data={question.childQuestions?.length > 0}
         >
           <div className="mb-6">
-            <h4 className="uppercase font-[500] text-gray-700 pb-2">
+            <h4 className="uppercase font-[500] text-neutral-700 pb-2">
               <FormattedMessage id={"question.conditions"} />
             </h4>
             <p className="text-base">{getMoreInfo().condition}</p>
           </div>
           <div className="mb-6">
-            <h4 className="uppercase font-[500] text-gray-700 pb-2">
+            <h4 className="uppercase font-[500] text-neutral-700 pb-2">
               <FormattedMessage id={"question.moreInfo"} />
             </h4>
             <p className="text-base">{getMoreInfo().moreInfoText}</p>
@@ -96,7 +96,7 @@ const TemplateQuestion = ({ question, defaultLanguage, getConditional }: Templat
           data={question.conditions.length > 0}
         >
           <div className="mb-6">
-            <h4 className="uppercase font-[500] text-gray-700 pb-2">
+            <h4 className="uppercase font-[500] text-neutral-700 pb-2">
               <FormattedMessage id={"question.onlyShowIf"} />
             </h4>
             <List
@@ -110,7 +110,7 @@ const TemplateQuestion = ({ question, defaultLanguage, getConditional }: Templat
         </OptionalWrapper>
         {/* Required */}
         <div>
-          <h4 className="uppercase font-[500] text-gray-700 pb-2">
+          <h4 className="uppercase font-[500] text-neutral-700 pb-2">
             <FormattedMessage id={"question.required"} />
           </h4>
           <p className="text-base">{`${question.required}`}</p>

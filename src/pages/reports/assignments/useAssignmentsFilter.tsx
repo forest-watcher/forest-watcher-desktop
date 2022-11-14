@@ -1,6 +1,7 @@
 import { TAvailableTypes } from "components/modals/FormModal";
 import { IFilter } from "components/ui/DataFilter/DataFilter";
 import { AssignmentsResponse } from "generated/core/coreResponses";
+import { priorityToString } from "helpers/assignments";
 import { ALL_VALUE, filterByTimeFrame, getTimeFrames } from "helpers/table";
 import { useMemo } from "react";
 import { useIntl } from "react-intl";
@@ -37,11 +38,13 @@ const useReportFilters = (assignments: AssignmentsResponse["data"] = []) => {
   const alertTypeOptions = useMemo<Option[]>(() => {
     const allAlerts = assignments
       .map(assignment => {
-        if (!assignment.attributes?.location) return "none";
+        if (!assignment.attributes?.location || typeof assignment.attributes?.location === "string") return "none";
         // @ts-expect-error
-        return assignment.attributes?.location?.map(loc => loc.alertType);
+        return assignment.attributes?.location?.map(loc => loc.alertType ?? "none");
       })
       .flat();
+
+    console.log(allAlerts);
 
     const uniqueAlerts = allAlerts
       .map(id => ({
@@ -59,8 +62,8 @@ const useReportFilters = (assignments: AssignmentsResponse["data"] = []) => {
   const priorityOptions = useMemo<Option[]>(() => {
     const uniquePriorities = assignments
       .map(assignment => ({
-        label: String(assignment.attributes?.priority) ?? "",
-        value: String(assignment.attributes?.priority) ?? ""
+        label: intl.formatMessage({ id: priorityToString(assignment.attributes?.priority) }),
+        value: intl.formatMessage({ id: priorityToString(assignment.attributes?.priority) })
       }))
       .filter((value, index, self) => self.findIndex(t => t.value === value.value) === index);
 
@@ -157,6 +160,7 @@ const useReportFilters = (assignments: AssignmentsResponse["data"] = []) => {
           }
         },
         filterCallback: (item, value) => {
+          if (typeof item.alertType === "string") return true;
           if (item.alertType.length === 0 && value === "none") {
             return true;
           }
@@ -184,11 +188,10 @@ const useReportFilters = (assignments: AssignmentsResponse["data"] = []) => {
           }
         },
         filterCallback: (item, value) => {
-          console.log(item.priority, value);
           if (!value || value === ALL_VALUE) {
             return true;
           } else {
-            return String(item.priority) === value;
+            return item.priority === value;
           }
         }
       }

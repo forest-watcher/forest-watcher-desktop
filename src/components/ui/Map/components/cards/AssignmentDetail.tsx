@@ -91,12 +91,12 @@ const AssignmentDetailCard: FC<IProps> = props => {
       }
     >
       <OptionalWrapper data={isAssignedToCurrentUser}>
-        <div className="text-gray-700 text-base p-4 bg-gray-400 rounded-md mb-6 mt-1">
+        <div className="text-neutral-700 text-base p-4 bg-neutral-400 rounded-md mb-6 mt-1">
           <Icon className="align-middle mr-2" name="InfoBubble" size={20} />
           <span>{intl.formatMessage({ id: "assignments.details.assigned.to.user" })}</span>
         </div>
       </OptionalWrapper>
-      <div className="text-gray-700 text-base">
+      <div className="text-neutral-700 text-base">
         <p className="mt-1">
           {intl.formatMessage({ id: "assignments.details.createAt" })}:{" "}
           {moment(selectedAssignment?.attributes?.createdAt).format("MMM DD, YYYY")}

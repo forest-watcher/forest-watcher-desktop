@@ -14,7 +14,7 @@ const IconBubble: FC<IProps> = props => {
     <div
       className={classnames(
         className,
-        "w-[48px] h-[48px] bg-green-500 rounded-full flex flex-col items-center justify-center"
+        "w-[48px] h-[48px] bg-primary-500 rounded-full flex flex-col items-center justify-center"
       )}
     >
       <Icon className={iconClassName} {...iconProps} />

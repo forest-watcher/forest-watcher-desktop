@@ -53,7 +53,7 @@ const Layers = () => {
           render={item => (
             <LayersSection {...item} refetchLayers={refetchLayers} layersLoading={layersLoading || layersFetching} />
           )}
-          itemClassName="even:bg-gray-400"
+          itemClassName="even:bg-neutral-400"
         />
       </LoadingWrapper>
     </section>

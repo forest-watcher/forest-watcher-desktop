@@ -66,7 +66,7 @@ const MultiSelectDialog: (<T>(props: IProps & UseControllerProps<T>) => JSX.Elem
     <div className="flex flex-col gap-10">
       {groups.map(group => (
         <div key={group.label} className="flex flex-col gap-4">
-          {group.label && <span className="block text-sm font-medium uppercase text-gray-700">{group.label}</span>}
+          {group.label && <span className="block text-sm font-medium uppercase text-neutral-700">{group.label}</span>}
 
           {group.options.map((option, id) => (
             <div key={option.value || id} className="flex justify-between w-full">
@@ -140,7 +140,7 @@ const MultiSelectDialogPreview = <T,>(props: IMultiSelectDialogPreviewProps<T>) 
   );
 
   const AddBtn = () => (
-    <Button className="w-full bg-white text-gray-600" variant="secondary" onClick={onAdd}>
+    <Button className="w-full bg-neutral-300 text-neutral-600" variant="secondary" onClick={onAdd}>
       <Icon size={13} name="GreenPlus" className="mr-3 my-[-1px]" />
       <FormattedMessage id={addButtonLabel} />
     </Button>
@@ -155,12 +155,12 @@ const MultiSelectDialogPreview = <T,>(props: IMultiSelectDialogPreviewProps<T>) 
           <div
             className={classnames(
               className,
-              "flex flex-col justify-center items-center rounded-md bg-gray-400 px-4 py-6 relative"
+              "flex flex-col justify-center items-center rounded-md bg-neutral-400 px-4 py-6 relative"
             )}
           >
             <IconBubble className="mb-3" name={emptyIcon} size={22} />
 
-            <h2 className="text-lg text-gray-700 mb-6">
+            <h2 className="text-lg text-neutral-700 mb-6">
               <FormattedMessage id={emptyLabel} />
             </h2>
 
@@ -171,11 +171,11 @@ const MultiSelectDialogPreview = <T,>(props: IMultiSelectDialogPreviewProps<T>) 
         }
       >
         <div className={className}>
-          <span className="block mb-3 text-sm font-medium uppercase text-gray-700">
+          <span className="block mb-3 text-sm font-medium uppercase text-neutral-700">
             <FormattedMessage id={label} />
           </span>
 
-          <ul className="text-gray-700 text-base mb-3">
+          <ul className="text-neutral-700 text-base mb-3">
             {activeGroups.map((group, groupId) => {
               return shouldDisplayGroupOptionsOnSeparateLines ? (
                 group.options.map((option, optionId) => (
