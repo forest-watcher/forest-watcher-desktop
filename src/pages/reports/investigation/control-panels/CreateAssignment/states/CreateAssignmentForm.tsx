@@ -129,9 +129,7 @@ const CreateAssignmentForm: FC<IProps> = props => {
       monitors: [...new Set(assignmentFormValues.monitors)],
       notes: assignmentFormValues.notes,
       areaId: areaId,
-      // @ts-ignore ToDo: update when endpoint is updated
-      templateIds: assignmentFormValues.templates,
-      status: "open" // Default
+      templateIds: assignmentFormValues.templates
     };
 
     if (shapeFileGeoJSON) {

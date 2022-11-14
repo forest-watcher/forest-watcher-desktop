@@ -10,16 +10,18 @@ export type AssignmentBody = {
     lat?: number;
     lon?: number;
     alertType?: string;
-  };
+  }[];
   priority: number;
   monitors: string[];
-  notes: string;
-  status: "open" | "on hold" | "completed";
-  alert?: string;
+  notes?: string;
   areaId: string;
-  templateId: string;
-  teamIds: string[];
+  templateIds: string[];
   geostore?: Schemas.GeojsonModel;
+  areaName?: string;
+  /**
+   * Image file
+   */
+  image?: string;
 };
 
 export type RouteBody = {
@@ -69,7 +71,6 @@ export type UpdateTemplateBody = {
     };
   }[];
   languages?: string[];
-  status?: string;
   public?: boolean;
   defaultLanguage?: string;
 };
@@ -107,6 +108,7 @@ export type AreaTemplateRelationBody = {
 
 export type TeamBody = {
   name: string;
+  layers?: string[];
 };
 
 export type UpdateAssignmentBody = {
@@ -115,6 +117,9 @@ export type UpdateAssignmentBody = {
   monitors?: string[];
   notes?: string;
   status?: string;
-  templateId?: string;
-  teamIds?: string[];
+  templateIds?: string[];
+  /**
+   * Image file
+   */
+  image?: string;
 };
