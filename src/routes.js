@@ -19,6 +19,7 @@ import Report from "pages/reports/report/Report";
 import Templates from "pages/templates/Templates";
 import Layers from "pages/layers/Layers";
 import Template from "pages/template/Template";
+import Assignment from "pages/assignment/Assignment";
 
 const getLoginComponent = ({ user, location }) => {
   const search = location.search || "";
@@ -93,6 +94,7 @@ const Routes = props => {
           <Route path={`${match.url}teams/invitations`} component={TeamsInvitations} />
           <Route exact path={`${match.url}teams/create`} render={args => <Teams isCreatingTeam {...args} />} />
           <Route exact path={`${match.url}teams/:teamId`} component={TeamDetail} />
+          <Route exact path={`${match.url}assignment/:id`} component={Assignment} />
           <Route
             exact
             path={`${match.url}teams/:teamId/edit`}
