@@ -139,7 +139,7 @@ export const getBoundFromGeoJSON = (geoJSON: any, padding = [15, 15]) => {
 };
 
 export const goToGeojson = (
-  map: MapInstance | null,
+  map: MapInstance | MapRef | null,
   geojson: any,
   animate = true,
   mapOptions?: mapboxgl.FitBoundsOptions
