@@ -19,7 +19,7 @@ import { Dispatch, FC, SetStateAction, useEffect, useMemo, useState } from "reac
 import { useForm, useFormContext } from "react-hook-form";
 import useGetUserTeamsWithActiveMembers from "hooks/querys/teams/useGetUserTeamsWithActiveMembers";
 import { FormattedMessage, useIntl } from "react-intl";
-import { LngLat, useMap } from "react-map-gl";
+import { LngLat, LngLatBoundsLike, useMap } from "react-map-gl";
 import { toastr } from "react-redux-toastr";
 import { useHistory, useParams } from "react-router-dom";
 import yup from "configureYup";
@@ -161,10 +161,11 @@ const CreateAssignmentForm: FC<IProps> = props => {
         alertType: alert.data.alertType
       }));
 
-      const polygon = turf.polygon([selectedAlerts.map(alert => [alert.data.longitude, alert.data.latitude])]);
+      const points = turf.points(selectedAlerts.map(alert => [alert.data.longitude, alert.data.latitude]));
+      const bbox = turf.bbox(points);
 
-      if (map) {
-        goToGeojson(map, polygon, false);
+      if (map && bbox.length > 0) {
+        map.fitBounds(bbox as LngLatBoundsLike, { padding: 40, animate: false });
       }
     }
 
