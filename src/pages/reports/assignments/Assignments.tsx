@@ -99,7 +99,12 @@ const Assignments = () => {
                     return intl.formatMessage({ id: "layers.none" });
                   }
 
-                  return value.map(alert => intl.formatMessage({ id: `layers.${alert.alertType}` })).join(", ");
+                  const valueStr = value
+                    .map(alert => (alert.alertType ? intl.formatMessage({ id: `layers.${alert.alertType}` }) : ""))
+                    .filter(name => name !== "")
+                    .join(", ");
+
+                  return valueStr.length ? valueStr : intl.formatMessage({ id: "layers.none" });
                 },
                 sortCompareFn: (a, b, direction) => {
                   const newA = intl.formatMessage({ id: `layers.${a}`, defaultMessage: a?.toString() });
