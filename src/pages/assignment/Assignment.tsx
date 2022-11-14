@@ -1,4 +1,4 @@
-import { FC, useEffect, useMemo, useState } from "react";
+import { FC, useMemo } from "react";
 import Hero from "components/layouts/Hero/Hero";
 import { Link, useParams, useRouteMatch } from "react-router-dom";
 import Article from "components/layouts/Article";
@@ -10,9 +10,7 @@ import { useGetV3GfwAssignmentsAssignmentId } from "generated/core/coreComponent
 import OptionalWrapper from "components/extensive/OptionalWrapper";
 import { useAccessToken } from "hooks/useAccessToken";
 import assignmentIcons from "assets/images/icons/assignmentIcons";
-import Polygon from "components/ui/Map/components/layers/Polygon";
-import { goToGeojson } from "helpers/map";
-import { Map as MapRef } from "mapbox-gl";
+import MapLayers from "./components/MapLayers";
 
 export type TParams = {
   id: string;
@@ -27,7 +25,6 @@ const Assignment: FC = props => {
     headers: httpAuthHeader
   });
   const intl = useIntl();
-  const [map, setMap] = useState<MapRef | undefined>();
   const templates = useMemo(() => {
     const templates = data?.data?.attributes?.templates || [];
 
@@ -45,18 +42,13 @@ const Assignment: FC = props => {
     }
 
     const valueStr = alertType
-      .map(alert => (alert.arrayType ? intl.formatMessage({ id: `layers.${alert.arrayType}` }) : ""))
+      // @ts-ignore - incorrect typing
+      .map(alert => (alert.alertType ? intl.formatMessage({ id: `layers.${alert.alertType}` }) : ""))
       .filter(name => name !== "")
       .join(", ");
 
     return valueStr.length ? valueStr : intl.formatMessage({ id: "layers.none" });
   }, [data?.data?.attributes?.location, intl]);
-
-  useEffect(() => {
-    if (data?.data?.attributes?.geostore?.geojson && map) {
-      goToGeojson(map, data?.data?.attributes?.geostore?.geojson, false);
-    }
-  }, [data?.data?.attributes?.geostore?.geojson, map]);
 
   const isMyAssignment = true;
 
@@ -83,14 +75,16 @@ const Assignment: FC = props => {
           </>
         }
       />
-      <Map className="c-map--within-hero" onMapLoad={e => setMap(e.target)}>
-        <OptionalWrapper data={Boolean(data?.data?.attributes?.geostore)}>
-          <Polygon id="alert" data={data?.data?.attributes?.geostore?.geojson} />
-        </OptionalWrapper>
+      <Map className="c-map--within-hero">
+        <MapLayers assignment={data?.data} />
       </Map>
       <LoadingWrapper loading={isLoading}>
         <OptionalWrapper data={Boolean(data)}>
-          <Article title="assignment.details.name" titleValues={{ name: "foo" }} className="mt-15 mb-20">
+          <Article
+            title="assignment.details.name"
+            titleValues={{ name: data?.data?.attributes?.name || "" }}
+            className="mt-15 mb-20"
+          >
             <div className="grid grid-cols-1 md:grid-cols-3 gap-7">
               <DetailCard
                 icon={assignmentIcons.creation}
