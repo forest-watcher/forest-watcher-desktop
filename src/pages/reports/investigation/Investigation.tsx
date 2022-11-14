@@ -240,10 +240,7 @@ const InvestigationPage: FC<IProps> = props => {
                   </Route>
 
                   <Route exact path={`${match.url}/:areaId/start/assignment`}>
-                    <CreateAssignmentControlPanel
-                      setLockAlertSelections={setLockAlertSelections}
-                      map={mapRef || undefined}
-                    />
+                    <CreateAssignmentControlPanel setLockAlertSelections={setLockAlertSelections} />
                   </Route>
                 </Switch>
 

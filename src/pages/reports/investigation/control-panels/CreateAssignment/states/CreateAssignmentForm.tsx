@@ -19,12 +19,11 @@ import { Dispatch, FC, SetStateAction, useEffect, useMemo, useState } from "reac
 import { useForm, useFormContext } from "react-hook-form";
 import useGetUserTeamsWithActiveMembers from "hooks/querys/teams/useGetUserTeamsWithActiveMembers";
 import { FormattedMessage, useIntl } from "react-intl";
-import { LngLat } from "react-map-gl";
+import { LngLat, useMap } from "react-map-gl";
 import { toastr } from "react-redux-toastr";
-import { useHistory, useLocation, useParams } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 import yup from "configureYup";
 import { yupResolver } from "@hookform/resolvers/yup/dist/yup";
-import { Map } from "mapbox-gl";
 import { serialize } from "object-to-formdata";
 import { goToGeojson } from "helpers/map";
 import * as turf from "@turf/turf";
@@ -32,7 +31,6 @@ export interface IProps {
   setShowCreateAssignmentForm: Dispatch<SetStateAction<boolean>>;
   setShapeFileGeoJSON: Dispatch<SetStateAction<GeojsonModel | undefined>>;
   shapeFileGeoJSON?: GeojsonModel;
-  map?: Map;
 }
 
 type TCreateAssignmentFormFields = {
@@ -59,10 +57,10 @@ const createAssignmentFormSchema = yup
   .required();
 
 const CreateAssignmentForm: FC<IProps> = props => {
-  const { setShowCreateAssignmentForm, setShapeFileGeoJSON, shapeFileGeoJSON, map } = props;
+  const { setShowCreateAssignmentForm, setShapeFileGeoJSON, shapeFileGeoJSON } = props;
   const intl = useIntl();
   const history = useHistory();
-  const location = useLocation();
+  const { current: map } = useMap();
   const userId = useGetUserId();
   const { areaId } = useParams<{ areaId: string }>();
   const selectedAreaDetails = useFindArea(areaId);

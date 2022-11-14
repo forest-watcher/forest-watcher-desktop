@@ -8,15 +8,13 @@ import { useFormContext } from "react-hook-form";
 import OpenAssignmentEmptyState from "pages/reports/investigation/control-panels/CreateAssignment/states/EmptyState";
 import { LngLat } from "react-map-gl";
 import { useParams } from "react-router-dom";
-import { Map } from "mapbox-gl";
 
 export interface IProps {
   setLockAlertSelections: Dispatch<SetStateAction<boolean>>;
-  map?: Map;
 }
 
 const CreateAssignmentControlPanel: FC<IProps> = props => {
-  const { setLockAlertSelections, map } = props;
+  const { setLockAlertSelections } = props;
   const { getValues, setValue } = useFormContext();
   const { areaId } = useParams<{ areaId: string }>();
   const [showCreateAssignmentForm, setShowCreateAssignmentForm] = useState(false);
@@ -55,7 +53,6 @@ const CreateAssignmentControlPanel: FC<IProps> = props => {
           setShowCreateAssignmentForm={setShowCreateAssignmentForm}
           setShapeFileGeoJSON={setShapeFileGeoJSON}
           shapeFileGeoJSON={shapeFileGeoJSON}
-          map={map}
         />
       )}
 
