@@ -44,8 +44,6 @@ const useReportFilters = (assignments: AssignmentsResponse["data"] = []) => {
       })
       .flat();
 
-    console.log(allAlerts);
-
     const uniqueAlerts = allAlerts
       .map(id => ({
         label: intl.formatMessage({
@@ -112,7 +110,6 @@ const useReportFilters = (assignments: AssignmentsResponse["data"] = []) => {
           }
         },
         filterCallback: (item, value) => {
-          console.log(item);
           if (!value || value === ALL_VALUE) {
             return true;
           } else {

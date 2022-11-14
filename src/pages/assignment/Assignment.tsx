@@ -12,6 +12,7 @@ import { useAccessToken } from "hooks/useAccessToken";
 import assignmentIcons from "assets/images/icons/assignmentIcons";
 import MapLayers from "./components/MapLayers";
 import DeleteAssignment from "./components/DeleteAssignment";
+import useGetUserId from "hooks/useGetUserId";
 
 export type TParams = {
   id: string;
@@ -25,6 +26,7 @@ const Assignment: FC = props => {
     pathParams: { assignmentId: id },
     headers: httpAuthHeader
   });
+  const userId = useGetUserId();
   const intl = useIntl();
   const templates = useMemo(() => {
     const templates = data?.data?.attributes?.templates || [];
@@ -51,7 +53,7 @@ const Assignment: FC = props => {
     return valueStr.length ? valueStr : intl.formatMessage({ id: "layers.none" });
   }, [data?.data?.attributes?.location, intl]);
 
-  const isMyAssignment = true;
+  const isMyAssignment = data?.data?.attributes?.createdBy === userId;
 
   return (
     <div className="relative">
