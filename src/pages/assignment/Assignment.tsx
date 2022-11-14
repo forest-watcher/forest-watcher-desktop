@@ -1,6 +1,6 @@
 import { FC, useMemo } from "react";
 import Hero from "components/layouts/Hero/Hero";
-import { Link, useParams, useRouteMatch } from "react-router-dom";
+import { Link, Route, Switch, useParams, useRouteMatch } from "react-router-dom";
 import Article from "components/layouts/Article";
 import Map from "components/ui/Map/Map";
 import { FormattedMessage, useIntl } from "react-intl";
@@ -11,6 +11,7 @@ import OptionalWrapper from "components/extensive/OptionalWrapper";
 import { useAccessToken } from "hooks/useAccessToken";
 import assignmentIcons from "assets/images/icons/assignmentIcons";
 import MapLayers from "./components/MapLayers";
+import DeleteAssignment from "./components/DeleteAssignment";
 
 export type TParams = {
   id: string;
@@ -18,7 +19,7 @@ export type TParams = {
 
 const Assignment: FC = props => {
   const { id } = useParams<TParams>();
-  let { url } = useRouteMatch();
+  let { path, url } = useRouteMatch();
   const { httpAuthHeader } = useAccessToken();
   const { data, isLoading } = useGetV3GfwAssignmentsAssignmentId({
     pathParams: { assignmentId: id },
@@ -130,6 +131,11 @@ const Assignment: FC = props => {
           </Article>
         </OptionalWrapper>
       </LoadingWrapper>
+      <Switch>
+        <Route path={`${path}/delete`}>
+          <DeleteAssignment />
+        </Route>
+      </Switch>
     </div>
   );
 };
