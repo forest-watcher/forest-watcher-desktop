@@ -166,7 +166,7 @@ const Basemaps: FC<IProps> = ({ defaultBasemap, onComparison }) => {
           <div
             className={classNames(
               "mx-[-20px] pt-6 px-5",
-              isAfter ? "bg-gray-400/70 border-solid border-t-gray-500 border-t-2" : "bg-gray-400/40",
+              isAfter ? "bg-neutral-400/70 border-solid border-t-neutral-500 border-t-2" : "bg-neutral-400/40",
               isLast && "mb-10",
               watcher.showPlanetImagery.length ? "pb-6" : "pb-2"
             )}
@@ -235,7 +235,7 @@ const Basemaps: FC<IProps> = ({ defaultBasemap, onComparison }) => {
                   }}
                 />
                 {isLast && (
-                  <Button variant="secondary" className="w-full bg-gray-300 mt-6" onClick={e => handleComparison(e)}>
+                  <Button variant="secondary" className="w-full bg-neutral-300 mt-6" onClick={e => handleComparison(e)}>
                     <FormattedMessage id={isComparison ? "maps.removeComparison" : "maps.addComparison"} />
                   </Button>
                 )}

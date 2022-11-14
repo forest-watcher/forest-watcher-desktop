@@ -25,7 +25,7 @@ const TemplateAreas = ({ areas }: TemplateAreasProps) => {
 
   return (
     <Article className="my-[60px]">
-      <h4 className="text-gray-700 text-2xl mb-5">
+      <h4 className="text-neutral-700 text-2xl mb-5">
         {intl.formatMessage({ id: "template.areas" })} ({areas?.length ?? 0})
       </h4>
       <DataTable
@@ -44,7 +44,7 @@ const TemplateAreas = ({ areas }: TemplateAreasProps) => {
             name: "   ",
             rowLabel: () => "View",
             rowHref: ({ id }) => `/areas/${id}`,
-            rowHrefClassNames: "text-green-500 font-medium uppercase",
+            rowHrefClassNames: "text-primary-500 font-medium uppercase",
             rowCellClassNames: "!text-right"
           }
         ]}

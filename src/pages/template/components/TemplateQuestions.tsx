@@ -21,9 +21,9 @@ const TemplateQuestions = ({ questions, defaultLanguage }: TemplateQuestionsProp
   };
 
   return (
-    <section className="bg-gray-400">
+    <section className="bg-neutral-400">
       <div className="row column py-section">
-        <h1 className="font-base text-[36px] font-light text-gray-700 mb-10">
+        <h1 className="font-base text-[36px] font-light text-neutral-700 mb-10">
           <FormattedMessage id="template.questions" />
         </h1>
         <List

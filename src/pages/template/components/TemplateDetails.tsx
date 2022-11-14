@@ -14,7 +14,7 @@ const TemplateDetails = ({ template }: TemplateDetailsProps) => {
 
   return (
     <section className="row column py-section">
-      <h1 className="font-base text-[36px] font-light text-gray-700 mb-10">{templateName}</h1>
+      <h1 className="font-base text-[36px] font-light text-neutral-700 mb-10">{templateName}</h1>
       <section className="grid md:grid-cols-2 grid-cols-1 gap-4">
         <IconCard
           iconName={"check-doc"}
