@@ -17,7 +17,7 @@ const Template = () => {
   });
 
   return (
-    <section>
+    <section className="relative">
       <TemplateHeader />
       <LoadingWrapper loading={templateLoading}>
         <TemplateDetails
