@@ -5,14 +5,14 @@ import DownIcon from "assets/images/icons/ChevronDown.svg";
 
 interface IProps extends HTMLAttributes<HTMLDivElement> {
   title: string;
-  text: string;
+  text?: string;
   icon?: string;
   shouldCollapse?: boolean;
 }
 
 const COLLAPSE_CHAR_LIMIT = 50;
 const DetailCard: FC<IProps> = ({ title, text, shouldCollapse = false, className, icon }) => {
-  const collapsable = shouldCollapse && text.length >= COLLAPSE_CHAR_LIMIT;
+  const collapsable = shouldCollapse && text && text.length >= COLLAPSE_CHAR_LIMIT;
 
   return (
     <div
@@ -34,7 +34,10 @@ const DetailCard: FC<IProps> = ({ title, text, shouldCollapse = false, className
               <p className="uppercase font-medium text-sm font-fira text-neutral-700 leading-[14px] mb-3">{title}</p>
               <Disclosure.Panel
                 static
-                className={classNames("text-base leading-snug break-all", collapsable && !open && "line-clamp-2")}
+                className={classNames(
+                  "text-base leading-snug break-words first-letter:uppercase",
+                  collapsable && !open && "line-clamp-2"
+                )}
               >
                 {text}
               </Disclosure.Panel>

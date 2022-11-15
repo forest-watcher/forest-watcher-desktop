@@ -70,7 +70,7 @@ const _Templates = () => {
   const [filteredRows, setFilteredRows] = useState<TemplateTableRowData[]>(rows);
 
   return (
-    <>
+    <div className="relative">
       <TemplatesHeader />
       <LoadingWrapper loading={areasLoading || templatesLoading}>
         <Article className="mt-10">
@@ -145,7 +145,7 @@ const _Templates = () => {
           </OptionalWrapper>
         </Article>
       </LoadingWrapper>
-    </>
+    </div>
   );
 };
 

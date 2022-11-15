@@ -68,7 +68,6 @@ const useTemplatesFilter = (templates: TemplateTableRowData[] = []) => {
       },
       filterCallback: (item, value) => {
         const values: any[] = Object.values(item).map((val: any) => val.toLowerCase());
-        console.log(values);
         return values.some(x => x.includes(value));
       }
     };

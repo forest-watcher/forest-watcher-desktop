@@ -34,7 +34,10 @@ const Assignments = () => {
   const [selectedAssignments, setSelectedAssignments] = useState<TAssignmentsDataTable[]>([]);
 
   // Queries - Get User's Assignments
-  const { data: assignmentsData, isLoading: assignmentsLoading } = useGetV3GfwUser({ headers: httpAuthHeader });
+  const { data: assignmentsData, isLoading: assignmentsLoading } = useGetV3GfwUser(
+    { headers: httpAuthHeader },
+    { cacheTime: 0, retryOnMount: true }
+  );
 
   const rows = useMemo<TAssignmentsDataTable[]>(() => {
     if (!assignmentsData?.data) return [];
@@ -99,7 +102,12 @@ const Assignments = () => {
                     return intl.formatMessage({ id: "layers.none" });
                   }
 
-                  return value.map(alert => intl.formatMessage({ id: `layers.${alert.alertType}` })).join(", ");
+                  const valueStr = value
+                    .map(alert => (alert.alertType ? intl.formatMessage({ id: `layers.${alert.alertType}` }) : ""))
+                    .filter(name => name !== "")
+                    .join(", ");
+
+                  return valueStr.length ? valueStr : intl.formatMessage({ id: "layers.none" });
                 },
                 sortCompareFn: (a, b, direction) => {
                   const newA = intl.formatMessage({ id: `layers.${a}`, defaultMessage: a?.toString() });
@@ -114,7 +122,7 @@ const Assignments = () => {
                 key: "id",
                 name: "   ",
                 rowLabel: () => "View",
-                rowHref: ({ id }) => `/assignments/${id}`,
+                rowHref: ({ id }) => `/assignment/${id}`,
                 rowHrefClassNames: "text-primary-500 font-medium uppercase",
                 rowCellClassNames: "!text-right"
               }
