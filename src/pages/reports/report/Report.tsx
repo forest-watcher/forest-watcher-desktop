@@ -14,6 +14,8 @@ import { UnpackNestedValue } from "react-hook-form";
 import { usePostV3ReportsTemplateIdExportSome } from "generated/exports/exportsComponents";
 import { exportService } from "services/exports";
 import { Answer } from "generated/forms/formsResponses";
+import { useGetV3GfwTemplatesTemplateIdAnswersAnswerId } from "generated/core/coreComponents";
+import { AnswerResponse } from "generated/forms/formsSchemas";
 
 const Report = () => {
   const { httpAuthHeader } = useAccessToken();
@@ -26,9 +28,8 @@ const Report = () => {
     headers: httpAuthHeader
   });
 
-  // Queries - Get Answer
-  const { data: answers, isLoading: answersLoading } = useGetAnswerForReportV3({
-    pathParams: { reportId, id: answerId },
+  const { data: answers, isLoading: answersLoading } = useGetV3GfwTemplatesTemplateIdAnswersAnswerId({
+    pathParams: { templateId: reportId, answerId },
     headers: httpAuthHeader
   });
 
@@ -53,9 +54,8 @@ const Report = () => {
     return report.data;
   };
 
-  const _responses = answers?.data ? answers.data[0].attributes?.responses : [];
-  const responses = _responses ?? [];
-  const answer = answers?.data && (answers.data[0] as Answer["data"]);
+  const responses = answers?.data?.attributes?.responses || []; // Responses are coming back as the wrong type.
+  const answer = answers?.data;
 
   return (
     <LoadingWrapper loading={reportLoading || answersLoading}>
@@ -65,7 +65,7 @@ const Report = () => {
       <ReportHeader setShowExportModal={setShowExportModal} />
       <ReportMap answer={answer} />
       <ReportDetails answer={answer} report={report} />
-      <ReportResponses questions={report?.data?.attributes.questions ?? []} responses={responses} />
+      <ReportResponses questions={report?.data?.attributes.questions ?? []} responses={responses as AnswerResponse[]} />
     </LoadingWrapper>
   );
 };

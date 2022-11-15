@@ -1,12 +1,12 @@
 import SquareClusterMarkers, { EPointDataTypes } from "components/ui/Map/components/layers/SquareClusterMarkers";
 import Map from "components/ui/Map/Map";
-import { Answer } from "generated/forms/formsResponses";
+import { AnswerResponse } from "generated/core/coreResponses";
 import { getReportAlertsByName } from "helpers/reports";
 import { Map as MapInstance, MapboxEvent } from "mapbox-gl";
 import { useCallback, useState } from "react";
 
 type ReportMapProps = {
-  answer?: Answer["data"];
+  answer?: AnswerResponse["data"];
 };
 
 const ReportMap = ({ answer }: ReportMapProps) => {
