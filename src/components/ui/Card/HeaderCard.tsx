@@ -34,7 +34,7 @@ const Content: HeaderCardComposition["Content"] = ({ className, children }) => {
     <div
       className={classNames(
         className,
-        "bg-neutral-300 py-7 px-6 border-2 border-solid border-neutral-500 border-opacity-40 rounded-b-[4px]"
+        "bg-neutral-300 py-7 px-6 border-2 border-solid border-neutral-500 border-opacity-40 rounded-b-[4px] border-t-0"
       )}
     >
       {children}
