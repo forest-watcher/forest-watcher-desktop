@@ -19,6 +19,7 @@ pipelines:
         script:
           - yarn build
     - step: &build_storybook
+        size: 2x
         name: Build Storybook
         image: node:16.14.0
         caches:
