@@ -7,7 +7,7 @@ import { useGetV3GfwUser } from "generated/core/coreComponents";
 import { priorityToString } from "helpers/assignments";
 import { sortByDateString, sortByString } from "helpers/table";
 import { useAccessToken } from "hooks/useAccessToken";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { FormattedMessage, useIntl } from "react-intl";
 import useAssignmentsFilters from "./useAssignmentsFilter";
 
