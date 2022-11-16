@@ -1,5 +1,5 @@
 import classnames from "classnames";
-import { Fragment, useCallback, useEffect, useState } from "react";
+import { Fragment, useCallback, useEffect, useMemo, useState } from "react";
 import { UseFormRegisterReturn, UseFormReturn } from "react-hook-form";
 import { FieldPropsBase } from "types/field";
 import { SelectProps, Option } from "types/select";
@@ -16,6 +16,7 @@ export interface Props extends FieldPropsBase {
   onChange?: () => void;
   variant?: "simple" | "simple-green";
   isMultiple?: boolean;
+  isMultipleDropdown?: boolean;
 }
 
 const getSelectedItems = (isMultiple: boolean, value: any, options: Option[]) => {
@@ -27,9 +28,21 @@ const getSelectedItems = (isMultiple: boolean, value: any, options: Option[]) =>
 };
 
 const Select = (props: Props) => {
-  const { selectProps, registered, error, id, formHook, variant, hideLabel, isMultiple = false, className } = props;
+  const {
+    selectProps,
+    registered,
+    error,
+    id,
+    formHook,
+    variant,
+    hideLabel,
+    isMultiple = false,
+    isMultipleDropdown = false,
+    className
+  } = props;
   const [options, setOptions] = useState<Option[]>(selectProps.options || []);
   const [selectHeight, setSelectHeight] = useState<number>(0);
+  const isGenericMultiple = useMemo(() => isMultiple || isMultipleDropdown, [isMultiple, isMultipleDropdown]);
 
   useEffect(() => {
     setOptions(selectProps.options || []);
@@ -41,9 +54,9 @@ const Select = (props: Props) => {
       ? selectProps.defaultValue.map(item => item.value)
       : selectProps.defaultValue?.value);
 
-  const selectedItems = getSelectedItems(isMultiple, value, options);
+  const selectedItems = getSelectedItems(isGenericMultiple, value, options);
 
-  const label = isMultiple
+  const label = isGenericMultiple
     ? options
         .filter(opt => value.find((item: string) => item === opt.value))
         .map(item => item.label)
@@ -60,7 +73,7 @@ const Select = (props: Props) => {
   }, [selectProps.asyncFetchOptions]);
 
   const onChange = (v: any) => {
-    if (isMultiple) {
+    if (isGenericMultiple) {
       props.formHook.setValue(
         registered.name,
         v.map((item: Option) => item.value)
@@ -80,7 +93,7 @@ const Select = (props: Props) => {
 
   return (
     <div className={classnames("c-input", selectProps.alternateLabelStyle && "c-input--alt-label", className)}>
-      <Listbox value={selectedItems} onChange={onChange} multiple={isMultiple}>
+      <Listbox value={selectedItems} onChange={onChange} multiple={isGenericMultiple}>
         {({ open }) => (
           <>
             {selectProps.label && (
@@ -183,7 +196,7 @@ const Select = (props: Props) => {
                               {option.secondaryLabel}
                             </span>
                           )}
-                          {isMultiple && (
+                          {isGenericMultiple && (
                             <img
                               src={selected ? RadioOn : RadioOff}
                               role="presentation"

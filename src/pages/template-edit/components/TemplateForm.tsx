@@ -40,9 +40,14 @@ const TemplateForm: FC<IParams> = ({ template = {}, assignedAreas = [] }) => {
             id="areas"
             formHook={formHook}
             registered={register("areas")}
+            isMultipleDropdown
             selectProps={{
               placeholder: intl.formatMessage({ id: "template.edit.areas.placeholder" }),
-              options: [],
+              options: [
+                { label: "hey", value: 1 },
+                { label: "bar", value: 2 },
+                { label: "baz", value: 3 }
+              ],
               label: intl.formatMessage({ id: "template.edit.areas" }),
               alternateLabelStyle: true,
               largeLabel: true
