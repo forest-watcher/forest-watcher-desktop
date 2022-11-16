@@ -1,6 +1,5 @@
 import { FC, ReactNode, useEffect } from "react";
 import { Route, Switch, Redirect, useLocation, useParams, useRouteMatch } from "react-router-dom";
-import querystring from "query-string";
 
 import Areas from "pages/areas/AreasContainer";
 import AreasManage from "pages/area-view/AreaViewContainer";
