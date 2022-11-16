@@ -51,7 +51,7 @@ class App extends Component {
   }
 
   render() {
-    const { match, user, userChecked, logout, locale, setLocale, location } = this.props;
+    const { user, userChecked, logout, locale, setLocale, location } = this.props;
     if (!userChecked) return null;
     const mergedMessages = Object.assign({}, translations[DEFAULT_LANGUAGE], translations[locale]);
 
@@ -72,9 +72,6 @@ class App extends Component {
 
             <main role="main" className="l-main">
               <Routes
-                match={match}
-                user={user}
-                location={location}
                 defaultComponent={() => <Landing locale={locale} setLocale={setLocale} translations={translations} />}
               />
               <UserNameForm isOpen={user.userHasNoLastName && location.pathname !== "/"} />
@@ -88,7 +85,6 @@ class App extends Component {
 }
 
 App.propTypes = {
-  match: PropTypes.object.isRequired,
   location: PropTypes.object.isRequired,
   userChecked: PropTypes.bool.isRequired,
   user: PropTypes.object.isRequired,
