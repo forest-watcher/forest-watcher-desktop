@@ -1,31 +1,42 @@
-import { useEffect } from "react";
-import { Route, Switch, Redirect, useLocation } from "react-router-dom";
-import PropTypes from "prop-types";
-import querystring from "query-string";
+import { FC, ReactNode, useEffect } from "react";
+import { Route, Switch, Redirect, useLocation, useParams, useRouteMatch } from "react-router-dom";
 
-import Areas from "./pages/areas/AreasContainer";
-import AreasManage from "./pages/area-view/AreaViewContainer";
-import AreaEdit from "./pages/area-edit/AreaEditContainer";
-import TemplatesManage from "./pages/templates-manage-legacy/TemplatesManageContainer";
-import Teams from "./pages/teams/TeamsContainer";
+import Areas from "pages/areas/AreasContainer";
+import AreasManage from "pages/area-view/AreaViewContainer";
+import AreaEdit from "pages/area-edit/AreaEditContainer";
+import TemplatesManage from "pages/templates-manage-legacy/TemplatesManageContainer";
+import Teams from "pages/teams/TeamsContainer";
 import TeamsInvitations from "pages/teams/invitation/InvitationContainer";
-import TeamDetail from "./pages/teams-detail/TeamDetailContainer";
-import Settings from "./pages/settings/SettingsContainer";
-import Reports from "./pages/reports/ReportsContainer";
-import Login from "./pages/login/Login";
-import SignUpAndReset from "./pages/login/SignUpAndReset";
+import TeamDetail from "pages/teams-detail/TeamDetailContainer";
+import Settings from "pages/settings/SettingsContainer";
+import Reports from "pages/reports/ReportsContainer";
+import Login from "pages/login/Login";
+import SignUpAndReset from "pages/login/SignUpAndReset";
 import { useRouteHistoryStack } from "hooks/useRouteHistoryStack";
 import Report from "pages/reports/report/Report";
 import Templates from "pages/templates/Templates";
 import Layers from "pages/layers/Layers";
 import TemplateDetail from "pages/template-detail/TemplateDetail";
 import Assignment from "pages/assignment/Assignment";
+import { useSelector } from "react-redux";
+import { RootState } from "store";
 
-const getLoginComponent = ({ user, location }) => {
-  const search = location.search || "";
-  const queryParams = querystring.parse(search);
+interface IParams {
+  token?: string;
+  confirmToken?: string;
+  callbackUrl?: string;
+}
+
+interface IProps {
+  defaultComponent: () => ReactNode;
+}
+
+const LoginComponent = () => {
+  const location = useLocation();
+  const queryParams = useParams<IParams>();
   const callbackUrl = queryParams.callbackUrl;
   const confirmToken = queryParams.confirmToken;
+  const user = useSelector((state: RootState) => state.user);
 
   if (!user.loggedIn && queryParams.token && (callbackUrl || confirmToken)) {
     return (
@@ -43,26 +54,29 @@ const getLoginComponent = ({ user, location }) => {
   }
 };
 
-const Routes = props => {
-  const queryParams = querystring.parse(window.location.search || "");
-  const { match, user, location, defaultComponent } = props;
+const Routes: FC<IProps> = props => {
+  const { defaultComponent } = props;
 
-  const { pathname } = useLocation();
+  const location = useLocation();
+  const match = useRouteMatch();
+  const queryParams = useParams<IParams>();
+  const user = useSelector((state: RootState) => state.user);
+
   useRouteHistoryStack();
 
   useEffect(() => {
     // only on top level (main nav)
     // stops deeper routes, that just contain modals, triggering a reset
-    const isTopLevel = pathname.split("/").length === 2;
+    const isTopLevel = location.pathname.split("/").length === 2;
     if (isTopLevel) {
       window.scrollTo(0, 0);
     }
-  }, [pathname]);
+  }, [location.pathname]);
 
   return (
     <Switch>
       <Route exact path="/" render={defaultComponent} />
-      <Route path={`${match.url}login`} render={() => getLoginComponent({ user, location })} />
+      <Route path={`${match.url}login`} component={LoginComponent} />
       {!user.loggedIn && (
         <Switch>
           <Route exact path={`${match.url}sign-up`} component={SignUpAndReset} />
@@ -135,13 +149,6 @@ const Routes = props => {
       )}
     </Switch>
   );
-};
-
-Routes.defaultProps = {
-  match: PropTypes.object,
-  user: PropTypes.object,
-  location: PropTypes.object,
-  defaultComponent: PropTypes.func
 };
 
 export default Routes;
