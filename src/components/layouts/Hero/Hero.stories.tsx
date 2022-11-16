@@ -23,7 +23,7 @@ Default.args = {
   titleValues: { name: "FED" },
   actions: (
     <>
-      <Link to={`/`} className="c-teams-details__edit-btn c-button c-button--primary">
+      <Link to={`/`} className="c-button c-button--primary">
         <FormattedMessage id="teams.details.edit" />
       </Link>
       <Link to={`/`} className="c-button c-button--secondary-light-text">
@@ -34,13 +34,29 @@ Default.args = {
   backLink: { name: "teams.details.back", to: "/teams" }
 };
 
+export const NoBackLink = Template.bind({});
+NoBackLink.args = {
+  title: "teams.details.name",
+  titleValues: { name: "FED" },
+  actions: (
+    <>
+      <Link to={`/`} className="c-button c-button--primary">
+        <FormattedMessage id="teams.details.edit" />
+      </Link>
+      <Link to={`/`} className="c-button c-button--secondary-light-text">
+        <FormattedMessage id="teams.details.delete" />
+      </Link>
+    </>
+  )
+};
+
 export const WithTabs = Template.bind({});
 WithTabs.args = {
   title: "teams.details.name",
   titleValues: { name: "FED" },
   actions: (
     <>
-      <Link to={`/`} className="c-teams-details__edit-btn c-button c-button--primary">
+      <Link to={`/`} className="c-button c-button--primary">
         <FormattedMessage id="teams.details.edit" />
       </Link>
       <Link to={`/`} className="c-button c-button--secondary-light-text">
@@ -48,6 +64,28 @@ WithTabs.args = {
       </Link>
     </>
   ),
+  backLink: { name: "teams.details.back", to: "/teams" },
+  pageTabs: {
+    value: "investigation",
+    options: [
+      {
+        value: "investigation",
+        name: "reporting.tabs.investigation",
+        href: "/reporting/investigation"
+      },
+      {
+        value: "reports",
+        name: "reporting.tabs.reports",
+        href: "/reporting/reports"
+      }
+    ]
+  }
+};
+
+export const WithTabsNoActions = Template.bind({});
+WithTabsNoActions.args = {
+  title: "teams.details.name",
+  titleValues: { name: "FED" },
   backLink: { name: "teams.details.back", to: "/teams" },
   pageTabs: {
     value: "investigation",
