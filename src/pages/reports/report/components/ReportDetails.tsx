@@ -1,6 +1,6 @@
 import IconCard from "components/icon-card/IconCard";
 import { AnswerResponse } from "generated/core/coreResponses";
-import { Answer, Report } from "generated/forms/formsResponses";
+import { Report } from "generated/forms/formsResponses";
 import moment from "moment";
 
 type ReportDetailsProps = {
