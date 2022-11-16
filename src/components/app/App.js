@@ -72,9 +72,6 @@ class App extends Component {
 
             <main role="main" className="l-main">
               <Routes
-                match={match}
-                user={user}
-                location={location}
                 defaultComponent={() => <Landing locale={locale} setLocale={setLocale} translations={translations} />}
               />
               <UserNameForm isOpen={user.userHasNoLastName && location.pathname !== "/"} />
