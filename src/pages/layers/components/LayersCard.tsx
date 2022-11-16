@@ -4,6 +4,7 @@ import { Layers } from "generated/clayers/clayersResponses";
 import { usePatchContextualLayer } from "generated/clayers/clayersComponents";
 import LoadingWrapper from "components/extensive/LoadingWrapper";
 import { FormattedMessage } from "react-intl";
+import HeaderCard from "components/ui/Card/HeaderCard";
 
 type LayersCardProps = {
   title: string;
@@ -19,15 +20,13 @@ const LayersCard = ({ title, items, refetchLayers, layersLoading }: LayersCardPr
   const loading = canBeLoadable ? layersLoading : false;
 
   return (
-    <section className="my-7">
-      {/* Title */}
-      <div className="bg-primary-400 border-2 border-solid border-primary-500 py-7 px-6 rounded-t-[4px] border-opacity-20">
-        <p className="text-[24px] text-neutral-700 font-[400]">
+    <HeaderCard className="my-7" as="section">
+      <HeaderCard.Header>
+        <HeaderCard.HeaderText>
           <FormattedMessage id={title} />
-        </p>
-      </div>
-      {/* Content */}
-      <div className="bg-neutral-300 py-7 px-6 border-2 border-solid border-neutral-500 border-opacity-40 rounded-b-[4px]">
+        </HeaderCard.HeaderText>
+      </HeaderCard.Header>
+      <HeaderCard.Content>
         <LoadingWrapper loading={updateLayerLoading || loading} className="py-10 relative">
           <List
             items={items}
@@ -42,8 +41,8 @@ const LayersCard = ({ title, items, refetchLayers, layersLoading }: LayersCardPr
             )}
           />
         </LoadingWrapper>
-      </div>
-    </section>
+      </HeaderCard.Content>
+    </HeaderCard>
   );
 };
 
