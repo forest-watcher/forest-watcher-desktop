@@ -1,5 +1,4 @@
 import Icon from "components/extensive/Icon";
-import Card from "components/ui/Card/Card";
 import { Link } from "react-router-dom";
 
 type IconCardProps = {
@@ -24,7 +23,7 @@ const IconCard = ({ iconName, title, text, textLink }: IconCardProps) => {
   };
 
   return (
-    <Card className="max-w-none flex items-center gap-3 bg-neutral-400">
+    <div className="py-7 px-6 bg-neutral-400/40 border-2 border-neutral-400 border-solid rounded-md flex gap-3">
       <div className="flex justify-center items-center h-[48px] w-[48px] rounded-full bg-primary-500 p-3">
         <Icon name={iconName} className="text-neutral-300" size={22} />
       </div>
@@ -35,7 +34,7 @@ const IconCard = ({ iconName, title, text, textLink }: IconCardProps) => {
           {_renderText()}
         </p>
       </div>
-    </Card>
+    </div>
   );
 };
 

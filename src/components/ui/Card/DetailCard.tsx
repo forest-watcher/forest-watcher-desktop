@@ -6,19 +6,21 @@ import DownIcon from "assets/images/icons/ChevronDown.svg";
 interface IProps extends HTMLAttributes<HTMLDivElement> {
   title: string;
   text?: string;
-  icon?: string;
   shouldCollapse?: boolean;
+  icon?: string;
+  iconName?: string;
 }
 
 const COLLAPSE_CHAR_LIMIT = 50;
-const DetailCard: FC<IProps> = ({ title, text, shouldCollapse = false, className, icon }) => {
+const DetailCard: FC<IProps> = ({ title, text, shouldCollapse = false, className, icon, iconName }) => {
   const collapsable = shouldCollapse && text && text.length >= COLLAPSE_CHAR_LIMIT;
 
   return (
     <div
       className={classNames(
         className,
-        "py-4 px-6 bg-neutral-400/40 border-2 border-neutral-400 border-solid rounded-md"
+        collapsable ? "py-4" : "py-7",
+        "px-6 bg-neutral-400/40 border-2 border-neutral-400 border-solid rounded-md"
       )}
     >
       <Disclosure>

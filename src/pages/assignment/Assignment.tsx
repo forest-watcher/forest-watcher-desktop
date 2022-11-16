@@ -88,7 +88,7 @@ const Assignment: FC = props => {
             titleValues={{ name: data?.data?.attributes?.name || "" }}
             className="mt-15 mb-20"
           >
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-7">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-7 auto-rows-min">
               <DetailCard
                 icon={assignmentIcons.creation}
                 title={intl.formatMessage({ id: "assignment.details.creation" })}
@@ -112,6 +112,7 @@ const Assignment: FC = props => {
                 icon={assignmentIcons.assignmentType}
                 title={intl.formatMessage({ id: "assignment.details.assignmentType" })}
                 text={alerts}
+                shouldCollapse
               />
               <DetailCard
                 icon={assignmentIcons.templates}
