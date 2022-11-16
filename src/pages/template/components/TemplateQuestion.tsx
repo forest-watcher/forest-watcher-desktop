@@ -1,5 +1,6 @@
 import List from "components/extensive/List";
 import OptionalWrapper from "components/extensive/OptionalWrapper";
+import HeaderCard from "components/ui/Card/HeaderCard";
 import { QuestionModel } from "generated/core/coreSchemas";
 import { FormattedMessage } from "react-intl";
 
@@ -37,13 +38,11 @@ const TemplateQuestion = ({ question, defaultLanguage, getConditional }: Templat
   };
 
   return (
-    <section className="my-10">
-      {/* Title */}
-      <div className="bg-primary-400 border-2 border-solid border-primary-500 py-7 px-6 rounded-t-[4px] border-opacity-20">
-        <p className="text-[24px] text-neutral-700 capitalize">{formattedQuestionName}</p>
-      </div>
-      {/* Data */}
-      <div className="bg-neutral-300 py-7 px-6 border-2 border-solid border-neutral-500 border-opacity-40 rounded-b-[4px]">
+    <HeaderCard className="my-10" as="section">
+      <HeaderCard.Header>
+        <HeaderCard.HeaderText className="capitalize">{formattedQuestionName}</HeaderCard.HeaderText>
+      </HeaderCard.Header>
+      <HeaderCard.Content>
         {/* Question */}
         <div className="mb-6">
           <h4 className="uppercase font-[500] text-neutral-700 pb-2">
@@ -115,8 +114,8 @@ const TemplateQuestion = ({ question, defaultLanguage, getConditional }: Templat
           </h4>
           <p className="text-base">{`${question.required}`}</p>
         </div>
-      </div>
-    </section>
+      </HeaderCard.Content>
+    </HeaderCard>
   );
 };
 

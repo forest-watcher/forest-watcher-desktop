@@ -4,7 +4,7 @@ import ReportsIcon from "assets/images/icons/Reports.svg";
 
 // More on default export: https://storybook.js.org/docs/react/writing-stories/introduction#default-export
 export default {
-  title: "UI/Cards/Other",
+  title: "UI/Cards/Other/Detail",
   component: DetailCard
 } as ComponentMeta<typeof DetailCard>;
 
