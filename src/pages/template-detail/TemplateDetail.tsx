@@ -1,11 +1,11 @@
 import LoadingWrapper from "components/extensive/LoadingWrapper";
+import Hero from "components/layouts/Hero/Hero";
 import { useGetV3GfwTemplatesTemplateId } from "generated/core/coreComponents";
 import { TemplateResponse } from "generated/core/coreResponses";
 import { useAccessToken } from "hooks/useAccessToken";
 import { useParams } from "react-router-dom";
 import TemplateAreas from "./components/TemplateAreas";
 import TemplateDetails from "./components/TemplateDetails";
-import TemplateHeader from "./components/TemplateHeader";
 import TemplateQuestions from "./components/TemplateQuestions";
 
 interface TemplateResponseWithData {
@@ -25,7 +25,7 @@ const TemplateDetail = () => {
 
   return (
     <section className="relative">
-      <TemplateHeader />
+      <Hero title="template.details" backLink={{ name: "template.back", to: "/templates" }} />
       <LoadingWrapper loading={templateLoading}>
         <TemplateDetails template={template?.data?.attributes} />
         <TemplateAreas areas={template?.data?.attributes?.areas || []} />
