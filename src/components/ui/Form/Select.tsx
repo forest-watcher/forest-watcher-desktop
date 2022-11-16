@@ -88,6 +88,7 @@ const Select = (props: Props) => {
                 className={classnames(
                   "c-input__label c-input__label--select",
                   selectProps.alternateLabelStyle && "c-input__label--alt",
+                  selectProps.largeLabel && "c-input__label--large",
                   hideLabel && "u-visually-hidden"
                 )}
               >

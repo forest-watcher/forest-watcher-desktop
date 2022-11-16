@@ -4,6 +4,7 @@ import { useGetV3GfwTemplatesTemplateId } from "generated/core/coreComponents";
 import { TemplateResponse } from "generated/core/coreResponses";
 import { useAccessToken } from "hooks/useAccessToken";
 import { useParams } from "react-router-dom";
+import TemplateForm from "./components/TemplateForm";
 
 interface TemplateResponseWithData {
   data?: TemplateResponse;
@@ -24,11 +25,7 @@ const TemplateEdit = () => {
     <section className="relative">
       <Hero title="template.edit.title" backLink={{ name: "template.edit.back", to: `/templates/${templateId}` }} />
       <LoadingWrapper loading={templateLoading}>
-        {/* <TemplateDetails template={template?.data?.attributes} />
-        <TemplateQuestions
-          questions={template?.data?.attributes?.questions || []}
-          defaultLanguage={template?.data?.attributes?.defaultLanguage}
-        /> */}
+        {template?.data?.attributes && <TemplateForm template={template.data.attributes} />}
       </LoadingWrapper>
     </section>
   );

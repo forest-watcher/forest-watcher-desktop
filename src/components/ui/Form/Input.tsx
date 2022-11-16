@@ -14,14 +14,16 @@ export interface Props extends FieldPropsBase {
 const Input = (props: Props) => {
   const { id, registered, className, htmlInputProps, error, hideLabel = false } = props;
   return (
-    <div className={classnames("c-input", className)}>
+    <div className={classnames("c-input", htmlInputProps.alternateLabelStyle && "c-input--alt-label", className)}>
       {htmlInputProps.label && (
         <label
           htmlFor={id}
           className={classnames(
             "c-input__label",
             `c-input__label--${htmlInputProps.type}`,
-            hideLabel && "u-visually-hidden"
+            hideLabel && "u-visually-hidden",
+            htmlInputProps.alternateLabelStyle && "c-input__label--alt",
+            htmlInputProps.largeLabel && "c-input__label--large"
           )}
         >
           {htmlInputProps.label}
