@@ -8,6 +8,7 @@ import { FieldError } from "./FieldError";
 import { Listbox } from "@headlessui/react";
 import RadioOff from "assets/images/icons/RadioOff.svg";
 import RadioOn from "assets/images/icons/RadioOn.svg";
+import { useIntl } from "react-intl";
 
 export interface Props extends FieldPropsBase {
   selectProps: SelectProps;
@@ -45,6 +46,7 @@ const Select = (props: Props) => {
   const [options, setOptions] = useState<Option[]>(selectProps.options || []);
   const [selectHeight, setSelectHeight] = useState<number>(0);
   const isGenericMultiple = useMemo(() => isMultiple || isMultipleDropdown, [isMultiple, isMultipleDropdown]);
+  const intl = useIntl();
 
   useEffect(() => {
     setOptions(selectProps.options || []);
@@ -58,14 +60,24 @@ const Select = (props: Props) => {
 
   const selectedItems = getSelectedItems(isGenericMultiple, value, options);
 
-  const label = isGenericMultiple
-    ? options
+  const label = useMemo(() => {
+    if (isMultiple) {
+      return options
         .filter(opt => value.find((item: string) => item === opt.value))
         .map(item => item.label)
-        .join(", ")
-    : value
-    ? options.find(opt => opt.value === value)?.label
-    : null;
+        .join(", ");
+    }
+
+    if (isMultipleDropdown && value.length > 0) {
+      return intl.formatMessage({ id: "common.xSelected" }, { count: value.length });
+    }
+
+    if (value) {
+      return options.find(opt => opt.value === value)?.label;
+    }
+
+    return null;
+  }, [intl, isMultiple, isMultipleDropdown, options, value]);
 
   const fetchOptions = useCallback(async () => {
     if (!!selectProps.asyncFetchOptions) {
@@ -78,10 +90,11 @@ const Select = (props: Props) => {
     if (isGenericMultiple) {
       props.formHook.setValue(
         registered.name,
-        v.map((item: Option) => item.value)
+        v.map((item: Option) => item.value),
+        { shouldDirty: true }
       );
     } else if (v.value) {
-      props.formHook.setValue(registered.name, v?.value);
+      props.formHook.setValue(registered.name, v?.value, { shouldDirty: true });
     }
     props.formHook.clearErrors(registered.name);
     if (props.onChange) {
@@ -189,7 +202,8 @@ const Select = (props: Props) => {
                             "c-input__select-list-item",
                             active && "c-input__select-list-item--is-active",
                             selected && "c-input__select-list-item--is-selected",
-                            variant && `c-input__select-list-item--${variant}`
+                            variant && `c-input__select-list-item--${variant}`,
+                            isMultipleDropdown && "flex flex-row-reverse justify-end align-middle gap-4"
                           )}
                         >
                           <span className="c-input__select-list-item-label">{option.label}</span>

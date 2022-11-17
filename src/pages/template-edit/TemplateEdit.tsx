@@ -25,7 +25,15 @@ const TemplateEdit = () => {
     <section className="relative">
       <Hero title="template.edit.title" backLink={{ name: "template.edit.back", to: `/templates/${templateId}` }} />
       <LoadingWrapper loading={templateLoading}>
-        {template?.data?.attributes && <TemplateForm template={template.data.attributes} />}
+        {template?.data?.attributes && (
+          <TemplateForm
+            backLink={`/templates/${templateId}`}
+            template={{
+              ...template.data.attributes,
+              areas: template.data.attributes.areas?.map(area => area.id || "") || []
+            }}
+          />
+        )}
       </LoadingWrapper>
     </section>
   );

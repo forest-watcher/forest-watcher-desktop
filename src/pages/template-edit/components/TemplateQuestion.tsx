@@ -1,20 +1,24 @@
+import Icon from "components/extensive/Icon";
 import List from "components/extensive/List";
 import OptionalWrapper from "components/extensive/OptionalWrapper";
 import { QuestionModel } from "generated/core/coreSchemas";
-import { FormattedMessage } from "react-intl";
+import React from "react";
+import { FormattedMessage, useIntl } from "react-intl";
 
 type TemplateQuestionProps = {
   question: QuestionModel;
   defaultLanguage?: string;
   getConditional: (questionName: string, optioinValue: number) => string;
+  onDelete: () => void;
 };
 
-const TemplateQuestion = ({ question, defaultLanguage, getConditional }: TemplateQuestionProps) => {
+const TemplateQuestion = ({ question, defaultLanguage, getConditional, onDelete }: TemplateQuestionProps) => {
   const formattedQuestionName = `${question.name.replace(/-/g, " ")}:`;
   // @ts-expect-error
   const questionText = question.label[defaultLanguage];
   // @ts-expect-error
   const responseOptions = question.values as { [key: string]: { label: string; value: number }[] };
+  const intl = useIntl();
 
   /**
    * Get Conditionals and More Info Text.
@@ -36,11 +40,19 @@ const TemplateQuestion = ({ question, defaultLanguage, getConditional }: Templat
     };
   };
 
+  const handleDelete = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+    onDelete();
+  };
+
   return (
     <section className="my-10">
       {/* Title */}
-      <div className="bg-primary-400 border-2 border-solid border-primary-500 py-7 px-6 rounded-t-[4px] border-opacity-20">
+      <div className="bg-primary-400 border-2 border-solid border-primary-500 py-7 px-6 rounded-t-[4px] border-opacity-20 flex justify-between align-middle">
         <p className="text-[24px] text-neutral-700 capitalize">{formattedQuestionName}</p>
+        <button onClick={handleDelete} aria-label={intl.formatMessage({ id: "common.delete" })}>
+          <Icon name="delete-round" size={36} />
+        </button>
       </div>
       {/* Data */}
       <div className="bg-neutral-300 py-7 px-6 border-2 border-solid border-neutral-500 border-opacity-40 rounded-b-[4px]">

@@ -12,14 +12,14 @@ export interface Props extends FieldPropsBase {
 }
 
 const Toggle = (props: Props) => {
-  const { registered, className, toggleProps, formHook, hideLabel } = props;
+  const { registered, className, toggleProps, formHook, hideLabel, labelClass } = props;
   const value =
     formHook.watch(props.registered.name) === undefined
       ? toggleProps.defaultValue
       : formHook.watch(props.registered.name);
 
   const handleChange = (v: Boolean) => {
-    formHook.setValue(registered.name, v);
+    formHook.setValue(registered.name, v, { shouldDirty: true });
     formHook.clearErrors(registered.name);
     props.onChange?.();
   };
@@ -27,7 +27,7 @@ const Toggle = (props: Props) => {
   return (
     <div className="c-input c-input--toggle">
       <Switch.Group>
-        <Switch.Label className={classnames("c-input__label", hideLabel && "u-visually-hidden")}>
+        <Switch.Label className={classnames("c-input__label", hideLabel && "u-visually-hidden", labelClass)}>
           {toggleProps.label}
         </Switch.Label>
         <Switch

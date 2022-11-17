@@ -1,14 +1,26 @@
 import List from "components/extensive/List";
 import { QuestionModel } from "generated/core/coreSchemas";
+import { FC } from "react";
+import { useFormContext, useWatch } from "react-hook-form";
 import { FormattedMessage } from "react-intl";
+import { FormFields } from "./TemplateForm";
 import TemplateQuestion from "./TemplateQuestion";
 
-type TemplateQuestionsProps = {
-  questions: QuestionModel[];
-  defaultLanguage?: string;
-};
+// type TemplateQuestionsProps = {
+//   questions: QuestionModel[];
+//   defaultLanguage?: string;
+// };
 
-const TemplateQuestions = ({ questions, defaultLanguage }: TemplateQuestionsProps) => {
+interface IProps {
+  onQuestionDelete: (index: number) => void;
+}
+
+const TemplateQuestions: FC<IProps> = ({ onQuestionDelete }) => {
+  const { control, setValue } = useFormContext<FormFields>();
+  const watcher = useWatch({ control });
+
+  const { questions = [], defaultLanguage } = watcher;
+
   const getConditional = (questionName: string, optionValue: number): string => {
     const foundQuestion = questions.find(q => q.name === questionName);
     if (!foundQuestion) return "";
@@ -21,19 +33,18 @@ const TemplateQuestions = ({ questions, defaultLanguage }: TemplateQuestionsProp
   };
 
   return (
-    <section className="bg-neutral-400">
-      <div className="row column py-section">
-        <h1 className="font-base text-[36px] font-light text-neutral-700 mb-10">
-          <FormattedMessage id="template.questions" />
-        </h1>
-        <List
-          items={questions}
-          render={question => (
-            <TemplateQuestion question={question} defaultLanguage={defaultLanguage} getConditional={getConditional} />
-          )}
+    <List
+      items={questions}
+      render={(question, index) => (
+        <TemplateQuestion
+          //@ts-ignore - todo - figure out type being undefined
+          question={question}
+          defaultLanguage={defaultLanguage}
+          getConditional={getConditional}
+          onDelete={() => onQuestionDelete(index)}
         />
-      </div>
-    </section>
+      )}
+    />
   );
 };
 
