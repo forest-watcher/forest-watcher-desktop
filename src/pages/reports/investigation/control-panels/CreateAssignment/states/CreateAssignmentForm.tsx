@@ -137,7 +137,7 @@ const CreateAssignmentForm: FC<IProps> = props => {
 
     if (shapeFileGeoJSON) {
       // Assign the custom shape file to the Assignment
-      body.geostore = shapeFileGeoJSON;
+      body.geostore = JSON.stringify(shapeFileGeoJSON);
       if (map) {
         goToGeojson(map, shapeFileGeoJSON, false);
       }

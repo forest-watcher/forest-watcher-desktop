@@ -4,14 +4,14 @@
  * @version 1.0
  */
 /**
- * @example {"name":"string","location":"string","priority":0,"monitors":["string"],"notes":"string","status":"string","alert":"string","areaId":"string","templateId":"string","teamIds":["string"],"createdAt":0,"createdBy":"string","areaName":"string"}
+ * @example {"name":"string","location":"string","priority":0,"monitors":["string"],"notes":"string","status":"string","alert":"string","areaId":"string","templateIds":["string"],"teamIds":["string"],"createdAt":0,"createdBy":"string","areaName":"string"}
  */
 export type AssignmentModel = {
   name: string;
   location?: {
     lat?: number;
     lon?: number;
-    arrayType?: string;
+    alertType?: string;
   }[];
   priority: number;
   monitors: string[];
@@ -88,6 +88,7 @@ export type ChildQuestionModel = {
   required: boolean;
   order?: number;
   conditionalValue?: number;
+  maxImageCount?: number;
 };
 
 export type QuestionModel = {
@@ -101,6 +102,7 @@ export type QuestionModel = {
   required: boolean;
   order?: number;
   childQuestions?: ChildQuestionModel;
+  maxImageCount?: number;
 };
 
 /**
