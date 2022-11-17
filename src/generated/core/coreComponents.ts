@@ -260,7 +260,7 @@ export type PatchV3GfwAssignmentsAssignmentIdError = Fetcher.ErrorWrapper<
 >;
 
 export type PatchV3GfwAssignmentsAssignmentIdVariables = {
-  body: RequestBodies.AssignmentBody;
+  body?: RequestBodies.UpdateAssignmentBody;
   pathParams: PatchV3GfwAssignmentsAssignmentIdPathParams;
 } & CoreContext["fetcherOptions"];
 
@@ -274,7 +274,7 @@ export const fetchPatchV3GfwAssignmentsAssignmentId = (
   coreFetch<
     Responses.AssignmentResponse,
     PatchV3GfwAssignmentsAssignmentIdError,
-    RequestBodies.AssignmentBody,
+    RequestBodies.UpdateAssignmentBody,
     {},
     {},
     PatchV3GfwAssignmentsAssignmentIdPathParams
