@@ -42,6 +42,7 @@ const TemplateQuestions: FC<IProps> = ({ onQuestionDelete }) => {
           defaultLanguage={defaultLanguage}
           getConditional={getConditional}
           onDelete={() => onQuestionDelete(index)}
+          index={index}
         />
       )}
     />
