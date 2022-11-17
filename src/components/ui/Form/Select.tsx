@@ -52,11 +52,13 @@ const Select = (props: Props) => {
     setOptions(selectProps.options || []);
   }, [selectProps.options]);
 
+  const watched = formHook.watch(props.registered.name);
   const value =
-    formHook.watch(props.registered.name) ||
-    (Array.isArray(selectProps.defaultValue)
+    watched !== undefined && watched !== null
+      ? watched
+      : Array.isArray(selectProps.defaultValue)
       ? selectProps.defaultValue.map(item => item.value)
-      : selectProps.defaultValue?.value);
+      : selectProps.defaultValue?.value;
 
   const selectedItems = getSelectedItems(isGenericMultiple, value, options);
 
@@ -72,8 +74,12 @@ const Select = (props: Props) => {
       return intl.formatMessage({ id: "common.xSelected" }, { count: value.length });
     }
 
-    if (value) {
-      return options.find(opt => opt.value === value)?.label;
+    if (value !== undefined && value !== null) {
+      const option = options.find(opt => opt.value === value);
+
+      if (option !== undefined) {
+        return option.label;
+      }
     }
 
     return null;
@@ -93,7 +99,7 @@ const Select = (props: Props) => {
         v.map((item: Option) => item.value),
         { shouldDirty: true }
       );
-    } else if (v.value) {
+    } else if (v.value !== null && v.value !== undefined) {
       props.formHook.setValue(registered.name, v?.value, { shouldDirty: true });
     }
     props.formHook.clearErrors(registered.name);

@@ -58,7 +58,7 @@ const Content: HeaderCardComposition["Content"] = ({ className, children }) => {
 
 const HeaderCard: FC<IProps> & HeaderCardComposition = ({ className, children, as = "div" }) => {
   const Element = as;
-  return <Element className={classNames(className, "rounded-b overflow-hidden")}>{children}</Element>;
+  return <Element className={classNames(className, "rounded-b")}>{children}</Element>;
 };
 
 HeaderCard.Header = Header;

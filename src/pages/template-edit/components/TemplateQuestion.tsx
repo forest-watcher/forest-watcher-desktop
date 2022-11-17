@@ -1,3 +1,4 @@
+import { Switch } from "@headlessui/react";
 import Icon from "components/extensive/Icon";
 import List from "components/extensive/List";
 import OptionalWrapper from "components/extensive/OptionalWrapper";
@@ -6,10 +7,10 @@ import HeaderCard from "components/ui/Card/HeaderCard";
 import Input from "components/ui/Form/Input";
 import Select from "components/ui/Form/Select";
 import Toggle from "components/ui/Form/Toggle";
-import { QUESTION_TYPES } from "constants/templates";
-import { QuestionModel } from "generated/core/coreSchemas";
-import React from "react";
-import { useFormContext } from "react-hook-form";
+import { CHILD_QUESTION, CONDITIONAL_QUESTION_TYPES, QUESTION_TYPES } from "constants/templates";
+import { ChildQuestionModel, QuestionModel } from "generated/core/coreSchemas";
+import React, { useState } from "react";
+import { useFormContext, useWatch } from "react-hook-form";
 import { FormattedMessage, useIntl } from "react-intl";
 import { FormFields } from "./TemplateForm";
 
@@ -35,7 +36,9 @@ const TemplateQuestion = ({
   const responseOptions = question.values as valuesType;
   const intl = useIntl();
   const formHook = useFormContext<FormFields>();
-  const { register, getValues, setValue } = formHook;
+  const { register, getValues, setValue, control } = formHook;
+  const watcher = useWatch({ control });
+  const isConditional = CONDITIONAL_QUESTION_TYPES.indexOf(question.type) > -1;
 
   /**
    * Get Conditionals and More Info Text.
@@ -102,6 +105,27 @@ const TemplateQuestion = ({
     });
   };
 
+  const handleCanAddCondition = (checked: boolean, questionIndex: number) => {
+    // const childQuestions = (getValues(`questions.${questionIndex}.childQuestions`) || []) as ChildQuestionModel[];
+    const questionName = getValues(`questions.${questionIndex}.name`);
+    let newQuestions = [];
+    if (checked) {
+      newQuestions.push({
+        ...CHILD_QUESTION,
+        label: {
+          [defaultLanguage]: ""
+        },
+        name: `${questionName}-more-info`
+      });
+    }
+    // @ts-ignore incorrect typings.
+    setValue(`questions.${questionIndex}.childQuestions`, newQuestions);
+  };
+
+  // @ts-ignore incorrect typings;
+  const canAddCondition = watcher?.questions[index]?.childQuestions?.length > 0 || false;
+  // @ts-ignore incorrect typings;
+  console.log(watcher?.questions[index]);
   return (
     <>
       <HeaderCard className="my-10">
@@ -194,7 +218,42 @@ const TemplateQuestion = ({
             </div>
           </OptionalWrapper>
           {/* Conditions */}
-          <OptionalWrapper
+
+          <OptionalWrapper data={isConditional}>
+            <Switch.Group>
+              <div className="flex items-center gap-4">
+                <Switch
+                  checked={canAddCondition}
+                  onChange={(checked: boolean) => {
+                    handleCanAddCondition(checked, index);
+                  }}
+                >
+                  {({ checked }) => (checked ? <Icon name="RadioOn" /> : <Icon name="RadioOff" />)}
+                </Switch>
+                <Switch.Label className="cursor-pointer text-sm uppercase font-medium">
+                  <FormattedMessage id="template.edit.addCondition" />
+                </Switch.Label>
+              </div>
+            </Switch.Group>
+          </OptionalWrapper>
+          <OptionalWrapper data={canAddCondition && Boolean(responseOptions)}>
+            <Select
+              id={`type-${index}`}
+              formHook={formHook}
+              // @ts-ignore
+              registered={register(`questions.${index}.childQuestions.0.conditionalValue`)}
+              selectProps={{
+                placeholder: intl.formatMessage({ id: "template.edit.selectResponse" }),
+                options:
+                  (responseOptions &&
+                    responseOptions[defaultLanguage]?.map(option => ({ value: option.value, label: option.label }))) ||
+                  [],
+                label: intl.formatMessage({ id: "template.edit.selectResponse.placeholder" })
+              }}
+              className="mt-4 mb-7"
+            />
+          </OptionalWrapper>
+          {/* <OptionalWrapper
             // @ts-expect-error
             data={question.childQuestions?.length > 0}
           >
@@ -210,8 +269,8 @@ const TemplateQuestion = ({
               </h4>
               <p className="text-base">{getMoreInfo().moreInfoText}</p>
             </div>
-          </OptionalWrapper>
-          {/* Only Show IF */}
+          </OptionalWrapper> */}
+          {/* Only Show IF
           <OptionalWrapper
             // @ts-expect-error
             data={question.conditions.length > 0}
@@ -228,7 +287,7 @@ const TemplateQuestion = ({
                 )}
               />
             </div>
-          </OptionalWrapper>
+          </OptionalWrapper> */}
         </HeaderCard.Content>
         <HeaderCard.Footer className="flex justify-end">
           <Toggle
