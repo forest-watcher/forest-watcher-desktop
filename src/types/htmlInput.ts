@@ -7,8 +7,6 @@ export interface InputProps
   label?: string;
   placeholder: string;
   type: string;
-  alternateLabelStyle?: boolean;
-  largeLabel?: boolean;
 }
 
 export interface HTMLInputField extends FieldBase, RegisterableField {

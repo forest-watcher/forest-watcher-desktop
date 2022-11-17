@@ -38,6 +38,8 @@ const Select = (props: Props) => {
     hideLabel,
     isMultiple = false,
     isMultipleDropdown = false,
+    alternateLabelStyle = false,
+    largeLabel = false,
     className
   } = props;
   const [options, setOptions] = useState<Option[]>(selectProps.options || []);
@@ -92,7 +94,7 @@ const Select = (props: Props) => {
   }, [fetchOptions]);
 
   return (
-    <div className={classnames("c-input", selectProps.alternateLabelStyle && "c-input--alt-label", className)}>
+    <div className={classnames("c-input", alternateLabelStyle && "c-input--alt-label", className)}>
       <Listbox value={selectedItems} onChange={onChange} multiple={isGenericMultiple}>
         {({ open }) => (
           <>
@@ -100,8 +102,8 @@ const Select = (props: Props) => {
               <Listbox.Label
                 className={classnames(
                   "c-input__label c-input__label--select",
-                  selectProps.alternateLabelStyle && "c-input__label--alt",
-                  selectProps.largeLabel && "c-input__label--large",
+                  alternateLabelStyle && "c-input__label--alt",
+                  largeLabel && "c-input__label--large",
                   hideLabel && "u-visually-hidden"
                 )}
               >

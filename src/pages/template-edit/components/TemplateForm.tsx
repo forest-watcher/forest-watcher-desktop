@@ -30,11 +30,11 @@ const TemplateForm: FC<IParams> = ({ template = {}, assignedAreas = [] }) => {
             htmlInputProps={{
               type: "text",
               label: intl.formatMessage({ id: "template.edit.name" }),
-              placeholder: intl.formatMessage({ id: "template.edit.name.placeholder" }),
-              alternateLabelStyle: true,
-              largeLabel: true
+              placeholder: intl.formatMessage({ id: "template.edit.name.placeholder" })
             }}
             key={template.defaultLanguage}
+            alternateLabelStyle
+            largeLabel
           />
           <Select
             id="areas"
@@ -48,10 +48,10 @@ const TemplateForm: FC<IParams> = ({ template = {}, assignedAreas = [] }) => {
                 { label: "bar", value: 2 },
                 { label: "baz", value: 3 }
               ],
-              label: intl.formatMessage({ id: "template.edit.areas" }),
-              alternateLabelStyle: true,
-              largeLabel: true
+              label: intl.formatMessage({ id: "template.edit.areas" })
             }}
+            alternateLabelStyle
+            largeLabel
           />
           <Select
             id="defaultLang"
@@ -60,10 +60,10 @@ const TemplateForm: FC<IParams> = ({ template = {}, assignedAreas = [] }) => {
             selectProps={{
               placeholder: intl.formatMessage({ id: "template.edit.defaultLanguage.placeholder" }),
               options: LOCALES_MAPPED_TO_SELECT,
-              label: intl.formatMessage({ id: "template.edit.defaultLanguage" }),
-              alternateLabelStyle: true,
-              largeLabel: true
+              label: intl.formatMessage({ id: "template.edit.defaultLanguage" })
             }}
+            alternateLabelStyle
+            largeLabel
           />
         </div>
       </section>

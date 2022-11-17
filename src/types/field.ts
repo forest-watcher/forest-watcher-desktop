@@ -17,6 +17,8 @@ export interface FieldPropsBase {
   labelClass?: string;
   error?: any;
   hideLabel?: boolean;
+  alternateLabelStyle?: Boolean;
+  largeLabel?: Boolean;
 }
 
 export interface FieldBase extends FieldPropsBase {

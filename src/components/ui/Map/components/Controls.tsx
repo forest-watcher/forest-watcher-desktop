@@ -188,9 +188,9 @@ const MapControls: FC<IProps> = props => {
                     placeholder: intl.formatMessage({ id: "components.map.selectACountry" }),
                     options: countriesOptions,
                     label: intl.formatMessage({ id: "components.map.searchACountry" }),
-                    alternateLabelStyle: true,
                     onFocus: () => clearFieldsExcept(inputs.country)
                   }}
+                  alternateLabelStyle
                 />
                 <p className="c-map__search-label">
                   <FormattedMessage id="components.map.searchBy" />

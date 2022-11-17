@@ -29,8 +29,8 @@ const TemplateDetail = () => {
   const template = data as TemplateResponseWithData; // Typing is incorrect from backend response, fix here.
 
   const isMyTemplate = useMemo(() => {
-    return template.data?.attributes?.user === userId;
-  }, [template.data?.attributes?.user, userId]);
+    return template?.data?.attributes?.user === userId;
+  }, [template?.data?.attributes?.user, userId]);
 
   return (
     <section className="relative">
