@@ -19,6 +19,7 @@ export interface FieldPropsBase {
   hideLabel?: boolean;
   alternateLabelStyle?: Boolean;
   largeLabel?: Boolean;
+  wrapperClassName?: string;
 }
 
 export interface FieldBase extends FieldPropsBase {

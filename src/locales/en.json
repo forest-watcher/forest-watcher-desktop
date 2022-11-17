@@ -425,6 +425,8 @@
   "template.edit.defaultLanguage.placeholder": "Select Default Language",
   "template.edit.publish": "Publish",
   "template.edit.title.placeholder": "Enter Question Title",
+  "template.edit.responseOption": "Response option",
+  "template.edit.responseOption.placeholder": "Enter Response Option",
   "templates.table.template": "Template",
   "templates.table.version": "Version",
   "templates.table.area": "Area",

@@ -20,7 +20,8 @@ const Input = (props: Props) => {
     error,
     hideLabel = false,
     alternateLabelStyle = false,
-    largeLabel = false
+    largeLabel = false,
+    wrapperClassName
   } = props;
 
   return (
@@ -39,7 +40,7 @@ const Input = (props: Props) => {
           {htmlInputProps.label}
         </label>
       )}
-      <div className="c-input__input-wrapper">
+      <div className={classnames("c-input__input-wrapper", wrapperClassName)}>
         <input
           {...htmlInputProps}
           {...registered}

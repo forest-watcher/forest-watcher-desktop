@@ -1,6 +1,7 @@
 import Icon from "components/extensive/Icon";
 import List from "components/extensive/List";
 import OptionalWrapper from "components/extensive/OptionalWrapper";
+import Button from "components/ui/Button/Button";
 import HeaderCard from "components/ui/Card/HeaderCard";
 import Input from "components/ui/Form/Input";
 import Select from "components/ui/Form/Select";
@@ -20,6 +21,8 @@ type TemplateQuestionProps = {
   index: number;
 };
 
+type valuesType = { [key: string]: { label: string; value: number }[] };
+
 const TemplateQuestion = ({
   question,
   defaultLanguage = "",
@@ -29,10 +32,10 @@ const TemplateQuestion = ({
 }: TemplateQuestionProps) => {
   const formattedQuestionName = `${question.name.replace(/-/g, " ")}:`;
   //@ts-ignore todo figure out key issue here.
-  const responseOptions = question.values as { [key: string]: { label: string; value: number }[] };
+  const responseOptions = question.values as valuesType;
   const intl = useIntl();
   const formHook = useFormContext<FormFields>();
-  const { register } = formHook;
+  const { register, getValues, setValue } = formHook;
 
   /**
    * Get Conditionals and More Info Text.
@@ -59,7 +62,45 @@ const TemplateQuestion = ({
     onDelete();
   };
 
-  console.log(question);
+  const handleDeleteOption = (questionIndex: number, valueIndex: number) => {
+    const values =
+      (getValues(
+        // @ts-ignore
+        `questions.${questionIndex}.values.${defaultLanguage as keyof typeof question.label}`
+      ) as valuesType) || [];
+
+    // @ts-ignore
+    const newQs = [...values];
+    newQs.splice(valueIndex, 1);
+
+    newQs.forEach((q, index) => {
+      q.value = index;
+    });
+
+    // @ts-ignore
+    setValue(`questions.${questionIndex}.values.${defaultLanguage as keyof typeof question.label}`, newQs, {
+      shouldDirty: true
+    });
+  };
+
+  const handleAddOption = (questionIndex: number) => {
+    const values =
+      (getValues(
+        // @ts-ignore
+        `questions.${questionIndex}.values.${defaultLanguage as keyof typeof question.label}`
+      ) as valuesType) || [];
+
+    // @ts-ignore
+    values.push({
+      value: values.length,
+      label: ""
+    });
+
+    // @ts-ignore
+    setValue(`questions.${questionIndex}.values.${defaultLanguage as keyof typeof question.label}`, values, {
+      shouldDirty: true
+    });
+  };
 
   return (
     <>
@@ -104,13 +145,52 @@ const TemplateQuestion = ({
           {/* Response Options */}
           <OptionalWrapper data={!!responseOptions}>
             <div className="mb-6">
-              <h4 className="uppercase font-[500] text-neutral-700 pb-2">
-                <FormattedMessage id={"question.responseOptions"} />
-              </h4>
               <List
                 items={responseOptions && responseOptions[defaultLanguage ?? ""]}
-                render={option => <p className="text-base mb-1">{option.label}</p>}
+                render={(option, optionIndex) => (
+                  <div className="flex items-stretch mb-3 gap-3 w-full">
+                    <div className="not-sr-only flex justify-center align-middle w-[42px] h-[40px] bg-primary-400 border-solid border-1 border-primary-500 rounded-[6px] font-base capitalize">
+                      {String.fromCharCode(97 + optionIndex)}
+                    </div>
+                    <Input
+                      id={`option-${index}-${optionIndex}`}
+                      htmlInputProps={{
+                        label: intl.formatMessage({ id: "template.edit.responseOption" }),
+                        placeholder: intl.formatMessage({ id: "template.edit.responseOption.placeholder" }),
+                        type: "text"
+                      }}
+                      registered={register(
+                        // @ts-ignore - incorrect typing for values
+                        `questions.${index}.values.${
+                          defaultLanguage as keyof typeof question.label
+                        }.${optionIndex}.label`
+                      )}
+                      hideLabel
+                      className="flex-grow"
+                      wrapperClassName="w-full"
+                    />
+                    <button
+                      onClick={e => {
+                        e.preventDefault();
+                        handleDeleteOption(index, optionIndex);
+                      }}
+                      aria-label={intl.formatMessage({ id: "common.delete" })}
+                    >
+                      <Icon name="delete-round" size={36} />
+                    </button>
+                  </div>
+                )}
               />
+              <Button
+                variant="secondary"
+                className="mt-3"
+                onClick={e => {
+                  e.preventDefault();
+                  handleAddOption(index);
+                }}
+              >
+                <FormattedMessage id="templates.addOption" />
+              </Button>
             </div>
           </OptionalWrapper>
           {/* Conditions */}
