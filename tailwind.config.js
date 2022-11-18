@@ -35,6 +35,9 @@ module.exports = {
       },
       fontFamily: {
         fira: "'Fira Sans', sans-serif"
+      },
+      maxWidth: {
+        row: "68.7rem"
       }
     }
   },
