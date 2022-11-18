@@ -9,8 +9,16 @@ type TemplateDetailsProps = {
 
 const TemplateDetails = ({ template }: TemplateDetailsProps) => {
   const intl = useIntl();
-  // @ts-expect-error
-  const templateName = template?.name[template?.defaultLanguage];
+
+  console.log(template);
+
+  if (!template) {
+    return null;
+  }
+
+  const templateName: string = template.name
+    ? (template.name[template?.defaultLanguage as keyof typeof template.name] as string)
+    : "";
 
   return (
     <section className="row column py-section">
@@ -19,7 +27,7 @@ const TemplateDetails = ({ template }: TemplateDetailsProps) => {
         <IconCard
           iconName={"check-doc"}
           title={intl.formatMessage({ id: "template.version" })}
-          text={intl.formatDate(template?.createdAt, {
+          text={intl.formatDate(template.createdAt, {
             day: "2-digit",
             month: "2-digit",
             year: "2-digit"
@@ -28,7 +36,7 @@ const TemplateDetails = ({ template }: TemplateDetailsProps) => {
         <IconCard
           iconName={"translate"}
           title={intl.formatMessage({ id: "template.language" })}
-          text={LOCALES_LIST.find(loc => loc.code === template?.defaultLanguage)?.name ?? ""}
+          text={LOCALES_LIST.find(loc => loc.code === template.defaultLanguage)?.name ?? ""}
         />
       </section>
     </section>
