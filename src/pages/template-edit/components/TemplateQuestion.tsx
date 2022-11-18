@@ -8,29 +8,23 @@ import Input from "components/ui/Form/Input";
 import Select from "components/ui/Form/Select";
 import Toggle from "components/ui/Form/Toggle";
 import { CHILD_QUESTION, CONDITIONAL_QUESTION_TYPES, QUESTION_TYPES } from "constants/templates";
-import { ChildQuestionModel, QuestionModel } from "generated/core/coreSchemas";
-import React, { useState } from "react";
+import { QuestionModel } from "generated/core/coreSchemas";
+import React from "react";
 import { useFormContext, useWatch } from "react-hook-form";
 import { FormattedMessage, useIntl } from "react-intl";
 import { FormFields } from "./TemplateForm";
+import useTemplateData from "../useTemplateData";
 
 type TemplateQuestionProps = {
   question: QuestionModel;
   defaultLanguage?: string;
-  getConditional: (questionName: string, optioinValue: number) => string;
   onDelete: () => void;
   index: number;
 };
 
 type valuesType = { [key: string]: { label: string; value: number }[] };
 
-const TemplateQuestion = ({
-  question,
-  defaultLanguage = "",
-  getConditional,
-  onDelete,
-  index
-}: TemplateQuestionProps) => {
+const TemplateQuestion = ({ question, defaultLanguage = "", onDelete, index }: TemplateQuestionProps) => {
   const formattedQuestionName = `${question.name.replace(/-/g, " ")}:`;
   //@ts-ignore todo figure out key issue here.
   const responseOptions = question.values as valuesType;
@@ -40,25 +34,17 @@ const TemplateQuestion = ({
   const watcher = useWatch({ control });
   const isConditional = CONDITIONAL_QUESTION_TYPES.indexOf(question.type) > -1;
 
-  /**
-   * Get Conditionals and More Info Text.
-   * @returns { condition?: string; moreInfoText?: string;  }
-   */
-  const getMoreInfo = (): {
-    condition?: string;
-    moreInfoText?: string;
-  } => {
-    const childQuestion =
-      // @ts-expect-error - incorrect typings
-      question?.childQuestions?.length > 0 ? question?.childQuestions[0] : undefined;
-    if (!childQuestion || !responseOptions || !defaultLanguage) return {};
-    return {
-      condition: `If the answer is "${
-        responseOptions[defaultLanguage][childQuestion.conditionalValue].label
-      }" ask for more info`,
-      moreInfoText: childQuestion.label[defaultLanguage]
-    };
-  };
+  // @ts-ignore incorrect typings;
+  const canAddCondition = watcher?.questions[index]?.childQuestions?.length > 0 || false;
+  // @ts-ignore incorrect typings;
+  const canAddPreviousQuestionCondition = watcher?.questions[index]?.conditions?.length > 0 || false;
+
+  const {
+    previousQuestionsAreSelection,
+    conditionalData: [conditionsQuestions, conditionsAnswers]
+  } = useTemplateData(index);
+
+  console.log([conditionsQuestions, conditionsAnswers]);
 
   const handleDelete = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
@@ -118,14 +104,39 @@ const TemplateQuestion = ({
         name: `${questionName}-more-info`
       });
     }
+
     // @ts-ignore incorrect typings.
-    setValue(`questions.${questionIndex}.childQuestions`, newQuestions);
+    setValue(`questions.${questionIndex}.childQuestions`, newQuestions, {
+      shouldDirty: true
+    });
   };
 
-  // @ts-ignore incorrect typings;
-  const canAddCondition = watcher?.questions[index]?.childQuestions?.length > 0 || false;
-  // @ts-ignore incorrect typings;
-  console.log(watcher?.questions[index]);
+  const handleCanAddConditionBasedOnPrevious = (checked: boolean, questionIndex: number) => {
+    const conditions: { name: string; value: number }[] = [];
+
+    const questions = watcher.questions;
+
+    if (checked && questions) {
+      const question = questions[questionIndex];
+
+      const conditionalQuestionList = questions.filter(tempQuestion => {
+        return tempQuestion.name !== question.name && CONDITIONAL_QUESTION_TYPES.indexOf(tempQuestion.type || "") > -1;
+      });
+
+      if (conditionalQuestionList[0]) {
+        conditions.push({
+          name: conditionalQuestionList[0].name || "",
+          value: conditionalQuestionList[0].order || 0
+        });
+      }
+    }
+
+    // @ts-ignore incorrect typings.
+    setValue(`questions.${questionIndex}.conditions`, conditions, {
+      shouldDirty: true
+    });
+  };
+
   return (
     <>
       <HeaderCard className="my-10">
@@ -220,74 +231,106 @@ const TemplateQuestion = ({
           {/* Conditions */}
 
           <OptionalWrapper data={isConditional}>
-            <Switch.Group>
+            <Switch.Group key={index}>
               <div className="flex items-center gap-4">
                 <Switch
                   checked={canAddCondition}
                   onChange={(checked: boolean) => {
                     handleCanAddCondition(checked, index);
                   }}
+                  name={`condition-${index}`}
                 >
                   {({ checked }) => (checked ? <Icon name="RadioOn" /> : <Icon name="RadioOff" />)}
                 </Switch>
-                <Switch.Label className="cursor-pointer text-sm uppercase font-medium">
+                <Switch.Label className="cursor-pointer text-sm uppercase font-medium text-neutral-700">
                   <FormattedMessage id="template.edit.addCondition" />
                 </Switch.Label>
               </div>
             </Switch.Group>
           </OptionalWrapper>
-          <OptionalWrapper data={canAddCondition && Boolean(responseOptions)}>
-            <Select
-              id={`type-${index}`}
-              formHook={formHook}
-              // @ts-ignore
-              registered={register(`questions.${index}.childQuestions.0.conditionalValue`)}
-              selectProps={{
-                placeholder: intl.formatMessage({ id: "template.edit.selectResponse" }),
-                options:
-                  (responseOptions &&
-                    responseOptions[defaultLanguage]?.map(option => ({ value: option.value, label: option.label }))) ||
-                  [],
-                label: intl.formatMessage({ id: "template.edit.selectResponse.placeholder" })
-              }}
-              className="mt-4 mb-7"
-            />
-          </OptionalWrapper>
-          {/* <OptionalWrapper
-            // @ts-expect-error
-            data={question.childQuestions?.length > 0}
-          >
-            <div className="mb-6">
-              <h4 className="uppercase font-[500] text-neutral-700 pb-2">
-                <FormattedMessage id={"question.conditions"} />
-              </h4>
-              <p className="text-base">{getMoreInfo().condition}</p>
-            </div>
-            <div className="mb-6">
-              <h4 className="uppercase font-[500] text-neutral-700 pb-2">
-                <FormattedMessage id={"question.moreInfo"} />
-              </h4>
-              <p className="text-base">{getMoreInfo().moreInfoText}</p>
-            </div>
-          </OptionalWrapper> */}
-          {/* Only Show IF
-          <OptionalWrapper
-            // @ts-expect-error
-            data={question.conditions.length > 0}
-          >
-            <div className="mb-6">
-              <h4 className="uppercase font-[500] text-neutral-700 pb-2">
-                <FormattedMessage id={"question.onlyShowIf"} />
-              </h4>
-              <List
-                // @ts-expect-error
-                items={question?.conditions}
-                render={condition => (
-                  <p className="text-base capitalize">{getConditional(condition.name, condition.value)}</p>
-                )}
+          {canAddCondition && Boolean(responseOptions) && (
+            <>
+              <Select
+                id={`conditional-${index}`}
+                formHook={formHook}
+                // @ts-ignore
+                registered={register(`questions.${index}.childQuestions.0.conditionalValue`)}
+                selectProps={{
+                  placeholder: intl.formatMessage({ id: "template.edit.selectResponse" }),
+                  options:
+                    (responseOptions &&
+                      responseOptions[defaultLanguage]?.map(option => ({
+                        value: option.value,
+                        label: option.label
+                      }))) ||
+                    [],
+                  label: intl.formatMessage({ id: "template.edit.selectResponse.placeholder" })
+                }}
+                className="mt-4 mb-7"
               />
+              <Input
+                id={`conditional-input-${index}`}
+                htmlInputProps={{
+                  label: intl.formatMessage({ id: "template.edit.selectResponseText" }),
+                  placeholder: intl.formatMessage({ id: "template.edit.selectResponseText.placeholder" }),
+                  type: "text"
+                }}
+                registered={register(
+                  // @ts-ignore
+                  `questions.${index}.childQuestions.0.label.${defaultLanguage as keyof typeof question.label}`
+                )}
+                alternateLabelStyle
+              />
+            </>
+          )}
+          <OptionalWrapper data={previousQuestionsAreSelection}>
+            <div className="flex align-middle gap-3 flex-wrap mt-10 min-h-[40px]">
+              <Switch.Group>
+                <div className="flex items-center gap-4">
+                  <Switch
+                    checked={canAddPreviousQuestionCondition}
+                    onChange={(checked: boolean) => {
+                      handleCanAddConditionBasedOnPrevious(checked, index);
+                    }}
+                    name={`condition-previous-${index}`}
+                  >
+                    {({ checked }) => (checked ? <Icon name="RadioOn" /> : <Icon name="RadioOff" />)}
+                  </Switch>
+                  <Switch.Label className="cursor-pointer text-sm uppercase font-medium text-neutral-700">
+                    <FormattedMessage id="template.edit.onlyShow" />
+                  </Switch.Label>
+                </div>
+              </Switch.Group>
+              {canAddPreviousQuestionCondition && (
+                <div className="flex flex-wrap gap-4">
+                  <Select
+                    id={`conditional-questions-${index}`}
+                    formHook={formHook}
+                    // @ts-ignore
+                    registered={register(`questions.${index}.conditions.0.name`)}
+                    selectProps={{
+                      placeholder: intl.formatMessage({ id: "template.edit.selectQuestion" }),
+                      options: conditionsQuestions,
+                      label: intl.formatMessage({ id: "template.edit.selectQuestion" })
+                    }}
+                    hideLabel
+                  />
+                  <Select
+                    id={`conditional-answers-${index}`}
+                    formHook={formHook}
+                    // @ts-ignore
+                    registered={register(`questions.${index}.conditions.0.value`)}
+                    selectProps={{
+                      placeholder: intl.formatMessage({ id: "template.edit.selectOption" }),
+                      options: conditionsAnswers,
+                      label: intl.formatMessage({ id: "templates.is" })
+                    }}
+                    labelClass="text-sm font-medium"
+                  />
+                </div>
+              )}
             </div>
-          </OptionalWrapper> */}
+          </OptionalWrapper>
         </HeaderCard.Content>
         <HeaderCard.Footer className="flex justify-end">
           <Toggle

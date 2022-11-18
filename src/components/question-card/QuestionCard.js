@@ -283,6 +283,8 @@ class QuestionCard extends Component {
     // todo: remove this once API has been updated to support editing questions
     const modeCreate = mode === "create" ? true : false;
     // finally we can render all that fancy stuff
+
+    console.log(this.question);
     return (
       <section className="c-question-card">
         <div className="question-card">

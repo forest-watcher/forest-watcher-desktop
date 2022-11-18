@@ -41,6 +41,7 @@ const Select = (props: Props) => {
     isMultipleDropdown = false,
     alternateLabelStyle = false,
     largeLabel = false,
+    labelClass,
     className
   } = props;
   const [options, setOptions] = useState<Option[]>(selectProps.options || []);
@@ -123,7 +124,8 @@ const Select = (props: Props) => {
                   "c-input__label c-input__label--select",
                   alternateLabelStyle && "c-input__label--alt",
                   largeLabel && "c-input__label--large",
-                  hideLabel && "u-visually-hidden"
+                  hideLabel && "u-visually-hidden",
+                  labelClass
                 )}
               >
                 {selectProps.label}
