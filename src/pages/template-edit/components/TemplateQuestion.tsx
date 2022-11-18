@@ -44,8 +44,6 @@ const TemplateQuestion = ({ question, defaultLanguage = "", onDelete, index }: T
     conditionalData: [conditionsQuestions, conditionsAnswers]
   } = useTemplateData(index);
 
-  console.log([conditionsQuestions, conditionsAnswers]);
-
   const handleDelete = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     onDelete();
@@ -154,7 +152,8 @@ const TemplateQuestion = ({ question, defaultLanguage = "", onDelete, index }: T
               htmlInputProps={{
                 label: intl.formatMessage({ id: "question.question" }),
                 placeholder: intl.formatMessage({ id: "template.edit.title.placeholder" }),
-                type: "text"
+                type: "text",
+                required: true
               }}
               registered={register(`questions.${index}.label.${defaultLanguage as keyof typeof question.label}`)}
               alternateLabelStyle
@@ -192,7 +191,8 @@ const TemplateQuestion = ({ question, defaultLanguage = "", onDelete, index }: T
                       htmlInputProps={{
                         label: intl.formatMessage({ id: "template.edit.responseOption" }),
                         placeholder: intl.formatMessage({ id: "template.edit.responseOption.placeholder" }),
-                        type: "text"
+                        type: "text",
+                        required: true
                       }}
                       registered={register(
                         // @ts-ignore - incorrect typing for values
@@ -273,7 +273,8 @@ const TemplateQuestion = ({ question, defaultLanguage = "", onDelete, index }: T
                 htmlInputProps={{
                   label: intl.formatMessage({ id: "template.edit.selectResponseText" }),
                   placeholder: intl.formatMessage({ id: "template.edit.selectResponseText.placeholder" }),
-                  type: "text"
+                  type: "text",
+                  required: true
                 }}
                 registered={register(
                   // @ts-ignore

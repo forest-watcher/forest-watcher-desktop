@@ -7,9 +7,6 @@ import { LOCALES_MAPPED_TO_SELECT } from "constants/locales";
 import Select from "components/ui/Form/Select";
 import { useGetV3GfwAreasUser } from "generated/core/coreComponents";
 import { useAccessToken } from "hooks/useAccessToken";
-import { TemplateBody } from "generated/core/coreRequestBodies";
-import { TransitionGroup, CSSTransition } from "react-transition-group";
-import QuestionCard from "components/question-card/QuestionCard";
 import TemplateQuestions from "./TemplateQuestions";
 import Button from "components/ui/Button/Button";
 import { Link } from "react-router-dom";
@@ -24,26 +21,22 @@ interface IParams {
   template?: FormFields;
   assignedAreas?: string[];
   backLink?: string;
+  onSubmit: (data: FormFields) => void;
 }
 
-const TemplateForm: FC<IParams> = ({ template, backLink = "" }) => {
+const TemplateForm: FC<IParams> = ({ template, backLink = "", onSubmit }) => {
   const intl = useIntl();
   const formHook = useForm<FormFields>({ defaultValues: template });
   const { httpAuthHeader } = useAccessToken();
-  const { data: areasData, isLoading: areasLoading } = useGetV3GfwAreasUser({ headers: httpAuthHeader });
+  const { data: areasData } = useGetV3GfwAreasUser({ headers: httpAuthHeader });
 
   const {
     register,
     handleSubmit,
     setValue,
     getValues,
-    watch,
     formState: { isDirty }
   } = formHook;
-
-  const onSubmit = (data: FormFields) => {
-    console.log(data);
-  };
 
   const handleAddQuestion = (e: React.MouseEvent<HTMLButtonElement>) => {
     const questions = getValues("questions") || [];
@@ -166,11 +159,6 @@ const TemplateForm: FC<IParams> = ({ template, backLink = "" }) => {
             </div>
           </div>
         </section>
-        {/* <TemplateDetails template={template?.data?.attributes} />
-        <TemplateQuestions
-          questions={template?.data?.attributes?.questions || []}
-          defaultLanguage={template?.data?.attributes?.defaultLanguage}
-        /> */}
       </form>
     </FormProvider>
   );

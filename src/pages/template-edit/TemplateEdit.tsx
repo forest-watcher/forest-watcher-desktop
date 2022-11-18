@@ -1,10 +1,10 @@
 import LoadingWrapper from "components/extensive/LoadingWrapper";
 import Hero from "components/layouts/Hero/Hero";
-import { useGetV3GfwTemplatesTemplateId } from "generated/core/coreComponents";
+import { useGetV3GfwTemplatesTemplateId, usePatchV3GfwTemplatesTemplateId } from "generated/core/coreComponents";
 import { TemplateResponse } from "generated/core/coreResponses";
 import { useAccessToken } from "hooks/useAccessToken";
 import { useParams } from "react-router-dom";
-import TemplateForm from "./components/TemplateForm";
+import TemplateForm, { FormFields } from "./components/TemplateForm";
 
 interface TemplateResponseWithData {
   data?: TemplateResponse;
@@ -19,7 +19,14 @@ const TemplateEdit = () => {
     pathParams: { templateId }
   });
 
+  const { mutate } = usePatchV3GfwTemplatesTemplateId();
+
   const template = data as TemplateResponseWithData; // Typing is incorrect from backend response, fix here.
+
+  const handleSubmit = (data: FormFields) => {
+    console.log(data);
+    mutate({ body: data, pathParams: { templateId }, headers: httpAuthHeader });
+  };
 
   return (
     <section className="relative">
@@ -32,6 +39,7 @@ const TemplateEdit = () => {
               ...template.data.attributes,
               areas: template.data.attributes.areas?.map(area => area.id || "") || []
             }}
+            onSubmit={handleSubmit}
           />
         )}
       </LoadingWrapper>

@@ -2,21 +2,19 @@ import { CONDITIONAL_QUESTION_TYPES } from "constants/templates";
 import { QuestionModel } from "generated/core/coreSchemas";
 import { filterBy } from "helpers/filters";
 import { useMemo } from "react";
-import { useFormContext, useWatch } from "react-hook-form";
+import { useFormContext } from "react-hook-form";
 import { FormFields } from "./components/TemplateForm";
 
 const useTemplateData = (index: number) => {
   const formHook = useFormContext<FormFields>();
-  const { control, getValues } = formHook;
+  const { getValues } = formHook;
   const questions = getValues("questions");
   const question = getValues(`questions.${index}`);
   // @ts-ignore conditions does exist
   const conditions = getValues(`questions.${index}.conditions`);
   // @ts-ignore conditions does exist
   const currentConditionQuestion = getValues(`questions.${index}.conditions.0.name`);
-
-  const watcher = useWatch({ control });
-  const defaultLanguage = watcher.defaultLanguage;
+  const defaultLanguage = getValues("defaultLanguage");
 
   const previousQuestionsAreSelection = useMemo(() => {
     let previousSelectionExists = false;
@@ -64,7 +62,7 @@ const useTemplateData = (index: number) => {
         if (tempQuestionIndex.length) {
           const tempQuestion = questions[tempQuestionIndex[0].order];
           const values = tempQuestion?.values
-            ? tempQuestion.values[defaultLanguage as keyof typeof tempQuestion.values]
+            ? tempQuestion.values[defaultLanguage as keyof typeof tempQuestion.values] || []
             : [];
 
           // @ts-ignore values is wrong typing
