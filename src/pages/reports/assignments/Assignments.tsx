@@ -7,9 +7,14 @@ import { useGetV3GfwUser } from "generated/core/coreComponents";
 import { priorityToString } from "helpers/assignments";
 import { sortByDateString, sortByString } from "helpers/table";
 import { useAccessToken } from "hooks/useAccessToken";
-import { useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { FormattedMessage, useIntl } from "react-intl";
 import useAssignmentsFilters from "./useAssignmentsFilter";
+import ExportModal, { TExportForm } from "components/modals/exports/ExportModal";
+import { Link, Route, Switch, useHistory, useRouteMatch } from "react-router-dom";
+import { UnpackNestedValue } from "react-hook-form";
+import { AREA_EXPORT_FILE_TYPES } from "constants/export";
+import { usePostV3ExportsAssignmentsExportSome } from "generated/exports/exportsComponents";
 
 export type TAssignmentsDataTable = {
   id: string;
@@ -32,12 +37,16 @@ const Assignments = () => {
   const intl = useIntl();
   const { httpAuthHeader } = useAccessToken();
   const [selectedAssignments, setSelectedAssignments] = useState<TAssignmentsDataTable[]>([]);
+  const { path, url } = useRouteMatch();
+  const history = useHistory();
 
   // Queries - Get User's Assignments
   const { data: assignmentsData, isLoading: assignmentsLoading } = useGetV3GfwUser(
     { headers: httpAuthHeader },
     { cacheTime: 0, retryOnMount: true }
   );
+
+  const { mutateAsync: exportReport } = usePostV3ExportsAssignmentsExportSome();
 
   const rows = useMemo<TAssignmentsDataTable[]>(() => {
     if (!assignmentsData?.data) return [];
@@ -54,6 +63,21 @@ const Assignments = () => {
   const [filteredRows, setFilteredRows] = useState<TAssignmentsDataTable[]>(rows);
   const { filters, extraFilters } = useAssignmentsFilters(assignmentsData?.data);
 
+  const handleExport = useCallback(
+    async (values: UnpackNestedValue<TExportForm>) => {
+      await exportReport({});
+      // Do request
+      // try {
+      //   const { data } = await exportService.exportArea(area.id, values.fileType, values.email);
+      //   return data;
+      // } catch (err) {
+      //   // Do toast
+      //   toastr.error(intl.formatMessage({ id: "export.error" }), "");
+      // }
+    },
+    [intl]
+  );
+
   return (
     <div className="l-content">
       <LoadingWrapper loading={assignmentsLoading}>
@@ -61,9 +85,9 @@ const Assignments = () => {
           title="reporting.tabs.assignments"
           size="small"
           actions={
-            <Button>
+            <Link to={`${url}/export`} className="c-button c-button--primary">
               <FormattedMessage id={selectedAssignments.length > 0 ? "export.selected" : "export.all"} />
-            </Button>
+            </Link>
           }
         >
           <DataFilter
@@ -130,6 +154,17 @@ const Assignments = () => {
           />
         </Article>
       </LoadingWrapper>
+      <Switch>
+        <Route path={`${path}/export`}>
+          <ExportModal
+            onSave={handleExport}
+            onClose={() => history.goBack()}
+            isOpen
+            fileTypes={AREA_EXPORT_FILE_TYPES}
+            fields={[]}
+          />
+        </Route>
+      </Switch>
     </div>
   );
 };
