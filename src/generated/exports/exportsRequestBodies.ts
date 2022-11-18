@@ -19,3 +19,14 @@ export type ExportAnswersRequest = {
   }[];
   email?: string;
 };
+
+export type ExportSomeAssignmentsRequest = {
+  fileTyoe?: string;
+  fields?: string[];
+  ids?: string;
+};
+
+export type ExportAllAssignments = {
+  fileType?: string;
+  fileds?: string[];
+};
