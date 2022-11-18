@@ -16,7 +16,10 @@ export type AssignmentBody = {
   notes?: string;
   areaId: string;
   templateIds: string[];
-  geostore?: Schemas.GeojsonModel;
+  /**
+   * A JSON string that represents the geostore object
+   */
+  geostore?: string;
   areaName?: string;
   /**
    * Image file
@@ -87,6 +90,7 @@ export type AnswerBody = {
   user: string;
   date: string;
   responses: Record<string, any>[];
+  assignmentId?: string;
 };
 
 export type AreaBody = {

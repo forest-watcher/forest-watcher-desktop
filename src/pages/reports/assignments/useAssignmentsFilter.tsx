@@ -39,7 +39,6 @@ const useReportFilters = (assignments: AssignmentsResponse["data"] = []) => {
     const allAlerts = assignments
       .map(assignment => {
         if (!assignment.attributes?.location || typeof assignment.attributes?.location === "string") return "none";
-        // @ts-expect-error
         return assignment.attributes?.location?.map(loc => loc.alertType ?? "none");
       })
       .flat();
