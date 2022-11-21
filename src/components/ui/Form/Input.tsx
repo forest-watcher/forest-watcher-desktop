@@ -48,7 +48,8 @@ const Input = (props: Props) => {
           className={classnames(
             "c-input__input",
             `c-input__input--${htmlInputProps.type}`,
-            error && "c-input__input--error"
+            error && "c-input__input--error",
+            htmlInputProps.className
           )}
           ref={registered.ref}
           title={htmlInputProps.title}

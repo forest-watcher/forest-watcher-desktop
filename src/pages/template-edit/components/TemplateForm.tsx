@@ -35,7 +35,7 @@ const TemplateForm: FC<IParams> = ({ template, backLink = "", onSubmit }) => {
     handleSubmit,
     setValue,
     getValues,
-    formState: { isDirty }
+    formState: { isDirty, isSubmitting }
   } = formHook;
 
   const handleAddQuestion = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -156,7 +156,7 @@ const TemplateForm: FC<IParams> = ({ template, backLink = "", onSubmit }) => {
                   className="c-button c-button--primary"
                   type="submit"
                   value={intl.formatMessage({ id: "common.save" })}
-                  disabled={!isDirty}
+                  disabled={!isDirty || isSubmitting}
                 />
               </div>
             </div>

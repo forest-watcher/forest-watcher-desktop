@@ -92,12 +92,12 @@ const _Templates = () => {
         title="templates.title"
         actions={
           <Link className="c-button c-button--primary" to="/templates/create">
-            <FormattedMessage id="templates.create" />
+            <FormattedMessage id="templates.createTemplate" />
           </Link>
         }
       />
       <LoadingWrapper loading={areasLoading || templatesLoading || templatesLatestLoading}>
-        <Article className="mt-10">
+        <Article className="my-10">
           <OptionalWrapper
             data={rows.length > 0}
             elseComponent={
@@ -157,7 +157,7 @@ const _Templates = () => {
                   name: "   ",
                   rowLabel: () => "View",
                   rowHref: ({ id }) => `/templates/${id}`,
-                  rowHrefClassNames: "text-primary-500 font-medium"
+                  rowHrefClassNames: "text-primary-500 font-medium uppercase"
                 }
               ]}
             />

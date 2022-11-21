@@ -38,7 +38,8 @@ const TemplatesSearch = ({ onSearch, data }: TemplateSearchProps) => {
         htmlInputProps={{
           type: "text",
           label: intl.formatMessage({ id: "filters.search" }),
-          placeholder: intl.formatMessage({ id: "templates.search.placeholder" })
+          placeholder: intl.formatMessage({ id: "templates.search.placeholder" }),
+          className: "md:min-w-[356px]"
         }}
       />
     </div>
