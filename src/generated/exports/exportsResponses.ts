@@ -20,3 +20,11 @@ export type Error = {
 export type Healthcheck = {
   uptime?: number;
 };
+
+export type Id = {
+  data?: string;
+};
+
+export type Url = {
+  data?: string;
+};
