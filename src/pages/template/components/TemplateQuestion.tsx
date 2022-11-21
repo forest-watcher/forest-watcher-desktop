@@ -2,7 +2,7 @@ import List from "components/extensive/List";
 import OptionalWrapper from "components/extensive/OptionalWrapper";
 import HeaderCard from "components/ui/Card/HeaderCard";
 import { QuestionModel } from "generated/core/coreSchemas";
-import { FormattedMessage } from "react-intl";
+import { FormattedMessage, useIntl } from "react-intl";
 
 type TemplateQuestionProps = {
   question: QuestionModel;
@@ -16,6 +16,7 @@ const TemplateQuestion = ({ question, defaultLanguage, getConditional }: Templat
   const questionText = question.label[defaultLanguage];
   // @ts-expect-error
   const responseOptions = question.values as { [key: string]: { label: string; value: number }[] };
+  const intl = useIntl();
 
   /**
    * Get Conditionals and More Info Text.
@@ -92,7 +93,7 @@ const TemplateQuestion = ({ question, defaultLanguage, getConditional }: Templat
         {/* Only Show IF */}
         <OptionalWrapper
           // @ts-expect-error
-          data={question.conditions.length > 0}
+          data={question.conditions?.length > 0}
         >
           <div className="mb-6">
             <h4 className="uppercase font-[500] text-neutral-700 pb-2">
@@ -112,7 +113,9 @@ const TemplateQuestion = ({ question, defaultLanguage, getConditional }: Templat
           <h4 className="uppercase font-[500] text-neutral-700 pb-2">
             <FormattedMessage id={"question.required"} />
           </h4>
-          <p className="text-base">{`${question.required}`}</p>
+          <p className="text-base">{`${
+            question.required ? intl.formatMessage({ id: "common.yes" }) : intl.formatMessage({ id: "common.no" })
+          }`}</p>
         </div>
       </HeaderCard.Content>
     </HeaderCard>
