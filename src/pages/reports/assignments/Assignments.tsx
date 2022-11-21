@@ -1,6 +1,5 @@
 import LoadingWrapper from "components/extensive/LoadingWrapper";
 import Article from "components/layouts/Article";
-import Button from "components/ui/Button/Button";
 import DataFilter from "components/ui/DataFilter/DataFilter";
 import DataTable from "components/ui/DataTable/DataTable";
 import { useGetV3GfwAreasUserandteam, useGetV3GfwUser } from "generated/core/coreComponents";
@@ -13,8 +12,11 @@ import useAssignmentsFilters from "./useAssignmentsFilter";
 import ExportModal, { TExportForm } from "components/modals/exports/ExportModal";
 import { Link, Route, Switch, useHistory, useRouteMatch } from "react-router-dom";
 import { UnpackNestedValue } from "react-hook-form";
-import { AREA_EXPORT_FILE_TYPES } from "constants/export";
+import { AREA_EXPORT_FILE_TYPES, ASSIGNMENT_FIELDS } from "constants/export";
 import { usePostV3ExportsAssignmentsExportSome } from "generated/exports/exportsComponents";
+import { toastr } from "react-redux-toastr";
+import { Url } from "generated/exports/exportsResponses";
+import { delay } from "services/exports";
 
 export type TAssignmentsDataTable = {
   id: string;
@@ -47,6 +49,7 @@ const Assignments = () => {
   );
 
   const { mutateAsync: exportReport } = usePostV3ExportsAssignmentsExportSome();
+
   const { data: areaData, isLoading: areasLoading } = useGetV3GfwAreasUserandteam({ headers: httpAuthHeader });
 
   const rows = useMemo<TAssignmentsDataTable[]>(() => {
@@ -72,17 +75,55 @@ const Assignments = () => {
 
   const handleExport = useCallback(
     async (values: UnpackNestedValue<TExportForm>) => {
-      await exportReport({});
+      const checkStatus = (id: string): Promise<Url> => {
+        return new Promise(async (resolve, reject) => {
+          let hasFinished = false;
+
+          try {
+            do {
+              const resp = await fetch(`${process.env.REACT_APP_API_CUBE_URL}/v3/exports/assignments/${id}`, {
+                method: "GET",
+                headers: {
+                  "Content-Type": "application/json",
+                  ...httpAuthHeader
+                }
+              });
+
+              const body: Url = await resp.json();
+              if (body.data) {
+                hasFinished = true;
+                resolve(body as Url);
+              }
+              await delay(3000);
+            } while (!hasFinished);
+          } catch (err) {
+            reject(err);
+          }
+        });
+      };
+
       // Do request
-      // try {
-      //   const { data } = await exportService.exportArea(area.id, values.fileType, values.email);
-      //   return data;
-      // } catch (err) {
-      //   // Do toast
-      //   toastr.error(intl.formatMessage({ id: "export.error" }), "");
-      // }
+      try {
+        const { data } = await exportReport({
+          body: {
+            ...values,
+            fields: ASSIGNMENT_FIELDS,
+            // @ts-ignore incorrect typings in docs
+            ids: selectedAssignments.length
+              ? selectedAssignments.map(a => a.id)
+              : assignmentsData?.data?.map(a => a.id) || []
+          },
+          headers: httpAuthHeader
+        });
+
+        const urlResp = await checkStatus(data || "");
+        return urlResp.data;
+      } catch (err) {
+        // Do toast
+        toastr.error(intl.formatMessage({ id: "export.error" }), "");
+      }
     },
-    [intl]
+    [assignmentsData?.data, exportReport, httpAuthHeader, intl, selectedAssignments]
   );
 
   return (
