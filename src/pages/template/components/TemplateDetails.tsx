@@ -10,8 +10,6 @@ type TemplateDetailsProps = {
 const TemplateDetails = ({ template }: TemplateDetailsProps) => {
   const intl = useIntl();
 
-  console.log(template);
-
   if (!template) {
     return null;
   }
