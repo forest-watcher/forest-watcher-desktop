@@ -2,7 +2,6 @@ import { useAccessToken } from "hooks/useAccessToken";
 import { useMemo, useState } from "react";
 import {
   useGetV3GfwAreasUser,
-  useGetV3GfwTemplates,
   useGetV3GfwTemplatesLatest,
   useGetV3GfwTemplatesPublic
 } from "generated/core/coreComponents";

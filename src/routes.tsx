@@ -4,7 +4,6 @@ import { Route, Switch, Redirect, useLocation, useParams, useRouteMatch } from "
 import Areas from "pages/areas/AreasContainer";
 import AreasManage from "pages/area-view/AreaViewContainer";
 import AreaEdit from "pages/area-edit/AreaEditContainer";
-import TemplatesManage from "pages/templates-manage-legacy/TemplatesManageContainer";
 import Teams from "pages/teams/TeamsContainer";
 import TeamsInvitations from "pages/teams/invitation/InvitationContainer";
 import TeamDetail from "pages/teams-detail/TeamDetailContainer";
