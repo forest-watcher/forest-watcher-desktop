@@ -21,6 +21,7 @@ import Assignment from "pages/assignment/Assignment";
 import { useSelector } from "react-redux";
 import { RootState } from "store";
 import TemplateEdit from "pages/template-edit/TemplateEdit";
+import TemplateCreate from "pages/template-edit/TemplateCreate";
 
 interface IParams {
   token?: string;
@@ -100,7 +101,7 @@ const Routes: FC<IProps> = props => {
           <Route path={`${match.url}areas/:areaId/edit`} component={AreaEdit} />
           <Route path={`${match.url}areas/:areaId`} component={AreasManage} />
           <Route exact path={`${match.url}templates`} component={Templates} />
-          <Route exact path={`${match.url}templates/create`} component={TemplatesManage} />
+          <Route exact path={`${match.url}templates/create`} component={TemplateCreate} />
           <Route exact path={`${match.url}templates/:templateId`} component={TemplateDetail} />
           <Route exact path={`${match.url}templates/:templateId/edit`} component={TemplateEdit} />
           <Route path={`${match.url}reporting/reports/:reportId/answers/:answerId`} component={Report} />

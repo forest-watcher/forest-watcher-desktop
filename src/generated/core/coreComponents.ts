@@ -2746,7 +2746,7 @@ export const fetchPatchV3TemplatesTemplateIdStatus = (
     {},
     {},
     PatchV3TemplatesTemplateIdStatusPathParams
-  >({ url: "/v3/templates/{templateId}/status", method: "patch", ...variables, signal });
+  >({ url: "/v3/gfw/templates/{templateId}/status", method: "patch", ...variables, signal });
 
 /**
  * Update the status of a given template

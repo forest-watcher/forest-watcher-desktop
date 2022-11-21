@@ -9,20 +9,24 @@ export interface Props extends FieldPropsBase {
   registered: UseFormRegisterReturn;
   formHook: UseFormReturn<any>;
   onChange?: () => void;
+  getValue?: (val: any) => boolean;
+  setValue?: (checked: boolean) => any;
 }
 
 const Toggle = (props: Props) => {
-  const { registered, className, toggleProps, formHook, hideLabel, labelClass } = props;
+  const { registered, className, toggleProps, formHook, hideLabel, labelClass, getValue, setValue } = props;
   const value =
     formHook.watch(props.registered.name) === undefined
       ? toggleProps.defaultValue
       : formHook.watch(props.registered.name);
 
-  const handleChange = (v: Boolean) => {
-    formHook.setValue(registered.name, v, { shouldDirty: true });
+  const handleChange = (v: boolean) => {
+    formHook.setValue(registered.name, setValue ? setValue(v) : v, { shouldDirty: true });
     formHook.clearErrors(registered.name);
     props.onChange?.();
   };
+
+  const parsedValue = getValue ? getValue(value) : value;
 
   return (
     <div className="c-input c-input--toggle">
@@ -31,9 +35,9 @@ const Toggle = (props: Props) => {
           {toggleProps.label}
         </Switch.Label>
         <Switch
-          checked={value}
+          checked={parsedValue}
           onChange={handleChange}
-          className={classnames("c-input__toggle", value && "c-input__toggle--on", className)}
+          className={classnames("c-input__toggle", parsedValue && "c-input__toggle--on", className)}
         >
           <span className="c-input__toggle-indicator" />
         </Switch>

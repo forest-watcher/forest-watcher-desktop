@@ -1,6 +1,11 @@
 import { useAccessToken } from "hooks/useAccessToken";
 import { useMemo, useState } from "react";
-import { useGetV3GfwAreasUser, useGetV3GfwTemplatesLatest } from "generated/core/coreComponents";
+import {
+  useGetV3GfwAreasUser,
+  useGetV3GfwTemplates,
+  useGetV3GfwTemplatesLatest,
+  useGetV3GfwTemplatesPublic
+} from "generated/core/coreComponents";
 import { LOCALES_LIST } from "../../constants/locales";
 import LoadingWrapper from "components/extensive/LoadingWrapper";
 import Article from "components/layouts/Article";
@@ -38,15 +43,23 @@ const _Templates = () => {
 
   // Queries
   const { data: areasData, isLoading: areasLoading } = useGetV3GfwAreasUser({ headers: httpAuthHeader });
-  const { data: templatesData, isLoading: templatesLoading } = useGetV3GfwTemplatesLatest(
+  const { data: templatesLatestData, isLoading: templatesLatestLoading } = useGetV3GfwTemplatesLatest(
+    { headers: httpAuthHeader },
+    { enabled: !!areasData, cacheTime: 0, retryOnMount: true }
+  );
+
+  const { data: templatesPublicData, isLoading: templatesLoading } = useGetV3GfwTemplatesPublic(
     { headers: httpAuthHeader },
     { enabled: !!areasData, cacheTime: 0, retryOnMount: true }
   );
 
   // @ts-expect-error
   const rows = useMemo<TemplateTableRowData[]>(() => {
-    if (!templatesData?.data) return [];
-    return templatesData?.data?.map(template => {
+    const publicTemplates = templatesPublicData?.data || [];
+    const latestTemplates = templatesLatestData?.data || [];
+    const allTemplates = [...publicTemplates, ...latestTemplates];
+
+    return allTemplates.map(template => {
       // @ts-expect-error
       const aoi = areasData?.data?.find(area => area?.attributes?.templateId === template.id);
       const parsedDate = template.attributes ? getTemplateDate(template.attributes) : "";
@@ -67,7 +80,7 @@ const _Templates = () => {
         templateName: template?.attributes?.name[template.attributes.defaultLanguage]
       };
     });
-  }, [templatesData, areasData, intl]);
+  }, [templatesPublicData?.data, templatesLatestData?.data, areasData?.data, intl]);
 
   // Filters
   const { filters } = useTemplatesFilter(rows);
@@ -83,7 +96,7 @@ const _Templates = () => {
           </Link>
         }
       />
-      <LoadingWrapper loading={areasLoading || templatesLoading}>
+      <LoadingWrapper loading={areasLoading || templatesLoading || templatesLatestLoading}>
         <Article className="mt-10">
           <OptionalWrapper
             data={rows.length > 0}

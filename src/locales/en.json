@@ -444,7 +444,7 @@
   "templates.search.placeholder": "Enter template name",
   "templates.list.empty.title": "No Templates Added",
   "templates.list.empty.text": "Create a template in the mobile app",
-  "templates.create": "Create a Template",
+  "templates.create": "Create New Template",
   "templates.manage": "Manage Template",
   "templates.assignArea": "Assign area",
   "templates.defaultLanguage": "Default language",

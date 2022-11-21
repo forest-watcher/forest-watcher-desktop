@@ -1,8 +1,10 @@
-import { useQueryClient } from "@tanstack/react-query";
 import LoadingWrapper from "components/extensive/LoadingWrapper";
 import Hero from "components/layouts/Hero/Hero";
-import { useGetV3GfwTemplatesTemplateId, usePatchV3GfwTemplatesTemplateId } from "generated/core/coreComponents";
-import { useCoreContext } from "generated/core/coreContext";
+import {
+  useGetV3GfwTemplatesTemplateId,
+  usePatchV3GfwTemplatesTemplateId,
+  usePatchV3TemplatesTemplateIdStatus
+} from "generated/core/coreComponents";
 import { TemplateResponse } from "generated/core/coreResponses";
 import { useAccessToken } from "hooks/useAccessToken";
 import { useHistory, useParams } from "react-router-dom";
@@ -16,26 +18,40 @@ const TemplateEdit = () => {
   const { httpAuthHeader } = useAccessToken();
   const { templateId } = useParams<{ templateId: string }>();
   const history = useHistory();
-  const queryClient = useQueryClient();
-  const { queryKeyFn } = useCoreContext();
 
   const { data, isLoading: templateLoading } = useGetV3GfwTemplatesTemplateId({
     headers: httpAuthHeader,
     pathParams: { templateId }
   });
 
-  const { mutate } = usePatchV3GfwTemplatesTemplateId({
-    onSuccess: data => {
-      // @ts-ignore incorrect docs . Update when docs updated
-      history.push(`/templates/${data.data.id}`);
-    }
-  });
+  const { mutateAsync: mutateStatus } = usePatchV3TemplatesTemplateIdStatus();
+
+  const { mutateAsync } = usePatchV3GfwTemplatesTemplateId();
 
   const template = data as TemplateResponseWithData; // Typing is incorrect from backend response, fix here.
 
   const handleSubmit = async (data: FormFields) => {
-    console.log(data);
-    mutate({ body: data, pathParams: { templateId }, headers: httpAuthHeader });
+    data.questions?.forEach(question => {
+      if (question?.values && Object.keys(question.values).length === 0) {
+        // @ts-ignore
+        delete question.values;
+      }
+    });
+
+    const resp = await mutateAsync({ body: data, pathParams: { templateId }, headers: httpAuthHeader });
+
+    if (data.status !== template.data?.attributes?.status) {
+      const status = data.status as "published" | "unpublished";
+      await mutateStatus({
+        body: { status: status },
+        // @ts-ignore
+        pathParams: { templateId: resp.data.id },
+        headers: httpAuthHeader
+      });
+    }
+
+    // @ts-ignore
+    history.push(`/templates/${resp.data.id}`);
   };
 
   return (

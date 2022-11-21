@@ -88,7 +88,8 @@ const TemplateForm: FC<IParams> = ({ template, backLink = "", onSubmit }) => {
               htmlInputProps={{
                 type: "text",
                 label: intl.formatMessage({ id: "template.edit.name" }),
-                placeholder: intl.formatMessage({ id: "template.edit.name.placeholder" })
+                placeholder: intl.formatMessage({ id: "template.edit.name.placeholder" }),
+                required: true
               }}
               key={template?.defaultLanguage}
               alternateLabelStyle
@@ -141,6 +142,8 @@ const TemplateForm: FC<IParams> = ({ template, backLink = "", onSubmit }) => {
               <Toggle
                 id="published"
                 registered={register("status")}
+                getValue={(val: string) => val === "published"}
+                setValue={checked => (checked ? "published" : "unpublished")}
                 formHook={formHook}
                 toggleProps={{ label: intl.formatMessage({ id: "template.edit.publish" }) }}
                 labelClass="capitalize font-normal text-base"

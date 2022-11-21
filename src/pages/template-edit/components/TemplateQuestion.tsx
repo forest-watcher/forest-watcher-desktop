@@ -216,16 +216,18 @@ const TemplateQuestion = ({ question, defaultLanguage = "", onDelete, index }: T
                   </div>
                 )}
               />
-              <Button
-                variant="secondary"
-                className="mt-3"
-                onClick={e => {
-                  e.preventDefault();
-                  handleAddOption(index);
-                }}
-              >
-                <FormattedMessage id="templates.addOption" />
-              </Button>
+              <OptionalWrapper data={isConditional}>
+                <Button
+                  variant="secondary"
+                  className="mt-3"
+                  onClick={e => {
+                    e.preventDefault();
+                    handleAddOption(index);
+                  }}
+                >
+                  <FormattedMessage id="templates.addOption" />
+                </Button>
+              </OptionalWrapper>
             </div>
           </OptionalWrapper>
           {/* Conditions */}
