@@ -92,7 +92,7 @@ const TemplateQuestion = ({ question, defaultLanguage, getConditional }: Templat
         {/* Only Show IF */}
         <OptionalWrapper
           // @ts-expect-error
-          data={question.conditions.length > 0}
+          data={question.conditions?.length > 0}
         >
           <div className="mb-6">
             <h4 className="uppercase font-[500] text-neutral-700 pb-2">

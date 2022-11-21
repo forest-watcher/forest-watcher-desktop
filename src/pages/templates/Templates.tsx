@@ -1,6 +1,6 @@
 import { useAccessToken } from "hooks/useAccessToken";
 import { useMemo, useState } from "react";
-import { useGetV3GfwAreasUser, useGetV3GfwTemplates } from "generated/core/coreComponents";
+import { useGetV3GfwAreasUser, useGetV3GfwTemplatesLatest } from "generated/core/coreComponents";
 import { LOCALES_LIST } from "../../constants/locales";
 import LoadingWrapper from "components/extensive/LoadingWrapper";
 import Article from "components/layouts/Article";
@@ -14,6 +14,7 @@ import DataFilter from "components/ui/DataFilter/DataFilter";
 import TemplatesSearch from "./components/TemplatesSearch";
 import { Link } from "react-router-dom";
 import Hero from "components/layouts/Hero/Hero";
+import { getTemplateDate } from "helpers/template";
 
 export type TemplateTableRowData = {
   id: string;
@@ -37,9 +38,9 @@ const _Templates = () => {
 
   // Queries
   const { data: areasData, isLoading: areasLoading } = useGetV3GfwAreasUser({ headers: httpAuthHeader });
-  const { data: templatesData, isLoading: templatesLoading } = useGetV3GfwTemplates(
+  const { data: templatesData, isLoading: templatesLoading } = useGetV3GfwTemplatesLatest(
     { headers: httpAuthHeader },
-    { enabled: !!areasData }
+    { enabled: !!areasData, cacheTime: 0, retryOnMount: true }
   );
 
   // @ts-expect-error
@@ -48,6 +49,8 @@ const _Templates = () => {
     return templatesData?.data?.map(template => {
       // @ts-expect-error
       const aoi = areasData?.data?.find(area => area?.attributes?.templateId === template.id);
+      const parsedDate = template.attributes ? getTemplateDate(template.attributes) : "";
+
       return {
         id: template.id,
         area: aoi?.attributes?.name ?? "",
@@ -55,7 +58,7 @@ const _Templates = () => {
         reports: template?.attributes?.answersCount || "-",
         status: template.attributes?.status,
         version: template.attributes?.createdAt,
-        formattedVersion: intl.formatDate(template.attributes?.createdAt, {
+        formattedVersion: intl.formatDate(parsedDate, {
           day: "2-digit",
           month: "2-digit",
           year: "2-digit"
@@ -111,13 +114,8 @@ const _Templates = () => {
                   sortCompareFn: sortByDateString
                 },
                 {
-                  key: "version",
+                  key: "formattedVersion",
                   name: intl.formatMessage({ id: "templates.table.version" }),
-                  rowLabel: (_, value) => {
-                    return !Array.isArray(value)
-                      ? intl.formatDate(value, { day: "2-digit", month: "2-digit", year: "2-digit" })
-                      : "";
-                  },
                   sortCompareFn: sortByDateString
                 },
                 {
