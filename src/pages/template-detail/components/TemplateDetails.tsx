@@ -10,8 +10,15 @@ type TemplateDetailsProps = {
 
 const TemplateDetails = ({ template }: TemplateDetailsProps) => {
   const intl = useIntl();
-  // @ts-expect-error
-  const templateName = template?.name[template?.defaultLanguage];
+
+  if (!template) {
+    return null;
+  }
+
+  const templateName: string = template.name
+    ? (template.name[template?.defaultLanguage as keyof typeof template.name] as string)
+    : "";
+
   const parsedDate = template ? getTemplateDate(template) : "";
 
   return (
@@ -30,7 +37,7 @@ const TemplateDetails = ({ template }: TemplateDetailsProps) => {
         <IconCard
           iconName={"translate"}
           title={intl.formatMessage({ id: "template.language" })}
-          text={LOCALES_LIST.find(loc => loc.code === template?.defaultLanguage)?.name ?? ""}
+          text={LOCALES_LIST.find(loc => loc.code === template.defaultLanguage)?.name ?? ""}
         />
       </section>
     </section>

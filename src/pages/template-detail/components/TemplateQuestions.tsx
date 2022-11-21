@@ -11,13 +11,19 @@ type TemplateQuestionsProps = {
 const TemplateQuestions = ({ questions, defaultLanguage }: TemplateQuestionsProps) => {
   const getConditional = (questionName: string, optionValue: number): string => {
     const foundQuestion = questions.find(q => q.name === questionName);
-    if (!foundQuestion) return "";
-    // @ts-expect-error
-    const foundValue = foundQuestion.values[defaultLanguage].find(option => option.value === optionValue);
-    if (!foundValue) return "";
+    if (!foundQuestion || !defaultLanguage) {
+      return "";
+    }
 
-    // @ts-expect-error
-    return `Only Show if "${foundQuestion.label[defaultLanguage]}" is "${foundValue.label}".`;
+    // @ts-ignore
+    const foundValue = foundQuestion.values[defaultLanguage].find(option => option.value === optionValue);
+    if (!foundValue) {
+      return "";
+    }
+
+    return `Only Show if "${foundQuestion.label[defaultLanguage as keyof typeof foundQuestion.label]}" is "${
+      foundValue.label
+    }".`;
   };
 
   return (

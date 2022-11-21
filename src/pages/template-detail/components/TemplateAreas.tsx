@@ -33,6 +33,7 @@ const TemplateAreas = ({ areas }: TemplateAreasProps) => {
         rows={rows}
         isPaginated
         selectFindGetter="id"
+        rowsPerPage={5}
         columnOrder={[
           {
             key: "name",
