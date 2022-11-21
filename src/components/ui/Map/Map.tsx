@@ -30,6 +30,7 @@ export interface IProps extends HTMLAttributes<HTMLElement> {
   style?: CSSProperties;
   controlsPortalDom?: HTMLElement;
   hideControls?: boolean;
+  hideSearch?: boolean;
 }
 
 const Map: FC<IProps> = props => {
@@ -52,6 +53,7 @@ const Map: FC<IProps> = props => {
     shouldWrapContainer = true,
     uncontrolled = false,
     hideControls = false,
+    hideSearch = false,
     controlsPortalDom,
     ...rest
   } = props;
@@ -102,7 +104,7 @@ const Map: FC<IProps> = props => {
       maxZoom={20}
       style={style}
     >
-      {!hideControls && <MapControls portalDom={controlsPortalDom} />}
+      {!hideControls && <MapControls portalDom={controlsPortalDom} hideSearch={hideSearch} />}
       {drawRef && mapRef && <MapEditControls draw={drawRef} map={mapRef} onUpdate={onMapEdit} />}
       {children}
     </ReactMap>
