@@ -284,7 +284,6 @@ class QuestionCard extends Component {
     const modeCreate = mode === "create" ? true : false;
     // finally we can render all that fancy stuff
 
-    console.log(this.question);
     return (
       <section className="c-question-card">
         <div className="question-card">

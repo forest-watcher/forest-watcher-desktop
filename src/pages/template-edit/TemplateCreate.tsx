@@ -37,7 +37,6 @@ const TemplateCreate = () => {
   }, [locale]);
 
   const handleSubmit = async (data: FormFields) => {
-    console.log(data);
     data.questions?.forEach(question => {
       if (question?.values && Object.keys(question.values).length === 0) {
         // @ts-ignore
