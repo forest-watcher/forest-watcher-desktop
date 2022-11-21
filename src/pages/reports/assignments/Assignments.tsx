@@ -3,7 +3,7 @@ import Article from "components/layouts/Article";
 import Button from "components/ui/Button/Button";
 import DataFilter from "components/ui/DataFilter/DataFilter";
 import DataTable from "components/ui/DataTable/DataTable";
-import { useGetV3GfwUser } from "generated/core/coreComponents";
+import { useGetV3GfwAreasUserandteam, useGetV3GfwUser } from "generated/core/coreComponents";
 import { priorityToString } from "helpers/assignments";
 import { sortByDateString, sortByString } from "helpers/table";
 import { useAccessToken } from "hooks/useAccessToken";
@@ -39,24 +39,32 @@ const Assignments = () => {
     { cacheTime: 0, retryOnMount: true }
   );
 
+  const { data: areaData, isLoading: areasLoading } = useGetV3GfwAreasUserandteam({ headers: httpAuthHeader });
+
   const rows = useMemo<TAssignmentsDataTable[]>(() => {
-    if (!assignmentsData?.data) return [];
-    return assignmentsData?.data?.map(assignment => ({
-      id: assignment.id ?? "",
-      createdAt: assignment.attributes?.createdAt ?? "",
-      area: assignment.attributes?.areaName ?? "-",
-      alertType: assignment.attributes?.location ?? [],
-      priority: intl.formatMessage({ id: priorityToString(assignment.attributes?.priority) }),
-      status: assignment.attributes?.status.toUpperCase() ?? ""
-    })) as TAssignmentsDataTable[];
-  }, [assignmentsData?.data, intl]);
+    if (!assignmentsData?.data) {
+      return [];
+    }
+
+    return assignmentsData?.data?.map(assignment => {
+      const area = areaData?.data?.find(area => area.id === assignment.attributes?.areaId);
+      return {
+        id: assignment.id ?? "",
+        createdAt: assignment.attributes?.createdAt ?? "",
+        area: area?.attributes?.name ?? "-",
+        alertType: assignment.attributes?.location ?? [],
+        priority: intl.formatMessage({ id: priorityToString(assignment.attributes?.priority) }),
+        status: assignment.attributes?.status.toUpperCase() ?? ""
+      };
+    }) as TAssignmentsDataTable[];
+  }, [areaData?.data, assignmentsData?.data, intl]);
 
   const [filteredRows, setFilteredRows] = useState<TAssignmentsDataTable[]>(rows);
   const { filters, extraFilters } = useAssignmentsFilters(assignmentsData?.data);
 
   return (
     <div className="l-content">
-      <LoadingWrapper loading={assignmentsLoading}>
+      <LoadingWrapper loading={assignmentsLoading || areasLoading}>
         <Article
           title="reporting.tabs.assignments"
           size="small"
