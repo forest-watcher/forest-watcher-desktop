@@ -213,7 +213,7 @@ const InvestigationPage: FC<IProps> = props => {
                 handleMapLoad(e);
                 cb(e.target);
               }}
-              hideControls
+              hideControls={showComparison}
               currentPlanetBasemap={
                 basemaps.length && isPlanet
                   ? basemaps.find(bm => bm.name === currentPlanetPeriod) || basemaps[0]
