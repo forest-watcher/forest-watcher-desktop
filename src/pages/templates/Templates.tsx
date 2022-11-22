@@ -8,11 +8,12 @@ import OptionalWrapper from "components/extensive/OptionalWrapper";
 import EmptyState from "components/ui/EmptyState/EmptyState";
 import DataTable from "components/ui/DataTable/DataTable";
 import { sortByDateString, sortByString } from "helpers/table";
-import { useIntl } from "react-intl";
-import TemplatesHeader from "./components/TemplatesHeader";
+import { FormattedMessage, useIntl } from "react-intl";
 import useTemplatesFilter from "./useTemplatesFilter";
 import DataFilter from "components/ui/DataFilter/DataFilter";
 import TemplatesSearch from "./components/TemplatesSearch";
+import Hero from "components/layouts/Hero/Hero";
+import { Link } from "react-router-dom";
 
 export type TemplateTableRowData = {
   id: string;
@@ -30,7 +31,7 @@ export type TemplatesFilterFields = {
   search: string;
 };
 
-const _Templates = () => {
+const Templates = () => {
   const intl = useIntl();
   const { httpAuthHeader } = useAccessToken();
 
@@ -71,7 +72,14 @@ const _Templates = () => {
 
   return (
     <div className="relative">
-      <TemplatesHeader />
+      <Hero
+        title="templates.name"
+        actions={
+          <Link className="c-button c-button--primary" to={`/templates/create`}>
+            <FormattedMessage id="templates.create" />
+          </Link>
+        }
+      />
       <LoadingWrapper loading={areasLoading || templatesLoading}>
         <Article className="mt-10">
           <OptionalWrapper
@@ -149,4 +157,4 @@ const _Templates = () => {
   );
 };
 
-export default _Templates;
+export default Templates;
