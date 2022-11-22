@@ -56,9 +56,11 @@ export type RouteResponse = {
 };
 
 export type TemplateResponse = {
-  id?: string;
-  type?: string;
-  attributes?: Schemas.TemplateModel;
+  data?: {
+    id?: string;
+    type?: string;
+    attributes?: Schemas.TemplateModel;
+  };
 };
 
 export type TemplatesResponse = {

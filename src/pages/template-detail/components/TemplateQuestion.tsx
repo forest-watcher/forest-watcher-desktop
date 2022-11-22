@@ -16,6 +16,7 @@ const TemplateQuestion = ({ question, defaultLanguage, getConditional }: Templat
   const questionText = question.label[defaultLanguage];
   // @ts-expect-error
   const responseOptions = question.values as { [key: string]: { label: string; value: number }[] };
+  const isImageType = question.type === "blob";
   const intl = useIntl();
 
   /**
@@ -59,6 +60,12 @@ const TemplateQuestion = ({ question, defaultLanguage, getConditional }: Templat
           <p className="text-base capitalize">
             <FormattedMessage id={`question.${question.type}`} />
           </p>
+        </div>
+        <div className="mb-6">
+          <h4 className="uppercase font-[500] text-neutral-700 pb-2">
+            <FormattedMessage id={"template.edit.maxNumber"} />
+          </h4>
+          <p className="text-base capitalize">{question.maxImageCount}</p>
         </div>
         {/* Response Options */}
         <OptionalWrapper data={!!responseOptions}>

@@ -38,6 +38,7 @@ const TemplateQuestion = ({ question, defaultLanguage = "", onDelete, index }: T
   const canAddCondition = watcher?.questions[index]?.childQuestions?.length > 0 || false;
   // @ts-ignore incorrect typings;
   const canAddPreviousQuestionCondition = watcher?.questions[index]?.conditions?.length > 0 || false;
+  const isImageQuestion = watcher?.questions ? watcher?.questions[index]?.type === "blob" : false;
 
   const {
     previousQuestionsAreSelection,
@@ -176,6 +177,23 @@ const TemplateQuestion = ({ question, defaultLanguage = "", onDelete, index }: T
               alternateLabelStyle
             />
           </div>
+          <OptionalWrapper data={isImageQuestion}>
+            <div className="mb-6">
+              <Input
+                id={`number-count-${index}`}
+                htmlInputProps={{
+                  label: intl.formatMessage({ id: "template.edit.maxNumber" }),
+                  placeholder: intl.formatMessage({ id: "template.edit.maxNumberPlaceholder" }),
+                  type: "number",
+                  min: 1,
+                  max: 10,
+                  required: true
+                }}
+                registered={register(`questions.${index}.maxImageCount`, { valueAsNumber: true })}
+                alternateLabelStyle
+              />
+            </div>
+          </OptionalWrapper>
           {/* Response Options */}
           <OptionalWrapper data={!!responseOptions}>
             <div className="mb-6">
