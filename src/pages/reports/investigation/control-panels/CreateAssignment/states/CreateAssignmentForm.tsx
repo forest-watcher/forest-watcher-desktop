@@ -279,7 +279,7 @@ const CreateAssignmentForm: FC<IProps> = props => {
       footer={
         openDialogName === EDialogsNames.None ? (
           <Button disabled={!formState.isValid} onClick={handleSubmit(handlePostAssignment)}>
-            <FormattedMessage id="assignment.create" />
+            <FormattedMessage id="common.complete" />
           </Button>
         ) : null
       }

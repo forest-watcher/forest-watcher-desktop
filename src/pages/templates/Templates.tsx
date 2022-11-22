@@ -36,7 +36,7 @@ export type TemplatesFilterFields = {
   search: string;
 };
 
-const _Templates = () => {
+const Templates = () => {
   const intl = useIntl();
   const { httpAuthHeader } = useAccessToken();
 
@@ -86,7 +86,7 @@ const _Templates = () => {
   return (
     <div className="relative">
       <Hero
-        title="templates.title"
+        title="templates.name"
         actions={
           <Link className="c-button c-button--primary" to="/templates/create">
             <FormattedMessage id="templates.createTemplate" />
@@ -165,4 +165,4 @@ const _Templates = () => {
   );
 };
 
-export default _Templates;
+export default Templates;
