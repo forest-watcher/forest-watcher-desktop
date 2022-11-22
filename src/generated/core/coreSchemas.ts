@@ -12,6 +12,7 @@ export type AssignmentModel = {
     lat?: number;
     lon?: number;
     alertType?: string;
+    alertId?: string;
   }[];
   priority: number;
   monitors: string[];
@@ -124,6 +125,7 @@ export type AnswerModel = {
   user: string;
   responses: string;
   createdAt: string;
+  assignmentId?: string;
 };
 
 export type TeamModel = {

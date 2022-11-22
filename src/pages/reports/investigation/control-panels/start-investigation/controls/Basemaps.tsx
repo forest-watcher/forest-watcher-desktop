@@ -199,11 +199,11 @@ const Basemaps: FC<IProps> = ({ defaultBasemap, onComparison }) => {
                     placeholder: intl.formatMessage({ id: "maps.period" }),
                     options: baseMapPeriods,
                     label: intl.formatMessage({ id: "maps.period" }),
-                    alternateLabelStyle: true,
                     defaultValue: baseMapPeriods[baseMapPeriods.length - 1]
                   }}
                   key={watcher.currentPlanetImageType}
                   className="u-margin-bottom-20"
+                  alternateLabelStyle
                 />
                 <OptionalWrapper data={!isMobile}>
                   <div className="u-margin-bottom-40">
@@ -230,9 +230,9 @@ const Basemaps: FC<IProps> = ({ defaultBasemap, onComparison }) => {
                     placeholder: intl.formatMessage({ id: "maps.imageType" }),
                     options: imageTypeOptions,
                     label: intl.formatMessage({ id: "maps.imageType" }),
-                    alternateLabelStyle: true,
                     defaultValue: imageTypeOptions[0]
                   }}
+                  alternateLabelStyle
                 />
                 {isLast && (
                   <Button variant="secondary" className="w-full bg-neutral-300 mt-6" onClick={e => handleComparison(e)}>

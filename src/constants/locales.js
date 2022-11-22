@@ -187,6 +187,18 @@ export const LOCALES_LIST = [
   { code: "za", name: "Zhuang, Chuang", nativeName: "Saɯ cueŋƅ, Saw cuengh" }
 ];
 
+const mapLocalesToOptions = locales => {
+  const localeOptions = locales.map(locale => {
+    return {
+      value: locale.code,
+      label: locale.name
+    };
+  });
+  return localeOptions;
+};
+
 const Locale = { LOCALES_LIST };
+
+export const LOCALES_MAPPED_TO_SELECT = mapLocalesToOptions(LOCALES_LIST);
 
 export default Locale;

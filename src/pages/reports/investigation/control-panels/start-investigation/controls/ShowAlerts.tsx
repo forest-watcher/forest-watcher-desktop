@@ -68,9 +68,9 @@ const ShowAlertsControl: FC<IProps> = props => {
             selectProps={{
               placeholder: intl.formatMessage({ id: "maps.period" }),
               options: alertTypesShownOptions,
-              alternateLabelStyle: true,
               defaultValue: alertTypesShownOptions[0]
             }}
+            alternateLabelStyle
           />
 
           {methods.getValues("alertTypesShown") !== EAlertTypes.viirs ? (
@@ -82,9 +82,9 @@ const ShowAlertsControl: FC<IProps> = props => {
               selectProps={{
                 placeholder: intl.formatMessage({ id: "maps.period" }),
                 options: alertTypesRequestThresholdOptions.default,
-                alternateLabelStyle: true,
                 defaultValue: alertTypesRequestThresholdOptions.default[0]
               }}
+              alternateLabelStyle
             />
           ) : (
             <Select
@@ -95,9 +95,9 @@ const ShowAlertsControl: FC<IProps> = props => {
               selectProps={{
                 placeholder: intl.formatMessage({ id: "maps.period" }),
                 options: alertTypesRequestThresholdOptions.viirs,
-                alternateLabelStyle: true,
                 defaultValue: alertTypesRequestThresholdOptions.viirs[0]
               }}
+              alternateLabelStyle
             />
           )}
         </>

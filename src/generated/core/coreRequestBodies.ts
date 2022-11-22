@@ -7,9 +7,10 @@ import type * as Schemas from "./coreSchemas";
 
 export type AssignmentBody = {
   location?: {
-    lat?: number;
-    lon?: number;
+    lat: number;
+    lon: number;
     alertType?: string;
+    alertId?: string;
   }[];
   priority: number;
   monitors: string[];

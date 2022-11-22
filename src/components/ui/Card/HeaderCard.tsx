@@ -9,6 +9,7 @@ interface HeaderCardComposition {
   Header: FC<React.HTMLAttributes<HTMLDivElement>>;
   HeaderText: FC<IProps & React.HTMLAttributes<HTMLParagraphElement>>;
   Content: FC<React.HTMLAttributes<HTMLDivElement>>;
+  Footer: FC<React.HTMLAttributes<HTMLDivElement>>;
 }
 
 const HeaderText: HeaderCardComposition["HeaderText"] = ({ className, children, as = "p" }) => {
@@ -29,12 +30,25 @@ const Header: HeaderCardComposition["Header"] = ({ className, children }) => {
   );
 };
 
+const Footer: HeaderCardComposition["Footer"] = ({ className, children }) => {
+  return (
+    <div
+      className={classNames(
+        className,
+        "bg-neutral-300 px-5 py-6 border-solid border-2 border-neutral-500 border-opacity-40 border-t-0 rounded-b"
+      )}
+    >
+      {children}
+    </div>
+  );
+};
+
 const Content: HeaderCardComposition["Content"] = ({ className, children }) => {
   return (
     <div
       className={classNames(
         className,
-        "bg-neutral-300 py-7 px-6 border-2 border-solid border-neutral-500 border-opacity-40 rounded-b-[4px] border-t-0"
+        "bg-neutral-300 py-7 px-6 border-2 border-solid border-neutral-500 border-opacity-40 border-t-0"
       )}
     >
       {children}
@@ -44,11 +58,12 @@ const Content: HeaderCardComposition["Content"] = ({ className, children }) => {
 
 const HeaderCard: FC<IProps> & HeaderCardComposition = ({ className, children, as = "div" }) => {
   const Element = as;
-  return <Element className={classNames(className, "")}>{children}</Element>;
+  return <Element className={classNames(className, "rounded-b")}>{children}</Element>;
 };
 
 HeaderCard.Header = Header;
 HeaderCard.Content = Content;
 HeaderCard.HeaderText = HeaderText;
+HeaderCard.Footer = Footer;
 
 export default HeaderCard;

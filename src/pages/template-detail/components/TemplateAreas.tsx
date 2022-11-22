@@ -5,12 +5,12 @@ import { useMemo } from "react";
 import { useIntl } from "react-intl";
 
 type TemplateAreaTableRowData = {
-  id: string;
-  name: string;
+  id?: string;
+  name?: string;
 };
 
 type TemplateAreasProps = {
-  areas: { id: string; name: string }[];
+  areas: { id?: string; name?: string }[];
 };
 
 const TemplateAreas = ({ areas }: TemplateAreasProps) => {

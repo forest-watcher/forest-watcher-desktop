@@ -4,7 +4,6 @@ import { Route, Switch, Redirect, useLocation, useParams, useRouteMatch } from "
 import Areas from "pages/areas/AreasContainer";
 import AreasManage from "pages/area-view/AreaViewContainer";
 import AreaEdit from "pages/area-edit/AreaEditContainer";
-import TemplatesManage from "pages/templates-manage/TemplatesManageContainer";
 import Teams from "pages/teams/TeamsContainer";
 import TeamsInvitations from "pages/teams/invitation/InvitationContainer";
 import TeamDetail from "pages/teams-detail/TeamDetailContainer";
@@ -16,10 +15,12 @@ import { useRouteHistoryStack } from "hooks/useRouteHistoryStack";
 import Report from "pages/reports/report/Report";
 import Templates from "pages/templates/Templates";
 import Layers from "pages/layers/Layers";
-import Template from "pages/template/Template";
+import TemplateDetail from "pages/template-detail/TemplateDetail";
 import Assignment from "pages/assignment/Assignment";
 import { useSelector } from "react-redux";
 import { RootState } from "store";
+import TemplateEdit from "pages/template-edit/TemplateEdit";
+import TemplateCreate from "pages/template-edit/TemplateCreate";
 
 interface IParams {
   token?: string;
@@ -99,8 +100,9 @@ const Routes: FC<IProps> = props => {
           <Route path={`${match.url}areas/:areaId/edit`} component={AreaEdit} />
           <Route path={`${match.url}areas/:areaId`} component={AreasManage} />
           <Route exact path={`${match.url}templates`} component={Templates} />
-          <Route exact path={`${match.url}templates/create`} component={TemplatesManage} />
-          <Route exact path={`${match.url}templates/:templateId`} component={Template} />
+          <Route exact path={`${match.url}templates/create`} component={TemplateCreate} />
+          <Route exact path={`${match.url}templates/:templateId`} component={TemplateDetail} />
+          <Route exact path={`${match.url}templates/:templateId/edit`} component={TemplateEdit} />
           <Route path={`${match.url}reporting/reports/:reportId/answers/:answerId`} component={Report} />
           <Route path={[`${match.url}reporting/:reportingTab?`]} component={Reports} />
           {/* TODO update these routes to use nested routes */}

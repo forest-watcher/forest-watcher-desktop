@@ -30,6 +30,12 @@
     &--alt {
       margin-top: 0;
     }
+    &--large {
+      font-size: 1.5rem;
+      line-height: 2.25rem;
+      font-weight: 400;
+      text-transform: capitalize;
+    }
   }
 
   &__input {
@@ -47,6 +53,7 @@
     &::placeholder {
       color: $neutral-600;
       font-weight: 400;
+      opacity: 1;
     }
 
     &:focus, &:active {

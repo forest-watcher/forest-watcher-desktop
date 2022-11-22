@@ -1,6 +1,6 @@
 import { useAccessToken } from "hooks/useAccessToken";
 import { useMemo, useState } from "react";
-import { useGetV3GfwAreasUser, useGetV3GfwTemplates } from "generated/core/coreComponents";
+import { useGetV3GfwTemplatesLatest, useGetV3GfwTemplatesPublic } from "generated/core/coreComponents";
 import { LOCALES_LIST } from "../../constants/locales";
 import LoadingWrapper from "components/extensive/LoadingWrapper";
 import Article from "components/layouts/Article";
@@ -12,8 +12,9 @@ import { FormattedMessage, useIntl } from "react-intl";
 import useTemplatesFilter from "./useTemplatesFilter";
 import DataFilter from "components/ui/DataFilter/DataFilter";
 import TemplatesSearch from "./components/TemplatesSearch";
-import Hero from "components/layouts/Hero/Hero";
 import { Link } from "react-router-dom";
+import Hero from "components/layouts/Hero/Hero";
+import { getTemplateDate } from "helpers/template";
 
 export type TemplateTableRowData = {
   id: string;
@@ -36,26 +37,34 @@ const Templates = () => {
   const { httpAuthHeader } = useAccessToken();
 
   // Queries
-  const { data: areasData, isLoading: areasLoading } = useGetV3GfwAreasUser({ headers: httpAuthHeader });
-  const { data: templatesData, isLoading: templatesLoading } = useGetV3GfwTemplates(
+  const { data: templatesLatestData, isLoading: templatesLatestLoading } = useGetV3GfwTemplatesLatest(
     { headers: httpAuthHeader },
-    { enabled: !!areasData }
+    { cacheTime: 0, retryOnMount: true }
+  );
+
+  const { data: templatesPublicData, isLoading: templatesLoading } = useGetV3GfwTemplatesPublic(
+    { headers: httpAuthHeader },
+    { cacheTime: 0, retryOnMount: true }
   );
 
   // @ts-expect-error
   const rows = useMemo<TemplateTableRowData[]>(() => {
-    if (!templatesData?.data) return [];
-    return templatesData?.data?.map(template => {
-      // @ts-expect-error
-      const aoi = areasData?.data?.find(area => area?.attributes?.templateId === template.id);
+    const publicTemplates = templatesPublicData?.data || [];
+    const latestTemplates = templatesLatestData?.data || [];
+    const allTemplates = [...publicTemplates, ...latestTemplates];
+
+    return allTemplates.map(template => {
+      const parsedDate = template.attributes ? getTemplateDate(template.attributes) : "";
+      const areasStr = template.attributes?.areas?.map(area => area.name).join(", ");
+
       return {
         id: template.id,
-        area: aoi?.attributes?.name ?? "",
+        area: template.attributes?.public ? "-" : areasStr || "-",
         language: LOCALES_LIST.find(loc => loc.code === template.attributes?.defaultLanguage)?.name,
         reports: template?.attributes?.answersCount || "-",
         status: template.attributes?.status,
         version: template.attributes?.createdAt,
-        formattedVersion: intl.formatDate(template.attributes?.createdAt, {
+        formattedVersion: intl.formatDate(parsedDate, {
           day: "2-digit",
           month: "2-digit",
           year: "2-digit"
@@ -64,7 +73,7 @@ const Templates = () => {
         templateName: template?.attributes?.name[template.attributes.defaultLanguage]
       };
     });
-  }, [templatesData, areasData, intl]);
+  }, [templatesPublicData?.data, templatesLatestData?.data, intl]);
 
   // Filters
   const { filters } = useTemplatesFilter(rows);
@@ -75,13 +84,13 @@ const Templates = () => {
       <Hero
         title="templates.name"
         actions={
-          <Link className="c-button c-button--primary" to={`/templates/create`}>
-            <FormattedMessage id="templates.create" />
+          <Link className="c-button c-button--primary" to="/templates/create">
+            <FormattedMessage id="templates.createTemplate" />
           </Link>
         }
       />
-      <LoadingWrapper loading={areasLoading || templatesLoading}>
-        <Article className="mt-10">
+      <LoadingWrapper loading={templatesLoading || templatesLatestLoading}>
+        <Article className="my-10">
           <OptionalWrapper
             data={rows.length > 0}
             elseComponent={
@@ -111,13 +120,8 @@ const Templates = () => {
                   sortCompareFn: sortByDateString
                 },
                 {
-                  key: "version",
+                  key: "formattedVersion",
                   name: intl.formatMessage({ id: "templates.table.version" }),
-                  rowLabel: (_, value) => {
-                    return !Array.isArray(value)
-                      ? intl.formatDate(value, { day: "2-digit", month: "2-digit", year: "2-digit" })
-                      : "";
-                  },
                   sortCompareFn: sortByDateString
                 },
                 {
@@ -146,7 +150,7 @@ const Templates = () => {
                   name: "   ",
                   rowLabel: () => "View",
                   rowHref: ({ id }) => `/templates/${id}`,
-                  rowHrefClassNames: "text-primary-500 font-medium"
+                  rowHrefClassNames: "text-primary-500 font-medium uppercase"
                 }
               ]}
             />
