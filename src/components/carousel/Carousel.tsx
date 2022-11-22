@@ -53,7 +53,7 @@ const Carousel = ({ slides, downloadable }: CarouselProps) => {
           <div className="c-carousel__container">
             {slides.map((src, index) => (
               <div className="c-carousel__slide" key={index}>
-                <div className="c-carousel__slide__inner">
+                <div className="relative h-[450px] overflow-hidden">
                   <OptionalWrapper data={downloadable}>
                     <button
                       className="absolute top-6 right-6 bg-primary-500 p-1 rounded-lg z-10"
@@ -62,7 +62,7 @@ const Carousel = ({ slides, downloadable }: CarouselProps) => {
                       <Icon name="download" size={32} />
                     </button>
                   </OptionalWrapper>
-                  <img className="c-carousel__slide__img" src={src} alt="A cool cat." />
+                  <img className="w-full h-full object-cover" src={src} alt="" />
                 </div>
               </div>
             ))}
