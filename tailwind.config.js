@@ -38,6 +38,10 @@ module.exports = {
       },
       maxWidth: {
         row: "68.7rem"
+      },
+      screens: {
+        600: "600px",
+        800: "800px"
       }
     }
   },

@@ -21,7 +21,7 @@ export type TReportResponse =
 
 export type TAreaResponse = paths["/v3/exports/areas/{id}"]["get"]["responses"]["200"]["content"]["application/json"];
 
-function delay(timeInMs: number) {
+export function delay(timeInMs: number) {
   return new Promise(resolve => setTimeout(resolve, timeInMs));
 }
 

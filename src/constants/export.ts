@@ -43,4 +43,20 @@ export const REPORT_EXPORT_FILE_TYPES = [
   PDF_EXPORT_FILE_TYPE
 ];
 
+export const ASSIGNMENT_FIELDS = [
+  "id",
+  "areaId",
+  "createdAt",
+  "createdBy",
+  "geostore",
+  "image",
+  "location",
+  "monitorNames",
+  "name",
+  "notes",
+  "priority",
+  "status",
+  "templates"
+];
+
 export const REPORT_EXPORT_IMAGES_TYPES = [ZIP_EXPORT_FILE_TYPE, PDF_EXPORT_FILE_TYPE];
