@@ -41,15 +41,14 @@ const _Templates = () => {
   const { httpAuthHeader } = useAccessToken();
 
   // Queries
-  const { data: areasData, isLoading: areasLoading } = useGetV3GfwAreasUser({ headers: httpAuthHeader });
   const { data: templatesLatestData, isLoading: templatesLatestLoading } = useGetV3GfwTemplatesLatest(
     { headers: httpAuthHeader },
-    { enabled: !!areasData, cacheTime: 0, retryOnMount: true }
+    { cacheTime: 0, retryOnMount: true }
   );
 
   const { data: templatesPublicData, isLoading: templatesLoading } = useGetV3GfwTemplatesPublic(
     { headers: httpAuthHeader },
-    { enabled: !!areasData, cacheTime: 0, retryOnMount: true }
+    { cacheTime: 0, retryOnMount: true }
   );
 
   // @ts-expect-error
@@ -59,13 +58,12 @@ const _Templates = () => {
     const allTemplates = [...publicTemplates, ...latestTemplates];
 
     return allTemplates.map(template => {
-      // @ts-expect-error
-      const aoi = areasData?.data?.find(area => area?.attributes?.templateId === template.id);
       const parsedDate = template.attributes ? getTemplateDate(template.attributes) : "";
+      const areasStr = template.attributes?.areas?.map(area => area.name).join(", ");
 
       return {
         id: template.id,
-        area: template.attributes?.public ? "" : aoi?.attributes?.name ?? "",
+        area: template.attributes?.public ? "-" : areasStr || "-",
         language: LOCALES_LIST.find(loc => loc.code === template.attributes?.defaultLanguage)?.name,
         reports: template?.attributes?.answersCount || "-",
         status: template.attributes?.status,
@@ -79,7 +77,7 @@ const _Templates = () => {
         templateName: template?.attributes?.name[template.attributes.defaultLanguage]
       };
     });
-  }, [templatesPublicData?.data, templatesLatestData?.data, areasData?.data, intl]);
+  }, [templatesPublicData?.data, templatesLatestData?.data, intl]);
 
   // Filters
   const { filters } = useTemplatesFilter(rows);
@@ -95,7 +93,7 @@ const _Templates = () => {
           </Link>
         }
       />
-      <LoadingWrapper loading={areasLoading || templatesLoading || templatesLatestLoading}>
+      <LoadingWrapper loading={templatesLoading || templatesLatestLoading}>
         <Article className="my-10">
           <OptionalWrapper
             data={rows.length > 0}
