@@ -3,7 +3,6 @@ import { useGetReport } from "generated/forms/formsComponents";
 import { useAccessToken } from "hooks/useAccessToken";
 import { useParams } from "react-router-dom";
 import ReportDetails from "./components/ReportDetails";
-import ReportHeader from "./components/ReportHeader";
 import ReportResponses from "./components/ReportResponses";
 import ReportMap from "./components/ReportMap";
 import { useState } from "react";
@@ -15,6 +14,9 @@ import { usePostV3ReportsTemplateIdExportSome } from "generated/exports/exportsC
 import { exportService } from "services/exports";
 import { useGetV3GfwTemplatesTemplateIdAnswersAnswerId } from "generated/core/coreComponents";
 import { AnswerResponse } from "generated/forms/formsSchemas";
+import Button from "components/ui/Button/Button";
+import Hero from "components/layouts/Hero/Hero";
+import { FormattedMessage } from "react-intl";
 
 const Report = () => {
   const { httpAuthHeader } = useAccessToken();
@@ -61,7 +63,15 @@ const Report = () => {
       <OptionalWrapper data={showExportModal}>
         <ReportExportModal onClose={() => setShowExportModal(false)} onSave={handleExport} />
       </OptionalWrapper>
-      <ReportHeader setShowExportModal={setShowExportModal} />
+      <Hero
+        title="reports.detail"
+        actions={
+          <Button onClick={() => setShowExportModal(true)}>
+            <FormattedMessage id="common.export" />
+          </Button>
+        }
+        backLink={{ name: "reports.back", to: "/reporting/reports/" }}
+      />
       <ReportMap answer={answer} />
       <ReportDetails answer={answer} report={report} />
       <ReportResponses questions={report?.data?.attributes.questions ?? []} responses={responses as AnswerResponse[]} />
