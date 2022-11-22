@@ -219,12 +219,13 @@ const TemplateQuestion = ({ question, defaultLanguage = "", onDelete, index }: T
               <OptionalWrapper data={isConditional}>
                 <Button
                   variant="secondary"
-                  className="mt-3"
                   onClick={e => {
                     e.preventDefault();
                     handleAddOption(index);
                   }}
+                  className="flex gap-[10px] items-center mt-3"
                 >
+                  <Icon size={14} name="PlusForButton" className="relative top-[-1px]" />
                   <FormattedMessage id="templates.addOption" />
                 </Button>
               </OptionalWrapper>

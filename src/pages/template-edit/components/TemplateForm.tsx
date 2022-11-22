@@ -12,6 +12,7 @@ import Button from "components/ui/Button/Button";
 import { Link } from "react-router-dom";
 import Toggle from "components/ui/Form/Toggle";
 import { QUESTION } from "constants/templates";
+import Icon from "components/extensive/Icon";
 
 export interface FormFields extends Omit<TemplateModel, "areas"> {
   areas: string[];
@@ -35,7 +36,7 @@ const TemplateForm: FC<IParams> = ({ template, backLink = "", onSubmit }) => {
     handleSubmit,
     setValue,
     getValues,
-    formState: { isDirty }
+    formState: { isDirty, isSubmitting }
   } = formHook;
 
   const handleAddQuestion = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -135,7 +136,8 @@ const TemplateForm: FC<IParams> = ({ template, backLink = "", onSubmit }) => {
         {/** Footer Section */}
         <section className="bg-neutral-300 py-10 px-2.5">
           <div className="max-w-row mx-auto flex w-full justify-between align-middle">
-            <Button variant="secondary" onClick={handleAddQuestion}>
+            <Button variant="secondary" onClick={handleAddQuestion} className="flex gap-[10px] items-center">
+              <Icon size={14} name="PlusForButton" className="relative top-[-1px]" />
               <FormattedMessage id="templates.addQuestion" />
             </Button>
             <div className="flex align-middle gap-10">
@@ -156,7 +158,7 @@ const TemplateForm: FC<IParams> = ({ template, backLink = "", onSubmit }) => {
                   className="c-button c-button--primary"
                   type="submit"
                   value={intl.formatMessage({ id: "common.save" })}
-                  disabled={!isDirty}
+                  disabled={!isDirty || isSubmitting}
                 />
               </div>
             </div>

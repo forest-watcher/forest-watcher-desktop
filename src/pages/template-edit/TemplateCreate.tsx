@@ -7,12 +7,16 @@ import { TEMPLATE, QUESTION } from "../../constants/templates";
 import { useSelector } from "react-redux";
 import { RootState } from "store";
 import { usePostV3GfwTemplates } from "generated/core/coreComponents";
+import useUrlQuery from "hooks/useUrlQuery";
 
 const TemplateCreate = () => {
   const { httpAuthHeader } = useAccessToken();
   const history = useHistory();
   const locale: string = useSelector((state: RootState) => state.app.locale);
   const { mutateAsync } = usePostV3GfwTemplates();
+  const urlQuery = useUrlQuery();
+  const backTo = useMemo(() => urlQuery.get("backTo"), [urlQuery]);
+  const backLink = backTo || "/templates";
 
   const defaultTemplate = useMemo(() => {
     return {
@@ -42,15 +46,15 @@ const TemplateCreate = () => {
         delete question.values;
       }
     });
-    // @ts-ignore  - inocreect typings
+    // @ts-ignore  - incorrect typings
     const resp = await mutateAsync({ body: data, headers: httpAuthHeader });
-    // @ts-ignore
-    history.push(`/templates/${resp.data.id}`);
+    // @ts-ignore  - incorrect typings
+    history.push(backTo ? backTo : `/templates/${resp.data.id}`);
   };
 
   return (
     <section className="relative">
-      <Hero title="templates.create" backLink={{ name: "template.back", to: `/templates` }} />
+      <Hero title="templates.create" backLink={{ name: "template.back", to: backLink }} />
       <TemplateForm
         backLink="/templates"
         // @ts-ignore - incorrect typings

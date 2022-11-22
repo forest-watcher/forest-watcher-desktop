@@ -1,4 +1,5 @@
 import LoadingWrapper from "components/extensive/LoadingWrapper";
+import OptionalWrapper from "components/extensive/OptionalWrapper";
 import Hero from "components/layouts/Hero/Hero";
 import { useGetV3GfwTemplatesTemplateId } from "generated/core/coreComponents";
 import { TemplateResponse } from "generated/core/coreResponses";
@@ -49,7 +50,9 @@ const TemplateDetail = () => {
       />
       <LoadingWrapper loading={templateLoading}>
         <TemplateDetails template={template?.data?.attributes} />
-        <TemplateAreas areas={template?.data?.attributes?.areas || []} />
+        <OptionalWrapper data={!template?.data?.attributes?.public}>
+          <TemplateAreas areas={template?.data?.attributes?.areas || []} />
+        </OptionalWrapper>
         <TemplateQuestions
           questions={template?.data?.attributes?.questions || []}
           defaultLanguage={template?.data?.attributes?.defaultLanguage}

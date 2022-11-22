@@ -53,6 +53,7 @@
     &::placeholder {
       color: $neutral-600;
       font-weight: 400;
+      opacity: 1;
     }
 
     &:focus, &:active {
