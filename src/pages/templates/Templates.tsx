@@ -65,7 +65,7 @@ const _Templates = () => {
 
       return {
         id: template.id,
-        area: aoi?.attributes?.name ?? "",
+        area: template.attributes?.public ? "" : aoi?.attributes?.name ?? "",
         language: LOCALES_LIST.find(loc => loc.code === template.attributes?.defaultLanguage)?.name,
         reports: template?.attributes?.answersCount || "-",
         status: template.attributes?.status,
