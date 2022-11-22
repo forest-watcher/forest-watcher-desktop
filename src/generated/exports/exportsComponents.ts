@@ -398,10 +398,6 @@ export type GetV3ExportsAreasIdError = Fetcher.ErrorWrapper<{
   payload: Responses.Error;
 }>;
 
-export type GetV3ExportsAreasIdResponse = {
-  data?: string;
-};
-
 export type GetV3ExportsAreasIdVariables = {
   pathParams: GetV3ExportsAreasIdPathParams;
 } & ExportsContext["fetcherOptions"];
@@ -410,24 +406,167 @@ export type GetV3ExportsAreasIdVariables = {
  * Returns the url for a given id token received from an areas export request
  */
 export const fetchGetV3ExportsAreasId = (variables: GetV3ExportsAreasIdVariables, signal?: AbortSignal) =>
-  exportsFetch<GetV3ExportsAreasIdResponse, GetV3ExportsAreasIdError, undefined, {}, {}, GetV3ExportsAreasIdPathParams>(
-    { url: "/v3/exports/areas/{id}", method: "get", ...variables, signal }
-  );
+  exportsFetch<Responses.Url, GetV3ExportsAreasIdError, undefined, {}, {}, GetV3ExportsAreasIdPathParams>({
+    url: "/v3/exports/areas/{id}",
+    method: "get",
+    ...variables,
+    signal
+  });
 
 /**
  * Returns the url for a given id token received from an areas export request
  */
-export const useGetV3ExportsAreasId = <TData = GetV3ExportsAreasIdResponse>(
+export const useGetV3ExportsAreasId = <TData = Responses.Url>(
   variables: GetV3ExportsAreasIdVariables,
+  options?: Omit<reactQuery.UseQueryOptions<Responses.Url, GetV3ExportsAreasIdError, TData>, "queryKey" | "queryFn">
+) => {
+  const { fetcherOptions, queryOptions, queryKeyFn } = useExportsContext(options);
+  return reactQuery.useQuery<Responses.Url, GetV3ExportsAreasIdError, TData>(
+    queryKeyFn({ path: "/v3/exports/areas/{id}", operationId: "getV3ExportsAreasId", variables }),
+    ({ signal }) => fetchGetV3ExportsAreasId({ ...fetcherOptions, ...variables }, signal),
+    {
+      ...options,
+      ...queryOptions
+    }
+  );
+};
+
+export type PostV3ExportsAssignmentsExportAllError = Fetcher.ErrorWrapper<{
+  status: 401;
+  payload: Responses.Error;
+}>;
+
+export type PostV3ExportsAssignmentsExportAllVariables = {
+  body?: RequestBodies.ExportAllAssignments;
+} & ExportsContext["fetcherOptions"];
+
+/**
+ * Exports all assignements and associated images the user can see as either fwbundle or zipped csv or geojson or shp. The "fields" array in the body determines the columns in any csv export. The response is an id to poll the GET /v3/exports/assignments/{id} endpoint is for the URL once the export has completed
+ */
+export const fetchPostV3ExportsAssignmentsExportAll = (
+  variables: PostV3ExportsAssignmentsExportAllVariables,
+  signal?: AbortSignal
+) =>
+  exportsFetch<Responses.Id, PostV3ExportsAssignmentsExportAllError, RequestBodies.ExportAllAssignments, {}, {}, {}>({
+    url: "/v3/exports/assignments/exportAll",
+    method: "post",
+    ...variables,
+    signal
+  });
+
+/**
+ * Exports all assignements and associated images the user can see as either fwbundle or zipped csv or geojson or shp. The "fields" array in the body determines the columns in any csv export. The response is an id to poll the GET /v3/exports/assignments/{id} endpoint is for the URL once the export has completed
+ */
+export const usePostV3ExportsAssignmentsExportAll = (
   options?: Omit<
-    reactQuery.UseQueryOptions<GetV3ExportsAreasIdResponse, GetV3ExportsAreasIdError, TData>,
+    reactQuery.UseMutationOptions<
+      Responses.Id,
+      PostV3ExportsAssignmentsExportAllError,
+      PostV3ExportsAssignmentsExportAllVariables
+    >,
+    "mutationFn"
+  >
+) => {
+  const { fetcherOptions } = useExportsContext();
+  return reactQuery.useMutation<
+    Responses.Id,
+    PostV3ExportsAssignmentsExportAllError,
+    PostV3ExportsAssignmentsExportAllVariables
+  >(
+    (variables: PostV3ExportsAssignmentsExportAllVariables) =>
+      fetchPostV3ExportsAssignmentsExportAll({ ...fetcherOptions, ...variables }),
+    options
+  );
+};
+
+export type PostV3ExportsAssignmentsExportSomeError = Fetcher.ErrorWrapper<{
+  status: 401;
+  payload: Responses.Error;
+}>;
+
+export type PostV3ExportsAssignmentsExportSomeVariables = {
+  body?: RequestBodies.ExportSomeAssignmentsRequest;
+} & ExportsContext["fetcherOptions"];
+
+/**
+ * Exports a selection of assignements and associated images given its id as either fwbundle or zipped csv or geojson or shp. The "fields" array in the body determines the columns in any csv export. The response is an id to poll the GET /v3/exports/assignments/{id} endpoint is for the URL once the export has completed
+ */
+export const fetchPostV3ExportsAssignmentsExportSome = (
+  variables: PostV3ExportsAssignmentsExportSomeVariables,
+  signal?: AbortSignal
+) =>
+  exportsFetch<
+    Responses.Id,
+    PostV3ExportsAssignmentsExportSomeError,
+    RequestBodies.ExportSomeAssignmentsRequest,
+    {},
+    {},
+    {}
+  >({ url: "/v3/exports/assignments/exportSome", method: "post", ...variables, signal });
+
+/**
+ * Exports a selection of assignements and associated images given its id as either fwbundle or zipped csv or geojson or shp. The "fields" array in the body determines the columns in any csv export. The response is an id to poll the GET /v3/exports/assignments/{id} endpoint is for the URL once the export has completed
+ */
+export const usePostV3ExportsAssignmentsExportSome = (
+  options?: Omit<
+    reactQuery.UseMutationOptions<
+      Responses.Id,
+      PostV3ExportsAssignmentsExportSomeError,
+      PostV3ExportsAssignmentsExportSomeVariables
+    >,
+    "mutationFn"
+  >
+) => {
+  const { fetcherOptions } = useExportsContext();
+  return reactQuery.useMutation<
+    Responses.Id,
+    PostV3ExportsAssignmentsExportSomeError,
+    PostV3ExportsAssignmentsExportSomeVariables
+  >(
+    (variables: PostV3ExportsAssignmentsExportSomeVariables) =>
+      fetchPostV3ExportsAssignmentsExportSome({ ...fetcherOptions, ...variables }),
+    options
+  );
+};
+
+export type GetV3ExportsAssignmentsIdPathParams = {
+  id: string;
+};
+
+export type GetV3ExportsAssignmentsIdError = Fetcher.ErrorWrapper<{
+  status: 401;
+  payload: Responses.Error;
+}>;
+
+export type GetV3ExportsAssignmentsIdVariables = {
+  pathParams: GetV3ExportsAssignmentsIdPathParams;
+} & ExportsContext["fetcherOptions"];
+
+/**
+ * Returns the url for a given id token received from an assignments export request
+ */
+export const fetchGetV3ExportsAssignmentsId = (variables: GetV3ExportsAssignmentsIdVariables, signal?: AbortSignal) =>
+  exportsFetch<Responses.Url, GetV3ExportsAssignmentsIdError, undefined, {}, {}, GetV3ExportsAssignmentsIdPathParams>({
+    url: "/v3/exports/assignments/{id}",
+    method: "get",
+    ...variables,
+    signal
+  });
+
+/**
+ * Returns the url for a given id token received from an assignments export request
+ */
+export const useGetV3ExportsAssignmentsId = <TData = Responses.Url>(
+  variables: GetV3ExportsAssignmentsIdVariables,
+  options?: Omit<
+    reactQuery.UseQueryOptions<Responses.Url, GetV3ExportsAssignmentsIdError, TData>,
     "queryKey" | "queryFn"
   >
 ) => {
   const { fetcherOptions, queryOptions, queryKeyFn } = useExportsContext(options);
-  return reactQuery.useQuery<GetV3ExportsAreasIdResponse, GetV3ExportsAreasIdError, TData>(
-    queryKeyFn({ path: "/v3/exports/areas/{id}", operationId: "getV3ExportsAreasId", variables }),
-    ({ signal }) => fetchGetV3ExportsAreasId({ ...fetcherOptions, ...variables }, signal),
+  return reactQuery.useQuery<Responses.Url, GetV3ExportsAssignmentsIdError, TData>(
+    queryKeyFn({ path: "/v3/exports/assignments/{id}", operationId: "getV3ExportsAssignmentsId", variables }),
+    ({ signal }) => fetchGetV3ExportsAssignmentsId({ ...fetcherOptions, ...variables }, signal),
     {
       ...options,
       ...queryOptions
@@ -445,4 +584,9 @@ export type QueryOperation =
       path: "/v3/exports/areas/{id}";
       operationId: "getV3ExportsAreasId";
       variables: GetV3ExportsAreasIdVariables;
+    }
+  | {
+      path: "/v3/exports/assignments/{id}";
+      operationId: "getV3ExportsAssignmentsId";
+      variables: GetV3ExportsAssignmentsIdVariables;
     };

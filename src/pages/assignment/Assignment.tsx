@@ -78,7 +78,7 @@ const Assignment: FC = props => {
           </>
         }
       />
-      <Map className="c-map--within-hero">
+      <Map className="c-map--within-hero" hideSearch>
         <MapLayers assignment={data?.data} />
       </Map>
       <LoadingWrapper loading={isLoading}>
@@ -88,7 +88,7 @@ const Assignment: FC = props => {
             titleValues={{ name: data?.data?.attributes?.name || "" }}
             className="mt-15 mb-20"
           >
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-7 auto-rows-min">
+            <div className="grid grid-cols-1 600:grid-cols-2 800:grid-cols-3 gap-7 auto-rows-min">
               <DetailCard
                 icon={assignmentIcons.creation}
                 title={intl.formatMessage({ id: "assignment.details.creation" })}
@@ -102,11 +102,13 @@ const Assignment: FC = props => {
                 icon={assignmentIcons.areas}
                 title={intl.formatMessage({ id: "assignment.details.area" })}
                 text={data?.data?.attributes?.areaName}
+                shouldCollapse
               />
               <DetailCard
                 icon={assignmentIcons.status}
                 title={intl.formatMessage({ id: "assignment.details.status" })}
                 text={data?.data?.attributes?.status}
+                shouldCollapse
               />
               <DetailCard
                 icon={assignmentIcons.assignmentType}
@@ -118,11 +120,13 @@ const Assignment: FC = props => {
                 icon={assignmentIcons.templates}
                 title={intl.formatMessage({ id: "assignment.details.templates" })}
                 text={templates}
+                shouldCollapse
               />
               <DetailCard
                 icon={assignmentIcons.monitor}
                 title={intl.formatMessage({ id: "assignment.details.monitor" })}
                 text={data?.data?.attributes?.monitorNames?.map(monitor => monitor.name).join(", ")}
+                shouldCollapse
               />
               <DetailCard
                 icon={assignmentIcons.notes}
