@@ -3,7 +3,7 @@ import { useAccessToken } from "hooks/useAccessToken";
 import { useMemo } from "react";
 import { useHistory } from "react-router-dom";
 import TemplateForm, { FormFields } from "./components/TemplateForm";
-import { TEMPLATE, QUESTION } from "../../constants/templates";
+import { TEMPLATE, QUESTION } from "constants/templates";
 import { useSelector } from "react-redux";
 import { RootState } from "store";
 import { usePostV3GfwTemplates } from "generated/core/coreComponents";
@@ -48,8 +48,7 @@ const TemplateCreate = () => {
     });
     // @ts-ignore  - incorrect typings
     const resp = await mutateAsync({ body: data, headers: httpAuthHeader });
-    // @ts-ignore  - incorrect typings
-    history.push(backTo ? backTo : `/templates/${resp.data.id}`);
+    history.push(backTo ? backTo : `/templates/${resp.data?.id}`);
   };
 
   return (

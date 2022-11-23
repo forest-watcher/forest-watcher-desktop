@@ -5,21 +5,16 @@ import {
   usePatchV3GfwTemplatesTemplateId,
   usePatchV3TemplatesTemplateIdStatus
 } from "generated/core/coreComponents";
-import { TemplateResponse } from "generated/core/coreResponses";
 import { useAccessToken } from "hooks/useAccessToken";
 import { useHistory, useParams } from "react-router-dom";
 import TemplateForm, { FormFields } from "./components/TemplateForm";
-
-interface TemplateResponseWithData {
-  data?: TemplateResponse;
-}
 
 const TemplateEdit = () => {
   const { httpAuthHeader } = useAccessToken();
   const { templateId } = useParams<{ templateId: string }>();
   const history = useHistory();
 
-  const { data, isLoading: templateLoading } = useGetV3GfwTemplatesTemplateId({
+  const { data: template, isLoading: templateLoading } = useGetV3GfwTemplatesTemplateId({
     headers: httpAuthHeader,
     pathParams: { templateId }
   });
@@ -27,8 +22,6 @@ const TemplateEdit = () => {
   const { mutateAsync: mutateStatus } = usePatchV3TemplatesTemplateIdStatus();
 
   const { mutateAsync } = usePatchV3GfwTemplatesTemplateId();
-
-  const template = data as TemplateResponseWithData; // Typing is incorrect from backend response, fix here.
 
   const handleSubmit = async (data: FormFields) => {
     data.questions?.forEach(question => {
@@ -40,7 +33,7 @@ const TemplateEdit = () => {
 
     const resp = await mutateAsync({ body: data, pathParams: { templateId }, headers: httpAuthHeader });
 
-    if (data.status !== template.data?.attributes?.status) {
+    if (data.status !== template?.data?.attributes?.status) {
       const status = data.status as "published" | "unpublished";
       await mutateStatus({
         body: { status: status },
@@ -50,8 +43,7 @@ const TemplateEdit = () => {
       });
     }
 
-    // @ts-ignore
-    history.push(`/templates/${resp.data.id}`);
+    history.push(`/templates/${resp.data?.id}`);
   };
 
   return (

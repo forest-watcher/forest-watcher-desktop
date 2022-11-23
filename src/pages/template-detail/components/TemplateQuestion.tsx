@@ -1,6 +1,7 @@
 import List from "components/extensive/List";
 import OptionalWrapper from "components/extensive/OptionalWrapper";
 import HeaderCard from "components/ui/Card/HeaderCard";
+import { CONDITIONAL_QUESTION_TYPES } from "constants/templates";
 import { QuestionModel } from "generated/core/coreSchemas";
 import { FormattedMessage, useIntl } from "react-intl";
 
@@ -16,6 +17,8 @@ const TemplateQuestion = ({ question, defaultLanguage, getConditional }: Templat
   const questionText = question.label[defaultLanguage];
   // @ts-expect-error
   const responseOptions = question.values as { [key: string]: { label: string; value: number }[] };
+  const isConditionalType = CONDITIONAL_QUESTION_TYPES.indexOf(question.type) > -1;
+  const isImageType = question.type === "blob";
   const intl = useIntl();
 
   /**
@@ -60,8 +63,17 @@ const TemplateQuestion = ({ question, defaultLanguage, getConditional }: Templat
             <FormattedMessage id={`question.${question.type}`} />
           </p>
         </div>
+        <OptionalWrapper data={isImageType}>
+          <div className="mb-6">
+            <h4 className="uppercase font-[500] text-neutral-700 pb-2">
+              <FormattedMessage id={"template.edit.maxNumber"} />
+            </h4>
+            <p className="text-base capitalize">{question.maxImageCount}</p>
+          </div>
+        </OptionalWrapper>
+
         {/* Response Options */}
-        <OptionalWrapper data={!!responseOptions}>
+        <OptionalWrapper data={!!responseOptions && isConditionalType}>
           <div className="mb-6">
             <h4 className="uppercase font-[500] text-neutral-700 pb-2">
               <FormattedMessage id={"question.responseOptions"} />

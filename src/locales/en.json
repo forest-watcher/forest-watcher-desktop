@@ -443,6 +443,8 @@
   "template.edit.addCondition": "Add condition",
   "template.edit.selectQuestion": "Select Question",
   "template.edit.selectOption": "Select Option",
+  "template.edit.maxNumber": "Max number of images",
+  "template.edit.maxNumberPlaceholder": "Enter a number between 1 and 10",
   "templates.table.template": "Template",
   "templates.table.version": "Version",
   "templates.table.area": "Area",
