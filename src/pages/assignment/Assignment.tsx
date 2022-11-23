@@ -38,22 +38,6 @@ const Assignment: FC = props => {
       .join(", ");
   }, [data?.data?.attributes?.templates]);
 
-  const alerts = useMemo(() => {
-    const alertType = data?.data?.attributes?.location;
-
-    if (!alertType || alertType?.length === 0) {
-      return intl.formatMessage({ id: "layers.none" });
-    }
-
-    const valueStr = alertType
-      // @ts-ignore - incorrect typing
-      .map(alert => (alert.alertType ? intl.formatMessage({ id: `layers.${alert.alertType}` }) : ""))
-      .filter(name => name !== "")
-      .join(", ");
-
-    return valueStr.length ? valueStr : intl.formatMessage({ id: "layers.none" });
-  }, [data?.data?.attributes?.location, intl]);
-
   const isMyAssignment = data?.data?.attributes?.createdBy === userId;
 
   return (
