@@ -27,6 +27,7 @@ import useFindArea from "hooks/useFindArea";
 import { useGetBackLink } from "hooks/useGetBackLink";
 import { fireGAEvent } from "helpers/analytics";
 import { AreaActions, AreaLabel } from "types/analytics";
+import useGetTemplates from "hooks/useGetTemplates";
 
 interface IProps extends TPropsFromRedux {}
 export type TParams = {
@@ -35,7 +36,6 @@ export type TParams = {
 
 const AreasView: FC<IProps & RouteComponentProps<TParams>> = ({
   loading,
-  templates,
   match,
   getUserTeams,
   getAreaTeams,
@@ -52,6 +52,7 @@ const AreasView: FC<IProps & RouteComponentProps<TParams>> = ({
   const intl = useIntl();
   const { areaId } = useParams<TParams>();
   const { backLinkTextKey } = useGetBackLink({ backLinkTextKey: "areas.back", backLink: "/areas" });
+  const { templates } = useGetTemplates();
 
   useEffect(() => {
     // Rare case, only other scroll tos are in routes.js for the top level nav

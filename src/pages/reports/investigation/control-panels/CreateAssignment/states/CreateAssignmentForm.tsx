@@ -10,7 +10,7 @@ import MapCard from "components/ui/Map/components/cards/MapCard";
 import { DEFAULT_TEMPLATE_ID } from "constants/global";
 import { useGetV3GfwTemplates, usePostV3GfwAssignments } from "generated/core/coreComponents";
 import { useCoreContext } from "generated/core/coreContext";
-import { AssignmentBody } from "generated/core/coreRequestBodies";
+import { CreateAssignmentBody } from "generated/core/coreRequestBodies";
 import { GeojsonModel } from "generated/core/coreSchemas";
 import { useAccessToken } from "hooks/useAccessToken";
 import useFindArea from "hooks/useFindArea";
@@ -27,6 +27,7 @@ import { yupResolver } from "@hookform/resolvers/yup/dist/yup";
 import { serialize } from "object-to-formdata";
 import { goToGeojson } from "helpers/map";
 import * as turf from "@turf/turf";
+import useGetTemplates from "hooks/useGetTemplates";
 export interface IProps {
   setShowCreateAssignmentForm: Dispatch<SetStateAction<boolean>>;
   setShapeFileGeoJSON: Dispatch<SetStateAction<GeojsonModel | undefined>>;
@@ -98,9 +99,7 @@ const CreateAssignmentForm: FC<IProps> = props => {
   // Queries - Teams Members
   const { data: teamData, isLoading: isTeamDataLoading } = useGetUserTeamsWithActiveMembers();
   // Queries - User Templates
-  const { data: templateData, isLoading: isTemplateDataLoading } = useGetV3GfwTemplates({
-    headers: httpAuthHeader
-  });
+  const { templates: templateData, isLoading: isTemplateDataLoading } = useGetTemplates();
 
   // Mutations - Create Assignment
   const { mutateAsync: postAssignment, isLoading: isSubmitting } = usePostV3GfwAssignments({
@@ -124,7 +123,7 @@ const CreateAssignmentForm: FC<IProps> = props => {
     const assignmentFormValues = getAssignmentValues();
     const selectedAlerts = getParentValues("selectedAlerts") as TAlertsById[];
     const singleSelectedLocation = getParentValues("singleSelectedLocation") as LngLat;
-    const body: AssignmentBody = {
+    const body: CreateAssignmentBody = {
       priority: assignmentFormValues.priority,
       // @ts-ignore
       monitors: [...new Set(assignmentFormValues.monitors)],
@@ -229,8 +228,8 @@ const CreateAssignmentForm: FC<IProps> = props => {
     const areaTemplates = selectedAreaDetails?.attributes.reportTemplate || [];
 
     const nonDuplicateUserTemplates =
-      templateData?.data
-        ?.filter(
+      templateData
+        .filter(
           userTemplate =>
             // Templates not already included on the Area, and templates created by the Auth User
             areaTemplates.findIndex(r => r.id === userTemplate.id) === -1 && userTemplate.attributes?.user === userId
