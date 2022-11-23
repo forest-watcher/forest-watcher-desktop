@@ -3,7 +3,7 @@ import Article from "components/layouts/Article";
 import DataFilter from "components/ui/DataFilter/DataFilter";
 import DataTable from "components/ui/DataTable/DataTable";
 import { useGetV3GfwAreasUserandteam, useGetV3GfwUser } from "generated/core/coreComponents";
-import { priorityToString } from "helpers/assignments";
+import { getAlertText, priorityToString } from "helpers/assignments";
 import { sortByDateString, sortByString } from "helpers/table";
 import { useAccessToken } from "hooks/useAccessToken";
 import { useCallback, useMemo, useState } from "react";
@@ -35,8 +35,6 @@ export type TAssignmentsFilterFields = {
   priority: string;
 };
 
-const DEFORESTATION_ALERTS = ["umd_as_it_happens", "wur_radd_alerts", "glad_sentinel_2"];
-
 const Assignments = () => {
   const intl = useIntl();
   const { httpAuthHeader } = useAccessToken();
@@ -60,60 +58,12 @@ const Assignments = () => {
     }
 
     return assignmentsData?.data?.map(assignment => {
-      const getAlertText = (a: typeof assignment) => {
-        if (a.attributes?.geostore) {
-          // It is a shapefile / location
-          return intl.formatMessage({ id: `layers.location` });
-        }
-
-        if (a.attributes?.location && a.attributes?.location.length) {
-          // it is either a set of alerts or a lat / lng location.
-          const deforestationLocations = a.attributes?.location.filter(location =>
-            DEFORESTATION_ALERTS.includes(location.alertType || "")
-          );
-
-          const otherLocations = a.attributes?.location.filter(location => {
-            const exists = !!deforestationLocations.find(defLoc => defLoc.alertId === location.alertId);
-            return !exists;
-          });
-
-          const deforestationLocationStr = deforestationLocations
-            .map(location => intl.formatMessage({ id: `layers.original.${location.alertType}` }))
-            .filter((value, index, self) => {
-              return self.indexOf(value) === index;
-            })
-            .join(", ");
-
-          const otherLocationsStr = otherLocations
-            .map(alert =>
-              alert.alertType
-                ? intl.formatMessage({ id: `layers.${alert.alertType}` })
-                : intl.formatMessage({ id: `layers.latlng` })
-            )
-            .filter((value, index, self) => {
-              return self.indexOf(value) === index;
-            })
-            .join(", ");
-
-          return deforestationLocationStr.length
-            ? [
-                intl.formatMessage({ id: `layers.deforestation_combined` }, { alerts: deforestationLocationStr }),
-                otherLocationsStr
-              ]
-                .filter(str => str.length > 0)
-                .join(", ")
-            : otherLocationsStr;
-        }
-
-        return "-";
-      };
-
       const area = areaData?.data?.find(area => area.id === assignment.attributes?.areaId);
       return {
         id: assignment.id ?? "",
         createdAt: assignment.attributes?.createdAt ?? "",
         area: area?.attributes?.name ?? "-",
-        alertType: getAlertText(assignment),
+        alertType: getAlertText(assignment, intl),
         priority: intl.formatMessage({ id: priorityToString(assignment.attributes?.priority) }),
         status: assignment.attributes?.status.toUpperCase() ?? ""
       };

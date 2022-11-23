@@ -13,6 +13,7 @@ import assignmentIcons from "assets/images/icons/assignmentIcons";
 import MapLayers from "./components/MapLayers";
 import DeleteAssignment from "./components/DeleteAssignment";
 import useGetUserId from "hooks/useGetUserId";
+import { getAlertText } from "helpers/assignments";
 
 export type TParams = {
   id: string;
@@ -113,7 +114,7 @@ const Assignment: FC = props => {
               <DetailCard
                 icon={assignmentIcons.assignmentType}
                 title={intl.formatMessage({ id: "assignment.details.assignmentType" })}
-                text={alerts}
+                text={getAlertText(data?.data, intl)}
                 shouldCollapse
               />
               <DetailCard
