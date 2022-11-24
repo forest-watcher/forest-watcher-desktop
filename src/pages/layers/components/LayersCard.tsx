@@ -43,7 +43,7 @@ const addLayersSchema = yup
 
 const LayersCard = ({ title, items, refetchLayers, layersLoading, titleIsKey = true, team }: LayersCardProps) => {
   const { mutateAsync: updateLayer, isLoading: updateLayerLoading } = usePatchContextualLayer();
-  const {} = useGetC;
+  // const {} = useGetC;
   const { httpAuthHeader } = useAccessToken();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { gfw } = useAppSelector(state => state.layers);
@@ -54,7 +54,7 @@ const LayersCard = ({ title, items, refetchLayers, layersLoading, titleIsKey = t
   const canBeLoadable = items.some(item => !item.attributes?.isPublic);
   const loading = canBeLoadable ? layersLoading : false;
   const isTeam = !!team;
-  const isMyTeam = team?.attributes?.userRole === "administrator";
+  const isMyTeam = team?.attributes?.userRole === "administrator" || team?.attributes?.userRole === "manager";
 
   const handleLayerUpdate = async (item: any /* todo fix */) => {
     return updateLayer(
@@ -128,6 +128,17 @@ const LayersCard = ({ title, items, refetchLayers, layersLoading, titleIsKey = t
               render={(item, index) => <FormattedMessage id={`${item.attributes?.name}`} />}
             />
           </LoadingWrapper>
+          <Button
+            onClick={() => {
+              addNewTeamLayer({
+                body: { name: "test", url: "https://www.google.com" },
+                pathParams: { teamId: team?.id || "" },
+                headers: httpAuthHeader
+              });
+            }}
+          >
+            Add
+          </Button>
         </HeaderCard.Content>
       </HeaderCard>
       <FormModal<TAssignLayersForm>
