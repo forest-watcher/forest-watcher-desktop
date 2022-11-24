@@ -20,13 +20,13 @@ const MapLayers: FC<IProps> = ({ assignment }) => {
     return Boolean(
       assignment?.attributes?.location
         ? // @ts-ignore incorrect typings
-          assignment?.attributes?.location.find(location => location.alertType !== undefined)
+          assignment?.attributes?.location?.find?.(location => location.alertType !== undefined)
         : false
     );
   }, [assignment?.attributes?.location]);
 
   const alertPoints = useMemo<IPoint[] | undefined>(() => {
-    return assignment?.attributes?.location?.map((alert, index) => {
+    return assignment?.attributes?.location?.map?.((alert, index) => {
       const point: IPoint = {
         id: index.toString(),
         position: [alert.lon || 0, alert.lat || 0],
@@ -45,7 +45,12 @@ const MapLayers: FC<IProps> = ({ assignment }) => {
   }, [assignment?.attributes?.geostore?.geojson, map]);
 
   useEffect(() => {
-    if (map && assignment?.attributes?.location && assignment.attributes.location.length > 0) {
+    if (
+      map &&
+      assignment?.attributes?.location &&
+      assignment?.attributes?.location?.map &&
+      assignment.attributes.location.length > 0
+    ) {
       const points = turf.points(assignment.attributes.location.map(alert => [alert.lon || 0, alert.lat || 0]));
       const bbox = turf.bbox(points);
 
