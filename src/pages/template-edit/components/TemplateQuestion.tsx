@@ -175,6 +175,7 @@ const TemplateQuestion = ({ question, defaultLanguage = "", onDelete, index }: T
                 label: intl.formatMessage({ id: "question.responseType" })
               }}
               alternateLabelStyle
+              className="max-w-[334px]"
             />
           </div>
           <OptionalWrapper data={isImageQuestion}>
