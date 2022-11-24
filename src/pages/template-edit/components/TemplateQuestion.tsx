@@ -32,7 +32,6 @@ const TemplateQuestion = ({ question, defaultLanguage = "", onDelete, index }: T
   const formHook = useFormContext<FormFields>();
   const { register, getValues, setValue, control } = formHook;
   const watcher = useWatch({ control });
-  const type = useWatch({ control, name: `questions.${index}.type` });
   const isConditional = CONDITIONAL_QUESTION_TYPES.indexOf(question.type) > -1;
 
   // @ts-ignore incorrect typings;
