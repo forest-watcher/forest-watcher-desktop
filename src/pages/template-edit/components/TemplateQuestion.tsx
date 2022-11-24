@@ -9,7 +9,7 @@ import Select from "components/ui/Form/Select";
 import Toggle from "components/ui/Form/Toggle";
 import { CHILD_QUESTION, CONDITIONAL_QUESTION_TYPES, QUESTION_TYPES } from "constants/templates";
 import { QuestionModel } from "generated/core/coreSchemas";
-import React from "react";
+import React, { useEffect } from "react";
 import { useFormContext, useWatch } from "react-hook-form";
 import { FormattedMessage, useIntl } from "react-intl";
 import { FormFields } from "./TemplateForm";
@@ -32,6 +32,7 @@ const TemplateQuestion = ({ question, defaultLanguage = "", onDelete, index }: T
   const formHook = useFormContext<FormFields>();
   const { register, getValues, setValue, control } = formHook;
   const watcher = useWatch({ control });
+  const type = useWatch({ control, name: `questions.${index}.type` });
   const isConditional = CONDITIONAL_QUESTION_TYPES.indexOf(question.type) > -1;
 
   // @ts-ignore incorrect typings;
@@ -135,6 +136,21 @@ const TemplateQuestion = ({ question, defaultLanguage = "", onDelete, index }: T
       shouldDirty: true
     });
   };
+
+  useEffect(() => {
+    const values = getValues(
+      // @ts-ignore
+      `questions.${index}.values.${defaultLanguage as keyof typeof question.label}`
+    ) as valuesType;
+
+    if (isConditional && !values) {
+      // @ts-ignore incorrect typings
+      setValue(`questions.${index}.values.${defaultLanguage as keyof typeof question.label}`, [], {
+        shouldDirty: true
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isConditional]);
 
   return (
     <>
