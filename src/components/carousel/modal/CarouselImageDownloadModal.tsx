@@ -18,7 +18,7 @@ const CarouselImageDownloadModal = ({ onClose, imageToDownload }: CarouselImageD
       title={"Images"}
       className="c-modal-form"
       actions={[
-        { name: "Download", onClick: handleDownload },
+        { name: "common.download", onClick: handleDownload },
         { name: "common.cancel", variant: "secondary", onClick: onClose }
       ]}
     >

@@ -4,6 +4,7 @@ import CarouselThumb from "./CarouselThumb";
 import Icon from "components/extensive/Icon";
 import OptionalWrapper from "components/extensive/OptionalWrapper";
 import CarouselImageDownloadModal from "./modal/CarouselImageDownloadModal";
+import { useIntl } from "react-intl";
 
 type CarouselProps = {
   slides: string[];
@@ -13,6 +14,8 @@ type CarouselProps = {
 const Carousel = ({ slides, downloadable }: CarouselProps) => {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [imageToDownload, setImageToDownload] = useState<string>("");
+  const intl = useIntl();
+  const newSlides = [...slides, ...slides, ...slides, ...slides, ...slides, ...slides, ...slides, ...slides, ...slides];
   const [mainViewportRef, carousel] = useEmblaCarousel({ skipSnaps: false });
   const [thumbViewportRef, carouselThumbs] = useEmblaCarousel({
     containScroll: "keepSnaps",
@@ -39,7 +42,7 @@ const Carousel = ({ slides, downloadable }: CarouselProps) => {
     carousel.on("select", onSelect);
   }, [carousel, onSelect]);
 
-  if (!slides || slides.length === 0) {
+  if (!newSlides || newSlides.length === 0) {
     return <p>No Images</p>;
   }
 
@@ -51,15 +54,16 @@ const Carousel = ({ slides, downloadable }: CarouselProps) => {
       <div className="c-carousel pb-[25px]">
         <div className="c-carousel__viewport" ref={mainViewportRef}>
           <div className="c-carousel__container">
-            {slides.map((src, index) => (
+            {newSlides.map((src, index) => (
               <div className="c-carousel__slide" key={index}>
                 <div className="relative h-[450px] overflow-hidden">
                   <OptionalWrapper data={downloadable}>
                     <button
-                      className="absolute top-6 right-6 bg-primary-500 p-1 rounded-lg z-10"
+                      className="absolute top-10 right-10 bg-primary-500 rounded-full z-10 w-10 h-10"
                       onClick={() => setImageToDownload(src)}
+                      aria-label={intl.formatMessage({ id: "common.download" })}
                     >
-                      <Icon name="download" size={32} />
+                      <Icon name="download" size={36} />
                     </button>
                   </OptionalWrapper>
                   <img className="w-full h-full object-cover" src={src} alt="" />
@@ -73,7 +77,7 @@ const Carousel = ({ slides, downloadable }: CarouselProps) => {
       <div className="c-carousel c-carousel--thumb">
         <div className="c-carousel__viewport" ref={thumbViewportRef}>
           <div className="c-carousel__container c-carousel__container--thumb">
-            {slides.map((src, index) => (
+            {newSlides.map((src, index) => (
               <CarouselThumb
                 onClick={() => onThumbClick(index)}
                 selected={index === selectedIndex}
