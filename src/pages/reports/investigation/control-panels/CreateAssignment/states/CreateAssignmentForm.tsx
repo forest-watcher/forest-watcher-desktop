@@ -8,7 +8,7 @@ import Loader from "components/ui/Loader";
 import { TAlertsById } from "types/map";
 import MapCard from "components/ui/Map/components/cards/MapCard";
 import { DEFAULT_TEMPLATE_ID } from "constants/global";
-import { useGetV3GfwTemplates, usePostV3GfwAssignments } from "generated/core/coreComponents";
+import { usePostV3GfwAssignments } from "generated/core/coreComponents";
 import { useCoreContext } from "generated/core/coreContext";
 import { CreateAssignmentBody } from "generated/core/coreRequestBodies";
 import { GeojsonModel } from "generated/core/coreSchemas";

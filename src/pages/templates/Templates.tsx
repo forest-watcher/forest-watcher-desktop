@@ -1,6 +1,4 @@
-import { useAccessToken } from "hooks/useAccessToken";
 import { useMemo, useState } from "react";
-import { useGetV3GfwTemplatesLatest, useGetV3GfwTemplatesPublic } from "generated/core/coreComponents";
 import { LOCALES_LIST } from "../../constants/locales";
 import LoadingWrapper from "components/extensive/LoadingWrapper";
 import Article from "components/layouts/Article";
