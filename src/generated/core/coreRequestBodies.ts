@@ -5,7 +5,7 @@
  */
 import type * as Schemas from "./coreSchemas";
 
-export type AssignmentBody = {
+export type CreateAssignmentBody = {
   location?: {
     lat: number;
     lon: number;
@@ -21,13 +21,13 @@ export type AssignmentBody = {
    * A JSON string that represents the geostore object
    */
   geostore?: string;
-  areaName?: string;
   /**
    * Image file
    *
    * @format binary
    */
   image?: Blob;
+  name?: string;
 };
 
 export type RouteBody = {
@@ -42,25 +42,60 @@ export type RouteBody = {
   startDate?: number;
 }[];
 
-export type TemplateBody = {
-  name: string;
-  questions: Schemas.QuestionModel[];
+export type CreateTemplateBody = {
+  name: Record<string, any>;
+  questions: {
+    type: string;
+    label: Record<string, any>;
+    name: string;
+    defaultValue?: string;
+    values?: {
+      [key: string]: {
+        label?: void;
+        value?: void;
+      };
+    };
+    maxImageCount?: number;
+    order?: number;
+    required?: boolean;
+    childQuestions?: {
+      type?: string;
+      label?: Record<string, any>;
+      name?: string;
+      defaultValue?: string;
+      values?: Record<string, any>;
+      maxImageCount?: string;
+      required?: boolean;
+      order?: number;
+      conditions?: {
+        name?: string;
+        value?: number;
+      };
+    }[];
+    conditions?: {
+      name?: string;
+      value?: string;
+    }[];
+  }[];
   languages: string[];
-  status: string;
-  public?: boolean;
+  status: "unpublished" | "published";
   defaultLanguage: string;
+  /**
+   * @default false
+   */
+  public?: boolean;
+  createdAt?: string;
+  areaIds?: string[];
 };
 
 export type UpdateTemplateBody = {
-  name?: string;
+  name?: Record<string, any>;
   questions?: {
     type?: string;
-    label?: {
-      en?: string;
-    };
+    label?: Record<string, any>;
     name?: string;
     defaultValue?: string;
-    values?: string;
+    values?: Record<string, any>;
     required?: boolean;
     order?: number;
     childQuestions?: {
@@ -75,10 +110,15 @@ export type UpdateTemplateBody = {
       order?: number;
       conditionalValue?: number;
     };
+    conditions?: {
+      name?: string;
+      value?: number;
+    }[];
+    maxImageCount?: string;
   }[];
   languages?: string[];
-  public?: boolean;
   defaultLanguage?: string;
+  areaIds?: string[];
 };
 
 export type AnswerBody = {

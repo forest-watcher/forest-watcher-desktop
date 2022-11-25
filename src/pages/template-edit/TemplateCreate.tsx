@@ -47,7 +47,7 @@ const TemplateCreate = () => {
       }
     });
     // @ts-ignore  - incorrect typings
-    const resp = await mutateAsync({ body: data, headers: httpAuthHeader });
+    const resp = await mutateAsync({ body: { ...data, areaIds: data.areas }, headers: httpAuthHeader });
     history.push(backTo ? backTo : `/templates/${resp.data?.id}`);
   };
 

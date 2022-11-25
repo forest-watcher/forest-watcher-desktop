@@ -1,6 +1,4 @@
-import { useAccessToken } from "hooks/useAccessToken";
 import { useMemo, useState } from "react";
-import { useGetV3GfwTemplatesLatest, useGetV3GfwTemplatesPublic } from "generated/core/coreComponents";
 import { LOCALES_LIST } from "../../constants/locales";
 import LoadingWrapper from "components/extensive/LoadingWrapper";
 import Article from "components/layouts/Article";
@@ -15,6 +13,7 @@ import TemplatesSearch from "./components/TemplatesSearch";
 import { Link } from "react-router-dom";
 import Hero from "components/layouts/Hero/Hero";
 import { getTemplateDate } from "helpers/template";
+import useGetTemplates from "hooks/useGetTemplates";
 
 export type TemplateTableRowData = {
   id: string;
@@ -34,26 +33,11 @@ export type TemplatesFilterFields = {
 
 const Templates = () => {
   const intl = useIntl();
-  const { httpAuthHeader } = useAccessToken();
-
-  // Queries
-  const { data: templatesLatestData, isLoading: templatesLatestLoading } = useGetV3GfwTemplatesLatest(
-    { headers: httpAuthHeader },
-    { cacheTime: 0, retryOnMount: true }
-  );
-
-  const { data: templatesPublicData, isLoading: templatesLoading } = useGetV3GfwTemplatesPublic(
-    { headers: httpAuthHeader },
-    { cacheTime: 0, retryOnMount: true }
-  );
+  const { templates, isLoading } = useGetTemplates();
 
   // @ts-expect-error
   const rows = useMemo<TemplateTableRowData[]>(() => {
-    const publicTemplates = templatesPublicData?.data || [];
-    const latestTemplates = templatesLatestData?.data || [];
-    const allTemplates = [...publicTemplates, ...latestTemplates];
-
-    return allTemplates.map(template => {
+    return templates.map(template => {
       const parsedDate = template.attributes ? getTemplateDate(template.attributes) : "";
       const areasStr = template.attributes?.areas?.map(area => area.name).join(", ");
 
@@ -73,7 +57,7 @@ const Templates = () => {
         templateName: template?.attributes?.name[template.attributes.defaultLanguage]
       };
     });
-  }, [templatesPublicData?.data, templatesLatestData?.data, intl]);
+  }, [templates, intl]);
 
   // Filters
   const { filters } = useTemplatesFilter(rows);
@@ -89,7 +73,7 @@ const Templates = () => {
           </Link>
         }
       />
-      <LoadingWrapper loading={templatesLoading || templatesLatestLoading}>
+      <LoadingWrapper loading={isLoading}>
         <Article className="my-10">
           <OptionalWrapper
             data={rows.length > 0}
