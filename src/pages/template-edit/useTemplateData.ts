@@ -44,7 +44,7 @@ const useTemplateData = (index: number) => {
       });
 
       // @ts-ignore conditions does exist
-      if (conditions.length) {
+      if (conditions?.length) {
         const childQuestionList = conditionalQuestionsFiltered.filter(tempQuestion => {
           return tempQuestion.name !== question.name;
         });
