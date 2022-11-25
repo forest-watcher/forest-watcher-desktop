@@ -19,7 +19,6 @@ const Carousel = ({ slides, downloadable }: CarouselProps) => {
   const [nextBtnEnabled, setNextBtnEnabled] = useState(false);
   const [imageToView, setImageToView] = useState<string>("");
   const intl = useIntl();
-  const newSlides = [...slides, ...slides, ...slides, ...slides, ...slides, ...slides, ...slides, ...slides, ...slides];
   const [mainViewportRef, carousel] = useEmblaCarousel({ skipSnaps: false, draggable: false });
   const [thumbViewportRef, carouselThumbs] = useEmblaCarousel({
     containScroll: "keepSnaps",
@@ -66,7 +65,7 @@ const Carousel = ({ slides, downloadable }: CarouselProps) => {
     window.open(url, "_blank");
   };
 
-  if (!newSlides || newSlides.length === 0) {
+  if (!slides || slides.length === 0) {
     return <FormattedMessage id="common.noImages" />;
   }
 
@@ -78,7 +77,7 @@ const Carousel = ({ slides, downloadable }: CarouselProps) => {
       <div className="c-carousel">
         <div className="c-carousel__viewport mb-4 rounded-b" ref={mainViewportRef}>
           <div className="c-carousel__container">
-            {newSlides.map((src, index) => (
+            {slides.map((src, index) => (
               <div className="c-carousel__slide" key={index}>
                 <div className="relative h-[450px] overflow-hidden">
                   <OptionalWrapper data={downloadable}>
@@ -115,7 +114,7 @@ const Carousel = ({ slides, downloadable }: CarouselProps) => {
           </Button>
           <div className="overflow-hidden" ref={thumbViewportRef}>
             <div className="flex gap-4">
-              {newSlides.map((src, index) => (
+              {slides.map((src, index) => (
                 <CarouselThumb
                   onClick={() => onThumbClick(index)}
                   selected={index === selectedIndex}
