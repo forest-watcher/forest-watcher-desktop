@@ -46,11 +46,11 @@ const Assignment: FC = props => {
 
     const valueStr = alertType
       // @ts-ignore - incorrect typing
-      .map(alert => (alert.alertType ? intl.formatMessage({ id: `layers.${alert.alertType}` }) : ""))
+      .map?.(alert => (alert.alertType ? intl.formatMessage({ id: `layers.${alert.alertType}` }) : ""))
       .filter(name => name !== "")
       .join(", ");
 
-    return valueStr.length ? valueStr : intl.formatMessage({ id: "layers.none" });
+    return valueStr?.length ? valueStr : intl.formatMessage({ id: "layers.none" });
   }, [data?.data?.attributes?.location, intl]);
 
   const isMyAssignment = data?.data?.attributes?.createdBy === userId;
