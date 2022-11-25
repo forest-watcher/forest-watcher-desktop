@@ -29,9 +29,9 @@ const TemplateDetails = ({ template }: TemplateDetailsProps) => {
           iconName={"check-doc"}
           title={intl.formatMessage({ id: "template.version" })}
           text={intl.formatDate(parsedDate, {
+            month: "short",
             day: "2-digit",
-            month: "2-digit",
-            year: "2-digit"
+            year: "numeric"
           })}
         />
         <IconCard

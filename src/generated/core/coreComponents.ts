@@ -16,14 +16,14 @@ export type PostV3GfwAssignmentsError = Fetcher.ErrorWrapper<{
 }>;
 
 export type PostV3GfwAssignmentsVariables = {
-  body: RequestBodies.AssignmentBody;
+  body: RequestBodies.CreateAssignmentBody;
 } & CoreContext["fetcherOptions"];
 
 /**
  * Creates an assignment
  */
 export const fetchPostV3GfwAssignments = (variables: PostV3GfwAssignmentsVariables, signal?: AbortSignal) =>
-  coreFetch<Responses.AssignmentResponse, PostV3GfwAssignmentsError, RequestBodies.AssignmentBody, {}, {}, {}>({
+  coreFetch<Responses.AssignmentResponse, PostV3GfwAssignmentsError, RequestBodies.CreateAssignmentBody, {}, {}, {}>({
     url: "/v3/gfw/assignments",
     method: "post",
     ...variables,
@@ -587,14 +587,14 @@ export type PostV3GfwTemplatesError = Fetcher.ErrorWrapper<
 >;
 
 export type PostV3GfwTemplatesVariables = {
-  body: RequestBodies.TemplateBody;
+  body: RequestBodies.CreateTemplateBody;
 } & CoreContext["fetcherOptions"];
 
 /**
  * Creates a new template
  */
 export const fetchPostV3GfwTemplates = (variables: PostV3GfwTemplatesVariables, signal?: AbortSignal) =>
-  coreFetch<Responses.TemplateResponse, PostV3GfwTemplatesError, RequestBodies.TemplateBody, {}, {}, {}>({
+  coreFetch<Responses.TemplateResponse, PostV3GfwTemplatesError, RequestBodies.CreateTemplateBody, {}, {}, {}>({
     url: "/v3/gfw/templates",
     method: "post",
     ...variables,

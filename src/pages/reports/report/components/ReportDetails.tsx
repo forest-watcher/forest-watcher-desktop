@@ -1,14 +1,15 @@
 import IconCard from "components/icon-card/IconCard";
 import { AnswerResponse } from "generated/core/coreResponses";
 import { Report } from "generated/forms/formsResponses";
-import moment from "moment";
+import { useIntl } from "react-intl";
 
 type ReportDetailsProps = {
   answer?: AnswerResponse["data"];
   report?: Report;
 };
 
-const ReportDetails = ({ answer, report }: ReportDetailsProps) => {
+const ReportDetails = ({ answer }: ReportDetailsProps) => {
+  const intl = useIntl();
   if (answer?.attributes) {
     const { createdAt, clickedPosition, areaOfInterestName, fullName } = answer.attributes;
 
@@ -20,7 +21,15 @@ const ReportDetails = ({ answer, report }: ReportDetailsProps) => {
       <section className="row column py-section">
         <h1 className="font-base text-4xl font-light text-neutral-700 mb-10">{answer?.attributes?.reportName}</h1>
         <section className="grid grid-cols-1 md:grid-cols-3 gap-7">
-          <IconCard iconName={"check"} title="Completed Date" text={moment(createdAt).format("MMM DD, YYYY")} />
+          <IconCard
+            iconName={"check"}
+            title="Completed Date"
+            text={intl.formatDate(createdAt, {
+              month: "short",
+              day: "2-digit",
+              year: "numeric"
+            })}
+          />
           <IconCard iconName={"footprint"} title="Monitor" text={fullName || ""} />
           <IconCard iconName={"target"} title="Monitor Coordinates" text={coordinates} />
           <IconCard iconName={"area"} title="Area" text={areaOfInterestName || ""} />
