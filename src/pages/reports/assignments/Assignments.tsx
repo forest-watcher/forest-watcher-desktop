@@ -3,7 +3,7 @@ import Article from "components/layouts/Article";
 import DataFilter from "components/ui/DataFilter/DataFilter";
 import DataTable from "components/ui/DataTable/DataTable";
 import { useGetV3GfwAreasUserandteam, useGetV3GfwUser } from "generated/core/coreComponents";
-import { priorityToString } from "helpers/assignments";
+import { getAlertText, priorityToString } from "helpers/assignments";
 import { sortByDateString, sortByString } from "helpers/table";
 import { useAccessToken } from "hooks/useAccessToken";
 import { useCallback, useMemo, useState } from "react";
@@ -63,7 +63,7 @@ const Assignments = () => {
         id: assignment.id ?? "",
         createdAt: assignment.attributes?.createdAt ?? "",
         area: area?.attributes?.name ?? "-",
-        alertType: assignment.attributes?.location ?? [],
+        alertType: getAlertText(assignment, intl),
         priority: intl.formatMessage({ id: priorityToString(assignment.attributes?.priority) }),
         status: assignment.attributes?.status.toUpperCase() ?? ""
       };
@@ -166,27 +166,7 @@ const Assignments = () => {
               {
                 key: "alertType",
                 name: "assignments.table.alertType",
-                rowLabel: (row, value) => {
-                  if (!Array.isArray(value)) {
-                    return "";
-                  }
-                  if (value.length === 0) {
-                    return intl.formatMessage({ id: "layers.none" });
-                  }
-
-                  const valueStr = value
-                    .map(alert => (alert.alertType ? intl.formatMessage({ id: `layers.${alert.alertType}` }) : ""))
-                    .filter(name => name !== "")
-                    .join(", ");
-
-                  return valueStr.length ? valueStr : intl.formatMessage({ id: "layers.none" });
-                },
-                sortCompareFn: (a, b, direction) => {
-                  const newA = intl.formatMessage({ id: `layers.${a}`, defaultMessage: a?.toString() });
-                  const newB = intl.formatMessage({ id: `layers.${b}`, defaultMessage: b?.toString() });
-
-                  return sortByString(newA, newB, direction);
-                }
+                sortCompareFn: sortByString
               },
               { key: "status", name: "assignments.table.status", sortCompareFn: sortByString },
               { key: "priority", name: "assignments.table.priority", sortCompareFn: sortByString },

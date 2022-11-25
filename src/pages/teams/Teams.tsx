@@ -58,7 +58,7 @@ const Teams: FC<IProps> = props => {
   );
 
   return (
-    <div>
+    <div className="relative">
       <Hero title="teams.name" />
       <Loader isLoading={isLoading} />
       {myInvites.length > 0 && (

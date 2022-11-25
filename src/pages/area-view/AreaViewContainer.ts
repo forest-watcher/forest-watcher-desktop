@@ -8,7 +8,6 @@ import { getTeamMembers, getUserTeams } from "modules/gfwTeams";
 const mapStateToProps = (state: RootState) => ({
   loading: state.areas.loading || state.areas.loadingAreasInUsers,
   areaTeams: state.areas.areaTeams,
-  templates: state.templates.templates,
   teams: state.gfwTeams.data,
   teamMembers: state.gfwTeams.members,
   allAnswers: state.reports.allAnswers

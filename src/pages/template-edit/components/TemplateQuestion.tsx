@@ -9,7 +9,7 @@ import Select from "components/ui/Form/Select";
 import Toggle from "components/ui/Form/Toggle";
 import { CHILD_QUESTION, CONDITIONAL_QUESTION_TYPES, QUESTION_TYPES } from "constants/templates";
 import { QuestionModel } from "generated/core/coreSchemas";
-import React from "react";
+import React, { useEffect } from "react";
 import { useFormContext, useWatch } from "react-hook-form";
 import { FormattedMessage, useIntl } from "react-intl";
 import { FormFields } from "./TemplateForm";
@@ -136,6 +136,21 @@ const TemplateQuestion = ({ question, defaultLanguage = "", onDelete, index }: T
     });
   };
 
+  useEffect(() => {
+    const values = getValues(
+      // @ts-ignore
+      `questions.${index}.values.${defaultLanguage as keyof typeof question.label}`
+    ) as valuesType;
+
+    if (isConditional && !values) {
+      // @ts-ignore incorrect typings
+      setValue(`questions.${index}.values.${defaultLanguage as keyof typeof question.label}`, [], {
+        shouldDirty: true
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isConditional]);
+
   return (
     <>
       <HeaderCard className="my-10">
@@ -175,6 +190,7 @@ const TemplateQuestion = ({ question, defaultLanguage = "", onDelete, index }: T
                 label: intl.formatMessage({ id: "question.responseType" })
               }}
               alternateLabelStyle
+              className="max-w-[334px]"
             />
           </div>
           <OptionalWrapper data={isImageQuestion}>

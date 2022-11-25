@@ -56,7 +56,7 @@ const Layers = () => {
   }, []);
 
   return (
-    <section>
+    <section className="relative">
       <Hero title={"settings.layers"} />
       <LoadingWrapper loading={layersLoading}>
         <List

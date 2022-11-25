@@ -5,7 +5,6 @@ import { TParams } from "../AreaView";
 import { FormattedMessage, useIntl } from "react-intl";
 import { toastr } from "react-redux-toastr";
 import { UnpackNestedValue } from "react-hook-form";
-import { TGetTemplates } from "services/reports";
 import { Option } from "types";
 import { areaService } from "services/area";
 import { useAppDispatch } from "hooks/useRedux";
@@ -13,9 +12,10 @@ import { getAreas, getAreasInUsersTeams } from "modules/areas";
 import yup from "configureYup";
 import { yupResolver } from "@hookform/resolvers/yup/dist/yup";
 import PlusIcon from "assets/images/icons/PlusForButton.svg";
+import { TemplatesResponse } from "generated/core/coreResponses";
 
 interface IProps {
-  templates: TGetTemplates["data"];
+  templates: TemplatesResponse["data"];
   onAdd?: () => void;
 }
 
