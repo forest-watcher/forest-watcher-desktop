@@ -405,6 +405,60 @@ export const useDeleteV1ContextualLayerTeamTeamIdCopy = (
   );
 };
 
+export type PostV3ContextualLayerTeamTeamIdError = Fetcher.ErrorWrapper<
+  | {
+      status: 401;
+      payload: Responses.Error;
+    }
+  | {
+      status: 403;
+      payload: Responses.Error;
+    }
+>;
+
+export type PostV3ContextualLayerTeamTeamIdVariables = {
+  body: RequestBodies.Layer;
+} & ClayersContext["fetcherOptions"];
+
+/**
+ * Create a layer owned by a team
+ */
+export const fetchPostV3ContextualLayerTeamTeamId = (
+  variables: PostV3ContextualLayerTeamTeamIdVariables,
+  signal?: AbortSignal
+) =>
+  clayersFetch<Responses.Layer, PostV3ContextualLayerTeamTeamIdError, RequestBodies.Layer, {}, {}, {}>({
+    url: "/v3/contextual-layer/team/:teamId",
+    method: "post",
+    ...variables,
+    signal
+  });
+
+/**
+ * Create a layer owned by a team
+ */
+export const usePostV3ContextualLayerTeamTeamId = (
+  options?: Omit<
+    reactQuery.UseMutationOptions<
+      Responses.Layer,
+      PostV3ContextualLayerTeamTeamIdError,
+      PostV3ContextualLayerTeamTeamIdVariables
+    >,
+    "mutationFn"
+  >
+) => {
+  const { fetcherOptions } = useClayersContext();
+  return reactQuery.useMutation<
+    Responses.Layer,
+    PostV3ContextualLayerTeamTeamIdError,
+    PostV3ContextualLayerTeamTeamIdVariables
+  >(
+    (variables: PostV3ContextualLayerTeamTeamIdVariables) =>
+      fetchPostV3ContextualLayerTeamTeamId({ ...fetcherOptions, ...variables }),
+    options
+  );
+};
+
 export type QueryOperation =
   | {
       path: "/v1/contextual-layer";
