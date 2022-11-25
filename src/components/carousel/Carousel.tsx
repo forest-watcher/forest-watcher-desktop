@@ -6,7 +6,6 @@ import OptionalWrapper from "components/extensive/OptionalWrapper";
 import CarouselImageDownloadModal from "./modal/CarouselImageDownloadModal";
 import { FormattedMessage, useIntl } from "react-intl";
 import Button from "components/ui/Button/Button";
-import downloadIcon from "assets/images/icons/Download.svg";
 
 type CarouselProps = {
   slides: string[];
