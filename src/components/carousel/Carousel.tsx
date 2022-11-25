@@ -87,7 +87,7 @@ const Carousel = ({ slides, downloadable }: CarouselProps) => {
                       aria-label={intl.formatMessage({ id: "common.download" })}
                       isIcon
                     >
-                      <Icon name="Download" size={36} />
+                      <Icon name="download" size={36} />
                     </Button>
                   </OptionalWrapper>
                   <button
