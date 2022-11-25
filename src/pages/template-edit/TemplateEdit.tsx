@@ -31,7 +31,12 @@ const TemplateEdit = () => {
       }
     });
 
-    const resp = await mutateAsync({ body: data, pathParams: { templateId }, headers: httpAuthHeader });
+    const resp = await mutateAsync({
+      // @ts-ignore
+      body: { ...data, areaIds: data.areas },
+      pathParams: { templateId },
+      headers: httpAuthHeader
+    });
 
     if (data.status !== template?.data?.attributes?.status) {
       const status = data.status as "published" | "unpublished";

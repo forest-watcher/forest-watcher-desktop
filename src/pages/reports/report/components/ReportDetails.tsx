@@ -3,7 +3,6 @@ import IconCard from "components/icon-card/IconCard";
 import { useGetV3GfwAssignmentsAssignmentId } from "generated/core/coreComponents";
 import { AnswerResponse } from "generated/core/coreResponses";
 import { useAccessToken } from "hooks/useAccessToken";
-import moment from "moment";
 import { useIntl } from "react-intl";
 
 type ReportDetailsProps = {
@@ -36,7 +35,11 @@ const ReportDetails = ({ answer }: ReportDetailsProps) => {
         <IconCard
           iconName={"check"}
           title={intl.formatMessage({ id: "common.completedDate" })}
-          text={moment(createdAt).format("MMM DD, YYYY")}
+          text={intl.formatDate(createdAt, {
+            month: "short",
+            day: "2-digit",
+            year: "numeric"
+          })}
         />
         <IconCard
           iconName={"footprint"}
