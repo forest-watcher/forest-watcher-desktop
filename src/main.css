@@ -1,3 +1,4 @@
+/* @tailwind base; TODO: Fix issues to base styling when we apply this! */
 @tailwind components;
 @tailwind utilities;
 

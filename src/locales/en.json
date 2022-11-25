@@ -130,6 +130,8 @@
   "common.yourself": "Yourself",
   "common.xSelected": "{count} Selected",
   "common.completedDate": "Completed Date",
+  "common.noImages": "No Images",
+  "common.view": "View",
   "login.welcome": "Log in using one of following accounts:",
   "forms.required": "required",
   "forms.save": "save",
