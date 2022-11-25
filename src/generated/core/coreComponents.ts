@@ -888,7 +888,7 @@ export type PostV3GfwTemplatesTemplateIdAnswersError = Fetcher.ErrorWrapper<
 >;
 
 export type PostV3GfwTemplatesTemplateIdAnswersVariables = {
-  body: RequestBodies.AnswerBody;
+  body: RequestBodies.CreateAnswerBody;
   pathParams: PostV3GfwTemplatesTemplateIdAnswersPathParams;
 } & CoreContext["fetcherOptions"];
 
@@ -902,7 +902,7 @@ export const fetchPostV3GfwTemplatesTemplateIdAnswers = (
   coreFetch<
     Responses.AnswerResponse,
     PostV3GfwTemplatesTemplateIdAnswersError,
-    RequestBodies.AnswerBody,
+    RequestBodies.CreateAnswerBody,
     {},
     {},
     PostV3GfwTemplatesTemplateIdAnswersPathParams
