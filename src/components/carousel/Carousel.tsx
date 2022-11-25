@@ -82,20 +82,12 @@ const Carousel = ({ slides, downloadable }: CarouselProps) => {
               <div className="c-carousel__slide" key={index}>
                 <div className="relative h-[450px] overflow-hidden">
                   <OptionalWrapper data={downloadable}>
-                    {/* <button
-                      className="absolute top-10 right-10 bg-primary-500 rounded-full z-10 w-10 h-10"
-                      onClick={() => handleDownload(src)}
-                      aria-label={intl.formatMessage({ id: "common.download" })}
-                    >
-                      <Icon name="download" size={36} />
-                    </button> */}
                     <Button
                       className="absolute top-10 right-10 z-10"
                       onClick={() => handleDownload(src)}
                       aria-label={intl.formatMessage({ id: "common.download" })}
                       isIcon
                     >
-                      {/* <img src={downloadIcon} role="presentation" alt="" /> */}
                       <Icon name="Download" size={36} />
                     </Button>
                   </OptionalWrapper>
