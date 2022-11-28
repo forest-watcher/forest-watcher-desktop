@@ -428,7 +428,7 @@ export const fetchPostV3ContextualLayerTeamTeamId = (
   signal?: AbortSignal
 ) =>
   clayersFetch<Responses.Layer, PostV3ContextualLayerTeamTeamIdError, RequestBodies.Layer, {}, {}, {}>({
-    url: "/v3/contextual-layer/team/:teamId",
+    url: "/v3/contextual-layer/team/{teamId}",
     method: "post",
     ...variables,
     signal
