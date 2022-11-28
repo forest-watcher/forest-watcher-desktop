@@ -3,7 +3,8 @@ import { Layers } from "generated/clayers/clayersResponses";
 import {
   useDeleteContextualLayer,
   usePatchContextualLayer,
-  usePostTeamContextualLayer
+  usePostTeamContextualLayer,
+  usePostV3ContextualLayerTeamTeamId
 } from "generated/clayers/clayersComponents";
 import LoadingWrapper from "components/extensive/LoadingWrapper";
 import { FormattedMessage, useIntl } from "react-intl";
@@ -67,7 +68,7 @@ const LayersCard = ({ title, items, refetchLayers, layersLoading, titleIsKey = t
     );
   };
 
-  const { mutateAsync: addNewTeamLayer } = usePostTeamContextualLayer();
+  const { mutateAsync: addNewTeamLayer } = usePostV3ContextualLayerTeamTeamId();
   const { mutateAsync: deleteTeamLayer } = useDeleteContextualLayer();
 
   const layerOptions = useMemo<Option[] | undefined>(
