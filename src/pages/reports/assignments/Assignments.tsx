@@ -62,16 +62,18 @@ const Assignments = () => {
       return {
         id: assignment.id ?? "",
         createdAt: assignment.attributes?.createdAt ?? "",
-        area: area?.attributes?.name ?? "-",
+        area: area?.attributes?.name ?? assignment.attributes?.areaId ?? "-",
+        areaId: assignment.attributes?.areaId,
         alertType: getAlertText(assignment, intl),
         priority: intl.formatMessage({ id: priorityToString(assignment.attributes?.priority) }),
-        status: assignment.attributes?.status.toUpperCase() ?? ""
+        status: intl.formatMessage({ id: `assignment.details.status.${assignment.attributes?.status ?? ""}` }),
+        statusValue: assignment.attributes?.status
       };
     }) as TAssignmentsDataTable[];
   }, [areaData?.data, assignmentsData?.data, intl]);
 
   const [filteredRows, setFilteredRows] = useState<TAssignmentsDataTable[]>(rows);
-  const { filters, extraFilters } = useAssignmentsFilters(assignmentsData?.data);
+  const { filters, extraFilters } = useAssignmentsFilters(assignmentsData?.data, areaData);
 
   const handleExport = useCallback(
     async (values: UnpackNestedValue<TExportForm>) => {
