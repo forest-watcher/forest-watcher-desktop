@@ -73,7 +73,7 @@ const Report = () => {
         backLink={{ name: "reports.back", to: "/reporting/reports/" }}
       />
       <ReportMap answer={answer} />
-      <ReportDetails answer={answer} report={report} />
+      <ReportDetails answer={answer} />
       <ReportResponses questions={report?.data?.attributes.questions ?? []} responses={responses as AnswerResponse[]} />
     </LoadingWrapper>
   );
