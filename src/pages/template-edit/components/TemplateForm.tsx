@@ -125,7 +125,7 @@ const TemplateForm: FC<IParams> = ({ template, backLink = "", onSubmit }) => {
           </div>
         </section>
         {/** Questions */}
-        <section className="bg-neutral-400 pt-15 pb-20 px-2.5">
+        <section className="bg-neutral-400 pt-15 pb-36 px-2.5">
           <div className="max-w-row mx-auto">
             <h2 className="font-base text-4xl font-light text-neutral-700 mb-10">
               <FormattedMessage id="template.questions" />
@@ -134,13 +134,13 @@ const TemplateForm: FC<IParams> = ({ template, backLink = "", onSubmit }) => {
           </div>
         </section>
         {/** Footer Section */}
-        <section className="bg-neutral-300 py-10 px-2.5">
-          <div className="max-w-row mx-auto flex w-full justify-between align-middle">
+        <section className="bg-neutral-300 py-5 px-2.5 fixed bottom-0 left-0 right-0">
+          <div className="max-w-row mx-auto flex flex-wrap w-full justify-between align-middle gap-3">
             <Button variant="secondary" onClick={handleAddQuestion} className="flex gap-[10px] items-center">
               <Icon size={14} name="PlusForButton" className="relative top-[-1px]" />
               <FormattedMessage id="templates.addQuestion" />
             </Button>
-            <div className="flex align-middle gap-10">
+            <div className="flex align-middle gap-10 flex-wrap">
               <Toggle
                 id="published"
                 registered={register("status")}

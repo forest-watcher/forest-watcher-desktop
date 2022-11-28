@@ -217,7 +217,7 @@ const TemplateQuestion = ({ question, defaultLanguage = "", onDelete, index }: T
                 items={responseOptions && responseOptions[defaultLanguage ?? ""]}
                 render={(option, optionIndex) => (
                   <div className="flex items-stretch mb-3 gap-3 w-full">
-                    <div className="not-sr-only flex justify-center align-middle w-[42px] h-[40px] bg-primary-400 border-solid border-1 border-primary-500 rounded-[6px] font-base capitalize">
+                    <div className="not-sr-only flex justify-center align-middle w-[42px] h-[40px] bg-primary-400 border-solid border border-primary-500 rounded-[6px] font-base capitalize text-neutral-700">
                       {String.fromCharCode(97 + optionIndex)}
                     </div>
                     <Input
