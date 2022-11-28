@@ -40,7 +40,7 @@ const useAssignmentsFilters = (assignments: AssignmentsResponse["data"] = [], ar
   const timeFrameOptions = useMemo<Option[]>(() => getTimeFrames(intl), [intl]);
 
   const alertTypeOptions = useMemo<Option[]>(() => {
-    const uniquePriorities = assignments
+    const uniqueAlerts = assignments
       .map(assignment => {
         const alertText = getAlertText(assignment, intl);
         return {
@@ -50,7 +50,7 @@ const useAssignmentsFilters = (assignments: AssignmentsResponse["data"] = [], ar
       })
       .filter((value, index, self) => self.findIndex(t => t.value === value.value) === index);
 
-    return [{ label: intl.formatMessage({ id: "common.all" }), value: ALL_VALUE }, ...uniquePriorities];
+    return [{ label: intl.formatMessage({ id: "common.all" }), value: ALL_VALUE }, ...uniqueAlerts];
   }, [assignments, intl]);
 
   const priorityOptions = useMemo<Option[]>(() => {
