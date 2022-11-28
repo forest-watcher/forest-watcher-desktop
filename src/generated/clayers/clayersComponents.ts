@@ -405,6 +405,13 @@ export const useDeleteV1ContextualLayerTeamTeamIdCopy = (
   );
 };
 
+export type PostV3ContextualLayerTeamTeamIdPathParams = {
+  /**
+   * Id of the team to create the layer for
+   */
+  teamId: string;
+};
+
 export type PostV3ContextualLayerTeamTeamIdError = Fetcher.ErrorWrapper<
   | {
       status: 401;
@@ -418,6 +425,7 @@ export type PostV3ContextualLayerTeamTeamIdError = Fetcher.ErrorWrapper<
 
 export type PostV3ContextualLayerTeamTeamIdVariables = {
   body: RequestBodies.Layer;
+  pathParams: PostV3ContextualLayerTeamTeamIdPathParams;
 } & ClayersContext["fetcherOptions"];
 
 /**
@@ -427,12 +435,14 @@ export const fetchPostV3ContextualLayerTeamTeamId = (
   variables: PostV3ContextualLayerTeamTeamIdVariables,
   signal?: AbortSignal
 ) =>
-  clayersFetch<Responses.Layer, PostV3ContextualLayerTeamTeamIdError, RequestBodies.Layer, {}, {}, {}>({
-    url: "/v3/contextual-layer/team/{teamId}",
-    method: "post",
-    ...variables,
-    signal
-  });
+  clayersFetch<
+    Responses.Layer,
+    PostV3ContextualLayerTeamTeamIdError,
+    RequestBodies.Layer,
+    {},
+    {},
+    PostV3ContextualLayerTeamTeamIdPathParams
+  >({ url: "/v3/contextual-layer/team/{teamId}", method: "post", ...variables, signal });
 
 /**
  * Create a layer owned by a team
