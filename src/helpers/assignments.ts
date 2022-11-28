@@ -18,14 +18,15 @@ export const getAlertText = (assignment: AssignmentResponse["data"], intl: IntlS
 
   if (assignment.attributes?.location && assignment.attributes?.location.length) {
     // it is either a set of alerts or a lat / lng location.
-    const deforestationLocations = assignment.attributes?.location.filter(location =>
-      DEFORESTATION_ALERTS.includes(location.alertType || "")
-    );
+    const deforestationLocations =
+      assignment.attributes?.location?.filter?.(location => DEFORESTATION_ALERTS.includes(location.alertType || "")) ||
+      [];
 
-    const otherLocations = assignment.attributes?.location.filter(location => {
-      const exists = !!deforestationLocations.find(defLoc => defLoc.alertId === location.alertId);
-      return !exists;
-    });
+    const otherLocations =
+      assignment.attributes?.location?.filter?.(location => {
+        const exists = !!deforestationLocations.find(defLoc => defLoc.alertId === location.alertId);
+        return !exists;
+      }) || [];
 
     const deforestationLocationStr = deforestationLocations
       .map(location => intl.formatMessage({ id: `layers.original.${location.alertType}` }))
