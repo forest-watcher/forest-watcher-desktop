@@ -655,6 +655,7 @@
   "assignment.create.form.template.label": "Templates",
   "assignment.create.form.template.add": "Add Template",
   "assignment.create.form.notesForMonitors": "Notes for monitors",
+  "assignment.create.form.addNotes": "Enter notes",
   "assignment.create.form.error": "Failed to create Assignment, try again later",
   "filters.title": "Filters",
   "filters.extra": "Apply more filters",
