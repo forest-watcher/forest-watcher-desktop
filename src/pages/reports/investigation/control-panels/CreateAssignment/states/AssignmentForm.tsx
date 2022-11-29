@@ -8,7 +8,7 @@ import Loader from "components/ui/Loader";
 import { TAlertsById } from "types/map";
 import MapCard from "components/ui/Map/components/cards/MapCard";
 import { DEFAULT_TEMPLATE_ID } from "constants/global";
-import { usePostV3GfwAssignments } from "generated/core/coreComponents";
+import { usePatchV3GfwAssignmentsAssignmentId, usePostV3GfwAssignments } from "generated/core/coreComponents";
 import { useCoreContext } from "generated/core/coreContext";
 import { CreateAssignmentBody } from "generated/core/coreRequestBodies";
 import { GeojsonModel } from "generated/core/coreSchemas";
@@ -16,7 +16,7 @@ import { useAccessToken } from "hooks/useAccessToken";
 import useFindArea from "hooks/useFindArea";
 import useGetUserId from "hooks/useGetUserId";
 import { Dispatch, FC, SetStateAction, useEffect, useMemo, useState } from "react";
-import { useForm, useFormContext } from "react-hook-form";
+import { useForm, useFormContext, useWatch } from "react-hook-form";
 import useGetUserTeamsWithActiveMembers from "hooks/querys/teams/useGetUserTeamsWithActiveMembers";
 import { FormattedMessage, useIntl } from "react-intl";
 import { LngLat, LngLatBoundsLike, useMap } from "react-map-gl";
@@ -28,10 +28,13 @@ import { serialize } from "object-to-formdata";
 import { goToGeojson } from "helpers/map";
 import * as turf from "@turf/turf";
 import useGetTemplates from "hooks/useGetTemplates";
+import { AssignmentResponse } from "generated/core/coreResponses";
 export interface IProps {
   setShowCreateAssignmentForm: Dispatch<SetStateAction<boolean>>;
   setShapeFileGeoJSON: Dispatch<SetStateAction<GeojsonModel | undefined>>;
   shapeFileGeoJSON?: GeojsonModel;
+  assignmentToEdit?: AssignmentResponse;
+  onFinish?: () => void;
 }
 
 type TCreateAssignmentFormFields = {
@@ -57,8 +60,28 @@ const createAssignmentFormSchema = yup
   })
   .required();
 
-const CreateAssignmentForm: FC<IProps> = props => {
-  const { setShowCreateAssignmentForm, setShapeFileGeoJSON, shapeFileGeoJSON } = props;
+const getFormValueForAssignmentFromResponse = (assignment?: AssignmentResponse): TCreateAssignmentFormFields => {
+  if (!assignment) {
+    return {
+      priority: 0,
+      monitors: [],
+      templates: DEFAULT_TEMPLATE_ID ? [DEFAULT_TEMPLATE_ID] : [],
+      notes: ""
+    };
+  }
+
+  const values = assignment.data?.attributes;
+
+  return {
+    priority: values?.priority || 0,
+    monitors: values?.monitors || [],
+    templates: values?.templateIds || [],
+    notes: values?.notes || ""
+  };
+};
+
+const AssignmentForm: FC<IProps> = props => {
+  const { setShowCreateAssignmentForm, setShapeFileGeoJSON, shapeFileGeoJSON, assignmentToEdit, onFinish } = props;
   const intl = useIntl();
   const history = useHistory();
   const { current: map } = useMap();
@@ -66,31 +89,30 @@ const CreateAssignmentForm: FC<IProps> = props => {
   const { areaId } = useParams<{ areaId: string }>();
   const selectedAreaDetails = useFindArea(areaId);
   const [openDialogName, setOpenDialogName] = useState<EDialogsNames>(EDialogsNames.None);
+  const isEdit = !!assignmentToEdit;
 
   // FormData
-  const { getValues: getParentValues, setValue: setParentValue } = useFormContext();
+  const parentFormContext = useFormContext();
+
   const {
     control,
-    watch,
     setValue,
     getValues: getAssignmentValues,
     handleSubmit,
     formState
   } = useForm<TCreateAssignmentFormFields>({
     mode: "onChange",
-    defaultValues: {
-      priority: 0,
-      monitors: [],
-      templates: DEFAULT_TEMPLATE_ID ? [DEFAULT_TEMPLATE_ID] : [],
-      notes: ""
-    },
+    defaultValues: getFormValueForAssignmentFromResponse(assignmentToEdit),
     resolver: yupResolver(createAssignmentFormSchema)
   });
 
+  const monitorsWatcher = useWatch({ control, name: "monitors" });
+
   useEffect(() => {
-    if (userId) {
+    if (userId && monitorsWatcher.length === 0) {
       setValue("monitors", [userId]);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [setValue, userId]);
 
   const { httpAuthHeader } = useAccessToken();
@@ -101,28 +123,34 @@ const CreateAssignmentForm: FC<IProps> = props => {
   // Queries - User Templates
   const { templates: templateData, isLoading: isTemplateDataLoading } = useGetTemplates();
 
+  const invalidate = () => {
+    queryClient.invalidateQueries(
+      queryKeyFn({
+        path: "/v3/gfw/assignments/allOpenUserForArea/{areaId}",
+        operationId: "getV3GfwAssignmentsAllOpenUserForAreaAreaId",
+        variables: {
+          pathParams: {
+            areaId: areaId!
+          },
+          headers: httpAuthHeader
+        }
+      })
+    );
+  };
+
   // Mutations - Create Assignment
   const { mutateAsync: postAssignment, isLoading: isSubmitting } = usePostV3GfwAssignments({
-    onSuccess: () => {
-      queryClient.invalidateQueries(
-        queryKeyFn({
-          path: "/v3/gfw/assignments/allOpenUserForArea/{areaId}",
-          operationId: "getV3GfwAssignmentsAllOpenUserForAreaAreaId",
-          variables: {
-            pathParams: {
-              areaId: areaId!
-            },
-            headers: httpAuthHeader
-          }
-        })
-      );
-    }
+    onSuccess: invalidate
+  });
+
+  const { mutateAsync: patchAssignment, isLoading: isPatchSubmitting } = usePatchV3GfwAssignmentsAssignmentId({
+    onSuccess: invalidate
   });
 
   const handlePostAssignment = async () => {
     const assignmentFormValues = getAssignmentValues();
-    const selectedAlerts = getParentValues("selectedAlerts") as TAlertsById[];
-    const singleSelectedLocation = getParentValues("singleSelectedLocation") as LngLat;
+    const selectedAlerts = parentFormContext?.getValues("selectedAlerts") as TAlertsById[];
+    const singleSelectedLocation = parentFormContext?.getValues("singleSelectedLocation") as LngLat;
     const body: CreateAssignmentBody = {
       priority: assignmentFormValues.priority,
       // @ts-ignore
@@ -134,61 +162,81 @@ const CreateAssignmentForm: FC<IProps> = props => {
       templateIds: assignmentFormValues.templates
     };
 
-    if (shapeFileGeoJSON) {
-      // Assign the custom shape file to the Assignment
-      body.geostore = JSON.stringify(shapeFileGeoJSON);
-      if (map) {
-        goToGeojson(map, shapeFileGeoJSON, false);
-      }
-    } else if (singleSelectedLocation) {
-      // Else use the Single Selected Location
-      body.location = [
-        {
-          lat: singleSelectedLocation.lat,
-          lon: singleSelectedLocation.lng
+    // Only handle location data if creating
+    if (!isEdit) {
+      if (shapeFileGeoJSON) {
+        // Assign the custom shape file to the Assignment
+        body.geostore = JSON.stringify(shapeFileGeoJSON);
+        if (map) {
+          goToGeojson(map, shapeFileGeoJSON, false);
         }
-      ];
+      } else if (singleSelectedLocation) {
+        // Else use the Single Selected Location
+        body.location = [
+          {
+            lat: singleSelectedLocation.lat,
+            lon: singleSelectedLocation.lng
+          }
+        ];
+        if (map) {
+          map.flyTo({ center: [singleSelectedLocation.lng, singleSelectedLocation.lat], animate: false });
+        }
+        // go to point on the map
+      } else if (selectedAlerts) {
+        // Else use the selected Alerts on Map
+        body.location = selectedAlerts.map(alert => ({
+          lat: alert.data.latitude,
+          lon: alert.data.longitude,
+          alertType: alert.data.alertType
+        }));
+
+        const points = turf.points(selectedAlerts.map(alert => [alert.data.longitude, alert.data.latitude]));
+        const bbox = turf.bbox(points);
+
+        if (map && bbox.length > 0) {
+          map.fitBounds(bbox as LngLatBoundsLike, { padding: 40, animate: false });
+        }
+      }
+
       if (map) {
-        map.flyTo({ center: [singleSelectedLocation.lng, singleSelectedLocation.lat], animate: false });
+        const node = map?.getCanvas();
+        const dataUrl = node.toDataURL("image/jpeg");
+        const blob = await (await fetch(dataUrl)).blob();
+        const imageFile = new File([blob], `${encodeURIComponent("assignment")}.jpg`, { type: "image/jpeg" });
+        body.image = imageFile;
       }
-      // go to point on the map
-    } else if (selectedAlerts) {
-      // Else use the selected Alerts on Map
-      body.location = selectedAlerts.map(alert => ({
-        lat: alert.data.latitude,
-        lon: alert.data.longitude,
-        alertType: alert.data.alertType
-      }));
-
-      const points = turf.points(selectedAlerts.map(alert => [alert.data.longitude, alert.data.latitude]));
-      const bbox = turf.bbox(points);
-
-      if (map && bbox.length > 0) {
-        map.fitBounds(bbox as LngLatBoundsLike, { padding: 40, animate: false });
-      }
-    }
-
-    if (map) {
-      const node = map?.getCanvas();
-      const dataUrl = node.toDataURL("image/jpeg");
-      const blob = await (await fetch(dataUrl)).blob();
-      const imageFile = new File([blob], `${encodeURIComponent("assignment")}.jpg`, { type: "image/jpeg" });
-      body.image = imageFile;
+    } else {
+      // @ts-ignore Remove values not needed for edit
+      delete body.areaId;
     }
 
     const formData = serialize(body, { indices: true });
 
     // Submit assignment to endpoint
     try {
-      const resp = await postAssignment({
-        // @ts-ignore postAssignment doesn't accept form data but the fetcher library handles it
-        body: formData,
-        headers: { ...httpAuthHeader, "Content-Type": "multipart/form-data" }
-      });
+      let resp = null;
+      if (!isEdit) {
+        resp = await postAssignment({
+          // @ts-ignore postAssignment doesn't accept form data but the fetcher library handles it
+          body: formData,
+          headers: { ...httpAuthHeader, "Content-Type": "multipart/form-data" }
+        });
+        onFinish?.();
+        history.push(`/assignment/${resp?.data?.id}`);
+      } else {
+        // patch assignment
+        resp = await patchAssignment({
+          // @ts-ignore postAssignment doesn't accept form data but the fetcher library handles it
+          body: formData,
+          pathParams: { assignmentId: assignmentToEdit.data?.id || "" },
+          headers: { ...httpAuthHeader, "Content-Type": "multipart/form-data" }
+        });
+        onFinish?.();
+        history.push(`/assignment/${assignmentToEdit.data?.id}`);
+      }
 
-      setParentValue("selectedAlerts", []);
-      setParentValue("singleSelectedLocation", undefined);
-      history.push(`/assignment/${resp.data?.id}`);
+      parentFormContext?.setValue("selectedAlerts", []);
+      parentFormContext?.setValue("singleSelectedLocation", undefined);
     } catch (e) {
       toastr.error(intl.formatMessage({ id: "assignment.create.form.error" }), "");
     }
@@ -261,14 +309,19 @@ const CreateAssignmentForm: FC<IProps> = props => {
     ];
   }, [templateData, isTemplateDataLoading, selectedAreaDetails, intl, userId]);
 
-  const monitorsWatcher = watch("monitors");
-
   return (
     <MapCard
       className="c-map-control-panel"
-      title={intl.formatMessage({ id: `assignment.create.dialog.title.${openDialogName}` })}
+      title={intl.formatMessage({
+        id:
+          isEdit && openDialogName === EDialogsNames.None
+            ? `assignment.edit.back`
+            : `assignment.create.dialog.title.${openDialogName}`
+      })}
       onBack={() => {
-        if (openDialogName === EDialogsNames.None) {
+        if (isEdit && openDialogName === EDialogsNames.None) {
+          history.push(`/assignment/${assignmentToEdit.data?.id}`);
+        } else if (openDialogName === EDialogsNames.None) {
           setShapeFileGeoJSON(undefined);
           setShowCreateAssignmentForm(false);
         } else {
@@ -283,7 +336,7 @@ const CreateAssignmentForm: FC<IProps> = props => {
         ) : null
       }
     >
-      <Loader isLoading={isSubmitting || isTemplateDataLoading || isTeamDataLoading} />
+      <Loader isLoading={isSubmitting || isPatchSubmitting || isTemplateDataLoading || isTeamDataLoading} />
       <OptionalWrapper data={openDialogName === EDialogsNames.None}>
         <RadioGroup<TCreateAssignmentFormFields>
           control={control}
@@ -323,8 +376,8 @@ const CreateAssignmentForm: FC<IProps> = props => {
         <MultiSelectDialog.Preview
           className="mt-10"
           groups={templateGroups}
-          shouldDisplayGroupOptionsOnSeparateLines
           control={control}
+          shouldDisplayGroupOptionsOnSeparateLines
           name="templates"
           error={formState.errors.templates}
           label="assignment.create.form.template.label"
@@ -347,4 +400,4 @@ const CreateAssignmentForm: FC<IProps> = props => {
   );
 };
 
-export default CreateAssignmentForm;
+export default AssignmentForm;
