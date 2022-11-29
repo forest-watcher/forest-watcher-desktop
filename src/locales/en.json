@@ -36,6 +36,8 @@
   "assignment.details.creation": "Creation date",
   "assignment.details.area": "Area",
   "assignment.details.status": "Status",
+  "assignment.details.status.open": "Open",
+  "assignment.details.status.completed": "Completed",
   "assignment.details.assignmentType": "Assignment type",
   "assignment.details.templates": "Templates",
   "assignment.details.monitor": "Monitor",

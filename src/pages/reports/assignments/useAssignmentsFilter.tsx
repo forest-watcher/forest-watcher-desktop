@@ -1,31 +1,35 @@
 import { TAvailableTypes } from "components/modals/FormModal";
 import { IFilter } from "components/ui/DataFilter/DataFilter";
-import { AssignmentsResponse } from "generated/core/coreResponses";
-import { priorityToString } from "helpers/assignments";
+import { AreasResponse, AssignmentsResponse } from "generated/core/coreResponses";
+import { getAlertText, priorityToString } from "helpers/assignments";
 import { ALL_VALUE, filterByTimeFrame, getTimeFrames } from "helpers/table";
 import { useMemo } from "react";
 import { useIntl } from "react-intl";
 import { Option } from "types/select";
 import { TAssignmentsFilterFields } from "./Assignments";
 
-const useReportFilters = (assignments: AssignmentsResponse["data"] = []) => {
+const useAssignmentsFilters = (assignments: AssignmentsResponse["data"] = [], areaData?: AreasResponse) => {
   const intl = useIntl();
 
   const areaFilterOptions = useMemo<Option[]>(() => {
     const uniqueAreas = assignments
-      .map(assignment => ({
-        label: assignment.attributes?.areaName ?? "",
-        value: assignment.attributes?.areaName ?? ""
-      }))
+      .map(assignment => {
+        const area = areaData?.data?.find(area => area.id === assignment.attributes?.areaId);
+
+        return {
+          label: area?.attributes?.name ?? assignment.attributes?.areaId ?? "",
+          value: assignment.attributes?.areaId ?? ""
+        };
+      })
       .filter((value, index, self) => self.findIndex(t => t.value === value.value) === index);
 
     return [{ label: intl.formatMessage({ id: "common.all" }), value: ALL_VALUE }, ...uniqueAreas];
-  }, [assignments, intl]);
+  }, [areaData?.data, assignments, intl]);
 
   const statusOptions = useMemo<Option[]>(() => {
     const uniqueStatuses = assignments
       .map(assignment => ({
-        label: assignment.attributes?.status ?? "",
+        label: intl.formatMessage({ id: `assignment.details.status.${assignment.attributes?.status ?? ""}` }),
         value: assignment.attributes?.status ?? ""
       }))
       .filter((value, index, self) => self.findIndex(t => t.value === value.value) === index);
@@ -36,21 +40,14 @@ const useReportFilters = (assignments: AssignmentsResponse["data"] = []) => {
   const timeFrameOptions = useMemo<Option[]>(() => getTimeFrames(intl), [intl]);
 
   const alertTypeOptions = useMemo<Option[]>(() => {
-    const allAlerts = assignments
+    const uniqueAlerts = assignments
       .map(assignment => {
-        if (!assignment.attributes?.location || typeof assignment.attributes?.location === "string") return "none";
-        return assignment.attributes?.location?.map(loc => loc.alertType ?? "none");
+        const alertText = getAlertText(assignment, intl);
+        return {
+          label: alertText,
+          value: alertText
+        };
       })
-      .flat();
-
-    const uniqueAlerts = allAlerts
-      .map(id => ({
-        label: intl.formatMessage({
-          id: `layers.${id}`,
-          defaultMessage: id
-        }),
-        value: id
-      }))
       .filter((value, index, self) => self.findIndex(t => t.value === value.value) === index);
 
     return [{ label: intl.formatMessage({ id: "common.all" }), value: ALL_VALUE }, ...uniqueAlerts];
@@ -88,10 +85,9 @@ const useReportFilters = (assignments: AssignmentsResponse["data"] = []) => {
           if (!value || value === ALL_VALUE) {
             return true;
           } else {
-            return item.area === value;
+            return item.areaId === value;
           }
-        },
-        getShouldShow: () => areaFilterOptions.length > 2
+        }
       },
       {
         name: "filter.by.status",
@@ -112,7 +108,7 @@ const useReportFilters = (assignments: AssignmentsResponse["data"] = []) => {
           if (!value || value === ALL_VALUE) {
             return true;
           } else {
-            return item.status === value;
+            return item.statusValue?.toLowerCase?.() === value;
           }
         },
         getShouldShow: () => statusOptions.length > 2
@@ -156,15 +152,10 @@ const useReportFilters = (assignments: AssignmentsResponse["data"] = []) => {
           }
         },
         filterCallback: (item, value) => {
-          if (typeof item.alertType === "string") return true;
-          if (item.alertType.length === 0 && value === "none") {
-            return true;
-          }
-
           if (!value || value === ALL_VALUE) {
             return true;
           } else {
-            return item.alertType.find((alert: any) => alert.alertType === value);
+            return item.alertType === value;
           }
         },
         getShouldShow: () => alertTypeOptions.length > 2
@@ -197,4 +188,4 @@ const useReportFilters = (assignments: AssignmentsResponse["data"] = []) => {
   return { filters, extraFilters };
 };
 
-export default useReportFilters;
+export default useAssignmentsFilters;
