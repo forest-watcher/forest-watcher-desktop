@@ -313,6 +313,7 @@ const CreateAssignmentForm: FC<IProps> = props => {
             wrapperClassName="mt-6"
             id="monitor-notes"
             label="assignment.create.form.notesForMonitors"
+            placeholder="assignment.create.form.addNotes"
             altLabel
             control={control}
             name="notes"
