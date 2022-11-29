@@ -91,7 +91,6 @@ const TemplateQuestion = ({ question, defaultLanguage = "", onDelete, index }: T
   };
 
   const handleCanAddCondition = (checked: boolean, questionIndex: number) => {
-    // const childQuestions = (getValues(`questions.${questionIndex}.childQuestions`) || []) as ChildQuestionModel[];
     const questionName = getValues(`questions.${questionIndex}.name`);
     let newQuestions = [];
     if (checked) {
