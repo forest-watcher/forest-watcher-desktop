@@ -16,7 +16,6 @@ import useGetUserId from "hooks/useGetUserId";
 import { getAlertText } from "helpers/assignments";
 import CreateAssignmentForm from "pages/reports/investigation/control-panels/CreateAssignment/states/AssignmentForm";
 import classNames from "classnames";
-import { useMap } from "react-map-gl";
 import { Map as MapType } from "mapbox-gl";
 
 export type TParams = {
