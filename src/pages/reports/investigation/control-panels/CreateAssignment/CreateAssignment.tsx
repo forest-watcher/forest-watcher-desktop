@@ -2,7 +2,7 @@ import SingleLocationLayer from "components/ui/Map/components/layers/Location";
 import Polygon from "components/ui/Map/components/layers/Polygon";
 import { GeojsonModel } from "generated/core/coreSchemas";
 import useZoomToGeojson from "hooks/useZoomToArea";
-import CreateAssignmentForm from "pages/reports/investigation/control-panels/CreateAssignment/states/CreateAssignmentForm";
+import CreateAssignmentForm from "pages/reports/investigation/control-panels/CreateAssignment/states/AssignmentForm";
 import { Dispatch, FC, SetStateAction, useCallback, useEffect, useState } from "react";
 import { useFormContext } from "react-hook-form";
 import OpenAssignmentEmptyState from "pages/reports/investigation/control-panels/CreateAssignment/states/EmptyState";

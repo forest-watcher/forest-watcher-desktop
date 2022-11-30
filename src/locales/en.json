@@ -31,6 +31,8 @@
   "assignments.table.priority": "Priority",
   "assignments.priority.filterBy": "Filter By Priority",
   "assignment.title": "Assignment Detail",
+  "assignment.edit": "Edit Assignment",
+  "assignment.edit.back": "Back to Assignment",
   "assignment.details.back": "Back to Assignments",
   "assignment.details.name": "Assignment: {name}",
   "assignment.details.creation": "Creation date",
