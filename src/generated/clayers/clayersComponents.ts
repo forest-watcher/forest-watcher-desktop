@@ -469,6 +469,45 @@ export const usePostV3ContextualLayerTeamTeamId = (
   );
 };
 
+export type GetV3ContextualLayerQueryParams = {
+  /**
+   * Flag for enabled layers (default ignored)
+   */
+  enabled?: boolean;
+};
+
+export type GetV3ContextualLayerError = Fetcher.ErrorWrapper<{
+  status: 401;
+  payload: Responses.Error;
+}>;
+
+export type GetV3ContextualLayerVariables = {
+  queryParams?: GetV3ContextualLayerQueryParams;
+} & ClayersContext["fetcherOptions"];
+
+export const fetchGetV3ContextualLayer = (variables: GetV3ContextualLayerVariables, signal?: AbortSignal) =>
+  clayersFetch<Responses.Layers, GetV3ContextualLayerError, undefined, {}, GetV3ContextualLayerQueryParams, {}>({
+    url: "/v3/contextual-layer",
+    method: "get",
+    ...variables,
+    signal
+  });
+
+export const useGetV3ContextualLayer = <TData = Responses.Layers>(
+  variables: GetV3ContextualLayerVariables,
+  options?: Omit<reactQuery.UseQueryOptions<Responses.Layers, GetV3ContextualLayerError, TData>, "queryKey" | "queryFn">
+) => {
+  const { fetcherOptions, queryOptions, queryKeyFn } = useClayersContext(options);
+  return reactQuery.useQuery<Responses.Layers, GetV3ContextualLayerError, TData>(
+    queryKeyFn({ path: "/v3/contextual-layer", operationId: "getV3ContextualLayer", variables }),
+    ({ signal }) => fetchGetV3ContextualLayer({ ...fetcherOptions, ...variables }, signal),
+    {
+      ...options,
+      ...queryOptions
+    }
+  );
+};
+
 export type QueryOperation =
   | {
       path: "/v1/contextual-layer";
@@ -484,4 +523,9 @@ export type QueryOperation =
       path: "/v1/fw_contextual_layers/healthcheck";
       operationId: "getFwApiHealthcheck";
       variables: GetFwApiHealthcheckVariables;
+    }
+  | {
+      path: "/v3/contextual-layer";
+      operationId: "getV3ContextualLayer";
+      variables: GetV3ContextualLayerVariables;
     };
