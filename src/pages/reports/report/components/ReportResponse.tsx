@@ -14,7 +14,8 @@ const ReportResponse = ({ question, response, type }: ReportResponseProps) => {
   const _renderResponse = () => {
     switch (type) {
       case "blob":
-        return <Carousel downloadable slides={response ? [response] : []} />;
+        // @ts-ignore response in this case is an array of strings.
+        return <Carousel downloadable slides={response ? response : []} />;
       default:
         return <p className="text-neutral-700">{response ?? "N/A"}</p>;
     }
