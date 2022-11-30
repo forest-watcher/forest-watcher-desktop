@@ -1,24 +1,21 @@
 import { useAccessToken } from "hooks/useAccessToken";
 import LayersSection, { ILayersSection } from "./components/LayersSection";
-import { useGetContextualLayer } from "../../generated/clayers/clayersComponents";
+import { useGetV3ContextualLayer } from "../../generated/clayers/clayersComponents";
 import { Layers as ILayers } from "../../generated/clayers/clayersResponses";
 import LoadingWrapper from "components/extensive/LoadingWrapper";
-import { useEffect, useMemo } from "react";
+import { useMemo } from "react";
 import List from "components/extensive/List";
 import Hero from "components/layouts/Hero/Hero";
-import { useAppDispatch } from "hooks/useRedux";
-import { getGFWLayers } from "modules/layers";
 
 const Layers = () => {
   const { httpAuthHeader } = useAccessToken();
-  const dispatch = useAppDispatch();
 
   const {
     data: layersData,
     isLoading: layersLoading,
     isFetching: layersFetching,
     refetch: refetchLayers
-  } = useGetContextualLayer({ headers: httpAuthHeader });
+  } = useGetV3ContextualLayer({ headers: httpAuthHeader });
 
   const layers: { pub?: ILayers["data"]; teams?: ILayers["data"] } = useMemo(() => {
     const pub = layersData?.data.filter(l => l.attributes && l.attributes.isPublic);
@@ -50,10 +47,12 @@ const Layers = () => {
     [layers]
   );
 
-  useEffect(() => {
-    dispatch(getGFWLayers());
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  // useEffect(() => {
+  //   dispatch(getGFWLayers());
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, []);
+
+  console.log(layersData);
 
   return (
     <section className="relative">

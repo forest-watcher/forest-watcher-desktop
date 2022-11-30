@@ -8,6 +8,7 @@ import { useAccessToken } from "hooks/useAccessToken";
 import List from "components/extensive/List";
 import { useIntl } from "react-intl";
 import EmptyState from "components/ui/EmptyState/EmptyState";
+import { useMemo } from "react";
 
 export interface ILayersSection {
   title: string;
@@ -45,6 +46,21 @@ const LayersSection = ({
 
   const isTeams = type === "TEAMS";
   const shouldShow = (isTeams && teams?.data && teams.data.length > 0) || !isTeams;
+
+  const layersByTeam = useMemo(() => {
+    const layers =
+      teams?.data?.map(team => {
+        return {
+          team,
+          // @ts-ignore type incorrect
+          layers: cardItems.filter(item => item.attributes?.owner.id === team.id)
+        };
+      }, []) || [];
+
+    return layers;
+  }, [cardItems, teams?.data]);
+
+  console.log({ layersByTeam });
 
   return (
     <OptionalWrapper data={shouldShow}>
