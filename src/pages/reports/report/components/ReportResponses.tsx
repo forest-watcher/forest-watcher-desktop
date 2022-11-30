@@ -36,7 +36,10 @@ const ReportResponses = ({ questions, responses }: ReportResponsesProps) => {
       .filter(x => x) as IReportResponse[];
   }, [questions, responses]);
 
-  const hasImages = useMemo(() => !!responses[0]?.value, [responses]);
+  const hasImages = useMemo(() => {
+    const found = data.find(item => item.type === "blob");
+    return !!found;
+  }, [data]);
 
   return (
     <>

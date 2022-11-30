@@ -1,4 +1,4 @@
-import { FC, useMemo } from "react";
+import { FC, useEffect, useMemo, useState } from "react";
 import Hero from "components/layouts/Hero/Hero";
 import { Link, Route, Switch, useParams, useRouteMatch } from "react-router-dom";
 import Article from "components/layouts/Article";
@@ -14,6 +14,9 @@ import MapLayers from "./components/MapLayers";
 import DeleteAssignment from "./components/DeleteAssignment";
 import useGetUserId from "hooks/useGetUserId";
 import { getAlertText } from "helpers/assignments";
+import CreateAssignmentForm from "pages/reports/investigation/control-panels/CreateAssignment/states/AssignmentForm";
+import classNames from "classnames";
+import { Map as MapType } from "mapbox-gl";
 
 export type TParams = {
   id: string;
@@ -22,8 +25,10 @@ export type TParams = {
 const Assignment: FC = props => {
   const { id } = useParams<TParams>();
   let { path, url } = useRouteMatch();
+  const [map, setMap] = useState<MapType | null>(null);
+  const isEdit = useRouteMatch(`${path}/edit`);
   const { httpAuthHeader } = useAccessToken();
-  const { data, isLoading } = useGetV3GfwAssignmentsAssignmentId({
+  const { data, isLoading, refetch } = useGetV3GfwAssignmentsAssignmentId({
     pathParams: { assignmentId: id },
     headers: httpAuthHeader
   });
@@ -39,15 +44,20 @@ const Assignment: FC = props => {
   }, [data?.data?.attributes?.templates]);
 
   const isMyAssignment = data?.data?.attributes?.createdBy === userId;
+  const isComplete = data?.data?.attributes?.status === "completed";
+
+  useEffect(() => {
+    map?.resize();
+  }, [isEdit, map]);
 
   return (
-    <div className="relative">
+    <div className={classNames(isEdit ? "l-full-page-map" : "relative")}>
       <Hero
-        title="assignment.title"
-        backLink={{ name: "assignment.details.back", to: "/reporting/assignments" }}
+        title={isEdit ? "assignment.edit" : "assignment.title"}
+        backLink={!isEdit ? { name: "assignment.details.back", to: "/reporting/assignments" } : undefined}
         actions={
-          <>
-            {isMyAssignment && (
+          <OptionalWrapper data={isEdit === null}>
+            {isMyAssignment && !isComplete && (
               <Link to={`${url}/edit`} className="c-button c-button--primary">
                 <FormattedMessage id="common.edit" />
               </Link>
@@ -60,14 +70,30 @@ const Assignment: FC = props => {
                 <FormattedMessage id="common.delete" />
               </Link>
             )}
-          </>
+          </OptionalWrapper>
         }
       />
-      <Map className="c-map--within-hero" hideSearch>
-        <MapLayers assignment={data?.data} />
-      </Map>
       <LoadingWrapper loading={isLoading}>
-        <OptionalWrapper data={Boolean(data)}>
+        <Map
+          className={classNames(isEdit ? "h-full" : "c-map--within-hero")}
+          hideSearch
+          onMapLoad={e => setMap(e.target)}
+        >
+          <MapLayers assignment={data?.data} />
+          <Switch>
+            <Route path={`${path}/edit`}>
+              <LoadingWrapper loading={isLoading}>
+                <CreateAssignmentForm
+                  setShowCreateAssignmentForm={() => {}}
+                  setShapeFileGeoJSON={() => {}}
+                  assignmentToEdit={data}
+                  onFinish={refetch}
+                />
+              </LoadingWrapper>
+            </Route>
+          </Switch>
+        </Map>
+        <OptionalWrapper data={Boolean(data) && !isEdit}>
           <Article
             title="assignment.details.name"
             titleValues={{ name: data?.data?.attributes?.name || "" }}
