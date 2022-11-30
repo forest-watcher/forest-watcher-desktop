@@ -17,15 +17,17 @@ const DetailCard: FC<IProps> = ({ title, text, shouldCollapse = false, className
 
   return (
     <div
-      className={classNames(
-        className,
-        collapsable ? "py-4" : "py-7",
-        "px-6 bg-neutral-400/40 border-2 border-neutral-400 border-solid rounded-md"
-      )}
+      className={classNames(className, "px-6 bg-neutral-400/40 border-2 border-neutral-400 border-solid rounded-md")}
     >
       <Disclosure>
         {({ open }) => (
-          <div className={classNames("flex gap-3", collapsable ? "items-start" : "items-center")}>
+          <div
+            className={classNames(
+              "flex gap-3 ",
+              collapsable ? "items-start py-4" : "items-center py-7",
+              !open && "max-h-[101px]"
+            )}
+          >
             <img
               src={icon}
               alt=""
