@@ -188,7 +188,7 @@ const Assignments = () => {
         <Route path={`${path}/export`}>
           <ExportModal
             onSave={handleExport}
-            onClose={() => history.goBack()}
+            onClose={() => history.push(`/reporting/assignments`)}
             isOpen
             fileTypes={AREA_EXPORT_FILE_TYPES}
             fields={[]}
