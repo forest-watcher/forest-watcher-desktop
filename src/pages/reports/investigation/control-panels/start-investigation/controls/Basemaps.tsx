@@ -216,7 +216,10 @@ const Basemaps: FC<IProps> = ({ defaultBasemap, onComparison }) => {
                             })
                           : baseMapPeriods.length - 1
                       }
-                      onChange={value => methods.setValue(`currentPlanetPeriod${item}`, value.value)}
+                      onChange={value => {
+                        methods.setValue(`date${item}`, [value.metadata.startDate, value.metadata.endDate]);
+                        methods.setValue(`currentPlanetPeriod${item}`, value.value);
+                      }}
                       labelGetter="metadata.label"
                       yearGetter="metadata.year"
                     />

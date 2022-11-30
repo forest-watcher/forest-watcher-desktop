@@ -10,6 +10,7 @@ interface IProps {
   renderBefore?: (cb: React.Dispatch<React.SetStateAction<Map | null>>) => ReactNode;
   renderAfter?: (cb: React.Dispatch<React.SetStateAction<Map | null>>) => ReactNode;
   minLeftSlide?: number;
+  children?: ReactNode;
 }
 
 interface MapCompare {
@@ -24,7 +25,7 @@ interface MapCompare {
 }
 
 const MapComparison = (props: IProps) => {
-  const { renderBefore, renderAfter, className, minLeftSlide = 0 } = props;
+  const { renderBefore, renderAfter, className, minLeftSlide = 0, children } = props;
   const [beforeMapRef, setBeforeMapRef] = useState<null | Map>(null);
   const [afterMapRef, setAfterMapRef] = useState<null | Map>(null);
   const [compareMapRef, setCompareMapRef] = useState<null | MapCompare>(null);
@@ -113,6 +114,7 @@ const MapComparison = (props: IProps) => {
       <div id="map-container" className={classNames(className, "relative min-h-[500px] c-map-comparison c-map")}>
         <div>{beforeMap}</div>
         <div className={classNames(!isReady && "opacity-0")}>{afterMap}</div>
+        {children}
       </div>
     </>
   );
