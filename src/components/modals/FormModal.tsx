@@ -110,7 +110,7 @@ const FormModal = <T,>(props: IProps<T>) => {
   }, [isOpen, reset]);
 
   const handleCloseRequest = () => {
-    if (isDirty) {
+    if (isDirty && !hideUnsavedChangesModal) {
       setIsClosing(true);
     } else if (onClose) {
       onClose();
