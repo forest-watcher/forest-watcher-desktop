@@ -37,7 +37,7 @@ export interface IProps {
   onFinish?: () => void;
 }
 
-type TCreateAssignmentFormFields = {
+type TAssignmentFormFields = {
   priority: number;
   monitors: string[];
   templates: string[];
@@ -50,7 +50,7 @@ enum EDialogsNames {
   Templates = "templates"
 }
 
-const createAssignmentFormSchema = yup
+const assignmentFormSchema = yup
   .object()
   .shape({
     priority: yup.number().min(0).max(1).integer().required(),
@@ -60,7 +60,7 @@ const createAssignmentFormSchema = yup
   })
   .required();
 
-const getFormValueForAssignmentFromResponse = (assignment?: AssignmentResponse): TCreateAssignmentFormFields => {
+const getFormValueForAssignmentFromResponse = (assignment?: AssignmentResponse): TAssignmentFormFields => {
   if (!assignment) {
     return {
       priority: 0,
@@ -100,10 +100,10 @@ const AssignmentForm: FC<IProps> = props => {
     getValues: getAssignmentValues,
     handleSubmit,
     formState
-  } = useForm<TCreateAssignmentFormFields>({
+  } = useForm<TAssignmentFormFields>({
     mode: "onChange",
     defaultValues: getFormValueForAssignmentFromResponse(assignmentToEdit),
-    resolver: yupResolver(createAssignmentFormSchema)
+    resolver: yupResolver(assignmentFormSchema)
   });
 
   const monitorsWatcher = useWatch({ control, name: "monitors" });
@@ -338,7 +338,7 @@ const AssignmentForm: FC<IProps> = props => {
     >
       <Loader isLoading={isSubmitting || isPatchSubmitting || isTemplateDataLoading || isTeamDataLoading} />
       <OptionalWrapper data={openDialogName === EDialogsNames.None}>
-        <RadioGroup<TCreateAssignmentFormFields>
+        <RadioGroup<TAssignmentFormFields>
           control={control}
           name="priority"
           label="assignment.create.form.priority.label"
