@@ -53,10 +53,10 @@ const ReportExportImagesModal = ({ onClose }: ReportExportImagesModalProps) => {
     <Modal
       isOpen
       onClose={onClose}
-      title={"Images"}
+      title={formatMessage({ id: "reports.detail.exportImages" })}
       className="c-modal-form"
       actions={[
-        { name: "Download", onClick: handleSubmit(handleSave) },
+        { name: "common.download", onClick: handleSubmit(handleSave) },
         { name: "common.cancel", variant: "secondary", onClick: onClose }
       ]}
     >
