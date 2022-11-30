@@ -72,8 +72,8 @@ const Reports: FC<IProps> = props => {
         coordinates: `${
           answer.attributes?.clickedPosition
             ?.map((position: any) => [position.lat, position.lon])[0]
-            .toString()
-            .replace(",", ", ") || ""
+            ?.toString()
+            ?.replace(",", ", ") || ""
         }${(answer.attributes?.clickedPosition?.length || 0) > 1 ? "…" : ""}`,
         userId: answer.attributes?.user
       })) ?? [],
