@@ -36,7 +36,6 @@ const LayersSection = ({
 }: ILayersSectionProps) => {
   // Get teams if the type is teams
   const userId = useGetUserId();
-  const intl = useIntl();
   const { httpAuthHeader } = useAccessToken();
 
   const { data: teams } = useGetV3GfwTeamsUserUserId(
@@ -60,22 +59,20 @@ const LayersSection = ({
     return layers;
   }, [cardItems, teams?.data]);
 
-  console.log({ layersByTeam });
-
   return (
     <OptionalWrapper data={shouldShow}>
       <Article className={className} title={title} subtitle={subtitle}>
         {isTeams ? (
           <List
-            items={teams?.data || []}
+            items={layersByTeam || []}
             render={item => (
               <LayersCard
-                title={`${item.attributes?.name}:`}
+                title={`${item.team.attributes?.name}:`}
                 titleIsKey={false}
-                items={cardItems}
+                items={item.layers}
                 refetchLayers={refetchLayers}
                 layersLoading={layersLoading}
-                team={item}
+                team={item.team}
               />
             )}
           />

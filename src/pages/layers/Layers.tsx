@@ -3,12 +3,17 @@ import LayersSection, { ILayersSection } from "./components/LayersSection";
 import { useGetV3ContextualLayer } from "../../generated/clayers/clayersComponents";
 import { Layers as ILayers } from "../../generated/clayers/clayersResponses";
 import LoadingWrapper from "components/extensive/LoadingWrapper";
-import { useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import List from "components/extensive/List";
 import Hero from "components/layouts/Hero/Hero";
+import { getGFWLayers } from "modules/layers";
+import { useAppDispatch } from "hooks/useRedux";
+import { useAppSelector } from "hooks/useRedux";
 
 const Layers = () => {
   const { httpAuthHeader } = useAccessToken();
+  const dispatch = useAppDispatch();
+  const { data: gfwLayers } = useAppSelector(state => state.layers);
 
   const {
     data: layersData,
@@ -47,12 +52,12 @@ const Layers = () => {
     [layers]
   );
 
-  // useEffect(() => {
-  //   dispatch(getGFWLayers());
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, []);
+  useEffect(() => {
+    dispatch(getGFWLayers());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-  console.log(layersData);
+  console.log(gfwLayers);
 
   return (
     <section className="relative">

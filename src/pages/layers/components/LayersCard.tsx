@@ -32,7 +32,7 @@ type LayersCardProps = {
 };
 
 type TAssignLayersForm = {
-  layers: number[];
+  layers: string[];
 };
 
 const addLayersSchema = yup
@@ -44,7 +44,6 @@ const addLayersSchema = yup
 
 const LayersCard = ({ title, items, refetchLayers, layersLoading, titleIsKey = true, team }: LayersCardProps) => {
   const { mutateAsync: updateLayer, isLoading: updateLayerLoading } = usePatchContextualLayer();
-  // const {} = useGetC;
   const { httpAuthHeader } = useAccessToken();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { gfw } = useAppSelector(state => state.layers);
@@ -76,39 +75,40 @@ const LayersCard = ({ title, items, refetchLayers, layersLoading, titleIsKey = t
       gfwLayers?.map((layer: any) => ({
         // @ts-ignore template.attributes.name has incorrect type
         label: intl.formatMessage({ id: layer.title }),
-        value: layer.cartodb_id as string
+        value: layer.tileurl
       })),
     [gfwLayers, intl]
   );
 
+  const selectedOptions = useMemo<string[]>(() => items?.map(item => item.attributes?.url || ""), [items]);
+
   const onModalSave = async (data: UnpackNestedValue<TAssignLayersForm>) => {
-    console.log(data);
     const promises: Promise<any>[] = [];
 
-    // Find changes
-    const layers = data.layers.map(id => gfwLayers.find(layer => layer.cartodb_id === id));
-
     // Delete all..
-    // items.forEach(item => {
-    //   item.attributes.
-    // })
+    items.forEach(item => {
+      promises.push(deleteTeamLayer({ pathParams: { layerId: item.id }, headers: httpAuthHeader }));
+    });
 
-    // Add
+    // Find Layers
+    const layers = data.layers.map(url => gfwLayers.find(layer => layer.tileurl === url));
+    console.log({ layers });
 
-    await Promise.all(promises);
-    // try {
-    //   await areaService.addTemplatesToAreas(areaId, data.templates);
-    //   toastr.success(intl.formatMessage({ id: "areas.details.templates.add.success" }), "");
-    //   dispatch(getAreas(true));
-    //   dispatch(getAreasInUsersTeams(true));
-    //   onClose();
-    // } catch (e: any) {
-    //   toastr.error(intl.formatMessage({ id: "areas.details.templates.add.error" }), "");
-    //   console.error(e);
-    // }
+    // Add them
+    layers.forEach(item =>
+      promises.push(
+        addNewTeamLayer({
+          body: { name: item.title, url: item.tileurl, enabled: true },
+          pathParams: { teamId: team?.id || "" },
+          headers: httpAuthHeader
+        })
+      )
+    );
+
+    Promise.all(promises);
   };
 
-  console.log(gfwLayers);
+  console.log({ selectedOptions, layerOptions, gfwLayers, items });
 
   return (
     <>
@@ -129,17 +129,6 @@ const LayersCard = ({ title, items, refetchLayers, layersLoading, titleIsKey = t
               render={(item, index) => <FormattedMessage id={`${item.attributes?.name}`} />}
             />
           </LoadingWrapper>
-          <Button
-            onClick={() => {
-              addNewTeamLayer({
-                body: { name: "test", url: "https://www.google.com" },
-                pathParams: { teamId: team?.id || "" },
-                headers: httpAuthHeader
-              });
-            }}
-          >
-            Add
-          </Button>
         </HeaderCard.Content>
       </HeaderCard>
       <FormModal<TAssignLayersForm>
@@ -149,7 +138,7 @@ const LayersCard = ({ title, items, refetchLayers, layersLoading, titleIsKey = t
         modalTitle="layers.teamLayers.edit"
         modalSubtitle="layers.teamLayers.editSubtitle"
         submitBtnName="common.done"
-        useFormProps={{ resolver: yupResolver(addLayersSchema) }}
+        useFormProps={{ resolver: yupResolver(addLayersSchema), defaultValues: { layers: selectedOptions } }}
         inputs={[
           {
             id: "select-templates",
