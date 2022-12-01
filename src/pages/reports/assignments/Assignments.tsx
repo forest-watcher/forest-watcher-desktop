@@ -21,6 +21,7 @@ import { delay } from "services/exports";
 export type TAssignmentsDataTable = {
   id: string;
   createdAt: string;
+  name: string;
   area: string;
   alertType: any;
   status: string;
@@ -62,6 +63,7 @@ const Assignments = () => {
       return {
         id: assignment.id ?? "",
         createdAt: assignment.attributes?.createdAt ?? "",
+        name: assignment.attributes?.name,
         area: area?.attributes?.name ?? assignment.attributes?.areaId ?? "-",
         areaId: assignment.attributes?.areaId,
         alertType: getAlertText(assignment, intl),
@@ -163,6 +165,12 @@ const Assignments = () => {
                     : "";
                 },
                 sortCompareFn: sortByDateString
+              },
+              {
+                key: "name",
+                name: "assignments.table.name",
+                sortCompareFn: sortByDateString,
+                rowCellClassNames: "min-w-[120px]"
               },
               { key: "area", name: "assignments.table.area", sortCompareFn: sortByString },
               {

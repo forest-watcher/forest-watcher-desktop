@@ -173,6 +173,7 @@ const Reports: FC<IProps> = props => {
                       },
                       sortCompareFn: sortByDateString
                     },
+                    { key: "name", name: "reports.reports.table.header.name", sortCompareFn: sortByString },
                     { key: "monitor", name: "reports.reports.table.header.monitor", sortCompareFn: sortByString },
                     {
                       key: "alerts",
@@ -194,7 +195,6 @@ const Reports: FC<IProps> = props => {
                         return sortByString(newA, newB, direction);
                       }
                     },
-                    { key: "name", name: "reports.reports.table.header.name", sortCompareFn: sortByString },
                     { key: "area", name: "reports.reports.table.header.area", sortCompareFn: sortByString },
                     {
                       key: "coordinates",
