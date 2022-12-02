@@ -8,12 +8,10 @@ import List from "components/extensive/List";
 import Hero from "components/layouts/Hero/Hero";
 import { getGFWLayers } from "modules/layers";
 import { useAppDispatch } from "hooks/useRedux";
-import { useAppSelector } from "hooks/useRedux";
 
 const Layers = () => {
   const { httpAuthHeader } = useAccessToken();
   const dispatch = useAppDispatch();
-  const { data: gfwLayers } = useAppSelector(state => state.layers);
 
   const {
     data: layersData,
@@ -56,8 +54,6 @@ const Layers = () => {
     dispatch(getGFWLayers());
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  console.log(gfwLayers);
 
   return (
     <section className="relative">

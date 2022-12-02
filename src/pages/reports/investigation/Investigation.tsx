@@ -144,8 +144,6 @@ const InvestigationPage: FC<IProps> = props => {
         setMapStyle(basemap.style);
       }
 
-      console.log(values.contextualLayers, layersData);
-
       setCurrentPlanetPeriod(values.currentPlanetPeriodBefore || "");
       setCurrentProc(values.currentPlanetImageTypeBefore === "nat" ? "" : values.currentPlanetImageTypeBefore || "");
       setCurrentPlanetPeriodAfter(values.currentPlanetPeriodAfter || "");
