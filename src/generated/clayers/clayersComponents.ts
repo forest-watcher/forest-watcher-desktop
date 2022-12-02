@@ -153,7 +153,7 @@ export const fetchDeleteV3ContextualLayerDeleteAllUserLayers = (
   signal?: AbortSignal
 ) =>
   clayersFetch<undefined, DeleteV3ContextualLayerDeleteAllUserLayersError, undefined, {}, {}, {}>({
-    url: "/v3/contextual-layer/deleteAllUserLayers",
+    url: "/v3/contextual-layer/user",
     method: "delete",
     ...variables,
     signal
@@ -505,6 +505,51 @@ export const useGetV3ContextualLayer = <TData = Responses.Layers>(
       ...options,
       ...queryOptions
     }
+  );
+};
+
+export type DeleteV3ContextualLayerLayerIdPathParams = {
+  layerId: string;
+};
+
+export type DeleteV3ContextualLayerLayerIdError = Fetcher.ErrorWrapper<undefined>;
+
+export type DeleteV3ContextualLayerLayerIdVariables = {
+  pathParams: DeleteV3ContextualLayerLayerIdPathParams;
+} & ClayersContext["fetcherOptions"];
+
+export const fetchDeleteV3ContextualLayerLayerId = (
+  variables: DeleteV3ContextualLayerLayerIdVariables,
+  signal?: AbortSignal
+) =>
+  clayersFetch<
+    undefined,
+    DeleteV3ContextualLayerLayerIdError,
+    undefined,
+    {},
+    {},
+    DeleteV3ContextualLayerLayerIdPathParams
+  >({ url: "/v3/contextual-layer/{layerId}", method: "delete", ...variables, signal });
+
+export const useDeleteV3ContextualLayerLayerId = (
+  options?: Omit<
+    reactQuery.UseMutationOptions<
+      undefined,
+      DeleteV3ContextualLayerLayerIdError,
+      DeleteV3ContextualLayerLayerIdVariables
+    >,
+    "mutationFn"
+  >
+) => {
+  const { fetcherOptions } = useClayersContext();
+  return reactQuery.useMutation<
+    undefined,
+    DeleteV3ContextualLayerLayerIdError,
+    DeleteV3ContextualLayerLayerIdVariables
+  >(
+    (variables: DeleteV3ContextualLayerLayerIdVariables) =>
+      fetchDeleteV3ContextualLayerLayerId({ ...fetcherOptions, ...variables }),
+    options
   );
 };
 
