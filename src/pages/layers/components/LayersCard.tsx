@@ -1,9 +1,7 @@
 import List from "components/extensive/List";
 import { Layers } from "generated/clayers/clayersResponses";
 import {
-  useDeleteContextualLayer,
-  usePatchContextualLayer,
-  usePostTeamContextualLayer,
+  useDeleteV3ContextualLayerLayerId,
   usePostV3ContextualLayerTeamTeamId
 } from "generated/clayers/clayersComponents";
 import LoadingWrapper from "components/extensive/LoadingWrapper";
@@ -19,8 +17,8 @@ import { UnpackNestedValue } from "react-hook-form";
 import yup from "configureYup";
 import { yupResolver } from "@hookform/resolvers/yup/dist/yup";
 import { Option } from "types";
-import useGetUserId from "hooks/useGetUserId";
 import { useAppSelector } from "hooks/useRedux";
+import { toastr } from "react-redux-toastr";
 
 type LayersCardProps = {
   title: string;
@@ -43,7 +41,6 @@ const addLayersSchema = yup
   .required();
 
 const LayersCard = ({ title, items, refetchLayers, layersLoading, titleIsKey = true, team }: LayersCardProps) => {
-  const { mutateAsync: updateLayer, isLoading: updateLayerLoading } = usePatchContextualLayer();
   const { httpAuthHeader } = useAccessToken();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { gfw } = useAppSelector(state => state.layers);
@@ -56,19 +53,8 @@ const LayersCard = ({ title, items, refetchLayers, layersLoading, titleIsKey = t
   const isTeam = !!team;
   const isMyTeam = team?.attributes?.userRole === "administrator" || team?.attributes?.userRole === "manager";
 
-  const handleLayerUpdate = async (item: any /* todo fix */) => {
-    return updateLayer(
-      {
-        headers: httpAuthHeader,
-        pathParams: { layerId: item.id },
-        body: { name: item.attributes.name, url: item.attributes.url, enabled: !item.attributes.enabled }
-      },
-      { onSuccess: () => refetchLayers() }
-    );
-  };
-
   const { mutateAsync: addNewTeamLayer } = usePostV3ContextualLayerTeamTeamId();
-  const { mutateAsync: deleteTeamLayer } = useDeleteContextualLayer();
+  const { mutateAsync: deleteTeamLayer } = useDeleteV3ContextualLayerLayerId();
 
   const layerOptions = useMemo<Option[] | undefined>(
     () =>
@@ -83,32 +69,37 @@ const LayersCard = ({ title, items, refetchLayers, layersLoading, titleIsKey = t
   const selectedOptions = useMemo<string[]>(() => items?.map(item => item.attributes?.url || ""), [items]);
 
   const onModalSave = async (data: UnpackNestedValue<TAssignLayersForm>) => {
-    const promises: Promise<any>[] = [];
+    try {
+      const promises: Promise<any>[] = [];
 
-    // Delete all..
-    items.forEach(item => {
-      promises.push(deleteTeamLayer({ pathParams: { layerId: item.id }, headers: httpAuthHeader }));
-    });
+      // Delete all..
+      items.forEach(item => {
+        promises.push(deleteTeamLayer({ pathParams: { layerId: item.id }, headers: httpAuthHeader }));
+      });
 
-    // Find Layers
-    const layers = data.layers.map(url => gfwLayers.find(layer => layer.tileurl === url));
-    console.log({ layers });
+      await Promise.all(promises);
 
-    // Add them
-    layers.forEach(item =>
-      promises.push(
-        addNewTeamLayer({
+      // Find Layers
+      const layers = data.layers.map(url => gfwLayers.find(layer => layer.tileurl === url));
+
+      for (let i = 0; i < layers.length; i++) {
+        const item = layers[i];
+        await addNewTeamLayer({
           body: { name: item.title, url: item.tileurl, enabled: true },
           pathParams: { teamId: team?.id || "" },
           headers: httpAuthHeader
-        })
-      )
-    );
+        });
+      }
+      toastr.success(intl.formatMessage({ id: "layers.success" }), "");
 
-    Promise.all(promises);
+      setIsModalOpen(false);
+    } catch (e: any) {
+      toastr.error(intl.formatMessage({ id: "layers.error" }), "");
+      console.error(e);
+    } finally {
+      refetchLayers();
+    }
   };
-
-  console.log({ selectedOptions, layerOptions, gfwLayers, items });
 
   return (
     <>
@@ -122,12 +113,21 @@ const LayersCard = ({ title, items, refetchLayers, layersLoading, titleIsKey = t
           </OptionalWrapper>
         </HeaderCard.Header>
         <HeaderCard.Content className="pb-0">
-          <LoadingWrapper loading={updateLayerLoading || loading} className="py-10 relative">
-            <List
-              items={items}
-              itemClassName="text-neutral-700 uppercase text-sm font-[500] mb-7"
-              render={(item, index) => <FormattedMessage id={`${item.attributes?.name}`} />}
-            />
+          <LoadingWrapper loading={loading} className="py-10 relative">
+            <OptionalWrapper
+              data={items.length > 0}
+              elseComponent={
+                <p className="text-base mb-7">
+                  <FormattedMessage id="layers.noLayers" />
+                </p>
+              }
+            >
+              <List
+                items={items}
+                itemClassName="text-neutral-700 uppercase text-sm font-[500] mb-7"
+                render={(item, index) => <FormattedMessage id={`${item.attributes?.name}`} />}
+              />
+            </OptionalWrapper>
           </LoadingWrapper>
         </HeaderCard.Content>
       </HeaderCard>
@@ -138,6 +138,7 @@ const LayersCard = ({ title, items, refetchLayers, layersLoading, titleIsKey = t
         modalTitle="layers.teamLayers.edit"
         modalSubtitle="layers.teamLayers.editSubtitle"
         submitBtnName="common.done"
+        key={selectedOptions.length}
         useFormProps={{ resolver: yupResolver(addLayersSchema), defaultValues: { layers: selectedOptions } }}
         inputs={[
           {

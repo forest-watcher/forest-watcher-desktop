@@ -6,8 +6,6 @@ import { useGetV3GfwTeamsUserUserId } from "generated/core/coreComponents";
 import useGetUserId from "hooks/useGetUserId";
 import { useAccessToken } from "hooks/useAccessToken";
 import List from "components/extensive/List";
-import { useIntl } from "react-intl";
-import EmptyState from "components/ui/EmptyState/EmptyState";
 import { useMemo } from "react";
 
 export interface ILayersSection {

@@ -24,6 +24,8 @@ import Layers from "./components/Layers";
 import MapComparison from "components/map-comparison/MapComparison";
 import classNames from "classnames";
 import { useMediaQuery } from "react-responsive";
+import { useGetV3ContextualLayer } from "generated/clayers/clayersComponents";
+import { useAccessToken } from "hooks/useAccessToken";
 
 interface IProps extends RouteComponentProps, TPropsFromRedux {}
 
@@ -50,7 +52,7 @@ export type TFormValues = {
 };
 
 const InvestigationPage: FC<IProps> = props => {
-  const { match, allAnswers, basemaps, areasInUsersTeams, selectedLayers } = props;
+  const { match, allAnswers, basemaps, areasInUsersTeams } = props;
   const [mapStyle, setMapStyle] = useState<string | undefined>(undefined);
   const [isPlanet, setIsPlanet] = useState(false);
   const [mapRef, setMapRef] = useState<MapInstance | null>(null);
@@ -68,6 +70,8 @@ const InvestigationPage: FC<IProps> = props => {
   let investigationMatch = useRouteMatch<TParams>({ path: "/reporting/investigation/:areaId/start", exact: false });
   const isMobile = useMediaQuery({ maxWidth: breakpoints.mobile });
   const [controlsPortal, setControlsPortal] = useState<HTMLElement | undefined>(undefined);
+  const { httpAuthHeader } = useAccessToken();
+  const { data: layersData } = useGetV3ContextualLayer({ headers: httpAuthHeader });
 
   const handleMapLoad = (evt: MapboxEvent) => {
     setMapRef(evt.target);
@@ -140,17 +144,23 @@ const InvestigationPage: FC<IProps> = props => {
         setMapStyle(basemap.style);
       }
 
+      console.log(values.contextualLayers, layersData);
+
       setCurrentPlanetPeriod(values.currentPlanetPeriodBefore || "");
       setCurrentProc(values.currentPlanetImageTypeBefore === "nat" ? "" : values.currentPlanetImageTypeBefore || "");
       setCurrentPlanetPeriodAfter(values.currentPlanetPeriodAfter || "");
       setCurrentProcAfter(values.currentPlanetImageTypeAfter === "nat" ? "" : values.currentPlanetImageTypeAfter || "");
-      setContextualLayerUrls(values.contextualLayers?.map(layer => selectedLayers[layer].attributes.url) || []);
+      setContextualLayerUrls(
+        values.contextualLayers?.map(
+          layer => layersData?.data.find(item => item?.id === layer)?.attributes?.url || ""
+        ) || []
+      );
       setBasemapKey(values.currentMap);
       setIsPlanet(values.showPlanetImagery?.[0] === PLANET_BASEMAP.key);
     });
 
     return () => subscription.unsubscribe();
-  }, [formhook, selectedLayers]);
+  }, [formhook, layersData]);
 
   useEffect(() => {
     if (!investigationMatch) {

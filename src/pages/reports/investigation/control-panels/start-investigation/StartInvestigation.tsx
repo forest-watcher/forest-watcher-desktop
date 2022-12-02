@@ -22,6 +22,8 @@ import { TFilterFields } from "pages/reports/reports/Reports";
 import ShowRoutesControl from "./controls/ShowRoutesControl";
 import Icon from "components/extensive/Icon";
 import Basemaps from "./controls/Basemaps";
+import { useGetV3ContextualLayer } from "generated/clayers/clayersComponents";
+import { useAccessToken } from "hooks/useAccessToken";
 
 export enum LAYERS {
   reports = "reports"
@@ -38,8 +40,9 @@ const StartInvestigationControlPanel: FC<IProps> = props => {
   const history = useHistory();
   const location = useLocation();
   const { areaId } = useParams<TParams>();
-  const { answers, onFilterUpdate, layersOptions, getLayers, defaultBasemap, onComparison } = props;
+  const { answers, onFilterUpdate, defaultBasemap, onComparison } = props;
   const [filteredRows, setFilteredRows] = useState<any>(answers);
+  const { httpAuthHeader } = useAccessToken();
 
   useEffect(() => {
     setFilteredRows(answers);
@@ -50,6 +53,21 @@ const StartInvestigationControlPanel: FC<IProps> = props => {
     loading: isLoadingAreas,
     loadingAreasInUsers: isLoadingTeamAreas
   } = useAppSelector(state => state.areas);
+
+  const { data: layersData } = useGetV3ContextualLayer({ headers: httpAuthHeader });
+
+  const layersOptions = useMemo(() => {
+    return (
+      layersData?.data
+        .filter(layer => layer?.attributes?.enabled)
+        .filter((value, index, self) => self.findIndex(t => t.attributes?.url === value.attributes?.url) === index)
+        .map(layer => ({
+          option: layer.id,
+          label: layer?.attributes?.name
+        })) || []
+    );
+  }, [layersData?.data]);
+
   const { loading: isLoadingAnswers } = useAppSelector(state => state.reports);
   const area = useFindArea(areaId);
 
@@ -79,11 +97,6 @@ const StartInvestigationControlPanel: FC<IProps> = props => {
   useEffect(() => {
     onFilterUpdate(filteredRows);
   }, [filteredRows, onFilterUpdate]);
-
-  useEffect(() => {
-    getLayers();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   return (
     <MapCard
