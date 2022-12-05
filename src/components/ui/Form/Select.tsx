@@ -14,7 +14,7 @@ export interface Props extends FieldPropsBase {
   selectProps: SelectProps;
   registered: UseFormRegisterReturn;
   formHook: UseFormReturn<any>;
-  onChange?: () => void;
+  onChange?: (v: any) => void;
   variant?: "simple" | "simple-green";
   isMultiple?: boolean;
   isMultipleDropdown?: boolean;
@@ -105,7 +105,7 @@ const Select = (props: Props) => {
     }
     props.formHook.clearErrors(registered.name);
     if (props.onChange) {
-      props.onChange();
+      props.onChange(v);
     }
   };
 

@@ -228,6 +228,9 @@ const Basemaps: FC<IProps> = ({ defaultBasemap, onComparison }) => {
                   key={watcher.currentPlanetImageType}
                   className="u-margin-bottom-20"
                   alternateLabelStyle
+                  onChange={value => {
+                    methods.setValue(`date${item}`, [value.metadata.startDate, value.metadata.endDate]);
+                  }}
                 />
                 <OptionalWrapper data={!isMobile}>
                   <div className="u-margin-bottom-40">
