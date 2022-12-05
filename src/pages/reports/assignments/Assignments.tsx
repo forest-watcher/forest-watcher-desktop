@@ -43,22 +43,39 @@ const Assignments = () => {
   const { path, url } = useRouteMatch();
   const history = useHistory();
 
-  // Queries - Get User's Assignments
+  /**
+   * * Get User's Assignments
+   */
   const { data: assignmentsData, isLoading: assignmentsLoading } = useGetV3GfwUser(
     { headers: httpAuthHeader },
     { cacheTime: 0, retryOnMount: true }
   );
 
-  const { mutateAsync: exportReport } = usePostV3ExportsAssignmentsExportSome();
-
+  /**
+   * * Get the user's areas (and team areas)
+   */
   const { data: areaData, isLoading: areasLoading } = useGetV3GfwAreasUserandteam({ headers: httpAuthHeader });
 
+  /**
+   * * Export reports
+   */
+  const { mutateAsync: exportReport } = usePostV3ExportsAssignmentsExportSome();
+
+  /**
+   * * Hide Assignments that don't have an area available to the user.
+   */
+  const availableAssignments = useMemo(() => {
+    return assignmentsData?.data?.filter(assignment =>
+      areaData?.data?.find(area => area.id === assignment.attributes?.areaId)
+    );
+  }, [areaData?.data, assignmentsData?.data]);
+
   const rows = useMemo<TAssignmentsDataTable[]>(() => {
-    if (!assignmentsData?.data) {
+    if (!availableAssignments) {
       return [];
     }
 
-    return assignmentsData?.data?.map(assignment => {
+    return availableAssignments.map(assignment => {
       const area = areaData?.data?.find(area => area.id === assignment.attributes?.areaId);
       return {
         id: assignment.id ?? "",
@@ -72,10 +89,10 @@ const Assignments = () => {
         statusValue: assignment.attributes?.status
       };
     }) as TAssignmentsDataTable[];
-  }, [areaData?.data, assignmentsData?.data, intl]);
+  }, [areaData?.data, availableAssignments, intl]);
 
   const [filteredRows, setFilteredRows] = useState<TAssignmentsDataTable[]>(rows);
-  const { filters, extraFilters } = useAssignmentsFilters(assignmentsData?.data, areaData);
+  const { filters, extraFilters } = useAssignmentsFilters(availableAssignments, areaData);
 
   const handleExport = useCallback(
     async (values: UnpackNestedValue<TExportForm>) => {
