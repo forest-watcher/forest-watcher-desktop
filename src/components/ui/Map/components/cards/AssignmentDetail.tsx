@@ -22,7 +22,6 @@ const AssignmentDetailCard: FC<IProps> = props => {
   const { selectedAssignment } = props;
   const intl = useIntl();
   const userId = useGetUserId();
-  const { pathname } = useLocation();
   const { data: teamData, isLoading: isTeamDataLoading } = useGetUserTeamsWithActiveMembers();
   const isAssignedToCurrentUser = useMemo(() => {
     return selectedAssignment?.attributes?.monitors.findIndex(monitor => monitor === userId) !== -1;
