@@ -9,6 +9,7 @@ import { allDeforestationAlerts, EAlertTypes } from "constants/alerts";
 // Map Sources
 import AreaAssignmentSource from "./AreaAssignmentSource";
 import AreaAlertsSource from "./AreaAlertSource";
+import AreaRoutesSource from "./AreaRoutesSource";
 
 interface IProps {
   contextualLayerUrls: string[];
@@ -44,6 +45,8 @@ const Layers: FC<IProps> = ({ contextualLayerUrls, lockAlertSelections }) => {
       {watcher.showOpenAssignments.includes("true") && (
         <AreaAssignmentSource areaId={investigationMatch?.params.areaId} />
       )}
+
+      {watcher.showRoutes.includes("true") && <AreaRoutesSource areaId={investigationMatch?.params.areaId} />}
     </OptionalWrapper>
   );
 };

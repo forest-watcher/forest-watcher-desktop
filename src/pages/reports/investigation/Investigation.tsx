@@ -49,8 +49,9 @@ export type TFormValues = {
   currentPlanetPeriodAfter?: string;
   currentPlanetImageTypeAfter?: ProcTypes;
   contextualLayers?: string[];
-  showAlerts: ["true"];
-  showOpenAssignments: ["true"];
+  showAlerts: ["true"] | ["false"];
+  showOpenAssignments: ["true"] | ["false"];
+  showRoutes: ["true"] | ["false"];
   alertTypesShown: "all" | EAlertTypes;
   alertTypesRequestThreshold: number;
   alertTypesViirsRequestThreshold: number;
@@ -128,6 +129,7 @@ const InvestigationPage: FC<IProps> = props => {
       currentMap: basemapKey,
       showPlanetImagery: [],
       showAlerts: ["true"],
+      showRoutes: ["false"],
       showOpenAssignments: ["true"],
       alertTypesShown: "all",
       alertTypesRequestThreshold: DefaultRequestThresholds[0].requestThreshold,
