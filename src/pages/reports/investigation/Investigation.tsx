@@ -21,8 +21,7 @@ import MapCard from "components/ui/Map/components/cards/MapCard";
 import breakpoints from "styles/utilities/_u-breakpoints.scss";
 import { useGetV3ContextualLayer } from "generated/clayers/clayersComponents";
 import { useAccessToken } from "hooks/useAccessToken";
-import { differenceInMonths } from "date-fns";
-import { FormatDateOptions, FormattedMessage, IntlShape, useIntl } from "react-intl";
+import { FormattedMessage, useIntl } from "react-intl";
 
 // Control Panel Views
 import AreaListControlPanel from "./control-panels/AreaList";
