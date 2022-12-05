@@ -121,19 +121,6 @@ export type UpdateTemplateBody = {
   areaIds?: string[];
 };
 
-export type AnswerBody = {
-  reportName: string;
-  areaOfInterest: string;
-  areaOfInterestName: string;
-  language: string;
-  userPosition: string;
-  clickedPosition: string;
-  user: string;
-  date: string;
-  responses: Record<string, any>[];
-  assignmentId?: string;
-};
-
 export type AreaBody = {
   name?: string;
   geojson?: Schemas.GeojsonModel;
@@ -173,4 +160,16 @@ export type UpdateAssignmentBody = {
    * @format binary
    */
   image?: Blob;
+};
+
+export type CreateAnswerBody = {
+  reportName: string;
+  areaOfInterest: string;
+  areaOfInterestName?: string;
+  language: string;
+  userPosition?: string;
+  clickedPosition?: string;
+  date?: string;
+  teamId: string;
+  assignmentId?: string;
 };

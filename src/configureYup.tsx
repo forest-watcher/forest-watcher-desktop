@@ -18,7 +18,8 @@ yup.setLocale({
     email: () => ({ key: "errors.string.email" })
   },
   array: {
-    min: ({ min }) => ({ key: "errors.array.min", values: { min } })
+    min: ({ min }) => ({ key: "errors.array.min", values: { min } }),
+    max: ({ max }) => ({ key: "errors.array.max", values: { max } })
   }
 });
 

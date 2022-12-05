@@ -4,7 +4,9 @@ import { CSSProperties, FC, useCallback, useEffect, useMemo, useState } from "re
 import { useForm, FormProvider } from "react-hook-form";
 import { Route, RouteComponentProps, Switch, useHistory, useRouteMatch } from "react-router-dom";
 import UserAreasMap, { IProps as UserAreasMapProps } from "components/user-areas-map/UserAreasMap";
-import { LAYERS } from "pages/reports/investigation/control-panels/start-investigation/StartInvestigation";
+import StartInvestigationControlPanel, {
+  LAYERS
+} from "pages/reports/investigation/control-panels/start-investigation/StartInvestigation";
 import { TParams } from "./types";
 import { TPropsFromRedux } from "./InvestigationContainer";
 import { BASEMAPS, PLANET_BASEMAP } from "constants/mapbox";
@@ -18,12 +20,13 @@ import breakpoints from "styles/utilities/_u-breakpoints.scss";
 // Control Panel Views
 import AreaListControlPanel from "./control-panels/AreaList";
 import AreaDetailControlPanel from "pages/reports/investigation/control-panels/AreaDetail";
-import StartInvestigationControlPanel from "pages/reports/investigation/control-panels/start-investigation/StartInvestigationContainer";
 import CreateAssignmentControlPanel from "pages/reports/investigation/control-panels/CreateAssignment/CreateAssignment";
 import Layers from "./components/Layers";
 import MapComparison from "components/map-comparison/MapComparison";
 import classNames from "classnames";
 import { useMediaQuery } from "react-responsive";
+import { useGetV3ContextualLayer } from "generated/clayers/clayersComponents";
+import { useAccessToken } from "hooks/useAccessToken";
 
 interface IProps extends RouteComponentProps, TPropsFromRedux {}
 
@@ -50,7 +53,7 @@ export type TFormValues = {
 };
 
 const InvestigationPage: FC<IProps> = props => {
-  const { match, allAnswers, basemaps, areasInUsersTeams, selectedLayers } = props;
+  const { match, allAnswers, basemaps, areasInUsersTeams } = props;
   const [mapStyle, setMapStyle] = useState<string | undefined>(undefined);
   const [isPlanet, setIsPlanet] = useState(false);
   const [mapRef, setMapRef] = useState<MapInstance | null>(null);
@@ -68,6 +71,8 @@ const InvestigationPage: FC<IProps> = props => {
   let investigationMatch = useRouteMatch<TParams>({ path: "/reporting/investigation/:areaId/start", exact: false });
   const isMobile = useMediaQuery({ maxWidth: breakpoints.mobile });
   const [controlsPortal, setControlsPortal] = useState<HTMLElement | undefined>(undefined);
+  const { httpAuthHeader } = useAccessToken();
+  const { data: layersData } = useGetV3ContextualLayer({ headers: httpAuthHeader });
 
   const handleMapLoad = (evt: MapboxEvent) => {
     setMapRef(evt.target);
@@ -144,13 +149,17 @@ const InvestigationPage: FC<IProps> = props => {
       setCurrentProc(values.currentPlanetImageTypeBefore === "nat" ? "" : values.currentPlanetImageTypeBefore || "");
       setCurrentPlanetPeriodAfter(values.currentPlanetPeriodAfter || "");
       setCurrentProcAfter(values.currentPlanetImageTypeAfter === "nat" ? "" : values.currentPlanetImageTypeAfter || "");
-      setContextualLayerUrls(values.contextualLayers?.map(layer => selectedLayers[layer].attributes.url) || []);
+      setContextualLayerUrls(
+        values.contextualLayers?.map(
+          layer => layersData?.data.find(item => item?.id === layer)?.attributes?.url || ""
+        ) || []
+      );
       setBasemapKey(values.currentMap);
       setIsPlanet(values.showPlanetImagery?.[0] === PLANET_BASEMAP.key);
     });
 
     return () => subscription.unsubscribe();
-  }, [formhook, selectedLayers]);
+  }, [formhook, layersData]);
 
   useEffect(() => {
     if (!investigationMatch) {

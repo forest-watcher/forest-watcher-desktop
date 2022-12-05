@@ -6,9 +6,7 @@ const mapStateToProps = ({ reports, map, areas, layers }: RootState) => ({
   allAnswers: reports.allAnswers,
   basemaps: map.data,
   areas: areas.data,
-  areasInUsersTeams: areas.areasInUsersTeams,
-  // @ts-ignore
-  selectedLayers: layers.selectedLayers
+  areasInUsersTeams: areas.areasInUsersTeams
 });
 
 const mapDispatchToProps = {};
