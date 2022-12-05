@@ -80,7 +80,7 @@ const AssignmentDetailCard: FC<IProps> = props => {
       footer={
         <>
           {selectedAssignment?.attributes?.createdBy === userId && (
-            <Link className="c-button c-button--secondary" to={pathname}>
+            <Link className="c-button c-button--secondary" to={`/assignment/${selectedAssignment.id}/edit`}>
               {intl.formatMessage({ id: "assignments.details.edit.btn" })}
             </Link>
           )}

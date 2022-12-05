@@ -11,9 +11,9 @@ interface IProps extends HTMLAttributes<HTMLDivElement> {
   iconName?: string;
 }
 
-const COLLAPSE_CHAR_LIMIT = 50;
+const COLLAPSE_CHAR_LIMIT = 52;
 const DetailCard: FC<IProps> = ({ title, text, shouldCollapse = false, className, icon, iconName }) => {
-  const collapsable = shouldCollapse && text && text.length >= COLLAPSE_CHAR_LIMIT;
+  const collapsable = shouldCollapse && text && text.length > COLLAPSE_CHAR_LIMIT;
 
   return (
     <div
