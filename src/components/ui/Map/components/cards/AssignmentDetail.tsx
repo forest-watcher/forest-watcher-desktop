@@ -6,7 +6,7 @@ import { FC, useMemo } from "react";
 import { useIntl } from "react-intl";
 import MapCard from "components/ui/Map/components/cards/MapCard";
 import moment from "moment";
-import { Link, useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
 import useGetUserTeamsWithActiveMembers from "hooks/querys/teams/useGetUserTeamsWithActiveMembers";
 import { TeamMemberModel } from "generated/core/coreSchemas";
 
