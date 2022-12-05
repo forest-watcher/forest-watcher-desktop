@@ -22,7 +22,7 @@ import breakpoints from "styles/utilities/_u-breakpoints.scss";
 import { useGetV3ContextualLayer } from "generated/clayers/clayersComponents";
 import { useAccessToken } from "hooks/useAccessToken";
 import { differenceInMonths } from "date-fns";
-import { FormatDateOptions, IntlShape, useIntl } from "react-intl";
+import { FormatDateOptions, FormattedMessage, IntlShape, useIntl } from "react-intl";
 
 // Control Panel Views
 import AreaListControlPanel from "./control-panels/AreaList";
@@ -32,6 +32,7 @@ import Layers from "./components/Layers";
 import MapComparison from "components/map-comparison/MapComparison";
 import classNames from "classnames";
 import { useMediaQuery } from "react-responsive";
+import { getDateStringsForComparison } from "helpers/dates";
 
 interface IProps extends RouteComponentProps, TPropsFromRedux {}
 
@@ -57,27 +58,6 @@ export type TFormValues = {
   singleSelectedLocation?: LngLat;
   dateBefore?: Date[];
   dateAfter?: Date[];
-};
-
-const getDateStrings = (intl: IntlShape, dateBefore?: (Date | undefined)[], dateAfter?: (Date | undefined)[]) => {
-  if (!dateBefore || !dateAfter || !dateBefore[0] || !dateBefore[1] || !dateAfter[0] || !dateAfter[1]) {
-    return;
-  }
-
-  const options: FormatDateOptions = { month: "long", year: "numeric" };
-
-  const beforeDiff = differenceInMonths(dateBefore[1], dateBefore[0]);
-  const afterDiff = differenceInMonths(dateAfter[1], dateAfter[0]);
-
-  const beforeFromStr = intl.formatDate(dateBefore[0], options);
-  const beforeToStr = intl.formatDate(dateBefore[1], options);
-  const afterFromStr = intl.formatDate(dateAfter[0], options);
-  const afterToStr = intl.formatDate(dateAfter[1], options);
-
-  const beforeStr = beforeDiff === 1 ? beforeFromStr : `${beforeFromStr} - ${beforeToStr}`;
-  const afterStr = afterDiff === 1 ? afterFromStr : `${afterFromStr} - ${afterToStr}`;
-
-  return { beforeStr, afterStr };
 };
 
 const InvestigationPage: FC<IProps> = props => {
@@ -186,7 +166,7 @@ const InvestigationPage: FC<IProps> = props => {
       );
       setBasemapKey(values.currentMap);
       setIsPlanet(values.showPlanetImagery?.[0] === PLANET_BASEMAP.key);
-      setDateStrs(getDateStrings(intl, values.dateBefore, values.dateAfter));
+      setDateStrs(getDateStringsForComparison(intl, values.dateBefore, values.dateAfter));
     });
 
     return () => subscription.unsubscribe();
@@ -238,8 +218,6 @@ const InvestigationPage: FC<IProps> = props => {
       watcher.layers
     ]
   );
-
-  console.log({ dateStrs });
 
   return (
     <>
@@ -319,9 +297,18 @@ const InvestigationPage: FC<IProps> = props => {
         }
       >
         <OptionalWrapper data={showComparison}>
-          <MapCard position="bottom-right" title={"Planet Imagery Comparison"}>
-            <p>Showing Left: {dateStrs?.beforeStr}</p>
-            <p>Showing Right: {dateStrs?.afterStr}</p>
+          <MapCard
+            position="bottom-right"
+            title={intl.formatMessage({ id: "maps.comparison.cardTitle" })}
+            titleIconName="Basemap"
+            className="z-10"
+          >
+            <p className="text-base mb-1">
+              <FormattedMessage id="maps.comparison.left" values={{ date: dateStrs?.beforeStr }} />
+            </p>
+            <p className="text-base">
+              <FormattedMessage id="maps.comparison.right" values={{ date: dateStrs?.afterStr }} />
+            </p>
           </MapCard>
         </OptionalWrapper>
       </MapComparison>
