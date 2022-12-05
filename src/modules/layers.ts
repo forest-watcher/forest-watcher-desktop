@@ -1,22 +1,61 @@
+// @ts-ignore missing types
 import normalize from "json-api-normalizer";
 import { layerService } from "services/layer";
 import { CARTO_URL, CARTO_TABLE } from "../constants/global";
 import { LAYERS_BLACKLIST } from "../constants/global";
+import { AppDispatch, RootState } from "store";
+
 // Actions
 const GET_GFW_LAYERS = "layers/GET_GFW_LAYERS";
 const SET_LAYERS = "layers/SET_LAYERS";
 const SET_LOADING = "layers/SET_LOADING";
 const DELETE_LAYERS = "layers/DELETE_LAYERS";
 
+export interface ICartoLayer {
+  cartodb_id: number;
+  title: string;
+  tileurl: string;
+}
+
+export interface ICartoLayerResponse {
+  rows: ICartoLayer[];
+  time: number;
+  fields: {
+    cartodb_id: { type: string; pgtype: string };
+    title: { type: string; pgtype: string };
+    tileurl: { type: string; pgtype: string };
+  };
+  total_rows: number;
+}
+
+// Legacy code - used by old Layers code, added to fix TS errors
+interface ILegacyLayer {
+  id: string;
+  attributes: any;
+}
+
+export type TLayersState = {
+  gfw: ICartoLayerResponse["rows"];
+  selectedLayers: any;
+  selectedLayerIds: string[];
+  loading: boolean;
+};
+
+export type TReducerActions =
+  | { type: typeof GET_GFW_LAYERS; payload: ICartoLayerResponse["rows"] }
+  | { type: typeof SET_LAYERS; payload: { selectedLayer: any } }
+  | { type: typeof SET_LOADING; payload: boolean }
+  | { type: typeof DELETE_LAYERS; payload: { layer: ILegacyLayer } };
+
 // Reducer
-const initialState = {
+const initialState: TLayersState = {
   gfw: [],
   selectedLayers: {},
   selectedLayerIds: [],
   loading: false
 };
 
-export default function reducer(state = initialState, action) {
+export default function reducer(state = initialState, action: TReducerActions): TLayersState {
   switch (action.type) {
     case GET_GFW_LAYERS: {
       if (action.payload) {
@@ -27,6 +66,7 @@ export default function reducer(state = initialState, action) {
     case SET_LAYERS: {
       const selectedLayer = action.payload.selectedLayer;
       if (selectedLayer) {
+        //@ts-ignore - TODO: Figure out typescript error
         if (state.selectedLayerIds.indexOf(...Object.keys(selectedLayer)) > -1) {
           return {
             ...state,
@@ -66,7 +106,7 @@ export default function reducer(state = initialState, action) {
 // Action Creators
 export function getGFWLayers() {
   const url = `${CARTO_URL}/api/v2/sql?q=SELECT cartodb_id, name as title, tileurl FROM ${CARTO_TABLE} WHERE tileurl is not NULL AND tileurl <> '' AND name is not NULL`;
-  return dispatch => {
+  return (dispatch: AppDispatch) => {
     dispatch({
       type: SET_LOADING,
       payload: true
@@ -76,7 +116,7 @@ export function getGFWLayers() {
         if (response.ok) return response.json();
         throw Error(response.statusText);
       })
-      .then(async data => {
+      .then(async (data: ICartoLayerResponse) => {
         dispatch({
           type: GET_GFW_LAYERS,
           payload: data.rows.filter(layer => !LAYERS_BLACKLIST.includes(layer.cartodb_id))
@@ -96,14 +136,14 @@ export function getGFWLayers() {
   };
 }
 
-export function createLayer(layer, teamId) {
-  return (dispatch, state) => {
+export function createLayer(layer: ICartoLayer, teamId: string) {
+  return (dispatch: AppDispatch, getState: () => RootState) => {
     dispatch({
       type: SET_LOADING,
       payload: true
     });
 
-    layerService.token = state().user.token;
+    layerService.token = getState().user.token;
     return layerService
       .createLayer(layer, teamId)
       .then(async data => {
@@ -127,14 +167,14 @@ export function createLayer(layer, teamId) {
   };
 }
 
-export function toggleLayer(layer, value) {
-  return (dispatch, state) => {
+export function toggleLayer(layer: ILegacyLayer, value: boolean) {
+  return (dispatch: AppDispatch, getState: () => RootState) => {
     dispatch({
       type: SET_LOADING,
       payload: true
     });
 
-    layerService.token = state().user.token;
+    layerService.token = getState().user.token;
     return layerService
       .toggleLayer(layer.id, value)
       .then(async data => {
@@ -158,14 +198,14 @@ export function toggleLayer(layer, value) {
   };
 }
 
-export function deleteLayer(layer) {
-  return (dispatch, state) => {
+export function deleteLayer(layer: ILegacyLayer) {
+  return (dispatch: AppDispatch, getState: () => RootState) => {
     dispatch({
       type: SET_LOADING,
       payload: true
     });
 
-    layerService.token = state().user.token;
+    layerService.token = getState().user.token;
     return layerService
       .deleteLayer(layer.id)
       .then(response => {
@@ -192,13 +232,13 @@ export function deleteLayer(layer) {
 }
 
 export function getLayers() {
-  return (dispatch, state) => {
+  return (dispatch: AppDispatch, getState: () => RootState) => {
     dispatch({
       type: SET_LOADING,
       payload: true
     });
 
-    layerService.token = state().user.token;
+    layerService.token = getState().user.token;
     return layerService
       .getLayers()
       .then(async data => {

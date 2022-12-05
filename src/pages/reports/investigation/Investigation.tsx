@@ -4,7 +4,9 @@ import { CSSProperties, FC, useCallback, useEffect, useMemo, useState } from "re
 import { useForm, FormProvider } from "react-hook-form";
 import { Route, RouteComponentProps, Switch, useHistory, useRouteMatch } from "react-router-dom";
 import UserAreasMap, { IProps as UserAreasMapProps } from "components/user-areas-map/UserAreasMap";
-import { LAYERS } from "pages/reports/investigation/control-panels/start-investigation/StartInvestigation";
+import StartInvestigationControlPanel, {
+  LAYERS
+} from "pages/reports/investigation/control-panels/start-investigation/StartInvestigation";
 import { TParams } from "./types";
 import { TPropsFromRedux } from "./InvestigationContainer";
 import { BASEMAPS, PLANET_BASEMAP } from "constants/mapbox";
@@ -18,7 +20,6 @@ import breakpoints from "styles/utilities/_u-breakpoints.scss";
 // Control Panel Views
 import AreaListControlPanel from "./control-panels/AreaList";
 import AreaDetailControlPanel from "pages/reports/investigation/control-panels/AreaDetail";
-import StartInvestigationControlPanel from "pages/reports/investigation/control-panels/start-investigation/StartInvestigationContainer";
 import CreateAssignmentControlPanel from "pages/reports/investigation/control-panels/CreateAssignment/CreateAssignment";
 import Layers from "./components/Layers";
 import MapComparison from "components/map-comparison/MapComparison";

@@ -11,7 +11,6 @@ import Loader from "components/ui/Loader";
 import { FormattedMessage, useIntl } from "react-intl";
 import ToggleGroup from "components/ui/Form/ToggleGroup";
 import { useFormContext, useWatch } from "react-hook-form";
-import { TPropsFromRedux } from "pages/reports/investigation/control-panels/start-investigation/StartInvestigationContainer";
 import DataFilter from "components/ui/DataFilter/DataFilter";
 import useControlPanelReportFilters from "pages/reports/reports/useControlPanelReportFilters";
 import { TGetAllAnswers } from "services/reports";
@@ -29,7 +28,7 @@ export enum LAYERS {
   reports = "reports"
 }
 
-interface IProps extends TPropsFromRedux {
+interface IProps {
   onFilterUpdate: (answers: TGetAllAnswers["data"]) => void;
   answers?: TGetAllAnswers["data"];
   defaultBasemap?: string;

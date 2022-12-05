@@ -19,6 +19,7 @@ import { yupResolver } from "@hookform/resolvers/yup/dist/yup";
 import { Option } from "types";
 import { useAppSelector } from "hooks/useRedux";
 import { toastr } from "react-redux-toastr";
+import { RootState } from "store";
 
 type LayersCardProps = {
   title: string;
@@ -43,8 +44,7 @@ const addLayersSchema = yup
 const LayersCard = ({ title, items, refetchLayers, layersLoading, titleIsKey = true, team }: LayersCardProps) => {
   const { httpAuthHeader } = useAccessToken();
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const { gfw } = useAppSelector(state => state.layers);
-  const gfwLayers = gfw as any[];
+  const { gfw: gfwLayers } = useAppSelector((state: RootState) => state.layers);
 
   const intl = useIntl();
 
@@ -59,7 +59,6 @@ const LayersCard = ({ title, items, refetchLayers, layersLoading, titleIsKey = t
   const layerOptions = useMemo<Option[] | undefined>(
     () =>
       gfwLayers?.map((layer: any) => ({
-        // @ts-ignore template.attributes.name has incorrect type
         label: intl.formatMessage({ id: layer.title }),
         value: layer.tileurl
       })),
@@ -85,7 +84,7 @@ const LayersCard = ({ title, items, refetchLayers, layersLoading, titleIsKey = t
       for (let i = 0; i < layers.length; i++) {
         const item = layers[i];
         await addNewTeamLayer({
-          body: { name: item.title, url: item.tileurl, enabled: true },
+          body: { name: item?.title || "", url: item?.tileurl || "", enabled: true },
           pathParams: { teamId: team?.id || "" },
           headers: httpAuthHeader
         });
