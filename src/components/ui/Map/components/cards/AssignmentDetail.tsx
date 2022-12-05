@@ -6,7 +6,7 @@ import { FC, useMemo } from "react";
 import { useIntl } from "react-intl";
 import MapCard from "components/ui/Map/components/cards/MapCard";
 import moment from "moment";
-import { Link, useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
 import useGetUserTeamsWithActiveMembers from "hooks/querys/teams/useGetUserTeamsWithActiveMembers";
 import { TeamMemberModel } from "generated/core/coreSchemas";
 
@@ -22,7 +22,6 @@ const AssignmentDetailCard: FC<IProps> = props => {
   const { selectedAssignment } = props;
   const intl = useIntl();
   const userId = useGetUserId();
-  const { pathname } = useLocation();
   const { data: teamData, isLoading: isTeamDataLoading } = useGetUserTeamsWithActiveMembers();
   const isAssignedToCurrentUser = useMemo(() => {
     return selectedAssignment?.attributes?.monitors.findIndex(monitor => monitor === userId) !== -1;
@@ -80,7 +79,7 @@ const AssignmentDetailCard: FC<IProps> = props => {
       footer={
         <>
           {selectedAssignment?.attributes?.createdBy === userId && (
-            <Link className="c-button c-button--secondary" to={pathname}>
+            <Link className="c-button c-button--secondary" to={`/assignment/${selectedAssignment.id}/edit`}>
               {intl.formatMessage({ id: "assignments.details.edit.btn" })}
             </Link>
           )}

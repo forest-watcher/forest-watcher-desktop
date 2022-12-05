@@ -65,7 +65,11 @@ const Carousel = ({ slides, downloadable }: CarouselProps) => {
   };
 
   if (!slides || slides.length === 0) {
-    return <FormattedMessage id="common.noImages" />;
+    return (
+      <p className="text-base">
+        <FormattedMessage id="common.noImages" />
+      </p>
+    );
   }
 
   return (

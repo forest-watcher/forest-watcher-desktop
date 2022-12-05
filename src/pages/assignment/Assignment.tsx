@@ -38,7 +38,7 @@ const Assignment: FC = props => {
     const templates = data?.data?.attributes?.templates || [];
 
     return templates
-      .map(template => (template.name ? template.name[template.defaultLanguage as keyof typeof template.name] : ""))
+      .map(template => (template?.name ? template.name[template.defaultLanguage as keyof typeof template.name] : ""))
       .filter(name => name !== "")
       .join(", ");
   }, [data?.data?.attributes?.templates]);

@@ -4,7 +4,9 @@ import { CSSProperties, FC, useCallback, useEffect, useMemo, useState } from "re
 import { useForm, FormProvider } from "react-hook-form";
 import { Route, RouteComponentProps, Switch, useHistory, useRouteMatch } from "react-router-dom";
 import UserAreasMap, { IProps as UserAreasMapProps } from "components/user-areas-map/UserAreasMap";
-import { LAYERS } from "pages/reports/investigation/control-panels/start-investigation/StartInvestigation";
+import StartInvestigationControlPanel, {
+  LAYERS
+} from "pages/reports/investigation/control-panels/start-investigation/StartInvestigation";
 import { TParams } from "./types";
 import { TPropsFromRedux } from "./InvestigationContainer";
 import { BASEMAPS, PLANET_BASEMAP } from "constants/mapbox";
@@ -12,22 +14,24 @@ import { TGetAllAnswers } from "services/reports";
 import { LngLat } from "react-map-gl";
 import { setupMapImages } from "helpers/map";
 import { Map as MapInstance, MapboxEvent } from "mapbox-gl";
+import OptionalWrapper from "components/extensive/OptionalWrapper";
+import MapCard from "components/ui/Map/components/cards/MapCard";
+
 //@ts-ignore
 import breakpoints from "styles/utilities/_u-breakpoints.scss";
+import { useGetV3ContextualLayer } from "generated/clayers/clayersComponents";
+import { useAccessToken } from "hooks/useAccessToken";
+import { differenceInMonths } from "date-fns";
+import { FormatDateOptions, IntlShape, useIntl } from "react-intl";
 
 // Control Panel Views
 import AreaListControlPanel from "./control-panels/AreaList";
 import AreaDetailControlPanel from "pages/reports/investigation/control-panels/AreaDetail";
-import StartInvestigationControlPanel from "pages/reports/investigation/control-panels/start-investigation/StartInvestigationContainer";
 import CreateAssignmentControlPanel from "pages/reports/investigation/control-panels/CreateAssignment/CreateAssignment";
 import Layers from "./components/Layers";
 import MapComparison from "components/map-comparison/MapComparison";
 import classNames from "classnames";
 import { useMediaQuery } from "react-responsive";
-import MapCard from "components/ui/Map/components/cards/MapCard";
-import { differenceInMonths } from "date-fns";
-import { FormatDateOptions, IntlShape, useIntl } from "react-intl";
-import OptionalWrapper from "components/extensive/OptionalWrapper";
 
 interface IProps extends RouteComponentProps, TPropsFromRedux {}
 
@@ -77,7 +81,7 @@ const getDateStrings = (intl: IntlShape, dateBefore?: (Date | undefined)[], date
 };
 
 const InvestigationPage: FC<IProps> = props => {
-  const { match, allAnswers, basemaps, areasInUsersTeams, selectedLayers } = props;
+  const { match, allAnswers, basemaps, areasInUsersTeams } = props;
   const [mapStyle, setMapStyle] = useState<string | undefined>(undefined);
   const [isPlanet, setIsPlanet] = useState(false);
   const [mapRef, setMapRef] = useState<MapInstance | null>(null);
@@ -97,6 +101,8 @@ const InvestigationPage: FC<IProps> = props => {
   const [controlsPortal, setControlsPortal] = useState<HTMLElement | undefined>(undefined);
   const [dateStrs, setDateStrs] = useState<{ beforeStr: string; afterStr: string }>();
   const intl = useIntl();
+  const { httpAuthHeader } = useAccessToken();
+  const { data: layersData } = useGetV3ContextualLayer({ headers: httpAuthHeader });
 
   const handleMapLoad = (evt: MapboxEvent) => {
     setMapRef(evt.target);
@@ -173,14 +179,18 @@ const InvestigationPage: FC<IProps> = props => {
       setCurrentProc(values.currentPlanetImageTypeBefore === "nat" ? "" : values.currentPlanetImageTypeBefore || "");
       setCurrentPlanetPeriodAfter(values.currentPlanetPeriodAfter || "");
       setCurrentProcAfter(values.currentPlanetImageTypeAfter === "nat" ? "" : values.currentPlanetImageTypeAfter || "");
-      setContextualLayerUrls(values.contextualLayers?.map(layer => selectedLayers[layer].attributes.url) || []);
+      setContextualLayerUrls(
+        values.contextualLayers?.map(
+          layer => layersData?.data.find(item => item?.id === layer)?.attributes?.url || ""
+        ) || []
+      );
       setBasemapKey(values.currentMap);
       setIsPlanet(values.showPlanetImagery?.[0] === PLANET_BASEMAP.key);
       setDateStrs(getDateStrings(intl, values.dateBefore, values.dateAfter));
     });
 
     return () => subscription.unsubscribe();
-  }, [formhook, intl, selectedLayers]);
+  }, [formhook, intl, layersData?.data]);
 
   useEffect(() => {
     if (!investigationMatch) {

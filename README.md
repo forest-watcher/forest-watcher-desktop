@@ -84,7 +84,7 @@ Here is an hook implementation example:
 ```
 import { useGetAllReports } from "generated/forms/formsComponents";
 
-const { httpAuthHeaders } = useAccessToken()
+const { httpAuthHeader } = useAccessToken()
 const {
     data: reportsData,
     isLoading: reportsLoading,
