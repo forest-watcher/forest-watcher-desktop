@@ -111,7 +111,31 @@ const Basemaps: FC<IProps> = ({ defaultBasemap, onComparison }) => {
 
   useEffect(() => {
     onComparison(isComparison);
-  }, [onComparison, isComparison]);
+
+    if (isComparison) {
+      // * Set default values of the comparison data if isComparison
+      const beforeDefault = beforeMapPeriods[beforeMapPeriods.length - 1];
+      const afterDefault = afterMapPeriods[afterMapPeriods.length - 1];
+      if (!watcher.currentPlanetPeriodBefore) {
+        // @ts-ignore
+        methods.setValue(`dateBefore`, [beforeDefault.metadata.startDate, beforeDefault.metadata.endDate]);
+        methods.setValue(`currentPlanetPeriodBefore`, beforeDefault.value);
+      }
+      if (!watcher.currentPlanetPeriodAfter) {
+        // @ts-ignore
+        methods.setValue(`dateAfter`, [afterDefault.metadata.startDate, afterDefault.metadata.endDate]);
+        methods.setValue(`currentPlanetPeriodAfter`, beforeDefault.value);
+      }
+    }
+  }, [
+    onComparison,
+    isComparison,
+    beforeMapPeriods,
+    afterMapPeriods,
+    watcher.currentPlanetPeriodBefore,
+    watcher.currentPlanetPeriodAfter,
+    methods
+  ]);
 
   const basemapKeys = useMemo(() => {
     if (isComparison) {
@@ -204,6 +228,9 @@ const Basemaps: FC<IProps> = ({ defaultBasemap, onComparison }) => {
                   key={watcher.currentPlanetImageType}
                   className="u-margin-bottom-20"
                   alternateLabelStyle
+                  onChange={value => {
+                    methods.setValue(`date${item}`, [value.metadata.startDate, value.metadata.endDate]);
+                  }}
                 />
                 <OptionalWrapper data={!isMobile}>
                   <div className="u-margin-bottom-40">
@@ -216,7 +243,10 @@ const Basemaps: FC<IProps> = ({ defaultBasemap, onComparison }) => {
                             })
                           : baseMapPeriods.length - 1
                       }
-                      onChange={value => methods.setValue(`currentPlanetPeriod${item}`, value.value)}
+                      onChange={value => {
+                        methods.setValue(`date${item}`, [value.metadata.startDate, value.metadata.endDate]);
+                        methods.setValue(`currentPlanetPeriod${item}`, value.value);
+                      }}
                       labelGetter="metadata.label"
                       yearGetter="metadata.year"
                     />

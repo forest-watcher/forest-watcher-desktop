@@ -14,8 +14,14 @@ import { TGetAllAnswers } from "services/reports";
 import { LngLat } from "react-map-gl";
 import { setupMapImages } from "helpers/map";
 import { Map as MapInstance, MapboxEvent } from "mapbox-gl";
+import OptionalWrapper from "components/extensive/OptionalWrapper";
+import MapCard from "components/ui/Map/components/cards/MapCard";
+
 //@ts-ignore
 import breakpoints from "styles/utilities/_u-breakpoints.scss";
+import { useGetV3ContextualLayer } from "generated/clayers/clayersComponents";
+import { useAccessToken } from "hooks/useAccessToken";
+import { FormattedMessage, useIntl } from "react-intl";
 
 // Control Panel Views
 import AreaListControlPanel from "./control-panels/AreaList";
@@ -25,8 +31,7 @@ import Layers from "./components/Layers";
 import MapComparison from "components/map-comparison/MapComparison";
 import classNames from "classnames";
 import { useMediaQuery } from "react-responsive";
-import { useGetV3ContextualLayer } from "generated/clayers/clayersComponents";
-import { useAccessToken } from "hooks/useAccessToken";
+import { getDateStringsForComparison } from "helpers/dates";
 
 interface IProps extends RouteComponentProps, TPropsFromRedux {}
 
@@ -50,6 +55,8 @@ export type TFormValues = {
   alertTypesViirsRequestThreshold: number;
   selectedAlerts: TAlertsById[];
   singleSelectedLocation?: LngLat;
+  dateBefore?: Date[];
+  dateAfter?: Date[];
 };
 
 const InvestigationPage: FC<IProps> = props => {
@@ -71,6 +78,8 @@ const InvestigationPage: FC<IProps> = props => {
   let investigationMatch = useRouteMatch<TParams>({ path: "/reporting/investigation/:areaId/start", exact: false });
   const isMobile = useMediaQuery({ maxWidth: breakpoints.mobile });
   const [controlsPortal, setControlsPortal] = useState<HTMLElement | undefined>(undefined);
+  const [dateStrs, setDateStrs] = useState<{ beforeStr: string; afterStr: string }>();
+  const intl = useIntl();
   const { httpAuthHeader } = useAccessToken();
   const { data: layersData } = useGetV3ContextualLayer({ headers: httpAuthHeader });
 
@@ -156,10 +165,11 @@ const InvestigationPage: FC<IProps> = props => {
       );
       setBasemapKey(values.currentMap);
       setIsPlanet(values.showPlanetImagery?.[0] === PLANET_BASEMAP.key);
+      setDateStrs(getDateStringsForComparison(intl, values.dateBefore, values.dateAfter));
     });
 
     return () => subscription.unsubscribe();
-  }, [formhook, layersData]);
+  }, [formhook, intl, layersData?.data]);
 
   useEffect(() => {
     if (!investigationMatch) {
@@ -284,7 +294,23 @@ const InvestigationPage: FC<IProps> = props => {
               }
             : undefined
         }
-      />
+      >
+        <OptionalWrapper data={showComparison}>
+          <MapCard
+            position="bottom-right"
+            title={intl.formatMessage({ id: "maps.comparison.cardTitle" })}
+            titleIconName="Basemap"
+            className="z-10"
+          >
+            <p className="text-base mb-1">
+              <FormattedMessage id="maps.comparison.left" values={{ date: dateStrs?.beforeStr }} />
+            </p>
+            <p className="text-base">
+              <FormattedMessage id="maps.comparison.right" values={{ date: dateStrs?.afterStr }} />
+            </p>
+          </MapCard>
+        </OptionalWrapper>
+      </MapComparison>
     </>
   );
 };

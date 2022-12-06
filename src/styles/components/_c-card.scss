@@ -165,6 +165,8 @@ $c-card-border-radius:  $global-spacing-1;
   position: absolute;
   display: flex;
   flex-direction: column;
+  max-width: 400px;
+  width: 100%;
   &__header {
     display: flex;
     align-items: center;
