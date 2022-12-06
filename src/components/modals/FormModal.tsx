@@ -142,7 +142,7 @@ const FormModal = <T,>(props: IProps<T>) => {
   return (
     <>
       <Modal
-        isOpen={isOpen && !isClosing}
+        isOpen={isOpen}
         onClose={onClose && handleCloseRequest}
         title={modalTitle}
         dismissible={dismissible}
@@ -161,11 +161,15 @@ const FormModal = <T,>(props: IProps<T>) => {
           {props.children}
         </form>
         {actions && <div className="c-modal-dialog__extra-actions">{actions}</div>}
+        {onClose && !hideUnsavedChangesModal && (
+          <UnsavedChanges
+            isOpen={isOpen && isClosing}
+            leaveCallBack={onClose}
+            stayCallBack={() => setIsClosing(false)}
+            hideBackdrop
+          />
+        )}
       </Modal>
-
-      {onClose && !hideUnsavedChangesModal && (
-        <UnsavedChanges isOpen={isOpen && isClosing} leaveCallBack={onClose} stayCallBack={() => setIsClosing(false)} />
-      )}
     </>
   );
 };
