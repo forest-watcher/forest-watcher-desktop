@@ -3,6 +3,21 @@ import { MapImages } from "helpers/map";
 const primary500 = "#94BE43";
 const neutral300 = "#FFFFFF";
 
+export const linePointStyle = {
+  type: "symbol",
+  layout: { "icon-image": MapImages.routePointIconUnselected },
+  paint: {}
+};
+
+export const lineStyle = {
+  type: "line",
+  layout: {},
+  paint: {
+    "line-color": neutral300,
+    "line-width": 8
+  }
+};
+
 export const pointStyle = {
   id: "point",
   type: "symbol",
