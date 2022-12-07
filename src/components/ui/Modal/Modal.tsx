@@ -16,10 +16,11 @@ export interface IProps {
     onClick: () => void;
   }[];
   className?: string;
+  hideBackdrop?: boolean;
 }
 
 const Modal: FC<PropsWithChildren<IProps>> = props => {
-  const { isOpen, onClose, title, actions, dismissible = true, children } = props;
+  const { isOpen, onClose, title, actions, dismissible = true, children, hideBackdrop = false } = props;
 
   return (
     <Transition
@@ -33,7 +34,7 @@ const Modal: FC<PropsWithChildren<IProps>> = props => {
         className={`c-modal-dialog__container ${props.className}`}
         onClose={dismissible && onClose ? onClose : () => {}}
       >
-        <div className="c-modal-dialog__backdrop" aria-hidden="true" />
+        {!hideBackdrop && <div className="c-modal-dialog__backdrop" aria-hidden="true" />}
 
         <Dialog.Panel className="c-modal-dialog">
           <Dialog.Title className="c-modal-dialog__title">

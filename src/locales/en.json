@@ -41,7 +41,7 @@
   "assignment.details.status": "Status",
   "assignment.details.status.open": "Open",
   "assignment.details.status.completed": "Completed",
-  "assignment.details.status.onhold": "On Hold",
+  "assignment.details.status.on hold": "On hold",
   "assignment.details.assignmentType": "Assignment type",
   "assignment.details.templates": "Templates",
   "assignment.details.monitor": "Monitor",
