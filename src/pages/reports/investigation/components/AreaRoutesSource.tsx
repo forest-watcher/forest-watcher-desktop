@@ -1,19 +1,10 @@
 import * as turf from "@turf/turf";
-import AssignmentDetailCard from "components/ui/Map/components/cards/AssignmentDetail";
-import SquareClusterMarkers, { EPointDataTypes } from "components/ui/Map/components/layers/SquareClusterMarkers";
 import { linePointStyle, lineStyle } from "components/ui/Map/components/layers/styles";
-import {
-  useGetV3GfwAssignmentsAllOpenUserForAreaAreaId,
-  useGetV3GfwRoutesTeams,
-  useGetV3GfwRoutesUser
-} from "generated/core/coreComponents";
-import { RoutesResponse } from "generated/core/coreResponses";
+import { useGetV3GfwRoutesTeams, useGetV3GfwRoutesUser } from "generated/core/coreComponents";
 import { RouteModel } from "generated/core/coreSchemas";
 import { useAccessToken } from "hooks/useAccessToken";
-import useGetUserId from "hooks/useGetUserId";
-import { FC, useCallback, useMemo, useState } from "react";
-import { Layer, Source, useMap } from "react-map-gl";
-import { AssignmentLayerType, IPoint } from "types/map";
+import { FC, useMemo } from "react";
+import { Layer, Source } from "react-map-gl";
 
 export interface IProps {
   areaId?: string;
@@ -29,11 +20,6 @@ const getRoutePoints = (route: { id?: string; type?: string; attributes?: RouteM
 };
 
 const AreaRoutesSource: FC<IProps> = props => {
-  const { areaId } = props;
-  const { current: mapRef } = useMap();
-  const userId = useGetUserId();
-  // const [selectedAssignmentId, setSelectedAssignmentId] = useState<string | null>(null);
-
   const { httpAuthHeader } = useAccessToken();
   const { data: teamRoutes } = useGetV3GfwRoutesTeams({
     headers: httpAuthHeader
@@ -42,108 +28,63 @@ const AreaRoutesSource: FC<IProps> = props => {
     headers: httpAuthHeader
   });
 
-  const routes = [...(teamRoutes?.data || []), ...(userRoutes?.data || [])];
+  const routes = useMemo(
+    () => [...(teamRoutes?.data || []), ...(userRoutes?.data || [])],
+    [teamRoutes?.data, userRoutes?.data]
+  );
 
-  const routesMapped = routes.map(route => {
-    return turf.lineString(getRoutePoints(route), route);
-  });
+  const routesMapped = useMemo(
+    () =>
+      routes.map(route => {
+        return turf.lineString(getRoutePoints(route));
+      }),
+    [routes]
+  );
 
-  const pointsMapped = routes.map(route => {
-    const points = turf.points(getRoutePoints(route), route);
+  const pointsMapped = useMemo(
+    () =>
+      routes.map(route => {
+        const points = turf.points(getRoutePoints(route));
 
-    points.features.forEach(point => {
-      const locations = routes.find(route => route.id === point.properties.id)?.attributes?.locations || [];
-      const indexOfPoint = locations.findIndex(
-        loc => point.geometry.coordinates[0] === loc.longitude && point.geometry.coordinates[1] === loc.latitude
-      );
+        const newFeatures = points.features.map(point => {
+          const newPoint = { ...point };
+          const locations = [route.attributes?.destination, ...(route.attributes?.locations || [])];
+          const indexOfPoint = locations.findIndex(
+            loc =>
+              newPoint.geometry.coordinates[0] === loc?.longitude && newPoint.geometry.coordinates[1] === loc?.latitude
+          );
 
-      console.log({ indexOfPoint });
-      const isEndPoint = indexOfPoint === 0 || indexOfPoint === locations.length - 1;
+          // @ts-ignore
+          newPoint.properties.isEndPoint = indexOfPoint === 0 || indexOfPoint === locations.length - 1;
+          // @ts-ignore TODO - change based on has the route been selected - will change the style.
+          newPoint.properties.isSelected = false;
 
-      // @ts-ignore
-      point.properties.isEndPoint = isEndPoint;
-    });
-    return points;
-  });
+          return newPoint;
+        });
 
-  console.log({ routesMapped, pointsMapped });
-
-  // const assignmentPoints = useMemo(() => {
-  //   if (!data || !data.data || !data.data.length) {
-  //     return [];
-  //   }
-
-  //   const assignmentCenters: IPoint[] = [];
-  //   for (let i = 0; i < data.data.length; i++) {
-  //     const assignment = data.data[i];
-
-  //     let calculatedCenter;
-  //     if (assignment.attributes?.location) {
-  //       // Alerts are assigned to the Assignment
-  //       const pointFeatures = turf.points(
-  //         // @ts-ignore
-  //         assignment.attributes?.location?.map(location => {
-  //           const lon = typeof location.lon === "string" ? parseFloat(location.lon) : location.lon;
-  //           const lat = typeof location.lat === "string" ? parseFloat(location.lat) : location.lat;
-  //           return [lon, lat];
-  //         })
-  //       );
-
-  //       // Find center of all the Alerts
-  //       calculatedCenter = turf.center(pointFeatures);
-  //     } else if (assignment.attributes?.geostore?.geojson) {
-  //       // A GeoStore location is assigned to the Assignment
-  //       calculatedCenter = turf.centerOfMass(assignment.attributes?.geostore?.geojson);
-  //     }
-
-  //     if (calculatedCenter) {
-  //       assignmentCenters.push({
-  //         id: assignment.id!,
-  //         position: [calculatedCenter.geometry.coordinates[0], calculatedCenter.geometry.coordinates[1]],
-  //         type: assignment.attributes?.createdBy === userId ? AssignmentLayerType.creator : AssignmentLayerType.default
-  //       });
-  //     }
-  //   }
-
-  //   return assignmentCenters;
-  // }, [data, userId]);
-
-  // const handleSquareSelect = useCallback((ids: string[] | null) => {
-  //   setSelectedAssignmentId(ids && ids[0] ? ids[0] : null);
-  // }, []);
+        points.features = newFeatures;
+        return points;
+      }),
+    [routes]
+  );
 
   return (
     <>
-      {/* <SquareClusterMarkers
-        id="assignments"
-        pointDataType={EPointDataTypes.Assignments}
-        points={assignmentPoints}
-        onSelectionChange={handleSquareSelect}
-        selectedSquareIds={selectedAssignmentId ? [selectedAssignmentId] : null}
-        mapRef={mapRef?.getMap() || null}
-        canMapDeselect
-      />
-
-      <AssignmentDetailCard
-        selectedAssignment={
-          selectedAssignmentId && data?.data ? data.data.find(i => i.id === selectedAssignmentId) : undefined
-        }
-      /> */}
-      {/* {routes.forEach(route => ( */}
       {routesMapped &&
-        routesMapped.forEach(route => (
-          <Source key={route.properties.id} type="geojson" data={route}>
+        routesMapped.map((route, index) => (
+          <Source key={index} type="geojson" data={route}>
             {/* @ts-ignore TS typing error with Layer */}
             <Layer {...lineStyle} />
           </Source>
         ))}
-      {/* {routesMapped && (
-        <Source type="geojson" data={multiPoints}>
-          {/* @ts-ignore TS typing error with Layer */}
-      {/* <Layer {...linePointStyle} />
-        </Source> */}
-      {/* `)}` */}
-      {/* ))} */}
+
+      {pointsMapped &&
+        pointsMapped.map((point, index) => (
+          <Source type="geojson" data={point} key={index}>
+            {/* @ts-ignore TS typing error with Layer */}
+            <Layer {...linePointStyle} />
+          </Source>
+        ))}
     </>
   );
 };
