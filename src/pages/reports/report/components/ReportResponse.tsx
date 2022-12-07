@@ -4,7 +4,6 @@ import HeaderCard from "components/ui/Card/HeaderCard";
 import Modal from "components/ui/Modal/Modal";
 import { download } from "helpers/exports";
 import { useState } from "react";
-import { Link } from "react-router-dom";
 
 export interface IReportResponse {
   question: string;
