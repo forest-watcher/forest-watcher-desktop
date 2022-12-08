@@ -719,5 +719,6 @@
   "filters.all.alerts": "All Alerts",
   "filters.all.templates": "All Templates",
   "filters.all.timeframes": "All Time Frames",
-  "filters.all.monitors": "All Monitors"
+  "filters.all.monitors": "All Monitors",
+  "audio.play": "Play Audio"
 }
