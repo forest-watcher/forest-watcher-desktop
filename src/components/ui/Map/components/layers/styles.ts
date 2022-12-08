@@ -3,6 +3,51 @@ import { MapImages } from "helpers/map";
 const primary500 = "#94BE43";
 const neutral300 = "#FFFFFF";
 
+const isSelectedEndpointCase = [
+  "case",
+  ["boolean", ["get", "isSelected"], false],
+  MapImages.routePoint,
+  MapImages.routePointIconUnselected
+];
+
+const isSelectedMiddleCase = [
+  "case",
+  ["boolean", ["get", "isSelected"], false],
+  MapImages.routePointIconMiddle,
+  MapImages.blank
+];
+
+const lintPointIconImage = [
+  "case",
+  ["boolean", ["get", "isEndPoint"], false],
+  isSelectedEndpointCase,
+  isSelectedMiddleCase
+];
+
+const symbolPriority = ["case", ["boolean", ["get", "isEndPoint"], false], 1, 0];
+
+export const linePointStyle = {
+  type: "symbol",
+  layout: {
+    "icon-image": lintPointIconImage,
+    "icon-size": 0.5,
+    "icon-padding": 0,
+    "symbol-sort-key": symbolPriority,
+    "symbol-z-order": "source",
+    "icon-allow-overlap": true
+  },
+  paint: {}
+};
+
+export const lineStyle = {
+  type: "line",
+  layout: {},
+  paint: {
+    "line-color": neutral300,
+    "line-width": 8
+  }
+};
+
 export const pointStyle = {
   id: "point",
   type: "symbol",

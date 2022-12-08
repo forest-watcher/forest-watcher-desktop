@@ -15,7 +15,10 @@ import alerViirsHoverIcon from "assets/images/icons/alertIcons/AlertViirsHover.p
 import assignmentAssignedToBeIcon from "assets/images/icons/alertIcons/AssignmentAssignedToMe.png";
 import assignmentCreateByMeIcon from "assets/images/icons/alertIcons/AssignmentCreatedByMe.png";
 import assignmentSelectedIcon from "assets/images/icons/alertIcons/AssignmentSelected.png";
-import routePointIcon from "assets/images/icons/alertIcons/RoutePoint.png";
+import routePointIcon from "assets/images/icons/routeIcons/RoutePoint.png";
+import routePointIconUnselected from "assets/images/icons/routeIcons/RoutePointUnselected.png";
+import routePointIconMiddle from "assets/images/icons/routeIcons/RoutePointMiddle.png";
+import blankIcon from "assets/images/icons/routeIcons/Blank.png";
 
 import L from "leaflet";
 import * as turf from "@turf/turf";
@@ -37,7 +40,10 @@ export enum MapImages {
   assignmentAssignedToMe = "assignment-assigned-to-me",
   assignmentCreatedByMe = "assignment-created-by-me",
   assignmentSelected = "assignment-selected",
-  routePoint = "route-point"
+  routePoint = "route-point",
+  routePointIconUnselected = "route-point-unselected",
+  routePointIconMiddle = "route-point-middle",
+  blank = "blank"
 }
 
 export const mapImagesArr = [
@@ -106,6 +112,18 @@ export const mapImagesArr = [
   {
     type: MapImages.routePoint,
     image: routePointIcon
+  },
+  {
+    type: MapImages.routePointIconUnselected,
+    image: routePointIconUnselected
+  },
+  {
+    type: MapImages.routePointIconMiddle,
+    image: routePointIconMiddle
+  },
+  {
+    type: MapImages.blank,
+    image: blankIcon
   }
 ];
 
