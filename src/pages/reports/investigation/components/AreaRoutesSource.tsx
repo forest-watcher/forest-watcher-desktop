@@ -1,99 +1,25 @@
 import * as turf from "@turf/turf";
-import MapCard from "components/ui/Map/components/cards/MapCard";
 import { linePointStyle, lineStyle } from "components/ui/Map/components/layers/styles";
 import { useGetV3GfwRoutesTeams, useGetV3GfwRoutesUser } from "generated/core/coreComponents";
 import { RouteResponse } from "generated/core/coreResponses";
 import { RouteModel } from "generated/core/coreSchemas";
-import { capitalizeFirstLetter } from "helpers/string";
 import { useAccessToken } from "hooks/useAccessToken";
 import { EventData, MapMouseEvent } from "mapbox-gl";
-import moment from "moment";
 import { FC, useEffect, useMemo, useState } from "react";
-import { FormattedMessage, useIntl } from "react-intl";
 import { Layer, Source, useMap } from "react-map-gl";
+import RouteCard from "./RouteCard";
 
 export interface IProps {
   areaId?: string;
 }
 
-interface CardProps {
-  route: RouteResponse["data"];
-}
-
-const getRoutePoints = (route: { id?: string; type?: string; attributes?: RouteModel }) => {
+export const getRoutePoints = (route: { id?: string; type?: string; attributes?: RouteModel }) => {
   const start = [route.attributes?.destination?.longitude || 0, route.attributes?.destination?.latitude || 0];
 
   const otherPoints =
     route.attributes?.locations?.map(location => [location.longitude || 0, location.latitude || 0]) || [];
 
   return [start, ...otherPoints];
-};
-
-const RouteCard: FC<CardProps> = ({ route }) => {
-  const intl = useIntl();
-
-  if (!route) {
-    return null;
-  }
-
-  const routePoints = getRoutePoints(route);
-  const line = turf.lineString(routePoints);
-  const start = routePoints[0];
-  const end = routePoints[routePoints.length - 1];
-  const length = turf.length(line, { units: "kilometers" }).toFixed(1);
-
-  return (
-    <MapCard title={route.attributes?.name || ""} position="bottom-right">
-      <ul className="c-card__text c-card__list">
-        <li>
-          <FormattedMessage
-            id="route.start"
-            values={{
-              value: `${start[0]?.toFixed(4)}, ${start[1].toFixed(4)}`
-            }}
-          />
-        </li>
-        <li>
-          <FormattedMessage
-            id="route.end"
-            values={{
-              value: `${end[0].toFixed(4)}, ${end[1].toFixed(4)}`
-            }}
-          />
-        </li>
-        <li>
-          <FormattedMessage id="route.distance" values={{ value: length }} />
-        </li>
-        <li>
-          <FormattedMessage
-            id="route.date"
-            values={{
-              value: intl.formatDate(route.attributes?.startDate, { month: "short", day: "2-digit", year: "numeric" })
-            }}
-          />
-        </li>
-        <li>
-          <FormattedMessage
-            id="route.difficulty"
-            values={{ value: intl.formatMessage({ id: `route.difficulty.${route.attributes?.difficulty}` }) }}
-          />
-        </li>
-        <li>
-          <FormattedMessage
-            id="route.timeTaken"
-            values={{
-              value: capitalizeFirstLetter(
-                moment.duration(moment(route.attributes?.endDate).diff(moment(route.attributes?.startDate))).humanize()
-              )
-            }}
-          />
-        </li>
-        <li>
-          <FormattedMessage id="route.monitor" values={{ value: route.attributes?.createdBy }} />
-        </li>
-      </ul>
-    </MapCard>
-  );
 };
 
 const AreaRoutesSource: FC<IProps> = props => {
