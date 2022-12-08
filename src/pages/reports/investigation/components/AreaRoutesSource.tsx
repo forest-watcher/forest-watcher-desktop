@@ -29,8 +29,11 @@ const AreaRoutesSource: FC<IProps> = props => {
   });
 
   const routes = useMemo(
-    () => [...(teamRoutes?.data || []), ...(userRoutes?.data || [])],
-    [teamRoutes?.data, userRoutes?.data]
+    () =>
+      [...(teamRoutes?.data || []), ...(userRoutes?.data || [])].filter(
+        route => route.attributes?.areaId === props.areaId
+      ),
+    [props.areaId, teamRoutes?.data, userRoutes?.data]
   );
 
   const routesMapped = useMemo(
@@ -57,7 +60,7 @@ const AreaRoutesSource: FC<IProps> = props => {
           // @ts-ignore
           newPoint.properties.isEndPoint = indexOfPoint === 0 || indexOfPoint === locations.length - 1;
           // @ts-ignore TODO - change based on has the route been selected - will change the style.
-          newPoint.properties.isSelected = false;
+          newPoint.properties.isSelected = true;
 
           return newPoint;
         });

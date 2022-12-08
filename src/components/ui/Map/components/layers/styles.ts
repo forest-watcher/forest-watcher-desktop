@@ -24,11 +24,17 @@ const lintPointIconImage = [
   isSelectedMiddleCase
 ];
 
+const symbolPriority = ["case", ["boolean", ["get", "isEndPoint"], false], 1, 0];
+
 export const linePointStyle = {
   type: "symbol",
   layout: {
     "icon-image": lintPointIconImage,
-    "icon-size": 0.5
+    "icon-size": 0.5,
+    "icon-padding": 0,
+    "symbol-sort-key": symbolPriority,
+    "symbol-z-order": "source",
+    "icon-allow-overlap": true
   },
   paint: {}
 };
