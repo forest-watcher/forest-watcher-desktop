@@ -25,7 +25,7 @@ const RouteCard: FC<IProps> = ({ route }) => {
   const length = turf.length(line, { units: "kilometers" }).toFixed(1);
 
   return (
-    <MapCard title={route.attributes?.name || ""} position="bottom-right">
+    <MapCard title={route.attributes?.name || ""} titleIconName="Routes" position="bottom-right">
       <ul className="c-card__text c-card__list">
         <li>
           <FormattedMessage
