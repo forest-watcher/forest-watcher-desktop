@@ -24,6 +24,7 @@ export const getRoutePoints = (route: { id?: string; type?: string; attributes?:
 
 const AreaRoutesSource: FC<IProps> = props => {
   const [selectedRoute, setSelectedRoute] = useState<RouteResponse["data"] | null>(null);
+  const [selectedFeature, setSelectedFeature] = useState<any | null>(null);
   const { httpAuthHeader } = useAccessToken();
   const { current: mapRef } = useMap();
   const { data: teamRoutes } = useGetV3GfwRoutesTeams({
@@ -82,19 +83,30 @@ const AreaRoutesSource: FC<IProps> = props => {
   );
 
   useEffect(() => {
-    const handleMapClick = (e: MapMouseEvent & EventData) => {
+    const handleRouteClick = (e: MapMouseEvent & EventData) => {
+      e.preventDefault();
       const route = JSON.parse(e.features[0].properties.route);
       setSelectedRoute(route);
+      setSelectedFeature(e.features[0]);
     };
 
-    routesMapped.forEach((routes, index) => mapRef?.on("click", `route-lines-${index}`, handleMapClick));
-    pointsMapped.forEach((points, index) => mapRef?.on("click", `route-points-${index}`, handleMapClick));
+    const handleMapClick = (e: MapMouseEvent & EventData) => {
+      if (e.defaultPrevented === false) {
+        setSelectedRoute(null);
+      }
+    };
+
+    routesMapped.forEach((routes, index) => mapRef?.on("click", `route-lines-${index}`, handleRouteClick));
+    pointsMapped.forEach((points, index) => mapRef?.on("click", `route-points-${index}`, handleRouteClick));
+
+    mapRef?.on("click", handleMapClick);
 
     return () => {
-      routesMapped.forEach((routes, index) => mapRef?.off("click", `route-lines-${index}`, handleMapClick));
-      pointsMapped.forEach((points, index) => mapRef?.off("click", `route-points-${index}`, handleMapClick));
+      routesMapped.forEach((routes, index) => mapRef?.off("click", `route-lines-${index}`, handleRouteClick));
+      pointsMapped.forEach((points, index) => mapRef?.off("click", `route-points-${index}`, handleRouteClick));
+      mapRef?.off("click", handleMapClick);
     };
-  }, [mapRef, pointsMapped, routesMapped]);
+  }, [mapRef, pointsMapped, routesMapped, selectedFeature]);
 
   return (
     <>
