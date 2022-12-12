@@ -184,11 +184,13 @@ const AssignmentForm: FC<IProps> = props => {
         // go to point on the map
       } else if (selectedAlerts) {
         // Else use the selected Alerts on Map
-        body.location = selectedAlerts.map(alert => ({
-          lat: alert.data.latitude,
-          lon: alert.data.longitude,
-          alertType: alert.data.alertType
-        }));
+        body.location = selectedAlerts.map(alert => {
+          // Find date to use as id - this helps mobile find the correct alert (along with long / lat and area)
+          const dateKey = Object.keys(alert.data).find(key => key.includes("_date"));
+          let id = (dateKey && alert.data[dateKey]) || undefined;
+
+          return { lat: alert.data.latitude, lon: alert.data.longitude, alertType: alert.data.alertType, alertId: id };
+        });
 
         const points = turf.points(selectedAlerts.map(alert => [alert.data.longitude, alert.data.latitude]));
         const bbox = turf.bbox(points);
