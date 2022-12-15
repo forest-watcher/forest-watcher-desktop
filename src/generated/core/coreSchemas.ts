@@ -45,6 +45,7 @@ export type RouteModel = {
   createdBy?: string;
   teamId?: string;
   active?: boolean;
+  username?: string;
 };
 
 export type PointModel = {

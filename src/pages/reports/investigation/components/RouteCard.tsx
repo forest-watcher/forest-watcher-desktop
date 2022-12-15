@@ -71,7 +71,7 @@ const RouteCard: FC<IProps> = ({ route }) => {
           />
         </li>
         <li>
-          <FormattedMessage id="route.monitor" values={{ value: route.attributes?.createdBy }} />
+          <FormattedMessage id="route.monitor" values={{ value: route.attributes?.username }} />
         </li>
       </ul>
     </MapCard>
