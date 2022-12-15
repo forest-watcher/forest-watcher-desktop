@@ -143,7 +143,6 @@ const UserAreasMap: FC<PropsWithChildren<IProps>> = props => {
       setClickState(undefined);
     }
 
-    setSelectedReportIds(null);
     setSelectedPoint(null);
   }, [clickState, onAreaSelect, onAreaDeselect, selectedAreaId]);
 
