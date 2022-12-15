@@ -117,14 +117,18 @@ const Basemaps: FC<IProps> = ({ defaultBasemap, onComparison }) => {
       const beforeDefault = beforeMapPeriods[beforeMapPeriods.length - 1];
       const afterDefault = afterMapPeriods[afterMapPeriods.length - 1];
       if (!watcher.currentPlanetPeriodBefore) {
-        // @ts-ignore
-        methods.setValue(`dateBefore`, [beforeDefault.metadata.startDate, beforeDefault.metadata.endDate]);
         methods.setValue(`currentPlanetPeriodBefore`, beforeDefault.value);
       }
+      if (!watcher.dateBefore) {
+        // @ts-ignore
+        methods.setValue(`dateBefore`, [beforeDefault.metadata.startDate, beforeDefault.metadata.endDate]);
+      }
       if (!watcher.currentPlanetPeriodAfter) {
+        methods.setValue(`currentPlanetPeriodAfter`, afterDefault.value);
+      }
+      if (!watcher.dateAfter) {
         // @ts-ignore
         methods.setValue(`dateAfter`, [afterDefault.metadata.startDate, afterDefault.metadata.endDate]);
-        methods.setValue(`currentPlanetPeriodAfter`, beforeDefault.value);
       }
     }
   }, [
@@ -134,7 +138,9 @@ const Basemaps: FC<IProps> = ({ defaultBasemap, onComparison }) => {
     afterMapPeriods,
     watcher.currentPlanetPeriodBefore,
     watcher.currentPlanetPeriodAfter,
-    methods
+    methods,
+    watcher.dateBefore,
+    watcher.dateAfter
   ]);
 
   const basemapKeys = useMemo(() => {
