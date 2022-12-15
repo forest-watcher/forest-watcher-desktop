@@ -67,7 +67,7 @@ const StartInvestigationControlPanel: FC<IProps> = props => {
     );
   }, [layersData?.data]);
 
-  const { loading: isLoadingAnswers } = useAppSelector(state => state.reports);
+  // const { loading: isLoadingAnswers } = useAppSelector(state => state.reports);
   const area = useFindArea(areaId);
 
   const selectedAreaGeoData = useMemo(() => area?.attributes.geostore.geojson, [area]);
@@ -109,7 +109,7 @@ const StartInvestigationControlPanel: FC<IProps> = props => {
         </Link>
       }
     >
-      <Loader isLoading={isLoadingAreas || isLoadingAnswers || isLoadingTeamAreas} />
+      <Loader isLoading={isLoadingAreas || isLoadingTeamAreas} />
 
       <form>
         <Basemaps defaultBasemap={defaultBasemap} onComparison={onComparison} />

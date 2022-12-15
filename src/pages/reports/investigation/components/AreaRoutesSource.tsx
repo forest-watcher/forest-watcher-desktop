@@ -42,45 +42,67 @@ const AreaRoutesSource: FC<IProps> = props => {
     [props.areaId, teamRoutes?.data, userRoutes?.data]
   );
 
-  const routesMapped = useMemo(
-    () =>
-      routes.map(route => {
-        const geojson = turf.lineString(getRoutePoints(route));
+  const routesMapped = useMemo(() => {
+    const mapped = routes.map(route => {
+      const points = getRoutePoints(route);
+
+      if (points.length <= 1) {
+        return null;
+      }
+
+      const geojson = turf.lineString(getRoutePoints(route));
+      // @ts-ignore
+      geojson.properties.route = route;
+      return geojson;
+    });
+
+    const filtered = mapped.filter(route => route !== null) as turf.helpers.Feature<
+      turf.helpers.LineString,
+      turf.helpers.Properties
+    >[];
+
+    return filtered;
+  }, [routes]);
+
+  const pointsMapped = useMemo(() => {
+    const mapped = routes.map(route => {
+      const points = getRoutePoints(route);
+
+      if (points.length <= 1) {
+        return null;
+      }
+
+      const formattedPoints = turf.points(getRoutePoints(route));
+
+      const newFeatures = formattedPoints.features.map(point => {
+        const newPoint = { ...point };
+        const locations = [route.attributes?.destination, ...(route.attributes?.locations || [])];
+        const indexOfPoint = locations.findIndex(
+          loc =>
+            newPoint.geometry.coordinates[0] === loc?.longitude && newPoint.geometry.coordinates[1] === loc?.latitude
+        );
+
         // @ts-ignore
-        geojson.properties.route = route;
-        return geojson;
-      }),
-    [routes]
-  );
+        newPoint.properties.isEndPoint = indexOfPoint === 0 || indexOfPoint === locations.length - 1;
+        // @ts-ignore TODO - change based on has the route been selected - will change the style.
+        newPoint.properties.isSelected = selectedRoute?.id === route.id;
+        // @ts-ignore
+        newPoint.properties.route = route;
 
-  const pointsMapped = useMemo(
-    () =>
-      routes.map(route => {
-        const points = turf.points(getRoutePoints(route));
+        return newPoint;
+      });
 
-        const newFeatures = points.features.map(point => {
-          const newPoint = { ...point };
-          const locations = [route.attributes?.destination, ...(route.attributes?.locations || [])];
-          const indexOfPoint = locations.findIndex(
-            loc =>
-              newPoint.geometry.coordinates[0] === loc?.longitude && newPoint.geometry.coordinates[1] === loc?.latitude
-          );
+      formattedPoints.features = newFeatures;
+      return formattedPoints;
+    });
 
-          // @ts-ignore
-          newPoint.properties.isEndPoint = indexOfPoint === 0 || indexOfPoint === locations.length - 1;
-          // @ts-ignore TODO - change based on has the route been selected - will change the style.
-          newPoint.properties.isSelected = selectedRoute?.id === route.id;
-          // @ts-ignore
-          newPoint.properties.route = route;
+    const filtered = mapped.filter(route => route !== null) as turf.helpers.FeatureCollection<
+      turf.helpers.Point,
+      turf.helpers.Properties
+    >[];
 
-          return newPoint;
-        });
-
-        points.features = newFeatures;
-        return points;
-      }),
-    [routes, selectedRoute?.id]
-  );
+    return filtered;
+  }, [routes, selectedRoute?.id]);
 
   useEffect(() => {
     const handleRouteClick = (e: MapMouseEvent & EventData) => {
