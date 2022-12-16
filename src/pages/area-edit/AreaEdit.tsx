@@ -4,8 +4,8 @@ import { FC, useState, MouseEvent, ChangeEvent, useEffect, useMemo, useCallback 
 import { MapboxEvent, Map as MapInstance, LngLatBounds } from "mapbox-gl";
 import { FormattedMessage, useIntl } from "react-intl";
 import ReactGA from "react-ga";
-import { TPropsFromRedux } from "./AreaEditContainer";
-import { FeatureCollection } from "geojson";
+import { MatchParams, TPropsFromRedux } from "./AreaEditContainer";
+import { FeatureCollection, Geometry, GeoJsonProperties } from "geojson";
 import Input from "components/ui/Form/Input";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -17,7 +17,7 @@ import union from "@turf/union";
 import InfoIcon from "assets/images/icons/Info.svg";
 import { goToGeojson } from "helpers/map";
 import Loader from "components/ui/Loader";
-import { Link, Route, Switch, useHistory, useRouteMatch } from "react-router-dom";
+import { Link, Route, Switch, useHistory, useParams, useRouteMatch } from "react-router-dom";
 import useUnsavedChanges from "hooks/useUnsavedChanges";
 import Modal from "components/ui/Modal/Modal";
 import DeleteArea from "./actions/DeleteAreaContainer";
@@ -29,6 +29,8 @@ import useUrlQuery from "hooks/useUrlQuery";
 import { checkArea } from "helpers/areas";
 import classNames from "classnames";
 import { useGetBackLink } from "hooks/useGetBackLink";
+import { useGetV3GfwAreasAreaId } from "generated/core/coreComponents";
+import { useAccessToken } from "hooks/useAccessToken";
 
 const areaTitleKeys = {
   manage: "areas.editArea",
@@ -47,20 +49,25 @@ const schema = yup
   })
   .required();
 
-const AreaEdit: FC<IProps> = ({
-  mode,
-  geojson,
-  getGeoFromShape,
-  setSaving,
-  saveAreaWithGeostore,
-  saveArea,
-  area,
-  loading,
-  saving
-}) => {
+const AreaEdit: FC<IProps> = ({ mode, getGeoFromShape, setSaving, saveAreaWithGeostore, saveArea, saving }) => {
+  const { areaId } = useParams<MatchParams>();
+  const { httpAuthHeader } = useAccessToken();
+  const { data: area, isLoading } = useGetV3GfwAreasAreaId(
+    {
+      pathParams: { areaId: areaId || "" },
+      headers: httpAuthHeader
+    },
+    { enabled: !!areaId }
+  );
+  const geojson = area?.data?.attributes?.geostore?.geojson as unknown as FeatureCollection<
+    Geometry,
+    GeoJsonProperties
+  >;
+
   const { register, handleSubmit, watch, formState, reset, setValue } = useForm<FormValues>({
     resolver: yupResolver(schema)
   });
+
   const { name } = watch();
   const [updatedGeojson, setUpdatedGeojson] = useState<FeatureCollection | null>(null);
   const [isValidatingShapefile, setIsValidatingShapefile] = useState(false);
@@ -92,19 +99,19 @@ const AreaEdit: FC<IProps> = ({
   const { changesMade, changesValid } = useMemo(() => {
     const changesValid =
       formState.errors.name === undefined && (updatedGeojson ? updatedGeojson.features.length > 0 : true);
-    const originalName = area?.attributes.name || "";
+    const originalName = area?.data?.attributes?.name || "";
     const changesMade = (name && name !== originalName) || updatedGeojson !== null;
 
     return { changesMade, changesValid };
-  }, [area?.attributes.name, formState.errors.name, name, updatedGeojson]);
+  }, [area?.data?.attributes?.name, formState.errors.name, name, updatedGeojson]);
 
   const { modal } = useUnsavedChanges(shouldUseChangesMade ? changesMade : false);
 
   useEffect(() => {
-    if (area?.attributes?.name) {
-      setValue("name", area.attributes.name);
+    if (area?.data?.attributes?.name) {
+      setValue("name", area.data.attributes.name);
     }
-  }, [area?.attributes?.name, setValue]);
+  }, [area?.data?.attributes?.name, setValue]);
 
   const centrePoint = useMemo(() => {
     let data = updatedGeojson || geojson;
@@ -153,16 +160,16 @@ const AreaEdit: FC<IProps> = ({
       setShouldUseChangesMade(false);
       // Deselect shape
       drawRef?.changeMode("simple_select");
-      goToGeojson(mapRef, updatedGeojson || area?.attributes.geostore.geojson, false);
+      goToGeojson(mapRef, updatedGeojson || area?.data?.attributes?.geostore?.geojson, false);
       const method = mode === "manage" ? "PATCH" : "POST";
 
-      let id = area?.id || "";
+      let id = area?.data?.id || "";
 
       try {
         if (updatedGeojson) {
           const resp = await saveAreaWithGeostore(
             {
-              ...area,
+              ...area?.data,
               geojson: updatedGeojson,
               name
             },
@@ -172,7 +179,7 @@ const AreaEdit: FC<IProps> = ({
           // @ts-ignore - Incorrect type
           id = Object.keys(resp.area)[0];
         } else {
-          await saveArea({ ...area, name }, mapRef.getCanvas(), method);
+          await saveArea({ ...area?.data, name }, mapRef.getCanvas(), method);
         }
 
         history.push(`/areas/${id}`);
@@ -212,8 +219,8 @@ const AreaEdit: FC<IProps> = ({
   const handleResetForm = (e?: MouseEvent<HTMLButtonElement>) => {
     e?.preventDefault();
     reset();
-    if (area?.attributes?.name) {
-      setValue("name", area.attributes.name);
+    if (area?.data?.attributes?.name) {
+      setValue("name", area.data.attributes.name);
     }
     drawRef?.deleteAll();
     if (geojson) {
@@ -292,7 +299,7 @@ const AreaEdit: FC<IProps> = ({
   return (
     <>
       <div className="c-area-edit l-full-page-map">
-        <Loader isLoading={loading || saving} />
+        <Loader isLoading={(isLoading && areaId) || saving} />
 
         <Hero
           title={areaTitleKeys[mode as keyof typeof areaTitleKeys]}

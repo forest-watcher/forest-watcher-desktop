@@ -23,11 +23,12 @@ import { exportService } from "services/exports";
 import { AREA_EXPORT_FILE_TYPES } from "constants/export";
 import { sortByNumber, sortByString } from "helpers/table";
 import { toastr } from "react-redux-toastr";
-import useFindArea from "hooks/useFindArea";
 import { useGetBackLink } from "hooks/useGetBackLink";
 import { fireGAEvent } from "helpers/analytics";
 import { AreaActions, AreaLabel } from "types/analytics";
 import useGetTemplates from "hooks/querys/templates/useGetTemplates";
+import { useGetV3GfwAreasAreaId } from "generated/core/coreComponents";
+import { useAccessToken } from "hooks/useAccessToken";
 
 interface IProps extends TPropsFromRedux {}
 export type TParams = {
@@ -35,7 +36,6 @@ export type TParams = {
 };
 
 const AreasView: FC<IProps & RouteComponentProps<TParams>> = ({
-  loading,
   match,
   getUserTeams,
   getAreaTeams,
@@ -51,6 +51,12 @@ const AreasView: FC<IProps & RouteComponentProps<TParams>> = ({
   const history = useHistory();
   const intl = useIntl();
   const { areaId } = useParams<TParams>();
+  const { httpAuthHeader } = useAccessToken();
+  const { data: area, isLoading } = useGetV3GfwAreasAreaId({
+    pathParams: { areaId: areaId || "" },
+    headers: httpAuthHeader
+  });
+
   const { backLinkTextKey } = useGetBackLink({ backLinkTextKey: "areas.back", backLink: "/areas" });
   const { templates } = useGetTemplates();
 
@@ -59,9 +65,7 @@ const AreasView: FC<IProps & RouteComponentProps<TParams>> = ({
     window.scrollTo(0, 0);
   }, []);
 
-  const area = useFindArea(areaId);
-
-  const isMyArea = area?.attributes?.userId === userId;
+  const isMyArea = area?.data?.attributes?.userId === userId;
 
   const canManage = useMemo(() => {
     // For Each team in the area
@@ -81,15 +85,16 @@ const AreasView: FC<IProps & RouteComponentProps<TParams>> = ({
     return hasPermissions;
   }, [areaTeams, isMyArea, teamMembers, userId]);
 
-  const geojson = useMemo(() => area?.attributes.geostore.geojson, [area]);
+  const geojson = useMemo(() => area?.data?.attributes?.geostore?.geojson, [area]);
 
   const templatesToAdd = useMemo(() => {
     return (
       templates?.filter(
-        template => !area?.attributes.reportTemplate.find(areaTemplate => areaTemplate?.id === template?.id)
+        // @ts-ignore missing type
+        template => !area?.data?.attributes?.reportTemplate?.find(areaTemplate => areaTemplate?._id === template?.id)
       ) || []
     );
-  }, [area?.attributes.reportTemplate, templates]);
+  }, [area?.data?.attributes?.reportTemplate, templates]);
 
   const teamsToAdd = useMemo(() => {
     return teams?.filter(team => !areaTeams.find(areaTeam => areaTeam.data.id === team.id)) || [];
@@ -120,8 +125,8 @@ const AreasView: FC<IProps & RouteComponentProps<TParams>> = ({
   };
 
   useEffect(() => {
-    if (area && userId) {
-      getAreaTeams(area.id);
+    if (area?.data?.id && userId) {
+      getAreaTeams(area.data.id);
       getUserTeams(userId);
     }
   }, [area, userId, getUserTeams, getAreaTeams]);
@@ -135,9 +140,9 @@ const AreasView: FC<IProps & RouteComponentProps<TParams>> = ({
   const handleExport = useCallback(
     async (values: UnpackNestedValue<TExportForm>) => {
       // Do request
-      if (area) {
+      if (area?.data?.id) {
         try {
-          const { data } = await exportService.exportArea(area.id, values.fileType, values.email);
+          const { data } = await exportService.exportArea(area?.data?.id, values.fileType, values.email);
           return data;
         } catch (err) {
           // Do toast
@@ -153,7 +158,7 @@ const AreasView: FC<IProps & RouteComponentProps<TParams>> = ({
       <div className="c-area-manage">
         <Hero
           title="areas.manageAreaName"
-          titleValues={{ name: area?.attributes.name ?? "" }}
+          titleValues={{ name: area?.data?.attributes?.name ?? "" }}
           backLink={{ name: backLinkTextKey }}
           actions={
             area ? (
@@ -167,7 +172,7 @@ const AreasView: FC<IProps & RouteComponentProps<TParams>> = ({
                   <FormattedMessage id="common.export" />
                 </Link>
                 <a
-                  href={`${process.env.REACT_APP_FLAGSHIP_URL}/map/aoi/${area.id}`}
+                  href={`${process.env.REACT_APP_FLAGSHIP_URL}/map/aoi/${area.data?.id}`}
                   target="_blank"
                   rel="noopenner noreferrer"
                   className="c-button c-button--secondary-light-text"
@@ -181,7 +186,7 @@ const AreasView: FC<IProps & RouteComponentProps<TParams>> = ({
           }
         />
 
-        {loading ? (
+        {isLoading ? (
           <div className="c-map c-map--within-hero">
             <Loader isLoading />
           </div>
@@ -189,14 +194,14 @@ const AreasView: FC<IProps & RouteComponentProps<TParams>> = ({
           area &&
           geojson && (
             <Map className="c-map--within-hero" onMapLoad={handleMapLoad}>
-              <Polygon id={area.id} label={area.attributes.name} data={geojson} />
+              <Polygon id={area?.data?.id || ""} label={area.data?.attributes?.name} data={geojson} />
             </Map>
           )
         )}
         <div className="l-content u-h-min-unset">
           <Article
             title="areas.details.templates"
-            titleValues={{ num: area?.attributes.reportTemplate.length ?? 0 }}
+            titleValues={{ num: area?.data?.attributes?.reportTemplate?.length ?? 0 }}
             size="small"
             actions={
               <Link
@@ -217,12 +222,14 @@ const AreasView: FC<IProps & RouteComponentProps<TParams>> = ({
           >
             {
               /* TS issue here, reportTemplate.length can be undefined */
-              (area?.attributes.reportTemplate.length ?? 0) > 0 && (
+              (area?.data?.attributes?.reportTemplate?.length ?? 0) > 0 && (
                 <DataTable<TTemplateDataTable>
                   className="u-w-100"
                   rows={
-                    area?.attributes.reportTemplate.map(template => ({
+                    area?.data?.attributes?.reportTemplate?.map(template => ({
                       ...template,
+                      // @ts-ignore
+                      id: template._id,
                       //@ts-ignore
                       name: (template?.name?.[template?.defaultLanguage] as string) || "",
                       openAssignments: 0
