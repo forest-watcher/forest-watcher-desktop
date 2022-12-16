@@ -31,15 +31,17 @@ export type CreateAssignmentBody = {
 };
 
 export type RouteBody = {
-  areaId?: string;
-  destination?: Schemas.PointModel;
-  difficulty?: string;
-  endDate?: number;
-  geostoreId?: string;
-  id?: string;
-  locations?: Schemas.RouteLocationModel[];
-  name?: string;
-  startDate?: number;
+  areaId: string;
+  destination: Schemas.PointModel;
+  difficulty: string;
+  endDate: number;
+  geostoreId: string;
+  id: string;
+  locations: Schemas.RouteLocationModel[];
+  name: string;
+  startDate: number;
+  teamId?: string;
+  active?: string;
 }[];
 
 export type CreateTemplateBody = {
@@ -135,12 +137,12 @@ export type AreaBody = {
 export type AreaTeamRelationBody = {
   areaId: string;
   teamId: string;
-};
+}[];
 
 export type AreaTemplateRelationBody = {
-  templateId?: string;
-  areaId?: string;
-};
+  areaId: string;
+  templateId: string;
+}[];
 
 export type TeamBody = {
   name: string;
@@ -152,7 +154,7 @@ export type UpdateAssignmentBody = {
   priority?: number;
   monitors?: string[];
   notes?: string;
-  status?: string;
+  status?: "open" | "completed" | "on hold";
   templateIds?: string[];
   /**
    * Image file

@@ -1497,7 +1497,7 @@ export type PostV3GfwArearelationsTeamsError = Fetcher.ErrorWrapper<
 >;
 
 export type PostV3GfwArearelationsTeamsVariables = {
-  body: RequestBodies.AreaTeamRelationBody;
+  body?: RequestBodies.AreaTeamRelationBody;
 } & CoreContext["fetcherOptions"];
 
 /**
@@ -1547,7 +1547,7 @@ export type DeleteV3GfwArearelationsTeamsError = Fetcher.ErrorWrapper<{
 }>;
 
 export type DeleteV3GfwArearelationsTeamsVariables = {
-  body: RequestBodies.AreaTeamRelationBody;
+  body?: RequestBodies.AreaTeamRelationBody;
 } & CoreContext["fetcherOptions"];
 
 /**
@@ -3063,6 +3063,117 @@ export const useGetV3GfwArearelationsTemplatesTemplateAreasTemplateId = <TData =
   );
 };
 
+export type PatchV3GfwAssignmentsAssignmentIdStatusPathParams = {
+  assignmentId: string;
+};
+
+export type PatchV3GfwAssignmentsAssignmentIdStatusError = Fetcher.ErrorWrapper<undefined>;
+
+export type PatchV3GfwAssignmentsAssignmentIdStatusRequestBody = {
+  status: "open" | "completed" | "on hold";
+};
+
+export type PatchV3GfwAssignmentsAssignmentIdStatusVariables = {
+  body: PatchV3GfwAssignmentsAssignmentIdStatusRequestBody;
+  pathParams: PatchV3GfwAssignmentsAssignmentIdStatusPathParams;
+} & CoreContext["fetcherOptions"];
+
+/**
+ * Allow the user to update the status of the asssignment even if they are monitors but not creators of the assignment. Monitors can perform on hold to open and open to on hold status change. Creators can perform all status changes.
+ */
+export const fetchPatchV3GfwAssignmentsAssignmentIdStatus = (
+  variables: PatchV3GfwAssignmentsAssignmentIdStatusVariables,
+  signal?: AbortSignal
+) =>
+  coreFetch<
+    Responses.AssignmentResponse,
+    PatchV3GfwAssignmentsAssignmentIdStatusError,
+    PatchV3GfwAssignmentsAssignmentIdStatusRequestBody,
+    {},
+    {},
+    PatchV3GfwAssignmentsAssignmentIdStatusPathParams
+  >({ url: "/v3/gfw/assignments/{assignmentId}/status", method: "patch", ...variables, signal });
+
+/**
+ * Allow the user to update the status of the asssignment even if they are monitors but not creators of the assignment. Monitors can perform on hold to open and open to on hold status change. Creators can perform all status changes.
+ */
+export const usePatchV3GfwAssignmentsAssignmentIdStatus = (
+  options?: Omit<
+    reactQuery.UseMutationOptions<
+      Responses.AssignmentResponse,
+      PatchV3GfwAssignmentsAssignmentIdStatusError,
+      PatchV3GfwAssignmentsAssignmentIdStatusVariables
+    >,
+    "mutationFn"
+  >
+) => {
+  const { fetcherOptions } = useCoreContext();
+  return reactQuery.useMutation<
+    Responses.AssignmentResponse,
+    PatchV3GfwAssignmentsAssignmentIdStatusError,
+    PatchV3GfwAssignmentsAssignmentIdStatusVariables
+  >(
+    (variables: PatchV3GfwAssignmentsAssignmentIdStatusVariables) =>
+      fetchPatchV3GfwAssignmentsAssignmentIdStatus({ ...fetcherOptions, ...variables }),
+    options
+  );
+};
+
+export type GetV3GfwRoutesTeamTeamIdAreaAreaIdPathParams = {
+  teamId: string;
+  areaId: string;
+};
+
+export type GetV3GfwRoutesTeamTeamIdAreaAreaIdError = Fetcher.ErrorWrapper<{
+  status: 401;
+  payload: Responses.Error;
+}>;
+
+export type GetV3GfwRoutesTeamTeamIdAreaAreaIdVariables = {
+  pathParams: GetV3GfwRoutesTeamTeamIdAreaAreaIdPathParams;
+} & CoreContext["fetcherOptions"];
+
+/**
+ * Returns all routes for team area either made for that team or made by the user
+ */
+export const fetchGetV3GfwRoutesTeamTeamIdAreaAreaId = (
+  variables: GetV3GfwRoutesTeamTeamIdAreaAreaIdVariables,
+  signal?: AbortSignal
+) =>
+  coreFetch<
+    Responses.RoutesResponse,
+    GetV3GfwRoutesTeamTeamIdAreaAreaIdError,
+    undefined,
+    {},
+    {},
+    GetV3GfwRoutesTeamTeamIdAreaAreaIdPathParams
+  >({ url: "/v3/gfw/routes/team/{teamId}/area/{areaId}", method: "get", ...variables, signal });
+
+/**
+ * Returns all routes for team area either made for that team or made by the user
+ */
+export const useGetV3GfwRoutesTeamTeamIdAreaAreaId = <TData = Responses.RoutesResponse>(
+  variables: GetV3GfwRoutesTeamTeamIdAreaAreaIdVariables,
+  options?: Omit<
+    reactQuery.UseQueryOptions<Responses.RoutesResponse, GetV3GfwRoutesTeamTeamIdAreaAreaIdError, TData>,
+    "queryKey" | "queryFn"
+  >
+) => {
+  const { fetcherOptions, queryOptions, queryKeyFn } = useCoreContext(options);
+  return reactQuery.useQuery<Responses.RoutesResponse, GetV3GfwRoutesTeamTeamIdAreaAreaIdError, TData>(
+    queryKeyFn({
+      path: "/v3/gfw/routes/team/{teamId}/area/{areaId}",
+      operationId: "getV3GfwRoutesTeamTeamIdAreaAreaId",
+      variables
+    }),
+    ({ signal }) => fetchGetV3GfwRoutesTeamTeamIdAreaAreaId({ ...fetcherOptions, ...variables }, signal),
+    {
+      ...options,
+      ...queryOptions
+    }
+  );
+};
+
 export type QueryOperation =
   | {
       path: "/v3/gfw/assignments/user";
@@ -3208,4 +3319,9 @@ export type QueryOperation =
       path: "/v3/gfw/arearelations/templates/templateAreas/{templateId}";
       operationId: "getV3GfwArearelationsTemplatesTemplateAreasTemplateId";
       variables: GetV3GfwArearelationsTemplatesTemplateAreasTemplateIdVariables;
+    }
+  | {
+      path: "/v3/gfw/routes/team/{teamId}/area/{areaId}";
+      operationId: "getV3GfwRoutesTeamTeamIdAreaAreaId";
+      variables: GetV3GfwRoutesTeamTeamIdAreaAreaIdVariables;
     };
