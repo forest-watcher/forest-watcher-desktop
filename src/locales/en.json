@@ -720,5 +720,16 @@
   "filters.all.templates": "All Templates",
   "filters.all.timeframes": "All Time Frames",
   "filters.all.monitors": "All Monitors",
-  "audio.play": "Play Audio"
+  "audio.play": "Play Audio",
+  "route.start": "Start: {value}",
+  "route.end": "End: {value}",
+  "route.distance": "Distance: {value} km",
+  "route.date": "Date: {value}",
+  "route.difficulty": "Difficulty: {value}",
+  "route.timeTaken": "Time Taken: {value}",
+  "route.monitor": "Monitor: {value}",
+  "route.difficulty.easy": "Easy",
+  "route.difficulty.medium": "Medium",
+  "route.difficulty.hard": "Hard"
+
 }

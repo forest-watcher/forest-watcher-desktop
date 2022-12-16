@@ -53,12 +53,14 @@ const ReportDetailCard: FC<IParams> = ({ answers, areasInUsersTeams }) => {
       position="bottom-right"
       className="c-map-card--area-detail"
       footer={
-        <Button
-          className="w-full"
-          onClick={() => history.push(`/reporting/reports/${answer?.attributes?.report}/answers/${answer?.id}`)}
-        >
-          View Report
-        </Button>
+        answer?.id ? (
+          <Button
+            className="w-full"
+            onClick={() => history.push(`/reporting/reports/${answer?.attributes?.report}/answers/${answer?.id}`)}
+          >
+            <FormattedMessage id="reports.preview.view" />
+          </Button>
+        ) : undefined
       }
     >
       {answer && (
