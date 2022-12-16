@@ -225,7 +225,7 @@ const Areas: FC<IProps> = props => {
                     // @ts-ignore
                     <Fragment key={areasInTeam.team.id}>
                       {/* @ts-ignore */}
-                      <h3 className="u-text-600 u-text-neutral-700">{areasInTeam.team.attributes?.name}</h3>
+                      <h3 className="u-text-600 u-text-neutral-700">{areasInTeam.team.name}</h3>
 
                       <div className="c-areas__area-listing">
                         {/* @ts-ignore */}
