@@ -1,14 +1,13 @@
 import classNames from "classnames";
+import { AreaResponse } from "generated/core/coreResponses";
 import { FC } from "react";
 import { FormattedMessage, useIntl } from "react-intl";
 import { Link } from "react-router-dom";
-import { TAreasResponse } from "services/area";
-import { TeamResponse } from "services/teams";
 import MapCard, { positions } from "./MapCard";
 
 interface IParams {
-  area?: TAreasResponse;
-  teams: TeamResponse["data"][];
+  area?: AreaResponse["data"];
+  teamNames: string[];
   numberOfReports?: number;
   className?: string;
   position?: positions;
@@ -19,7 +18,7 @@ interface IParams {
 
 const AreaDetailCard: FC<IParams> = ({
   area,
-  teams,
+  teamNames,
   className,
   position = "bottom-right",
   onBack,
@@ -31,7 +30,7 @@ const AreaDetailCard: FC<IParams> = ({
 
   return (
     <MapCard
-      title={intl.formatMessage({ id: "areas.card.title" }, { name: area?.attributes.name })}
+      title={intl.formatMessage({ id: "areas.card.title" }, { name: area?.attributes?.name })}
       position={position}
       className={classNames("c-map-card--area-detail", className)}
       footer={
@@ -55,20 +54,19 @@ const AreaDetailCard: FC<IParams> = ({
       {area && (
         <ul className="c-card__text c-card__list">
           <li>
-            <FormattedMessage
-              id="areas.card.size"
-              values={{ size: (area.attributes.geostore.areaHa / 100).toFixed(2) }}
-            />
+            {area?.attributes?.geostore?.areaHa && (
+              <FormattedMessage
+                id="areas.card.size"
+                values={{ size: (area.attributes.geostore.areaHa / 100).toFixed(2) }}
+              />
+            )}
           </li>
           <li>
             <FormattedMessage id="areas.card.reports" values={{ num: numberOfReports }} />
           </li>
-          {teams.length > 0 && (
+          {teamNames.length > 0 && (
             <li className="u-text-break-word">
-              <FormattedMessage
-                id="areas.card.teams"
-                values={{ num: teams.map(team => team?.attributes?.name).join(", ") }}
-              />
+              <FormattedMessage id="areas.card.teams" values={{ num: teamNames.join(", ") }} />
             </li>
           )}
         </ul>

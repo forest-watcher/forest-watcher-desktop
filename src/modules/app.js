@@ -1,5 +1,3 @@
-import { getGeostore } from "./geostores";
-import { getAreas, getAreasInUsersTeams } from "./areas";
 import { getTemplate, getTemplates } from "./templates";
 import { getTeamByUserId } from "./teams";
 import { getUser } from "./user";
@@ -34,21 +32,7 @@ export function syncApp() {
     const user = state().user.data;
     dispatch(getUser());
     dispatch(getTeamByUserId(user.id));
-    await dispatch(getAreas());
-    let areaPromises = [];
     let teamTemplateIds = [];
-    const areasIds = state().areas.ids;
-    const areas = state().areas.data;
-    areasIds.forEach(id => {
-      areaPromises.push(dispatch(getGeostore(areas[id].attributes.geostore.id)));
-      if (areas[id].attributes.templateId) {
-        teamTemplateIds.push(areas[id].attributes.templateId);
-      }
-    });
-    await Promise.all(areaPromises);
-
-    // Fetch all team user areas
-    dispatch(getAreasInUsersTeams());
 
     // fetch all user templates
     await dispatch(getTemplates());

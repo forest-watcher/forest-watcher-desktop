@@ -55,8 +55,7 @@ const mockTeamMembers: ITeamCardProps["teamMembers"] = [
 const mockTeamAreas = ["Area #1", "Area #2", "Area #3"];
 
 describe("TeamCard", () => {
-  let getTeamMembers = jest.fn(),
-    getTeamAreas = jest.fn();
+  let getTeamMembers = jest.fn();
 
   const render = () =>
     utilRender(
@@ -65,8 +64,6 @@ describe("TeamCard", () => {
         teamMembers={mockTeamMembers}
         teamAreas={mockTeamAreas}
         getTeamMembers={getTeamMembers}
-        getTeamAreas={getTeamAreas}
-        areasDetail={undefined}
         canManage
       />
     );
@@ -160,11 +157,5 @@ describe("TeamCard", () => {
     render();
 
     expect(getTeamMembers).toHaveBeenCalledTimes(1);
-  });
-
-  it("should call getTeamAreas dispatcher once", () => {
-    render();
-
-    expect(getTeamAreas).toHaveBeenCalledTimes(1);
   });
 });

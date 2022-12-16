@@ -1,6 +1,6 @@
 import { useGetV3GfwTemplatesLatest, useGetV3GfwTemplatesPublic } from "generated/core/coreComponents";
 import { useMemo } from "react";
-import { useAccessToken } from "./useAccessToken";
+import { useAccessToken } from "../../useAccessToken";
 
 const useGetTemplates = () => {
   const { httpAuthHeader } = useAccessToken();

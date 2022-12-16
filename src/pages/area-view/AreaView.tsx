@@ -27,7 +27,7 @@ import useFindArea from "hooks/useFindArea";
 import { useGetBackLink } from "hooks/useGetBackLink";
 import { fireGAEvent } from "helpers/analytics";
 import { AreaActions, AreaLabel } from "types/analytics";
-import useGetTemplates from "hooks/useGetTemplates";
+import useGetTemplates from "hooks/querys/templates/useGetTemplates";
 
 interface IProps extends TPropsFromRedux {}
 export type TParams = {

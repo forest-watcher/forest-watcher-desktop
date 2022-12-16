@@ -1,5 +1,4 @@
 import { FC, PropsWithChildren, useCallback, useEffect, useMemo, useState } from "react";
-import { useAppSelector } from "hooks/useRedux";
 import Polygon, { IProps as IPolygonProps } from "../ui/Map/components/layers/Polygon";
 import Map, { IProps as IMapProps } from "../ui/Map/Map";
 import { TAreasResponse } from "services/area";
@@ -15,6 +14,8 @@ import ReportDetailCard from "components/ui/Map/components/cards/ReportDetailCon
 import { getReportAlertsByName } from "helpers/reports";
 import { TAnswer } from "components/ui/Map/components/cards/ReportDetail";
 import { ProcTypes } from "pages/reports/investigation/Investigation";
+import useGetAreas from "hooks/querys/areas/useGetAreas";
+import { areas } from "modules";
 
 export interface IProps extends IMapProps {
   // Should be a memorised function! useCallBack()
@@ -52,27 +53,27 @@ const UserAreasMap: FC<PropsWithChildren<IProps>> = props => {
     undefined
   );
 
-  const { data: areasList, areasInUsersTeams } = useAppSelector(state => state.areas);
+  const {
+    data: { userAreas, areasByTeam }
+  } = useGetAreas();
 
-  const areaMap = useMemo<TAreasResponse[]>(() => {
+  const areaMap = useMemo(() => {
     if (showTeamAreas) {
-      const mapped: TAreasResponse[] = areasInUsersTeams
-        .map(teamAreas => {
-          return teamAreas.areas.map(area => area.data as TAreasResponse);
-        })
-        .flat();
-
-      return mapped.filter((value, index, self) => self.findIndex(t => t.id === value.id) === index);
+      return areasByTeam
+        .map(teamAreas => teamAreas.areas?.map(area => area.data))
+        .flat()
+        .filter((value, index, self) => self.findIndex(t => t?.id === value?.id) === index);
     }
-    return Object.values(areasList);
-  }, [areasInUsersTeams, areasList, showTeamAreas]);
+    return userAreas;
+  }, [areasByTeam, showTeamAreas, userAreas]);
 
   const [hasLoaded, setHasLoaded] = useState(true);
   const [selectedPoint, setSelectedPoint] = useState<mapboxgl.Point | null>(null);
   const [selectedReportIds, setSelectedReportIds] = useState<string[] | null>(null);
   const features = useMemo(() => {
     if (areaMap.length > 0) {
-      const mapped = areaMap.map((area: any) => area.attributes.geostore.geojson.features).flat();
+      // @ts-ignore
+      const mapped = areaMap.map(area => area?.attributes?.geostore?.geojson?.features).flat();
       return turf.featureCollection(mapped);
     }
     return null;
@@ -171,16 +172,18 @@ const UserAreasMap: FC<PropsWithChildren<IProps>> = props => {
 
   return (
     <Map onMapLoad={handleMapLoad} cooperativeGestures={cooperativeGestures} {...rest}>
-      {areaMap.map(area => (
-        <Polygon
-          key={area.id}
-          id={area.id}
-          label={area.attributes.name}
-          data={area.attributes.geostore.geojson}
-          isSelected={selectedAreaId === area.id}
-          onClick={handleAreaClick}
-        />
-      ))}
+      {areaMap.map(area =>
+        area ? (
+          <Polygon
+            key={area.id}
+            id={area.id || ""}
+            label={area.attributes?.name}
+            data={area.attributes?.geostore?.geojson}
+            isSelected={selectedAreaId === area.id}
+            onClick={handleAreaClick}
+          />
+        ) : null
+      )}
 
       {hasLoaded && (
         <SquareClusterMarkers
