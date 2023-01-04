@@ -27,6 +27,7 @@ interface IProps extends HTMLAttributes<HTMLElement> {
   countries: Array<any>;
   portalDom?: HTMLElement;
   hideSearch?: boolean;
+  showKeyLegend?: boolean;
 }
 
 const schema = yup
@@ -44,7 +45,16 @@ enum inputs {
 }
 
 const MapControls: FC<IProps> = props => {
-  const { className, countriesOptions = [], getCountries, countries, portalDom, hideSearch = false, ...rest } = props;
+  const {
+    className,
+    countriesOptions = [],
+    getCountries,
+    countries,
+    portalDom,
+    hideSearch = false,
+    showKeyLegend,
+    ...rest
+  } = props;
   const classes = classnames("c-map__controls", className);
   const [panelOpen, setPanelOpen] = useState(false);
   const { current: map } = useMap();
@@ -151,6 +161,10 @@ const MapControls: FC<IProps> = props => {
 
   const controls = (
     <div className={classes} {...rest}>
+      <OptionalWrapper data={showKeyLegend}>
+        <div style={{ color: "red" }}>Hello OE</div>
+      </OptionalWrapper>
+
       <OptionalWrapper data={!hideSearch}>
         <Popover className="c-map__search-controls">
           <Popover.Button
