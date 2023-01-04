@@ -1,6 +1,6 @@
 import classNames from "classnames";
 import { FC } from "react";
-import { FormattedMessage, useIntl } from "react-intl";
+import { FormattedMessage } from "react-intl";
 import { Link } from "react-router-dom";
 import { TAreasResponse } from "services/area";
 import { TeamResponse } from "services/teams";
