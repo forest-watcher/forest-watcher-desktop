@@ -1,4 +1,5 @@
-import { FC, HTMLAttributes, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import MapLegendControl from "components/ui/Map/components/MapLegendControl";
+import { FC, HTMLAttributes, useCallback, useEffect, useMemo, useRef } from "react";
 import classnames from "classnames";
 import { LngLatBoundsLike, useMap } from "react-map-gl";
 import ZoomInIcon from "assets/images/icons/Plus.svg";
@@ -56,7 +57,6 @@ const MapControls: FC<IProps> = props => {
     ...rest
   } = props;
   const classes = classnames("c-map__controls", className);
-  const [panelOpen, setPanelOpen] = useState(false);
   const { current: map } = useMap();
   const formHook = useForm({
     resolver: yupResolver(schema)
@@ -162,7 +162,7 @@ const MapControls: FC<IProps> = props => {
   const controls = (
     <div className={classes} {...rest}>
       <OptionalWrapper data={showKeyLegend}>
-        <div style={{ color: "red" }}>Hello OE</div>
+        <MapLegendControl />
       </OptionalWrapper>
 
       <OptionalWrapper data={!hideSearch}>
@@ -170,12 +170,11 @@ const MapControls: FC<IProps> = props => {
           <Popover.Button
             aria-label={intl.formatMessage({ id: "components.map.searchAddress" })}
             className="c-map__control c-map__control--single"
-            onClick={() => setPanelOpen(true)}
           >
             <img src={SearchIcon} alt="" role="presentation" />
           </Popover.Button>
 
-          <Popover.Panel static={panelOpen} className="c-map__search-panel">
+          <Popover.Panel className="c-map__search-panel">
             {({ close }) => (
               <>
                 <div className="c-map__autocomplete-section">
@@ -189,7 +188,6 @@ const MapControls: FC<IProps> = props => {
                     onClick={() => {
                       geocoderInputContainer.current = null;
                       reset();
-                      setPanelOpen(false);
                       close();
                     }}
                   >
