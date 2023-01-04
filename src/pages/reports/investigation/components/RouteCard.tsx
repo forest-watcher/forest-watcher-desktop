@@ -28,6 +28,9 @@ const RouteCard: FC<IProps> = ({ route }) => {
     <MapCard title={route.attributes?.name || ""} titleIconName="Routes" position="bottom-right">
       <ul className="c-card__text c-card__list">
         <li>
+          <FormattedMessage id="route.type" />
+        </li>
+        <li>
           <FormattedMessage
             id="route.start"
             values={{

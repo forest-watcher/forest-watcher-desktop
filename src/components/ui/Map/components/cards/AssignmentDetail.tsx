@@ -72,7 +72,6 @@ const AssignmentDetailCard: FC<IProps> = props => {
 
   return (
     <MapCard
-      className="min-w-[400px]"
       title={selectedAssignment?.attributes?.name || ""}
       titleIconName="AssignmentFlag"
       position="bottom-right"
