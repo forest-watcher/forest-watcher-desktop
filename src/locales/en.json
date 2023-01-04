@@ -231,7 +231,7 @@
   "areas.details.teams.remove.error": "Failed to unassign, try again later",
   "areas.details.teamsTable.header.name": "Name",
   "areas.details.teamsTable.header.reports": "Reports",
-  "areas.card.title": "{name} Details",
+  "areas.card.type": "Type: Area",
   "areas.card.size": "Size: {size} km²",
   "areas.card.reports": "Reports: {num}",
   "areas.card.teams": "Teams: {num}",
