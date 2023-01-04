@@ -41,8 +41,6 @@ const Areas: FC<IProps> = props => {
     return areasByTeam.length > 0;
   }, [areasByTeam.length]);
 
-  // const areaMap = useMemo<TAreasResponse[]>(() => Object.values(areasList), [areasList]);
-
   const [selectedArea, setSelectedArea] = useState<AreaResponse["data"] | null>(null);
   const [mapRef, setMapRef] = useState<MapInstance | null>(null);
   const [currentBoundsStr, setCurrentBoundsStr] = useState("");
