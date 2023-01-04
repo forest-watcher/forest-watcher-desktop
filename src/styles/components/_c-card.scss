@@ -32,6 +32,14 @@ $c-card-border-radius:  $global-spacing-1;
       li:not(:last-child) {
         margin-bottom: 6px;
       }
+
+      li {
+        overflow: hidden;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+        white-space: normal;
+      }
     }
   }
 
