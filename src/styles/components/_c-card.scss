@@ -30,7 +30,15 @@ $c-card-border-radius:  $global-spacing-1;
     }
     .c-card__list {
       li:not(:last-child) {
-        margin-bottom: 6px;
+        margin-bottom: 4px;
+      }
+
+      li {
+        overflow: hidden;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+        white-space: normal;
       }
     }
   }
@@ -170,7 +178,7 @@ $c-card-border-radius:  $global-spacing-1;
   &__header {
     display: flex;
     align-items: center;
-    gap: $global-spacing-2;
+    gap: 10px;
   }
 
   &__back-button {

@@ -139,7 +139,7 @@ const NavLinks: FC<INavLinks> = ({ loggedIn, formHook, languages, user, logout, 
           {loggedIn && (
             <>
               {!isMobile && (
-                <li className="c-nav__link-wrapper">
+                <li className="c-nav__link-wrapper max-w-[200px]">
                   <ReactGA.OutboundLink
                     eventLabel="navigation - myGFW"
                     to={MY_GFW_LINK}

@@ -28,7 +28,7 @@ const ReportMap = ({ answer }: ReportMapProps) => {
     : [0, 0];
 
   return (
-    <Map className="c-map--within-hero" onMapLoad={handleMapLoad}>
+    <Map className="c-map--within-hero" onMapLoad={handleMapLoad} hideSearch>
       <SquareClusterMarkers
         id="answers"
         pointDataType={EPointDataTypes.Reports}
