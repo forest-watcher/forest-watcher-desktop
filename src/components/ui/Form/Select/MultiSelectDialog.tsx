@@ -9,10 +9,13 @@ import { FormattedMessage } from "react-intl";
 import { Switch } from "@headlessui/react";
 import { Control, Path, useController, UseControllerProps, useWatch } from "react-hook-form";
 
-type TMultiSelectDialogGroups = {
+type TMultiSelectDialogGroup = {
   options: { value: string; label: string }[];
   label?: string;
-}[];
+  labelSelectsAll?: boolean;
+};
+
+type TMultiSelectDialogGroups = TMultiSelectDialogGroup[];
 
 export interface IProps {
   groups: TMultiSelectDialogGroups;
@@ -44,9 +47,10 @@ const MultiSelectDialog: (<T>(props: IProps & UseControllerProps<T>) => JSX.Elem
   IMultiSelectDialogComposition = props => {
   const { groups, ...controlProps } = props;
   const { field } = useController(controlProps);
-  const [controlledValue, setControlledValue] = useState(field.value || []);
+  //@ts-ignore TODO figure out ts issues in this component
+  const [controlledValue, setControlledValue] = useState<any[]>(field.value || []);
 
-  const handleChange = (checked: boolean, value: string) => {
+  const getValues = (checked: boolean, value: string) => {
     let copyControlledValue;
     if (checked) {
       // @ts-ignore
@@ -56,17 +60,66 @@ const MultiSelectDialog: (<T>(props: IProps & UseControllerProps<T>) => JSX.Elem
       copyControlledValue = controlledValue.filter(i => i !== value);
     }
 
-    // Send data to react hook form
-    field.onChange(copyControlledValue);
+    return copyControlledValue;
+  };
 
-    setControlledValue(copyControlledValue);
+  const handleChange = (checked: boolean, value: string) => {
+    const newValue = getValues(checked, value);
+    updateChanges(newValue);
+  };
+
+  const updateChanges = (value: string[]) => {
+    // Send data to react hook form
+    field.onChange(value);
+
+    console.log({ value });
+
+    setControlledValue(value);
+  };
+
+  const handleSelectAll = (checked: boolean, group: TMultiSelectDialogGroup) => {
+    const valuesMapped = group.options.map(option => option.value);
+
+    let newValue: string[] = [];
+
+    valuesMapped.forEach(value => {
+      newValue = [...newValue, ...getValues(checked, value)];
+    });
+
+    updateChanges(newValue);
+  };
+
+  const getIsAllOfGroupSelected = (group: TMultiSelectDialogGroup) => {
+    const valuesMapped = group.options.map(option => option.value);
+
+    const filtered = controlledValue.filter(
+      checkedVal => group.options.findIndex(groupVal => groupVal.value === checkedVal) > -1
+    );
+
+    return filtered.length === valuesMapped.length;
   };
 
   return (
     <div className="flex flex-col gap-10">
       {groups.map(group => (
         <div key={group.label} className="flex flex-col gap-4">
-          {group.label && <span className="block text-sm font-medium uppercase text-neutral-700">{group.label}</span>}
+          {group.label && group.labelSelectsAll ? (
+            <div className="flex justify-between w-full">
+              <Switch.Group>
+                <Switch.Label className="cursor-pointer block text-sm font-medium uppercase text-neutral-700">
+                  {group.label}
+                </Switch.Label>
+                <Switch
+                  checked={getIsAllOfGroupSelected(group)}
+                  onChange={(checked: boolean) => handleSelectAll(checked, group)}
+                >
+                  {({ checked }) => (checked ? <Icon name="RadioOn" /> : <Icon name="RadioOff" />)}
+                </Switch>
+              </Switch.Group>
+            </div>
+          ) : (
+            <span className="block text-sm font-medium uppercase text-neutral-700">{group.label}</span>
+          )}
 
           {group.options.map((option, id) => (
             <div key={option.value || id} className="flex justify-between w-full">
@@ -75,7 +128,7 @@ const MultiSelectDialog: (<T>(props: IProps & UseControllerProps<T>) => JSX.Elem
                 <Switch
                   // @ts-ignore
                   checked={controlledValue.includes(option.value)}
-                  onChange={checked => handleChange(checked, option.value)}
+                  onChange={(checked: boolean) => handleChange(checked, option.value)}
                 >
                   {({ checked }) => (checked ? <Icon name="RadioOn" /> : <Icon name="RadioOff" />)}
                 </Switch>
