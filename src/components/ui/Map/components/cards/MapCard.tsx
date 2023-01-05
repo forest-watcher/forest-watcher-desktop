@@ -28,8 +28,8 @@ const MapCard: FC<IParams> = props => {
             onClick={() => onBack()}
           />
         )}
-        {titleIconName && <Icon name={titleIconName} size={32} />}
-        <Card.Title className="c-map-card__title">{title}</Card.Title>
+        {titleIconName && <Icon name={titleIconName} size={32} className="min-w-[32px]" />}
+        <Card.Title className="c-map-card__title line-clamp-2 whitespace-normal">{title}</Card.Title>
       </Card.Header>
       <div className="c-map-card__content">{children}</div>
       {footer && <Card.Footer className="c-map-card__footer">{footer}</Card.Footer>}

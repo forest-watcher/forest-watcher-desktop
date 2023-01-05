@@ -3,7 +3,7 @@ import OptionalWrapper from "components/extensive/OptionalWrapper";
 import { AssignmentResponse } from "generated/core/coreResponses";
 import useGetUserId from "hooks/useGetUserId";
 import { FC, useMemo } from "react";
-import { useIntl } from "react-intl";
+import { FormattedMessage, useIntl } from "react-intl";
 import MapCard from "components/ui/Map/components/cards/MapCard";
 import moment from "moment";
 import { Link } from "react-router-dom";
@@ -72,8 +72,7 @@ const AssignmentDetailCard: FC<IProps> = props => {
 
   return (
     <MapCard
-      className="min-w-[400px]"
-      title={intl.formatMessage({ id: "assignments.details.title" }, { name: selectedAssignment?.attributes?.name })}
+      title={selectedAssignment?.attributes?.name || ""}
       titleIconName="AssignmentFlag"
       position="bottom-right"
       footer={
@@ -95,21 +94,24 @@ const AssignmentDetailCard: FC<IProps> = props => {
           <span>{intl.formatMessage({ id: "assignments.details.assigned.to.user" })}</span>
         </div>
       </OptionalWrapper>
-      <div className="text-neutral-700 text-base">
-        <p className="mt-1">
+      <ul className="c-card__text c-card__list">
+        <li>
+          <FormattedMessage id="assignments.details.type" />
+        </li>
+        <li>
           {intl.formatMessage({ id: "assignments.details.createAt" })}:{" "}
           {moment(selectedAssignment?.attributes?.createdAt).format("MMM DD, YYYY")}
-        </p>
-        <p className="mt-1">
+        </li>
+        <li>
           {intl.formatMessage({ id: "assignment.create.form.monitor.label" })}: {monitors.join(", ")}
-        </p>
-        <p className="mt-1">
+        </li>
+        <li>
           {intl.formatMessage({ id: "assignment.create.form.priority.label" })}:{" "}
           {selectedAssignment?.attributes?.priority === 1
             ? intl.formatMessage({ id: "assignment.create.form.priority.high" })
             : intl.formatMessage({ id: "assignment.create.form.priority.normal" })}
-        </p>
-      </div>
+        </li>
+      </ul>
     </MapCard>
   );
 };
