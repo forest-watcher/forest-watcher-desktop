@@ -46,10 +46,8 @@ const ReportDetailCard: FC<IParams> = ({ answers, areasInUsersTeams }) => {
 
   return (
     <MapCard
-      title={intl.formatMessage(
-        { id: answer ? "reports.preview.comepletedTitle" : "reports.select" },
-        { name: answer?.attributes?.reportName }
-      )}
+      title={answer?.attributes?.reportName ?? intl.formatMessage({ id: "reports.select" })}
+      titleIconName="mapCardIcons/Reports"
       position="bottom-right"
       className="c-map-card--area-detail"
       footer={
@@ -65,6 +63,9 @@ const ReportDetailCard: FC<IParams> = ({ answers, areasInUsersTeams }) => {
     >
       {answer && (
         <ul className="c-card__text c-card__list">
+          <li>
+            <FormattedMessage id="reports.preview.type" />
+          </li>
           <OptionalWrapper data={!!answer.attributes?.createdAt}>
             <li>
               <FormattedMessage

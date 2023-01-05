@@ -6,6 +6,8 @@ import { RouteResponse } from "generated/core/coreResponses";
 import MapCard from "components/ui/Map/components/cards/MapCard";
 import { capitalizeFirstLetter } from "helpers/string";
 import moment from "moment";
+import { useGetV3GfwTeamsTeamId } from "generated/core/coreComponents";
+import { useAccessToken } from "hooks/useAccessToken";
 
 interface IProps {
   route: RouteResponse["data"];
@@ -13,6 +15,14 @@ interface IProps {
 
 const RouteCard: FC<IProps> = ({ route }) => {
   const intl = useIntl();
+  const { httpAuthHeader } = useAccessToken();
+  const { data: teamData } = useGetV3GfwTeamsTeamId(
+    {
+      headers: httpAuthHeader,
+      pathParams: { teamId: route?.attributes?.teamId || "" }
+    },
+    { enabled: Boolean(route?.attributes?.teamId) }
+  );
 
   if (!route) {
     return null;
@@ -27,6 +37,9 @@ const RouteCard: FC<IProps> = ({ route }) => {
   return (
     <MapCard title={route.attributes?.name || ""} titleIconName="Routes" position="bottom-right">
       <ul className="c-card__text c-card__list">
+        <li>
+          <FormattedMessage id="route.type" />
+        </li>
         <li>
           <FormattedMessage
             id="route.start"
@@ -71,7 +84,14 @@ const RouteCard: FC<IProps> = ({ route }) => {
           />
         </li>
         <li>
-          <FormattedMessage id="route.monitor" values={{ value: route.attributes?.username }} />
+          <FormattedMessage
+            id="route.monitor"
+            values={{
+              value: teamData
+                ? `${route.attributes?.username} (${teamData.data?.attributes?.name})`
+                : route.attributes?.username
+            }}
+          />
         </li>
       </ul>
     </MapCard>

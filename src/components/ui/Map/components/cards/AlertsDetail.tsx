@@ -5,7 +5,7 @@ import MapCard from "components/ui/Map/components/cards/MapCard";
 import { EAlertTypes } from "constants/alerts";
 import moment from "moment";
 import { FC } from "react";
-import { useIntl } from "react-intl";
+import { FormattedMessage, useIntl } from "react-intl";
 import { TAlertsById } from "types/map";
 
 export interface IProps {
@@ -71,39 +71,45 @@ const AlertsDetailCard: FC<IProps> = props => {
 
   return (
     <MapCard
-      className="min-w-[400px]"
-      title={intl.formatMessage({ id: "alerts.deforestation.alerts" })}
+      title={
+        alertsToShow && alertsToShow.length === 1
+          ? intl.formatMessage({ id: `alerts.${alertsToShow[0].data.alertType}` })
+          : intl.formatMessage({ id: "alerts.deforestation.alerts" })
+      }
       titleIconName="Deforestation"
       position="bottom-right"
       footer={
         canSelectNeighboringAlert ? (
           <Button variant="secondary" onClick={handleSelectNeighboringPoints}>
-            Select All Connected Alerts
+            <FormattedMessage id="alerts.details.selectAll" />
           </Button>
         ) : null
       }
     >
-      <div className="text-neutral-700 text-base">
-        <p className="mt-1">
+      <ul className="c-card__text c-card__list">
+        <li>
+          <FormattedMessage id="alerts.detail.type" />
+        </li>
+        <li>
           {intl.formatMessage({ id: "alerts.detail.issued" })}: {firstAlertDate.format("MMM DD, YYYY")}
           {showLastDate && " - " + lastAlertDate.format("MMM DD, YYYY")}
-        </p>
-        <p className="mt-1">
+        </li>
+        <li>
           {intl.formatMessage({ id: "alerts.detail.alertType" })}:{" "}
           {allAlertTypes.map(alertType => intl.formatMessage({ id: `alerts.${alertType}` })).join(", ")}
-        </p>
+        </li>
 
         {numOfHighConfidenceAlerts > 0 && (
-          <p className="mt-1">
+          <li>
             {intl.formatMessage({ id: "alerts.detail.confidenceLevel" })}:{" "}
             {intl.formatMessage({
               id: `alerts.detail.confidenceLevel.${
                 numOfHighConfidenceAlerts === alertsToShow.length ? "high" : "high.multiple"
               }`
             })}
-          </p>
+          </li>
         )}
-      </div>
+      </ul>
 
       <OptionalWrapper data={!canSelectNeighboringAlert}>
         <div className="text-neutral-700 text-base p-4 bg-neutral-400 rounded-md mt-6">
