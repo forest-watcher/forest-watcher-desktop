@@ -50,40 +50,37 @@ const MultiSelectDialog: (<T>(props: IProps & UseControllerProps<T>) => JSX.Elem
   //@ts-ignore TODO figure out ts issues in this component
   const [controlledValue, setControlledValue] = useState<any[]>(field.value || []);
 
-  const getValues = (checked: boolean, value: string) => {
+  const getValues = (checked: boolean, value: string, selectedValues: any[]) => {
     let copyControlledValue;
     if (checked) {
       // @ts-ignore
-      copyControlledValue = [...controlledValue, value];
+      copyControlledValue = [...selectedValues, value];
     } else {
       // @ts-ignore
-      copyControlledValue = controlledValue.filter(i => i !== value);
+      copyControlledValue = selectedValues.filter(i => i !== value);
     }
 
     return copyControlledValue;
   };
 
   const handleChange = (checked: boolean, value: string) => {
-    const newValue = getValues(checked, value);
+    const newValue = getValues(checked, value, controlledValue);
     updateChanges(newValue);
   };
 
   const updateChanges = (value: string[]) => {
     // Send data to react hook form
     field.onChange(value);
-
-    console.log({ value });
-
     setControlledValue(value);
   };
 
   const handleSelectAll = (checked: boolean, group: TMultiSelectDialogGroup) => {
     const valuesMapped = group.options.map(option => option.value);
 
-    let newValue: string[] = [];
+    let newValue: string[] = [...controlledValue];
 
     valuesMapped.forEach(value => {
-      newValue = [...newValue, ...getValues(checked, value)];
+      newValue = getValues(checked, value, newValue);
     });
 
     updateChanges(newValue);
