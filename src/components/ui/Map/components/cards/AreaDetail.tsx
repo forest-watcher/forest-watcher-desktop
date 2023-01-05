@@ -1,7 +1,7 @@
 import classNames from "classnames";
 import { AreaResponse } from "generated/core/coreResponses";
 import { FC } from "react";
-import { FormattedMessage, useIntl } from "react-intl";
+import { FormattedMessage } from "react-intl";
 import { Link } from "react-router-dom";
 import MapCard, { positions } from "./MapCard";
 
@@ -26,11 +26,10 @@ const AreaDetailCard: FC<IParams> = ({
   onStartInvestigation,
   onManageArea
 }) => {
-  const intl = useIntl();
-
   return (
     <MapCard
-      title={intl.formatMessage({ id: "areas.card.title" }, { name: area?.attributes?.name })}
+      title={area?.attributes?.name || ""}
+      titleIconName="mapCardIcons/Areas"
       position={position}
       className={classNames("c-map-card--area-detail", className)}
       footer={
@@ -54,13 +53,16 @@ const AreaDetailCard: FC<IParams> = ({
       {area && (
         <ul className="c-card__text c-card__list">
           <li>
-            {area?.attributes?.geostore?.areaHa && (
+            <FormattedMessage id="areas.card.type" />
+          </li>
+          {area.attributes?.geostore?.areaHa && (
+            <li>
               <FormattedMessage
                 id="areas.card.size"
                 values={{ size: (area.attributes.geostore.areaHa / 100).toFixed(2) }}
               />
-            )}
-          </li>
+            </li>
+          )}
           <li>
             <FormattedMessage id="areas.card.reports" values={{ num: numberOfReports }} />
           </li>

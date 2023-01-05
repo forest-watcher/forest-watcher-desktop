@@ -46,23 +46,26 @@ const ReportDetailCard: FC<IParams> = ({ answers, areasInUsersTeams }) => {
 
   return (
     <MapCard
-      title={intl.formatMessage(
-        { id: answer ? "reports.preview.comepletedTitle" : "reports.select" },
-        { name: answer?.attributes?.reportName }
-      )}
+      title={answer?.attributes?.reportName ?? intl.formatMessage({ id: "reports.select" })}
+      titleIconName="mapCardIcons/Reports"
       position="bottom-right"
       className="c-map-card--area-detail"
       footer={
-        <Button
-          className="w-full"
-          onClick={() => history.push(`/reporting/reports/${answer?.attributes?.report}/answers/${answer?.id}`)}
-        >
-          View Report
-        </Button>
+        answer?.id ? (
+          <Button
+            className="w-full"
+            onClick={() => history.push(`/reporting/reports/${answer?.attributes?.report}/answers/${answer?.id}`)}
+          >
+            <FormattedMessage id="reports.preview.view" />
+          </Button>
+        ) : undefined
       }
     >
       {answer && (
         <ul className="c-card__text c-card__list">
+          <li>
+            <FormattedMessage id="reports.preview.type" />
+          </li>
           <OptionalWrapper data={!!answer.attributes?.createdAt}>
             <li>
               <FormattedMessage
