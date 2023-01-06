@@ -47,8 +47,15 @@ const Response = (props: ReportResponseProps) => {
         </>
       );
     case "blob":
-      // @ts-ignore response in this case is an array of strings.
-      return <Carousel downloadable slides={response ? response : []} />;
+      return (
+        <Carousel
+          downloadable
+          slides={
+            // Make sure to always pass an array of images
+            response && Array.isArray(response) ? response : response && !Array.isArray(response) ? [response] : []
+          }
+        />
+      );
     default:
       return <p className="text-neutral-700 text-base">{response ?? "N/A"}</p>;
   }
