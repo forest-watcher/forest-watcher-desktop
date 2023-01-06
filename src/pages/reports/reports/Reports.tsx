@@ -11,7 +11,7 @@ import Loader from "components/ui/Loader";
 import EmptyState from "components/ui/EmptyState/EmptyState";
 import EmptyStateIcon from "assets/images/icons/EmptyReports.svg";
 import { sortByDateString, sortByString } from "helpers/table";
-import DeleteRoute from "./actions/DeleteReportContainer";
+import DeleteRoute from "./actions/DeleteReport";
 import { getReportAlertsByName } from "helpers/reports";
 import { IAlertIdentifier } from "constants/alerts";
 import { UnpackNestedValue } from "react-hook-form";
@@ -160,7 +160,7 @@ const Reports: FC<IProps> = () => {
                   rowActions={[
                     {
                       name: "common.delete",
-                      href: row => `${url}/${row.template}/${row.id}/delete/`,
+                      href: row => `${url}/${row.templateId}/${row.id}/delete/`,
                       shouldShow: row => row.userId === userId
                     },
                     {
@@ -214,7 +214,7 @@ const Reports: FC<IProps> = () => {
         </Article>
       </div>
       <Switch>
-        <Route path={`${path}/:reportId/:id/delete`}>
+        <Route path={`${path}/:templateId/:reportAnswerId/delete`}>
           <DeleteRoute />
         </Route>
         <Route path={`${path}/export`}>
