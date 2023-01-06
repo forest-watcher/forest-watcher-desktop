@@ -200,7 +200,7 @@ const Assignments = () => {
               {
                 key: "id",
                 name: "   ",
-                rowLabel: () => "View",
+                rowLabel: () => intl.formatMessage({ id: "common.view" }),
                 rowHref: ({ id }) => `/assignment/${id}`,
                 rowHrefClassNames: "text-primary-500 font-medium uppercase",
                 rowCellClassNames: "!text-right"
