@@ -58,7 +58,7 @@ const Reports: FC<IProps> = () => {
   const userId = useGetUserId();
 
   /*
-   * API - Fetch all Report Answers
+   * Queries - Fetch all Report Answers
    */
   const { httpAuthHeader } = useAccessToken();
   const { data: { data: allAnswers } = {}, isLoading } = useGetV3GfwTemplatesAllAnswers({ headers: httpAuthHeader });

@@ -1,3 +1,4 @@
+import { AnswersResponse } from "generated/core/coreResponses";
 import { FC, PropsWithChildren, useCallback, useEffect, useMemo, useState } from "react";
 import { useAppSelector } from "hooks/useRedux";
 import Polygon, { IProps as IPolygonProps } from "../ui/Map/components/layers/Polygon";
@@ -6,7 +7,6 @@ import { TAreasResponse } from "services/area";
 import { Map as MapInstance, MapboxEvent } from "mapbox-gl";
 import * as turf from "@turf/turf";
 import { goToGeojson } from "helpers/map";
-import { TGetAllAnswers } from "services/reports";
 import SquareClusterMarkers, { EPointDataTypes } from "components/ui/Map/components/layers/SquareClusterMarkers";
 import { Layer, Source } from "react-map-gl";
 import { PLANET_BASEMAP } from "constants/mapbox";
@@ -24,7 +24,7 @@ export interface IProps extends IMapProps {
   focusAllAreas?: boolean;
   selectedAreaId?: string;
   showReports?: boolean;
-  answers?: TGetAllAnswers["data"];
+  answers?: AnswersResponse["data"];
   currentPlanetBasemap?: IPlanetBasemap;
   currentProc?: ProcTypes;
   showTeamAreas?: boolean;

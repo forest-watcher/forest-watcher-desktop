@@ -1,15 +1,15 @@
 import { TAvailableTypes } from "components/modals/FormModal";
 import { IFilter } from "components/ui/DataFilter/DataFilter";
 import { IAlertIdentifier } from "constants/alerts";
+import { AnswersResponse } from "generated/core/coreResponses";
 import { getReportAlertsByName } from "helpers/reports";
 import { ALL_VALUE, filterByTimeFrame, getTimeFrames } from "helpers/table";
 import { useMemo } from "react";
 import { useIntl } from "react-intl";
-import { TGetAllAnswers } from "services/reports";
 import { Option } from "types/select";
 import { TFilterFields } from "./Reports";
 
-const useControlPanelReportFilters = (answers: TGetAllAnswers["data"] = []) => {
+const useControlPanelReportFilters = (answers: AnswersResponse["data"] = []) => {
   const intl = useIntl();
 
   const templateOptions = useMemo<Option[]>(() => {
