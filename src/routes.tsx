@@ -21,7 +21,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "store";
 import TemplateEdit from "pages/template-edit/TemplateEdit";
 import TemplateCreate from "pages/template-edit/TemplateCreate";
-import Help from "pages/help/Layers";
+import Help from "pages/help/Help";
 
 interface IParams {
   token?: string;
