@@ -96,7 +96,7 @@ const useAssignmentsFilters = (assignments: AssignmentsResponse["data"] = [], ar
           selectProps: {
             placeholder: intl.formatMessage({ id: "templates.filterBy" }),
             options: statusOptions,
-            label: intl.formatMessage({ id: "Status" }),
+            label: intl.formatMessage({ id: "assignments.table.status" }),
             defaultValue: statusOptions[0]
           },
           variant: "simple-green",

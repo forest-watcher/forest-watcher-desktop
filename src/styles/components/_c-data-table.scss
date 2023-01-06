@@ -49,6 +49,8 @@
   &__action-toggle {
     padding: 8px 34px 8px 8px;
     margin-left: auto;
+    position: relative;
+    top: -1px;
   }
 
   &__pagination {
