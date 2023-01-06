@@ -42,6 +42,7 @@ const Select = (props: Props) => {
     alternateLabelStyle = false,
     largeLabel = false,
     labelClass,
+    wrapperClassName,
     className
   } = props;
   const [options, setOptions] = useState<Option[]>(selectProps.options || []);
@@ -131,7 +132,7 @@ const Select = (props: Props) => {
                 {selectProps.label}
               </Listbox.Label>
             )}
-            <div className={classnames(isMultiple ? "u-w-100" : "c-input__input-wrapper")}>
+            <div className={classnames(isMultiple ? "u-w-100" : "c-input__input-wrapper", wrapperClassName)}>
               <div
                 className={classnames(
                   "c-input__select",
