@@ -21,6 +21,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "store";
 import TemplateEdit from "pages/template-edit/TemplateEdit";
 import TemplateCreate from "pages/template-edit/TemplateCreate";
+import Help from "pages/help/Layers";
 
 interface IParams {
   token?: string;
@@ -142,8 +143,7 @@ const Routes: FC<IProps> = props => {
             render={args => <TeamDetail isDeletingTeamArea {...args} />}
           />
           <Route exact path={`${match.url}layers`} component={Layers} />
-          {/* !! TODO: To Be Removed as /layers has replaced /settings !! */}
-          <Route exact path={`${match.url}settings`} component={Settings} />
+          <Route path={`${match.url}help`} component={Help} />
           <Route path="*">
             <Redirect to="/areas" />
           </Route>

@@ -742,6 +742,20 @@
   "route.monitor": "Monitor: {value}",
   "route.difficulty.easy": "Easy",
   "route.difficulty.medium": "Medium",
-  "route.difficulty.hard": "Hard"
-
-}
+  "route.difficulty.hard": "Hard",
+  "help.title": "Help",
+  "help.helpCenter.title": "GFW Help Center",
+  "help.helpCenter.subtitle": "Find Global Forest Watch documentation and Frequently Asked Questions in the Global Forest Watch Help Center.",
+  "help.helpCenter.cta.title": "Help Center",
+  "help.helpCenter.cta.subtitle": "The Help Center offers resources to guide you through the forest monitoring data, technology and tools that Global Forest Watch offers.",
+  "help.helpCenter.cta.link": "Visit GFW Help center",
+  "help.form.title": "Contact",
+  "help.form.subtitle": "Didn't find what you were looking for in our Help Center? Get in touch and let us know how we can help.",
+  "help.form.getInTouch": "Get in touch",
+  "help.form.platform.label": "Which platform would you like to provide feedback for?*",
+  "help.form.platform.placeholder": "Select Platform",
+  "help.form.queryRelate.label": "What does your query relate to?*",
+  "help.form.queryRelate.placeholder": "Select Subject",
+  "help.form.query.label": "Please describe your query*",
+  "help.form.query.placeholder": "Enter Message"
+ }
