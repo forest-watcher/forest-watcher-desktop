@@ -199,7 +199,6 @@ const Assignments = () => {
               { key: "priority", name: "assignments.table.priority", sortCompareFn: sortByString },
               {
                 key: "id",
-                name: "   ",
                 rowLabel: () => intl.formatMessage({ id: "common.view" }),
                 rowHref: ({ id }) => `/assignment/${id}`,
                 rowHrefClassNames: "text-primary-500 font-medium uppercase",

@@ -199,7 +199,6 @@ const Reports: FC<IProps> = props => {
                     },
                     {
                       key: "id",
-                      name: "   ",
                       rowLabel: () => intl.formatMessage({ id: "common.view" }),
                       rowHref: ({ id, templateId }) => `${url}/${templateId}/answers/${id}`,
                       rowHrefClassNames: "text-primary-500 font-medium uppercase",
