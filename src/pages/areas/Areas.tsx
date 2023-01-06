@@ -1,3 +1,5 @@
+import { useGetV3GfwTemplatesAllAnswers } from "generated/core/coreComponents";
+import { useAccessToken } from "hooks/useAccessToken";
 import { FC, useMemo, useState, Fragment, useCallback, useEffect } from "react";
 import Hero from "components/layouts/Hero/Hero";
 import Article from "components/layouts/Article";
@@ -30,7 +32,7 @@ interface IProps extends TPropsFromRedux {
 }
 
 const Areas: FC<IProps> = props => {
-  const { areasList, loading, loadingTeamAreas, areasInUsersTeams, allAnswers, teamMembers, getTeamMembers } = props;
+  const { areasList, loading, loadingTeamAreas, areasInUsersTeams, teamMembers, getTeamMembers } = props;
   const areaMap = useMemo<TAreasResponse[]>(() => Object.values(areasList), [areasList]);
   const [selectedArea, setSelectedArea] = useState<TAreasResponse | null>(null);
   const [mapRef, setMapRef] = useState<MapInstance | null>(null);
@@ -42,6 +44,13 @@ const Areas: FC<IProps> = props => {
 
     return teamWithAreasIndex > -1;
   }, [areasInUsersTeams]);
+
+  /*
+   * Queries
+   */
+  const { httpAuthHeader } = useAccessToken();
+  // - Fetch all Report Answers
+  const { data: { data: allAnswers } = {} } = useGetV3GfwTemplatesAllAnswers({ headers: httpAuthHeader });
 
   const answersBySelectedArea = useMemo(() => {
     return allAnswers?.filter(

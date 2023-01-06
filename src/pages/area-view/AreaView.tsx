@@ -1,5 +1,7 @@
 import Hero from "components/layouts/Hero/Hero";
 import Map from "components/ui/Map/Map";
+import { useGetV3GfwTemplatesAllAnswers } from "generated/core/coreComponents";
+import { useAccessToken } from "hooks/useAccessToken";
 import { FC, useState, useEffect, useMemo, useCallback } from "react";
 import { MapboxEvent, Map as MapInstance } from "mapbox-gl";
 import { FormattedMessage, useIntl } from "react-intl";
@@ -42,7 +44,6 @@ const AreasView: FC<IProps & RouteComponentProps<TParams>> = ({
   getTeamMembers,
   areaTeams,
   teamMembers,
-  allAnswers,
   teams
 }) => {
   const [mapRef, setMapRef] = useState<MapInstance | null>(null);
@@ -52,7 +53,17 @@ const AreasView: FC<IProps & RouteComponentProps<TParams>> = ({
   const intl = useIntl();
   const { areaId } = useParams<TParams>();
   const { backLinkTextKey } = useGetBackLink({ backLinkTextKey: "areas.back", backLink: "/areas" });
+
+  /*
+   * Queries
+   */
+  const { httpAuthHeader } = useAccessToken();
+
+  // - Get All Templates
   const { templates } = useGetTemplates();
+
+  // - Fetch all Report Answers
+  const { data: { data: allAnswers } = {} } = useGetV3GfwTemplatesAllAnswers({ headers: httpAuthHeader });
 
   useEffect(() => {
     // Rare case, only other scroll tos are in routes.js for the top level nav

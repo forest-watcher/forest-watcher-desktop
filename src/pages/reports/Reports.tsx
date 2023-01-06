@@ -1,6 +1,5 @@
-import { FC, useEffect } from "react";
+import { FC } from "react";
 import { Redirect, Route, RouteComponentProps, Switch } from "react-router-dom";
-import { TPropsFromRedux } from "./ReportsContainer";
 import Hero from "components/layouts/Hero/Hero";
 import { IProps as ITabGroupProps } from "components/ui/TabGroup/TabGroup";
 import InvestigationPage from "./investigation/InvestigationContainer";
@@ -12,7 +11,7 @@ type TParams = {
   reportingTab: string;
 };
 
-interface IProps extends TPropsFromRedux, RouteComponentProps<TParams> {}
+interface IProps extends RouteComponentProps<TParams> {}
 
 const INVESTIGATION_PATH = "/reporting/investigation";
 const REPORTS_PATH = "/reporting/reports";
@@ -37,12 +36,8 @@ const pageTabs: ITabGroupProps["options"] = [
 ];
 
 const Reports: FC<IProps> = props => {
-  const { match, getAllReports } = props;
+  const { match } = props;
   const { reportingTab } = match.params;
-
-  useEffect(() => {
-    getAllReports();
-  }, [getAllReports]);
 
   return !pageTabs.find(pageTab => pageTab.value === reportingTab) ? (
     <Redirect to={INVESTIGATION_PATH} />
