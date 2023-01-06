@@ -4,7 +4,7 @@ import { TPropsFromRedux } from "./ReportsContainer";
 import Hero from "components/layouts/Hero/Hero";
 import { IProps as ITabGroupProps } from "components/ui/TabGroup/TabGroup";
 import InvestigationPage from "./investigation/InvestigationContainer";
-import ReportsPage from "./reports/ReportsContainer";
+import ReportsPage from "./reports/Reports";
 import classnames from "classnames";
 import Assignments from "./assignments/Assignments";
 

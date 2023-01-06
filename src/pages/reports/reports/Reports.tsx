@@ -1,7 +1,8 @@
 import Article from "components/layouts/Article";
 import DataFilter from "components/ui/DataFilter/DataFilter";
 import DataTable from "components/ui/DataTable/DataTable";
-import { TPropsFromRedux } from "./ReportsContainer";
+import { useGetV3GfwTemplatesAllAnswers } from "generated/core/coreComponents";
+import { useAccessToken } from "hooks/useAccessToken";
 import { FC, useCallback, useMemo, useState } from "react";
 import { FormattedMessage, useIntl } from "react-intl";
 import { Link, Route, Switch, useHistory, useRouteMatch } from "react-router-dom";
@@ -46,16 +47,21 @@ export type TFilterFields = {
   voice: boolean;
 };
 
-interface IProps extends TPropsFromRedux {}
+interface IProps {}
 
-const Reports: FC<IProps> = props => {
-  const { allAnswers, loading } = props;
+const Reports: FC<IProps> = () => {
   let { path, url } = useRouteMatch();
   const history = useHistory();
   const [selectedReports, setSelectedReports] = useState<TReportsDataTable[]>([]);
   const urlQuery = useUrlQuery();
   const defaultTemplateFilter = useMemo(() => urlQuery.get("defaultTemplateFilter"), [urlQuery]);
   const userId = useGetUserId();
+
+  /*
+   * API - Fetch all Report Answers
+   */
+  const { httpAuthHeader } = useAccessToken();
+  const { data: { data: allAnswers } = {}, isLoading } = useGetV3GfwTemplatesAllAnswers({ headers: httpAuthHeader });
 
   const rows = useMemo<TReportsDataTable[]>(
     () =>
@@ -118,7 +124,7 @@ const Reports: FC<IProps> = props => {
   return (
     <>
       <div className="l-content">
-        <Loader isLoading={loading} />
+        <Loader isLoading={isLoading} />
         <Article
           title="reports.reports.subTitle"
           size="small"
@@ -128,7 +134,7 @@ const Reports: FC<IProps> = props => {
             </Link>
           }
         >
-          {!loading &&
+          {!isLoading &&
             (allAnswers?.length === 0 ? (
               <EmptyState
                 iconUrl={EmptyStateIcon}
