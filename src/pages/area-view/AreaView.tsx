@@ -1,7 +1,6 @@
 import Hero from "components/layouts/Hero/Hero";
 import Map from "components/ui/Map/Map";
-import { useGetV3GfwTemplatesAllAnswers } from "generated/core/coreComponents";
-import { useAccessToken } from "hooks/useAccessToken";
+import useGetAllReportAnswersForUser from "hooks/querys/reportAnwsers/useGetAllReportAnswersForUser";
 import { FC, useState, useEffect, useMemo, useCallback } from "react";
 import { MapboxEvent, Map as MapInstance } from "mapbox-gl";
 import { FormattedMessage, useIntl } from "react-intl";
@@ -57,13 +56,10 @@ const AreasView: FC<IProps & RouteComponentProps<TParams>> = ({
   /*
    * Queries
    */
-  const { httpAuthHeader } = useAccessToken();
-
   // - Get All Templates
   const { templates } = useGetTemplates();
-
   // - Fetch all Report Answers
-  const { data: { data: allAnswers } = {} } = useGetV3GfwTemplatesAllAnswers({ headers: httpAuthHeader });
+  const { data: allAnswers } = useGetAllReportAnswersForUser();
 
   useEffect(() => {
     // Rare case, only other scroll tos are in routes.js for the top level nav

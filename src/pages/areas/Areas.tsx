@@ -1,5 +1,4 @@
-import { useGetV3GfwTemplatesAllAnswers } from "generated/core/coreComponents";
-import { useAccessToken } from "hooks/useAccessToken";
+import useGetAllReportAnswersForUser from "hooks/querys/reportAnwsers/useGetAllReportAnswersForUser";
 import { FC, useMemo, useState, Fragment, useCallback, useEffect } from "react";
 import Hero from "components/layouts/Hero/Hero";
 import Article from "components/layouts/Article";
@@ -46,11 +45,9 @@ const Areas: FC<IProps> = props => {
   }, [areasInUsersTeams]);
 
   /*
-   * Queries
+   * Queries - Fetch all Report Answers
    */
-  const { httpAuthHeader } = useAccessToken();
-  // - Fetch all Report Answers
-  const { data: { data: allAnswers } = {} } = useGetV3GfwTemplatesAllAnswers({ headers: httpAuthHeader });
+  const { data: allAnswers } = useGetAllReportAnswersForUser();
 
   const answersBySelectedArea = useMemo(() => {
     return allAnswers?.filter(

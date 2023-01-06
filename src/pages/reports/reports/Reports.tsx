@@ -1,8 +1,7 @@
 import Article from "components/layouts/Article";
 import DataFilter from "components/ui/DataFilter/DataFilter";
 import DataTable from "components/ui/DataTable/DataTable";
-import { useGetV3GfwTemplatesAllAnswers } from "generated/core/coreComponents";
-import { useAccessToken } from "hooks/useAccessToken";
+import useGetAllReportAnswersForUser from "hooks/querys/reportAnwsers/useGetAllReportAnswersForUser";
 import { FC, useCallback, useMemo, useState } from "react";
 import { FormattedMessage, useIntl } from "react-intl";
 import { Link, Route, Switch, useHistory, useRouteMatch } from "react-router-dom";
@@ -60,8 +59,7 @@ const Reports: FC<IProps> = () => {
   /*
    * Queries - Fetch all Report Answers
    */
-  const { httpAuthHeader } = useAccessToken();
-  const { data: { data: allAnswers } = {}, isLoading } = useGetV3GfwTemplatesAllAnswers({ headers: httpAuthHeader });
+  const { data: allAnswers, isLoading: isReportAnswersLoading } = useGetAllReportAnswersForUser();
 
   const rows = useMemo<TReportsDataTable[]>(
     () =>
@@ -124,7 +122,7 @@ const Reports: FC<IProps> = () => {
   return (
     <>
       <div className="l-content">
-        <Loader isLoading={isLoading} />
+        <Loader isLoading={isReportAnswersLoading} />
         <Article
           title="reports.reports.subTitle"
           size="small"
@@ -134,7 +132,7 @@ const Reports: FC<IProps> = () => {
             </Link>
           }
         >
-          {!isLoading &&
+          {!isReportAnswersLoading &&
             (allAnswers?.length === 0 ? (
               <EmptyState
                 iconUrl={EmptyStateIcon}

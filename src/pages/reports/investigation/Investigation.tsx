@@ -1,5 +1,5 @@
-import { useGetV3GfwTemplatesAllAnswers } from "generated/core/coreComponents";
 import { AnswersResponse } from "generated/core/coreResponses";
+import useGetAllReportAnswersForUser from "hooks/querys/reportAnwsers/useGetAllReportAnswersForUser";
 import { TAlertsById } from "types/map";
 import { DefaultRequestThresholds, EAlertTypes, ViirsRequestThresholds } from "constants/alerts";
 import { CSSProperties, FC, useCallback, useEffect, useMemo, useState } from "react";
@@ -92,7 +92,7 @@ const InvestigationPage: FC<IProps> = props => {
   const { data: layersData } = useGetV3ContextualLayer({ headers: httpAuthHeader });
 
   // - Fetch all Report Answers
-  const { data: { data: allAnswers } = {} } = useGetV3GfwTemplatesAllAnswers({ headers: httpAuthHeader });
+  const { data: allAnswers } = useGetAllReportAnswersForUser();
 
   const handleMapLoad = (evt: MapboxEvent) => {
     setMapRef(evt.target);
