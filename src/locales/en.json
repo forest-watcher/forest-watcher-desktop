@@ -138,6 +138,8 @@
   "common.completedDate": "Completed Date",
   "common.noImages": "No Images",
   "common.view": "View",
+  "common.error": "Something went wrong",
+  "common.errorBody": "Try again later",
   "login.welcome": "Log in using one of following accounts:",
   "forms.required": "required",
   "forms.save": "save",
@@ -764,5 +766,7 @@
   "help.form.queryRelate.data": "Data-related inquiry or suggestion",
   "help.form.queryRelate.general": "General inquiry",
   "help.form.query.label": "Please describe your query*",
-  "help.form.query.placeholder": "Enter Message"
+  "help.form.query.placeholder": "Enter Message",
+  "help.form.success": "Form submitted",
+  "help.form.successBody": "Thank you for contacting us"
  }
