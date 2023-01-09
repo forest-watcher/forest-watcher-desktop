@@ -37,7 +37,8 @@ const Help = () => {
     register,
     handleSubmit,
     formState: { errors },
-    control
+    control,
+    reset
   } = formHook;
 
   const { httpAuthHeader } = useAccessToken();
@@ -51,6 +52,7 @@ const Help = () => {
         intl.formatMessage({ id: "help.form.success" }),
         intl.formatMessage({ id: "help.form.successBody" })
       );
+      reset({ query: "", platform: "", queryRelate: "" });
     }
   });
 
