@@ -170,7 +170,7 @@ const UserAreasMap: FC<PropsWithChildren<IProps>> = props => {
   };
 
   return (
-    <Map onMapLoad={handleMapLoad} cooperativeGestures={cooperativeGestures} {...rest}>
+    <Map onMapLoad={handleMapLoad} cooperativeGestures={cooperativeGestures} showKeyLegend={!!selectedAreaId} {...rest}>
       {areaMap.map(area =>
         area ? (
           <Polygon

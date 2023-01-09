@@ -193,7 +193,7 @@ const AreasView: FC<IProps & RouteComponentProps<TParams>> = ({
         ) : (
           area &&
           geojson && (
-            <Map className="c-map--within-hero" onMapLoad={handleMapLoad}>
+            <Map className="c-map--within-hero" onMapLoad={handleMapLoad} showKeyLegend>
               <Polygon id={area?.data?.id || ""} label={area.data?.attributes?.name} data={geojson} />
             </Map>
           )

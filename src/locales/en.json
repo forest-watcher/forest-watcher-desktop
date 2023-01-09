@@ -718,6 +718,15 @@
   "maps.comparison.cardTitle": "Planet Imagery Comparison",
   "maps.comparison.left": "Showing Left: {date}",
   "maps.comparison.right": "Showing Right: {date}",
+
+  "maps.legend.key.alerts": "Alerts",
+  "maps.legend.key.my.reports": "My Reports",
+  "maps.legend.key.imported.reports": "Imported Reports",
+  "maps.legend.key.VIIRS.alerts": "VIIRS Alerts",
+  "maps.legend.key.VIIRS.reports": "VIIRS Reports",
+  "maps.legend.key.assignments.created": "Assignments (Created by me)",
+  "maps.legend.key.assignments.assigned": "Assignments (Assigned to me)",
+
   "filters.all.alerts": "All Alerts",
   "filters.all.templates": "All Templates",
   "filters.all.timeframes": "All Time Frames",

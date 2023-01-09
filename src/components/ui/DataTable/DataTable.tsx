@@ -19,7 +19,7 @@ export interface IRowAction<T> extends Omit<Omit<IContextMenuProps["menuItems"][
 
 export interface IColumnOrder<T> {
   key: keyof T;
-  name: string;
+  name?: string;
   rowHref?: string | ((row: T, value?: string) => string);
   rowLabel?: string | ((row: T, value?: string | number | any[]) => string);
   sortCompareFn?: (a: string | number | any[], b: string | number | any[], direction: Direction) => number;
@@ -182,11 +182,11 @@ const DataTable = <T extends { [key: string]: string | number | any[] }>(props: 
                 <th key={column.key.toString()} aria-sort={column.key === sortedCol?.key ? sortedDirection : undefined}>
                   {column.sortCompareFn ? (
                     <button onClick={() => handleSort(column)} className="c-data-table__sort-button">
-                      <FormattedMessage id={column.name} />
+                      {column.name && <FormattedMessage id={column.name} />}
                       <SortIcon direction={column.key === sortedCol?.key ? sortedDirection : Direction.None} />
                     </button>
                   ) : (
-                    <FormattedMessage id={column.name} />
+                    column.name && <FormattedMessage id={column.name} />
                   )}
                 </th>
               ))}
