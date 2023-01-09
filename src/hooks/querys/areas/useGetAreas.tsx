@@ -1,7 +1,19 @@
 import { useGetV3GfwAreasUserandteam } from "generated/core/coreComponents";
+import { AreaModel } from "generated/core/coreSchemas";
 import { useAccessToken } from "hooks/useAccessToken";
 import useGetUserId from "hooks/useGetUserId";
 import { useCallback, useMemo } from "react";
+
+export type TAreasByTeam = {
+  team?: string;
+  areas?: {
+    data: {
+      id?: string | undefined;
+      type?: string | undefined;
+      attributes?: AreaModel | undefined;
+    };
+  }[];
+}[];
 
 const useGetAreas = () => {
   const userId = useGetUserId();
@@ -16,7 +28,7 @@ const useGetAreas = () => {
     );
   }, [areaList?.data, userId]);
 
-  const areasByTeam = useMemo(() => {
+  const areasByTeam = useMemo<TAreasByTeam>(() => {
     // Get each team.
     const teams =
       areaList?.data

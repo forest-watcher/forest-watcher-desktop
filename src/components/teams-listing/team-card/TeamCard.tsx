@@ -4,24 +4,21 @@ import EditIcon from "assets/images/icons/Edit.svg";
 import { FormattedMessage } from "react-intl";
 import { TGFWTeamsState } from "modules/gfwTeams";
 import { TPropsFromRedux } from "./TeamCardContainer";
-import useGetAreas from "hooks/querys/areas/useGetAreas";
+import { TAreasByTeam } from "hooks/querys/areas/useGetAreas";
 
 export interface IOwnProps {
   team: TGFWTeamsState["data"][number];
   canManage?: boolean;
+  areasByTeam: TAreasByTeam;
 }
 
 export type IProps = TPropsFromRedux & IOwnProps;
 
 const TeamCard: FC<IProps> = props => {
-  const { team, getTeamMembers, teamMembers, teamAreas, canManage = false } = props;
+  const { team, getTeamMembers, teamMembers, teamAreas, canManage = false, areasByTeam } = props;
   useEffect(() => {
     getTeamMembers();
   }, [getTeamMembers]);
-
-  const {
-    data: { areasByTeam }
-  } = useGetAreas();
 
   const areasDetail = useMemo(
     // @ts-ignore incorrect typings
