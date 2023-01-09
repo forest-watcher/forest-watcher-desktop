@@ -211,12 +211,11 @@ const TemplateQuestion = ({ question, defaultLanguage = "", onDelete, index }: T
                 htmlInputProps={{
                   label: intl.formatMessage({ id: "template.edit.maxNumber" }),
                   placeholder: intl.formatMessage({ id: "template.edit.maxNumberPlaceholder" }),
-                  type: "number",
-                  min: 1,
-                  max: 10
+                  type: "number"
                 }}
                 registered={register(`questions.${index}.maxImageCount`, { valueAsNumber: true })}
                 alternateLabelStyle
+                error={errors?.questions && errors?.questions[index].maxImageCount}
               />
             </div>
           </OptionalWrapper>
@@ -246,6 +245,15 @@ const TemplateQuestion = ({ question, defaultLanguage = "", onDelete, index }: T
                       hideLabel
                       className="flex-grow"
                       wrapperClassName="w-full"
+                      error={
+                        errors?.questions &&
+                        errors.questions[index].values &&
+                        // @ts-ignore
+                        errors.questions[index].values[defaultLanguage as keyof typeof question.label] &&
+                        // @ts-ignore
+                        errors.questions[index].values[defaultLanguage as keyof typeof question.label][optionIndex]
+                          ?.label
+                      }
                     />
                     <button
                       onClick={e => {

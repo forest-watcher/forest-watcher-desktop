@@ -28,8 +28,6 @@ interface IParams {
 }
 
 const labelValidationFunc = yup.lazy(value => {
-  // if (!isEmpty(value)) {
-  // const validationObject = { name: yup.string().required() };
   const newEntries = Object.keys(value).reduce(
     (acc, val) => ({
       ...acc,
@@ -39,20 +37,51 @@ const labelValidationFunc = yup.lazy(value => {
   );
 
   return yup.object().shape(newEntries);
-  // }
-  // console.log({ value });
-  // return yup.mixed().notRequired();
+});
+
+const labelArrValidationFunc = yup.lazy(value => {
+  const newEntries = Object.keys(value).reduce(
+    (acc, val) => ({
+      ...acc,
+      [val]: yup
+        .array(
+          yup.object().shape({
+            label: yup.string().required()
+          })
+        )
+        .min(1)
+    }),
+    {}
+  );
+
+  return yup.object().shape(newEntries);
+});
+
+const questionValidationFunc = yup.lazy(value => {
+  if (value.type === "blob") {
+    return yup.object().shape({
+      label: labelValidationFunc,
+      maxImageCount: yup.number().min(1).max(10).required()
+    });
+  }
+
+  if (value.type === "radio" || value.type === "select") {
+    return yup.object().shape({
+      label: labelValidationFunc,
+      values: labelArrValidationFunc
+    });
+  }
+
+  return yup.object().shape({
+    label: labelValidationFunc
+  });
 });
 
 const templateSchema = yup
   .object()
   .shape({
     name: labelValidationFunc,
-    questions: yup.array(
-      yup.object().shape({
-        label: labelValidationFunc
-      })
-    )
+    questions: yup.array(questionValidationFunc)
   })
   .required();
 
