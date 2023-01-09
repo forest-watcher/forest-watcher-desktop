@@ -58,23 +58,36 @@ const labelArrValidationFunc = yup.lazy(value => {
 });
 
 const questionValidationFunc = yup.lazy(value => {
+  let moreInfoValidation = yup.array().notRequired();
+
+  if (value.childQuestions?.length > 0) {
+    moreInfoValidation = yup.array(
+      yup.object().shape({
+        label: labelValidationFunc
+      })
+    );
+  }
+
+  const defaultShape = {
+    label: labelValidationFunc,
+    childQuestions: moreInfoValidation
+  };
+
   if (value.type === "blob") {
     return yup.object().shape({
-      label: labelValidationFunc,
+      ...defaultShape,
       maxImageCount: yup.number().min(1).max(10).required()
     });
   }
 
   if (value.type === "radio" || value.type === "select") {
     return yup.object().shape({
-      label: labelValidationFunc,
+      ...defaultShape,
       values: labelArrValidationFunc
     });
   }
 
-  return yup.object().shape({
-    label: labelValidationFunc
-  });
+  return yup.object().shape(defaultShape);
 });
 
 const templateSchema = yup
@@ -135,8 +148,6 @@ const TemplateForm: FC<IParams> = ({ template, backLink = "", onSubmit }) => {
 
     setValue("questions", newQs, { shouldDirty: true });
   };
-
-  console.log(errors);
 
   return (
     <FormProvider {...formHook}>

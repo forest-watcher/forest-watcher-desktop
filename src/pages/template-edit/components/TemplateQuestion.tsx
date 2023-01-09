@@ -215,7 +215,7 @@ const TemplateQuestion = ({ question, defaultLanguage = "", onDelete, index }: T
                 }}
                 registered={register(`questions.${index}.maxImageCount`, { valueAsNumber: true })}
                 alternateLabelStyle
-                error={errors?.questions && errors?.questions[index].maxImageCount}
+                error={errors?.questions && errors?.questions[index] && errors?.questions[index].maxImageCount}
               />
             </div>
           </OptionalWrapper>
@@ -247,12 +247,15 @@ const TemplateQuestion = ({ question, defaultLanguage = "", onDelete, index }: T
                       wrapperClassName="w-full"
                       error={
                         errors?.questions &&
+                        errors.questions[index] &&
                         errors.questions[index].values &&
                         // @ts-ignore
                         errors.questions[index].values[defaultLanguage as keyof typeof question.label] &&
                         // @ts-ignore
+                        errors.questions[index].values[defaultLanguage as keyof typeof question.label][optionIndex] &&
+                        // @ts-ignore
                         errors.questions[index].values[defaultLanguage as keyof typeof question.label][optionIndex]
-                          ?.label
+                          .label
                       }
                     />
                     <button
@@ -334,6 +337,17 @@ const TemplateQuestion = ({ question, defaultLanguage = "", onDelete, index }: T
                   `questions.${index}.childQuestions.0.label.${defaultLanguage as keyof typeof question.label}`
                 )}
                 alternateLabelStyle
+                error={
+                  errors.questions &&
+                  errors.questions[index] &&
+                  errors.questions[index].childQuestions &&
+                  // @ts-ignore
+                  errors.questions[index].childQuestions[0] &&
+                  // @ts-ignore
+                  errors.questions[index].childQuestions[0].label &&
+                  // @ts-ignore
+                  errors.questions[index].childQuestions[0].label[defaultLanguage as keyof typeof question.label]
+                }
               />
             </>
           )}
