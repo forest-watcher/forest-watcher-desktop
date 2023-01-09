@@ -30,7 +30,13 @@ const TemplateQuestion = ({ question, defaultLanguage = "", onDelete, index }: T
   const responseOptions = question.values as valuesType;
   const intl = useIntl();
   const formHook = useFormContext<FormFields>();
-  const { register, getValues, setValue, control } = formHook;
+  const {
+    register,
+    getValues,
+    setValue,
+    control,
+    formState: { errors }
+  } = formHook;
   const watcher = useWatch({ control });
   const isConditional = CONDITIONAL_QUESTION_TYPES.indexOf(question.type) > -1;
 
@@ -167,11 +173,17 @@ const TemplateQuestion = ({ question, defaultLanguage = "", onDelete, index }: T
               htmlInputProps={{
                 label: intl.formatMessage({ id: "question.question" }),
                 placeholder: intl.formatMessage({ id: "template.edit.title.placeholder" }),
-                type: "text",
-                required: true
+                type: "text"
               }}
               registered={register(`questions.${index}.label.${defaultLanguage as keyof typeof question.label}`)}
               alternateLabelStyle
+              error={
+                errors.questions &&
+                errors.questions[index] &&
+                errors.questions[index].label &&
+                // @ts-ignore
+                errors.questions[index].label[defaultLanguage as keyof typeof question.label]
+              }
             />
           </div>
           {/* Response Type */}
@@ -201,8 +213,7 @@ const TemplateQuestion = ({ question, defaultLanguage = "", onDelete, index }: T
                   placeholder: intl.formatMessage({ id: "template.edit.maxNumberPlaceholder" }),
                   type: "number",
                   min: 1,
-                  max: 10,
-                  required: true
+                  max: 10
                 }}
                 registered={register(`questions.${index}.maxImageCount`, { valueAsNumber: true })}
                 alternateLabelStyle
@@ -224,8 +235,7 @@ const TemplateQuestion = ({ question, defaultLanguage = "", onDelete, index }: T
                       htmlInputProps={{
                         label: intl.formatMessage({ id: "template.edit.responseOption" }),
                         placeholder: intl.formatMessage({ id: "template.edit.responseOption.placeholder" }),
-                        type: "text",
-                        required: true
+                        type: "text"
                       }}
                       registered={register(
                         // @ts-ignore - incorrect typing for values
@@ -309,8 +319,7 @@ const TemplateQuestion = ({ question, defaultLanguage = "", onDelete, index }: T
                 htmlInputProps={{
                   label: intl.formatMessage({ id: "template.edit.selectResponseText" }),
                   placeholder: intl.formatMessage({ id: "template.edit.selectResponseText.placeholder" }),
-                  type: "text",
-                  required: true
+                  type: "text"
                 }}
                 registered={register(
                   // @ts-ignore

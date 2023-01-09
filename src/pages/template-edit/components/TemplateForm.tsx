@@ -13,6 +13,8 @@ import { Link } from "react-router-dom";
 import Toggle from "components/ui/Form/Toggle";
 import { QUESTION } from "constants/templates";
 import Icon from "components/extensive/Icon";
+import yup from "configureYup";
+import { yupResolver } from "@hookform/resolvers/yup";
 
 export interface FormFields extends Omit<TemplateModel, "areas"> {
   areas: string[];
@@ -25,9 +27,38 @@ interface IParams {
   onSubmit: (data: FormFields) => void;
 }
 
+const labelValidationFunc = yup.lazy(value => {
+  // if (!isEmpty(value)) {
+  // const validationObject = { name: yup.string().required() };
+  const newEntries = Object.keys(value).reduce(
+    (acc, val) => ({
+      ...acc,
+      [val]: yup.string().required()
+    }),
+    {}
+  );
+
+  return yup.object().shape(newEntries);
+  // }
+  // console.log({ value });
+  // return yup.mixed().notRequired();
+});
+
+const templateSchema = yup
+  .object()
+  .shape({
+    name: labelValidationFunc,
+    questions: yup.array(
+      yup.object().shape({
+        label: labelValidationFunc
+      })
+    )
+  })
+  .required();
+
 const TemplateForm: FC<IParams> = ({ template, backLink = "", onSubmit }) => {
   const intl = useIntl();
-  const formHook = useForm<FormFields>({ defaultValues: template });
+  const formHook = useForm<FormFields>({ defaultValues: template, resolver: yupResolver(templateSchema) });
   const { httpAuthHeader } = useAccessToken();
   const { data: areasData } = useGetV3GfwAreasUser({ headers: httpAuthHeader });
 
@@ -36,7 +67,7 @@ const TemplateForm: FC<IParams> = ({ template, backLink = "", onSubmit }) => {
     handleSubmit,
     setValue,
     getValues,
-    formState: { isDirty, isSubmitting }
+    formState: { isDirty, isSubmitting, errors }
   } = formHook;
 
   const handleAddQuestion = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -76,6 +107,8 @@ const TemplateForm: FC<IParams> = ({ template, backLink = "", onSubmit }) => {
     setValue("questions", newQs, { shouldDirty: true });
   };
 
+  console.log(errors);
+
   return (
     <FormProvider {...formHook}>
       <form onSubmit={handleSubmit(onSubmit)}>
@@ -89,12 +122,13 @@ const TemplateForm: FC<IParams> = ({ template, backLink = "", onSubmit }) => {
               htmlInputProps={{
                 type: "text",
                 label: intl.formatMessage({ id: "template.edit.name" }),
-                placeholder: intl.formatMessage({ id: "template.edit.name.placeholder" }),
-                required: true
+                placeholder: intl.formatMessage({ id: "template.edit.name.placeholder" })
               }}
               key={template?.defaultLanguage}
               alternateLabelStyle
               largeLabel
+              // @ts-ignore
+              error={errors.name && errors.name[`${template?.defaultLanguage}`]}
             />
             <Select
               id="areas"
