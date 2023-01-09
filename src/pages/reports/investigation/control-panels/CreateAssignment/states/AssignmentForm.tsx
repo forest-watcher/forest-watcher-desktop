@@ -248,6 +248,7 @@ const AssignmentForm: FC<IProps> = props => {
     const managedTeamGroups =
       teamData?.map(team => ({
         label: team?.attributes?.name || "",
+        labelSelectsAll: true,
         options:
           team?.attributes?.members?.map(member => ({
             label: member.name || member.email,

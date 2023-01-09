@@ -156,10 +156,6 @@ const Reports: FC<IProps> = props => {
                       name: "common.delete",
                       href: row => `${url}/${row.template}/${row.id}/delete/`,
                       shouldShow: row => row.userId === userId
-                    },
-                    {
-                      name: "View",
-                      href: row => `${url}/${row.templateId}/answers/${row.id}`
                     }
                   ]}
                   columnOrder={[
@@ -200,6 +196,13 @@ const Reports: FC<IProps> = props => {
                       key: "coordinates",
                       name: "reports.reports.table.header.coordinates",
                       sortCompareFn: sortByString
+                    },
+                    {
+                      key: "id",
+                      rowLabel: () => intl.formatMessage({ id: "common.view" }),
+                      rowHref: ({ id, templateId }) => `${url}/${templateId}/answers/${id}`,
+                      rowHrefClassNames: "text-primary-500 font-medium uppercase",
+                      rowCellClassNames: "!text-right !pr-3"
                     }
                   ]}
                 />

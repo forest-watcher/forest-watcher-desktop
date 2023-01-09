@@ -131,8 +131,7 @@ const Templates = () => {
                 },
                 {
                   key: "id",
-                  name: "   ",
-                  rowLabel: () => "View",
+                  rowLabel: () => intl.formatMessage({ id: "common.view" }),
                   rowHref: ({ id }) => `/templates/${id}`,
                   rowHrefClassNames: "text-primary-500 font-medium uppercase"
                 }

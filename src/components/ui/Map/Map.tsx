@@ -31,6 +31,7 @@ export interface IProps extends HTMLAttributes<HTMLElement> {
   controlsPortalDom?: HTMLElement;
   hideControls?: boolean;
   hideSearch?: boolean;
+  showKeyLegend?: boolean;
 }
 
 const Map: FC<IProps> = props => {
@@ -55,6 +56,7 @@ const Map: FC<IProps> = props => {
     hideControls = false,
     hideSearch = false,
     controlsPortalDom,
+    showKeyLegend = false,
     ...rest
   } = props;
   const classes = classnames("c-map", className);
@@ -104,7 +106,9 @@ const Map: FC<IProps> = props => {
       maxZoom={20}
       style={style}
     >
-      {!hideControls && <MapControls portalDom={controlsPortalDom} hideSearch={hideSearch} />}
+      {!hideControls && (
+        <MapControls portalDom={controlsPortalDom} hideSearch={hideSearch} showKeyLegend={showKeyLegend} />
+      )}
       {drawRef && mapRef && <MapEditControls draw={drawRef} map={mapRef} onUpdate={onMapEdit} />}
       {children}
     </ReactMap>
