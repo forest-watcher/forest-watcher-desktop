@@ -91,7 +91,7 @@ export default defineConfig({
       source: "url",
       url: "https://raw.githubusercontent.com/wri/fw_users/dev/docs/fw_users.yaml"
     },
-    outputDir: "src/generated/core",
+    outputDir: "src/generated/users",
     to: async context => {
       const filenamePrefix = "users";
       const { schemasFiles } = await generateSchemaTypes(context, {

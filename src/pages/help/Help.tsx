@@ -9,6 +9,8 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import yup from "configureYup";
 import TextArea from "components/ui/Form/Input/TextArea";
 import Select from "components/ui/Form/Select";
+import { usePostContact } from "generated/users/usersComponents";
+import { useAccessToken } from "hooks/useAccessToken";
 
 const schema = yup
   .object()
@@ -37,7 +39,16 @@ const Help = () => {
     control
   } = formHook;
 
-  const onSubmit: SubmitHandler<FormData> = data => console.log(data);
+  const { httpAuthHeader } = useAccessToken();
+
+  const { mutateAsync, isLoading } = usePostContact();
+
+  const onSubmit: SubmitHandler<FormData> = async data => {
+    try {
+      const resp = await mutateAsync({ headers: httpAuthHeader, body: data });
+      console.log({ resp });
+    } catch (err) {}
+  };
 
   return (
     <article className="relative">
