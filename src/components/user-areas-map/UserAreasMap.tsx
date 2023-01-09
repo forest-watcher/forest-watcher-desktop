@@ -1,7 +1,6 @@
 import { FC, PropsWithChildren, useCallback, useEffect, useMemo, useState } from "react";
 import Polygon, { IProps as IPolygonProps } from "../ui/Map/components/layers/Polygon";
 import Map, { IProps as IMapProps } from "../ui/Map/Map";
-import { TAreasResponse } from "services/area";
 import { Map as MapInstance, MapboxEvent } from "mapbox-gl";
 import * as turf from "@turf/turf";
 import { goToGeojson } from "helpers/map";
@@ -15,7 +14,6 @@ import { getReportAlertsByName } from "helpers/reports";
 import { TAnswer } from "components/ui/Map/components/cards/ReportDetail";
 import { ProcTypes } from "pages/reports/investigation/Investigation";
 import useGetAreas from "hooks/querys/areas/useGetAreas";
-import { areas } from "modules";
 
 export interface IProps extends IMapProps {
   // Should be a memorised function! useCallBack()

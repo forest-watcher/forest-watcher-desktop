@@ -1,5 +1,4 @@
 import { FC, useMemo } from "react";
-import { useAppSelector } from "hooks/useRedux";
 import { RouteComponentProps, useLocation } from "react-router-dom";
 import MapCard from "components/ui/Map/components/cards/MapCard";
 import Card from "components/ui/Card/Card";
