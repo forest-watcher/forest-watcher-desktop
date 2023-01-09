@@ -48,7 +48,7 @@ const Help = () => {
       toastr.error(intl.formatMessage({ id: "common.error" }), intl.formatMessage({ id: "common.errorBody" }));
     },
     onSuccess: () => {
-      toastr.error(
+      toastr.success(
         intl.formatMessage({ id: "help.form.success" }),
         intl.formatMessage({ id: "help.form.successBody" })
       );
