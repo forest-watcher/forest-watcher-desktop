@@ -86,6 +86,23 @@ export default defineConfig({
       });
     }
   },
+  users: {
+    from: {
+      source: "url",
+      url: "https://raw.githubusercontent.com/wri/fw_users/dev/docs/fw_users.yaml"
+    },
+    outputDir: "src/generated/core",
+    to: async context => {
+      const filenamePrefix = "users";
+      const { schemasFiles } = await generateSchemaTypes(context, {
+        filenamePrefix
+      });
+      await generateReactQueryComponents(context, {
+        filenamePrefix,
+        schemasFiles
+      });
+    }
+  },
   clayers: {
     from: {
       source: "url",
