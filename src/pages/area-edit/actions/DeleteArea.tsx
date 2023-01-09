@@ -6,9 +6,12 @@ import Loader from "components/ui/Loader";
 import { FormattedMessage, useIntl } from "react-intl";
 import { TErrorResponse } from "constants/api";
 import { TParams } from "pages/area-view/AreaView";
-import { TPropsFromRedux } from "./DeleteAreaContainer";
+import { useDeleteV3GfwAreasAreaId } from "generated/core/coreComponents";
+import { useAccessToken } from "hooks/useAccessToken";
+import { useCoreContext } from "generated/core/coreContext";
+import { useQueryClient } from "@tanstack/react-query";
 
-interface IProps extends TPropsFromRedux {
+interface IProps {
   onClose?: () => void;
 }
 
@@ -17,7 +20,12 @@ const DeleteArea: FC<IProps> = props => {
   const history = useHistory();
   const [isDeleting, setIsDeleting] = useState(false);
   const { areaId } = useParams<TParams>();
-  const { deleteArea, onClose } = props;
+  const { onClose } = props;
+
+  const { httpAuthHeader } = useAccessToken();
+  const { mutateAsync } = useDeleteV3GfwAreasAreaId();
+  const queryClient = useQueryClient();
+  const { queryKeyFn } = useCoreContext();
 
   const close = () => {
     onClose?.();
@@ -27,7 +35,10 @@ const DeleteArea: FC<IProps> = props => {
   const onDeleteArea = async () => {
     setIsDeleting(true);
     try {
-      await deleteArea(areaId);
+      await mutateAsync({ pathParams: { areaId }, headers: httpAuthHeader });
+      await queryClient.invalidateQueries(
+        queryKeyFn({ path: "/v3/gfw/areas/userAndTeam", operationId: "getV3GfwAreasUserandteam", variables: {} })
+      );
       history.push("/areas");
       toastr.success(intl.formatMessage({ id: "areas.delete.success" }), "");
     } catch (e: any) {

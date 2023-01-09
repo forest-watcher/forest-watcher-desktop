@@ -20,7 +20,7 @@ import Loader from "components/ui/Loader";
 import { Link, Route, Switch, useHistory, useParams, useRouteMatch } from "react-router-dom";
 import useUnsavedChanges from "hooks/useUnsavedChanges";
 import Modal from "components/ui/Modal/Modal";
-import DeleteArea from "./actions/DeleteAreaContainer";
+import DeleteArea from "./actions/DeleteArea";
 import { Source, Layer } from "react-map-gl";
 import { labelStyle } from "components/ui/Map/components/layers/styles";
 import * as turf from "@turf/turf";
