@@ -34,8 +34,6 @@ const Help = () => {
     register,
     handleSubmit,
     formState: { errors },
-    reset,
-    resetField,
     control
   } = formHook;
 
