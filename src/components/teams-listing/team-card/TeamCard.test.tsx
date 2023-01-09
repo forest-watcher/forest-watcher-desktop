@@ -148,10 +148,4 @@ describe("TeamCard", () => {
       </div>
     `);
   });
-
-  // it("should call getTeamMembers dispatcher once", () => {
-  //   render();
-
-  //   expect(getTeamMembers).toHaveBeenCalledTimes(1);
-  // });
 });
