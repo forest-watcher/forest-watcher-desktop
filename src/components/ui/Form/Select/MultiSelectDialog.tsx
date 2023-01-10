@@ -51,16 +51,13 @@ const MultiSelectDialog: (<T>(props: IProps & UseControllerProps<T>) => JSX.Elem
   const [controlledValue, setControlledValue] = useState<any[]>(field.value || []);
 
   const getValues = (checked: boolean, value: string, selectedValues: any[]) => {
-    let copyControlledValue;
+    let copySelectedValues = [...selectedValues].filter(i => i !== value);
+
     if (checked) {
-      // @ts-ignore
-      copyControlledValue = [...selectedValues, value];
-    } else {
-      // @ts-ignore
-      copyControlledValue = selectedValues.filter(i => i !== value);
+      copySelectedValues.push(value);
     }
 
-    return copyControlledValue;
+    return copySelectedValues;
   };
 
   const handleChange = (checked: boolean, value: string) => {
