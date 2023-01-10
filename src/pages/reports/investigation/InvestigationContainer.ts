@@ -2,8 +2,7 @@ import { connect, ConnectedProps } from "react-redux";
 import Investigation from "./Investigation";
 import { RootState } from "store";
 
-const mapStateToProps = ({ reports, map, areas, layers }: RootState) => ({
-  allAnswers: reports.allAnswers,
+const mapStateToProps = ({ map, areas }: RootState) => ({
   basemaps: map.data,
   areas: areas.data,
   areasInUsersTeams: areas.areasInUsersTeams

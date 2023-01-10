@@ -56,7 +56,7 @@ const DataFilter = <T, OPTION_TYPE>(props: IProps<T, OPTION_TYPE>) => {
 
     onFiltered?.(filtered);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [watcher, extrasValue]);
+  }, [options, watcher, extrasValue]);
 
   const onExtrasSubmit = (resp: UnpackNestedValue<T>) => {
     setIsExtrasOpen(false);
