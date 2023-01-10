@@ -142,6 +142,7 @@
     "generate:forms": "npx openapi-codegen gen forms",
     "generate:core": "npx openapi-codegen gen core",
     "generate:clayers": "npx openapi-codegen gen clayers",
+    "generate:users": "npx openapi-codegen gen users",
     "generate:new": "npx openapi-codegen init"
   },
   "prettier": "@3sidedcube/prettier-config",
@@ -154,6 +155,9 @@
     "plugins": [
       "jsx-a11y"
     ],
+    "rules": {
+      "no-throw-literal": "off"
+    },
     "overrides": [
       {
         "files": [

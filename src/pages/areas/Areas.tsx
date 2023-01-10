@@ -1,3 +1,4 @@
+import useGetAllReportAnswersForUser from "hooks/querys/reportAnwsers/useGetAllReportAnswersForUser";
 import { FC, useMemo, useState, Fragment, useCallback, useEffect } from "react";
 import Hero from "components/layouts/Hero/Hero";
 import Article from "components/layouts/Article";
@@ -30,7 +31,7 @@ interface IProps extends TPropsFromRedux {
 }
 
 const Areas: FC<IProps> = props => {
-  const { allAnswers, teamMembers, getTeamMembers } = props;
+  const { teamMembers, getTeamMembers } = props;
   const {
     data: { userAreas, areasByTeam, unfilteredAreas, getTeamNamesByAreaId },
     isLoading
@@ -44,6 +45,11 @@ const Areas: FC<IProps> = props => {
   const [selectedArea, setSelectedArea] = useState<AreaResponse["data"] | null>(null);
   const [mapRef, setMapRef] = useState<MapInstance | null>(null);
   const [currentBoundsStr, setCurrentBoundsStr] = useState("");
+
+  /*
+   * Queries - Fetch all Report Answers
+   */
+  const { data: allAnswers } = useGetAllReportAnswersForUser();
 
   const answersBySelectedArea = useMemo(() => {
     return allAnswers?.filter(

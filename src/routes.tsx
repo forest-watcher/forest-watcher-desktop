@@ -7,8 +7,7 @@ import AreaEdit from "pages/area-edit/AreaEditContainer";
 import Teams from "pages/teams/TeamsContainer";
 import TeamsInvitations from "pages/teams/invitation/InvitationContainer";
 import TeamDetail from "pages/teams-detail/TeamDetailContainer";
-import Settings from "pages/settings/SettingsContainer";
-import Reports from "pages/reports/ReportsContainer";
+import Reports from "pages/reports/Reports";
 import Login from "pages/login/Login";
 import SignUpAndReset from "pages/login/SignUpAndReset";
 import { useRouteHistoryStack } from "hooks/useRouteHistoryStack";
@@ -21,6 +20,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "store";
 import TemplateEdit from "pages/template-edit/TemplateEdit";
 import TemplateCreate from "pages/template-edit/TemplateCreate";
+import Help from "pages/help/Help";
 
 interface IParams {
   token?: string;
@@ -142,8 +142,7 @@ const Routes: FC<IProps> = props => {
             render={args => <TeamDetail isDeletingTeamArea {...args} />}
           />
           <Route exact path={`${match.url}layers`} component={Layers} />
-          {/* !! TODO: To Be Removed as /layers has replaced /settings !! */}
-          <Route exact path={`${match.url}settings`} component={Settings} />
+          <Route path={`${match.url}help`} component={Help} />
           <Route path="*">
             <Redirect to="/areas" />
           </Route>
