@@ -7,7 +7,6 @@ import AreaEdit from "pages/area-edit/AreaEditContainer";
 import Teams from "pages/teams/TeamsContainer";
 import TeamsInvitations from "pages/teams/invitation/InvitationContainer";
 import TeamDetail from "pages/teams-detail/TeamDetailContainer";
-import Settings from "pages/settings/SettingsContainer";
 import Reports from "pages/reports/Reports";
 import Login from "pages/login/Login";
 import SignUpAndReset from "pages/login/SignUpAndReset";
