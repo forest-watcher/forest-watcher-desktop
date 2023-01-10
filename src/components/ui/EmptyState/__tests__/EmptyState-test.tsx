@@ -17,7 +17,6 @@ it("EmptyState should render properly", () => {
     <div>
       <div
         class="c-empty-state"
-        data-testid="button"
       >
         <img
           alt=""
