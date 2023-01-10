@@ -4,7 +4,6 @@ import { getTemplate, getTemplates } from "./templates";
 import { getTeamByUserId } from "./teams";
 import { getUser } from "./user";
 import { getPlanetBasemaps } from "./map";
-import { getAllReports } from "modules/reports";
 
 // Actions
 export const USER_CHECKED = "app/USER_CHECKED";
@@ -55,9 +54,6 @@ export function syncApp() {
 
     // fetch planet base maps
     dispatch(getPlanetBasemaps());
-
-    // fetch any answers
-    dispatch(getAllReports());
 
     // fetch any missing team templates
     let templatePromises = [];

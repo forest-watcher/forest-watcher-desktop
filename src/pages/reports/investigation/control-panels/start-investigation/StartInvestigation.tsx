@@ -1,3 +1,4 @@
+import { AnswersResponse } from "generated/core/coreResponses";
 import ShowAlertsControl from "pages/reports/investigation/control-panels/start-investigation/controls/ShowAlerts";
 import ShowOpenAssignments from "pages/reports/investigation/control-panels/start-investigation/controls/ShowOpenAssignments";
 import { TFormValues } from "pages/reports/investigation/Investigation";
@@ -13,7 +14,6 @@ import ToggleGroup from "components/ui/Form/ToggleGroup";
 import { useFormContext, useWatch } from "react-hook-form";
 import DataFilter from "components/ui/DataFilter/DataFilter";
 import useControlPanelReportFilters from "pages/reports/reports/useControlPanelReportFilters";
-import { TGetAllAnswers } from "services/reports";
 import useFindArea from "hooks/useFindArea";
 import { fireGAEvent } from "helpers/analytics";
 import { MapActions } from "types/analytics";
@@ -29,8 +29,8 @@ export enum LAYERS {
 }
 
 interface IProps {
-  onFilterUpdate: (answers: TGetAllAnswers["data"]) => void;
-  answers?: TGetAllAnswers["data"];
+  onFilterUpdate: (answers: AnswersResponse["data"]) => void;
+  answers?: AnswersResponse["data"];
   defaultBasemap?: string;
   onComparison: (value: boolean) => void;
 }
