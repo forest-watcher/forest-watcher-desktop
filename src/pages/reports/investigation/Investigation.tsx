@@ -62,7 +62,7 @@ export type TFormValues = {
 };
 
 const InvestigationPage: FC<IProps> = props => {
-  const { match, basemaps, areasInUsersTeams } = props;
+  const { match, basemaps } = props;
   const [mapStyle, setMapStyle] = useState<string | undefined>(undefined);
   const [isPlanet, setIsPlanet] = useState(false);
   const [mapRef, setMapRef] = useState<MapInstance | null>(null);
@@ -256,10 +256,7 @@ const InvestigationPage: FC<IProps> = props => {
                 <Switch>
                   <Route exact path={`${match.url}`} component={AreaListControlPanel} />
                   <Route exact path={`${match.url}/:areaId`}>
-                    <AreaDetailControlPanel
-                      areasInUsersTeams={areasInUsersTeams}
-                      numberOfReports={answersBySelectedArea?.length}
-                    />
+                    <AreaDetailControlPanel numberOfReports={answersBySelectedArea?.length} />
                   </Route>
                   <Route exact path={`${match.url}/:areaId/start`}>
                     <StartInvestigationControlPanel

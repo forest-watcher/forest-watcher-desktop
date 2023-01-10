@@ -27,7 +27,7 @@ import { yupResolver } from "@hookform/resolvers/yup/dist/yup";
 import { serialize } from "object-to-formdata";
 import { goToGeojson } from "helpers/map";
 import * as turf from "@turf/turf";
-import useGetTemplates from "hooks/useGetTemplates";
+import useGetTemplates from "hooks/querys/templates/useGetTemplates";
 import { AssignmentResponse } from "generated/core/coreResponses";
 export interface IProps {
   setShowCreateAssignmentForm: Dispatch<SetStateAction<boolean>>;

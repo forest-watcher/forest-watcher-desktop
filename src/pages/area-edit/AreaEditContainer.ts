@@ -5,9 +5,8 @@ import { getGeoFromShape } from "modules/geostores";
 import AreaEdit from "./AreaEdit";
 import { ThunkDispatch } from "redux-thunk";
 import { RouteComponentProps } from "react-router-dom";
-import { readArea, readGeojson } from "helpers/areas";
 
-interface MatchParams {
+export interface MatchParams {
   areaId?: string;
 }
 
@@ -15,11 +14,8 @@ interface IMatchParams extends RouteComponentProps<MatchParams> {}
 
 const mapStateToProps = (state: RootState, { match }: IMatchParams) => ({
   mode: match.params.areaId ? "manage" : "create",
-  loading: state.areas.loading,
   editing: state.areas.editing,
-  saving: state.areas.saving,
-  geojson: readGeojson(state, match.params.areaId),
-  area: readArea(state, match.params.areaId)
+  saving: state.areas.saving
 });
 
 function mapDispatchToProps(dispatch: ThunkDispatch<RootState, null, any>) {

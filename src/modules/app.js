@@ -1,5 +1,3 @@
-import { getGeostore } from "./geostores";
-import { getAreas, getAreasInUsersTeams } from "./areas";
 import { getTeamByUserId } from "./teams";
 import { getUser } from "./user";
 import { getPlanetBasemaps } from "./map";
@@ -32,18 +30,6 @@ export function syncApp() {
     const user = state().user.data;
     dispatch(getUser());
     dispatch(getTeamByUserId(user.id));
-    await dispatch(getAreas());
-    let areaPromises = [];
-    const areasIds = state().areas.ids;
-    const areas = state().areas.data;
-    areasIds.forEach(id => {
-      areaPromises.push(dispatch(getGeostore(areas[id].attributes.geostore.id)));
-    });
-    await Promise.all(areaPromises);
-
-    // Fetch all team user areas
-    dispatch(getAreasInUsersTeams());
-
     // fetch planet base maps
     dispatch(getPlanetBasemaps());
   };

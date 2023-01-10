@@ -5,12 +5,8 @@ import { RootState } from "store";
 
 import Areas from "./Areas";
 
-const mapStateToProps = ({ areas, app, gfwTeams }: RootState) => ({
-  areasList: areas.data,
-  areasInUsersTeams: areas.areasInUsersTeams,
-  loading: areas.loading,
+const mapStateToProps = ({ app, gfwTeams }: RootState) => ({
   userChecked: app.userChecked,
-  loadingTeamAreas: areas.loadingAreasInUsers,
   teamMembers: gfwTeams.members
 });
 

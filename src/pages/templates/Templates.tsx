@@ -13,7 +13,7 @@ import TemplatesSearch from "./components/TemplatesSearch";
 import { Link } from "react-router-dom";
 import Hero from "components/layouts/Hero/Hero";
 import { getTemplateDate } from "helpers/template";
-import useGetTemplates from "hooks/useGetTemplates";
+import useGetTemplates from "hooks/querys/templates/useGetTemplates";
 
 export type TemplateTableRowData = {
   id: string;
