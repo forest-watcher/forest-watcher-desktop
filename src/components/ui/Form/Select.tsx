@@ -138,7 +138,8 @@ const Select = (props: Props) => {
                   "c-input__select",
                   open && "c-input__select--open",
                   variant && `c-input__select--${variant}`,
-                  isMultiple && "c-input__select--multiple"
+                  isMultiple && "c-input__select--multiple",
+                  error && "c-input__select--error"
                 )}
               >
                 <Listbox.Button

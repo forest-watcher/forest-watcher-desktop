@@ -9,6 +9,9 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import yup from "configureYup";
 import TextArea from "components/ui/Form/Input/TextArea";
 import Select from "components/ui/Form/Select";
+import { usePostContact } from "generated/users/usersComponents";
+import { useAccessToken } from "hooks/useAccessToken";
+import { toastr } from "react-redux-toastr";
 
 const schema = yup
   .object()
@@ -34,10 +37,30 @@ const Help = () => {
     register,
     handleSubmit,
     formState: { errors },
-    control
+    control,
+    reset
   } = formHook;
 
-  const onSubmit: SubmitHandler<FormData> = data => console.log(data);
+  const { httpAuthHeader } = useAccessToken();
+
+  const { mutate, isLoading } = usePostContact({
+    onError: () => {
+      toastr.error(intl.formatMessage({ id: "common.error" }), intl.formatMessage({ id: "common.errorBody" }));
+    },
+    onSuccess: () => {
+      toastr.success(
+        intl.formatMessage({ id: "help.form.success" }),
+        intl.formatMessage({ id: "help.form.successBody" })
+      );
+      reset({ query: "", platform: "", queryRelate: "" });
+    }
+  });
+
+  const onSubmit: SubmitHandler<FormData> = async data => {
+    if (!isLoading) {
+      mutate({ headers: httpAuthHeader, body: data });
+    }
+  };
 
   return (
     <article className="relative">
@@ -87,9 +110,9 @@ const Help = () => {
                 selectProps={{
                   placeholder: intl.formatMessage({ id: "help.form.platform.placeholder" }),
                   options: [
-                    { label: intl.formatMessage({ id: "help.form.platform.web" }), value: "web" },
-                    { label: intl.formatMessage({ id: "help.form.platform.mobile" }), value: "mobile" },
-                    { label: intl.formatMessage({ id: "help.form.platform.both" }), value: "both" }
+                    { label: intl.formatMessage({ id: "help.form.platform.web" }), value: "Forest Watcher Web" },
+                    { label: intl.formatMessage({ id: "help.form.platform.mobile" }), value: "Forest Watcher Mobile" },
+                    { label: intl.formatMessage({ id: "help.form.platform.both" }), value: "Both" }
                   ],
                   label: intl.formatMessage({ id: "help.form.platform.label" })
                 }}
@@ -105,10 +128,13 @@ const Help = () => {
                 selectProps={{
                   placeholder: intl.formatMessage({ id: "help.form.queryRelate.placeholder" }),
                   options: [
-                    { label: intl.formatMessage({ id: "help.form.queryRelate.bug" }), value: "bug" },
-                    { label: intl.formatMessage({ id: "help.form.queryRelate.feedback" }), value: "feedback" },
-                    { label: intl.formatMessage({ id: "help.form.queryRelate.data" }), value: "data" },
-                    { label: intl.formatMessage({ id: "help.form.queryRelate.general" }), value: "general" }
+                    { label: intl.formatMessage({ id: "help.form.queryRelate.bug" }), value: "Report a bug or error" },
+                    { label: intl.formatMessage({ id: "help.form.queryRelate.feedback" }), value: "Provide feedback" },
+                    {
+                      label: intl.formatMessage({ id: "help.form.queryRelate.data" }),
+                      value: "Data-related inquiry or suggestion"
+                    },
+                    { label: intl.formatMessage({ id: "help.form.queryRelate.general" }), value: "General inquiry" }
                   ],
                   label: intl.formatMessage({ id: "help.form.queryRelate.label" })
                 }}
@@ -128,7 +154,7 @@ const Help = () => {
               />
             </HeaderCard.Content>
             <HeaderCard.Footer>
-              <input type="submit" className="c-button c-button--primary" />
+              <input type="submit" className="c-button c-button--primary" disabled={isLoading} />
             </HeaderCard.Footer>
           </form>
         </HeaderCard>
