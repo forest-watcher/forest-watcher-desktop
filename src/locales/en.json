@@ -624,7 +624,7 @@
   "errors.array.min": "At least {min, plural, one {# item is} other {# items are}} required",
   "errors.array.max": "Please select {max} or less items",
   "errors.number.min": "This should be at least {min}",
-  "errors.number.max": "This should be less than {max}",
+  "errors.number.max": "This should be less than or equal to {max}",
   "errors.team.detail": "Could not find Team",
   "errors.boundary.title": "Something went wrong",
   "errors.boundary.message": "Something unexpected happened. Please try again later.",

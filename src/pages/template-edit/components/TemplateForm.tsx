@@ -13,6 +13,8 @@ import { Link } from "react-router-dom";
 import Toggle from "components/ui/Form/Toggle";
 import { QUESTION } from "constants/templates";
 import Icon from "components/extensive/Icon";
+import yup from "configureYup";
+import { yupResolver } from "@hookform/resolvers/yup";
 
 export interface FormFields extends Omit<TemplateModel, "areas"> {
   areas: string[];
@@ -25,9 +27,80 @@ interface IParams {
   onSubmit: (data: FormFields) => void;
 }
 
+const labelValidationFunc = yup.lazy(value => {
+  const newEntries = Object.keys(value).reduce(
+    (acc, val) => ({
+      ...acc,
+      [val]: yup.string().required()
+    }),
+    {}
+  );
+
+  return yup.object().shape(newEntries);
+});
+
+const labelArrValidationFunc = yup.lazy(value => {
+  const newEntries = Object.keys(value).reduce(
+    (acc, val) => ({
+      ...acc,
+      [val]: yup
+        .array(
+          yup.object().shape({
+            label: yup.string().required()
+          })
+        )
+        .min(1)
+    }),
+    {}
+  );
+
+  return yup.object().shape(newEntries);
+});
+
+const questionValidationFunc = yup.lazy(value => {
+  let moreInfoValidation = yup.array().notRequired();
+
+  if (value.childQuestions?.length > 0) {
+    moreInfoValidation = yup.array(
+      yup.object().shape({
+        label: labelValidationFunc
+      })
+    );
+  }
+
+  const defaultShape = {
+    label: labelValidationFunc,
+    childQuestions: moreInfoValidation
+  };
+
+  if (value.type === "blob") {
+    return yup.object().shape({
+      ...defaultShape,
+      maxImageCount: yup.number().min(1).max(10).required()
+    });
+  }
+
+  if (value.type === "radio" || value.type === "select") {
+    return yup.object().shape({
+      ...defaultShape,
+      values: labelArrValidationFunc
+    });
+  }
+
+  return yup.object().shape(defaultShape);
+});
+
+const templateSchema = yup
+  .object()
+  .shape({
+    name: labelValidationFunc,
+    questions: yup.array(questionValidationFunc)
+  })
+  .required();
+
 const TemplateForm: FC<IParams> = ({ template, backLink = "", onSubmit }) => {
   const intl = useIntl();
-  const formHook = useForm<FormFields>({ defaultValues: template });
+  const formHook = useForm<FormFields>({ defaultValues: template, resolver: yupResolver(templateSchema) });
   const { httpAuthHeader } = useAccessToken();
   const { data: areasData } = useGetV3GfwAreasUser({ headers: httpAuthHeader });
 
@@ -36,7 +109,7 @@ const TemplateForm: FC<IParams> = ({ template, backLink = "", onSubmit }) => {
     handleSubmit,
     setValue,
     getValues,
-    formState: { isDirty, isSubmitting }
+    formState: { isDirty, isSubmitting, errors }
   } = formHook;
 
   const handleAddQuestion = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -89,12 +162,13 @@ const TemplateForm: FC<IParams> = ({ template, backLink = "", onSubmit }) => {
               htmlInputProps={{
                 type: "text",
                 label: intl.formatMessage({ id: "template.edit.name" }),
-                placeholder: intl.formatMessage({ id: "template.edit.name.placeholder" }),
-                required: true
+                placeholder: intl.formatMessage({ id: "template.edit.name.placeholder" })
               }}
               key={template?.defaultLanguage}
               alternateLabelStyle
               largeLabel
+              // @ts-ignore
+              error={errors.name && errors.name[`${template?.defaultLanguage}`]}
             />
             <Select
               id="areas"
