@@ -1,7 +1,7 @@
 import Article from "components/layouts/Article";
 import DataFilter from "components/ui/DataFilter/DataFilter";
 import DataTable from "components/ui/DataTable/DataTable";
-import { TPropsFromRedux } from "./ReportsContainer";
+import useGetAllReportAnswersForUser from "hooks/querys/reportAnwsers/useGetAllReportAnswersForUser";
 import { FC, useCallback, useMemo, useState } from "react";
 import { FormattedMessage, useIntl } from "react-intl";
 import { Link, Route, Switch, useHistory, useRouteMatch } from "react-router-dom";
@@ -10,7 +10,7 @@ import Loader from "components/ui/Loader";
 import EmptyState from "components/ui/EmptyState/EmptyState";
 import EmptyStateIcon from "assets/images/icons/EmptyReports.svg";
 import { sortByDateString, sortByString } from "helpers/table";
-import DeleteRoute from "./actions/DeleteReportContainer";
+import DeleteRoute from "./actions/DeleteReport";
 import { getReportAlertsByName } from "helpers/reports";
 import { IAlertIdentifier } from "constants/alerts";
 import { UnpackNestedValue } from "react-hook-form";
@@ -46,16 +46,20 @@ export type TFilterFields = {
   voice: boolean;
 };
 
-interface IProps extends TPropsFromRedux {}
+interface IProps {}
 
-const Reports: FC<IProps> = props => {
-  const { allAnswers, loading } = props;
+const Reports: FC<IProps> = () => {
   let { path, url } = useRouteMatch();
   const history = useHistory();
   const [selectedReports, setSelectedReports] = useState<TReportsDataTable[]>([]);
   const urlQuery = useUrlQuery();
   const defaultTemplateFilter = useMemo(() => urlQuery.get("defaultTemplateFilter"), [urlQuery]);
   const userId = useGetUserId();
+
+  /*
+   * Queries - Fetch all Report Answers
+   */
+  const { data: allAnswers, isLoading: isReportAnswersLoading } = useGetAllReportAnswersForUser();
 
   const rows = useMemo<TReportsDataTable[]>(
     () =>
@@ -118,7 +122,7 @@ const Reports: FC<IProps> = props => {
   return (
     <>
       <div className="l-content">
-        <Loader isLoading={loading} />
+        <Loader isLoading={isReportAnswersLoading} />
         <Article
           title="reports.reports.subTitle"
           size="small"
@@ -128,7 +132,7 @@ const Reports: FC<IProps> = props => {
             </Link>
           }
         >
-          {!loading &&
+          {!isReportAnswersLoading &&
             (allAnswers?.length === 0 ? (
               <EmptyState
                 iconUrl={EmptyStateIcon}
@@ -154,7 +158,7 @@ const Reports: FC<IProps> = props => {
                   rowActions={[
                     {
                       name: "common.delete",
-                      href: row => `${url}/${row.template}/${row.id}/delete/`,
+                      href: row => `${url}/${row.templateId}/${row.id}/delete/`,
                       shouldShow: row => row.userId === userId
                     }
                   ]}
@@ -211,7 +215,7 @@ const Reports: FC<IProps> = props => {
         </Article>
       </div>
       <Switch>
-        <Route path={`${path}/:reportId/:id/delete`}>
+        <Route path={`${path}/:templateId/:reportAnswerId/delete`}>
           <DeleteRoute />
         </Route>
         <Route path={`${path}/export`}>

@@ -124,7 +124,7 @@ it("Select Input with an error should render correctly", () => {
           class="c-input__input-wrapper"
         >
           <div
-            class="c-input__select"
+            class="c-input__select c-input__select--error"
           >
             <button
               aria-expanded="false"

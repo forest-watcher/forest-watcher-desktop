@@ -1,25 +1,35 @@
+import { useQueryClient } from "@tanstack/react-query";
+import { useDeleteV3GfwTemplatesTemplateIdAnswersAnswerId } from "generated/core/coreComponents";
+import { useCoreContext } from "generated/core/coreContext";
+import { useAccessToken } from "hooks/useAccessToken";
 import { FC, useState } from "react";
 import Modal from "components/ui/Modal/Modal";
 import { useHistory, useParams } from "react-router-dom";
 import { toastr } from "react-redux-toastr";
 import Loader from "components/ui/Loader";
 import { FormattedMessage, useIntl } from "react-intl";
-import { TPropsFromRedux } from "./DeleteReportContainer";
-import { legacy_reportService } from "services/reports";
 
-interface IProps extends TPropsFromRedux {}
+interface IProps {}
 
 interface IReportParams {
-  reportId: string;
-  id: string;
+  templateId: string;
+  reportAnswerId: string;
 }
 
-const DeleteReport: FC<IProps> = props => {
+const DeleteReport: FC<IProps> = () => {
   const intl = useIntl();
   const history = useHistory();
   const [isDeleting, setIsDeleting] = useState(false);
-  const { reportId, id } = useParams<IReportParams>();
-  const { getAllReports } = props;
+  const { templateId, reportAnswerId } = useParams<IReportParams>();
+
+  const queryClient = useQueryClient();
+  const { queryKeyFn } = useCoreContext();
+
+  /**
+   * Mutations - Delete a Report answer
+   */
+  const { httpAuthHeader } = useAccessToken();
+  const { mutateAsync: deleteReportAnswer } = useDeleteV3GfwTemplatesTemplateIdAnswersAnswerId();
 
   const close = () => {
     history.push(`/reporting/reports`);
@@ -28,8 +38,15 @@ const DeleteReport: FC<IProps> = props => {
   const onDeleteReport = async () => {
     setIsDeleting(true);
     try {
-      await legacy_reportService.deleteAnswer(reportId, id);
-      getAllReports();
+      await deleteReportAnswer({
+        pathParams: { answerId: reportAnswerId, templateId },
+        headers: httpAuthHeader
+      });
+
+      await queryClient.invalidateQueries(
+        queryKeyFn({ path: "/v3/gfw/templates/allAnswers", operationId: "getV3GfwTemplatesAllAnswers", variables: {} })
+      );
+
       toastr.success(intl.formatMessage({ id: "reports.delete.success" }), "");
       close();
     } catch (e: any) {

@@ -1,3 +1,5 @@
+import { AnswersResponse } from "generated/core/coreResponses";
+import useGetAllReportAnswersForUser from "hooks/querys/reportAnwsers/useGetAllReportAnswersForUser";
 import { TAlertsById } from "types/map";
 import { DefaultRequestThresholds, EAlertTypes, ViirsRequestThresholds } from "constants/alerts";
 import { CSSProperties, FC, useCallback, useEffect, useMemo, useState } from "react";
@@ -10,7 +12,6 @@ import StartInvestigationControlPanel, {
 import { TParams } from "./types";
 import { TPropsFromRedux } from "./InvestigationContainer";
 import { BASEMAPS, PLANET_BASEMAP } from "constants/mapbox";
-import { TGetAllAnswers } from "services/reports";
 import { LngLat } from "react-map-gl";
 import { setupMapImages } from "helpers/map";
 import { Map as MapInstance, MapboxEvent } from "mapbox-gl";
@@ -61,7 +62,7 @@ export type TFormValues = {
 };
 
 const InvestigationPage: FC<IProps> = props => {
-  const { match, allAnswers, basemaps, areasInUsersTeams } = props;
+  const { match, basemaps } = props;
   const [mapStyle, setMapStyle] = useState<string | undefined>(undefined);
   const [isPlanet, setIsPlanet] = useState(false);
   const [mapRef, setMapRef] = useState<MapInstance | null>(null);
@@ -72,7 +73,7 @@ const InvestigationPage: FC<IProps> = props => {
   const [contextualLayerUrls, setContextualLayerUrls] = useState<string[]>([]);
   const [basemapKey, setBasemapKey] = useState<undefined | string>();
   const history = useHistory();
-  const [filteredAnswers, setFilteredAnswers] = useState<TGetAllAnswers["data"] | null>(null);
+  const [filteredAnswers, setFilteredAnswers] = useState<AnswersResponse["data"] | null>(null);
   const [lockAlertSelections, setLockAlertSelections] = useState(false);
   const [showComparison, setShowComparison] = useState(false);
   let selectedAreaMatch = useRouteMatch<TParams>({ path: "/reporting/investigation/:areaId", exact: false });
@@ -81,8 +82,17 @@ const InvestigationPage: FC<IProps> = props => {
   const [controlsPortal, setControlsPortal] = useState<HTMLElement | undefined>(undefined);
   const [dateStrs, setDateStrs] = useState<{ beforeStr: string; afterStr: string }>();
   const intl = useIntl();
+
+  /*
+   * Queries
+   */
   const { httpAuthHeader } = useAccessToken();
+
+  // - Fetch Contextual Layers
   const { data: layersData } = useGetV3ContextualLayer({ headers: httpAuthHeader });
+
+  // - Fetch all Report Answers
+  const { data: allAnswers } = useGetAllReportAnswersForUser();
 
   const handleMapLoad = (evt: MapboxEvent) => {
     setMapRef(evt.target);
@@ -186,7 +196,7 @@ const InvestigationPage: FC<IProps> = props => {
     }
   }, [isPlanet]);
 
-  const handleFiltersChange = (filters: TGetAllAnswers["data"]) => {
+  const handleFiltersChange = (filters: AnswersResponse["data"]) => {
     if (filters?.length === answersBySelectedArea?.length) {
       setFilteredAnswers(null);
     } else {
@@ -246,10 +256,7 @@ const InvestigationPage: FC<IProps> = props => {
                 <Switch>
                   <Route exact path={`${match.url}`} component={AreaListControlPanel} />
                   <Route exact path={`${match.url}/:areaId`}>
-                    <AreaDetailControlPanel
-                      areasInUsersTeams={areasInUsersTeams}
-                      numberOfReports={answersBySelectedArea?.length}
-                    />
+                    <AreaDetailControlPanel numberOfReports={answersBySelectedArea?.length} />
                   </Route>
                   <Route exact path={`${match.url}/:areaId/start`}>
                     <StartInvestigationControlPanel

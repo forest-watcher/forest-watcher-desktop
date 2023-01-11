@@ -1,3 +1,4 @@
+import useGetAllReportAnswersForUser from "hooks/querys/reportAnwsers/useGetAllReportAnswersForUser";
 import { FC, useMemo, useState, Fragment, useCallback, useEffect } from "react";
 import Hero from "components/layouts/Hero/Hero";
 import Article from "components/layouts/Article";
@@ -7,12 +8,10 @@ import ReactGA from "react-ga";
 import EmptyState from "components/ui/EmptyState/EmptyState";
 import PlusIcon from "assets/images/icons/PlusWhite.svg";
 import { TPropsFromRedux } from "./AreasContainer";
-import { TAreasResponse } from "services/area";
 import AreaCard from "components/area-card/AreaCard";
 import UserAreasMap from "components/user-areas-map/UserAreasMap";
 import AreaDetailCard from "components/ui/Map/components/cards/AreaDetail";
 import AreaIcon from "assets/images/icons/EmptyAreas.svg";
-import { getAreaTeams } from "helpers/areas";
 import { Link, Route, Switch, useHistory, useRouteMatch } from "react-router-dom";
 import ExportModal, { TExportForm } from "components/modals/exports/ExportModal";
 import { UnpackNestedValue } from "react-hook-form";
@@ -24,24 +23,33 @@ import classNames from "classnames";
 import { fireGAEvent } from "helpers/analytics";
 import { AreaActions, AreaLabel } from "types/analytics";
 import AreasOnboarding from "components/onboarding/monitoring/AreasOnboarding";
+import useGetAreas from "hooks/querys/areas/useGetAreas";
+import { AreaResponse } from "generated/core/coreResponses";
 
 interface IProps extends TPropsFromRedux {
   getTeamMembers: (teamId: string) => void;
 }
 
 const Areas: FC<IProps> = props => {
-  const { areasList, loading, loadingTeamAreas, areasInUsersTeams, allAnswers, teamMembers, getTeamMembers } = props;
-  const areaMap = useMemo<TAreasResponse[]>(() => Object.values(areasList), [areasList]);
-  const [selectedArea, setSelectedArea] = useState<TAreasResponse | null>(null);
+  const { teamMembers, getTeamMembers } = props;
+  const {
+    data: { userAreas, areasByTeam, unfilteredAreas, getTeamNamesByAreaId },
+    isLoading
+  } = useGetAreas();
+
+  const areaCount = useMemo(() => [...userAreas, ...areasByTeam].length, [areasByTeam, userAreas]);
+  const hasTeamAreas = useMemo(() => {
+    return areasByTeam.length > 0;
+  }, [areasByTeam.length]);
+
+  const [selectedArea, setSelectedArea] = useState<AreaResponse["data"] | null>(null);
   const [mapRef, setMapRef] = useState<MapInstance | null>(null);
   const [currentBoundsStr, setCurrentBoundsStr] = useState("");
-  const hasTeamAreas = useMemo(() => {
-    const teamWithAreasIndex = areasInUsersTeams.findIndex(
-      teamArea => teamArea.areas.length > 0 && teamArea.team !== null
-    );
 
-    return teamWithAreasIndex > -1;
-  }, [areasInUsersTeams]);
+  /*
+   * Queries - Fetch all Report Answers
+   */
+  const { data: allAnswers } = useGetAllReportAnswersForUser();
 
   const answersBySelectedArea = useMemo(() => {
     return allAnswers?.filter(
@@ -60,9 +68,9 @@ const Areas: FC<IProps> = props => {
 
   const handleAreaSelect = useCallback(
     (areaId: string) => {
-      setSelectedArea(areasList[areaId]);
+      setSelectedArea(unfilteredAreas?.data?.find(area => area.id === areaId) || null);
     },
-    [areasList]
+    [unfilteredAreas?.data]
   );
 
   const handleExport = useCallback(
@@ -100,10 +108,11 @@ const Areas: FC<IProps> = props => {
   }, [mapRef]);
 
   useEffect(() => {
-    areasInUsersTeams.forEach(team => {
-      team.team?.id && getTeamMembers(team.team?.id);
+    areasByTeam.forEach(({ team }) => {
+      // @ts-ignore incorrect typings
+      team?.id && getTeamMembers(team?.id);
     });
-  }, [areasInUsersTeams, getTeamMembers]);
+  }, [areasByTeam, getTeamMembers]);
 
   return (
     <div className="c-areas">
@@ -114,7 +123,7 @@ const Areas: FC<IProps> = props => {
           <Link
             className={classNames(
               "c-button c-button--primary",
-              areaMap.length === 0 && !hasTeamAreas && "c-button--disabled"
+              areaCount === 0 && !hasTeamAreas && "c-button--disabled"
             )}
             to={`${url}/export`}
             onClick={() =>
@@ -128,7 +137,7 @@ const Areas: FC<IProps> = props => {
           </Link>
         }
       />
-      {loading ? (
+      {isLoading ? (
         <div className="c-map c-map--within-hero">
           <Loader isLoading />
         </div>
@@ -143,7 +152,7 @@ const Areas: FC<IProps> = props => {
           {selectedArea && (
             <AreaDetailCard
               area={selectedArea}
-              teams={getAreaTeams(selectedArea.id, areasInUsersTeams)}
+              teamNames={selectedArea.id ? getTeamNamesByAreaId(selectedArea.id) : []}
               numberOfReports={answersBySelectedArea?.length}
               onStartInvestigation={() =>
                 fireGAEvent({
@@ -165,7 +174,7 @@ const Areas: FC<IProps> = props => {
       )}
 
       <div className="l-content l-content--neutral-400">
-        {(!areaMap || areaMap.length === 0) && !loading ? (
+        {areaCount === 0 && !isLoading ? (
           <div className="row column">
             <EmptyState
               iconUrl={AreaIcon}
@@ -190,32 +199,40 @@ const Areas: FC<IProps> = props => {
             }
           >
             <div className="c-areas__area-listing">
-              {[...areaMap]
-                .sort((a, b) => a.attributes.name.localeCompare(b.attributes.name.toString()))
-                .map((area: TAreasResponse) => (
+              {[...userAreas]
+                .sort((a, b) => {
+                  const aStr = a.attributes?.name || "";
+                  const bStr = b.attributes?.name || "";
+
+                  return aStr.localeCompare(bStr.toString());
+                })
+                .map(area => (
                   <AreaCard area={area} key={area.id} className="c-areas__item" />
                 ))}
             </div>
           </Article>
         )}
       </div>
-      {loadingTeamAreas && (
+      {isLoading && (
         <div className="l-content">
           <Loader isLoading />
         </div>
       )}
       {hasTeamAreas && (
         <div className="l-content">
-          {areasInUsersTeams && areasInUsersTeams.length > 0 && !loadingTeamAreas && (
+          {areasByTeam && !isLoading && (
             <Article title="areas.teamSubtitle">
-              {areasInUsersTeams.map(
+              {areasByTeam.map(
                 areasInTeam =>
                   areasInTeam.team &&
-                  areasInTeam.areas.length > 0 && (
+                  (areasInTeam?.areas?.length || 0) > 0 && (
+                    // @ts-ignore
                     <Fragment key={areasInTeam.team.id}>
-                      <h3 className="u-text-600 u-text-neutral-700">{areasInTeam.team.attributes?.name}</h3>
+                      {/* @ts-ignore */}
+                      <h3 className="u-text-600 u-text-neutral-700">{areasInTeam.team.name}</h3>
 
                       <div className="c-areas__area-listing">
+                        {/* @ts-ignore */}
                         {[...areasInTeam.areas]
                           .sort((a, b) => a.data.attributes.name.localeCompare(b.data.attributes.name.toString()))
                           .map(area => (
@@ -226,7 +243,9 @@ const Areas: FC<IProps> = props => {
                               subtitleKey="teams.managedBy"
                               subtitleValue={{
                                 name:
+                                  // @ts-ignore
                                   areasInTeam?.team?.id &&
+                                  // @ts-ignore
                                   teamMembers?.[areasInTeam?.team?.id]?.find(
                                     member => member.attributes.role === "administrator"
                                   )?.attributes?.name
@@ -239,7 +258,7 @@ const Areas: FC<IProps> = props => {
               )}
             </Article>
           )}
-          <Loader isLoading={loadingTeamAreas} />
+          <Loader isLoading={isLoading} />
         </div>
       )}
       <Switch>

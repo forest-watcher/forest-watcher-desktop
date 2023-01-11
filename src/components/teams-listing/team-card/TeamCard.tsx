@@ -4,20 +4,27 @@ import EditIcon from "assets/images/icons/Edit.svg";
 import { FormattedMessage } from "react-intl";
 import { TGFWTeamsState } from "modules/gfwTeams";
 import { TPropsFromRedux } from "./TeamCardContainer";
+import { TAreasByTeam } from "hooks/querys/areas/useGetAreas";
 
 export interface IOwnProps {
   team: TGFWTeamsState["data"][number];
   canManage?: boolean;
+  areasByTeam: TAreasByTeam;
 }
 
 export type IProps = TPropsFromRedux & IOwnProps;
 
 const TeamCard: FC<IProps> = props => {
-  const { team, getTeamMembers, teamMembers, getTeamAreas, teamAreas, areasDetail, canManage = false } = props;
+  const { team, getTeamMembers, teamMembers, teamAreas, canManage = false, areasByTeam } = props;
   useEffect(() => {
     getTeamMembers();
-    getTeamAreas();
-  }, [getTeamMembers, getTeamAreas]);
+  }, [getTeamMembers]);
+
+  const areasDetail = useMemo(
+    // @ts-ignore incorrect typings
+    () => areasByTeam.find(areasAndTeam => areasAndTeam.team?.id === team.id),
+    [areasByTeam, team.id]
+  );
 
   const [manages, monitors] = useMemo(
     () =>
@@ -71,9 +78,10 @@ const TeamCard: FC<IProps> = props => {
             <h3 className="c-teams__sub-title">
               <FormattedMessage id="teams.summary.areas" />
             </h3>
-            {/* ToDo: Change any to TGetAreasByTeamId["data"] when docs are upto date! */}
             <p>
-              {areasDetail ? areasDetail.areas.map(area => area.data.attributes.name).join(", ") : teamAreas.join(", ")}
+              {areasDetail
+                ? areasDetail?.areas?.map(area => area?.data?.attributes?.name).join(", ")
+                : teamAreas.join(", ")}
             </p>
           </div>
         </div>

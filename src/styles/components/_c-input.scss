@@ -75,8 +75,12 @@
     font-family: $base-font-family;
     width: 100%;
     position: relative;
+    &--error {
+      border-color: $secondary-500;
+    }
     &--open {
       border-radius: 4px 4px 0px 0px;
+      border-color: $neutral-500;
     }
     &--simple {
       border: none;

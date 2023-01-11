@@ -1,5 +1,5 @@
 import TeamCard, { IProps as ITeamCardProps } from "./TeamCard";
-import { render as utilRender } from "../../../test-utils";
+import { render } from "test-utils";
 
 const mockTeam: ITeamCardProps["team"] = {
   type: "team",
@@ -55,24 +55,17 @@ const mockTeamMembers: ITeamCardProps["teamMembers"] = [
 const mockTeamAreas = ["Area #1", "Area #2", "Area #3"];
 
 describe("TeamCard", () => {
-  let getTeamMembers = jest.fn(),
-    getTeamAreas = jest.fn();
-
-  const render = () =>
-    utilRender(
+  it("should render correctly", () => {
+    const { container } = render(
       <TeamCard
         team={mockTeam}
         teamMembers={mockTeamMembers}
         teamAreas={mockTeamAreas}
-        getTeamMembers={getTeamMembers}
-        getTeamAreas={getTeamAreas}
-        areasDetail={undefined}
+        getTeamMembers={() => {}}
         canManage
+        areasByTeam={[]}
       />
     );
-
-  it("should render correctly", () => {
-    const { container } = render();
 
     expect(container).toMatchInlineSnapshot(`
       <div>
@@ -154,17 +147,5 @@ describe("TeamCard", () => {
         </div>
       </div>
     `);
-  });
-
-  it("should call getTeamMembers dispatcher once", () => {
-    render();
-
-    expect(getTeamMembers).toHaveBeenCalledTimes(1);
-  });
-
-  it("should call getTeamAreas dispatcher once", () => {
-    render();
-
-    expect(getTeamAreas).toHaveBeenCalledTimes(1);
   });
 });

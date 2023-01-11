@@ -6,11 +6,10 @@ import { ThunkDispatch } from "redux-thunk";
 import { getTeamMembers, getUserTeams } from "modules/gfwTeams";
 
 const mapStateToProps = (state: RootState) => ({
-  loading: state.areas.loading || state.areas.loadingAreasInUsers,
+  loading: state.areas.loadingAreasInUsers,
   areaTeams: state.areas.areaTeams,
   teams: state.gfwTeams.data,
-  teamMembers: state.gfwTeams.members,
-  allAnswers: state.reports.allAnswers
+  teamMembers: state.gfwTeams.members
 });
 
 function mapDispatchToProps(dispatch: ThunkDispatch<RootState, null, any>) {
