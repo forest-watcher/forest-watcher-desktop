@@ -175,15 +175,9 @@ const TemplateQuestion = ({ question, defaultLanguage = "", onDelete, index }: T
                 placeholder: intl.formatMessage({ id: "template.edit.title.placeholder" }),
                 type: "text"
               }}
-              registered={register(`questions.${index}.label.${defaultLanguage as keyof typeof question.label}`)}
+              registered={register(`questions.${index}.label.${defaultLanguage as keyof QuestionModel["label"]}`)}
               alternateLabelStyle
-              error={
-                errors.questions &&
-                errors.questions[index] &&
-                errors.questions[index].label &&
-                // @ts-ignore
-                errors.questions[index].label[defaultLanguage as keyof typeof question.label]
-              }
+              error={errors?.questions?.[index]?.label?.[defaultLanguage as keyof QuestionModel["label"]]}
             />
           </div>
           {/* Response Type */}
@@ -239,24 +233,14 @@ const TemplateQuestion = ({ question, defaultLanguage = "", onDelete, index }: T
                       registered={register(
                         // @ts-ignore - incorrect typing for values
                         `questions.${index}.values.${
-                          defaultLanguage as keyof typeof question.label
+                          defaultLanguage as keyof QuestionModel["label"]
                         }.${optionIndex}.label`
                       )}
                       hideLabel
                       className="flex-grow"
                       wrapperClassName="w-full"
-                      error={
-                        errors?.questions &&
-                        errors.questions[index] &&
-                        errors.questions[index].values &&
-                        // @ts-ignore
-                        errors.questions[index].values[defaultLanguage as keyof typeof question.label] &&
-                        // @ts-ignore
-                        errors.questions[index].values[defaultLanguage as keyof typeof question.label][optionIndex] &&
-                        // @ts-ignore
-                        errors.questions[index].values[defaultLanguage as keyof typeof question.label][optionIndex]
-                          .label
-                      }
+                      // @ts-ignore typing issue
+                      error={errors?.questions[index]?.values[defaultLanguage]?.[optionIndex]?.label}
                     />
                     <button
                       onClick={e => {
@@ -337,17 +321,8 @@ const TemplateQuestion = ({ question, defaultLanguage = "", onDelete, index }: T
                   `questions.${index}.childQuestions.0.label.${defaultLanguage as keyof typeof question.label}`
                 )}
                 alternateLabelStyle
-                error={
-                  errors.questions &&
-                  errors.questions[index] &&
-                  errors.questions[index].childQuestions &&
-                  // @ts-ignore
-                  errors.questions[index].childQuestions[0] &&
-                  // @ts-ignore
-                  errors.questions[index].childQuestions[0].label &&
-                  // @ts-ignore
-                  errors.questions[index].childQuestions[0].label[defaultLanguage as keyof typeof question.label]
-                }
+                // @ts-ignore typing issue
+                error={errors?.questions?.[index]?.childQuestions?.[0]?.label?.[defaultLanguage]}
               />
             </>
           )}
