@@ -276,14 +276,15 @@ const AssignmentForm: FC<IProps> = props => {
       return [];
     }
 
-    const areaTemplates = selectedAreaDetails?.attributes.reportTemplate || [];
-
+    const areaTemplates = selectedAreaDetails?.attributes?.reportTemplate || [];
     const nonDuplicateUserTemplates =
       templateData
         .filter(
           userTemplate =>
             // Templates not already included on the Area, and templates created by the Auth User
-            areaTemplates.findIndex(r => r.id === userTemplate.id) === -1 && userTemplate.attributes?.user === userId
+            // @ts-ignore ids not present on either template models
+            areaTemplates.findIndex(r => (r.id || r._id) === userTemplate.id) === -1 &&
+            userTemplate.attributes?.user === userId
         )
         // Refactor object so it matches areaTemplates
         .map(t => ({ id: t.id, ...t.attributes })) || [];
@@ -292,20 +293,24 @@ const AssignmentForm: FC<IProps> = props => {
       {
         options: [...areaTemplates, ...nonDuplicateUserTemplates]
           // Default template should be first in the list!
-          .sort(a => (a.id === DEFAULT_TEMPLATE_ID ? -1 : 0))
+          // @ts-ignore ids not present on either template models
+          .sort(a => ((a.id || a._id) === DEFAULT_TEMPLATE_ID ? -1 : 0))
           .map(template => {
-            if (template.id === DEFAULT_TEMPLATE_ID) {
+            // @ts-ignore ids not present on either template models
+            if ((template.id || template._id) === DEFAULT_TEMPLATE_ID) {
               // For the default template, change translation its label
               return {
                 label: intl.formatMessage({ id: "assignment.create.form.template.default.label" }),
-                value: template.id
+                // @ts-ignore ids not present on either template models
+                value: template.id || template._id
               };
             }
 
             return {
               // @ts-ignore
               label: template.name[template.defaultLanguage],
-              value: template.id!
+              // @ts-ignore ids not present on either template models
+              value: (template.id || template._id)!
             };
           })
       }

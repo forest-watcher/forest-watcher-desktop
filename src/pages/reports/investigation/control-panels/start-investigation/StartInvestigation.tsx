@@ -5,7 +5,6 @@ import { TFormValues } from "pages/reports/investigation/Investigation";
 import { Link, useHistory, useLocation, useParams } from "react-router-dom";
 import { FC, useCallback, useEffect, useMemo, useState } from "react";
 import { toastr } from "react-redux-toastr";
-import { useAppSelector } from "hooks/useRedux";
 import { TParams } from "pages/reports/investigation/types";
 import MapCard from "components/ui/Map/components/cards/MapCard";
 import Loader from "components/ui/Loader";
@@ -23,6 +22,7 @@ import Icon from "components/extensive/Icon";
 import Basemaps from "./controls/Basemaps";
 import { useGetV3ContextualLayer } from "generated/clayers/clayersComponents";
 import { useAccessToken } from "hooks/useAccessToken";
+import useGetAreas from "hooks/querys/areas/useGetAreas";
 
 export enum LAYERS {
   reports = "reports"
@@ -48,10 +48,9 @@ const StartInvestigationControlPanel: FC<IProps> = props => {
   }, [answers]);
 
   const {
-    data: areas,
-    loading: isLoadingAreas,
-    loadingAreasInUsers: isLoadingTeamAreas
-  } = useAppSelector(state => state.areas);
+    data: { unfilteredAreas: areas },
+    isFetching: isLoadingAreas
+  } = useGetAreas({ refetchOnWindowFocus: false });
 
   const { data: layersData } = useGetV3ContextualLayer({ headers: httpAuthHeader });
 
@@ -70,7 +69,7 @@ const StartInvestigationControlPanel: FC<IProps> = props => {
   // const { loading: isLoadingAnswers } = useAppSelector(state => state.reports);
   const area = useFindArea(areaId);
 
-  const selectedAreaGeoData = useMemo(() => area?.attributes.geostore.geojson, [area]);
+  const selectedAreaGeoData = useMemo(() => area?.attributes?.geostore?.geojson, [area]);
   const intl = useIntl();
 
   const { filters } = useControlPanelReportFilters(answers);
@@ -87,7 +86,7 @@ const StartInvestigationControlPanel: FC<IProps> = props => {
   useEffect(() => {
     // If the areas has been fetched, and the selected Area Geo Data hasn't
     // been found then return to reporting/investigation as the areaId is invalid
-    if (!selectedAreaGeoData && areaId && Object.keys(areas).length) {
+    if (!selectedAreaGeoData && areaId && areas && Object.keys(areas).length) {
       toastr.warning(intl.formatMessage({ id: "reporting.investigation.error" }), "");
       handleBackBtnClick();
     }
@@ -100,7 +99,10 @@ const StartInvestigationControlPanel: FC<IProps> = props => {
   return (
     <MapCard
       className="c-map-control-panel"
-      title={intl.formatMessage({ id: "reporting.control.panel.investigation.title" }, { area: area?.attributes.name })}
+      title={intl.formatMessage(
+        { id: "reporting.control.panel.investigation.title" },
+        { area: area?.attributes?.name }
+      )}
       onBack={handleBackBtnClick}
       footer={
         <Link to={`${location.pathname}/assignment`} className="c-button c-button--primary">
@@ -109,7 +111,7 @@ const StartInvestigationControlPanel: FC<IProps> = props => {
         </Link>
       }
     >
-      <Loader isLoading={isLoadingAreas || isLoadingTeamAreas} />
+      <Loader isLoading={isLoadingAreas} />
 
       <form>
         <Basemaps defaultBasemap={defaultBasemap} onComparison={onComparison} />

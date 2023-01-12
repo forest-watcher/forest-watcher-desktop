@@ -25,7 +25,8 @@ import { TTeamsDetailDataTableAction } from "./types";
 import { TGFWTeamsState } from "modules/gfwTeams";
 import { sortByString } from "helpers/table";
 import RemoveAreaFromTeam from "pages/area-view/actions/RemoveAreaFromTeam";
-import { TAreasInTeam } from "services/area";
+import useGetAreas from "hooks/querys/areas/useGetAreas";
+import { AreaResponse } from "generated/core/coreResponses";
 
 export type TParams = {
   teamId: string;
@@ -61,8 +62,6 @@ const TeamDetail: FC<IProps> = props => {
   const {
     team,
     teamMembers,
-    teamAreas,
-    getTeamAreas,
     getUserTeams,
     getTeamMembers,
     userIsManager,
@@ -81,6 +80,21 @@ const TeamDetail: FC<IProps> = props => {
   const [fetched, setFetched] = useState<boolean>(false);
   const history = useHistory();
   const intl = useIntl();
+  const {
+    data: { areasByTeam },
+    isFetching: isFetchingAreas
+  } = useGetAreas();
+
+  const teamAreas = useMemo(() => {
+    if (!areasByTeam) {
+      return [];
+    }
+
+    // @ts-ignore incorrect schema
+    const found = areasByTeam.find(teamArea => teamArea.team?.id === teamId);
+
+    return found?.areas ? found.areas : [];
+  }, [areasByTeam, teamId]);
 
   const userId = useGetUserId();
 
@@ -98,10 +112,9 @@ const TeamDetail: FC<IProps> = props => {
     if (!team) {
       getUserTeams(userId);
       getTeamMembers(teamId);
-      getTeamAreas(teamId);
       setFetched(true);
     }
-  }, [getTeamMembers, teamId, userId, team, getUserTeams, getTeamAreas]);
+  }, [getTeamMembers, teamId, userId, team, getUserTeams]);
 
   // ToDo: Create a util for this
   const [manages, monitors] = useMemo(
@@ -151,16 +164,17 @@ const TeamDetail: FC<IProps> = props => {
    * @param areas members from the API
    */
   const mapAreasToRows = useMemo(
-    () => (teamAreas: TAreasInTeam["areas"]) =>
+    () => (teamAreas: AreaResponse[]) =>
       teamAreas.map(area => {
         return {
-          id: area.data.id,
-          name: area.data.attributes.name,
-          templates: area.data.attributes.reportTemplate
-            //@ts-ignore
-            .map(template => template.name[template.defaultLanguage] || "")
-            .filter(name => !!name)
-            .join(", ")
+          id: area?.data?.id || "",
+          name: area?.data?.attributes?.name || "",
+          templates:
+            area?.data?.attributes?.reportTemplate
+              //@ts-ignore
+              ?.map(template => template.name[template.defaultLanguage] || "")
+              .filter(name => !!name)
+              .join(", ") || ""
         };
       }),
     []
@@ -208,7 +222,7 @@ const TeamDetail: FC<IProps> = props => {
 
   return (
     <>
-      <Loader isLoading={isLoading} />
+      <Loader isLoading={isLoading || isFetchingAreas} />
       <Hero
         title="teams.details.name"
         titleValues={{ name: team.attributes.name }}
