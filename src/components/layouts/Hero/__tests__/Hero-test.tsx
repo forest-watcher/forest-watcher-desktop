@@ -21,7 +21,7 @@ it("Hero should render properly", () => {
         class="bg-neutral-700"
       >
         <div
-          class="max-w-row mx-auto px-2.5 py-5"
+          class="max-w-row mx-auto px-2.5 2xl:py-5 py-4"
         >
           <div
             class="flex justify-between items-center gap-3"
