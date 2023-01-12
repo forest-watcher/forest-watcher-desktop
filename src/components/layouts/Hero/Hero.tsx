@@ -24,7 +24,7 @@ const Hero: FC<PropsWithChildren<IProps>> = props => {
 
   return (
     <aside className="bg-neutral-700">
-      <div className="max-w-row mx-auto px-2.5 py-5">
+      <div className="max-w-row mx-auto px-2.5 2xl:py-5 py-4">
         {backLink && (
           <div className="flex justify-between items-center gap-3">
             {backLink.to ? (
