@@ -12,12 +12,10 @@ const mapStateToProps = ({ gfwTeams, user, areas }: RootState, ownProps: IOwnPro
   return {
     team: gfwTeams.data.find(team => team.id === ownProps.match.params.teamId),
     teamMembers: gfwTeams.members[ownProps.match.params.teamId] || [],
-    teamAreas:
-      areas.areasInUsersTeams.find(areasAndTeam => areasAndTeam.team?.id === ownProps.match.params.teamId)?.areas || [],
     userIsAdmin: userMember?.attributes.role === "administrator",
     userIsManager: userMember?.attributes.role === "administrator" || userMember?.attributes.role === "manager",
     numOfActiveFetches: gfwTeams.numOfActiveFetches,
-    isLoading: gfwTeams.numOfActiveFetches > 0 || areas.loadingAreasInUsers
+    isLoading: gfwTeams.numOfActiveFetches > 0
   };
 };
 

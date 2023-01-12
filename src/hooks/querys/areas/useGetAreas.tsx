@@ -1,8 +1,10 @@
-import { useGetV3GfwAreasUserandteam } from "generated/core/coreComponents";
+import { GetV3GfwAreasUserandteamError, useGetV3GfwAreasUserandteam } from "generated/core/coreComponents";
+import type * as Responses from "generated/core/coreResponses";
 import { AreaModel } from "generated/core/coreSchemas";
 import { useAccessToken } from "hooks/useAccessToken";
 import useGetUserId from "hooks/useGetUserId";
 import { useCallback, useMemo } from "react";
+import * as reactQuery from "@tanstack/react-query";
 
 export type TAreasByTeam = {
   team?: string;
@@ -15,10 +17,15 @@ export type TAreasByTeam = {
   }[];
 }[];
 
-const useGetAreas = () => {
+const useGetAreas = (
+  options?: Omit<
+    reactQuery.UseQueryOptions<Responses.AreasResponse, GetV3GfwAreasUserandteamError, Responses.AreasResponse>,
+    "queryKey" | "queryFn"
+  >
+) => {
   const userId = useGetUserId();
   const { httpAuthHeader } = useAccessToken();
-  const { data: areaList, ...rest } = useGetV3GfwAreasUserandteam({ headers: httpAuthHeader });
+  const { data: areaList, ...rest } = useGetV3GfwAreasUserandteam({ headers: httpAuthHeader }, options);
 
   const userAreas = useMemo(() => {
     return (

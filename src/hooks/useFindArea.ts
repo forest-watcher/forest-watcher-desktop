@@ -1,32 +1,22 @@
+import { useGetV3GfwAreasAreaId } from "generated/core/coreComponents";
 import { useMemo } from "react";
-import { TAreasResponse } from "services/area";
-import { useAppSelector } from "./useRedux";
+import { useAccessToken } from "./useAccessToken";
 
-const useFindArea = (areaId?: string): TAreasResponse | null => {
-  const { data: userAreas, areasInUsersTeams: teamAreas } = useAppSelector(state => state.areas);
+const useFindArea = (areaId?: string) => {
+  const { httpAuthHeader } = useAccessToken();
+
+  const { data } = useGetV3GfwAreasAreaId(
+    { pathParams: { areaId: areaId || "" }, headers: httpAuthHeader },
+    { enabled: Boolean(areaId) }
+  );
 
   const area = useMemo(() => {
-    if (!areaId) return null;
-
-    if (userAreas[areaId]) {
-      return userAreas[areaId] as TAreasResponse;
+    if (!data || !data.data) {
+      return null;
     }
 
-    let found = false;
-    let area: TAreasResponse | null = null;
-
-    teamAreas.forEach(teamArea => {
-      if (!found) {
-        let searchArea = teamArea.areas.find(area => area.data.id === areaId);
-        if (searchArea) {
-          area = searchArea.data;
-          found = true;
-        }
-      }
-    });
-
-    return area;
-  }, [areaId, userAreas, teamAreas]);
+    return data.data;
+  }, [data]);
 
   return area;
 };
