@@ -35,6 +35,7 @@ export interface IProps {
   shapeFileGeoJSON?: GeojsonModel;
   assignmentToEdit?: AssignmentResponse;
   onFinish?: () => void;
+  prevLocationPathname?: string;
 }
 
 type TAssignmentFormFields = {
@@ -81,7 +82,14 @@ const getFormValueForAssignmentFromResponse = (assignment?: AssignmentResponse):
 };
 
 const AssignmentForm: FC<IProps> = props => {
-  const { setShowCreateAssignmentForm, setShapeFileGeoJSON, shapeFileGeoJSON, assignmentToEdit, onFinish } = props;
+  const {
+    setShowCreateAssignmentForm,
+    setShapeFileGeoJSON,
+    shapeFileGeoJSON,
+    assignmentToEdit,
+    onFinish,
+    prevLocationPathname
+  } = props;
   const intl = useIntl();
   const history = useHistory();
   const { current: map } = useMap();
@@ -328,7 +336,9 @@ const AssignmentForm: FC<IProps> = props => {
       })}
       onBack={() => {
         if (isEdit && openDialogName === EDialogsNames.None) {
-          history.push(`/assignment/${assignmentToEdit.data?.id}`);
+          history.push(
+            `/assignment/${assignmentToEdit.data?.id}${prevLocationPathname ? `?prev=${prevLocationPathname}` : ""}`
+          );
         } else if (openDialogName === EDialogsNames.None) {
           setShapeFileGeoJSON(undefined);
           setShowCreateAssignmentForm(false);
