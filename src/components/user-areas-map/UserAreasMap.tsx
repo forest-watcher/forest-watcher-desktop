@@ -57,10 +57,11 @@ const UserAreasMap: FC<PropsWithChildren<IProps>> = props => {
 
   const areaMap = useMemo(() => {
     if (showTeamAreas) {
-      return areasByTeam
-        .map(teamAreas => teamAreas.areas?.map(area => area.data))
-        .flat()
-        .filter((value, index, self) => self.findIndex(t => t?.id === value?.id) === index);
+      const mapped = areasByTeam.map(teamAreas => teamAreas.areas?.map(area => area.data)).flat();
+
+      return [...mapped, ...userAreas].filter(
+        (value, index, self) => self.findIndex(t => t?.id === value?.id) === index
+      );
     }
     return userAreas;
   }, [areasByTeam, showTeamAreas, userAreas]);

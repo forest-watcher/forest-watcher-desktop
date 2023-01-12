@@ -148,6 +148,7 @@ const Areas: FC<IProps> = props => {
           onAreaSelect={handleAreaSelect}
           onAreaDeselect={handleAreaDeselect}
           onMapLoad={handleMapLoad}
+          showTeamAreas
         >
           {selectedArea && (
             <AreaDetailCard
