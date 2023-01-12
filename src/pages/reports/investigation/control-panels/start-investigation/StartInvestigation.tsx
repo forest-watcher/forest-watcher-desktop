@@ -5,7 +5,6 @@ import { TFormValues } from "pages/reports/investigation/Investigation";
 import { Link, useHistory, useLocation, useParams } from "react-router-dom";
 import { FC, useCallback, useEffect, useMemo, useState } from "react";
 import { toastr } from "react-redux-toastr";
-import { useAppSelector } from "hooks/useRedux";
 import { TParams } from "pages/reports/investigation/types";
 import MapCard from "components/ui/Map/components/cards/MapCard";
 import Loader from "components/ui/Loader";
