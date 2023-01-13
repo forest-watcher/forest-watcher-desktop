@@ -1,6 +1,6 @@
 import { FC, useEffect, useMemo, useState } from "react";
 import Hero from "components/layouts/Hero/Hero";
-import { Link, Route, Switch, useParams, useRouteMatch } from "react-router-dom";
+import { Link, Route, Switch, useLocation, useParams, useRouteMatch } from "react-router-dom";
 import Article from "components/layouts/Article";
 import Map from "components/ui/Map/Map";
 import { FormattedMessage, useIntl } from "react-intl";
@@ -25,6 +25,9 @@ export type TParams = {
 const Assignment: FC = props => {
   const { id } = useParams<TParams>();
   let { path, url } = useRouteMatch();
+  const { search } = useLocation();
+  const prevLocationPathname = search.split("=")[1];
+
   const [map, setMap] = useState<MapType | null>(null);
   const isEdit = useRouteMatch(`${path}/edit`);
   const { httpAuthHeader } = useAccessToken();
@@ -54,7 +57,14 @@ const Assignment: FC = props => {
     <div className={classNames(isEdit ? "l-full-page-map" : "relative")}>
       <Hero
         title={isEdit ? "assignment.edit" : "assignment.title"}
-        backLink={!isEdit ? { name: "assignment.details.back", to: "/reporting/assignments" } : undefined}
+        backLink={
+          !isEdit
+            ? {
+                name: "assignment.details.back",
+                to: prevLocationPathname ?? "/reporting/assignments"
+              }
+            : undefined
+        }
         actions={
           <OptionalWrapper data={isEdit === null}>
             {isMyAssignment && !isComplete && (
@@ -88,6 +98,7 @@ const Assignment: FC = props => {
                   setShapeFileGeoJSON={() => {}}
                   assignmentToEdit={data}
                   onFinish={refetch}
+                  prevLocationPathname={prevLocationPathname}
                 />
               </LoadingWrapper>
             </Route>
