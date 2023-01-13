@@ -9,6 +9,8 @@ import moment from "moment";
 import { Link, useLocation } from "react-router-dom";
 import useGetUserTeamsWithActiveMembers from "hooks/querys/teams/useGetUserTeamsWithActiveMembers";
 import { TeamMemberModel } from "generated/core/coreSchemas";
+import ReactDOM from "react-dom";
+import { useAppSelector } from "hooks/useRedux";
 
 export interface IProps {
   selectedAssignment?: AssignmentResponse["data"];
@@ -20,6 +22,7 @@ type GroupedTeams = {
 
 const AssignmentDetailCard: FC<IProps> = props => {
   const { selectedAssignment } = props;
+  const portal = useAppSelector(state => state.layers.portal);
   const intl = useIntl();
   const userId = useGetUserId();
   const { pathname } = useLocation();
@@ -71,7 +74,7 @@ const AssignmentDetailCard: FC<IProps> = props => {
 
   if (!selectedAssignment) return null;
 
-  return (
+  const content = (
     <MapCard
       title={selectedAssignment?.attributes?.name || ""}
       titleIconName="AssignmentFlag"
@@ -118,6 +121,8 @@ const AssignmentDetailCard: FC<IProps> = props => {
       </ul>
     </MapCard>
   );
+
+  return portal ? ReactDOM.createPortal(content, portal) : content;
 };
 
 export default AssignmentDetailCard;
