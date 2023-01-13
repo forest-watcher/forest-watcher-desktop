@@ -10,6 +10,7 @@ const GET_GFW_LAYERS = "layers/GET_GFW_LAYERS";
 const SET_LAYERS = "layers/SET_LAYERS";
 const SET_LOADING = "layers/SET_LOADING";
 const DELETE_LAYERS = "layers/DELETE_LAYERS";
+const SET_CARD_PORTAL = "layers/SET_CARD_PORTAL";
 
 export interface ICartoLayer {
   cartodb_id: number;
@@ -39,24 +40,33 @@ export type TLayersState = {
   selectedLayers: any;
   selectedLayerIds: string[];
   loading: boolean;
+  portal: HTMLElement | undefined;
 };
 
 export type TReducerActions =
   | { type: typeof GET_GFW_LAYERS; payload: ICartoLayerResponse["rows"] }
   | { type: typeof SET_LAYERS; payload: { selectedLayer: any } }
   | { type: typeof SET_LOADING; payload: boolean }
-  | { type: typeof DELETE_LAYERS; payload: { layer: ILegacyLayer } };
+  | { type: typeof DELETE_LAYERS; payload: { layer: ILegacyLayer } }
+  | { type: typeof SET_CARD_PORTAL; payload: { portal: HTMLElement | undefined } };
 
 // Reducer
 const initialState: TLayersState = {
   gfw: [],
   selectedLayers: {},
   selectedLayerIds: [],
-  loading: false
+  loading: false,
+  portal: undefined
 };
 
 export default function reducer(state = initialState, action: TReducerActions): TLayersState {
   switch (action.type) {
+    case SET_CARD_PORTAL: {
+      if (action.payload) {
+        return Object.assign({}, state, { portal: action.payload.portal });
+      }
+      return state;
+    }
     case GET_GFW_LAYERS: {
       if (action.payload) {
         return Object.assign({}, state, { gfw: action.payload });
@@ -104,6 +114,16 @@ export default function reducer(state = initialState, action: TReducerActions): 
 }
 
 // Action Creators
+
+export function setPortalCard(portal: HTMLElement | undefined) {
+  return (dispatch: AppDispatch) => {
+    dispatch({
+      type: SET_CARD_PORTAL,
+      payload: { portal }
+    });
+  };
+}
+
 export function getGFWLayers() {
   const url = `${CARTO_URL}/api/v2/sql?q=SELECT cartodb_id, name as title, tileurl FROM ${CARTO_TABLE} WHERE tileurl is not NULL AND tileurl <> '' AND name is not NULL`;
   return (dispatch: AppDispatch) => {

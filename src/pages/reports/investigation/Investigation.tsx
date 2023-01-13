@@ -33,6 +33,8 @@ import MapComparison from "components/map-comparison/MapComparison";
 import classNames from "classnames";
 import { useMediaQuery } from "react-responsive";
 import { getDateStringsForComparison } from "helpers/dates";
+import { useAppDispatch } from "hooks/useRedux";
+import { setPortalCard } from "modules/layers";
 
 interface IProps extends RouteComponentProps, TPropsFromRedux {}
 
@@ -63,6 +65,7 @@ export type TFormValues = {
 
 const InvestigationPage: FC<IProps> = props => {
   const { match, basemaps } = props;
+  const dispatch = useAppDispatch();
   const [mapStyle, setMapStyle] = useState<string | undefined>(undefined);
   const [isPlanet, setIsPlanet] = useState(false);
   const [mapRef, setMapRef] = useState<MapInstance | null>(null);
@@ -305,6 +308,7 @@ const InvestigationPage: FC<IProps> = props => {
         }
       >
         <OptionalWrapper data={showComparison}>
+          {/* comparison card */}
           <MapCard
             position="bottom-right"
             title={intl.formatMessage({ id: "maps.comparison.cardTitle" })}
@@ -319,6 +323,7 @@ const InvestigationPage: FC<IProps> = props => {
             </p>
           </MapCard>
         </OptionalWrapper>
+        <div ref={e => dispatch(setPortalCard(e || undefined))}></div>
       </MapComparison>
     </>
   );
