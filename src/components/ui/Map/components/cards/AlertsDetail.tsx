@@ -81,7 +81,7 @@ const AlertsDetailCard: FC<IProps> = props => {
       footer={
         canSelectNeighboringAlert ? (
           <Button variant="secondary" onClick={handleSelectNeighboringPoints}>
-            <FormattedMessage id="alerts.details.selectAll" />
+            <FormattedMessage id="alerts.detail.selectAll" />
           </Button>
         ) : null
       }
