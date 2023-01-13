@@ -23,6 +23,7 @@ import Basemaps from "./controls/Basemaps";
 import { useGetV3ContextualLayer } from "generated/clayers/clayersComponents";
 import { useAccessToken } from "hooks/useAccessToken";
 import useGetAreas from "hooks/querys/areas/useGetAreas";
+import { useAppSelector } from "hooks/useRedux";
 
 export enum LAYERS {
   reports = "reports"
@@ -42,6 +43,7 @@ const StartInvestigationControlPanel: FC<IProps> = props => {
   const { answers, onFilterUpdate, defaultBasemap, onComparison } = props;
   const [filteredRows, setFilteredRows] = useState<any>(answers);
   const { httpAuthHeader } = useAccessToken();
+  const layersLoading = useAppSelector(state => state.layers.loading);
 
   useEffect(() => {
     setFilteredRows(answers);
@@ -110,7 +112,7 @@ const StartInvestigationControlPanel: FC<IProps> = props => {
         </Link>
       }
     >
-      <Loader isLoading={isLoadingAreas} />
+      <Loader isLoading={isLoadingAreas || layersLoading} />
 
       <form>
         <Basemaps defaultBasemap={defaultBasemap} onComparison={onComparison} />
