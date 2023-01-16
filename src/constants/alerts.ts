@@ -111,10 +111,6 @@ export const DefaultRequestThresholds: readonly TRequestThreshold[] = [
   {
     labelKey: "timeframes.6months",
     requestThreshold: 186 // 31 days * 6
-  },
-  {
-    labelKey: "timeframes.12months",
-    requestThreshold: 365 // a year
   }
 ];
 
