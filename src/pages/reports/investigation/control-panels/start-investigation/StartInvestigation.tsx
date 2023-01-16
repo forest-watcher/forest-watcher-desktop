@@ -113,7 +113,7 @@ const StartInvestigationControlPanel: FC<IProps> = props => {
         </Link>
       }
     >
-      <Loader isLoading={(isLoadingAreas && !areas) || isFetchingAlerts} />
+      <Loader isLoading={(isLoadingAreas && !areas) || isFetchingAlerts > 0} />
 
       <form>
         <Basemaps defaultBasemap={defaultBasemap} onComparison={onComparison} />
