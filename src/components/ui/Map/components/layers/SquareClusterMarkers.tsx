@@ -237,7 +237,7 @@ const SquareClusterMarkers: FC<IProps> = props => {
     return () => {
       map?.off("preclick", handlePreClick);
     };
-  }, [id, map, onSquareSelect, canMultiSelect, canMapDeselect, locked]);
+  }, [id, map, onSquareSelect, canMultiSelect, canMapDeselect, locked, onSelectionOverlapped]);
 
   useEffect(() => {
     onSelectionChange?.(selectedPoints);

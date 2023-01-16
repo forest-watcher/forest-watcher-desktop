@@ -23,7 +23,6 @@ import Basemaps from "./controls/Basemaps";
 import { useGetV3ContextualLayer } from "generated/clayers/clayersComponents";
 import { useAccessToken } from "hooks/useAccessToken";
 import useGetAreas from "hooks/querys/areas/useGetAreas";
-import { useAppSelector } from "hooks/useRedux";
 import { useIsFetching } from "@tanstack/react-query";
 
 export enum LAYERS {
