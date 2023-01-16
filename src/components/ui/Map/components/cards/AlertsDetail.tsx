@@ -3,8 +3,10 @@ import OptionalWrapper from "components/extensive/OptionalWrapper";
 import Button from "components/ui/Button/Button";
 import MapCard from "components/ui/Map/components/cards/MapCard";
 import { EAlertTypes } from "constants/alerts";
+import { useAppSelector } from "hooks/useRedux";
 import moment from "moment";
 import { FC } from "react";
+import ReactDOM from "react-dom";
 import { FormattedMessage, useIntl } from "react-intl";
 import { TAlertsById } from "types/map";
 
@@ -43,6 +45,7 @@ const ALERT_API_KEY_MAP = {
 
 const AlertsDetailCard: FC<IProps> = props => {
   const { selectedAlerts, handleSelectNeighboringPoints, canSelectNeighboringAlert = false } = props;
+  const portal = useAppSelector(state => state.layers.portal);
   const intl = useIntl();
 
   if (!selectedAlerts || selectedAlerts?.length === 0) {
@@ -69,7 +72,7 @@ const AlertsDetailCard: FC<IProps> = props => {
     alert => alert.data[ALERT_API_KEY_MAP.confidence(alert.data.alertType)] === "high"
   ).length;
 
-  return (
+  const content = (
     <MapCard
       title={
         alertsToShow && alertsToShow.length === 1
@@ -119,6 +122,8 @@ const AlertsDetailCard: FC<IProps> = props => {
       </OptionalWrapper>
     </MapCard>
   );
+
+  return portal ? ReactDOM.createPortal(content, portal) : content;
 };
 
 export default AlertsDetailCard;

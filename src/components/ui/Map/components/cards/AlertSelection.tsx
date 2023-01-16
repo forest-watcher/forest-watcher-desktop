@@ -1,7 +1,9 @@
 import Button from "components/ui/Button/Button";
 import MultiSelectDialog, { TMultiSelectDialogGroups } from "components/ui/Form/Select/MultiSelectDialog";
 import MapCard from "components/ui/Map/components/cards/MapCard";
+import { useAppSelector } from "hooks/useRedux";
 import { FC, useMemo } from "react";
+import ReactDOM from "react-dom";
 import { useFormContext, useWatch } from "react-hook-form";
 import { FormattedMessage, useIntl } from "react-intl";
 import { TAlertsById } from "types/map";
@@ -15,6 +17,7 @@ export interface IProps {
 
 const AlertSelectionCard: FC<IProps> = props => {
   const { selectedAlerts, handleSelectedPointsConfirm, alertsById } = props;
+  const portal = useAppSelector(state => state.layers.portal);
   const intl = useIntl();
   const { control, setValue } = useFormContext();
   const { overlappedSelect } = useWatch({ control });
@@ -30,7 +33,7 @@ const AlertSelectionCard: FC<IProps> = props => {
     return [{ options: mapped }];
   }, [alertsById, intl, selectedAlerts]);
 
-  return (
+  const content = (
     <MapCard
       title={intl.formatMessage({ id: "alerts.deforestation.multiple" })}
       titleIconName="Deforestation"
@@ -55,6 +58,8 @@ const AlertSelectionCard: FC<IProps> = props => {
       <MultiSelectDialog groups={alertGroup} control={control} name="overlappedSelect" />
     </MapCard>
   );
+
+  return portal ? ReactDOM.createPortal(content, portal) : content;
 };
 
 export default AlertSelectionCard;
