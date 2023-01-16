@@ -24,6 +24,7 @@ import { useGetV3ContextualLayer } from "generated/clayers/clayersComponents";
 import { useAccessToken } from "hooks/useAccessToken";
 import useGetAreas from "hooks/querys/areas/useGetAreas";
 import { useAppSelector } from "hooks/useRedux";
+import { useIsFetching } from "@tanstack/react-query";
 
 export enum LAYERS {
   reports = "reports"
@@ -43,7 +44,7 @@ const StartInvestigationControlPanel: FC<IProps> = props => {
   const { answers, onFilterUpdate, defaultBasemap, onComparison } = props;
   const [filteredRows, setFilteredRows] = useState<any>(answers);
   const { httpAuthHeader } = useAccessToken();
-  const layersLoading = useAppSelector(state => state.layers.loading);
+  const isFetchingAlerts = useIsFetching(["areaAlerts"]);
 
   useEffect(() => {
     setFilteredRows(answers);
@@ -112,7 +113,7 @@ const StartInvestigationControlPanel: FC<IProps> = props => {
         </Link>
       }
     >
-      <Loader isLoading={isLoadingAreas || layersLoading} />
+      <Loader isLoading={(isLoadingAreas && !areas) || isFetchingAlerts} />
 
       <form>
         <Basemaps defaultBasemap={defaultBasemap} onComparison={onComparison} />
