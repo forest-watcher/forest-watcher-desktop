@@ -16,6 +16,7 @@ import { useForm, UseFormReturn } from "react-hook-form";
 //@ts-ignore
 import breakpoints from "styles/utilities/_u-breakpoints.scss";
 import OptionalWrapper from "components/extensive/OptionalWrapper";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface IProps extends HTMLAttributes<HTMLDivElement> {
   translations: any;
@@ -45,6 +46,7 @@ interface INavLinks {
 const NavLinks: FC<INavLinks> = ({ loggedIn, formHook, languages, user, logout, onLinkSelect }) => {
   const { register } = formHook;
   const isMobile = useMediaQuery({ maxWidth: breakpoints.mobile });
+  const queryClient = useQueryClient();
 
   return (
     <>
@@ -173,6 +175,7 @@ const NavLinks: FC<INavLinks> = ({ loggedIn, formHook, languages, user, logout, 
                 to="/login"
                 onClick={() => {
                   onLinkSelect?.();
+                  queryClient.invalidateQueries();
                   logout();
                 }}
                 className="c-nav__link"
