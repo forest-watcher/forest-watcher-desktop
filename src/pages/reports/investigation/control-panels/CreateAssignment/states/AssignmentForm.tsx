@@ -19,14 +19,13 @@ import { Dispatch, FC, SetStateAction, useEffect, useMemo, useState } from "reac
 import { useForm, useFormContext, useWatch } from "react-hook-form";
 import useGetUserTeamsWithActiveMembers from "hooks/querys/teams/useGetUserTeamsWithActiveMembers";
 import { FormattedMessage, useIntl } from "react-intl";
-import { LngLat, LngLatBoundsLike, useMap } from "react-map-gl";
+import { LngLat, useMap } from "react-map-gl";
 import { toastr } from "react-redux-toastr";
 import { useHistory, useParams } from "react-router-dom";
 import yup from "configureYup";
 import { yupResolver } from "@hookform/resolvers/yup/dist/yup";
 import { serialize } from "object-to-formdata";
 import { goToGeojson } from "helpers/map";
-import * as turf from "@turf/turf";
 import useGetTemplates from "hooks/querys/templates/useGetTemplates";
 import { AssignmentResponse } from "generated/core/coreResponses";
 export interface IProps {
@@ -199,21 +198,6 @@ const AssignmentForm: FC<IProps> = props => {
 
           return { lat: alert.data.latitude, lon: alert.data.longitude, alertType: alert.data.alertType, alertId: id };
         });
-
-        const points = turf.points(selectedAlerts.map(alert => [alert.data.longitude, alert.data.latitude]));
-        const bbox = turf.bbox(points);
-
-        if (map && bbox.length > 0) {
-          map.fitBounds(bbox as LngLatBoundsLike, { padding: 40, animate: false });
-        }
-      }
-
-      if (map) {
-        const node = map?.getCanvas();
-        const dataUrl = node.toDataURL("image/jpeg");
-        const blob = await (await fetch(dataUrl)).blob();
-        const imageFile = new File([blob], `${encodeURIComponent("assignment")}.jpg`, { type: "image/jpeg" });
-        body.image = imageFile;
       }
     } else {
       // @ts-ignore Remove values not needed for edit
@@ -232,7 +216,7 @@ const AssignmentForm: FC<IProps> = props => {
           headers: { ...httpAuthHeader, "Content-Type": "multipart/form-data" }
         });
         onFinish?.();
-        history.push(`/assignment/${resp?.data?.id}`);
+        history.push(`/assignment/${resp?.data?.id}?saveMapImage=true`);
       } else {
         // patch assignment
         resp = await patchAssignment({
@@ -242,7 +226,7 @@ const AssignmentForm: FC<IProps> = props => {
           headers: { ...httpAuthHeader, "Content-Type": "multipart/form-data" }
         });
         onFinish?.();
-        history.push(`/assignment/${assignmentToEdit.data?.id}`);
+        history.push(`/assignment/${assignmentToEdit.data?.id}?saveMapImage=true`);
       }
 
       parentFormContext?.setValue("selectedAlerts", []);

@@ -1,12 +1,15 @@
 import { FC, useEffect, useMemo, useState } from "react";
 import Hero from "components/layouts/Hero/Hero";
-import { Link, Route, Switch, useLocation, useParams, useRouteMatch } from "react-router-dom";
+import { Link, Route, Switch, useParams, useRouteMatch } from "react-router-dom";
 import Article from "components/layouts/Article";
 import Map from "components/ui/Map/Map";
 import { FormattedMessage, useIntl } from "react-intl";
 import LoadingWrapper from "components/extensive/LoadingWrapper";
 import DetailCard from "components/ui/Card/DetailCard";
-import { useGetV3GfwAssignmentsAssignmentId } from "generated/core/coreComponents";
+import {
+  useGetV3GfwAssignmentsAssignmentId,
+  usePatchV3GfwAssignmentsAssignmentId
+} from "generated/core/coreComponents";
 import OptionalWrapper from "components/extensive/OptionalWrapper";
 import { useAccessToken } from "hooks/useAccessToken";
 import assignmentIcons from "assets/images/icons/assignmentIcons";
@@ -17,6 +20,8 @@ import { getAlertText } from "helpers/assignments";
 import CreateAssignmentForm from "pages/reports/investigation/control-panels/CreateAssignment/states/AssignmentForm";
 import classNames from "classnames";
 import { Map as MapType } from "mapbox-gl";
+import useUrlQuery from "hooks/useUrlQuery";
+import { serialize } from "object-to-formdata";
 
 export type TParams = {
   id: string;
@@ -25,8 +30,9 @@ export type TParams = {
 const Assignment: FC = props => {
   const { id } = useParams<TParams>();
   let { path, url } = useRouteMatch();
-  const { search } = useLocation();
-  const prevLocationPathname = search.split("=")[1];
+  const urlQuery = useUrlQuery();
+  const shouldSaveImage = useMemo(() => urlQuery.get("saveMapImage") === "true", [urlQuery]);
+  const prevLocationPathname = useMemo(() => urlQuery.get("prev"), [urlQuery]);
 
   const [map, setMap] = useState<MapType | null>(null);
   const isEdit = useRouteMatch(`${path}/edit`);
@@ -35,6 +41,9 @@ const Assignment: FC = props => {
     pathParams: { assignmentId: id },
     headers: httpAuthHeader
   });
+
+  const { mutateAsync: patchAssignment } = usePatchV3GfwAssignmentsAssignmentId();
+
   const userId = useGetUserId();
   const intl = useIntl();
   const templates = useMemo(() => {
@@ -52,6 +61,33 @@ const Assignment: FC = props => {
   useEffect(() => {
     map?.resize();
   }, [isEdit, map]);
+
+  useEffect(() => {
+    /**
+     * Save image here becuase the map is in the right style to pull through after
+     * creating the assignment
+     */
+    const saveImage = async () => {
+      const body: { image: null | File } = { image: null };
+      const node = map?.getCanvas();
+      const dataUrl = node?.toDataURL("image/jpeg");
+      const blob = await (await fetch(dataUrl || "")).blob();
+      const imageFile = new File([blob], `${encodeURIComponent("assignment")}.jpg`, { type: "image/jpeg" });
+      body.image = imageFile;
+      const formData = serialize(body, { indices: true });
+
+      await patchAssignment({
+        // @ts-ignore postAssignment doesn't accept form data but the fetcher library handles it
+        body: formData,
+        pathParams: { assignmentId: id || "" },
+        headers: { ...httpAuthHeader, "Content-Type": "multipart/form-data" }
+      });
+    };
+    if (shouldSaveImage && map && isMyAssignment) {
+      setTimeout(saveImage, 1000); // Wait for assignment map
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [map, shouldSaveImage]);
 
   return (
     <div className={classNames(isEdit ? "l-full-page-map" : "relative")}>
@@ -98,7 +134,7 @@ const Assignment: FC = props => {
                   setShapeFileGeoJSON={() => {}}
                   assignmentToEdit={data}
                   onFinish={refetch}
-                  prevLocationPathname={prevLocationPathname}
+                  prevLocationPathname={prevLocationPathname || undefined}
                 />
               </LoadingWrapper>
             </Route>
