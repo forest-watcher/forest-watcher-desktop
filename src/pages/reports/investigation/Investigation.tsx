@@ -61,6 +61,7 @@ export type TFormValues = {
   singleSelectedLocation?: LngLat;
   dateBefore?: Date[];
   dateAfter?: Date[];
+  overlappedSelect?: string[];
 };
 
 const InvestigationPage: FC<IProps> = props => {
