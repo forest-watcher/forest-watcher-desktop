@@ -9,6 +9,7 @@ import { useFormContext, useWatch } from "react-hook-form";
 import { useMap } from "react-map-gl";
 import KDBush from "kdbush";
 import { IPoint, TAlertsById } from "types/map";
+import AlertSelectionCard from "components/ui/Map/components/cards/AlertSelection";
 
 export interface IProps {
   areaId?: string;
@@ -24,6 +25,7 @@ const AreaAlertMapSource: FC<IProps> = props => {
   const selectedAlerts = useWatch({ control, name: "selectedAlerts" });
   const [selectedAlertIds, setSelectedAlertIds] = useState<string[] | null>(null);
   const [neighboringAlertIds, setNeighboringAlertIds] = useState<string[]>();
+  const [multipleAlertsToPick, setMultipleAlertsToPick] = useState<string[] | null>();
   const alerts = useGetAlertsForArea(areaId, alertTypesToShow, alertRequestThreshold);
 
   const [alertPoints, alertsById, pointsIndex] = useMemo(
@@ -72,9 +74,15 @@ const AreaAlertMapSource: FC<IProps> = props => {
         alertsById.filter(alert => ids?.includes(alert.id))
       );
       setSelectedAlertIds(ids);
+      setMultipleAlertsToPick(null);
     },
     [alertsById, setValue]
   );
+
+  const handleSelectedPointsConfirm = (ids: string[]) => {
+    const newIds = [...(selectedAlertIds || []), ...ids];
+    handleAlertSelectionChange(newIds);
+  };
 
   const handleSelectNeighboringPoints = () => {
     if (!neighboringAlertIds || !selectedAlertIds) return;
@@ -112,16 +120,25 @@ const AreaAlertMapSource: FC<IProps> = props => {
         }}
         mapRef={mapRef?.getMap() || null}
         onSelectionChange={handleAlertSelectionChange}
+        onSelectionOverlapped={setMultipleAlertsToPick}
         canMultiSelect
         canMapDeselect
         locked={locked}
       />
 
-      <AlertsDetailCard
-        selectedAlerts={selectedAlerts}
-        handleSelectNeighboringPoints={handleSelectNeighboringPoints}
-        canSelectNeighboringAlert={neighboringAlertIds?.length! > 0}
-      />
+      {multipleAlertsToPick ? (
+        <AlertSelectionCard
+          selectedAlerts={multipleAlertsToPick}
+          handleSelectedPointsConfirm={handleSelectedPointsConfirm}
+          alertsById={alertsById}
+        />
+      ) : (
+        <AlertsDetailCard
+          selectedAlerts={selectedAlerts}
+          handleSelectNeighboringPoints={handleSelectNeighboringPoints}
+          canSelectNeighboringAlert={neighboringAlertIds?.length! > 0}
+        />
+      )}
     </>
   );
 };

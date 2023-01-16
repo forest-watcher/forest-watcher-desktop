@@ -35,6 +35,7 @@ export interface IProps {
   mapRef: MapInstance | null;
   goToPoints?: boolean;
   canMultiSelect?: boolean;
+  onSelectionOverlapped?: (ids: string[]) => void;
   // Will a click on the map, de-select the selectedIds?
   canMapDeselect?: boolean;
   onSelectionChange?: (selectedIds: string[] | null) => void;
@@ -53,6 +54,7 @@ const SquareClusterMarkers: FC<IProps> = props => {
     canMultiSelect = false,
     canMapDeselect = false,
     onSelectionChange,
+    onSelectionOverlapped,
     locked = false
   } = props;
   const { current: map } = useMap();
@@ -193,6 +195,11 @@ const SquareClusterMarkers: FC<IProps> = props => {
         const pointIds = features?.map(feature => feature.properties?.id) || [];
 
         setSelectedPoints(state => {
+          if (canMultiSelect && onSelectionOverlapped && pointIds.length > 1) {
+            onSelectionOverlapped(pointIds);
+            return state;
+          }
+
           if (!state) return pointIds;
 
           const isCurrentlySelected = state.findIndex(i => pointIds.includes(i)) !== -1 || false;

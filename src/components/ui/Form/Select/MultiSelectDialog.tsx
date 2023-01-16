@@ -15,7 +15,7 @@ type TMultiSelectDialogGroup = {
   labelSelectsAll?: boolean;
 };
 
-type TMultiSelectDialogGroups = TMultiSelectDialogGroup[];
+export type TMultiSelectDialogGroups = TMultiSelectDialogGroup[];
 
 export interface IProps {
   groups: TMultiSelectDialogGroups;
