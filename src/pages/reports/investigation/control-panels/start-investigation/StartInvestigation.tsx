@@ -68,9 +68,8 @@ const StartInvestigationControlPanel: FC<IProps> = props => {
     );
   }, [layersData?.data]);
 
-  const area = useFindArea(areaId);
+  const { area, resp: areaResp } = useFindArea(areaId);
 
-  const selectedAreaGeoData = useMemo(() => area?.attributes?.geostore?.geojson, [area]);
   const intl = useIntl();
 
   const { filters } = useControlPanelReportFilters(answers);
@@ -85,13 +84,11 @@ const StartInvestigationControlPanel: FC<IProps> = props => {
   }, [history, areaId]);
 
   useEffect(() => {
-    // If the areas has been fetched, and the selected Area Geo Data hasn't
-    // been found then return to reporting/investigation as the areaId is invalid
-    if (!selectedAreaGeoData && areaId && areas && Object.keys(areas).length && !isLoadingAreas) {
+    if (areaResp.isError) {
       toastr.warning(intl.formatMessage({ id: "reporting.investigation.error" }), "");
       handleBackBtnClick();
     }
-  }, [selectedAreaGeoData, areaId, areas, handleBackBtnClick, intl, isLoadingAreas]);
+  });
 
   useEffect(() => {
     onFilterUpdate(filteredRows);

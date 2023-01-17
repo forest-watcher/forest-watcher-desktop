@@ -26,7 +26,7 @@ const OpenAssignmentEmptyState: FC<IProps> = props => {
   const history = useHistory();
   const location = useLocation();
   const { areaId } = useParams<{ areaId: string }>();
-  const selectedAreaDetails = useFindArea(areaId);
+  const { area: selectedAreaDetails } = useFindArea(areaId);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const { getValues, setValue } = useFormContext();
   const [isUploadingShapeFile, setIsUploadingShapeFile] = useState(false);

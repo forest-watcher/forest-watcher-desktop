@@ -8,7 +8,7 @@ const useGetAlertsForArea = (
   alertTypesToShow = allDeforestationAlerts,
   alertRequestThreshold?: number
 ) => {
-  const area = useFindArea(areaId);
+  const { area } = useFindArea(areaId);
 
   return useQueries({
     queries: alertTypesToShow.map(alertTypeKey => ({
