@@ -67,7 +67,6 @@ const UserAreasMap: FC<PropsWithChildren<IProps>> = props => {
   }, [areasByTeam, showTeamAreas, userAreas]);
 
   const [hasLoaded, setHasLoaded] = useState(true);
-  const [selectedPoint, setSelectedPoint] = useState<mapboxgl.Point | null>(null);
   const [selectedReportIds, setSelectedReportIds] = useState<string[] | null>(null);
   const features = useMemo(() => {
     if (areaMap.length > 0) {
@@ -116,7 +115,6 @@ const UserAreasMap: FC<PropsWithChildren<IProps>> = props => {
   );
 
   const handleSquareSelect = useCallback((ids: string[], point: mapboxgl.Point) => {
-    setSelectedPoint(point);
     setSelectedReportIds(ids);
   }, []);
 
@@ -132,8 +130,6 @@ const UserAreasMap: FC<PropsWithChildren<IProps>> = props => {
     if (clickState?.type === "deselect" || clickState?.type === "select") {
       setClickState(undefined);
     }
-
-    setSelectedPoint(null);
   }, [clickState, onAreaSelect, onAreaDeselect, selectedAreaId]);
 
   useEffect(() => {
