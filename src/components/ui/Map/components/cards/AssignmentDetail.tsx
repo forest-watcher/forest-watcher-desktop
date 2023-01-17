@@ -14,6 +14,7 @@ import { useAppSelector } from "hooks/useRedux";
 
 export interface IProps {
   selectedAssignment?: AssignmentResponse["data"];
+  onClose: () => void;
 }
 
 type GroupedTeams = {
@@ -21,7 +22,7 @@ type GroupedTeams = {
 };
 
 const AssignmentDetailCard: FC<IProps> = props => {
-  const { selectedAssignment } = props;
+  const { selectedAssignment, onClose } = props;
   const portal = useAppSelector(state => state.layers.portal);
   const intl = useIntl();
   const userId = useGetUserId();
@@ -79,6 +80,7 @@ const AssignmentDetailCard: FC<IProps> = props => {
       title={selectedAssignment?.attributes?.name || ""}
       titleIconName="AssignmentFlag"
       position="bottom-right"
+      onOutsideClick={onClose}
       footer={
         <>
           {selectedAssignment?.attributes?.createdBy === userId && (

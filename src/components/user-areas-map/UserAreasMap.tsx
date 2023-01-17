@@ -110,19 +110,9 @@ const UserAreasMap: FC<PropsWithChildren<IProps>> = props => {
       } else {
         // If the same area was clicked, do nothing
         setClickState(undefined);
-        // If points within similar area, do not set reports to null
-        const boundary = 20;
-        const { x, y } = selectedPoint || { x: 0, y: 0 };
-
-        const xInRange = x > (point?.x || 0) - boundary && x < (point?.x || 0) + boundary;
-        const yInRange = y > (point?.y || 0) - boundary && y < (point?.y || 0) + boundary;
-
-        if (!(xInRange && yInRange) && selectedReportIds !== null) {
-          setSelectedReportIds(null);
-        }
       }
     },
-    [selectedAreaId, selectedPoint, selectedReportIds]
+    [selectedAreaId]
   );
 
   const handleSquareSelect = useCallback((ids: string[], point: mapboxgl.Point) => {
@@ -217,6 +207,7 @@ const UserAreasMap: FC<PropsWithChildren<IProps>> = props => {
               ?.filter(answer => selectedReportIds.findIndex(id => id === answer.id) > -1)
               .map(answer => answer) as TAnswer[]
           }
+          onClose={() => setSelectedReportIds(null)}
         />
       )}
 

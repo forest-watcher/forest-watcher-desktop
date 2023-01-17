@@ -1,4 +1,4 @@
-import { FC, useEffect, useMemo, useState } from "react";
+import { FC, useEffect, useMemo, useRef, useState } from "react";
 import { FormattedMessage, useIntl } from "react-intl";
 import MapCard from "./MapCard";
 import { components } from "interfaces/forms";
@@ -8,17 +8,21 @@ import { TAreasInTeam } from "services/area";
 import OptionalWrapper from "components/extensive/OptionalWrapper";
 import Button from "components/ui/Button/Button";
 import { useHistory } from "react-router-dom";
+import ReactDOM from "react-dom";
+import { useAppSelector } from "hooks/useRedux";
 
 export type TAnswer = components["responses"]["Answer"]["content"]["application/json"]["data"];
 
 interface IParams extends TPropsFromRedux {
   answers: TAnswer[];
+  onClose: () => void;
 }
 
-const ReportDetailCard: FC<IParams> = ({ answers, areasInUsersTeams }) => {
+const ReportDetailCard: FC<IParams> = ({ answers, areasInUsersTeams, onClose }) => {
   const intl = useIntl();
   const [answer, setCurrentAnswer] = useState<TAnswer | undefined>(undefined);
   const history = useHistory();
+  const portal = useAppSelector(state => state.layers.portal);
 
   const alertTypesString = useAlertTypeString(answer);
 
@@ -44,12 +48,13 @@ const ReportDetailCard: FC<IParams> = ({ answers, areasInUsersTeams }) => {
     }
   }, [answers]);
 
-  return (
+  const content = (
     <MapCard
       title={answer?.attributes?.reportName ?? intl.formatMessage({ id: "reports.select" })}
       titleIconName="mapCardIcons/Reports"
       position="bottom-right"
       className="c-map-card--area-detail"
+      onOutsideClick={onClose}
       footer={
         answer?.id ? (
           <Button
@@ -125,6 +130,8 @@ const ReportDetailCard: FC<IParams> = ({ answers, areasInUsersTeams }) => {
       )}
     </MapCard>
   );
+
+  return portal ? ReactDOM.createPortal(content, portal) : content;
 };
 
 export default ReportDetailCard;
