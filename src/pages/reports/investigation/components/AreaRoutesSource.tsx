@@ -112,21 +112,12 @@ const AreaRoutesSource: FC<IProps> = props => {
       setSelectedFeature(e.features[0]);
     };
 
-    const handleMapClick = (e: MapMouseEvent & EventData) => {
-      if (e.defaultPrevented === false) {
-        setSelectedRoute(null);
-      }
-    };
-
     routesMapped.forEach((routes, index) => mapRef?.on("click", `route-lines-${index}`, handleRouteClick));
     pointsMapped.forEach((points, index) => mapRef?.on("click", `route-points-${index}`, handleRouteClick));
-
-    mapRef?.on("click", handleMapClick);
 
     return () => {
       routesMapped.forEach((routes, index) => mapRef?.off("click", `route-lines-${index}`, handleRouteClick));
       pointsMapped.forEach((points, index) => mapRef?.off("click", `route-points-${index}`, handleRouteClick));
-      mapRef?.off("click", handleMapClick);
     };
   }, [mapRef, pointsMapped, routesMapped, selectedFeature]);
 
@@ -147,7 +138,7 @@ const AreaRoutesSource: FC<IProps> = props => {
             <Layer {...linePointStyle} id={`route-points-${index}`} />
           </Source>
         ))}
-      {selectedRoute && <RouteCard route={selectedRoute} />}
+      {selectedRoute && <RouteCard route={selectedRoute} onClose={() => setSelectedRoute(null)} />}
     </>
   );
 };

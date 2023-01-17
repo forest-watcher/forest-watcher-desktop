@@ -8,13 +8,17 @@ import { capitalizeFirstLetter } from "helpers/string";
 import moment from "moment";
 import { useGetV3GfwTeamsTeamId } from "generated/core/coreComponents";
 import { useAccessToken } from "hooks/useAccessToken";
+import { useAppSelector } from "hooks/useRedux";
+import ReactDOM from "react-dom";
 
 interface IProps {
   route: RouteResponse["data"];
+  onClose: () => void;
 }
 
-const RouteCard: FC<IProps> = ({ route }) => {
+const RouteCard: FC<IProps> = ({ route, onClose }) => {
   const intl = useIntl();
+  const portal = useAppSelector(state => state.layers.portal);
   const { httpAuthHeader } = useAccessToken();
   const { data: teamData } = useGetV3GfwTeamsTeamId(
     {
@@ -34,8 +38,13 @@ const RouteCard: FC<IProps> = ({ route }) => {
   const end = routePoints[routePoints.length - 1];
   const length = turf.length(line, { units: "kilometers" }).toFixed(1);
 
-  return (
-    <MapCard title={route.attributes?.name || ""} titleIconName="Routes" position="bottom-right">
+  const content = (
+    <MapCard
+      title={route.attributes?.name || ""}
+      titleIconName="Routes"
+      position="bottom-right"
+      onOutsideClick={onClose}
+    >
       <ul className="c-card__text c-card__list">
         <li>
           <FormattedMessage id="route.type" />
@@ -96,6 +105,8 @@ const RouteCard: FC<IProps> = ({ route }) => {
       </ul>
     </MapCard>
   );
+
+  return portal ? ReactDOM.createPortal(content, portal) : content;
 };
 
 export default RouteCard;

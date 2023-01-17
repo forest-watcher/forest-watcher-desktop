@@ -91,6 +91,7 @@ const AreaAssignmentMapSource: FC<IProps> = props => {
         selectedAssignment={
           selectedAssignmentId && data?.data ? data.data.find(i => i.id === selectedAssignmentId) : undefined
         }
+        onClose={() => setSelectedAssignmentId(null)}
       />
     </>
   );

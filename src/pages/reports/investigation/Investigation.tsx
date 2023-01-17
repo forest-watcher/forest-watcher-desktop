@@ -314,7 +314,6 @@ const InvestigationPage: FC<IProps> = props => {
             position="bottom-right"
             title={intl.formatMessage({ id: "maps.comparison.cardTitle" })}
             titleIconName="Basemap"
-            className="z-10"
           >
             <p className="text-base mb-1">
               <FormattedMessage id="maps.comparison.left" values={{ date: dateStrs?.beforeStr }} />

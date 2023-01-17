@@ -67,7 +67,6 @@ const UserAreasMap: FC<PropsWithChildren<IProps>> = props => {
   }, [areasByTeam, showTeamAreas, userAreas]);
 
   const [hasLoaded, setHasLoaded] = useState(true);
-  const [selectedPoint, setSelectedPoint] = useState<mapboxgl.Point | null>(null);
   const [selectedReportIds, setSelectedReportIds] = useState<string[] | null>(null);
   const features = useMemo(() => {
     if (areaMap.length > 0) {
@@ -110,23 +109,12 @@ const UserAreasMap: FC<PropsWithChildren<IProps>> = props => {
       } else {
         // If the same area was clicked, do nothing
         setClickState(undefined);
-        // If points within similar area, do not set reports to null
-        const boundary = 20;
-        const { x, y } = selectedPoint || { x: 0, y: 0 };
-
-        const xInRange = x > (point?.x || 0) - boundary && x < (point?.x || 0) + boundary;
-        const yInRange = y > (point?.y || 0) - boundary && y < (point?.y || 0) + boundary;
-
-        if (!(xInRange && yInRange) && selectedReportIds !== null) {
-          setSelectedReportIds(null);
-        }
       }
     },
-    [selectedAreaId, selectedPoint, selectedReportIds]
+    [selectedAreaId]
   );
 
   const handleSquareSelect = useCallback((ids: string[], point: mapboxgl.Point) => {
-    setSelectedPoint(point);
     setSelectedReportIds(ids);
   }, []);
 
@@ -142,8 +130,6 @@ const UserAreasMap: FC<PropsWithChildren<IProps>> = props => {
     if (clickState?.type === "deselect" || clickState?.type === "select") {
       setClickState(undefined);
     }
-
-    setSelectedPoint(null);
   }, [clickState, onAreaSelect, onAreaDeselect, selectedAreaId]);
 
   useEffect(() => {
@@ -217,6 +203,7 @@ const UserAreasMap: FC<PropsWithChildren<IProps>> = props => {
               ?.filter(answer => selectedReportIds.findIndex(id => id === answer.id) > -1)
               .map(answer => answer) as TAnswer[]
           }
+          onClose={() => setSelectedReportIds(null)}
         />
       )}
 

@@ -18,7 +18,7 @@ interface ICtaProps extends LinkProps {
 /**
  * Useful link about Compound Components https://blog.martindidiego.com/compound-components-typescript
  */
-interface ICardComposition {
+interface ICardComposition extends React.ForwardRefExoticComponent<IProps & React.RefAttributes<HTMLDivElement>> {
   Image: FC<ImgHTMLAttributes<HTMLImageElement>>;
   Title: FC<ITitleProps>;
   Cta: FC<ICtaProps>;
@@ -27,16 +27,16 @@ interface ICardComposition {
   Footer: FC<React.HTMLAttributes<HTMLDivElement>>;
 }
 
-const Card: FC<IProps> & ICardComposition = props => {
+const Card = React.forwardRef<HTMLDivElement, IProps>((props, ref) => {
   const { className, children, size = "large", ...rest } = props;
   const classes = classnames("c-card", `c-card--${size}`, className);
 
   return (
-    <div className={classes} data-testid="card" {...rest}>
+    <div className={classes} data-testid="card" ref={ref} {...rest}>
       {children}
     </div>
   );
-};
+}) as ICardComposition;
 
 const Image: ICardComposition["Image"] = props => {
   const { className, ...rest } = props;
