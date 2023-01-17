@@ -240,7 +240,7 @@ const TemplateQuestion = ({ question, defaultLanguage = "", onDelete, index }: T
                       className="flex-grow"
                       wrapperClassName="w-full"
                       // @ts-ignore typing issue
-                      error={errors?.questions[index]?.values?.[defaultLanguage]?.[optionIndex]?.label}
+                      error={errors?.questions?.[index]?.values?.[defaultLanguage]?.[optionIndex]?.label}
                     />
                     <button
                       onClick={e => {
