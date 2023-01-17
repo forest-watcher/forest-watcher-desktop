@@ -133,12 +133,15 @@ const ExportModal: FC<IProps> = ({ onClose, onSave, isOpen, fileTypes, fields, d
   const handleSave = async (resp: UnpackNestedValue<TExportForm>) => {
     if (resp.downloadMethod === "link") {
       onClose?.();
+
+      return;
     }
 
     const saveResp = await onSave(resp);
     if (saveResp && resp.downloadMethod === "download") {
       download(saveResp);
     }
+
     onClose?.();
   };
 
