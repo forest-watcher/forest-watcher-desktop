@@ -5,20 +5,20 @@ import { useAccessToken } from "./useAccessToken";
 const useFindArea = (areaId?: string) => {
   const { httpAuthHeader } = useAccessToken();
 
-  const { data } = useGetV3GfwAreasAreaId(
+  const resp = useGetV3GfwAreasAreaId(
     { pathParams: { areaId: areaId || "" }, headers: httpAuthHeader },
     { enabled: Boolean(areaId) }
   );
 
   const area = useMemo(() => {
-    if (!data || !data.data) {
+    if (!resp.data || !resp.data.data) {
       return null;
     }
 
-    return data.data;
-  }, [data]);
+    return resp.data.data;
+  }, [resp.data]);
 
-  return area;
+  return { area, resp };
 };
 
 export default useFindArea;
