@@ -183,6 +183,7 @@ const TemplateForm: FC<IParams> = ({ template, backLink = "", onSubmit }) => {
               }}
               alternateLabelStyle
               largeLabel
+              disabled={!areasData || !areasData?.data || areasData?.data?.length === 0}
             />
             <Select
               id="defaultLang"
