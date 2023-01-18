@@ -101,8 +101,8 @@ const Routes: FC<IProps> = props => {
           <Route path={`${match.url}areas/:areaId`} component={AreasManage} />
           <Route exact path={`${match.url}templates`} component={Templates} />
           <Route exact path={`${match.url}templates/create`} component={TemplateCreate} />
-          <Route exact path={`${match.url}templates/:templateId`} component={TemplateDetail} />
           <Route exact path={`${match.url}templates/:templateId/edit`} component={TemplateEdit} />
+          <Route path={`${match.url}templates/:templateId`} component={TemplateDetail} />
           <Route path={`${match.url}reporting/reports/:reportId/answers/:answerId`} component={Report} />
           <Route path={[`${match.url}reporting/:reportingTab?`]} component={Reports} />
           {/* TODO update these routes to use nested routes */}
