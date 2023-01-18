@@ -1,4 +1,4 @@
-import { FC, useMemo } from "react";
+import { FC, ReactEventHandler, useMemo } from "react";
 import { RouteComponentProps, useLocation } from "react-router-dom";
 import MapCard from "components/ui/Map/components/cards/MapCard";
 import Card from "components/ui/Card/Card";
@@ -6,6 +6,7 @@ import { FormattedMessage, useIntl } from "react-intl";
 import Loader from "components/ui/Loader";
 import useUrlQuery from "hooks/useUrlQuery";
 import useGetAreas from "hooks/querys/areas/useGetAreas";
+import DefaultAreaThumbnail from "assets/images/DefaultAreaThumbnail.svg";
 
 interface IProps extends RouteComponentProps {}
 
@@ -33,6 +34,10 @@ const AreaListAreaCard: FC<{ area: any; teamId?: string }> = ({ area, teamId }) 
     }
   };
 
+  const handleThumbnailLoadError: ReactEventHandler<HTMLImageElement> = e => {
+    e.currentTarget.src = DefaultAreaThumbnail;
+  };
+
   return (
     <div className="c-map-control-panel__grid-item" ref={el => handleCardRef(area.id, el)}>
       <Card className="c-map-control-panel__area-card" size="small">
@@ -41,6 +46,7 @@ const AreaListAreaCard: FC<{ area: any; teamId?: string }> = ({ area, teamId }) 
           src={area.attributes.image}
           loading="lazy"
           className="c-area-card__image c-map-control-panel__area-card-image"
+          onError={handleThumbnailLoadError}
         />
         <div className="c-map-control-panel__area-card-content">
           <Card.Title className="u-margin-top-none">{area.attributes.name}</Card.Title>

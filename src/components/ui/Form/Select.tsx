@@ -18,6 +18,7 @@ export interface Props extends FieldPropsBase {
   variant?: "simple" | "simple-green";
   isMultiple?: boolean;
   isMultipleDropdown?: boolean;
+  disabled?: boolean;
 }
 
 const getSelectedItems = (isMultiple: boolean, value: any, options: Option[]) => {
@@ -43,7 +44,8 @@ const Select = (props: Props) => {
     largeLabel = false,
     labelClass,
     wrapperClassName,
-    className
+    className,
+    disabled = false
   } = props;
   const [options, setOptions] = useState<Option[]>(selectProps.options || []);
   const [selectHeight, setSelectHeight] = useState<number>(0);
@@ -116,7 +118,7 @@ const Select = (props: Props) => {
 
   return (
     <div className={classnames("c-input", alternateLabelStyle && "c-input--alt-label", className)}>
-      <Listbox value={selectedItems} onChange={onChange} multiple={isGenericMultiple}>
+      <Listbox value={selectedItems} onChange={onChange} multiple={isGenericMultiple} disabled={disabled}>
         {({ open }) => (
           <>
             {selectProps.label && (
