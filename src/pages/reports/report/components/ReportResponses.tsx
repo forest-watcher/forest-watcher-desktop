@@ -5,7 +5,7 @@ import { AnswerResponse, ReportsQuestion } from "generated/forms/formsSchemas";
 import { useMemo, useState } from "react";
 import { FormattedMessage } from "react-intl";
 import ReportExportImagesModal from "./modal/ReportExportImagesModal";
-import ReportResponse, { IReportResponse } from "./ReportResponse";
+import ReportResponse, { ReportResponseProps } from "./ReportResponse";
 
 type ReportResponsesProps = {
   questions: ReportsQuestion[];
@@ -30,10 +30,13 @@ const ReportResponses = ({ questions, responses }: ReportResponsesProps) => {
           // @ts-expect-error
           question: `${formattedQuestion}: ${q.label.en}`,
           response: response.value ?? null,
+          childQuestions: responses.filter(response =>
+            q.childQuestions?.find(question => question.name === response.name)
+          ),
           type: q.type
         };
       })
-      .filter(x => x) as IReportResponse[];
+      .filter(x => x) as ReportResponseProps[];
   }, [questions, responses]);
 
   const hasImages = useMemo(() => {

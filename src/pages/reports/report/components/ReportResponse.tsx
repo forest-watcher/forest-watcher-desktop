@@ -1,7 +1,9 @@
+import classNames from "classnames";
 import Carousel from "components/carousel/Carousel";
 import OptionalWrapper from "components/extensive/OptionalWrapper";
 import HeaderCard from "components/ui/Card/HeaderCard";
 import Modal from "components/ui/Modal/Modal";
+import { AnswerResponse } from "generated/forms/formsSchemas";
 import { download } from "helpers/exports";
 import { useState } from "react";
 
@@ -11,25 +13,35 @@ export interface IReportResponse {
   type: string;
 }
 
-interface ReportResponseProps extends IReportResponse {}
+export interface ReportResponseProps extends IReportResponse {
+  childQuestions?: AnswerResponse[];
+}
 
 const Response = (props: ReportResponseProps) => {
-  const { response, type } = props;
+  const { response, type, childQuestions } = props;
   const [audioModalOpen, setAudioModalOpen] = useState(false);
   switch (type) {
     case "audio":
-      const filename = response.split("/").pop();
+      const filename = response?.split("/").pop() || "";
 
       return (
         <>
-          <button
-            onClick={() => {
-              setAudioModalOpen(true);
-            }}
-            className="bg-primary-400 px-4 py-[9px] rounded-md border border-solid border-primary-500 text-neutral-700 text-base"
-          >
-            {filename}
-          </button>
+          {childQuestions?.map(child => (
+            <Response key={child.name} response={child.value || ""} type="text" question="" />
+          ))}
+          {filename && (
+            <button
+              onClick={() => {
+                setAudioModalOpen(true);
+              }}
+              className={classNames(
+                "bg-primary-400 px-4 py-[9px] rounded-md border border-solid border-primary-500 text-neutral-700 text-base",
+                Boolean(childQuestions?.length) && "mt-6"
+              )}
+            >
+              {filename}
+            </button>
+          )}
           <Modal
             isOpen={audioModalOpen}
             title="audio.play"
