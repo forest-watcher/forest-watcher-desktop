@@ -176,6 +176,7 @@ const NavLinks: FC<INavLinks> = ({ loggedIn, formHook, languages, user, logout, 
                 onClick={() => {
                   onLinkSelect?.();
                   queryClient.invalidateQueries();
+                  queryClient.clear();
                   logout();
                 }}
                 className="c-nav__link"

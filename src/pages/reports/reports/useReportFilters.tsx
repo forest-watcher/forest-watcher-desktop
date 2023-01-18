@@ -219,7 +219,7 @@ const useReportFilters = (
             return item.monitor === value;
           }
         },
-        getShouldShow: () => alertTypeOptions.length > 2
+        getShouldShow: () => usernameOptions.length > 2
       }
     ];
   }, [alertTypeOptions, intl, usernameOptions]);
