@@ -40,6 +40,7 @@ const AreaDetailControlPanel: FC<IAreaCardProps> = ({ numberOfReports }) => {
       teamNames={getTeamNamesByAreaId(areaId)}
       numberOfReports={numberOfReports}
       position="top-left"
+      teamId={scrollToTeamId || undefined}
       onBack={() =>
         history.push(
           `/reporting/investigation?scrollToAreaId=${areaId}${
