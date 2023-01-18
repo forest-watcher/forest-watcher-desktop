@@ -63,7 +63,10 @@ const AreaAssignmentMapSource: FC<IProps> = props => {
         assignmentCenters.push({
           id: assignment.id!,
           position: [calculatedCenter.geometry.coordinates[0], calculatedCenter.geometry.coordinates[1]],
-          type: assignment.attributes?.createdBy === userId ? AssignmentLayerType.creator : AssignmentLayerType.default
+          type:
+            assignment.attributes?.createdBy === userId && !assignment.attributes?.monitors.includes(userId)
+              ? AssignmentLayerType.creator
+              : AssignmentLayerType.default
         });
       }
     }
