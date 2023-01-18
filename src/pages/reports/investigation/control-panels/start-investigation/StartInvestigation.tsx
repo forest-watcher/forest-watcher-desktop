@@ -24,6 +24,7 @@ import { useGetV3ContextualLayer } from "generated/clayers/clayersComponents";
 import { useAccessToken } from "hooks/useAccessToken";
 import useGetAreas from "hooks/querys/areas/useGetAreas";
 import { useIsFetching } from "@tanstack/react-query";
+import useUrlQuery from "hooks/useUrlQuery";
 
 export enum LAYERS {
   reports = "reports"
@@ -44,6 +45,8 @@ const StartInvestigationControlPanel: FC<IProps> = props => {
   const [filteredRows, setFilteredRows] = useState<any>(answers);
   const { httpAuthHeader } = useAccessToken();
   const isFetchingAlerts = useIsFetching(["areaAlerts"]);
+  const urlQuery = useUrlQuery();
+  const teamId = useMemo(() => urlQuery.get("teamId"), [urlQuery]);
 
   useEffect(() => {
     setFilteredRows(answers);
@@ -60,13 +63,19 @@ const StartInvestigationControlPanel: FC<IProps> = props => {
     return (
       layersData?.data
         .filter(layer => layer?.attributes?.enabled)
+        .filter(
+          layer =>
+            layer?.attributes?.owner.type === "USER" ||
+            // @ts-ignore - owner.id missing from types
+            (layer?.attributes?.owner.type === "TEAM" && layer?.attributes?.owner.id === teamId)
+        )
         .filter((value, index, self) => self.findIndex(t => t.attributes?.url === value.attributes?.url) === index)
         .map(layer => ({
           option: layer.id,
           label: layer?.attributes?.name
         })) || []
     );
-  }, [layersData?.data]);
+  }, [layersData?.data, teamId]);
 
   const { area, resp: areaResp } = useFindArea(areaId);
 
@@ -80,8 +89,8 @@ const StartInvestigationControlPanel: FC<IProps> = props => {
   const watcher = useWatch({ control });
 
   const handleBackBtnClick = useCallback(() => {
-    history.push(`/reporting/investigation/${areaId}`);
-  }, [history, areaId]);
+    history.push(`/reporting/investigation/${areaId}${teamId ? `?scrollToTeamId=${teamId}` : ""}`);
+  }, [history, areaId, teamId]);
 
   useEffect(() => {
     if (areaResp.isError) {

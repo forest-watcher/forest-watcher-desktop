@@ -14,6 +14,7 @@ interface IParams {
   onBack?: () => void;
   onStartInvestigation?: () => void;
   onManageArea?: () => void;
+  teamId?: string;
 }
 
 const AreaDetailCard: FC<IParams> = ({
@@ -24,7 +25,8 @@ const AreaDetailCard: FC<IParams> = ({
   onBack,
   numberOfReports,
   onStartInvestigation,
-  onManageArea
+  onManageArea,
+  teamId
 }) => {
   return (
     <MapCard
@@ -36,7 +38,7 @@ const AreaDetailCard: FC<IParams> = ({
         area && (
           <>
             <Link
-              to={`/reporting/investigation/${area.id}/start`}
+              to={`/reporting/investigation/${area.id}/start${teamId ? `?teamId=${teamId}` : ""}`}
               className="c-button c-button--primary"
               onClick={onStartInvestigation}
             >
