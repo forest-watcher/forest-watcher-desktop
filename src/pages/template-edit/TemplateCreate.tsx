@@ -8,6 +8,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "store";
 import { usePostV3GfwTemplates } from "generated/core/coreComponents";
 import useUrlQuery from "hooks/useUrlQuery";
+import { getFormBody } from "./TemplateEdit";
 
 const TemplateCreate = () => {
   const { httpAuthHeader } = useAccessToken();
@@ -40,14 +41,8 @@ const TemplateCreate = () => {
   }, [locale]);
 
   const handleSubmit = async (data: FormFields) => {
-    data.questions?.forEach(question => {
-      if (question?.values && Object.keys(question.values).length === 0) {
-        // @ts-ignore
-        delete question.values;
-      }
-    });
     // @ts-ignore  - incorrect typings
-    const resp = await mutateAsync({ body: { ...data, areaIds: data.areas }, headers: httpAuthHeader });
+    const resp = await mutateAsync({ body: { ...getFormBody(data), areaIds: data.areas }, headers: httpAuthHeader });
     history.push(backTo ? backTo : `/templates/${resp.data?.id}`);
   };
 

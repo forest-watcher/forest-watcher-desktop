@@ -19,6 +19,7 @@ const TemplateQuestion = ({ question, defaultLanguage, getConditional }: Templat
   const responseOptions = question.values as { [key: string]: { label: string; value: number }[] };
   const isConditionalType = CONDITIONAL_QUESTION_TYPES.indexOf(question.type) > -1;
   const isImageType = question.type === "blob";
+  const isSelectionType = question.type === "radio" || question.type === "select";
   const intl = useIntl();
 
   /**
@@ -32,7 +33,9 @@ const TemplateQuestion = ({ question, defaultLanguage, getConditional }: Templat
     const childQuestion =
       // @ts-expect-error
       question?.childQuestions?.length > 0 ? question?.childQuestions[0] : undefined;
-    if (!childQuestion || !responseOptions || !defaultLanguage) return {};
+    if (!childQuestion || !responseOptions || !defaultLanguage) {
+      return {};
+    }
     return {
       condition: `If the answer is "${
         responseOptions[defaultLanguage][childQuestion.conditionalValue].label
@@ -87,7 +90,7 @@ const TemplateQuestion = ({ question, defaultLanguage, getConditional }: Templat
         {/* Conditions */}
         <OptionalWrapper
           // @ts-expect-error
-          data={question.childQuestions?.length > 0}
+          data={question.childQuestions?.length > 0 && isSelectionType}
         >
           <div className="mb-6">
             <h4 className="uppercase font-[500] text-neutral-700 pb-2">
