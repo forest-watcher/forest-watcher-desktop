@@ -233,14 +233,16 @@ const AreasView: FC<IProps & RouteComponentProps<TParams>> = ({
                 <DataTable<TTemplateDataTable>
                   className="u-w-100"
                   rows={
-                    area?.data?.attributes?.reportTemplate?.map(template => ({
-                      ...template,
-                      // @ts-ignore
-                      id: template._id,
-                      //@ts-ignore
-                      name: (template?.name?.[template?.defaultLanguage] as string) || "",
-                      openAssignments: 0
-                    })) ?? []
+                    area?.data?.attributes?.reportTemplate
+                      ?.filter(template => (template.hasOwnProperty("isLatest") ? template.isLatest : true))
+                      .map(template => ({
+                        ...template,
+                        // @ts-ignore
+                        id: template._id,
+                        //@ts-ignore
+                        name: (template?.name?.[template?.defaultLanguage] as string) || "",
+                        openAssignments: 0
+                      })) ?? []
                   }
                   columnOrder={[
                     {
