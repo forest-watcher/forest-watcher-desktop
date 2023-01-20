@@ -148,7 +148,7 @@ const StartInvestigationControlPanel: FC<IProps> = props => {
         <ShowOpenAssignments />
         <ShowRoutesControl />
 
-        {layersOptions.length && (
+        {Boolean(layersOptions.length) && (
           <ToggleGroup
             id="contextual-layer-toggles"
             registered={register("contextualLayers")}
