@@ -1,5 +1,6 @@
 import OptionalWrapper from "components/extensive/OptionalWrapper";
-import { useGetV3GfwTeamsMyinvites, useGetV3GfwTeamsUserUserId } from "generated/core/coreComponents";
+import { useGetV3GfwTeamsMyinvites } from "generated/core/coreComponents";
+import useGetUserTeams from "hooks/querys/teams/useGetUserTeams";
 import { useAccessToken } from "hooks/useAccessToken";
 import { FC, useMemo } from "react";
 import { RouteComponentProps, Link } from "react-router-dom";
@@ -10,7 +11,6 @@ import Loader from "components/ui/Loader";
 import { FormattedMessage, useIntl } from "react-intl";
 import TeamsListing from "components/teams-listing/TeamsListing";
 import Button from "components/ui/Button/Button";
-import useGetUserId from "hooks/useGetUserId";
 import CreateTeam from "./actions/CreateTeam";
 import PlusIcon from "assets/images/icons/PlusWhite.svg";
 import EmptyStateIcon from "assets/images/icons/EmptyTeams.svg";
@@ -25,28 +25,17 @@ const Teams: FC<IProps> = props => {
   const { isCreatingTeam = false, match } = props;
 
   const intl = useIntl();
-  const userId = useGetUserId();
 
   /* Queries */
   const { httpAuthHeader } = useAccessToken();
-  const { data: userTeams, isLoading } = useGetV3GfwTeamsUserUserId(
-    {
-      pathParams: {
-        userId
-      },
-      headers: httpAuthHeader
-    },
-    {
-      enabled: !!userId
-    }
-  );
+  const { data: userTeams, isLoading } = useGetUserTeams();
   const { data: userTeamInvites } = useGetV3GfwTeamsMyinvites({
     headers: httpAuthHeader
   });
 
   const managedTeams = useMemo(
     () =>
-      userTeams?.data?.filter(
+      userTeams?.filter(
         team => team.attributes?.userRole === "administrator" || team.attributes?.userRole === "manager"
       ) || [],
     [userTeams]
@@ -54,7 +43,7 @@ const Teams: FC<IProps> = props => {
 
   const joinedTeams = useMemo(
     () =>
-      userTeams?.data?.filter(
+      userTeams?.filter(
         team => team.attributes?.userRole !== "administrator" && team.attributes?.userRole !== "manager"
       ) || [],
     [userTeams]
@@ -90,7 +79,7 @@ const Teams: FC<IProps> = props => {
         // [0]
       >
         <OptionalWrapper
-          data={(userTeams?.data?.length && userTeams?.data?.length > 0) || false}
+          data={(userTeams?.length && userTeams?.length > 0) || false}
           // [1]
           elseComponent={
             <div className="l-content l-content--neutral-400">

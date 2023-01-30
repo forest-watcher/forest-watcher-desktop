@@ -1,3 +1,4 @@
+import useGetUserTeams from "hooks/querys/teams/useGetUserTeams";
 import { FC, useMemo } from "react";
 import FormModal from "components/modals/FormModal";
 import { UnpackNestedValue } from "react-hook-form";
@@ -31,6 +32,7 @@ const CreateTeamModal: FC<IProps> = props => {
   const intl = useIntl();
   const history = useHistory();
   const urlQuery = useUrlQuery();
+  const { invalidateGetUserTeams } = useGetUserTeams();
   const backTo = useMemo(() => urlQuery.get("backTo"), [urlQuery]);
 
   const onClose = () => {
@@ -39,7 +41,11 @@ const CreateTeamModal: FC<IProps> = props => {
 
   const onSave = async (data: UnpackNestedValue<TCreateTeamForm>) => {
     try {
+      // ToDo: use fw_core and invalidate teams fetch
       const { data: newTeam } = await teamService.createTeam(data);
+
+      await invalidateGetUserTeams();
+
       history.push(backTo || `/teams/${newTeam.id}`);
       toastr.success(intl.formatMessage({ id: "teams.create.success" }), "");
       fireGAEvent({
