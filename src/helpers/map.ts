@@ -12,8 +12,10 @@ import alertNotSelectedIcon from "assets/images/icons/alertIcons/AlertNotSelecte
 import alertHoverIcon from "assets/images/icons/alertIcons/AlertHover.png";
 import alertViirsNotSelectedIcon from "assets/images/icons/alertIcons/AlertViirsNotSelected.png";
 import alerViirsHoverIcon from "assets/images/icons/alertIcons/AlertViirsHover.png";
-import assignmentAssignedToBeIcon from "assets/images/icons/alertIcons/AssignmentAssignedToMe.png";
+import assignmentAssignedToMeIcon from "assets/images/icons/alertIcons/AssignmentAssignedToMe.png";
 import assignmentCreateByMeIcon from "assets/images/icons/alertIcons/AssignmentCreatedByMe.png";
+import assignmentAssignedToMeHoverIcon from "assets/images/icons/alertIcons/AssignmentAssignedToMeHover.png";
+import assignmentCreateByMeHoverIcon from "assets/images/icons/alertIcons/AssignmentCreatedByMeHover.png";
 import assignmentSelectedIcon from "assets/images/icons/alertIcons/AssignmentSelected.png";
 import routePointIcon from "assets/images/icons/routeIcons/RoutePoint.png";
 import routePointIconUnselected from "assets/images/icons/routeIcons/RoutePointUnselected.png";
@@ -39,6 +41,8 @@ export enum MapImages {
   alertViirsHover = "alert-viirs-hover",
   assignmentAssignedToMe = "assignment-assigned-to-me",
   assignmentCreatedByMe = "assignment-created-by-me",
+  assignmentAssignedToMeHover = "assignment-assigned-to-me-hover",
+  assignmentCreatedByMeHover = "assignment-created-by-me-hover",
   assignmentSelected = "assignment-selected",
   routePoint = "route-point",
   routePointIconUnselected = "route-point-unselected",
@@ -99,11 +103,19 @@ export const mapImagesArr = [
   },
   {
     type: MapImages.assignmentAssignedToMe,
-    image: assignmentAssignedToBeIcon
+    image: assignmentAssignedToMeIcon
   },
   {
     type: MapImages.assignmentCreatedByMe,
     image: assignmentCreateByMeIcon
+  },
+  {
+    type: MapImages.assignmentAssignedToMeHover,
+    image: assignmentAssignedToMeHoverIcon
+  },
+  {
+    type: MapImages.assignmentCreatedByMeHover,
+    image: assignmentCreateByMeHoverIcon
   },
   {
     type: MapImages.assignmentSelected,
@@ -360,6 +372,15 @@ export const getAlertImage: TMapIconGenerator = (alertType, isHover, isSelected)
 export const getAssignmentImage: TMapIconGenerator = (alertType, isHover, isSelected) => {
   if (isSelected) {
     return MapImages.assignmentSelected;
+  }
+
+  if (isHover) {
+    switch (alertType) {
+      case "creator": // ToDo: move to enum
+        return MapImages.assignmentCreatedByMeHover;
+      default:
+        return MapImages.assignmentAssignedToMeHover;
+    }
   }
 
   switch (alertType) {
