@@ -1,5 +1,8 @@
-import { FC, useEffect, useMemo, useState } from "react";
-import { RouteComponentProps, useHistory, Link } from "react-router-dom";
+import { useGetV3GfwTeamsTeamId } from "generated/core/coreComponents";
+import { TeamMemberModel } from "generated/core/coreSchemas";
+import { useAccessToken } from "hooks/useAccessToken";
+import { FC, useEffect, useMemo } from "react";
+import { RouteComponentProps, useHistory, Link, useParams } from "react-router-dom";
 import { toastr } from "react-redux-toastr";
 import { TPropsFromRedux } from "./TeamDetailContainer";
 import Hero from "components/layouts/Hero/Hero";
@@ -14,7 +17,6 @@ import type {
 } from "./types";
 import { FormattedMessage, useIntl } from "react-intl";
 import PlusIcon from "assets/images/icons/PlusWhite.svg";
-import useGetUserId from "hooks/useGetUserId";
 import Loader from "components/ui/Loader";
 import EditTeam from "./actions/EditTeam";
 import AddTeamMember from "./actions/AddTeamMember";
@@ -22,7 +24,6 @@ import EditTeamMember from "./actions/EditTeamMember";
 import DeleteTeam from "./actions/DeleteTeam";
 import RemoveTeamMember from "./actions/RemoveTeamMember";
 import { TTeamsDetailDataTableAction } from "./types";
-import { TGFWTeamsState } from "modules/gfwTeams";
 import { sortByString } from "helpers/table";
 import RemoveAreaFromTeam from "pages/area-view/actions/RemoveAreaFromTeam";
 import useGetAreas from "hooks/querys/areas/useGetAreas";
@@ -60,14 +61,8 @@ const areaColumnOrder: TAreaDataTableColumns[] = [
 
 const TeamDetail: FC<IProps> = props => {
   const {
-    team,
-    teamMembers,
-    getUserTeams,
-    getTeamMembers,
     userIsManager,
     userIsAdmin,
-    numOfActiveFetches,
-    isLoading,
     isAddingTeamMember = false,
     isEditingTeamMember = false,
     isRemovingTeamMember = false,
@@ -76,14 +71,22 @@ const TeamDetail: FC<IProps> = props => {
     isDeletingTeamArea = false,
     match
   } = props;
-  const { teamId } = match.params;
-  const [fetched, setFetched] = useState<boolean>(false);
+  const { teamId } = useParams<{ teamId: string }>();
   const history = useHistory();
   const intl = useIntl();
   const {
     data: { areasByTeam },
     isFetching: isFetchingAreas
   } = useGetAreas();
+
+  /* Queries */
+  const { httpAuthHeader } = useAccessToken();
+  const { data: { data: team } = {}, isLoading: isTeamLoading } = useGetV3GfwTeamsTeamId({
+    pathParams: {
+      teamId
+    },
+    headers: httpAuthHeader
+  });
 
   const teamAreas = useMemo(() => {
     if (!areasByTeam) {
@@ -96,41 +99,25 @@ const TeamDetail: FC<IProps> = props => {
     return found?.areas ? found.areas : [];
   }, [areasByTeam, teamId]);
 
-  const userId = useGetUserId();
-
+  // If the team wasn't found, then redirect to the teams summary page.
   useEffect(() => {
-    // If the component has attempted to fetch the teams and the fetches have
-    // finished but the team was still not found, then redirect to the teams
-    // summary page.
-    if (numOfActiveFetches === 0 && !team && fetched) {
+    if (!isTeamLoading && !team) {
       toastr.warning(intl.formatMessage({ id: "errors.team.detail" }), "");
       history.push("/teams");
     }
-  }, [intl, teamId, history, fetched, team, numOfActiveFetches]);
+  }, [history, intl, isTeamLoading, team]);
 
-  useEffect(() => {
-    if (!team) {
-      getUserTeams(userId);
-      getTeamMembers(teamId);
-      setFetched(true);
-    }
-  }, [getTeamMembers, teamId, userId, team, getUserTeams]);
-
-  // ToDo: Create a util for this
-  const [manages, monitors] = useMemo(
+  // ToDo: Create a util hook for this
+  const manages = useMemo(
     () =>
-      teamMembers.reduce<[typeof teamMembers, typeof teamMembers]>(
-        (acc, teamMember) => {
-          if (teamMember.attributes.role === "administrator" || teamMember.attributes.role === "manager") {
-            acc[0].push(teamMember);
-          } else {
-            acc[1].push(teamMember);
-          }
-          return acc;
-        },
-        [[], []]
-      ),
-    [teamMembers]
+      team?.attributes?.members?.filter(member => member.role === "administrator" || member.role === "manager") || [],
+    [team]
+  );
+
+  const monitors = useMemo(
+    () =>
+      team?.attributes?.members?.filter(member => member.role !== "administrator" && member.role !== "manager") || [],
+    [team]
   );
 
   /**
@@ -138,22 +125,22 @@ const TeamDetail: FC<IProps> = props => {
    * @param members members from the API
    */
   const mapMembersToRows = useMemo(
-    () => (members: TGFWTeamsState["members"][string]) =>
-      members.map<TTeamDetailDataTable>(member => {
-        let statusSuffix: typeof member.attributes.status | "administrator" | "left" = member.attributes.status;
-        if (member.attributes.role === "administrator") {
+    () => (members: TeamMemberModel[]) =>
+      members.map<TTeamDetailDataTable>((member, index) => {
+        let statusSuffix: typeof member.status | "administrator" | "left" = member.status;
+        if (member.role === "administrator") {
           statusSuffix = "administrator";
-        } else if (member.attributes.role === "left") {
+        } else if (member.role === "left") {
           statusSuffix = "left";
         }
 
         return {
-          id: member.id,
-          name: member.attributes.name || member.attributes.userId || "",
-          email: member.attributes.email,
+          id: member.userId || index,
+          name: member.name || member.userId || "",
+          email: member.email,
           status: intl.formatMessage({ id: `teams.details.table.status.${statusSuffix}` }),
           statusSuffix,
-          userId: member.attributes.userId
+          userId: member.userId
         };
       }),
     [intl]
@@ -222,10 +209,10 @@ const TeamDetail: FC<IProps> = props => {
 
   return (
     <>
-      <Loader isLoading={isLoading || isFetchingAreas} />
+      <Loader isLoading={isTeamLoading || isFetchingAreas} />
       <Hero
         title="teams.details.name"
-        titleValues={{ name: team.attributes.name }}
+        titleValues={{ name: team?.attributes?.name || "" }}
         actions={
           <>
             {userIsManager && (
@@ -300,7 +287,7 @@ const TeamDetail: FC<IProps> = props => {
       <AddTeamMember isOpen={isAddingTeamMember} />
       <EditTeamMember isOpen={isEditingTeamMember} />
       <RemoveTeamMember isOpen={isRemovingTeamMember} />
-      <EditTeam isOpen={isEditingTeam} currentName={team.attributes.name} />
+      <EditTeam isOpen={isEditingTeam} currentName={team?.attributes?.name || ""} />
       <DeleteTeam isOpen={isDeletingTeam} teamId={teamId} />
       <RemoveAreaFromTeam isOpen={isDeletingTeamArea} />
     </>

@@ -1,7 +1,7 @@
 import { connect, ConnectedProps } from "react-redux";
 import { RootState } from "store";
 import TeamDetail, { IOwnProps } from "./TeamDetail";
-import { getTeamMembers, getUserTeams, getTeamAreas } from "modules/gfwTeams";
+import { getTeamAreas } from "modules/gfwTeams";
 import { ThunkDispatch } from "redux-thunk";
 
 const mapStateToProps = ({ gfwTeams, user, areas }: RootState, ownProps: IOwnProps) => {
@@ -10,18 +10,12 @@ const mapStateToProps = ({ gfwTeams, user, areas }: RootState, ownProps: IOwnPro
   );
 
   return {
-    team: gfwTeams.data.find(team => team.id === ownProps.match.params.teamId),
-    teamMembers: gfwTeams.members[ownProps.match.params.teamId] || [],
     userIsAdmin: userMember?.attributes.role === "administrator",
-    userIsManager: userMember?.attributes.role === "administrator" || userMember?.attributes.role === "manager",
-    numOfActiveFetches: gfwTeams.numOfActiveFetches,
-    isLoading: gfwTeams.numOfActiveFetches > 0
+    userIsManager: userMember?.attributes.role === "administrator" || userMember?.attributes.role === "manager"
   };
 };
 
 const mapDispatchToProps = (dispatch: ThunkDispatch<RootState, null, any>, ownProps: IOwnProps) => ({
-  getUserTeams: (userId: string) => dispatch(getUserTeams(userId)),
-  getTeamMembers: (teamId: string) => dispatch(getTeamMembers(teamId)),
   getTeamAreas: (teamId: string) => dispatch(getTeamAreas(teamId))
 });
 

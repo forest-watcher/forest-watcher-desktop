@@ -1,3 +1,4 @@
+import { useInvalidateGetUserTeams } from "hooks/querys/teams/useGetUserTeams";
 import { FC, useCallback, useEffect, useState } from "react";
 import Modal from "components/ui/Modal/Modal";
 import Loader from "components/ui/Loader";
@@ -27,6 +28,7 @@ const EditMemberRoleModal: FC<IProps> = props => {
   const members = useAppSelector(state => state.gfwTeams.members[teamId]);
   const history = useHistory();
   const [isSave, setIsSaving] = useState(false);
+  const invalidateGetUserTeams = useInvalidateGetUserTeams();
 
   const close = useCallback(() => {
     history.push(`/teams/${teamId}`);
@@ -57,6 +59,7 @@ const EditMemberRoleModal: FC<IProps> = props => {
       } else {
         await teamService.reassignAdmin({ teamId, userId: memberId });
       }
+      await invalidateGetUserTeams();
       // Refetch the Team members
       dispatch(getTeamMembers(teamId));
       close();

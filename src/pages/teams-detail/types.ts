@@ -1,7 +1,7 @@
 import { IRowAction, IColumnOrder } from "components/ui/DataTable/DataTable";
 
 export type TTeamDetailDataTable = {
-  id: string;
+  id: string | number;
   name?: string;
   email: string;
   status: string;

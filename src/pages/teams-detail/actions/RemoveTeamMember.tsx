@@ -1,3 +1,4 @@
+import { useInvalidateGetUserTeams } from "hooks/querys/teams/useGetUserTeams";
 import { FC, useCallback, useEffect, useState } from "react";
 import Modal from "components/ui/Modal/Modal";
 import Loader from "components/ui/Loader";
@@ -26,6 +27,7 @@ const RemoveTeamMemberModal: FC<IProps> = props => {
   const dispatch = useAppDispatch();
   const members = useAppSelector(state => state.gfwTeams.members[teamId]);
   const [isRemoving, setIsRemoving] = useState(false);
+  const invalidateGetUserTeams = useInvalidateGetUserTeams();
 
   const close = useCallback(() => {
     history.push(`/teams/${teamId}`);
@@ -43,6 +45,7 @@ const RemoveTeamMemberModal: FC<IProps> = props => {
     setIsRemoving(true);
     try {
       await teamService.removeTeamMember({ teamId, teamUserId: memberId });
+      await invalidateGetUserTeams();
       // Refetch the Team members
       dispatch(getTeamMembers(teamId));
       close();

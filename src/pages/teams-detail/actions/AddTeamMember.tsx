@@ -1,3 +1,4 @@
+import { useInvalidateGetUserTeams } from "hooks/querys/teams/useGetUserTeams";
 import { FC, useEffect } from "react";
 import FormModal from "components/modals/FormModal";
 import { useHistory, useParams } from "react-router-dom";
@@ -39,6 +40,7 @@ const AddTeamMemberModal: FC<IProps> = props => {
   const intl = useIntl();
   const history = useHistory();
   const dispatch = useAppDispatch();
+  const invalidateGetUserTeams = useInvalidateGetUserTeams();
 
   useEffect(() => {
     // In case the URL ends in anything else: /teams/:teamId/add/:memberRole
@@ -61,6 +63,9 @@ const AddTeamMemberModal: FC<IProps> = props => {
           }
         ]
       });
+
+      await invalidateGetUserTeams();
+
       // Refetch the Team members
       dispatch(getTeamMembers(teamId));
       toastr.success(intl.formatMessage({ id: "teams.details.add.member.success" }), "");

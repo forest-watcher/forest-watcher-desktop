@@ -5,9 +5,6 @@ import { useAccessToken } from "hooks/useAccessToken";
 import useGetUserId from "hooks/useGetUserId";
 
 const useGetUserTeams = () => {
-  const queryClient = useQueryClient();
-  const { queryKeyFn } = useCoreContext();
-
   const userId = useGetUserId();
 
   const { httpAuthHeader } = useAccessToken();
@@ -24,7 +21,17 @@ const useGetUserTeams = () => {
     }
   );
 
-  const invalidateGetUserTeams = async () =>
+  // Remove nested data property
+  return { data: data?.data, ...rest };
+};
+
+export const useInvalidateGetUserTeams = () => {
+  const queryClient = useQueryClient();
+  const { queryKeyFn } = useCoreContext();
+
+  const userId = useGetUserId();
+
+  return async () =>
     await queryClient.invalidateQueries(
       queryKeyFn({
         path: "/v3/gfw/teams/user/{userId}",
@@ -36,9 +43,6 @@ const useGetUserTeams = () => {
         }
       })
     );
-
-  // Remove nested data property
-  return { data: data?.data, invalidateGetUserTeams, ...rest };
 };
 
 export default useGetUserTeams;

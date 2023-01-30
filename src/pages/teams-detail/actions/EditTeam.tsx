@@ -1,3 +1,4 @@
+import { useInvalidateGetUserTeams } from "hooks/querys/teams/useGetUserTeams";
 import { FC } from "react";
 import FormModal from "components/modals/FormModal";
 import { useHistory, useParams } from "react-router-dom";
@@ -35,6 +36,7 @@ const EditTeamModal: FC<IProps> = props => {
   const { teamId } = useParams<TParams>();
   const history = useHistory();
   const userId = useGetUserId();
+  const invalidateGetUserTeams = useInvalidateGetUserTeams();
 
   const onClose = () => {
     history.push(`/teams/${teamId}`);
@@ -43,6 +45,7 @@ const EditTeamModal: FC<IProps> = props => {
   const onSave = async (data: UnpackNestedValue<TEditTeamForm>) => {
     try {
       await teamService.updateTeam(teamId, data);
+      await invalidateGetUserTeams();
       // Refetch the User Teams
       dispatch(getUserTeams(userId));
       toastr.success(intl.formatMessage({ id: "teams.edit.success" }), "");

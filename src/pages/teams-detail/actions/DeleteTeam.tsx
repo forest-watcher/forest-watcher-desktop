@@ -1,3 +1,4 @@
+import { useInvalidateGetUserTeams } from "hooks/querys/teams/useGetUserTeams";
 import { FC, useState } from "react";
 import Modal from "components/ui/Modal/Modal";
 import { useHistory } from "react-router-dom";
@@ -19,6 +20,7 @@ const DeleteTeam: FC<IProps> = props => {
   const intl = useIntl();
   const history = useHistory();
   const [isDeleting, setIsDeleting] = useState(false);
+  const invalidateGetUserTeams = useInvalidateGetUserTeams();
 
   const close = () => {
     history.push(`/teams/${teamId}`);
@@ -28,6 +30,7 @@ const DeleteTeam: FC<IProps> = props => {
     setIsDeleting(true);
     try {
       await teamService.deleteTeam(teamId);
+      await invalidateGetUserTeams();
       history.push("/teams");
       toastr.success(intl.formatMessage({ id: "teams.delete.success" }), "");
       fireGAEvent({

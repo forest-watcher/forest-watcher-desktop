@@ -1,3 +1,4 @@
+import { useInvalidateGetUserTeams } from "hooks/querys/teams/useGetUserTeams";
 import { FC, useCallback, useState } from "react";
 import Modal from "components/ui/Modal/Modal";
 import Loader from "components/ui/Loader";
@@ -24,6 +25,7 @@ const RemoveAreaFromTeam: FC<IProps> = props => {
   const intl = useIntl();
   const dispatch = useAppDispatch();
   const [isRemoving, setIsRemoving] = useState(false);
+  const invalidateGetUserTeams = useInvalidateGetUserTeams();
 
   const onClose = useCallback(() => {
     history.goBack();
@@ -33,6 +35,7 @@ const RemoveAreaFromTeam: FC<IProps> = props => {
     setIsRemoving(true);
     try {
       await areaService.unassignTeamFromArea(areaId, teamId);
+      await invalidateGetUserTeams();
       dispatch(getAreasInUsersTeams());
       onClose();
       toastr.success(intl.formatMessage({ id: "areas.details.teams.remove.success" }), "");

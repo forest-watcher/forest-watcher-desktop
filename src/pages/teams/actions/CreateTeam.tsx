@@ -1,4 +1,4 @@
-import useGetUserTeams from "hooks/querys/teams/useGetUserTeams";
+import { useInvalidateGetUserTeams } from "hooks/querys/teams/useGetUserTeams";
 import { FC, useMemo } from "react";
 import FormModal from "components/modals/FormModal";
 import { UnpackNestedValue } from "react-hook-form";
@@ -32,7 +32,7 @@ const CreateTeamModal: FC<IProps> = props => {
   const intl = useIntl();
   const history = useHistory();
   const urlQuery = useUrlQuery();
-  const { invalidateGetUserTeams } = useGetUserTeams();
+  const invalidateGetUserTeams = useInvalidateGetUserTeams();
   const backTo = useMemo(() => urlQuery.get("backTo"), [urlQuery]);
 
   const onClose = () => {
