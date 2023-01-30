@@ -15,7 +15,7 @@ import { GeojsonModel } from "generated/core/coreSchemas";
 import { useAccessToken } from "hooks/useAccessToken";
 import useFindArea from "hooks/useFindArea";
 import useGetUserId from "hooks/useGetUserId";
-import { Dispatch, FC, SetStateAction, useEffect, useMemo, useState } from "react";
+import { Dispatch, FC, SetStateAction, useEffect, useMemo, useRef, useState } from "react";
 import { useForm, useFormContext, useWatch } from "react-hook-form";
 import useGetUserTeamsWithActiveMembers from "hooks/querys/teams/useGetUserTeamsWithActiveMembers";
 import { FormattedMessage, useIntl } from "react-intl";
@@ -90,6 +90,7 @@ const AssignmentForm: FC<IProps> = props => {
     prevLocationPathname
   } = props;
   const intl = useIntl();
+  const mapCardContentRef = useRef<HTMLDivElement>();
   const history = useHistory();
   const { current: map } = useMap();
   const userId = useGetUserId();
@@ -121,6 +122,14 @@ const AssignmentForm: FC<IProps> = props => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [setValue, userId]);
+
+  // Each time the Open Dialog changes
+  // Reset the Card Content Scroll Position to the top
+  useEffect(() => {
+    if (mapCardContentRef.current) {
+      mapCardContentRef.current.scrollTop = 0;
+    }
+  }, [openDialogName, mapCardContentRef]);
 
   const { httpAuthHeader } = useAccessToken();
   const queryClient = useQueryClient();
@@ -337,6 +346,7 @@ const AssignmentForm: FC<IProps> = props => {
           </Button>
         ) : null
       }
+      mapCardContentRef={mapCardContentRef}
     >
       <Loader isLoading={isSubmitting || isPatchSubmitting || isTemplateDataLoading || isTeamDataLoading} />
       <OptionalWrapper data={openDialogName === EDialogsNames.None}>
