@@ -1,22 +1,15 @@
-import { useQueries } from "@tanstack/react-query";
-import { useGetV3GfwAreasUserandteam } from "generated/core/coreComponents";
 import { TeamsResponse } from "generated/core/coreResponses";
-import { useAccessToken } from "hooks/useAccessToken";
-import useGetUserId from "hooks/useGetUserId";
 import { FC, useMemo } from "react";
 import Card from "../../ui/Card/Card";
 import EditIcon from "assets/images/icons/Edit.svg";
 import { FormattedMessage } from "react-intl";
-import { TPropsFromRedux } from "./TeamCardContainer";
 import { TAreasByTeam } from "hooks/querys/areas/useGetAreas";
 
-export interface IOwnProps {
+export interface IProps {
   team: Required<TeamsResponse>["data"][number];
   canManage?: boolean;
   areasByTeam: TAreasByTeam;
 }
-
-export type IProps = TPropsFromRedux & IOwnProps;
 
 const TeamCard: FC<IProps> = props => {
   const { team, canManage = false, areasByTeam } = props;

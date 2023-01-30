@@ -1,6 +1,6 @@
 import { TeamsResponse } from "generated/core/coreResponses";
 import { FC } from "react";
-import TeamCard from "./team-card/TeamCardContainer";
+import TeamCard from "./team-card/TeamCard";
 import useGetAreas from "hooks/querys/areas/useGetAreas";
 
 interface IProps {

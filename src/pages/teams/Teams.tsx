@@ -1,9 +1,8 @@
 import OptionalWrapper from "components/extensive/OptionalWrapper";
-import { useGetV3GfwTeamsUserUserId } from "generated/core/coreComponents";
+import { useGetV3GfwTeamsMyinvites, useGetV3GfwTeamsUserUserId } from "generated/core/coreComponents";
 import { useAccessToken } from "hooks/useAccessToken";
-import { FC, useEffect, useMemo } from "react";
+import { FC, useMemo } from "react";
 import { RouteComponentProps, Link } from "react-router-dom";
-import { TPropsFromRedux } from "./TeamsContainer";
 import EmptyState from "components/ui/EmptyState/EmptyState";
 import Hero from "components/layouts/Hero/Hero";
 import Article from "components/layouts/Article";
@@ -18,16 +17,17 @@ import EmptyStateIcon from "assets/images/icons/EmptyTeams.svg";
 import { fireGAEvent } from "helpers/analytics";
 import { TeamActions, TeamLabels } from "types/analytics";
 
-interface IProps extends TPropsFromRedux, RouteComponentProps {
+interface IProps extends RouteComponentProps {
   isCreatingTeam: boolean;
 }
 
 const Teams: FC<IProps> = props => {
-  const { myInvites, getMyTeamInvites, isCreatingTeam = false, match } = props;
+  const { isCreatingTeam = false, match } = props;
 
   const intl = useIntl();
   const userId = useGetUserId();
 
+  /* Queries */
   const { httpAuthHeader } = useAccessToken();
   const { data: userTeams, isLoading } = useGetV3GfwTeamsUserUserId(
     {
@@ -40,12 +40,9 @@ const Teams: FC<IProps> = props => {
       enabled: !!userId
     }
   );
-
-  useEffect(() => {
-    if (userId) {
-      getMyTeamInvites();
-    }
-  }, [getMyTeamInvites, userId]);
+  const { data: userTeamInvites } = useGetV3GfwTeamsMyinvites({
+    headers: httpAuthHeader
+  });
 
   const managedTeams = useMemo(
     () =>
@@ -69,21 +66,21 @@ const Teams: FC<IProps> = props => {
       <Loader isLoading={isLoading} />
 
       {/* User Invite Banner */}
-      {myInvites.length > 0 && (
+      <OptionalWrapper data={(userTeamInvites?.data?.length && userTeamInvites?.data?.length > 0) || false}>
         <div className="l-team-invitations l-content--neutral-400">
           <div className="row column">
             <div className="l-team-invitations__row">
-              <FormattedMessage id="teams.invitation.banner" values={{ num: myInvites.length }}>
+              <FormattedMessage id="teams.invitation.banner" values={{ num: userTeamInvites?.data?.length }}>
                 {txt => <span className="l-team-invitations__title">{txt}</span>}
               </FormattedMessage>
 
               <Link to={`${match.path}/invitations`} className="c-button c-button--primary">
-                <FormattedMessage id="teams.invitation.view" values={{ num: myInvites.length }} />
+                <FormattedMessage id="teams.invitation.view" values={{ num: userTeamInvites?.data?.length }} />
               </Link>
             </div>
           </div>
         </div>
-      )}
+      </OptionalWrapper>
 
       {/* [0] The teams fetch is Loading - show nothing to the user */}
       {/* [1] No Teams were found        - show empty state to the user */}

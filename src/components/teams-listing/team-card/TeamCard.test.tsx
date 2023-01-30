@@ -33,17 +33,20 @@ const mockTeam: ITeamCardProps["team"] = {
   }
 };
 
-// const mockTeamAreas = [
-//   { type: "area", id: "6233708756b0c7001bf95232", attributes: { name: "Area #1" } },
-//   { type: "area", id: "6233708756b0c7001bf95232", attributes: { name: "Area #2" } },
-//   { type: "area", id: "6233708756b0c7001bf95232", attributes: { name: "Area #3" } }
-// ];
-
-const mockTeamAreas = ["Area #1", "Area #2", "Area #3"];
+const mockTeamAreas = [
+  {
+    team: "1234",
+    areas: [
+      { data: { type: "area", id: "6233708756b0c7001bf95232", attributes: { name: "Area #1" } } },
+      { data: { type: "area", id: "6233708756b0c7001bf95232", attributes: { name: "Area #2" } } },
+      { data: { type: "area", id: "6233708756b0c7001bf95232", attributes: { name: "Area #3" } } }
+    ]
+  }
+];
 
 describe("TeamCard", () => {
   it("should render correctly", () => {
-    const { container } = render(<TeamCard team={mockTeam} teamAreas={mockTeamAreas} canManage areasByTeam={[]} />);
+    const { container } = render(<TeamCard team={mockTeam} canManage areasByTeam={mockTeamAreas} />);
 
     expect(container).toMatchInlineSnapshot(`
       <div>
