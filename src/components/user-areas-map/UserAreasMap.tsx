@@ -28,6 +28,7 @@ export interface IProps extends IMapProps {
   currentProc?: ProcTypes;
   showTeamAreas?: boolean;
   cooperativeGestures?: boolean;
+  alwaysHideKeyLegend?: boolean;
 }
 
 const UserAreasMap: FC<PropsWithChildren<IProps>> = props => {
@@ -44,6 +45,7 @@ const UserAreasMap: FC<PropsWithChildren<IProps>> = props => {
     currentProc = "",
     showTeamAreas = false,
     cooperativeGestures = true,
+    alwaysHideKeyLegend = false,
     ...rest
   } = props;
   const [mapRef, setMapRef] = useState<MapInstance | null>(null);
@@ -155,7 +157,12 @@ const UserAreasMap: FC<PropsWithChildren<IProps>> = props => {
   };
 
   return (
-    <Map onMapLoad={handleMapLoad} cooperativeGestures={cooperativeGestures} showKeyLegend={!!selectedAreaId} {...rest}>
+    <Map
+      onMapLoad={handleMapLoad}
+      cooperativeGestures={cooperativeGestures}
+      showKeyLegend={!alwaysHideKeyLegend && !!selectedAreaId}
+      {...rest}
+    >
       {areaMap.map(area =>
         area ? (
           <Polygon

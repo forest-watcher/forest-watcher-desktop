@@ -149,6 +149,7 @@ const Areas: FC<IProps> = props => {
           onAreaDeselect={handleAreaDeselect}
           onMapLoad={handleMapLoad}
           showTeamAreas
+          alwaysHideKeyLegend
         >
           {selectedArea && (
             <AreaDetailCard
