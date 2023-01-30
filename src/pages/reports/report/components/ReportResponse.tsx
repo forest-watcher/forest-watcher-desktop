@@ -29,9 +29,9 @@ const Response = (props: ReportResponseProps) => {
 
       return (
         <>
-          {childQuestions?.map(child => (
-            <Response key={child.name} response={child.value || ""} type="text" question="" />
-          ))}
+          {childQuestions?.map(
+            child => child.value && <Response key={child.name} response={child.value} type="text" question="" />
+          )}
           {filename && (
             <button
               onClick={() => {
@@ -39,7 +39,7 @@ const Response = (props: ReportResponseProps) => {
               }}
               className={classNames(
                 "bg-primary-400 px-4 py-[9px] rounded-md border border-solid border-primary-500 text-neutral-700 text-base",
-                Boolean(childQuestions?.length) && "mt-6"
+                Boolean(childQuestions?.find(item => item.value)) && "mt-6"
               )}
             >
               {filename}
