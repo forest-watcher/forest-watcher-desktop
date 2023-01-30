@@ -37,11 +37,13 @@ const AddTemplateModal: FC<IProps> = ({ templates, onAdd }) => {
   const dispatch = useAppDispatch();
   const templateOptions = useMemo<Option[] | undefined>(
     () =>
-      templates?.map(template => ({
-        // @ts-ignore template.attributes.name has incorrect type
-        label: template.attributes.name[template.attributes.defaultLanguage],
-        value: template.id as string
-      })),
+      templates
+        ?.filter(template => template.attributes?.status === "published")
+        .map(template => ({
+          // @ts-ignore template.attributes.name has incorrect type
+          label: template.attributes.name[template.attributes.defaultLanguage],
+          value: template.id as string
+        })),
     [templates]
   );
 
