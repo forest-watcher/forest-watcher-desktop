@@ -1,4 +1,8 @@
+import { useQueries } from "@tanstack/react-query";
+import { useGetV3GfwAreasUserandteam } from "generated/core/coreComponents";
 import { TeamsResponse } from "generated/core/coreResponses";
+import { useAccessToken } from "hooks/useAccessToken";
+import useGetUserId from "hooks/useGetUserId";
 import { FC, useMemo } from "react";
 import Card from "../../ui/Card/Card";
 import EditIcon from "assets/images/icons/Edit.svg";
@@ -15,13 +19,13 @@ export interface IOwnProps {
 export type IProps = TPropsFromRedux & IOwnProps;
 
 const TeamCard: FC<IProps> = props => {
-  const { team, canManage = false } = props;
+  const { team, canManage = false, areasByTeam } = props;
 
-  // const areasDetail = useMemo(
-  //   // @ts-ignore incorrect typings
-  //   () => areasByTeam.find(areasAndTeam => areasAndTeam.team?.id === team.id),
-  //   [areasByTeam, team.id]
-  // );
+  const areasDetail = useMemo(
+    // @ts-ignore incorrect typings
+    () => areasByTeam.find(areasAndTeam => areasAndTeam.team?.id === team.id),
+    [areasByTeam, team.id]
+  );
 
   const manages = useMemo(
     () =>
@@ -68,11 +72,11 @@ const TeamCard: FC<IProps> = props => {
             <h3 className="c-teams__sub-title">
               <FormattedMessage id="teams.summary.areas" />
             </h3>
-            {/*<p>*/}
-            {/*  {areasDetail*/}
-            {/*    ? areasDetail?.areas?.map(area => area?.data?.attributes?.name).join(", ")*/}
-            {/*    : teamAreas.join(", ")}*/}
-            {/*</p>*/}
+            <p>
+              {areasDetail
+                ? areasDetail?.areas?.map(area => area?.data?.attributes?.name).join(", ")
+                : team.attributes?.areas?.join(", ")}
+            </p>
           </div>
         </div>
       </Card>
