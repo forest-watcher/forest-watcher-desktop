@@ -1,3 +1,6 @@
+import OptionalWrapper from "components/extensive/OptionalWrapper";
+import { useGetV3GfwTeamsUserUserId } from "generated/core/coreComponents";
+import { useAccessToken } from "hooks/useAccessToken";
 import { FC, useEffect, useMemo } from "react";
 import { RouteComponentProps, Link } from "react-router-dom";
 import { TPropsFromRedux } from "./TeamsContainer";
@@ -20,47 +23,52 @@ interface IProps extends TPropsFromRedux, RouteComponentProps {
 }
 
 const Teams: FC<IProps> = props => {
-  const {
-    teams,
-    myInvites,
-    getUserTeams,
-    getMyTeamInvites,
-    numOfActiveFetches,
-    isCreatingTeam = false,
-    match,
-    isLoading
-  } = props;
+  const { myInvites, getMyTeamInvites, isCreatingTeam = false, match } = props;
 
   const intl = useIntl();
   const userId = useGetUserId();
 
+  const { httpAuthHeader } = useAccessToken();
+  const { data: userTeams, isLoading } = useGetV3GfwTeamsUserUserId(
+    {
+      pathParams: {
+        userId
+      },
+      headers: httpAuthHeader
+    },
+    {
+      enabled: !!userId
+    }
+  );
+
   useEffect(() => {
     if (userId) {
-      getUserTeams(userId);
       getMyTeamInvites();
     }
-  }, [getUserTeams, getMyTeamInvites, userId]);
+  }, [getMyTeamInvites, userId]);
 
-  const [managedTeams, joinedTeams] = useMemo(
+  const managedTeams = useMemo(
     () =>
-      teams.reduce<[typeof teams, typeof teams]>(
-        (acc, team) => {
-          if (team.attributes.userRole === "administrator" || team.attributes.userRole === "manager") {
-            acc[0].push(team);
-          } else {
-            acc[1].push(team);
-          }
-          return acc;
-        },
-        [[], []]
-      ),
-    [teams]
+      userTeams?.data?.filter(
+        team => team.attributes?.userRole === "administrator" || team.attributes?.userRole === "manager"
+      ) || [],
+    [userTeams]
+  );
+
+  const joinedTeams = useMemo(
+    () =>
+      userTeams?.data?.filter(
+        team => team.attributes?.userRole !== "administrator" && team.attributes?.userRole !== "manager"
+      ) || [],
+    [userTeams]
   );
 
   return (
     <div className="relative">
       <Hero title="teams.name" />
       <Loader isLoading={isLoading} />
+
+      {/* User Invite Banner */}
       {myInvites.length > 0 && (
         <div className="l-team-invitations l-content--neutral-400">
           <div className="row column">
@@ -76,24 +84,34 @@ const Teams: FC<IProps> = props => {
           </div>
         </div>
       )}
-      {/* No teams are in state but fetches are being made - show nothing to the user */}
-      {/* No teams are in state and fetches have finished  - show empty state to the user */}
-      {/* Teams are in state                               - show the teams to the user */}
-      {!teams.length && numOfActiveFetches > 0 ? null : !teams.length && numOfActiveFetches === 0 ? (
-        <div className="l-content l-content--neutral-400">
-          <div className="row column">
-            <EmptyState
-              iconUrl={EmptyStateIcon}
-              title={intl.formatMessage({ id: "teams.empty.state.title" })}
-              text={intl.formatMessage({ id: "teams.empty.state.subTitle" })}
-              ctaText={intl.formatMessage({ id: "teams.create" })}
-              ctaTo={`${match.path}/create`}
-            />
-          </div>
-        </div>
-      ) : (
-        <>
+
+      {/* [0] The teams fetch is Loading - show nothing to the user */}
+      {/* [1] No Teams were found        - show empty state to the user */}
+      {/* [3] Teams were found           - show the teams to the user */}
+      <OptionalWrapper
+        data={!isLoading}
+        // [0]
+      >
+        <OptionalWrapper
+          data={(userTeams?.data?.length && userTeams?.data?.length > 0) || false}
+          // [1]
+          elseComponent={
+            <div className="l-content l-content--neutral-400">
+              <div className="row column">
+                <EmptyState
+                  iconUrl={EmptyStateIcon}
+                  title={intl.formatMessage({ id: "teams.empty.state.title" })}
+                  text={intl.formatMessage({ id: "teams.empty.state.subTitle" })}
+                  ctaText={intl.formatMessage({ id: "teams.create" })}
+                  ctaTo={`${match.path}/create`}
+                />
+              </div>
+            </div>
+          }
+        >
+          {/* [3] */}
           <div className="l-content c-teams">
+            {/* Teams the User manages */}
             <Article
               className="c-teams__heading"
               title="teams.managedByMe"
@@ -120,6 +138,7 @@ const Teams: FC<IProps> = props => {
             </Article>
           </div>
           <div className="l-content l-content--neutral-400 c-teams">
+            {/* Teams the User is a member off but doesn't manage */}
             <Article
               className="c-teams__heading"
               title="teams.joinedByMe"
@@ -128,9 +147,10 @@ const Teams: FC<IProps> = props => {
               <TeamsListing teams={joinedTeams} />
             </Article>
           </div>
-        </>
-      )}
+        </OptionalWrapper>
+      </OptionalWrapper>
 
+      {/* Create Team Modal */}
       <CreateTeam isOpen={isCreatingTeam} />
     </div>
   );
