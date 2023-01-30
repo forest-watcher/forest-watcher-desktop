@@ -26,6 +26,7 @@ const TemplateQuestions: FC<IProps> = ({ onQuestionDelete }) => {
           index={index}
         />
       )}
+      autoScrollToBottom
     />
   );
 };
