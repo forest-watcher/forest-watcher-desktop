@@ -7,7 +7,7 @@ import { useIntl } from "react-intl";
 export interface IProps extends PropsWithChildren {
   className?: string;
   btnCaption: string;
-  link: string;
+  link?: string;
   disabled?: boolean;
 }
 
@@ -24,17 +24,21 @@ const LinkPreview: FC<IProps> = props => {
           {intl.formatMessage({ id: "export.copied" })}
         </div>
       )}
+
       <div className="c-link-preview__children u-flex-1">{children}</div>
-      <Chip
-        variant="secondary"
-        className="c-link-preview__cta"
-        onClick={() => {
-          navigator.clipboard.writeText(link);
-          setCopied(true);
-        }}
-      >
-        {btnCaption}
-      </Chip>
+
+      {link && (
+        <Chip
+          variant="secondary"
+          className="c-link-preview__cta"
+          onClick={() => {
+            navigator.clipboard.writeText(link);
+            setCopied(true);
+          }}
+        >
+          {btnCaption}
+        </Chip>
+      )}
     </div>
   );
 };
