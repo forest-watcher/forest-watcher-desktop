@@ -645,6 +645,7 @@
   "export.downloadMethods.link": "Shareable",
   "export.copyLink": "Copy Link",
   "export.copied": "Copied",
+  "export.no.file.type": "Please select a File Type...",
   "export.linkLoading": "Generating Link...",
   "export.all": "Export all",
   "export.selected": "Export selected",

@@ -53,7 +53,8 @@ const exportSchemaWithEmail = yup
 const ExportModal: FC<IProps> = ({ onClose, onSave, isOpen, fileTypes, fields, defaultSelectedFields }) => {
   const intl = useIntl();
   const [downloadMethod, setDownloadMethod] = useState();
-  const [reportUrl, setReportUrl] = useState("");
+  const [reportUrl, setReportUrl] = useState<string>();
+  const [reportUrlLabel, setReportUrlLabel] = useState(() => intl.formatMessage({ id: "export.no.file.type" }));
   const inputs = useMemo<IModalProps<TExportForm>["inputs"]>(() => {
     const toReturn: IModalProps<TExportForm>["inputs"] = [
       {
@@ -146,7 +147,7 @@ const ExportModal: FC<IProps> = ({ onClose, onSave, isOpen, fileTypes, fields, d
   };
 
   const generateShortenedLink = async (resp: UnpackNestedValue<TExportForm>) => {
-    setReportUrl(intl.formatMessage({ id: "export.linkLoading" }));
+    setReportUrlLabel(intl.formatMessage({ id: "export.linkLoading" }));
     const saveResp = await onSave(resp);
     if (saveResp) {
       const shorten = await bitlyService.shorten(saveResp);
@@ -172,14 +173,14 @@ const ExportModal: FC<IProps> = ({ onClose, onSave, isOpen, fileTypes, fields, d
       onChange={async (changes, values) => {
         setDownloadMethod(changes[0]);
 
-        if (changes[0] === "link" && (await exportSchema.isValid(values))) {
+        if (changes[0] === "link" && !!values.fileType && (await exportSchema.isValid(values))) {
           generateShortenedLink(values);
         }
       }}
     >
       {downloadMethod === "link" && (
         <LinkPreview btnCaption={intl.formatMessage({ id: "export.copyLink" })} link={reportUrl} className="">
-          {reportUrl}
+          {reportUrlLabel}
         </LinkPreview>
       )}
     </FormModal>
