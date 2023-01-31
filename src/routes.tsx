@@ -6,7 +6,7 @@ import AreasManage from "pages/area-view/AreaViewContainer";
 import AreaEdit from "pages/area-edit/AreaEditContainer";
 import Teams from "pages/teams/Teams";
 import TeamsInvitations from "pages/teams/invitation/InvitationContainer";
-import TeamDetail from "pages/teams-detail/TeamDetailContainer";
+import TeamDetail from "pages/teams-detail/TeamDetail";
 import Reports from "pages/reports/Reports";
 import Login from "pages/login/Login";
 import SignUpAndReset from "pages/login/SignUpAndReset";
@@ -111,6 +111,7 @@ const Routes: FC<IProps> = props => {
           <Route exact path={`${match.url}teams/create`} render={args => <Teams isCreatingTeam {...args} />} />
           <Route exact path={`${match.url}teams/:teamId`} component={TeamDetail} />
           <Route path={`${match.url}assignment/:id`} component={Assignment} />
+          {/*ToDo: Use useRouteMatch()*/}
           <Route
             exact
             path={`${match.url}teams/:teamId/edit`}

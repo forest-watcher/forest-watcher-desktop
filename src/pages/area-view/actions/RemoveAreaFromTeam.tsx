@@ -34,6 +34,7 @@ const RemoveAreaFromTeam: FC<IProps> = props => {
   const removeTeam = async () => {
     setIsRemoving(true);
     try {
+      // ToDo: change to fw_core
       await areaService.unassignTeamFromArea(areaId, teamId);
       await invalidateGetUserTeams();
       dispatch(getAreasInUsersTeams());

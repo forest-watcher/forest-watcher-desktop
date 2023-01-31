@@ -1,9 +1,9 @@
 import { TeamMemberModel } from "generated/core/coreSchemas";
 import useGetTeamDetails from "hooks/querys/teams/useGetTeamDetails";
+import useGetUserId from "hooks/useGetUserId";
 import { FC, useEffect, useMemo } from "react";
-import { RouteComponentProps, useHistory, Link, useParams } from "react-router-dom";
+import { useHistory, Link, useParams, useLocation } from "react-router-dom";
 import { toastr } from "react-redux-toastr";
-import { TPropsFromRedux } from "./TeamDetailContainer";
 import Hero from "components/layouts/Hero/Hero";
 import Article from "components/layouts/Article";
 import DataTable from "components/ui/DataTable/DataTable";
@@ -32,7 +32,7 @@ export type TParams = {
   teamId: string;
 };
 
-export interface IOwnProps extends RouteComponentProps<TParams> {
+export interface IProps {
   isAddingTeamMember?: boolean;
   isEditingTeamMember?: boolean;
   isRemovingTeamMember?: boolean;
@@ -40,8 +40,6 @@ export interface IOwnProps extends RouteComponentProps<TParams> {
   isDeletingTeam?: boolean;
   isDeletingTeamArea?: boolean;
 }
-
-type IProps = IOwnProps & TPropsFromRedux;
 
 const columnOrder: TTeamsDetailDataTableColumns[] = [
   { key: "name", name: "teams.details.table.header.name", sortCompareFn: sortByString },
@@ -60,19 +58,18 @@ const areaColumnOrder: TAreaDataTableColumns[] = [
 
 const TeamDetail: FC<IProps> = props => {
   const {
-    userIsManager,
-    userIsAdmin,
     isAddingTeamMember = false,
     isEditingTeamMember = false,
     isRemovingTeamMember = false,
     isEditingTeam = false,
     isDeletingTeam = false,
-    isDeletingTeamArea = false,
-    match
+    isDeletingTeamArea = false
   } = props;
+  const location = useLocation();
   const { teamId } = useParams<{ teamId: string }>();
   const history = useHistory();
   const intl = useIntl();
+  const userId = useGetUserId();
   const {
     data: { areasByTeam },
     isFetching: isFetchingAreas
@@ -80,6 +77,20 @@ const TeamDetail: FC<IProps> = props => {
 
   /* Queries */
   const { data: team, isLoading: isTeamLoading } = useGetTeamDetails(teamId);
+
+  // Is the current user the Manager and/or Admin?
+  const [userIsAdmin, userIsManager] = useMemo(() => {
+    const userMemberInfo = team?.attributes?.members?.find(member => member.userId === userId);
+
+    if (isTeamLoading || !userMemberInfo) {
+      return [false, false];
+    }
+
+    return [
+      userMemberInfo.role === "administrator",
+      userMemberInfo.role === "administrator" || userMemberInfo.role === "manager"
+    ];
+  }, [isTeamLoading, team, userId]);
 
   const teamAreas = useMemo(() => {
     if (!areasByTeam) {
@@ -128,7 +139,8 @@ const TeamDetail: FC<IProps> = props => {
         }
 
         return {
-          id: member.userId || index,
+          // @ts-ignore `_id` not typed checked
+          id: member._id,
           name: member.name || member.userId || "",
           email: member.email,
           status: intl.formatMessage({ id: `teams.details.table.status.${statusSuffix}` }),
@@ -163,7 +175,7 @@ const TeamDetail: FC<IProps> = props => {
   const makeManager: TTeamsDetailDataTableAction = {
     name: "teams.details.table.actions.manager",
     value: "makeManager",
-    href: memberRow => `${match.url}/edit/${memberRow.id}/manager`,
+    href: memberRow => `${location.pathname}/edit/${memberRow.id}/manager`,
     shouldShow: memberRow => {
       return memberRow.statusSuffix === "confirmed";
     }
@@ -172,13 +184,13 @@ const TeamDetail: FC<IProps> = props => {
   const makeMonitor: TTeamsDetailDataTableAction = {
     name: "teams.details.table.actions.monitor",
     value: "makeMonitor",
-    href: memberRow => `${match.url}/edit/${memberRow.id}/monitor`
+    href: memberRow => `${location.pathname}/edit/${memberRow.id}/monitor`
   };
 
   const makeAdmin: TTeamsDetailDataTableAction = {
     name: "teams.details.table.actions.admin",
     value: "makeAdmin",
-    href: memberRow => `${match.url}/edit/${memberRow.userId}/admin`,
+    href: memberRow => `${location.pathname}/edit/${memberRow.userId}/admin`,
     shouldShow: memberRow => {
       return userIsAdmin && memberRow.statusSuffix === "confirmed";
     }
@@ -187,13 +199,13 @@ const TeamDetail: FC<IProps> = props => {
   const removeMember: TTeamsDetailDataTableAction = {
     name: "teams.details.table.actions.remove",
     value: "removeFromTeam",
-    href: memberRow => `${match.url}/remove/${memberRow.id}`
+    href: memberRow => `${location.pathname}/remove/${memberRow.id}`
   };
 
   const removeArea: TAreaDataTableAction = {
     name: "areas.details.teams.removeArea.title",
     value: "remove",
-    href: memberRow => `${match.url}/removeArea/${memberRow.id}`
+    href: memberRow => `${location.pathname}/removeArea/${memberRow.id}`
   };
 
   if (!team) {
@@ -209,12 +221,12 @@ const TeamDetail: FC<IProps> = props => {
         actions={
           <>
             {userIsManager && (
-              <Link to={`${match.url}/edit`} className="c-teams-details__edit-btn c-button c-button--primary">
+              <Link to={`${location.pathname}/edit`} className="c-teams-details__edit-btn c-button c-button--primary">
                 <FormattedMessage id="teams.details.edit" />
               </Link>
             )}
             {userIsAdmin && (
-              <Link to={`${match.url}/delete`} className="c-button c-button--secondary-light-text">
+              <Link to={`${location.pathname}/delete`} className="c-button c-button--secondary-light-text">
                 <FormattedMessage id="teams.details.delete" />
               </Link>
             )}
@@ -245,7 +257,7 @@ const TeamDetail: FC<IProps> = props => {
           size="small"
           actions={
             userIsManager && (
-              <Link to={`${match.url}/add/monitor`} className="c-button c-button--primary">
+              <Link to={`${location.pathname}/add/monitor`} className="c-button c-button--primary">
                 <img className="c-button__inline-icon" src={PlusIcon} alt="" role="presentation" />
                 <FormattedMessage id="teams.details.add.monitors" />
               </Link>

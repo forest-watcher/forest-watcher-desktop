@@ -10,7 +10,6 @@ import Modal from "components/ui/Modal/Modal";
 import Loader from "components/ui/Loader";
 import { TParams as TTeamDetailParams } from "../TeamDetail";
 import { useHistory, useParams } from "react-router-dom";
-import { teamService } from "services/teams";
 import { toastr } from "react-redux-toastr";
 import { FormattedMessage, useIntl } from "react-intl";
 import { TErrorResponse } from "constants/api";
