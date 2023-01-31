@@ -1,7 +1,6 @@
 import OptionalWrapper from "components/extensive/OptionalWrapper";
-import { useGetV3GfwTeamsMyinvites } from "generated/core/coreComponents";
+import useGetTeamInvites from "hooks/querys/teams/useGetTeamInvites";
 import useGetUserTeams from "hooks/querys/teams/useGetUserTeams";
-import { useAccessToken } from "hooks/useAccessToken";
 import { FC, useMemo } from "react";
 import { RouteComponentProps, Link } from "react-router-dom";
 import EmptyState from "components/ui/EmptyState/EmptyState";
@@ -27,12 +26,12 @@ const Teams: FC<IProps> = props => {
   const intl = useIntl();
 
   /* Queries */
-  const { httpAuthHeader } = useAccessToken();
+  // Get all the User's Teams
   const { data: userTeams, isLoading } = useGetUserTeams();
-  const { data: userTeamInvites } = useGetV3GfwTeamsMyinvites({
-    headers: httpAuthHeader
-  });
+  // Get all the User's Team Invites
+  const { data: userTeamInvites } = useGetTeamInvites();
 
+  // ToDo: use Hook for these two filters
   const managedTeams = useMemo(
     () =>
       userTeams?.filter(
@@ -55,16 +54,16 @@ const Teams: FC<IProps> = props => {
       <Loader isLoading={isLoading} />
 
       {/* User Invite Banner */}
-      <OptionalWrapper data={(userTeamInvites?.data?.length && userTeamInvites?.data?.length > 0) || false}>
+      <OptionalWrapper data={(userTeamInvites?.length && userTeamInvites?.length > 0) || false}>
         <div className="l-team-invitations l-content--neutral-400">
           <div className="row column">
             <div className="l-team-invitations__row">
-              <FormattedMessage id="teams.invitation.banner" values={{ num: userTeamInvites?.data?.length }}>
+              <FormattedMessage id="teams.invitation.banner" values={{ num: userTeamInvites?.length }}>
                 {txt => <span className="l-team-invitations__title">{txt}</span>}
               </FormattedMessage>
 
               <Link to={`${match.path}/invitations`} className="c-button c-button--primary">
-                <FormattedMessage id="teams.invitation.view" values={{ num: userTeamInvites?.data?.length }} />
+                <FormattedMessage id="teams.invitation.view" values={{ num: userTeamInvites?.length }} />
               </Link>
             </div>
           </div>

@@ -1,10 +1,14 @@
-import { useAppDispatch, useAppSelector } from "hooks/useRedux";
+import {
+  usePatchV3GfwTeamsTeamIdUsersUserIdAccept,
+  usePatchV3GfwTeamsTeamIdUsersUserIdDecline
+} from "generated/core/coreComponents";
+import useGetTeamInvites from "hooks/querys/teams/useGetTeamInvites";
+import { useAccessToken } from "hooks/useAccessToken";
+import useGetUserId from "hooks/useGetUserId";
 import { FC, useCallback, useEffect, useState } from "react";
 import Modal from "components/ui/Modal/Modal";
 import Loader from "components/ui/Loader";
 import { Redirect, useHistory } from "react-router-dom";
-import { teamService } from "services/teams";
-import { getMyTeamInvites } from "modules/gfwTeams";
 import { toastr } from "react-redux-toastr";
 import { TErrorResponse } from "constants/api";
 import { FormattedMessage, useIntl } from "react-intl";
@@ -45,47 +49,56 @@ export interface IProps {
 const RemoveTeamMemberModal: FC<IProps> = props => {
   const { isOpen, actionType, teamId } = props;
   const history = useHistory();
-  const dispatch = useAppDispatch();
-  const { myInvites, myInvitesFetched, numOfActiveFetches } = useAppSelector(state => state.gfwTeams);
   const intl = useIntl();
+  const userId = useGetUserId();
   const [isLoading, setIsLoading] = useState(false);
+
+  /* Queries */
+  const { httpAuthHeader } = useAccessToken();
+  // Get all the User's Team Invites
+  const { data: userTeamInvites, isLoading: isTeamInvitesLoading } = useGetTeamInvites();
+
+  /* Mutations */
+  // Accept Team Invitation
+  const { mutateAsync: acceptTeamInvite } = usePatchV3GfwTeamsTeamIdUsersUserIdAccept();
+  const { mutateAsync: declineTeamInvite } = usePatchV3GfwTeamsTeamIdUsersUserIdDecline();
 
   const close = useCallback(() => {
     history.push(`/teams/invitations`);
   }, [history]);
-
-  // Close modal with teamId or actionType is invalid
 
   useEffect(() => {
     // Close the modal if teamId isn't present in the team invites
     // Or the user has no invites when they're trying to "accept all"
     if (
       isOpen &&
-      myInvitesFetched &&
-      ((myInvites.length && teamId !== "all" && !myInvites.find(invite => invite.id === teamId)) || !myInvites.length)
+      !isTeamInvitesLoading &&
+      ((userTeamInvites?.length && teamId !== "all" && !userTeamInvites.find(invite => invite.id === teamId)) ||
+        !userTeamInvites?.length)
     ) {
       toastr.warning(intl.formatMessage({ id: "teams.invitation.invalid" }), "");
       close();
     }
-  }, [actionType, close, history, intl, isOpen, myInvites, myInvitesFetched, teamId]);
+  }, [close, intl, isOpen, isTeamInvitesLoading, teamId, userTeamInvites]);
 
   const config = teamId === "all" && actionType === "accept" ? CONFIG["acceptAll"] : CONFIG[actionType];
 
-  const acceptTeamInvite = async () => {
+  const handleConfirm = async () => {
+    if (!userTeamInvites) return; // Should never get here
+
     setIsLoading(true);
     try {
       if (actionType === "accept" && teamId === "all") {
-        for (let i = 0; i < myInvites.length; i++) {
-          await teamService.acceptTeamInvite(myInvites[i].id);
+        for (let i = 0; i < userTeamInvites.length; i++) {
+          await acceptTeamInvite({ headers: httpAuthHeader, pathParams: { teamId: userTeamInvites[i].id!, userId } });
         }
       } else if (actionType === "accept") {
-        await teamService.acceptTeamInvite(teamId);
+        await acceptTeamInvite({ headers: httpAuthHeader, pathParams: { teamId, userId } });
       } else if (actionType === "decline") {
-        await teamService.declineTeamInvite(teamId);
+        await declineTeamInvite({ headers: httpAuthHeader, pathParams: { teamId, userId } });
       }
 
       close();
-      dispatch(getMyTeamInvites());
       toastr.success(intl.formatMessage({ id: config.successMessage }), "");
     } catch (e: any) {
       const error = JSON.parse(e.message) as TErrorResponse;
@@ -108,11 +121,11 @@ const RemoveTeamMemberModal: FC<IProps> = props => {
       title={config.title}
       onClose={close}
       actions={[
-        { name: config.confirmBtn, onClick: acceptTeamInvite },
+        { name: config.confirmBtn, onClick: handleConfirm },
         { name: config.cancelBtn, variant: "secondary", onClick: close }
       ]}
     >
-      <Loader isLoading={isLoading || numOfActiveFetches > 0} />
+      <Loader isLoading={isLoading || isTeamInvitesLoading} />
       <p>
         <FormattedMessage id={config.body} />
       </p>

@@ -5,7 +5,7 @@ import Areas from "pages/areas/AreasContainer";
 import AreasManage from "pages/area-view/AreaViewContainer";
 import AreaEdit from "pages/area-edit/AreaEditContainer";
 import Teams from "pages/teams/Teams";
-import TeamsInvitations from "pages/teams/invitation/InvitationContainer";
+import TeamsInvitations from "pages/teams/invitation/Invitation";
 import TeamDetail from "pages/teams-detail/TeamDetail";
 import Reports from "pages/reports/Reports";
 import Login from "pages/login/Login";

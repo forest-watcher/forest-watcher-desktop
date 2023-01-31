@@ -5,7 +5,6 @@ import { FC, useMemo } from "react";
 import FormModal from "components/modals/FormModal";
 import { UnpackNestedValue } from "react-hook-form";
 import { useHistory } from "react-router-dom";
-import { teamService } from "services/teams";
 import { toastr } from "react-redux-toastr";
 import { useIntl } from "react-intl";
 import yup from "configureYup";
