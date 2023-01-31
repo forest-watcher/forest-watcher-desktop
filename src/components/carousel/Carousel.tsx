@@ -105,38 +105,40 @@ const Carousel = ({ slides, downloadable }: CarouselProps) => {
             ))}
           </div>
         </div>
-        <div className="relative">
-          <Button
-            className="absolute -left-14 top-1/2 u-translate-y-half"
-            disabled={!prevBtnEnabled}
-            onClick={scrollPrev}
-            isIcon
-            aria-label={intl.formatMessage({ id: "common.previous" })}
-          >
-            <Icon name="ChevronLeft" size={36} />
-          </Button>
-          <div className="overflow-hidden" ref={thumbViewportRef}>
-            <div className="flex gap-4">
-              {slides.map((src, index) => (
-                <CarouselThumb
-                  onClick={() => onThumbClick(index)}
-                  selected={index === selectedIndex}
-                  imgSrc={src}
-                  key={index}
-                />
-              ))}
+        {slides.length > 1 && (
+          <div className="relative">
+            <Button
+              className="absolute -left-14 top-1/2 u-translate-y-half"
+              disabled={!prevBtnEnabled}
+              onClick={scrollPrev}
+              isIcon
+              aria-label={intl.formatMessage({ id: "common.previous" })}
+            >
+              <Icon name="ChevronLeft" size={36} />
+            </Button>
+            <div className="overflow-hidden" ref={thumbViewportRef}>
+              <div className="flex gap-4">
+                {slides.map((src, index) => (
+                  <CarouselThumb
+                    onClick={() => onThumbClick(index)}
+                    selected={index === selectedIndex}
+                    imgSrc={src}
+                    key={index}
+                  />
+                ))}
+              </div>
             </div>
+            <Button
+              className="absolute -right-14 top-1/2 u-translate-y-half"
+              disabled={!nextBtnEnabled}
+              onClick={scrollNext}
+              isIcon
+              aria-label={intl.formatMessage({ id: "common.next" })}
+            >
+              <Icon name="ChevronRight" size={36} />
+            </Button>
           </div>
-          <Button
-            className="absolute -right-14 top-1/2 u-translate-y-half"
-            disabled={!nextBtnEnabled}
-            onClick={scrollNext}
-            isIcon
-            aria-label={intl.formatMessage({ id: "common.next" })}
-          >
-            <Icon name="ChevronRight" size={36} />
-          </Button>
-        </div>
+        )}
       </div>
     </>
   );
