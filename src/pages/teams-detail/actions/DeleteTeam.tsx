@@ -38,7 +38,7 @@ const DeleteTeam: FC<IProps> = props => {
       await deleteTeamTeamId({ headers: httpAuthHeader, pathParams: { teamId } });
 
       // Ensure the Team Listing and Team Details caches are invalidated, forcing a re-fetched
-      await invalidateGetUserTeams(teamId);
+      await invalidateGetUserTeams();
 
       history.push("/teams");
       toastr.success(intl.formatMessage({ id: "teams.delete.success" }), "");
