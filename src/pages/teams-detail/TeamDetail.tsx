@@ -1,6 +1,5 @@
-import { useGetV3GfwTeamsTeamId } from "generated/core/coreComponents";
 import { TeamMemberModel } from "generated/core/coreSchemas";
-import { useAccessToken } from "hooks/useAccessToken";
+import useGetTeamDetails from "hooks/querys/teams/useGetTeamDetails";
 import { FC, useEffect, useMemo } from "react";
 import { RouteComponentProps, useHistory, Link, useParams } from "react-router-dom";
 import { toastr } from "react-redux-toastr";
@@ -80,13 +79,7 @@ const TeamDetail: FC<IProps> = props => {
   } = useGetAreas();
 
   /* Queries */
-  const { httpAuthHeader } = useAccessToken();
-  const { data: { data: team } = {}, isLoading: isTeamLoading } = useGetV3GfwTeamsTeamId({
-    pathParams: {
-      teamId
-    },
-    headers: httpAuthHeader
-  });
+  const { data: team, isLoading: isTeamLoading } = useGetTeamDetails(teamId);
 
   const teamAreas = useMemo(() => {
     if (!areasByTeam) {

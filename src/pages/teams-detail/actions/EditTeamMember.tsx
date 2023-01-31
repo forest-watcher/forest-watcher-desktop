@@ -1,3 +1,8 @@
+import {
+  usePatchV3GfwTeamsTeamIdUsersReassignAdminUserId,
+  usePatchV3GfwTeamsTeamIdUsersTeamMemberRelationId
+} from "generated/core/coreComponents";
+import useGetTeamDetails from "hooks/querys/teams/useGetTeamDetails";
 import { useInvalidateGetUserTeams } from "hooks/querys/teams/useGetUserTeams";
 import { FC, useCallback, useEffect, useState } from "react";
 import Modal from "components/ui/Modal/Modal";
@@ -7,8 +12,6 @@ import { useHistory, useParams } from "react-router-dom";
 import { teamService } from "services/teams";
 import { toastr } from "react-redux-toastr";
 import { FormattedMessage, useIntl } from "react-intl";
-import { useAppDispatch, useAppSelector } from "hooks/useRedux";
-import { getTeamMembers } from "modules/gfwTeams";
 import { TErrorResponse } from "constants/api";
 
 type TParams = TTeamDetailParams & {
@@ -24,11 +27,19 @@ const EditMemberRoleModal: FC<IProps> = props => {
   const { isOpen } = props;
   const { teamId, memberRole, memberId } = useParams<TParams>();
   const intl = useIntl();
-  const dispatch = useAppDispatch();
-  const members = useAppSelector(state => state.gfwTeams.members[teamId]);
   const history = useHistory();
   const [isSave, setIsSaving] = useState(false);
+
+  /* Queries */
+  // ToDo: change this to the get members util hook
+  const { data: team, isLoading: isTeamLoading } = useGetTeamDetails(teamId);
   const invalidateGetUserTeams = useInvalidateGetUserTeams();
+
+  /* Mutations */
+  // Update a Team Member's Role
+  const { mutateAsync: updateTeamMemberRole } = usePatchV3GfwTeamsTeamIdUsersTeamMemberRelationId();
+  // Reassign Team Administrator
+  const { mutateAsync: reassignTeamAdmin } = usePatchV3GfwTeamsTeamIdUsersReassignAdminUserId();
 
   const close = useCallback(() => {
     history.push(`/teams/${teamId}`);
@@ -40,28 +51,27 @@ const EditMemberRoleModal: FC<IProps> = props => {
       close();
     }
     // Close the modal if the member id isn't present on team
-    if (
-      isOpen &&
-      members &&
-      !members.some(m => m.id === memberId) &&
-      !members.some(m => m.attributes.userId === memberId)
-    ) {
+    if (isOpen && !isTeamLoading && !team?.attributes?.members?.some(m => m.userId === memberId)) {
       toastr.warning(intl.formatMessage({ id: "teams.member.invalid" }), "");
       close();
     }
-  }, [history, memberRole, isOpen, teamId, members, memberId, close, intl]);
+  }, [close, intl, isOpen, isTeamLoading, memberId, memberRole, team]);
 
   const editTeamMember = async () => {
     setIsSaving(true);
     try {
       if (memberRole !== "admin") {
-        await teamService.updateTeamMember({ teamId, teamUserId: memberId }, { role: memberRole });
+        await updateTeamMemberRole({
+          pathParams: { teamId, teamMemberRelationId: memberId },
+          body: { role: memberRole }
+        });
       } else {
-        await teamService.reassignAdmin({ teamId, userId: memberId });
+        await reassignTeamAdmin({ pathParams: { teamId, userId: memberId } });
       }
-      await invalidateGetUserTeams();
-      // Refetch the Team members
-      dispatch(getTeamMembers(teamId));
+
+      // Ensure the Team Listing and Team Details caches are invalidated, forcing a re-fetched
+      await invalidateGetUserTeams(teamId);
+
       close();
       toastr.success(intl.formatMessage({ id: "teams.change.member.success" }), "");
     } catch (e: any) {
