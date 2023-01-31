@@ -65,6 +65,7 @@ const TeamDetail: FC<IProps> = props => {
     isDeletingTeam = false,
     isDeletingTeamArea = false
   } = props;
+
   const location = useLocation();
   const { teamId } = useParams<{ teamId: string }>();
   const history = useHistory();

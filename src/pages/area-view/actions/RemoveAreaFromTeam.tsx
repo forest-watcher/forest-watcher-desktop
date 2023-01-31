@@ -1,4 +1,6 @@
+import { useDeleteV3GfwArearelationsTeams } from "generated/core/coreComponents";
 import { useInvalidateGetUserTeams } from "hooks/querys/teams/useGetUserTeams";
+import { useAccessToken } from "hooks/useAccessToken";
 import { FC, useCallback, useState } from "react";
 import Modal from "components/ui/Modal/Modal";
 import Loader from "components/ui/Loader";
@@ -6,10 +8,7 @@ import { useHistory, useParams } from "react-router-dom";
 import { TParams as TAreaDetailParams } from "../AreaView";
 import { toastr } from "react-redux-toastr";
 import { TErrorResponse } from "constants/api";
-import { useAppDispatch } from "hooks/useRedux";
 import { FormattedMessage, useIntl } from "react-intl";
-import { areaService } from "services/area";
-import { getAreasInUsersTeams } from "modules/areas";
 
 type TParams = TAreaDetailParams & {
   teamId: string;
@@ -23,9 +22,13 @@ const RemoveAreaFromTeam: FC<IProps> = props => {
   const { teamId, areaId } = useParams<TParams>();
   const history = useHistory();
   const intl = useIntl();
-  const dispatch = useAppDispatch();
   const [isRemoving, setIsRemoving] = useState(false);
   const invalidateGetUserTeams = useInvalidateGetUserTeams();
+
+  /* Mutations */
+  const { httpAuthHeader } = useAccessToken();
+  // Remove Area-Team Relation
+  const { mutateAsync: removeAreaTeamRelation } = useDeleteV3GfwArearelationsTeams();
 
   const onClose = useCallback(() => {
     history.goBack();
@@ -34,10 +37,11 @@ const RemoveAreaFromTeam: FC<IProps> = props => {
   const removeTeam = async () => {
     setIsRemoving(true);
     try {
-      // ToDo: change to fw_core
-      await areaService.unassignTeamFromArea(areaId, teamId);
+      await removeAreaTeamRelation({ headers: httpAuthHeader, body: [{ areaId, teamId }] });
+
+      // ToDo: Invalidate Areas fetches?
       await invalidateGetUserTeams();
-      dispatch(getAreasInUsersTeams());
+
       onClose();
       toastr.success(intl.formatMessage({ id: "areas.details.teams.remove.success" }), "");
     } catch (e: any) {
