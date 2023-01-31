@@ -1,4 +1,6 @@
+import { usePostV3GfwTeams } from "generated/core/coreComponents";
 import { useInvalidateGetUserTeams } from "hooks/querys/teams/useGetUserTeams";
+import { useAccessToken } from "hooks/useAccessToken";
 import { FC, useMemo } from "react";
 import FormModal from "components/modals/FormModal";
 import { UnpackNestedValue } from "react-hook-form";
@@ -35,18 +37,22 @@ const CreateTeamModal: FC<IProps> = props => {
   const invalidateGetUserTeams = useInvalidateGetUserTeams();
   const backTo = useMemo(() => urlQuery.get("backTo"), [urlQuery]);
 
+  /* Mutations */
+  const { httpAuthHeader } = useAccessToken();
+  // Create a New Team
+  const { mutateAsync: createTeam } = usePostV3GfwTeams();
+
   const onClose = () => {
     history.push(backTo || "/teams");
   };
 
   const onSave = async (data: UnpackNestedValue<TCreateTeamForm>) => {
     try {
-      // ToDo: use fw_core and invalidate teams fetch
-      const { data: newTeam } = await teamService.createTeam(data);
+      const { data: newTeam } = await createTeam({ headers: httpAuthHeader, body: data });
 
       await invalidateGetUserTeams();
 
-      history.push(backTo || `/teams/${newTeam.id}`);
+      history.push(backTo || `/teams/${newTeam?.id}`);
       toastr.success(intl.formatMessage({ id: "teams.create.success" }), "");
       fireGAEvent({
         category: "Teams",
