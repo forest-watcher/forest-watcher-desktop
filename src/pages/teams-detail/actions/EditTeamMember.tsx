@@ -51,7 +51,12 @@ const EditMemberRoleModal: FC<IProps> = props => {
       close();
     }
     // Close the modal if the member id isn't present on team
-    if (isOpen && !isTeamLoading && !team?.attributes?.members?.some(m => m.userId === memberId)) {
+    if (
+      isOpen &&
+      !isTeamLoading &&
+      // @ts-ignore `_id` not type check
+      !team?.attributes?.members?.some(m => m._id === memberId)
+    ) {
       toastr.warning(intl.formatMessage({ id: "teams.member.invalid" }), "");
       close();
     }
