@@ -4,6 +4,7 @@ import {
 } from "generated/core/coreComponents";
 import useGetTeamDetails from "hooks/querys/teams/useGetTeamDetails";
 import { useInvalidateGetUserTeams } from "hooks/querys/teams/useGetUserTeams";
+import { useAccessToken } from "hooks/useAccessToken";
 import { FC, useCallback, useEffect, useState } from "react";
 import Modal from "components/ui/Modal/Modal";
 import Loader from "components/ui/Loader";
@@ -36,6 +37,7 @@ const EditMemberRoleModal: FC<IProps> = props => {
   const invalidateGetUserTeams = useInvalidateGetUserTeams();
 
   /* Mutations */
+  const { httpAuthHeader } = useAccessToken();
   // Update a Team Member's Role
   const { mutateAsync: updateTeamMemberRole } = usePatchV3GfwTeamsTeamIdUsersTeamMemberRelationId();
   // Reassign Team Administrator
@@ -67,6 +69,7 @@ const EditMemberRoleModal: FC<IProps> = props => {
     try {
       if (memberRole !== "admin") {
         await updateTeamMemberRole({
+          headers: httpAuthHeader,
           pathParams: { teamId, teamMemberRelationId: memberId },
           body: { role: memberRole }
         });

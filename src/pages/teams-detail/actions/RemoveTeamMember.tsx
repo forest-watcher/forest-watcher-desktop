@@ -1,6 +1,7 @@
 import { useDeleteV3GfwTeamsTeamIdUsersTeamMemberRelationId } from "generated/core/coreComponents";
 import useGetTeamDetails from "hooks/querys/teams/useGetTeamDetails";
 import { useInvalidateGetUserTeams } from "hooks/querys/teams/useGetUserTeams";
+import { useAccessToken } from "hooks/useAccessToken";
 import { FC, useCallback, useEffect, useState } from "react";
 import Modal from "components/ui/Modal/Modal";
 import Loader from "components/ui/Loader";
@@ -31,6 +32,7 @@ const RemoveTeamMemberModal: FC<IProps> = props => {
   const invalidateGetUserTeams = useInvalidateGetUserTeams();
 
   /* Mutations */
+  const { httpAuthHeader } = useAccessToken();
   // Removed the team member from the team
   const { mutateAsync: deleteTeamMember } = useDeleteV3GfwTeamsTeamIdUsersTeamMemberRelationId();
 
@@ -54,7 +56,7 @@ const RemoveTeamMemberModal: FC<IProps> = props => {
   const removeTeamMember = async () => {
     setIsRemoving(true);
     try {
-      await deleteTeamMember({ pathParams: { teamId, teamMemberRelationId: memberId } });
+      await deleteTeamMember({ headers: httpAuthHeader, pathParams: { teamId, teamMemberRelationId: memberId } });
 
       // Ensure the Team Listing and Team Details caches are invalidated, forcing a re-fetched
       await invalidateGetUserTeams(teamId);

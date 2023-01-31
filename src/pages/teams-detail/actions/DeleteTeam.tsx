@@ -1,12 +1,13 @@
+import { useDeleteV3GfwTeamsTeamId } from "generated/core/coreComponents";
 import { useInvalidateGetUserTeams } from "hooks/querys/teams/useGetUserTeams";
+import { useAccessToken } from "hooks/useAccessToken";
 import { FC, useState } from "react";
 import Modal from "components/ui/Modal/Modal";
 import { useHistory } from "react-router-dom";
-import { teamService } from "services/teams";
 import { toastr } from "react-redux-toastr";
 import Loader from "components/ui/Loader";
 import { FormattedMessage, useIntl } from "react-intl";
-import { TErrorResponse } from "../../../constants/api";
+import { TErrorResponse } from "constants/api";
 import { fireGAEvent } from "helpers/analytics";
 import { TeamActions, TeamLabels } from "types/analytics";
 
@@ -22,6 +23,11 @@ const DeleteTeam: FC<IProps> = props => {
   const [isDeleting, setIsDeleting] = useState(false);
   const invalidateGetUserTeams = useInvalidateGetUserTeams();
 
+  /* Mutations */
+  const { httpAuthHeader } = useAccessToken();
+  // Delete a Team
+  const { mutateAsync: deleteTeamTeamId } = useDeleteV3GfwTeamsTeamId();
+
   const close = () => {
     history.push(`/teams/${teamId}`);
   };
@@ -29,8 +35,11 @@ const DeleteTeam: FC<IProps> = props => {
   const deleteTeam = async () => {
     setIsDeleting(true);
     try {
-      await teamService.deleteTeam(teamId);
-      await invalidateGetUserTeams();
+      await deleteTeamTeamId({ headers: httpAuthHeader, pathParams: { teamId } });
+
+      // Ensure the Team Listing and Team Details caches are invalidated, forcing a re-fetched
+      await invalidateGetUserTeams(teamId);
+
       history.push("/teams");
       toastr.success(intl.formatMessage({ id: "teams.delete.success" }), "");
       fireGAEvent({

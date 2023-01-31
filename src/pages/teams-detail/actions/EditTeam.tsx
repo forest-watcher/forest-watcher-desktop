@@ -1,5 +1,6 @@
 import { usePatchV3GfwTeamsTeamId } from "generated/core/coreComponents";
 import { useInvalidateGetUserTeams } from "hooks/querys/teams/useGetUserTeams";
+import { useAccessToken } from "hooks/useAccessToken";
 import { FC } from "react";
 import FormModal from "components/modals/FormModal";
 import { useHistory, useParams } from "react-router-dom";
@@ -34,6 +35,7 @@ const EditTeamModal: FC<IProps> = props => {
   const invalidateGetUserTeams = useInvalidateGetUserTeams();
 
   /* Mutations */
+  const { httpAuthHeader } = useAccessToken();
   // Update a Team Name
   const { mutateAsync: updateTeamName } = usePatchV3GfwTeamsTeamId();
 
@@ -43,9 +45,10 @@ const EditTeamModal: FC<IProps> = props => {
 
   const onSave = async (data: UnpackNestedValue<TEditTeamForm>) => {
     try {
-      await updateTeamName({ pathParams: { teamId }, body: data });
+      await updateTeamName({ headers: httpAuthHeader, pathParams: { teamId }, body: data });
 
-      await invalidateGetUserTeams();
+      // Ensure the Team Listing and Team Details caches are invalidated, forcing a re-fetched
+      await invalidateGetUserTeams(teamId);
 
       toastr.success(intl.formatMessage({ id: "teams.edit.success" }), "");
       onClose();
