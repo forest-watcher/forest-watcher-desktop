@@ -71,7 +71,11 @@ const TemplateQuestion = ({ question, defaultLanguage, getConditional }: Templat
             <h4 className="uppercase font-[500] text-neutral-700 pb-2">
               <FormattedMessage id={"template.edit.maxNumber"} />
             </h4>
-            <p className="text-base capitalize">{question.maxImageCount}</p>
+            {/*
+             * We use 5 as the default because Mobile also sets 5 if image count is not provided
+             * This can happen on old templates that were created before we allowed multiple image uploads.
+             */}
+            <p className="text-base capitalize">{question.maxImageCount ?? 5}</p>
           </div>
         </OptionalWrapper>
 
