@@ -177,19 +177,22 @@ const Assignment: FC = props => {
               <DetailCard
                 icon={assignmentIcons.templates}
                 title={intl.formatMessage({ id: "assignment.details.templates" })}
-                text={templates}
+                text={templates || intl.formatMessage({ id: "assignment.details.noTemplates" })}
                 shouldCollapse
               />
               <DetailCard
                 icon={assignmentIcons.monitor}
                 title={intl.formatMessage({ id: "assignment.details.monitor" })}
-                text={data?.data?.attributes?.monitorNames?.map(monitor => monitor.name).join(", ")}
+                text={
+                  data?.data?.attributes?.monitorNames?.map(monitor => monitor.name).join(", ") ||
+                  intl.formatMessage({ id: "assignment.details.noMonitors" })
+                }
                 shouldCollapse
               />
               <DetailCard
                 icon={assignmentIcons.notes}
                 title={intl.formatMessage({ id: "assignment.details.notes" })}
-                text={data?.data?.attributes?.notes}
+                text={data?.data?.attributes?.notes || intl.formatMessage({ id: "assignment.details.noNotes" })}
                 shouldCollapse
               />
             </div>
