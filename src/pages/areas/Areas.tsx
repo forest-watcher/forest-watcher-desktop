@@ -1,4 +1,9 @@
+import { useQueries } from "@tanstack/react-query";
+import { fetchGetV3GfwTeamsTeamIdUsers } from "generated/core/coreComponents";
+import { useCoreContext } from "generated/core/coreContext";
+import * as Responses from "generated/core/coreResponses";
 import useGetAllReportAnswersForUser from "hooks/querys/reportAnwsers/useGetAllReportAnswersForUser";
+import { useAccessToken } from "hooks/useAccessToken";
 import { FC, useMemo, useState, Fragment, useCallback, useEffect } from "react";
 import Hero from "components/layouts/Hero/Hero";
 import Article from "components/layouts/Article";
@@ -31,7 +36,6 @@ interface IProps extends TPropsFromRedux {
 }
 
 const Areas: FC<IProps> = props => {
-  const { teamMembers, getTeamMembers } = props;
   const {
     data: { userAreas, areasByTeam, unfilteredAreas, getTeamNamesByAreaId },
     isLoading
@@ -47,9 +51,42 @@ const Areas: FC<IProps> = props => {
   const [currentBoundsStr, setCurrentBoundsStr] = useState("");
 
   /*
-   * Queries - Fetch all Report Answers
+   * Queries
    */
+  const { httpAuthHeader } = useAccessToken();
+  const { queryKeyFn } = useCoreContext();
+  // Fetch all Report Answers
   const { data: allAnswers } = useGetAllReportAnswersForUser();
+  // Fetch all the Team members for each Team Area
+  const teamMembers = useQueries<Responses.TeamMembersResponse[]>({
+    // ToDo: don't fetch if area.team.id is falsy
+    queries: areasByTeam.map(area => ({
+      queryKey: queryKeyFn({
+        path: "/v3/gfw/teams/{teamId}/users",
+        operationId: "getV3GfwTeamsTeamIdUsers",
+        // @ts-ignore ignore types here
+        variables: { pathParams: { teamId: area.team.id } }
+      }),
+      queryFn: async ({ signal }) => {
+        const res = await fetchGetV3GfwTeamsTeamIdUsers(
+          {
+            headers: httpAuthHeader,
+            pathParams: {
+              // @ts-ignore ignore types here
+              teamId: area.team.id
+            }
+          },
+          signal
+        );
+
+        return {
+          // @ts-ignore ignore types here
+          teamId: area.team.id,
+          adminName: res.data?.find(member => member.attributes?.role === "administrator")?.attributes?.name
+        };
+      }
+    }))
+  });
 
   const answersBySelectedArea = useMemo(() => {
     return allAnswers?.filter(
@@ -106,13 +143,6 @@ const Areas: FC<IProps> = props => {
       mapRef?.off("idle", onIdleHandler);
     };
   }, [mapRef]);
-
-  useEffect(() => {
-    areasByTeam.forEach(({ team }) => {
-      // @ts-ignore incorrect typings
-      team?.id && getTeamMembers(team?.id);
-    });
-  }, [areasByTeam, getTeamMembers]);
 
   return (
     <div className="c-areas">
@@ -248,9 +278,7 @@ const Areas: FC<IProps> = props => {
                                   // @ts-ignore
                                   areasInTeam?.team?.id &&
                                   // @ts-ignore
-                                  teamMembers?.[areasInTeam?.team?.id]?.find(
-                                    member => member.attributes.role === "administrator"
-                                  )?.attributes?.name
+                                  teamMembers?.find(team => team.data?.teamId === areasInTeam?.team?.id)?.data.adminName
                               }}
                             />
                           ))}
