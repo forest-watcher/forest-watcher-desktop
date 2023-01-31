@@ -1,4 +1,6 @@
+import { usePostV3GfwTeamsTeamIdUsers } from "generated/core/coreComponents";
 import { useInvalidateGetUserTeams } from "hooks/querys/teams/useGetUserTeams";
+import { useAccessToken } from "hooks/useAccessToken";
 import { FC, useEffect } from "react";
 import FormModal from "components/modals/FormModal";
 import { useHistory, useParams } from "react-router-dom";
@@ -6,11 +8,8 @@ import { TParams as TTeamDetailParams } from "../TeamDetail";
 import { yupResolver } from "@hookform/resolvers/yup";
 import yup from "configureYup";
 import { useIntl } from "react-intl";
-import { teamService } from "services/teams";
-import { getTeamMembers } from "modules/gfwTeams";
 import { toastr } from "react-redux-toastr";
 import { UnpackNestedValue } from "react-hook-form";
-import { useAppDispatch } from "hooks/useRedux";
 import { TErrorResponse } from "constants/api";
 import { fireGAEvent } from "helpers/analytics";
 import { TeamActions, TeamLabels } from "types/analytics";
@@ -39,7 +38,10 @@ const AddTeamMemberModal: FC<IProps> = props => {
   const { teamId, memberRole } = useParams<TParams>();
   const intl = useIntl();
   const history = useHistory();
-  const dispatch = useAppDispatch();
+
+  /* Mutations */
+  const { httpAuthHeader } = useAccessToken();
+  const { mutateAsync: addTeamMembers } = usePostV3GfwTeamsTeamIdUsers();
   const invalidateGetUserTeams = useInvalidateGetUserTeams();
 
   useEffect(() => {
@@ -55,8 +57,12 @@ const AddTeamMemberModal: FC<IProps> = props => {
 
   const onSave = async (data: UnpackNestedValue<TAddTeamMemberForm>) => {
     try {
-      await teamService.addTeamMembers(teamId, {
-        users: [
+      await addTeamMembers({
+        headers: httpAuthHeader,
+        pathParams: {
+          teamId
+        },
+        body: [
           {
             email: data.email,
             role: memberRole
@@ -64,10 +70,9 @@ const AddTeamMemberModal: FC<IProps> = props => {
         ]
       });
 
-      await invalidateGetUserTeams();
+      // Ensure the Team Listing and Team Details caches are invalidated, forcing a re-fetched
+      await invalidateGetUserTeams(teamId);
 
-      // Refetch the Team members
-      dispatch(getTeamMembers(teamId));
       toastr.success(intl.formatMessage({ id: "teams.details.add.member.success" }), "");
       fireGAEvent({
         category: "Teams",

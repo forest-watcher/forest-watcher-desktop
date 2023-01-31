@@ -31,7 +31,11 @@ export const useInvalidateGetUserTeams = () => {
 
   const userId = useGetUserId();
 
-  return async () =>
+  /**
+   * Invalidate the GetV3GfwTeamsUserUserId cache
+   * If a teamId is passed, invalidate the GetV3GfwTeamsTeamId cache too
+   */
+  return async (teamId?: string) => {
     await queryClient.invalidateQueries(
       queryKeyFn({
         path: "/v3/gfw/teams/user/{userId}",
@@ -43,6 +47,21 @@ export const useInvalidateGetUserTeams = () => {
         }
       })
     );
+
+    if (teamId) {
+      await queryClient.invalidateQueries(
+        queryKeyFn({
+          path: "/v3/gfw/teams/{teamId}",
+          operationId: "getV3GfwTeamsTeamId",
+          variables: {
+            pathParams: {
+              teamId
+            }
+          }
+        })
+      );
+    }
+  };
 };
 
 export default useGetUserTeams;
