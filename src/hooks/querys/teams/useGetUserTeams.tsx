@@ -3,6 +3,7 @@ import { useGetV3GfwTeamsUserUserId } from "generated/core/coreComponents";
 import { useCoreContext } from "generated/core/coreContext";
 import { useAccessToken } from "hooks/useAccessToken";
 import useGetUserId from "hooks/useGetUserId";
+import { useMemo } from "react";
 
 const useGetUserTeams = () => {
   const userId = useGetUserId();
@@ -21,8 +22,31 @@ const useGetUserTeams = () => {
     }
   );
 
+  /**
+   * Find all the Teams the current logged-in user manages
+   * If the user is either an "administrator" or "manager", they are considered as a manager
+   */
+  const managedTeams = useMemo(
+    () =>
+      data?.data?.filter(
+        team => team.attributes?.userRole === "administrator" || team.attributes?.userRole === "manager"
+      ) || [],
+    [data]
+  );
+
+  /**
+   * Find all the teams the current logged-in user is a member of but not a manager
+   */
+  const joinedTeams = useMemo(
+    () =>
+      data?.data?.filter(
+        team => team.attributes?.userRole !== "administrator" && team.attributes?.userRole !== "manager"
+      ) || [],
+    [data]
+  );
+
   // Remove nested data property
-  return { data: data?.data, ...rest };
+  return { data: data?.data, managedTeams, joinedTeams, ...rest };
 };
 
 export const useInvalidateGetUserTeams = () => {

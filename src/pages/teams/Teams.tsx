@@ -1,7 +1,7 @@
 import OptionalWrapper from "components/extensive/OptionalWrapper";
 import useGetTeamInvites from "hooks/querys/teams/useGetTeamInvites";
 import useGetUserTeams from "hooks/querys/teams/useGetUserTeams";
-import { FC, useMemo } from "react";
+import { FC } from "react";
 import { RouteComponentProps, Link } from "react-router-dom";
 import EmptyState from "components/ui/EmptyState/EmptyState";
 import Hero from "components/layouts/Hero/Hero";
@@ -27,26 +27,9 @@ const Teams: FC<IProps> = props => {
 
   /* Queries */
   // Get all the User's Teams
-  const { data: userTeams, isLoading } = useGetUserTeams();
+  const { data: userTeams, managedTeams, joinedTeams, isLoading } = useGetUserTeams();
   // Get all the User's Team Invites
   const { data: userTeamInvites } = useGetTeamInvites();
-
-  // ToDo: use Hook for these two filters
-  const managedTeams = useMemo(
-    () =>
-      userTeams?.filter(
-        team => team.attributes?.userRole === "administrator" || team.attributes?.userRole === "manager"
-      ) || [],
-    [userTeams]
-  );
-
-  const joinedTeams = useMemo(
-    () =>
-      userTeams?.filter(
-        team => team.attributes?.userRole !== "administrator" && team.attributes?.userRole !== "manager"
-      ) || [],
-    [userTeams]
-  );
 
   return (
     <div className="relative">
