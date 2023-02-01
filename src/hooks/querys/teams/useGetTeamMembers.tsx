@@ -9,10 +9,25 @@ export type TeamMembersWithTeamIdResponse = {
   teamId: string;
 };
 
+/**
+ * A hook for fetching team members for each teamId passed
+ * @param teamIds
+ * @return useQueries<TeamMembersWithTeamIdResponse[]>
+ * @link https://tanstack.com/query/v4/docs/react/reference/useQueries
+ */
 const useGetTeamMembers = (teamIds: string[]) => {
   const { httpAuthHeader } = useAccessToken();
   const { queryKeyFn } = useCoreContext();
 
+  /**
+   * Curry function which returns a Promise which fetches GetV3GfwTeamsTeamIdUsers from fw_core
+   * The API doesn't return which teamId the members are associated with
+   * This function acts as a wrapper for the generated `fetchGetV3GfwTeamsTeamIdUsers` function,
+   * adding an extra property for `teamId`
+   * See `TeamMembersWithTeamIdResponse` type above
+   * @param teamId
+   * @return Promise<TeamMembersWithTeamIdResponse>
+   */
   const fetchTeamMembers = (teamId: string) => async (): Promise<TeamMembersWithTeamIdResponse> => {
     const res = await fetchGetV3GfwTeamsTeamIdUsers({
       headers: httpAuthHeader,

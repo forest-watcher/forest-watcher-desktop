@@ -8,7 +8,6 @@ import { FormattedMessage, useIntl } from "react-intl";
 import ReactGA from "react-ga";
 import EmptyState from "components/ui/EmptyState/EmptyState";
 import PlusIcon from "assets/images/icons/PlusWhite.svg";
-import { TPropsFromRedux } from "./AreasContainer";
 import AreaCard from "components/area-card/AreaCard";
 import UserAreasMap from "components/user-areas-map/UserAreasMap";
 import AreaDetailCard from "components/ui/Map/components/cards/AreaDetail";
@@ -27,9 +26,7 @@ import AreasOnboarding from "components/onboarding/monitoring/AreasOnboarding";
 import useGetAreas from "hooks/querys/areas/useGetAreas";
 import { AreaResponse } from "generated/core/coreResponses";
 
-interface IProps extends TPropsFromRedux {
-  getTeamMembers: (teamId: string) => void;
-}
+interface IProps {}
 
 const Areas: FC<IProps> = props => {
   const {
@@ -65,8 +62,6 @@ const Areas: FC<IProps> = props => {
       if (isLoading || isError || !team.teamId) {
         return acc;
       }
-
-      console.log("OE");
 
       acc[team.teamId] =
         team.members?.find(member => member.attributes?.role === "administrator")?.attributes?.name || "";
