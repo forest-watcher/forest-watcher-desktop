@@ -31,7 +31,6 @@ const EditMemberRoleModal: FC<IProps> = props => {
   const [isSave, setIsSaving] = useState(false);
 
   /* Queries */
-  // ToDo: change this to the get members util hook
   const { data: team, isLoading: isTeamLoading } = useGetTeamDetails(teamId);
   const invalidateGetUserTeams = useInvalidateGetUserTeams();
 
