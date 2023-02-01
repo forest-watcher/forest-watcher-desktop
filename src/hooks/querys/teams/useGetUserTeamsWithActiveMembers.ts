@@ -4,6 +4,7 @@ import { useAccessToken } from "hooks/useAccessToken";
 import useGetUserId from "hooks/useGetUserId";
 import { useMemo } from "react";
 
+// ToDo: move this is the Get User Teams hook
 const useGetUserTeamsWithActiveMembers = ({ shouldExcludeUser = true } = {}) => {
   const { httpAuthHeader } = useAccessToken();
   const userId = useGetUserId();
