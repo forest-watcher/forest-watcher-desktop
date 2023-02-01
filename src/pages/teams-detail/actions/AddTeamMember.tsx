@@ -1,4 +1,4 @@
-import { usePostV3GfwTeamsTeamIdUsers } from "generated/core/coreComponents";
+import { PostV3GfwTeamsTeamIdUsersError, usePostV3GfwTeamsTeamIdUsers } from "generated/core/coreComponents";
 import { useInvalidateGetUserTeams } from "hooks/querys/teams/useGetUserTeams";
 import { useAccessToken } from "hooks/useAccessToken";
 import { FC, useEffect } from "react";
@@ -10,7 +10,6 @@ import yup from "configureYup";
 import { useIntl } from "react-intl";
 import { toastr } from "react-redux-toastr";
 import { UnpackNestedValue } from "react-hook-form";
-import { TErrorResponse } from "constants/api";
 import { fireGAEvent } from "helpers/analytics";
 import { TeamActions, TeamLabels } from "types/analytics";
 
@@ -81,12 +80,12 @@ const AddTeamMemberModal: FC<IProps> = props => {
       });
       onClose();
     } catch (e: any) {
-      const error = JSON.parse(e.message) as TErrorResponse;
+      const error = e as PostV3GfwTeamsTeamIdUsersError;
       toastr.error(
         intl.formatMessage({ id: "teams.details.add.member.error" }),
-        error?.errors?.length ? error.errors[0].detail : ""
+        typeof error.payload === "string" ? "" : error.payload.errors[0].detail
       );
-      console.error(e);
+      console.error(error);
     }
   };
 

@@ -1,4 +1,4 @@
-import { useDeleteV3GfwTeamsTeamId } from "generated/core/coreComponents";
+import { DeleteV3GfwTeamsTeamIdError, useDeleteV3GfwTeamsTeamId } from "generated/core/coreComponents";
 import { useInvalidateGetUserTeams } from "hooks/querys/teams/useGetUserTeams";
 import { useAccessToken } from "hooks/useAccessToken";
 import { FC, useState } from "react";
@@ -7,7 +7,6 @@ import { useHistory } from "react-router-dom";
 import { toastr } from "react-redux-toastr";
 import Loader from "components/ui/Loader";
 import { FormattedMessage, useIntl } from "react-intl";
-import { TErrorResponse } from "constants/api";
 import { fireGAEvent } from "helpers/analytics";
 import { TeamActions, TeamLabels } from "types/analytics";
 
@@ -48,10 +47,10 @@ const DeleteTeam: FC<IProps> = props => {
         label: TeamLabels.DeletedTeam
       });
     } catch (e: any) {
-      const error = JSON.parse(e.message) as TErrorResponse;
+      const error = e as DeleteV3GfwTeamsTeamIdError;
       toastr.error(
         intl.formatMessage({ id: "teams.delete.error" }),
-        error?.errors?.length ? error.errors[0].detail : ""
+        typeof error.payload === "string" ? "" : error.payload.errors[0].detail
       );
       console.error(e);
     }

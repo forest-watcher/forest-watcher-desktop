@@ -1,4 +1,4 @@
-import { useDeleteV3GfwArearelationsTeams } from "generated/core/coreComponents";
+import { DeleteV3GfwArearelationsTeamsError, useDeleteV3GfwArearelationsTeams } from "generated/core/coreComponents";
 import { useInvalidateGetUserTeams } from "hooks/querys/teams/useGetUserTeams";
 import { useAccessToken } from "hooks/useAccessToken";
 import { FC, useCallback, useState } from "react";
@@ -7,7 +7,6 @@ import Loader from "components/ui/Loader";
 import { useHistory, useParams } from "react-router-dom";
 import { TParams as TAreaDetailParams } from "../AreaView";
 import { toastr } from "react-redux-toastr";
-import { TErrorResponse } from "constants/api";
 import { FormattedMessage, useIntl } from "react-intl";
 
 type TParams = TAreaDetailParams & {
@@ -45,10 +44,10 @@ const RemoveAreaFromTeam: FC<IProps> = props => {
       onClose();
       toastr.success(intl.formatMessage({ id: "areas.details.teams.remove.success" }), "");
     } catch (e: any) {
-      const error = JSON.parse(e.message) as TErrorResponse;
+      const error = e as DeleteV3GfwArearelationsTeamsError;
       toastr.error(
         intl.formatMessage({ id: "areas.details.teams.remove.error" }),
-        error?.errors?.length ? error.errors[0].detail : ""
+        typeof error.payload === "string" ? "" : error.payload.errors[0].detail
       );
       console.error(e);
     }

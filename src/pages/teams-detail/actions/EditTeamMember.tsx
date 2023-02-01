@@ -1,4 +1,5 @@
 import {
+  PatchV3GfwTeamsTeamIdUsersTeamMemberRelationIdError,
   usePatchV3GfwTeamsTeamIdUsersReassignAdminUserId,
   usePatchV3GfwTeamsTeamIdUsersTeamMemberRelationId
 } from "generated/core/coreComponents";
@@ -12,7 +13,6 @@ import { TParams as TTeamDetailParams } from "../TeamDetail";
 import { useHistory, useParams } from "react-router-dom";
 import { toastr } from "react-redux-toastr";
 import { FormattedMessage, useIntl } from "react-intl";
-import { TErrorResponse } from "constants/api";
 
 type TParams = TTeamDetailParams & {
   memberRole: "manager" | "monitor" | "admin";
@@ -82,10 +82,10 @@ const EditMemberRoleModal: FC<IProps> = props => {
       close();
       toastr.success(intl.formatMessage({ id: "teams.change.member.success" }), "");
     } catch (e: any) {
-      const error = JSON.parse(e.message) as TErrorResponse;
+      const error = e as PatchV3GfwTeamsTeamIdUsersTeamMemberRelationIdError;
       toastr.error(
         intl.formatMessage({ id: "teams.change.member.error" }),
-        error?.errors?.length ? error.errors[0].detail : ""
+        typeof error.payload === "string" ? "" : error.payload.errors[0].detail
       );
       console.error(e);
     }

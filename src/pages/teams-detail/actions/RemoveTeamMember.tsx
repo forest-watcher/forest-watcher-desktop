@@ -1,4 +1,7 @@
-import { useDeleteV3GfwTeamsTeamIdUsersTeamMemberRelationId } from "generated/core/coreComponents";
+import {
+  DeleteV3GfwTeamsTeamIdUsersTeamMemberRelationIdError,
+  useDeleteV3GfwTeamsTeamIdUsersTeamMemberRelationId
+} from "generated/core/coreComponents";
 import useGetTeamDetails from "hooks/querys/teams/useGetTeamDetails";
 import { useInvalidateGetUserTeams } from "hooks/querys/teams/useGetUserTeams";
 import { useAccessToken } from "hooks/useAccessToken";
@@ -8,7 +11,6 @@ import Loader from "components/ui/Loader";
 import { useHistory, useParams } from "react-router-dom";
 import { TParams as TTeamDetailParams } from "../TeamDetail";
 import { toastr } from "react-redux-toastr";
-import { TErrorResponse } from "constants/api";
 import { FormattedMessage, useIntl } from "react-intl";
 
 type TParams = TTeamDetailParams & {
@@ -64,10 +66,10 @@ const RemoveTeamMemberModal: FC<IProps> = props => {
       close();
       toastr.success(intl.formatMessage({ id: "teams.remove.member.success" }), "");
     } catch (e: any) {
-      const error = JSON.parse(e.message) as TErrorResponse;
+      const error = e as DeleteV3GfwTeamsTeamIdUsersTeamMemberRelationIdError;
       toastr.error(
         intl.formatMessage({ id: "teams.remove.member.error" }),
-        error?.errors?.length ? error.errors[0].detail : ""
+        typeof error.payload === "string" ? "" : error.payload.errors[0].detail
       );
       console.error(e);
     }
