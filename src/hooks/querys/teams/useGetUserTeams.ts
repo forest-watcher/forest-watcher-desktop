@@ -5,7 +5,7 @@ import { useAccessToken } from "hooks/useAccessToken";
 import useGetUserId from "hooks/useGetUserId";
 import { useMemo } from "react";
 
-const useGetUserTeams = () => {
+const useGetUserTeams = ({ enabled }: { enabled?: boolean } = {}) => {
   const userId = useGetUserId();
 
   const { httpAuthHeader } = useAccessToken();
@@ -17,7 +17,7 @@ const useGetUserTeams = () => {
       headers: httpAuthHeader
     },
     {
-      enabled: !!userId,
+      enabled: typeof enabled !== "undefined" ? enabled && !!userId : !!userId,
       staleTime: 1000 * 60 // 1 minutes
     }
   );

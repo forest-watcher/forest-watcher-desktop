@@ -1,10 +1,8 @@
+import useGetUserTeams from "hooks/querys/teams/useGetUserTeams";
 import LayersCard from "./LayersCard";
 import { Layers } from "generated/clayers/clayersResponses";
 import OptionalWrapper from "components/extensive/OptionalWrapper";
 import Article from "components/layouts/Article";
-import { useGetV3GfwTeamsUserUserId } from "generated/core/coreComponents";
-import useGetUserId from "hooks/useGetUserId";
-import { useAccessToken } from "hooks/useAccessToken";
 import List from "components/extensive/List";
 import { useMemo } from "react";
 
@@ -33,20 +31,14 @@ const LayersSection = ({
   type
 }: ILayersSectionProps) => {
   // Get teams if the type is teams
-  const userId = useGetUserId();
-  const { httpAuthHeader } = useAccessToken();
-
-  const { data: teams } = useGetV3GfwTeamsUserUserId(
-    { pathParams: { userId }, headers: httpAuthHeader },
-    { enabled: type === "TEAMS" }
-  );
+  const { data: teams } = useGetUserTeams({ enabled: type === "TEAMS" });
 
   const isTeams = type === "TEAMS";
-  const shouldShow = (isTeams && teams?.data && teams.data.length > 0) || !isTeams;
+  const shouldShow = (isTeams && teams && teams.length > 0) || !isTeams;
 
   const layersByTeam = useMemo(() => {
     const layers =
-      teams?.data?.map(team => {
+      teams?.map(team => {
         return {
           team,
           // @ts-ignore type incorrect
@@ -55,7 +47,7 @@ const LayersSection = ({
       }, []) || [];
 
     return layers;
-  }, [cardItems, teams?.data]);
+  }, [cardItems, teams]);
 
   return (
     <OptionalWrapper data={shouldShow}>
