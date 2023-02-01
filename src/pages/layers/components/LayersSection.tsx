@@ -14,7 +14,7 @@ export interface ILayersSection {
   cardTitle?: string;
   cardItems: Layers["data"];
   className?: string;
-  type: "PUBLIC" | "TEAMS";
+  type: "PUBLIC" | "TEAMS" | "USER";
 }
 
 interface ILayersSectionProps extends ILayersSection {
@@ -80,6 +80,7 @@ const LayersSection = ({
             items={cardItems}
             refetchLayers={refetchLayers}
             layersLoading={layersLoading}
+            type={type}
           />
         )}
       </Article>

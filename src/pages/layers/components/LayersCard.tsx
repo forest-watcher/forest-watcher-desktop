@@ -2,6 +2,7 @@ import List from "components/extensive/List";
 import { Layers } from "generated/clayers/clayersResponses";
 import {
   useDeleteV3ContextualLayerLayerId,
+  usePostContextualLayer,
   usePostV3ContextualLayerTeamTeamId
 } from "generated/clayers/clayersComponents";
 import LoadingWrapper from "components/extensive/LoadingWrapper";
@@ -20,6 +21,7 @@ import { Option } from "types";
 import { useAppSelector } from "hooks/useRedux";
 import { toastr } from "react-redux-toastr";
 import { RootState } from "store";
+import { ILayersSection } from "./LayersSection";
 
 type LayersCardProps = {
   title: string;
@@ -28,6 +30,7 @@ type LayersCardProps = {
   refetchLayers: () => void;
   layersLoading: boolean;
   team?: TeamResponse["data"];
+  type?: ILayersSection["type"];
 };
 
 type TAssignLayersForm = {
@@ -41,7 +44,7 @@ const addLayersSchema = yup
   })
   .required();
 
-const LayersCard = ({ title, items, refetchLayers, layersLoading, titleIsKey = true, team }: LayersCardProps) => {
+const LayersCard = ({ title, items, refetchLayers, layersLoading, titleIsKey = true, team, type }: LayersCardProps) => {
   const { httpAuthHeader } = useAccessToken();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { gfw: gfwLayers } = useAppSelector((state: RootState) => state.layers);
@@ -51,10 +54,14 @@ const LayersCard = ({ title, items, refetchLayers, layersLoading, titleIsKey = t
   const canBeLoadable = items.some(item => !item.attributes?.isPublic);
   const loading = canBeLoadable ? layersLoading : false;
   const isTeam = !!team;
+  const isUser = type === "USER";
+
   const isMyTeam = team?.attributes?.userRole === "administrator" || team?.attributes?.userRole === "manager";
 
   const { mutateAsync: addNewTeamLayer } = usePostV3ContextualLayerTeamTeamId();
-  const { mutateAsync: deleteTeamLayer } = useDeleteV3ContextualLayerLayerId();
+  const { mutateAsync: deleteLayer } = useDeleteV3ContextualLayerLayerId();
+
+  const { mutateAsync: addNewUserLayer } = usePostContextualLayer();
 
   const layerOptions = useMemo<Option[] | undefined>(
     () =>
@@ -69,28 +76,21 @@ const LayersCard = ({ title, items, refetchLayers, layersLoading, titleIsKey = t
 
   const onModalSave = async (data: UnpackNestedValue<TAssignLayersForm>) => {
     try {
+      toastr.success(intl.formatMessage({ id: "layers.success" }), "");
       const promises: Promise<any>[] = [];
 
       // Delete all..
       items.forEach(item => {
-        promises.push(deleteTeamLayer({ pathParams: { layerId: item.id }, headers: httpAuthHeader }));
+        promises.push(deleteLayer({ pathParams: { layerId: item.id }, headers: httpAuthHeader }));
       });
 
       await Promise.all(promises);
 
-      // Find Layers
-      const layers = data.layers.map(url => gfwLayers.find(layer => layer.tileurl === url));
-
-      for (let i = 0; i < layers.length; i++) {
-        const item = layers[i];
-        await addNewTeamLayer({
-          body: { name: item?.title || "", url: item?.tileurl || "", enabled: true },
-          pathParams: { teamId: team?.id || "" },
-          headers: httpAuthHeader
-        });
+      if (isTeam) {
+        await handleTeamUpdates(data);
+      } else if (isUser) {
+        await handleUserUpdates(data);
       }
-      toastr.success(intl.formatMessage({ id: "layers.success" }), "");
-
       setIsModalOpen(false);
     } catch (e: any) {
       toastr.error(intl.formatMessage({ id: "layers.error" }), "");
@@ -100,12 +100,39 @@ const LayersCard = ({ title, items, refetchLayers, layersLoading, titleIsKey = t
     }
   };
 
+  const handleTeamUpdates = async (data: UnpackNestedValue<TAssignLayersForm>) => {
+    // Find Layers
+    const layers = data.layers.map(url => gfwLayers.find(layer => layer.tileurl === url));
+
+    for (let i = 0; i < layers.length; i++) {
+      const item = layers[i];
+      await addNewTeamLayer({
+        body: { name: item?.title || "", url: item?.tileurl || "", enabled: true },
+        pathParams: { teamId: team?.id || "" },
+        headers: httpAuthHeader
+      });
+    }
+  };
+
+  const handleUserUpdates = async (data: UnpackNestedValue<TAssignLayersForm>) => {
+    // Find Layers
+    const layers = data.layers.map(url => gfwLayers.find(layer => layer.tileurl === url));
+
+    for (let i = 0; i < layers.length; i++) {
+      const item = layers[i];
+      await addNewUserLayer({
+        body: { name: item?.title || "", url: item?.tileurl || "", enabled: true, isPublic: false },
+        headers: httpAuthHeader
+      });
+    }
+  };
+
   return (
     <>
       <HeaderCard className="mt-7" as="section">
         <HeaderCard.Header className="flex justify-between align-middle">
           <HeaderCard.HeaderText>{titleIsKey ? <FormattedMessage id={title} /> : title}</HeaderCard.HeaderText>
-          <OptionalWrapper data={isTeam && isMyTeam}>
+          <OptionalWrapper data={(isTeam && isMyTeam) || isUser}>
             <Button onClick={() => setIsModalOpen(true)}>
               <FormattedMessage id="common.edit" />
             </Button>
@@ -116,7 +143,7 @@ const LayersCard = ({ title, items, refetchLayers, layersLoading, titleIsKey = t
             <OptionalWrapper
               data={items.length > 0}
               elseComponent={
-                <p className="text-base mb-7">
+                <p className="text-neutral-700 uppercase text-sm font-[500] mb-7">
                   <FormattedMessage id="layers.noLayers" />
                 </p>
               }
@@ -134,8 +161,8 @@ const LayersCard = ({ title, items, refetchLayers, layersLoading, titleIsKey = t
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         onSave={onModalSave}
-        modalTitle="layers.teamLayers.edit"
-        modalSubtitle="layers.teamLayers.editSubtitle"
+        modalTitle="layers.userLayers.edit"
+        modalSubtitle="layers.userLayers.editSubtitle"
         submitBtnName="common.done"
         key={selectedOptions.length}
         useFormProps={{ resolver: yupResolver(addLayersSchema), defaultValues: { layers: selectedOptions } }}
@@ -143,8 +170,8 @@ const LayersCard = ({ title, items, refetchLayers, layersLoading, titleIsKey = t
           {
             id: "select-templates",
             selectProps: {
-              label: intl.formatMessage({ id: "layers.teamLayers.subtitle" }),
-              placeholder: intl.formatMessage({ id: "layers.teamLayers.subtitle" }),
+              label: intl.formatMessage({ id: "layers.userLayers.subtitle" }),
+              placeholder: intl.formatMessage({ id: "layers.userLayers.subtitle" }),
               options: layerOptions,
               defaultValue: []
             },
