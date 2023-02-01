@@ -1,6 +1,5 @@
 import { TeamMemberModel } from "generated/core/coreSchemas";
 import useGetTeamDetails from "hooks/querys/teams/useGetTeamDetails";
-import useGetUserId from "hooks/useGetUserId";
 import { FC, useEffect, useMemo } from "react";
 import { useHistory, Link, useParams, useLocation } from "react-router-dom";
 import { toastr } from "react-redux-toastr";
@@ -70,28 +69,20 @@ const TeamDetail: FC<IProps> = props => {
   const { teamId } = useParams<{ teamId: string }>();
   const history = useHistory();
   const intl = useIntl();
-  const userId = useGetUserId();
   const {
     data: { areasByTeam },
     isFetching: isFetchingAreas
   } = useGetAreas();
 
   /* Queries */
-  const { data: team, isLoading: isTeamLoading } = useGetTeamDetails(teamId);
-
-  // Is the current user the Manager and/or Admin?
-  const [userIsAdmin, userIsManager] = useMemo(() => {
-    const userMemberInfo = team?.attributes?.members?.find(member => member.userId === userId);
-
-    if (isTeamLoading || !userMemberInfo) {
-      return [false, false];
-    }
-
-    return [
-      userMemberInfo.role === "administrator",
-      userMemberInfo.role === "administrator" || userMemberInfo.role === "manager"
-    ];
-  }, [isTeamLoading, team, userId]);
+  const {
+    data: team,
+    manages,
+    monitors,
+    userIsAdmin,
+    userIsManager,
+    isLoading: isTeamLoading
+  } = useGetTeamDetails(teamId);
 
   const teamAreas = useMemo(() => {
     if (!areasByTeam) {
@@ -111,19 +102,6 @@ const TeamDetail: FC<IProps> = props => {
       history.push("/teams");
     }
   }, [history, intl, isTeamLoading, team]);
-
-  // ToDo: Create a util hook for this
-  const manages = useMemo(
-    () =>
-      team?.attributes?.members?.filter(member => member.role === "administrator" || member.role === "manager") || [],
-    [team]
-  );
-
-  const monitors = useMemo(
-    () =>
-      team?.attributes?.members?.filter(member => member.role !== "administrator" && member.role !== "manager") || [],
-    [team]
-  );
 
   /**
    * Map each member from the API to translated data table rows

@@ -1,5 +1,5 @@
 import useGetAllReportAnswersForUser from "hooks/querys/reportAnwsers/useGetAllReportAnswersForUser";
-import useGetTeamMembers from "hooks/querys/teams/useGetTeamMembers";
+import useGetTeamMembersForTeamIds from "hooks/querys/teams/useGetTeamMembersForTeamIds";
 import { FC, useMemo, useState, Fragment, useCallback, useEffect } from "react";
 import Hero from "components/layouts/Hero/Hero";
 import Article from "components/layouts/Article";
@@ -49,7 +49,7 @@ const Areas: FC<IProps> = props => {
   // Fetch all Report Answers
   const { data: allAnswers } = useGetAllReportAnswersForUser();
   // Fetch all the Team members for each Team Area
-  const teamMembers = useGetTeamMembers(
+  const teamMembers = useGetTeamMembersForTeamIds(
     areasByTeam?.map(area => {
       // @ts-ignore `id` not typed
       return area?.team?.id;

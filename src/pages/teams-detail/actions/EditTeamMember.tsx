@@ -73,7 +73,7 @@ const EditMemberRoleModal: FC<IProps> = props => {
           body: { role: memberRole }
         });
       } else {
-        await reassignTeamAdmin({ pathParams: { teamId, userId: memberId } });
+        await reassignTeamAdmin({ headers: httpAuthHeader, pathParams: { teamId, userId: memberId } });
       }
 
       // Ensure the Team Listing and Team Details caches are invalidated, forcing a re-fetched

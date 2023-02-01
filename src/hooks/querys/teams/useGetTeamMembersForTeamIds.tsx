@@ -15,7 +15,7 @@ export type TeamMembersWithTeamIdResponse = {
  * @return useQueries<TeamMembersWithTeamIdResponse[]>
  * @link https://tanstack.com/query/v4/docs/react/reference/useQueries
  */
-const useGetTeamMembers = (teamIds: string[]) => {
+const useGetTeamMembersForTeamIds = (teamIds: string[]) => {
   const { httpAuthHeader } = useAccessToken();
   const { queryKeyFn } = useCoreContext();
 
@@ -56,4 +56,4 @@ const useGetTeamMembers = (teamIds: string[]) => {
   });
 };
 
-export default useGetTeamMembers;
+export default useGetTeamMembersForTeamIds;
