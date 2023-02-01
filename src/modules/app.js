@@ -1,4 +1,3 @@
-import { getTeamByUserId } from "./teams";
 import { getUser } from "./user";
 import { getPlanetBasemaps } from "./map";
 
@@ -26,10 +25,7 @@ export default function reducer(state = initialState, action) {
 // Action Creators
 export function syncApp() {
   return async (dispatch, state) => {
-    // fetch all areas and their geostores
-    const user = state().user.data;
     dispatch(getUser());
-    dispatch(getTeamByUserId(user.id));
     // fetch planet base maps
     dispatch(getPlanetBasemaps());
   };
