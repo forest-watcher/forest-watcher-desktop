@@ -1,4 +1,6 @@
 import {
+  PatchV3GfwTeamsTeamIdUsersUserIdAcceptError,
+  PatchV3GfwTeamsTeamIdUsersUserIdDeclineError,
   usePatchV3GfwTeamsTeamIdUsersUserIdAccept,
   usePatchV3GfwTeamsTeamIdUsersUserIdDecline
 } from "generated/core/coreComponents";
@@ -10,7 +12,6 @@ import Modal from "components/ui/Modal/Modal";
 import Loader from "components/ui/Loader";
 import { Redirect, useHistory } from "react-router-dom";
 import { toastr } from "react-redux-toastr";
-import { TErrorResponse } from "constants/api";
 import { FormattedMessage, useIntl } from "react-intl";
 
 const CONFIG = {
@@ -101,10 +102,12 @@ const RemoveTeamMemberModal: FC<IProps> = props => {
       close();
       toastr.success(intl.formatMessage({ id: config.successMessage }), "");
     } catch (e: any) {
-      const error = JSON.parse(e.message) as TErrorResponse;
+      const error = JSON.parse(e.message) as
+        | PatchV3GfwTeamsTeamIdUsersUserIdAcceptError
+        | PatchV3GfwTeamsTeamIdUsersUserIdDeclineError;
       toastr.error(
         intl.formatMessage({ id: config.errorMessage }),
-        error?.errors?.length ? error.errors[0].detail : ""
+        typeof error.payload === "string" ? "" : error.payload.message!
       );
       console.error(e);
     }

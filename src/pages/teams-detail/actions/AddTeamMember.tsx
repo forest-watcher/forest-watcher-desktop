@@ -83,7 +83,7 @@ const AddTeamMemberModal: FC<IProps> = props => {
       const error = e as PostV3GfwTeamsTeamIdUsersError;
       toastr.error(
         intl.formatMessage({ id: "teams.details.add.member.error" }),
-        typeof error.payload === "string" ? "" : error.payload.errors[0].detail
+        typeof error.payload === "string" ? "" : error.payload.message!
       );
       console.error(error);
     }

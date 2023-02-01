@@ -47,7 +47,7 @@ const RemoveAreaFromTeam: FC<IProps> = props => {
       const error = e as DeleteV3GfwArearelationsTeamsError;
       toastr.error(
         intl.formatMessage({ id: "areas.details.teams.remove.error" }),
-        typeof error.payload === "string" ? "" : error.payload.errors[0].detail
+        typeof error.payload === "string" ? "" : error.payload.message!
       );
       console.error(e);
     }

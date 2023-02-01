@@ -50,7 +50,7 @@ const DeleteTeam: FC<IProps> = props => {
       const error = e as DeleteV3GfwTeamsTeamIdError;
       toastr.error(
         intl.formatMessage({ id: "teams.delete.error" }),
-        typeof error.payload === "string" ? "" : error.payload.errors[0].detail
+        typeof error.payload === "string" ? "" : error.payload.message!
       );
       console.error(e);
     }
