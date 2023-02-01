@@ -2,7 +2,7 @@ import OptionalWrapper from "components/extensive/OptionalWrapper";
 import useGetTeamInvites from "hooks/querys/teams/useGetTeamInvites";
 import useGetUserTeams from "hooks/querys/teams/useGetUserTeams";
 import { FC } from "react";
-import { RouteComponentProps, Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import EmptyState from "components/ui/EmptyState/EmptyState";
 import Hero from "components/layouts/Hero/Hero";
 import Article from "components/layouts/Article";
@@ -16,13 +16,14 @@ import EmptyStateIcon from "assets/images/icons/EmptyTeams.svg";
 import { fireGAEvent } from "helpers/analytics";
 import { TeamActions, TeamLabels } from "types/analytics";
 
-interface IProps extends RouteComponentProps {
+interface IProps {
   isCreatingTeam: boolean;
 }
 
 const Teams: FC<IProps> = props => {
-  const { isCreatingTeam = false, match } = props;
+  const { isCreatingTeam = false } = props;
 
+  const location = useLocation();
   const intl = useIntl();
 
   /* Queries */
@@ -45,7 +46,7 @@ const Teams: FC<IProps> = props => {
                 {txt => <span className="l-team-invitations__title">{txt}</span>}
               </FormattedMessage>
 
-              <Link to={`${match.path}/invitations`} className="c-button c-button--primary">
+              <Link to={`${location.pathname}/invitations`} className="c-button c-button--primary">
                 <FormattedMessage id="teams.invitation.view" values={{ num: userTeamInvites?.length }} />
               </Link>
             </div>
@@ -71,7 +72,7 @@ const Teams: FC<IProps> = props => {
                   title={intl.formatMessage({ id: "teams.empty.state.title" })}
                   text={intl.formatMessage({ id: "teams.empty.state.subTitle" })}
                   ctaText={intl.formatMessage({ id: "teams.create" })}
-                  ctaTo={`${match.path}/create`}
+                  ctaTo={`${location.pathname}/create`}
                 />
               </div>
             </div>
@@ -86,7 +87,7 @@ const Teams: FC<IProps> = props => {
               titleValues={{ num: managedTeams.length.toString() }}
               actions={
                 <Link
-                  to={`${match.path}/create`}
+                  to={`${location.pathname}/create`}
                   onClick={() =>
                     fireGAEvent({
                       category: "Teams",

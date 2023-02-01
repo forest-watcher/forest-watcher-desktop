@@ -20,6 +20,7 @@ const TeamCard: FC<IProps> = props => {
     [areasByTeam, team.id]
   );
 
+  // ToDo: these should really use the utils in: src/hooks/querys/teams/useGetTeamDetails.ts
   const manages = useMemo(
     () =>
       team.attributes?.members?.filter(member => member.role === "administrator" || member.role === "manager") || [],

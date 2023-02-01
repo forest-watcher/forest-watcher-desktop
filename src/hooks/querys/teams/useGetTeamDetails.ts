@@ -30,6 +30,7 @@ const useGetTeamDetails = (teamId?: string) => {
 
   /**
    * Find the Current "manages" for the team
+   * If a member is either an "administrator" or "manager", they are considered as a manager
    */
   const manages = useMemo(
     () =>
