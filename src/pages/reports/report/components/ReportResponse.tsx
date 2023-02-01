@@ -6,6 +6,7 @@ import Modal from "components/ui/Modal/Modal";
 import { AnswerResponse } from "generated/forms/formsSchemas";
 import { download } from "helpers/exports";
 import { useState } from "react";
+import { useIntl } from "react-intl";
 
 export interface IReportResponse {
   question: string;
@@ -20,15 +21,17 @@ export interface ReportResponseProps extends IReportResponse {
 const Response = (props: ReportResponseProps) => {
   const { response, type, childQuestions } = props;
   const [audioModalOpen, setAudioModalOpen] = useState(false);
+  const intl = useIntl();
+
   switch (type) {
     case "audio":
       const filename = response?.split("/").pop() || "";
 
       return (
         <>
-          {childQuestions?.map(child => (
-            <Response key={child.name} response={child.value || ""} type="text" question="" />
-          ))}
+          {childQuestions?.map(
+            child => child.value && <Response key={child.name} response={child.value} type="text" question="" />
+          )}
           {filename && (
             <button
               onClick={() => {
@@ -36,7 +39,7 @@ const Response = (props: ReportResponseProps) => {
               }}
               className={classNames(
                 "bg-primary-400 px-4 py-[9px] rounded-md border border-solid border-primary-500 text-neutral-700 text-base",
-                Boolean(childQuestions?.length) && "mt-6"
+                Boolean(childQuestions?.find(item => item.value)) && "mt-6"
               )}
             >
               {filename}
@@ -69,7 +72,11 @@ const Response = (props: ReportResponseProps) => {
         />
       );
     default:
-      return <p className="text-neutral-700 text-base">{response ?? "N/A"}</p>;
+      return (
+        <p className="text-neutral-700 text-base">
+          {response || intl.formatMessage({ id: "reports.reports.noResponse" })}
+        </p>
+      );
   }
 };
 
