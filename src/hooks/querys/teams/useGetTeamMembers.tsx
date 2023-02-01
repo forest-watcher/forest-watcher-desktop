@@ -23,8 +23,8 @@ const useGetTeamMembers = (teamIds: string[]) => {
    * Curry function which returns a Promise which fetches GetV3GfwTeamsTeamIdUsers from fw_core
    * The API doesn't return which teamId the members are associated with
    * This function acts as a wrapper for the generated `fetchGetV3GfwTeamsTeamIdUsers` function,
-   * adding an extra property for `teamId`
-   * See `TeamMembersWithTeamIdResponse` type above
+   * adding an extra property for `teamId`.
+   * @see `TeamMembersWithTeamIdResponse` type above
    * @param teamId
    * @return Promise<TeamMembersWithTeamIdResponse>
    */
