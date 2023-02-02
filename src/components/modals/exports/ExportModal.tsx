@@ -152,6 +152,7 @@ const ExportModal: FC<IProps> = ({ onClose, onSave, isOpen, fileTypes, fields, d
     if (saveResp) {
       const shorten = await bitlyService.shorten(saveResp);
       setReportUrl(shorten.link);
+      setReportUrlLabel(shorten.link);
     }
   };
 
