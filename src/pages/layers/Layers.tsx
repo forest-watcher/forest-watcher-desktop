@@ -20,13 +20,17 @@ const Layers = () => {
     refetch: refetchLayers
   } = useGetV3ContextualLayer({ headers: httpAuthHeader });
 
-  const layers: { pub?: ILayers["data"]; teams?: ILayers["data"] } = useMemo(() => {
+  const layers: { pub?: ILayers["data"]; user?: ILayers["data"]; teams?: ILayers["data"] } = useMemo(() => {
     const pub = layersData?.data.filter(l => l.attributes && l.attributes.isPublic);
     const teams = layersData?.data.filter(
       l => l.attributes && !l.attributes.isPublic && l.attributes.owner.type === "TEAM"
     );
 
-    return { pub, teams };
+    const user = layersData?.data.filter(
+      l => l.attributes && !l.attributes.isPublic && l.attributes.owner.type === "USER"
+    );
+
+    return { pub, teams, user };
   }, [layersData]);
 
   const sections = useMemo(
@@ -38,6 +42,13 @@ const Layers = () => {
           cardTitle: "layers.publicLayers.card.title",
           cardItems: layers.pub ?? [],
           type: "PUBLIC"
+        },
+        {
+          title: "layers.userLayers.title",
+          subtitle: "layers.userLayers.subtitle",
+          cardTitle: "layers.userLayers.card.title",
+          cardItems: layers.user ?? [],
+          type: "USER"
         },
         {
           title: "layers.teamLayers.title",
