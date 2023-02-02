@@ -35,7 +35,7 @@ const Footer: HeaderCardComposition["Footer"] = ({ className, children }) => {
     <div
       className={classNames(
         className,
-        "bg-neutral-300 px-5 py-6 border-solid border-2 border-neutral-500 border-opacity-40 border-t-0 rounded-b"
+        "bg-neutral-300 px-5 py-6 border-solid border-2 border-neutral-600 border-opacity-10 border-t-0 rounded-b"
       )}
     >
       {children}
@@ -48,7 +48,7 @@ const Content: HeaderCardComposition["Content"] = ({ className, children }) => {
     <div
       className={classNames(
         className,
-        "bg-neutral-300 py-7 px-6 border-2 border-solid border-neutral-500 border-opacity-40 border-t-0 rounded-b"
+        "bg-neutral-300 py-7 px-6 border-2 border-solid border-neutral-600 border-opacity-10 border-t-0 rounded-b"
       )}
     >
       {children}
