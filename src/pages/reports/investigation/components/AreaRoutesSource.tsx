@@ -14,12 +14,7 @@ export interface IProps {
 }
 
 export const getRoutePoints = (route: { id?: string; type?: string; attributes?: RouteModel }) => {
-  const start = [route.attributes?.destination?.longitude || 0, route.attributes?.destination?.latitude || 0];
-
-  const otherPoints =
-    route.attributes?.locations?.map(location => [location.longitude || 0, location.latitude || 0]) || [];
-
-  return [start, ...otherPoints];
+  return route.attributes?.locations?.map(location => [location.longitude || 0, location.latitude || 0]) || [];
 };
 
 const AreaRoutesSource: FC<IProps> = props => {
@@ -76,7 +71,7 @@ const AreaRoutesSource: FC<IProps> = props => {
 
       const newFeatures = formattedPoints.features.map(point => {
         const newPoint = { ...point };
-        const locations = [route.attributes?.destination, ...(route.attributes?.locations || [])];
+        const locations = route.attributes?.locations || [];
         const indexOfPoint = locations.findIndex(
           loc =>
             newPoint.geometry.coordinates[0] === loc?.longitude && newPoint.geometry.coordinates[1] === loc?.latitude
