@@ -1,6 +1,6 @@
 import { UsersContext } from "./usersContext";
 
-const baseUrl = "https://dev-fw-api.globalforestwatch.org/v1/users";
+const baseUrl = `${process.env.REACT_APP_API_CUBE_URL}/v1/users`;
 
 export type ErrorWrapper<TError> = TError | { status: "unknown"; payload: string };
 
