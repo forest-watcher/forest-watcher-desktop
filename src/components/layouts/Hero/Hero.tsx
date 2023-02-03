@@ -34,7 +34,7 @@ const Hero: FC<PropsWithChildren<IProps>> = props => {
               </Link>
             ) : (
               <button
-                onClick={() => history.goBack()}
+                onClick={() => history.push("/areas")}
                 className={classnames("c-link", "c-link--hero", backLink.className)}
               >
                 <img src={ChevronRight} alt="" role="presentation" />
