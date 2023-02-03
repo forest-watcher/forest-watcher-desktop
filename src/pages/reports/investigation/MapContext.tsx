@@ -99,8 +99,6 @@ export const MapProvider = ({ children }: PropsWithChildren) => {
     [setActiveValue]
   );
 
-  console.log(active);
-
   return (
     <MapContext.Provider
       value={{
