@@ -73,7 +73,7 @@ const ShowAlertsControl: FC<IProps> = props => {
             alternateLabelStyle
           />
 
-          {methods.getValues("alertTypesShown") !== EAlertTypes.viirs ? (
+          {methods.getValues("alertTypesShown") !== EAlertTypes.VIIRS ? (
             <Select
               id="alert-types-timeframes"
               className="u-margin-bottom"

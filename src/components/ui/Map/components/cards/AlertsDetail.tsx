@@ -19,11 +19,11 @@ export interface IProps {
 const ALERT_API_KEY_MAP = {
   date: (alertType: EAlertTypes) => {
     switch (alertType) {
-      case EAlertTypes.umd_as_it_happens:
+      case EAlertTypes.GLAD:
         return "umd_glad_landsat_alerts__date";
-      case EAlertTypes.glad_sentinel_2:
+      case EAlertTypes.GLADS2:
         return "umd_glad_sentinel2_alerts__date";
-      case EAlertTypes.wur_radd_alerts:
+      case EAlertTypes.RADD:
         return "wur_radd_alerts__date";
       default:
         return "";
@@ -31,11 +31,11 @@ const ALERT_API_KEY_MAP = {
   },
   confidence: (alertType: EAlertTypes) => {
     switch (alertType) {
-      case EAlertTypes.umd_as_it_happens:
+      case EAlertTypes.GLAD:
         return "umd_glad_landsat_alerts__confidence";
-      case EAlertTypes.glad_sentinel_2:
+      case EAlertTypes.GLADS2:
         return "umd_glad_sentinel2_alerts__confidence";
-      case EAlertTypes.wur_radd_alerts:
+      case EAlertTypes.RADD:
         return "wur_radd_alerts__confidence";
       default:
         return "";
