@@ -29,10 +29,10 @@ const useGetTeamDetails = (teamId?: string) => {
   );
 
   /**
-   * Find the Current "manages" for the team
+   * Find the Current "managers" for the team
    * If a member is either an "administrator" or "manager", they are considered as a manager
    */
-  const manages = useMemo(
+  const managers = useMemo(
     () =>
       data?.data?.attributes?.members?.filter(member => member.role === "administrator" || member.role === "manager") ||
       [],
@@ -67,7 +67,7 @@ const useGetTeamDetails = (teamId?: string) => {
   }, [data, userId]);
 
   // Remove nested data property
-  return { data: data?.data, admin, manages, monitors, userIsAdmin, userIsManager, ...rest };
+  return { data: data?.data, admin, managers, monitors, userIsAdmin, userIsManager, ...rest };
 };
 
 export default useGetTeamDetails;

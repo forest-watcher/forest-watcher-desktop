@@ -77,7 +77,7 @@ const TeamDetail: FC<IProps> = props => {
   /* Queries */
   const {
     data: team,
-    manages,
+    managers,
     monitors,
     userIsAdmin,
     userIsManager,
@@ -217,12 +217,12 @@ const TeamDetail: FC<IProps> = props => {
         <Article
           className="c-teams-details__heading"
           title="teams.details.managers"
-          titleValues={{ num: manages.length }}
+          titleValues={{ num: managers.length }}
           size="small"
         >
           <DataTable<TTeamDetailDataTable>
             className="u-w-100"
-            rows={mapMembersToRows(manages)}
+            rows={mapMembersToRows(managers)}
             columnOrder={userIsManager ? columnOrderWithStatus : columnOrder}
             rowActions={userIsManager ? [makeAdmin, makeMonitor, removeMember] : undefined}
           />

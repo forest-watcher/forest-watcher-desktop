@@ -23,7 +23,7 @@ const TeamCard: FC<IProps> = props => {
   console.log(areasDetail);
 
   // ToDo: these should really use the utils in: src/hooks/querys/teams/useGetTeamDetails.ts
-  const manages = useMemo(
+  const managers = useMemo(
     () =>
       team.attributes?.members?.filter(member => member.role === "administrator" || member.role === "manager") || [],
     [team]
@@ -50,9 +50,9 @@ const TeamCard: FC<IProps> = props => {
       <Card size="large" className={"c-teams__card c-teams--nested-card c-teams--nested-card-people"}>
         <div>
           <h3 className="c-teams__sub-title">
-            <FormattedMessage id="teams.managers" values={{ num: manages.length }} />
+            <FormattedMessage id="teams.managers" values={{ num: managers.length }} />
           </h3>
-          <p>{manages.map(i => i.name || i.email).join(", ")}</p>
+          <p>{managers.map(i => i.name || i.email).join(", ")}</p>
         </div>
         <div>
           <h3 className="c-teams__sub-title">
