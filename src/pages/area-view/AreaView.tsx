@@ -208,7 +208,12 @@ const AreasView: FC<IProps & RouteComponentProps<TParams>> = ({
         <div className="l-content u-h-min-unset">
           <Article
             title="areas.details.templates"
-            titleValues={{ num: area?.data?.attributes?.reportTemplate?.length ?? 0 }}
+            titleValues={{
+              num:
+                area?.data?.attributes?.reportTemplate?.filter(template =>
+                  template.hasOwnProperty("isLatest") ? template.isLatest : true
+                ).length ?? 0
+            }}
             size="small"
             actions={
               <Link
