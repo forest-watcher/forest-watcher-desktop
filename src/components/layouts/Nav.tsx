@@ -75,22 +75,22 @@ const NavLinks: FC<INavLinks> = ({ loggedIn, formHook, languages, user, logout, 
             </li>
             <li className="c-nav__link-wrapper">
               <NavLink
-                to="/templates"
-                className="c-nav__link"
-                activeClassName="c-nav__link--active"
-                onClick={() => onLinkSelect?.()}
-              >
-                <FormattedMessage id="templates.name" />
-              </NavLink>
-            </li>
-            <li className="c-nav__link-wrapper">
-              <NavLink
                 to="/teams"
                 className="c-nav__link"
                 activeClassName="c-nav__link--active"
                 onClick={() => onLinkSelect?.()}
               >
                 <FormattedMessage id="teams.name" />
+              </NavLink>
+            </li>
+            <li className="c-nav__link-wrapper">
+              <NavLink
+                to="/templates"
+                className="c-nav__link"
+                activeClassName="c-nav__link--active"
+                onClick={() => onLinkSelect?.()}
+              >
+                <FormattedMessage id="templates.name" />
               </NavLink>
             </li>
             <li className="c-nav__link-wrapper">
