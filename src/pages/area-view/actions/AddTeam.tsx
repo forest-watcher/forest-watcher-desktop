@@ -1,5 +1,4 @@
 import { useInvalidateGetAreaById } from "hooks/querys/areas/useGetAreaById";
-import { useInvalidateGetTemplates } from "hooks/querys/templates/useGetTemplates";
 import { FC, useMemo } from "react";
 import FormModal from "components/modals/FormModal";
 import { Link, useHistory, useParams } from "react-router-dom";

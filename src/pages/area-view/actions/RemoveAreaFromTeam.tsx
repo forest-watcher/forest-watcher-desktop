@@ -1,5 +1,4 @@
 import { useInvalidateGetAreaById } from "hooks/querys/areas/useGetAreaById";
-import { useInvalidateGetTemplates } from "hooks/querys/templates/useGetTemplates";
 import { FC, useCallback, useState } from "react";
 import Modal from "components/ui/Modal/Modal";
 import Loader from "components/ui/Loader";
