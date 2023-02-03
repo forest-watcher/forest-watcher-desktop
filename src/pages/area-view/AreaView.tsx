@@ -166,7 +166,7 @@ const AreasView: FC<IProps & RouteComponentProps<TParams>> = ({
         <Hero
           title="areas.manageAreaName"
           titleValues={{ name: area?.data?.attributes?.name ?? "" }}
-          backLink={{ name: backLinkTextKey }}
+          backLink={{ name: backLinkTextKey, to: "/areas" }}
           actions={
             area ? (
               <>
