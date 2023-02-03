@@ -3,8 +3,8 @@ import Map from "components/ui/Map/Map";
 import useGetAreaById from "hooks/querys/areas/useGetAreaById";
 import useGetAllReportAnswersForUser from "hooks/querys/reportAnwsers/useGetAllReportAnswersForUser";
 import useGetUserTeams from "hooks/querys/teams/useGetUserTeams";
-import { FC, useState, useEffect, useMemo, useCallback } from "react";
-import { MapboxEvent, Map as MapInstance } from "mapbox-gl";
+import { FC, useCallback, useEffect, useMemo, useState } from "react";
+import { Map as MapInstance, MapboxEvent } from "mapbox-gl";
 import { FormattedMessage, useIntl } from "react-intl";
 import { TPropsFromRedux } from "./AreaViewContainer";
 import { goToGeojson } from "helpers/map";
@@ -45,7 +45,10 @@ const AreasView: FC<IProps & RouteComponentProps<TParams>> = props => {
   const intl = useIntl();
   const { areaId } = useParams<TParams>();
 
-  const { backLinkTextKey } = useGetBackLink({ backLinkTextKey: "areas.back", backLink: "/areas" });
+  const { backLinkTextKey } = useGetBackLink({
+    backLinkTextKey: "areas.back",
+    backLink: "/areas"
+  });
 
   /*
    * Queries
@@ -145,8 +148,8 @@ const AreasView: FC<IProps & RouteComponentProps<TParams>> = props => {
       <div className="c-area-manage">
         <Hero
           title="areas.manageAreaName"
-          titleValues={{ name: area?.attributes?.name ?? "" }}
-          backLink={{ name: backLinkTextKey }}
+          titleValues={{ name: area?.data?.attributes?.name ?? "" }}
+          backLink={{ name: backLinkTextKey, to: "/areas" }}
           actions={
             area ? (
               <>
