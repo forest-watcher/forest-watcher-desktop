@@ -102,11 +102,11 @@ export const DefaultRequestThresholds: readonly TRequestThreshold[] = [
   },
   {
     labelKey: "timeframes.2months",
-    requestThreshold: 60 // 31 days * 2
+    requestThreshold: 62 // 31 days * 2
   },
   {
     labelKey: "timeframes.6months",
-    requestThreshold: 180 // 31 days * 6
+    requestThreshold: 184 // Max number of alerts (6 months ish)
   }
 ];
 
