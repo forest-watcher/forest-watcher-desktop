@@ -54,7 +54,7 @@ const ExportModal: FC<IProps> = ({ onClose, onSave, isOpen, fileTypes, fields, d
   const intl = useIntl();
   const [downloadMethod, setDownloadMethod] = useState();
   const [reportUrl, setReportUrl] = useState<string>();
-  const [reportUrlLabel, setReportUrlLabel] = useState(() => intl.formatMessage({ id: "export.no.file.type" }));
+  const [reportUrlLabel, setReportUrlLabel] = useState("");
   const inputs = useMemo<IModalProps<TExportForm>["inputs"]>(() => {
     const toReturn: IModalProps<TExportForm>["inputs"] = [
       {
@@ -152,6 +152,7 @@ const ExportModal: FC<IProps> = ({ onClose, onSave, isOpen, fileTypes, fields, d
     if (saveResp) {
       const shorten = await bitlyService.shorten(saveResp);
       setReportUrl(shorten.link);
+      setReportUrlLabel(shorten.link);
     }
   };
 
@@ -170,8 +171,17 @@ const ExportModal: FC<IProps> = ({ onClose, onSave, isOpen, fileTypes, fields, d
       }}
       inputs={inputs}
       watch={["downloadMethod", "fields", "fileType"]}
-      onChange={async (changes, values) => {
+      onChange={async (changes, formHook) => {
+        const values = formHook.getValues();
+
         setDownloadMethod(changes[0]);
+
+        if (changes[0] === "link" && !values.fileType) {
+          formHook.setError("fileType", {
+            type: "custom",
+            message: intl.formatMessage({ id: "errors.mixed.required" })
+          });
+        }
 
         if (changes[0] === "link" && !!values.fileType && (await exportSchema.isValid(values))) {
           generateShortenedLink(values);
