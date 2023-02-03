@@ -20,6 +20,8 @@ const TeamCard: FC<IProps> = props => {
     [areasByTeam, team.id]
   );
 
+  console.log(areasDetail);
+
   // ToDo: these should really use the utils in: src/hooks/querys/teams/useGetTeamDetails.ts
   const manages = useMemo(
     () =>

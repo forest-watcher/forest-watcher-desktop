@@ -35,7 +35,7 @@ const mockTeam: ITeamCardProps["team"] = {
 
 const mockTeamAreas = [
   {
-    team: "1234",
+    team: { id: "1234" },
     areas: [
       { data: { type: "area", id: "6233708756b0c7001bf95232", attributes: { name: "Area #1" } } },
       { data: { type: "area", id: "6233708756b0c7001bf95232", attributes: { name: "Area #2" } } },
@@ -46,6 +46,7 @@ const mockTeamAreas = [
 
 describe("TeamCard", () => {
   it("should render correctly", () => {
+    // @ts-ignore areasByTeam type is wrong!
     const { container } = render(<TeamCard team={mockTeam} canManage areasByTeam={mockTeamAreas} />);
 
     expect(container).toMatchInlineSnapshot(`
@@ -99,9 +100,11 @@ describe("TeamCard", () => {
               <h3
                 class="c-teams__sub-title"
               >
-                0 Monitors:
+                1 Monitor:
               </h3>
-              <p />
+              <p>
+                user+gfw@test.com
+              </p>
             </div>
           </div>
           <div
