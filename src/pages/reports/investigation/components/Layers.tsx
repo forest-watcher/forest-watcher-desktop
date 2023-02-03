@@ -14,9 +14,10 @@ import AreaRoutesSource from "./AreaRoutesSource";
 interface IProps {
   contextualLayerUrls: string[];
   lockAlertSelections: boolean;
+  parentControl?: boolean;
 }
 
-const Layers: FC<IProps> = ({ contextualLayerUrls, lockAlertSelections }) => {
+const Layers: FC<IProps> = ({ contextualLayerUrls, lockAlertSelections, parentControl = false }) => {
   let investigationMatch = useRouteMatch<TParams>({ path: "/reporting/investigation/:areaId/start", exact: false });
   const { control } = useFormContext();
   const watcher = useWatch({ control });
@@ -43,10 +44,12 @@ const Layers: FC<IProps> = ({ contextualLayerUrls, lockAlertSelections }) => {
       )}
 
       {watcher.showOpenAssignments.includes("true") && (
-        <AreaAssignmentSource areaId={investigationMatch?.params.areaId} />
+        <AreaAssignmentSource areaId={investigationMatch?.params.areaId} parentControl={parentControl} />
       )}
 
-      {watcher.showRoutes.includes("true") && <AreaRoutesSource areaId={investigationMatch?.params.areaId} />}
+      {watcher.showRoutes.includes("true") && (
+        <AreaRoutesSource areaId={investigationMatch?.params.areaId} parentControl={parentControl} />
+      )}
     </OptionalWrapper>
   );
 };

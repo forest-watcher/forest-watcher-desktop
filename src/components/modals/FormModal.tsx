@@ -5,7 +5,7 @@ import { Props as ISelectProps } from "components/ui/Form/Select";
 import { IProps as IToggleGroupProps } from "components/ui/Form/ToggleGroup";
 import { Props as IToggleProps } from "components/ui/Form/Toggle";
 import { Props as IRadioChipGroupProps } from "components/ui/Form/RadioChipGroup";
-import { useForm, SubmitHandler, RegisterOptions, UnpackNestedValue, FieldPath } from "react-hook-form";
+import { useForm, SubmitHandler, RegisterOptions, UnpackNestedValue, FieldPath, UseFormReturn } from "react-hook-form";
 import UnsavedChanges from "components/modals/UnsavedChanges";
 import Loader from "components/ui/Loader";
 import { UseFormProps } from "react-hook-form/dist/types";
@@ -42,7 +42,7 @@ export interface IProps<T> extends PropsWithChildren {
   actions?: ReactNode;
   resetValues?: UnpackNestedValue<T>;
   watch?: string[];
-  onChange?: (changes: any, values: any) => void;
+  onChange?: (changes: any, formHook: UseFormReturn<T>) => void;
   hideUnsavedChangesModal?: boolean;
 }
 
@@ -134,7 +134,7 @@ const FormModal = <T,>(props: IProps<T>) => {
 
   useEffect(() => {
     if (JSON.stringify(watchedValues) !== JSON.stringify(prevWatchedValues)) {
-      props.onChange?.(watchedValues, formHook.getValues());
+      props.onChange?.(watchedValues, formHook);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [watchedValues]);

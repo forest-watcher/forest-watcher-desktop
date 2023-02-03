@@ -90,7 +90,6 @@ const AssignmentForm: FC<IProps> = props => {
     prevLocationPathname
   } = props;
   const intl = useIntl();
-  const mapCardContentRef = useRef<HTMLDivElement>();
   const history = useHistory();
   const { current: map } = useMap();
   const userId = useGetUserId();
@@ -98,6 +97,10 @@ const AssignmentForm: FC<IProps> = props => {
   const { area: selectedAreaDetails } = useFindArea(areaId);
   const [openDialogName, setOpenDialogName] = useState<EDialogsNames>(EDialogsNames.None);
   const isEdit = !!assignmentToEdit;
+
+  // Scroll Position Values
+  const controlPanelPreviousScrollTopRef = useRef<number>(0);
+  const controlPanelContentRef = useRef<HTMLDivElement>();
 
   // FormData
   const parentFormContext = useFormContext();
@@ -123,13 +126,16 @@ const AssignmentForm: FC<IProps> = props => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [setValue, userId]);
 
-  // Each time the Open Dialog changes
-  // Reset the Card Content Scroll Position to the top
+  // Each time the Open Dialog changes, either:
   useEffect(() => {
-    if (mapCardContentRef.current) {
-      mapCardContentRef.current.scrollTop = 0;
+    if (controlPanelContentRef.current && openDialogName === "none") {
+      // Revert to the previous scroll top, when the dialogs close
+      controlPanelContentRef.current.scrollTop = controlPanelPreviousScrollTopRef.current;
+    } else if (controlPanelContentRef.current) {
+      // Reset the Card Content Scroll Position to the top, when any dialog opens
+      controlPanelContentRef.current.scrollTop = 0;
     }
-  }, [openDialogName, mapCardContentRef]);
+  }, [openDialogName, controlPanelContentRef]);
 
   const { httpAuthHeader } = useAccessToken();
   const queryClient = useQueryClient();
@@ -251,15 +257,18 @@ const AssignmentForm: FC<IProps> = props => {
 
   const teamGroups = useMemo(() => {
     const managedTeamGroups =
-      teamData?.map(team => ({
-        label: team?.attributes?.name || "",
-        labelSelectsAll: true,
-        options:
-          team?.attributes?.members?.map(member => ({
-            label: member.name || member.email,
-            value: member.userId!
-          })) || []
-      })) || [];
+      teamData
+        ?.map(team => ({
+          label: team?.attributes?.name || "",
+          labelSelectsAll: true,
+          areas: team.attributes?.areas,
+          options:
+            team?.attributes?.members?.map(member => ({
+              label: member.name || member.email,
+              value: member.userId!
+            })) || []
+        }))
+        .filter(team => team.areas?.includes(selectedAreaDetails?.id || "")) || [];
 
     return [
       {
@@ -273,7 +282,7 @@ const AssignmentForm: FC<IProps> = props => {
       },
       ...managedTeamGroups
     ];
-  }, [teamData, intl, userId]);
+  }, [teamData, intl, userId, selectedAreaDetails]);
 
   const templateGroups = useMemo(() => {
     // Wait for user templates to be fetched
@@ -350,7 +359,7 @@ const AssignmentForm: FC<IProps> = props => {
           </Button>
         ) : null
       }
-      mapCardContentRef={mapCardContentRef}
+      mapCardContentRef={controlPanelContentRef}
     >
       <Loader isLoading={isSubmitting || isPatchSubmitting || isTemplateDataLoading || isTeamDataLoading} />
       <OptionalWrapper data={openDialogName === EDialogsNames.None}>
@@ -374,7 +383,11 @@ const AssignmentForm: FC<IProps> = props => {
           emptyLabel="assignment.create.form.monitor.empty"
           emptyIcon="white-foot"
           addButtonLabel="assignment.create.form.monitor.add"
-          onAdd={() => setOpenDialogName(EDialogsNames.Monitors)}
+          onAdd={() => {
+            // Store the current scroll height
+            controlPanelPreviousScrollTopRef.current = controlPanelContentRef.current?.scrollTop || 0;
+            setOpenDialogName(EDialogsNames.Monitors);
+          }}
         />
 
         <OptionalWrapper data={monitorsWatcher.length > 0}>
@@ -400,7 +413,11 @@ const AssignmentForm: FC<IProps> = props => {
           emptyLabel="assignment.create.form.template.empty"
           emptyIcon="FactCheck"
           addButtonLabel="assignment.create.form.template.add"
-          onAdd={() => setOpenDialogName(EDialogsNames.Templates)}
+          onAdd={() => {
+            // Store the current scroll height
+            controlPanelPreviousScrollTopRef.current = controlPanelContentRef.current?.scrollTop || 0;
+            setOpenDialogName(EDialogsNames.Templates);
+          }}
           shouldDisplayAllLabel={false}
         />
       </OptionalWrapper>

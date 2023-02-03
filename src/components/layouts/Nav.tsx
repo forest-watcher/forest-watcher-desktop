@@ -75,22 +75,22 @@ const NavLinks: FC<INavLinks> = ({ loggedIn, formHook, languages, user, logout, 
             </li>
             <li className="c-nav__link-wrapper">
               <NavLink
-                to="/templates"
-                className="c-nav__link"
-                activeClassName="c-nav__link--active"
-                onClick={() => onLinkSelect?.()}
-              >
-                <FormattedMessage id="templates.name" />
-              </NavLink>
-            </li>
-            <li className="c-nav__link-wrapper">
-              <NavLink
                 to="/teams"
                 className="c-nav__link"
                 activeClassName="c-nav__link--active"
                 onClick={() => onLinkSelect?.()}
               >
                 <FormattedMessage id="teams.name" />
+              </NavLink>
+            </li>
+            <li className="c-nav__link-wrapper">
+              <NavLink
+                to="/templates"
+                className="c-nav__link"
+                activeClassName="c-nav__link--active"
+                onClick={() => onLinkSelect?.()}
+              >
+                <FormattedMessage id="templates.name" />
               </NavLink>
             </li>
             <li className="c-nav__link-wrapper">
@@ -155,7 +155,7 @@ const NavLinks: FC<INavLinks> = ({ loggedIn, formHook, languages, user, logout, 
           </li>
           <OptionalWrapper data={loggedIn}>
             {!isMobile && (
-              <li className="c-nav__link-wrapper max-w-[200px]">
+              <li className="c-nav__link-wrapper max-w-[89px] lg:max-w-[150px]">
                 <ReactGA.OutboundLink
                   eventLabel="navigation - myGFW"
                   to={MY_GFW_LINK}

@@ -1,3 +1,5 @@
+import { useInvalidateGetAreaById } from "hooks/querys/areas/useGetAreaById";
+import { useInvalidateGetTemplates } from "hooks/querys/templates/useGetTemplates";
 import { FC, useMemo } from "react";
 import FormModal from "components/modals/FormModal";
 import { Link, useHistory, useParams } from "react-router-dom";
@@ -35,6 +37,9 @@ const AddTemplateModal: FC<IProps> = ({ templates, onAdd }) => {
   const intl = useIntl();
   const history = useHistory();
   const dispatch = useAppDispatch();
+  const invalidateGetAreaById = useInvalidateGetAreaById();
+  const invalidateGetTemplates = useInvalidateGetTemplates();
+
   const templateOptions = useMemo<Option[] | undefined>(
     () =>
       templates
@@ -57,6 +62,8 @@ const AddTemplateModal: FC<IProps> = ({ templates, onAdd }) => {
       toastr.success(intl.formatMessage({ id: "areas.details.templates.add.success" }), "");
       dispatch(getAreas(true));
       dispatch(getAreasInUsersTeams(true));
+      await invalidateGetTemplates();
+      await invalidateGetAreaById(areaId);
       onClose();
     } catch (e: any) {
       toastr.error(intl.formatMessage({ id: "areas.details.templates.add.error" }), "");

@@ -1,6 +1,6 @@
-import { FC, useEffect, useMemo, useState } from "react";
+import { FC, useEffect, useMemo, useState, useCallback } from "react";
 import Hero from "components/layouts/Hero/Hero";
-import { Link, Route, Switch, useParams, useRouteMatch } from "react-router-dom";
+import { Link, Route, Switch, useHistory, useParams, useRouteMatch } from "react-router-dom";
 import Article from "components/layouts/Article";
 import Map from "components/ui/Map/Map";
 import { FormattedMessage, useIntl } from "react-intl";
@@ -22,6 +22,11 @@ import classNames from "classnames";
 import { Map as MapType } from "mapbox-gl";
 import useUrlQuery from "hooks/useUrlQuery";
 import { serialize } from "object-to-formdata";
+import ExportModal, { TExportForm } from "components/modals/exports/ExportModal";
+import { AREA_EXPORT_FILE_TYPES } from "constants/export";
+import useAssignmentsExport from "hooks/querys/exports/useAssignmentsExport";
+import { UnpackNestedValue } from "react-hook-form";
+import { toastr } from "react-redux-toastr";
 
 export type TParams = {
   id: string;
@@ -33,6 +38,7 @@ const Assignment: FC = props => {
   const urlQuery = useUrlQuery();
   const shouldSaveImage = useMemo(() => urlQuery.get("saveMapImage") === "true", [urlQuery]);
   const prevLocationPathname = useMemo(() => urlQuery.get("prev"), [urlQuery]);
+  const history = useHistory();
 
   const [map, setMap] = useState<MapType | null>(null);
   const isEdit = useRouteMatch(`${path}/edit`);
@@ -43,6 +49,8 @@ const Assignment: FC = props => {
   });
 
   const { mutateAsync: patchAssignment } = usePatchV3GfwAssignmentsAssignmentId();
+
+  const { mutateAsync: exportAssignment } = useAssignmentsExport();
 
   const userId = useGetUserId();
   const intl = useIntl();
@@ -88,6 +96,19 @@ const Assignment: FC = props => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [map, shouldSaveImage]);
+
+  const handleExport = useCallback(
+    async (values: UnpackNestedValue<TExportForm>) => {
+      try {
+        const resp = await exportAssignment({ values, assignmentIds: [id] });
+
+        return resp.data;
+      } catch (err) {
+        toastr.error(intl.formatMessage({ id: "export.error" }), "");
+      }
+    },
+    [exportAssignment, id, intl]
+  );
 
   return (
     <div className={classNames(isEdit ? "l-full-page-map" : "relative")}>
@@ -202,6 +223,15 @@ const Assignment: FC = props => {
       <Switch>
         <Route path={`${path}/delete`}>
           <DeleteAssignment />
+        </Route>
+        <Route path={`${path}/export`}>
+          <ExportModal
+            onSave={handleExport}
+            onClose={() => history.goBack()}
+            isOpen
+            fileTypes={AREA_EXPORT_FILE_TYPES}
+            fields={[]}
+          />
         </Route>
       </Switch>
     </div>

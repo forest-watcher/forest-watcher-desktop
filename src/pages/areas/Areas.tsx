@@ -1,4 +1,5 @@
 import useGetAllReportAnswersForUser from "hooks/querys/reportAnwsers/useGetAllReportAnswersForUser";
+import useGetTeamMembersForTeamIds from "hooks/querys/teams/useGetTeamMembersForTeamIds";
 import { FC, useMemo, useState, Fragment, useCallback, useEffect } from "react";
 import Hero from "components/layouts/Hero/Hero";
 import Article from "components/layouts/Article";
@@ -7,7 +8,6 @@ import { FormattedMessage, useIntl } from "react-intl";
 import ReactGA from "react-ga";
 import EmptyState from "components/ui/EmptyState/EmptyState";
 import PlusIcon from "assets/images/icons/PlusWhite.svg";
-import { TPropsFromRedux } from "./AreasContainer";
 import AreaCard from "components/area-card/AreaCard";
 import UserAreasMap from "components/user-areas-map/UserAreasMap";
 import AreaDetailCard from "components/ui/Map/components/cards/AreaDetail";
@@ -25,13 +25,11 @@ import { AreaActions, AreaLabel } from "types/analytics";
 import AreasOnboarding from "components/onboarding/monitoring/AreasOnboarding";
 import useGetAreas from "hooks/querys/areas/useGetAreas";
 import { AreaResponse } from "generated/core/coreResponses";
+import MapContext, { MapProvider } from "pages/reports/investigation/MapContext";
 
-interface IProps extends TPropsFromRedux {
-  getTeamMembers: (teamId: string) => void;
-}
+interface IProps {}
 
 const Areas: FC<IProps> = props => {
-  const { teamMembers, getTeamMembers } = props;
   const {
     data: { userAreas, areasByTeam, unfilteredAreas, getTeamNamesByAreaId },
     isLoading
@@ -47,9 +45,31 @@ const Areas: FC<IProps> = props => {
   const [currentBoundsStr, setCurrentBoundsStr] = useState("");
 
   /*
-   * Queries - Fetch all Report Answers
+   * Queries
    */
+  // Fetch all Report Answers
   const { data: allAnswers } = useGetAllReportAnswersForUser();
+  // Fetch all the Team members for each Team Area
+  const teamMembers = useGetTeamMembersForTeamIds(
+    areasByTeam?.map(area => {
+      // @ts-ignore `id` not typed
+      return area?.team?.id;
+    }) || []
+  );
+
+  // Find all the Team Admin Names
+  const teamAdminNames = useMemo(() => {
+    return teamMembers.reduce<Record<string, string>>((acc, { data: team, isLoading, isError }) => {
+      if (isLoading || isError || !team.teamId) {
+        return acc;
+      }
+
+      acc[team.teamId] =
+        team.members?.find(member => member.attributes?.role === "administrator")?.attributes?.name || "";
+
+      return acc;
+    }, {});
+  }, [teamMembers]);
 
   const answersBySelectedArea = useMemo(() => {
     return allAnswers?.filter(
@@ -107,13 +127,6 @@ const Areas: FC<IProps> = props => {
     };
   }, [mapRef]);
 
-  useEffect(() => {
-    areasByTeam.forEach(({ team }) => {
-      // @ts-ignore incorrect typings
-      team?.id && getTeamMembers(team?.id);
-    });
-  }, [areasByTeam, getTeamMembers]);
-
   return (
     <div className="c-areas">
       <AreasOnboarding />
@@ -142,37 +155,40 @@ const Areas: FC<IProps> = props => {
           <Loader isLoading />
         </div>
       ) : (
-        <UserAreasMap
-          className="c-map--within-hero"
-          selectedAreaId={selectedArea?.id}
-          onAreaSelect={handleAreaSelect}
-          onAreaDeselect={handleAreaDeselect}
-          onMapLoad={handleMapLoad}
-          showTeamAreas
-          alwaysHideKeyLegend
-        >
-          {selectedArea && (
-            <AreaDetailCard
-              area={selectedArea}
-              teamNames={selectedArea.id ? getTeamNamesByAreaId(selectedArea.id) : []}
-              numberOfReports={answersBySelectedArea?.length}
-              onStartInvestigation={() =>
-                fireGAEvent({
-                  category: "Areas",
-                  action: AreaActions.Investigation,
-                  label: AreaLabel.StartedInvestigation
-                })
-              }
-              onManageArea={() =>
-                fireGAEvent({
-                  category: "Areas",
-                  action: AreaActions.Managed,
-                  label: AreaLabel.StartedFromAreas
-                })
-              }
-            />
-          )}
-        </UserAreasMap>
+        <MapProvider>
+          <UserAreasMap
+            className="c-map--within-hero"
+            selectedAreaId={selectedArea?.id}
+            onAreaSelect={handleAreaSelect}
+            onAreaDeselect={handleAreaDeselect}
+            onMapLoad={handleMapLoad}
+            showTeamAreas
+            alwaysHideKeyLegend
+            context={MapContext}
+          >
+            {selectedArea && (
+              <AreaDetailCard
+                area={selectedArea}
+                teamNames={selectedArea.id ? getTeamNamesByAreaId(selectedArea.id) : []}
+                numberOfReports={answersBySelectedArea?.length}
+                onStartInvestigation={() =>
+                  fireGAEvent({
+                    category: "Areas",
+                    action: AreaActions.Investigation,
+                    label: AreaLabel.StartedInvestigation
+                  })
+                }
+                onManageArea={() =>
+                  fireGAEvent({
+                    category: "Areas",
+                    action: AreaActions.Managed,
+                    label: AreaLabel.StartedFromAreas
+                  })
+                }
+              />
+            )}
+          </UserAreasMap>
+        </MapProvider>
       )}
 
       <div className="l-content l-content--neutral-400">
@@ -246,11 +262,7 @@ const Areas: FC<IProps> = props => {
                               subtitleValue={{
                                 name:
                                   // @ts-ignore
-                                  areasInTeam?.team?.id &&
-                                  // @ts-ignore
-                                  teamMembers?.[areasInTeam?.team?.id]?.find(
-                                    member => member.attributes.role === "administrator"
-                                  )?.attributes?.name
+                                  areasInTeam?.team?.id && teamAdminNames[areasInTeam?.team?.id]
                               }}
                             />
                           ))}

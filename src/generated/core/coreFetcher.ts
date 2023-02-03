@@ -76,7 +76,7 @@ export async function coreFetch<
     // eslint-disable-next-line
     throw {
       status: "unknown" as const,
-      payload: e instanceof Error ? `Network error (${e.message})` : "Network error"
+      payload: e instanceof Error ? `Network error (${e.message})` : e
     };
   }
 }

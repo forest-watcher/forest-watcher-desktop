@@ -4,19 +4,25 @@ import SquareClusterMarkers, { EPointDataTypes } from "components/ui/Map/compone
 import { useGetV3GfwAssignmentsAllOpenUserForAreaAreaId } from "generated/core/coreComponents";
 import { useAccessToken } from "hooks/useAccessToken";
 import useGetUserId from "hooks/useGetUserId";
-import { FC, useCallback, useMemo, useState } from "react";
+import { FC, useCallback, useContext, useMemo } from "react";
 import { useMap } from "react-map-gl";
 import { AssignmentLayerType, IPoint } from "types/map";
+import MapContext from "../MapContext";
 
 export interface IProps {
   areaId?: string;
+  parentControl: boolean;
 }
 
 const AreaAssignmentMapSource: FC<IProps> = props => {
-  const { areaId } = props;
+  const {
+    active: { assignmentId: selectedAssignmentId },
+    setAssignmentId: setSelectedAssignmentId
+  } = useContext(MapContext);
+
+  const { areaId, parentControl } = props;
   const { current: mapRef } = useMap();
   const userId = useGetUserId();
-  const [selectedAssignmentId, setSelectedAssignmentId] = useState<string | null>(null);
 
   const { httpAuthHeader } = useAccessToken();
   const { data } = useGetV3GfwAssignmentsAllOpenUserForAreaAreaId(
@@ -74,9 +80,12 @@ const AreaAssignmentMapSource: FC<IProps> = props => {
     return assignmentCenters;
   }, [data, userId]);
 
-  const handleSquareSelect = useCallback((ids: string[] | null) => {
-    setSelectedAssignmentId(ids && ids[0] ? ids[0] : null);
-  }, []);
+  const handleSquareSelect = useCallback(
+    (ids: string[] | null) => {
+      setSelectedAssignmentId?.(ids && ids[0] ? ids[0] : null);
+    },
+    [setSelectedAssignmentId]
+  );
 
   return (
     <>
@@ -84,7 +93,7 @@ const AreaAssignmentMapSource: FC<IProps> = props => {
         id="assignments"
         pointDataType={EPointDataTypes.Assignments}
         points={assignmentPoints}
-        onSelectionChange={handleSquareSelect}
+        onSquareSelect={handleSquareSelect}
         selectedSquareIds={selectedAssignmentId ? [selectedAssignmentId] : null}
         mapRef={mapRef?.getMap() || null}
         canMapDeselect
@@ -94,7 +103,7 @@ const AreaAssignmentMapSource: FC<IProps> = props => {
         selectedAssignment={
           selectedAssignmentId && data?.data ? data.data.find(i => i.id === selectedAssignmentId) : undefined
         }
-        onClose={() => setSelectedAssignmentId(null)}
+        onClose={() => parentControl && setSelectedAssignmentId?.(null)}
       />
     </>
   );
