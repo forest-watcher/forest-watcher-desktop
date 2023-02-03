@@ -137,6 +137,7 @@
     "build-storybook": "build-storybook -s src/assets",
     "transifex:prettier": "prettier --ignore-path .gitignore \"src/locales/*.+(json)\" --write",
     "generate:api": "npx openapi-codegen gen api",
+    "generate:alerts": "npx openapi-codegen gen alerts",
     "generate:teams": "npx openapi-codegen gen teams",
     "generate:exports": "npx openapi-codegen gen exports",
     "generate:forms": "npx openapi-codegen gen forms",
