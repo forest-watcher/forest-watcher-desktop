@@ -78,7 +78,10 @@ const Carousel = ({ slides, downloadable }: CarouselProps) => {
         <CarouselImageDownloadModal onClose={() => setImageToView("")} imageToDownload={imageToView} />
       </OptionalWrapper>
       <div className="c-carousel">
-        <div className="c-carousel__viewport mb-4 rounded-b" ref={mainViewportRef}>
+        <div
+          className="c-carousel__viewport mb-4 rounded-b border-t-0 border-2 bg-neutral-300 border-solid border-neutral-600 border-opacity-10"
+          ref={mainViewportRef}
+        >
           <div className="c-carousel__container">
             {slides.map((src, index) => (
               <div className="c-carousel__slide" key={index}>
@@ -98,7 +101,7 @@ const Carousel = ({ slides, downloadable }: CarouselProps) => {
                     onClick={() => setImageToView(src)}
                     aria-label={intl.formatMessage({ id: "common.view" })}
                   >
-                    <img className="w-full h-full object-cover" src={src} alt="" />
+                    <img className="w-full h-full object-contain" src={src} alt="" />
                   </button>
                 </div>
               </div>
@@ -106,9 +109,9 @@ const Carousel = ({ slides, downloadable }: CarouselProps) => {
           </div>
         </div>
         {slides.length > 1 && (
-          <div className="relative">
+          <div className="relative flex items-center gap-4">
             <Button
-              className="absolute -left-14 top-1/2 u-translate-y-half"
+              className="xl:absolute xl:-left-14 top-1/2 xl:u-translate-y-half"
               disabled={!prevBtnEnabled}
               onClick={scrollPrev}
               isIcon
@@ -116,7 +119,7 @@ const Carousel = ({ slides, downloadable }: CarouselProps) => {
             >
               <Icon name="ChevronLeft" size={36} />
             </Button>
-            <div className="overflow-hidden" ref={thumbViewportRef}>
+            <div className="overflow-hidden grow" ref={thumbViewportRef}>
               <div className="flex gap-4">
                 {slides.map((src, index) => (
                   <CarouselThumb
@@ -129,7 +132,7 @@ const Carousel = ({ slides, downloadable }: CarouselProps) => {
               </div>
             </div>
             <Button
-              className="absolute -right-14 top-1/2 u-translate-y-half"
+              className="xl:absolute xl:-right-14  xl:top-1/2 xl:u-translate-y-half"
               disabled={!nextBtnEnabled}
               onClick={scrollNext}
               isIcon
