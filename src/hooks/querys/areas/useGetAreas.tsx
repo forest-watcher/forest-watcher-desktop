@@ -25,7 +25,10 @@ const useGetAreas = (
 ) => {
   const userId = useGetUserId();
   const { httpAuthHeader } = useAccessToken();
-  const { data: areaList, ...rest } = useGetV3GfwAreasUserandteam({ headers: httpAuthHeader }, options);
+  const { data: areaList, ...rest } = useGetV3GfwAreasUserandteam(
+    { headers: httpAuthHeader },
+    { refetchOnWindowFocus: false, ...options }
+  );
 
   const userAreas = useMemo(() => {
     return (
