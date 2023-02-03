@@ -1,3 +1,5 @@
+import { useInvalidateGetAreaById } from "hooks/querys/areas/useGetAreaById";
+import { useInvalidateGetTemplates } from "hooks/querys/templates/useGetTemplates";
 import { FC, useCallback, useState } from "react";
 import Modal from "components/ui/Modal/Modal";
 import Loader from "components/ui/Loader";
@@ -24,6 +26,7 @@ const RemoveAreaFromTeam: FC<IProps> = props => {
   const intl = useIntl();
   const dispatch = useAppDispatch();
   const [isRemoving, setIsRemoving] = useState(false);
+  const invalidateGetAreaById = useInvalidateGetAreaById();
 
   const onClose = useCallback(() => {
     history.goBack();
@@ -34,6 +37,7 @@ const RemoveAreaFromTeam: FC<IProps> = props => {
     try {
       await areaService.unassignTeamFromArea(areaId, teamId);
       dispatch(getAreasInUsersTeams());
+      await invalidateGetAreaById(areaId);
       onClose();
       toastr.success(intl.formatMessage({ id: "areas.details.teams.remove.success" }), "");
     } catch (e: any) {
