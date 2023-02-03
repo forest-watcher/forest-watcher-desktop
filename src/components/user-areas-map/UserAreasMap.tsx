@@ -1,5 +1,5 @@
 import { AnswersResponse } from "generated/core/coreResponses";
-import { FC, PropsWithChildren, useCallback, useEffect, useMemo, useState } from "react";
+import { Context, FC, PropsWithChildren, useCallback, useContext, useEffect, useMemo, useState } from "react";
 import Polygon, { IProps as IPolygonProps } from "../ui/Map/components/layers/Polygon";
 import Map, { IProps as IMapProps } from "../ui/Map/Map";
 import { Map as MapInstance, MapboxEvent } from "mapbox-gl";
@@ -14,6 +14,7 @@ import { getReportAlertsByName } from "helpers/reports";
 import { TAnswer } from "components/ui/Map/components/cards/ReportDetail";
 import { ProcTypes } from "pages/reports/investigation/Investigation";
 import useGetAreas from "hooks/querys/areas/useGetAreas";
+import { IContext } from "pages/reports/investigation/MapContext";
 
 export interface IProps extends IMapProps {
   // Should be a memorised function! useCallBack()
@@ -29,6 +30,7 @@ export interface IProps extends IMapProps {
   showTeamAreas?: boolean;
   cooperativeGestures?: boolean;
   alwaysHideKeyLegend?: boolean;
+  context: Context<IContext>;
 }
 
 const UserAreasMap: FC<PropsWithChildren<IProps>> = props => {
@@ -46,8 +48,15 @@ const UserAreasMap: FC<PropsWithChildren<IProps>> = props => {
     showTeamAreas = false,
     cooperativeGestures = true,
     alwaysHideKeyLegend = false,
+    context,
     ...rest
   } = props;
+
+  const {
+    active: { reportIds: selectedReportIds },
+    setReportIds: setSelectedReportIds
+  } = useContext(context);
+
   const [mapRef, setMapRef] = useState<MapInstance | null>(null);
   const [clickState, setClickState] = useState<{ type: "deselect" } | { type: "select"; areaId: string } | undefined>(
     undefined
@@ -69,7 +78,6 @@ const UserAreasMap: FC<PropsWithChildren<IProps>> = props => {
   }, [areasByTeam, showTeamAreas, userAreas]);
 
   const [hasLoaded, setHasLoaded] = useState(true);
-  const [selectedReportIds, setSelectedReportIds] = useState<string[] | null>(null);
   const features = useMemo(() => {
     if (areaMap.length > 0) {
       // @ts-ignore
@@ -116,9 +124,12 @@ const UserAreasMap: FC<PropsWithChildren<IProps>> = props => {
     [selectedAreaId]
   );
 
-  const handleSquareSelect = useCallback((ids: string[], point: mapboxgl.Point) => {
-    setSelectedReportIds(ids);
-  }, []);
+  const handleSquareSelect = useCallback(
+    (ids: string[], point: mapboxgl.Point) => {
+      setSelectedReportIds?.(ids);
+    },
+    [setSelectedReportIds]
+  );
 
   useEffect(() => {
     if (clickState?.type === "deselect" && onAreaDeselect && selectedAreaId) {
@@ -210,7 +221,7 @@ const UserAreasMap: FC<PropsWithChildren<IProps>> = props => {
               ?.filter(answer => selectedReportIds.findIndex(id => id === answer.id) > -1)
               .map(answer => answer) as TAnswer[]
           }
-          onClose={() => setSelectedReportIds(null)}
+          onClose={() => !rest.hideControls && setSelectedReportIds?.(null)}
         />
       )}
 

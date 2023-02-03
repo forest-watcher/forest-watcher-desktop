@@ -1,14 +1,13 @@
+import { usePatchV3GfwTeamsTeamId } from "generated/core/coreComponents";
+import { useInvalidateGetUserTeams } from "hooks/querys/teams/useGetUserTeams";
+import { useAccessToken } from "hooks/useAccessToken";
 import { FC } from "react";
 import FormModal from "components/modals/FormModal";
 import { useHistory, useParams } from "react-router-dom";
 import { TParams } from "../TeamDetail";
 import { useIntl } from "react-intl";
-import { teamService } from "services/teams";
 import { toastr } from "react-redux-toastr";
 import { UnpackNestedValue } from "react-hook-form";
-import { useAppDispatch } from "hooks/useRedux";
-import { getUserTeams } from "modules/gfwTeams";
-import useGetUserId from "hooks/useGetUserId";
 import yup from "configureYup";
 import { yupResolver } from "@hookform/resolvers/yup/dist/yup";
 
@@ -31,10 +30,14 @@ interface IProps {
 const EditTeamModal: FC<IProps> = props => {
   const { isOpen, currentName } = props;
   const intl = useIntl();
-  const dispatch = useAppDispatch();
   const { teamId } = useParams<TParams>();
   const history = useHistory();
-  const userId = useGetUserId();
+  const invalidateGetUserTeams = useInvalidateGetUserTeams();
+
+  /* Mutations */
+  const { httpAuthHeader } = useAccessToken();
+  // Update a Team Name
+  const { mutateAsync: updateTeamName } = usePatchV3GfwTeamsTeamId();
 
   const onClose = () => {
     history.push(`/teams/${teamId}`);
@@ -42,9 +45,11 @@ const EditTeamModal: FC<IProps> = props => {
 
   const onSave = async (data: UnpackNestedValue<TEditTeamForm>) => {
     try {
-      await teamService.updateTeam(teamId, data);
-      // Refetch the User Teams
-      dispatch(getUserTeams(userId));
+      await updateTeamName({ headers: httpAuthHeader, pathParams: { teamId }, body: data });
+
+      // Ensure the Team Listing and Team Details caches are invalidated, forcing a re-fetched
+      await invalidateGetUserTeams(teamId);
+
       toastr.success(intl.formatMessage({ id: "teams.edit.success" }), "");
       onClose();
     } catch (e) {

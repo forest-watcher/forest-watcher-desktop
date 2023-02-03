@@ -1,20 +1,15 @@
-import { useGetV3GfwTeamsUserUserId } from "generated/core/coreComponents";
 import { TeamsResponse } from "generated/core/coreResponses";
-import { useAccessToken } from "hooks/useAccessToken";
+import useGetUserTeams from "hooks/querys/teams/useGetUserTeams";
 import useGetUserId from "hooks/useGetUserId";
 import { useMemo } from "react";
 
 const useGetUserTeamsWithActiveMembers = ({ shouldExcludeUser = true } = {}) => {
-  const { httpAuthHeader } = useAccessToken();
   const userId = useGetUserId();
-  const { data, ...rest } = useGetV3GfwTeamsUserUserId({
-    headers: httpAuthHeader,
-    pathParams: { userId }
-  });
+  const { data, ...rest } = useGetUserTeams();
 
   const filteredTeams = useMemo(
     () =>
-      data?.data?.reduce<TeamsResponse["data"]>((acc, team) => {
+      data?.reduce<TeamsResponse["data"]>((acc, team) => {
         if (!team?.attributes?.members) return acc; // Should never get here
 
         let teamMembers = shouldExcludeUser
@@ -36,7 +31,7 @@ const useGetUserTeamsWithActiveMembers = ({ shouldExcludeUser = true } = {}) => 
           }
         ];
       }, []),
-    [data?.data, shouldExcludeUser, userId]
+    [data, shouldExcludeUser, userId]
   );
 
   return { data: filteredTeams, ...rest };
