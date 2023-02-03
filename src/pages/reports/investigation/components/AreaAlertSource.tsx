@@ -4,12 +4,13 @@ import { pointStyle } from "components/ui/Map/components/layers/styles";
 import { EAlertTypes } from "constants/alerts";
 import { findNeighboringPoints } from "helpers/map";
 import useGetAlertsForArea from "hooks/querys/alerts/useGetAlertsForArea";
-import { FC, useCallback, useEffect, useMemo, useState } from "react";
+import { FC, useCallback, useContext, useEffect, useMemo } from "react";
 import { useFormContext, useWatch } from "react-hook-form";
 import { useMap } from "react-map-gl";
 import KDBush from "kdbush";
 import { IPoint, TAlertsById } from "types/map";
 import AlertSelectionCard from "components/ui/Map/components/cards/AlertSelection";
+import MapContext from "../MapContext";
 
 export interface IProps {
   areaId?: string;
@@ -23,9 +24,14 @@ const AreaAlertMapSource: FC<IProps> = props => {
   const { current: mapRef } = useMap();
   const { setValue, control } = useFormContext();
   const selectedAlerts = useWatch({ control, name: "selectedAlerts" });
-  const [selectedAlertIds, setSelectedAlertIds] = useState<string[] | null>(null);
-  const [neighboringAlertIds, setNeighboringAlertIds] = useState<string[]>();
-  const [multipleAlertsToPick, setMultipleAlertsToPick] = useState<string[] | null>();
+
+  const {
+    active: { selectedAlertIds, neighboringAlertIds, multipleAlertsToPick },
+    setSelectedAlertIds,
+    setNeighboringAlertIds,
+    setMultipleAlertsToPick
+  } = useContext(MapContext);
+
   const alerts = useGetAlertsForArea(areaId, alertTypesToShow, alertRequestThreshold);
 
   const [alertPoints, alertsById, pointsIndex] = useMemo(
@@ -73,10 +79,10 @@ const AreaAlertMapSource: FC<IProps> = props => {
         "selectedAlerts",
         alertsById.filter(alert => ids?.includes(alert.id))
       );
-      setSelectedAlertIds(ids);
-      setMultipleAlertsToPick(null);
+      setSelectedAlertIds?.(ids);
+      setMultipleAlertsToPick?.(null);
     },
-    [alertsById, setValue]
+    [alertsById, setMultipleAlertsToPick, setSelectedAlertIds, setValue]
   );
 
   const handleSelectedPointsConfirm = (ids: string[]) => {
@@ -94,13 +100,13 @@ const AreaAlertMapSource: FC<IProps> = props => {
     // If all selected Alerts for parent form are removed
     // Set SelectedAlertIds to null so that the SquareClusterMarkers are cleared too
     if (selectedAlerts && selectedAlerts.length === 0) {
-      setSelectedAlertIds(null);
+      setSelectedAlertIds?.(null);
     }
 
     if (selectedAlerts && selectedAlerts?.length > 0) {
-      setNeighboringAlertIds(findNeighboringPoints(pointsIndex, selectedAlerts).map(point => point.id));
+      setNeighboringAlertIds?.(findNeighboringPoints(pointsIndex, selectedAlerts).map(point => point.id));
     }
-  }, [pointsIndex, selectedAlerts]);
+  }, [pointsIndex, selectedAlerts, setSelectedAlertIds, setNeighboringAlertIds]);
 
   return (
     <>
@@ -120,7 +126,7 @@ const AreaAlertMapSource: FC<IProps> = props => {
         }}
         mapRef={mapRef?.getMap() || null}
         onSelectionChange={handleAlertSelectionChange}
-        onSelectionOverlapped={setMultipleAlertsToPick}
+        onSelectionOverlapped={ids => setMultipleAlertsToPick?.(ids)}
         canMultiSelect
         canMapDeselect
         locked={locked}

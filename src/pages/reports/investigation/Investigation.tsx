@@ -35,6 +35,7 @@ import { useMediaQuery } from "react-responsive";
 import { getDateStringsForComparison } from "helpers/dates";
 import { useAppDispatch } from "hooks/useRedux";
 import { setPortalCard } from "modules/layers";
+import MapContext, { MapProvider } from "./MapContext";
 
 interface IProps extends RouteComponentProps, TPropsFromRedux {}
 
@@ -221,7 +222,8 @@ const InvestigationPage: FC<IProps> = props => {
       cooperativeGestures: false,
       shouldWrapContainer: false,
       style: mapContainerStyle,
-      uncontrolled: true
+      uncontrolled: true,
+      context: MapContext
     }),
     [
       answersBySelectedArea,
@@ -237,94 +239,100 @@ const InvestigationPage: FC<IProps> = props => {
   return (
     <>
       <div className="c-map z-auto h-auto" ref={e => setControlsPortal(e || undefined)}></div>
-      <MapComparison
-        className={classNames("h-full", showComparison && "select-none")}
-        minLeftSlide={isMobile ? 300 : 500}
-        renderBefore={cb => {
-          return (
-            <UserAreasMap
-              {...sharedMapProps}
-              onMapLoad={e => {
-                handleMapLoad(e);
-                cb(e.target);
-              }}
-              hideControls={showComparison}
-              currentPlanetBasemap={
-                basemaps.length && isPlanet
-                  ? basemaps.find(bm => bm.name === currentPlanetPeriod) || basemaps[0]
-                  : undefined
-              }
-              currentProc={currentProc}
+      <MapProvider>
+        <MapComparison
+          className={classNames("h-full", showComparison && "select-none")}
+          minLeftSlide={isMobile ? 300 : 500}
+          renderBefore={cb => {
+            return (
+              <UserAreasMap
+                {...sharedMapProps}
+                onMapLoad={e => {
+                  handleMapLoad(e);
+                  cb(e.target);
+                }}
+                hideControls={showComparison}
+                currentPlanetBasemap={
+                  basemaps.length && isPlanet
+                    ? basemaps.find(bm => bm.name === currentPlanetPeriod) || basemaps[0]
+                    : undefined
+                }
+                currentProc={currentProc}
+              >
+                <FormProvider {...formhook}>
+                  <Switch>
+                    <Route exact path={`${match.url}`} component={AreaListControlPanel} />
+                    <Route exact path={`${match.url}/:areaId`}>
+                      <AreaDetailControlPanel numberOfReports={answersBySelectedArea?.length} />
+                    </Route>
+                    <Route exact path={`${match.url}/:areaId/start`}>
+                      <StartInvestigationControlPanel
+                        answers={answersBySelectedArea}
+                        onFilterUpdate={handleFiltersChange}
+                        defaultBasemap={basemapKey}
+                        onComparison={(value: boolean) => setShowComparison(value)}
+                      />
+                    </Route>
+
+                    <Route exact path={`${match.url}/:areaId/start/assignment`}>
+                      <CreateAssignmentControlPanel setLockAlertSelections={setLockAlertSelections} />
+                    </Route>
+                  </Switch>
+
+                  <Layers contextualLayerUrls={contextualLayerUrls} lockAlertSelections={lockAlertSelections} />
+                </FormProvider>
+              </UserAreasMap>
+            );
+          }}
+          renderAfter={
+            showComparison
+              ? cb => {
+                  return (
+                    <UserAreasMap
+                      {...sharedMapProps}
+                      onMapLoad={e => {
+                        handleMapLoad(e);
+                        cb(e.target);
+                      }}
+                      controlsPortalDom={controlsPortal}
+                      currentPlanetBasemap={
+                        basemaps.length && isPlanet
+                          ? basemaps.find(bm => bm.name === currentPlanetPeriodAfter) || basemaps[0]
+                          : undefined
+                      }
+                      currentProc={currentProcAfter}
+                    >
+                      <FormProvider {...formhook}>
+                        <Layers
+                          contextualLayerUrls={contextualLayerUrls}
+                          lockAlertSelections={lockAlertSelections}
+                          parentControl
+                        />
+                      </FormProvider>
+                    </UserAreasMap>
+                  );
+                }
+              : undefined
+          }
+        >
+          <OptionalWrapper data={showComparison}>
+            {/* comparison card */}
+            <MapCard
+              position="bottom-right"
+              title={intl.formatMessage({ id: "maps.comparison.cardTitle" })}
+              titleIconName="Basemap"
             >
-              <FormProvider {...formhook}>
-                <Switch>
-                  <Route exact path={`${match.url}`} component={AreaListControlPanel} />
-                  <Route exact path={`${match.url}/:areaId`}>
-                    <AreaDetailControlPanel numberOfReports={answersBySelectedArea?.length} />
-                  </Route>
-                  <Route exact path={`${match.url}/:areaId/start`}>
-                    <StartInvestigationControlPanel
-                      answers={answersBySelectedArea}
-                      onFilterUpdate={handleFiltersChange}
-                      defaultBasemap={basemapKey}
-                      onComparison={(value: boolean) => setShowComparison(value)}
-                    />
-                  </Route>
-
-                  <Route exact path={`${match.url}/:areaId/start/assignment`}>
-                    <CreateAssignmentControlPanel setLockAlertSelections={setLockAlertSelections} />
-                  </Route>
-                </Switch>
-
-                <Layers contextualLayerUrls={contextualLayerUrls} lockAlertSelections={lockAlertSelections} />
-              </FormProvider>
-            </UserAreasMap>
-          );
-        }}
-        renderAfter={
-          showComparison
-            ? cb => {
-                return (
-                  <UserAreasMap
-                    {...sharedMapProps}
-                    onMapLoad={e => {
-                      handleMapLoad(e);
-                      cb(e.target);
-                    }}
-                    controlsPortalDom={controlsPortal}
-                    currentPlanetBasemap={
-                      basemaps.length && isPlanet
-                        ? basemaps.find(bm => bm.name === currentPlanetPeriodAfter) || basemaps[0]
-                        : undefined
-                    }
-                    currentProc={currentProcAfter}
-                  >
-                    <FormProvider {...formhook}>
-                      <Layers contextualLayerUrls={contextualLayerUrls} lockAlertSelections={lockAlertSelections} />
-                    </FormProvider>
-                  </UserAreasMap>
-                );
-              }
-            : undefined
-        }
-      >
-        <OptionalWrapper data={showComparison}>
-          {/* comparison card */}
-          <MapCard
-            position="bottom-right"
-            title={intl.formatMessage({ id: "maps.comparison.cardTitle" })}
-            titleIconName="Basemap"
-          >
-            <p className="text-base mb-1">
-              <FormattedMessage id="maps.comparison.left" values={{ date: dateStrs?.beforeStr }} />
-            </p>
-            <p className="text-base">
-              <FormattedMessage id="maps.comparison.right" values={{ date: dateStrs?.afterStr }} />
-            </p>
-          </MapCard>
-        </OptionalWrapper>
-        <div ref={e => dispatch(setPortalCard(e || undefined))}></div>
-      </MapComparison>
+              <p className="text-base mb-1">
+                <FormattedMessage id="maps.comparison.left" values={{ date: dateStrs?.beforeStr }} />
+              </p>
+              <p className="text-base">
+                <FormattedMessage id="maps.comparison.right" values={{ date: dateStrs?.afterStr }} />
+              </p>
+            </MapCard>
+          </OptionalWrapper>
+          <div ref={e => dispatch(setPortalCard(e || undefined))}></div>
+        </MapComparison>
+      </MapProvider>
     </>
   );
 };

@@ -1,16 +1,17 @@
 import * as turf from "@turf/turf";
 import { linePointStyle, lineStyle } from "components/ui/Map/components/layers/styles";
 import { useGetV3GfwRoutesTeams, useGetV3GfwRoutesUser } from "generated/core/coreComponents";
-import { RouteResponse } from "generated/core/coreResponses";
 import { RouteModel } from "generated/core/coreSchemas";
 import { useAccessToken } from "hooks/useAccessToken";
 import { EventData, MapMouseEvent } from "mapbox-gl";
-import { FC, useEffect, useMemo, useState } from "react";
+import { FC, useContext, useEffect, useMemo } from "react";
 import { Layer, Source, useMap } from "react-map-gl";
+import MapContext from "../MapContext";
 import RouteCard from "./RouteCard";
 
 export interface IProps {
   areaId?: string;
+  parentControl?: boolean;
 }
 
 export const getRoutePoints = (route: { id?: string; type?: string; attributes?: RouteModel }) => {
@@ -18,8 +19,10 @@ export const getRoutePoints = (route: { id?: string; type?: string; attributes?:
 };
 
 const AreaRoutesSource: FC<IProps> = props => {
-  const [selectedRoute, setSelectedRoute] = useState<RouteResponse["data"] | null>(null);
-  const [selectedFeature, setSelectedFeature] = useState<any | null>(null);
+  const {
+    active: { selectedRoute },
+    setSelectedRoute
+  } = useContext(MapContext);
   const { httpAuthHeader } = useAccessToken();
   const { current: mapRef } = useMap();
   const { data: teamRoutes } = useGetV3GfwRoutesTeams({
@@ -103,8 +106,7 @@ const AreaRoutesSource: FC<IProps> = props => {
     const handleRouteClick = (e: MapMouseEvent & EventData) => {
       e.preventDefault();
       const route = JSON.parse(e.features[0].properties.route);
-      setSelectedRoute(route);
-      setSelectedFeature(e.features[0]);
+      setSelectedRoute?.(route);
     };
 
     routesMapped.forEach((routes, index) => mapRef?.on("click", `route-lines-${index}`, handleRouteClick));
@@ -114,7 +116,7 @@ const AreaRoutesSource: FC<IProps> = props => {
       routesMapped.forEach((routes, index) => mapRef?.off("click", `route-lines-${index}`, handleRouteClick));
       pointsMapped.forEach((points, index) => mapRef?.off("click", `route-points-${index}`, handleRouteClick));
     };
-  }, [mapRef, pointsMapped, routesMapped, selectedFeature]);
+  }, [mapRef, pointsMapped, routesMapped, setSelectedRoute]);
 
   return (
     <>
@@ -133,7 +135,9 @@ const AreaRoutesSource: FC<IProps> = props => {
             <Layer {...linePointStyle} id={`route-points-${index}`} />
           </Source>
         ))}
-      {selectedRoute && <RouteCard route={selectedRoute} onClose={() => setSelectedRoute(null)} />}
+      {selectedRoute && (
+        <RouteCard route={selectedRoute} onClose={() => props.parentControl && setSelectedRoute?.(null)} />
+      )}
     </>
   );
 };
