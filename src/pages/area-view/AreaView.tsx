@@ -1,5 +1,6 @@
 import Hero from "components/layouts/Hero/Hero";
 import Map from "components/ui/Map/Map";
+import useGetAreaById from "hooks/querys/areas/useGetAreaById";
 import useGetAllReportAnswersForUser from "hooks/querys/reportAnwsers/useGetAllReportAnswersForUser";
 import useGetUserTeams from "hooks/querys/teams/useGetUserTeams";
 import { FC, useState, useEffect, useMemo, useCallback } from "react";
@@ -29,8 +30,6 @@ import { useGetBackLink } from "hooks/useGetBackLink";
 import { fireGAEvent } from "helpers/analytics";
 import { AreaActions, AreaLabel } from "types/analytics";
 import useGetTemplates from "hooks/querys/templates/useGetTemplates";
-import { useGetV3GfwAreasAreaId } from "generated/core/coreComponents";
-import { useAccessToken } from "hooks/useAccessToken";
 
 interface IProps extends TPropsFromRedux {}
 export type TParams = {
@@ -51,14 +50,10 @@ const AreasView: FC<IProps & RouteComponentProps<TParams>> = props => {
   /*
    * Queries
    */
-  const { httpAuthHeader } = useAccessToken();
-  // - Get All Templates
+  // Get Area by AreaId
+  const { data: area, isLoading } = useGetAreaById(areaId);
+  // - Get All Templates - ToDo: Move to Add Template Modal
   const { templates } = useGetTemplates();
-  // - Fetch Area by AreaId
-  const { data: area, isLoading } = useGetV3GfwAreasAreaId({
-    pathParams: { areaId: areaId || "" },
-    headers: httpAuthHeader
-  });
   // - Fetch all Report Answers
   const { data: allAnswers } = useGetAllReportAnswersForUser();
   // - Fetch all Teams the User is a member of
@@ -69,7 +64,7 @@ const AreasView: FC<IProps & RouteComponentProps<TParams>> = props => {
     window.scrollTo(0, 0);
   }, []);
 
-  const isMyArea = area?.data?.attributes?.userId === userId;
+  const isMyArea = area?.attributes?.userId === userId;
 
   const canManage = useMemo(() => {
     // For Each team in the area
@@ -84,16 +79,16 @@ const AreasView: FC<IProps & RouteComponentProps<TParams>> = props => {
     return hasPermissions;
   }, [areaTeams, isMyArea, managedTeams]);
 
-  const geojson = useMemo(() => area?.data?.attributes?.geostore?.geojson, [area]);
+  const geojson = useMemo(() => area?.attributes?.geostore?.geojson, [area]);
 
   const templatesToAdd = useMemo(() => {
     return (
       templates?.filter(
         // @ts-ignore missing type
-        template => !area?.data?.attributes?.reportTemplate?.find(areaTemplate => areaTemplate?._id === template?.id)
+        template => !area?.attributes?.reportTemplate?.find(areaTemplate => areaTemplate?._id === template?.id)
       ) || []
     );
-  }, [area?.data?.attributes?.reportTemplate, templates]);
+  }, [area?.attributes?.reportTemplate, templates]);
 
   const teamsToAdd = useMemo(() => {
     return userTeams?.filter(team => !areaTeams.find(areaTeam => areaTeam.data.id === team.id)) || [];
@@ -124,17 +119,17 @@ const AreasView: FC<IProps & RouteComponentProps<TParams>> = props => {
   };
 
   useEffect(() => {
-    if (area?.data?.id && userId) {
-      getAreaTeams(area.data.id);
+    if (area?.id) {
+      getAreaTeams(area.id);
     }
   }, [area, getAreaTeams, userId]);
 
   const handleExport = useCallback(
     async (values: UnpackNestedValue<TExportForm>) => {
       // Do request
-      if (area?.data?.id) {
+      if (area?.id) {
         try {
-          const { data } = await exportService.exportArea(area?.data?.id, values.fileType, values.email);
+          const { data } = await exportService.exportArea(area?.id, values.fileType, values.email);
           return data;
         } catch (err) {
           // Do toast
@@ -150,7 +145,7 @@ const AreasView: FC<IProps & RouteComponentProps<TParams>> = props => {
       <div className="c-area-manage">
         <Hero
           title="areas.manageAreaName"
-          titleValues={{ name: area?.data?.attributes?.name ?? "" }}
+          titleValues={{ name: area?.attributes?.name ?? "" }}
           backLink={{ name: backLinkTextKey }}
           actions={
             area ? (
@@ -164,7 +159,7 @@ const AreasView: FC<IProps & RouteComponentProps<TParams>> = props => {
                   <FormattedMessage id="common.export" />
                 </Link>
                 <a
-                  href={`${process.env.REACT_APP_FLAGSHIP_URL}/map/aoi/${area.data?.id}`}
+                  href={`${process.env.REACT_APP_FLAGSHIP_URL}/map/aoi/${area?.id}`}
                   target="_blank"
                   rel="noopenner noreferrer"
                   className="c-button c-button--secondary-light-text"
@@ -186,14 +181,19 @@ const AreasView: FC<IProps & RouteComponentProps<TParams>> = props => {
           area &&
           geojson && (
             <Map className="c-map--within-hero" onMapLoad={handleMapLoad} showKeyLegend>
-              <Polygon id={area?.data?.id || ""} label={area.data?.attributes?.name} data={geojson} />
+              <Polygon id={area?.id || ""} label={area?.attributes?.name} data={geojson} />
             </Map>
           )
         )}
         <div className="l-content u-h-min-unset">
           <Article
             title="areas.details.templates"
-            titleValues={{ num: area?.data?.attributes?.reportTemplate?.length ?? 0 }}
+            titleValues={{
+              num:
+                area?.attributes?.reportTemplate?.filter(template =>
+                  template.hasOwnProperty("isLatest") ? template.isLatest : true
+                ).length ?? 0
+            }}
             size="small"
             actions={
               <Link
@@ -214,11 +214,11 @@ const AreasView: FC<IProps & RouteComponentProps<TParams>> = props => {
           >
             {
               /* TS issue here, reportTemplate.length can be undefined */
-              (area?.data?.attributes?.reportTemplate?.length ?? 0) > 0 && (
+              (area?.attributes?.reportTemplate?.length ?? 0) > 0 && (
                 <DataTable<TTemplateDataTable>
                   className="u-w-100"
                   rows={
-                    area?.data?.attributes?.reportTemplate
+                    area?.attributes?.reportTemplate
                       ?.filter(template => (template.hasOwnProperty("isLatest") ? template.isLatest : true))
                       .map(template => ({
                         ...template,

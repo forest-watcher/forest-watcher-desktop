@@ -1,6 +1,7 @@
 import { DeleteV3GfwArearelationsTeamsError, useDeleteV3GfwArearelationsTeams } from "generated/core/coreComponents";
 import { useInvalidateGetUserTeams } from "hooks/querys/teams/useGetUserTeams";
 import { useAccessToken } from "hooks/useAccessToken";
+import { useInvalidateGetAreaById } from "hooks/querys/areas/useGetAreaById";
 import { FC, useCallback, useState } from "react";
 import Modal from "components/ui/Modal/Modal";
 import Loader from "components/ui/Loader";
@@ -23,6 +24,7 @@ const RemoveAreaFromTeam: FC<IProps> = props => {
   const intl = useIntl();
   const [isRemoving, setIsRemoving] = useState(false);
   const invalidateGetUserTeams = useInvalidateGetUserTeams();
+  const invalidateGetAreaById = useInvalidateGetAreaById();
 
   /* Mutations */
   const { httpAuthHeader } = useAccessToken();
@@ -40,6 +42,7 @@ const RemoveAreaFromTeam: FC<IProps> = props => {
 
       // ToDo: Invalidate Areas fetches?
       await invalidateGetUserTeams();
+      await invalidateGetAreaById(areaId);
 
       onClose();
       toastr.success(intl.formatMessage({ id: "areas.details.teams.remove.success" }), "");

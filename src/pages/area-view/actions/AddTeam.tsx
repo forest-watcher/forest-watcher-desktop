@@ -1,4 +1,5 @@
 import { TeamsResponse } from "generated/core/coreResponses";
+import { useInvalidateGetAreaById } from "hooks/querys/areas/useGetAreaById";
 import { FC, useMemo } from "react";
 import FormModal from "components/modals/FormModal";
 import { Link, useHistory, useParams } from "react-router-dom";
@@ -38,6 +39,7 @@ const AddTeamModal: FC<IProps> = ({ teams }) => {
   const history = useHistory();
   const dispatch = useAppDispatch();
   const userId = useGetUserId();
+  const invalidateGetAreaById = useInvalidateGetAreaById();
 
   const teamOptions = useMemo<Option[] | undefined>(
     () =>
@@ -65,6 +67,7 @@ const AddTeamModal: FC<IProps> = ({ teams }) => {
       await areaService.addTeamsToAreas(areaId, data.teams);
       toastr.success(intl.formatMessage({ id: "areas.details.teams.add.success" }), "");
       dispatch(getAreas());
+      await invalidateGetAreaById(areaId);
       onClose();
     } catch (e: any) {
       toastr.error(intl.formatMessage({ id: "areas.details.teams.add.error" }), "");
