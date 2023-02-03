@@ -6,17 +6,8 @@
 import type * as Schemas from "./coreSchemas";
 
 export type Error = {
-  /**
-   * @uniqueItems true
-   * @minItems 1
-   */
-  errors: {
-    status: number;
-    /**
-     * @minLength 1
-     */
-    detail: string;
-  }[];
+  statusCode?: number;
+  message?: string;
 };
 
 export type Healthcheck = {

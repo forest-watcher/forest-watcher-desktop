@@ -253,15 +253,18 @@ const AssignmentForm: FC<IProps> = props => {
 
   const teamGroups = useMemo(() => {
     const managedTeamGroups =
-      teamData?.map(team => ({
-        label: team?.attributes?.name || "",
-        labelSelectsAll: true,
-        options:
-          team?.attributes?.members?.map(member => ({
-            label: member.name || member.email,
-            value: member.userId!
-          })) || []
-      })) || [];
+      teamData
+        ?.map(team => ({
+          label: team?.attributes?.name || "",
+          labelSelectsAll: true,
+          areas: team.attributes?.areas,
+          options:
+            team?.attributes?.members?.map(member => ({
+              label: member.name || member.email,
+              value: member.userId!
+            })) || []
+        }))
+        .filter(team => team.areas?.includes(selectedAreaDetails?.id || "")) || [];
 
     return [
       {
@@ -275,7 +278,7 @@ const AssignmentForm: FC<IProps> = props => {
       },
       ...managedTeamGroups
     ];
-  }, [teamData, intl, userId]);
+  }, [teamData, intl, userId, selectedAreaDetails]);
 
   const templateGroups = useMemo(() => {
     // Wait for user templates to be fetched

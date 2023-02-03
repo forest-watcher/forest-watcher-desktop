@@ -1,10 +1,10 @@
+import { TeamsResponse } from "generated/core/coreResponses";
 import { FC } from "react";
-import { TGFWTeamsState } from "modules/gfwTeams";
-import TeamCard from "./team-card/TeamCardContainer";
+import TeamCard from "./team-card/TeamCard";
 import useGetAreas from "hooks/querys/areas/useGetAreas";
 
 interface IProps {
-  teams: TGFWTeamsState["data"];
+  teams: TeamsResponse["data"];
   canManage?: boolean;
 }
 
@@ -17,7 +17,7 @@ const TeamsListing: FC<IProps> = props => {
 
   return (
     <div className="c-teams__listing">
-      {teams.map(team => (
+      {teams?.map(team => (
         <div className="c-teams__grid-item" key={team.id}>
           <TeamCard team={team} canManage={canManage} areasByTeam={areasByTeam || []} />
         </div>

@@ -1,3 +1,4 @@
+import useGetTeamDetails from "hooks/querys/teams/useGetTeamDetails";
 import { FormattedMessage, useIntl } from "react-intl";
 import { getRoutePoints } from "./AreaRoutesSource";
 import * as turf from "@turf/turf";
@@ -6,8 +7,6 @@ import { RouteResponse } from "generated/core/coreResponses";
 import MapCard from "components/ui/Map/components/cards/MapCard";
 import { capitalizeFirstLetter } from "helpers/string";
 import moment from "moment";
-import { useGetV3GfwTeamsTeamId } from "generated/core/coreComponents";
-import { useAccessToken } from "hooks/useAccessToken";
 import { useAppSelector } from "hooks/useRedux";
 import ReactDOM from "react-dom";
 
@@ -19,14 +18,7 @@ interface IProps {
 const RouteCard: FC<IProps> = ({ route, onClose }) => {
   const intl = useIntl();
   const portal = useAppSelector(state => state.layers.portal);
-  const { httpAuthHeader } = useAccessToken();
-  const { data: teamData } = useGetV3GfwTeamsTeamId(
-    {
-      headers: httpAuthHeader,
-      pathParams: { teamId: route?.attributes?.teamId || "" }
-    },
-    { enabled: Boolean(route?.attributes?.teamId) }
-  );
+  const { data: teamData } = useGetTeamDetails(route?.attributes?.teamId);
 
   if (!route) {
     return null;
@@ -97,7 +89,7 @@ const RouteCard: FC<IProps> = ({ route, onClose }) => {
             id="route.monitor"
             values={{
               value: teamData
-                ? `${route.attributes?.username} (${teamData.data?.attributes?.name})`
+                ? `${route.attributes?.username} (${teamData?.attributes?.name})`
                 : route.attributes?.username
             }}
           />
