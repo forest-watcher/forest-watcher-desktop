@@ -30,7 +30,8 @@ const useGetAlertsForArea = (
     },
     {
       enabled: !!area,
-      staleTime: 1000 * 60 * 30 // 30 Minutes - Alert Data is accurate for the last 30 minutes
+      // Alert Data is accurate for the last day. No need to re-fetch alert data within the same user session
+      staleTime: Infinity
     }
   );
 
