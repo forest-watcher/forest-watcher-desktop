@@ -35,7 +35,7 @@ const Layers: FC<IProps> = ({ contextualLayerUrls, lockAlertSelections, parentCo
           areaId={investigationMatch?.params.areaId}
           alertTypesToShow={watcher.alertTypesShown === "all" ? allDeforestationAlerts : [watcher.alertTypesShown]}
           alertRequestThreshold={
-            watcher.alertTypesShown !== EAlertTypes.viirs
+            watcher.alertTypesShown !== EAlertTypes.VIIRS
               ? watcher.alertTypesRequestThreshold
               : watcher.alertTypesViirsRequestThreshold
           }

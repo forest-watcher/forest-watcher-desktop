@@ -1,17 +1,13 @@
 // These are used in API requests,
 // so the values must be defined (can't be 1, 2, 3, etc)
 export enum EAlertTypes {
-  "umd_as_it_happens" = "umd_as_it_happens",
-  "glad_sentinel_2" = "glad_sentinel_2",
-  "wur_radd_alerts" = "wur_radd_alerts",
-  "viirs" = "viirs"
+  GLAD = "GLAD",
+  GLADS2 = "GLADS2",
+  RADD = "RADD",
+  VIIRS = "VIIRS"
 }
 
-export const allDeforestationAlerts = [
-  EAlertTypes.umd_as_it_happens,
-  EAlertTypes.glad_sentinel_2,
-  EAlertTypes.wur_radd_alerts
-];
+export const allDeforestationAlerts = [EAlertTypes.GLAD, EAlertTypes.GLADS2, EAlertTypes.RADD];
 
 export interface IAlertIdentifier {
   id: EAlertTypes;
@@ -34,7 +30,7 @@ interface IAlertTypes {
 
 const alertTypes: IAlertTypes = {
   umd_as_it_happens: {
-    id: EAlertTypes.umd_as_it_happens,
+    id: EAlertTypes.GLAD,
     reportNameId: "GLAD", // Must match regex for report names: [A-Z]
     api: {
       datastoreId: "umd_glad_landsat_alerts",
@@ -48,7 +44,7 @@ const alertTypes: IAlertTypes = {
     requestThreshold: 365
   },
   glad_sentinel_2: {
-    id: EAlertTypes.glad_sentinel_2,
+    id: EAlertTypes.GLADS2,
     reportNameId: "GLADSTWO", // Must match regex for report names: [A-Z]
     api: {
       datastoreId: "umd_glad_sentinel2_alerts",
@@ -62,7 +58,7 @@ const alertTypes: IAlertTypes = {
     requestThreshold: 365
   },
   wur_radd_alerts: {
-    id: EAlertTypes.wur_radd_alerts,
+    id: EAlertTypes.RADD,
     reportNameId: "RADD", // Must match regex for report names: [A-Z]
     api: {
       datastoreId: "wur_radd_alerts",
@@ -76,7 +72,7 @@ const alertTypes: IAlertTypes = {
     requestThreshold: 365
   },
   viirs: {
-    id: EAlertTypes.viirs,
+    id: EAlertTypes.VIIRS,
     reportNameId: "VIIRS", // Must match regex for report names: [A-Z]
     api: {
       datastoreId: "nasa_viirs_fire_alerts",
@@ -110,7 +106,7 @@ export const DefaultRequestThresholds: readonly TRequestThreshold[] = [
   },
   {
     labelKey: "timeframes.6months",
-    requestThreshold: 186 // 31 days * 6
+    requestThreshold: 184 // Max number of alerts (6 months ish)
   }
 ];
 

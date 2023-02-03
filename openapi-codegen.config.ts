@@ -18,6 +18,23 @@ export default defineConfig({
       });
     }
   },
+  alerts: {
+    from: {
+      source: "url",
+      url: "https://raw.githubusercontent.com/wri/fw_alerts/dev/docs/fw_alerts.yaml"
+    },
+    outputDir: "src/generated/alerts",
+    to: async context => {
+      const filenamePrefix = "alerts";
+      const { schemasFiles } = await generateSchemaTypes(context, {
+        filenamePrefix
+      });
+      await generateReactQueryComponents(context, {
+        filenamePrefix,
+        schemasFiles
+      });
+    }
+  },
   teams: {
     from: {
       source: "url",

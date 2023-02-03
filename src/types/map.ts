@@ -1,4 +1,5 @@
 import { alertTypes, EAlertTypes } from "constants/alerts";
+import { Alerts } from "generated/alerts/alertsSchemas";
 import { Marker } from "mapbox-gl";
 
 export const ReportLayers = {
@@ -28,12 +29,12 @@ export enum AssignmentLayerColours {
 export interface IPoint {
   position: [number, number];
   id: string;
-  type?: EAlertTypes | AssignmentLayerType;
+  type?: keyof typeof EAlertTypes | AssignmentLayerType;
 }
 
 export type TAlertsById = {
   id: string;
-  data: Record<any, any>;
+  data: Alerts;
 };
 
 export interface IMarkers {

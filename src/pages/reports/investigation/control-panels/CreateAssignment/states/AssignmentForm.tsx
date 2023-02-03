@@ -208,10 +208,14 @@ const AssignmentForm: FC<IProps> = props => {
         // Else use the selected Alerts on Map
         body.location = selectedAlerts.map(alert => {
           // Find date to use as id - this helps mobile find the correct alert (along with long / lat and area)
-          const dateKey = Object.keys(alert.data).find(key => key.includes("_date"));
-          let id = (dateKey && alert.data[dateKey]) || undefined;
+          let id = alert.data.date;
 
-          return { lat: alert.data.latitude, lon: alert.data.longitude, alertType: alert.data.alertType, alertId: id };
+          return {
+            lat: Number(alert.data.latitude),
+            lon: Number(alert.data.longitude),
+            alertType: alert.data.alertType,
+            alertId: id
+          };
         });
       }
     } else {

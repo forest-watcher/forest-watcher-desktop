@@ -32,46 +32,42 @@ const AreaAlertMapSource: FC<IProps> = props => {
     setMultipleAlertsToPick
   } = useContext(MapContext);
 
-  const alerts = useGetAlertsForArea(areaId, alertTypesToShow, alertRequestThreshold);
+  /* Queries */
+  // Fetch all alerts for given area, DataType (type of alert), and threshold (how long in the past)
+  const { data: alerts } = useGetAlertsForArea(areaId, alertTypesToShow, alertRequestThreshold);
 
-  const [alertPoints, alertsById, pointsIndex] = useMemo(
-    () => {
-      const copyAlerts = [...alerts];
+  const [alertPoints, alertsById, pointsIndex] = useMemo(() => {
+    const copyAlerts = alerts ? [...alerts] : [];
 
-      const pointData: IPoint[] = [];
-      const pointsById: TAlertsById[] = [];
-      for (const alert of copyAlerts) {
-        if (alert.isLoading || !alert.data) continue;
+    const pointData: IPoint[] = [];
+    const pointsById: TAlertsById[] = [];
 
-        const { type, data } = alert.data;
+    for (let i = 0; i < copyAlerts.length; i++) {
+      const alert = copyAlerts[i];
+      if (!alert.alertType) continue; // Should never get here
 
-        for (let i = 0; i < data.length; i++) {
-          const alertId = (type + i) as string;
+      const alertId = (alert.alertType + i) as string;
 
-          pointData.push({
-            id: alertId,
-            position: [data[i].longitude, data[i].latitude],
-            type: type
-          });
+      pointData.push({
+        id: alertId,
+        position: [parseFloat(alert.longitude!), parseFloat(alert.latitude!)],
+        type: alert.alertType
+      });
 
-          pointsById.push({
-            id: alertId,
-            data: { ...data[i], alertType: type }
-          });
-        }
-      }
+      pointsById.push({
+        id: alertId,
+        data: { ...alert }
+      });
+    }
 
-      const pointsIndex = new KDBush(
-        pointsById,
-        p => p.data.longitude,
-        p => p.data.latitude
-      );
+    const pointsIndex = new KDBush(
+      pointsById,
+      p => Number(p.data.longitude),
+      p => Number(p.data.latitude)
+    );
 
-      return [pointData, pointsById, pointsIndex];
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    alerts.map(queryAlert => queryAlert.data) // ToDo: update when using fw_alerts endpoint
-  );
+    return [pointData, pointsById, pointsIndex];
+  }, [alerts]);
 
   const handleAlertSelectionChange = useCallback(
     (ids: string[] | null) => {

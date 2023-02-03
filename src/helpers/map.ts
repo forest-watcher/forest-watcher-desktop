@@ -193,7 +193,7 @@ const getAllNeighbours = (
   }
 
   function getNeighbours(point: TAlertsById) {
-    const data = geoKDBush.around(pointsIndex, point.data.longitude, point.data.latitude, 8, distance);
+    const data = geoKDBush.around(pointsIndex, Number(point.data.longitude), Number(point.data.latitude), 8, distance);
     checkSiblings(data);
   }
 
@@ -354,7 +354,7 @@ export const getAlertImage: TMapIconGenerator = (alertType, isHover, isSelected)
 
   if (isHover) {
     switch (alertType) {
-      case EAlertTypes.viirs:
+      case EAlertTypes.VIIRS:
         return MapImages.alertViirsHover;
       default:
         return MapImages.alertHover;
@@ -362,7 +362,7 @@ export const getAlertImage: TMapIconGenerator = (alertType, isHover, isSelected)
   }
 
   switch (alertType) {
-    case EAlertTypes.viirs:
+    case EAlertTypes.VIIRS:
       return MapImages.alertViirsDefault;
     default:
       return MapImages.alertDefault;
