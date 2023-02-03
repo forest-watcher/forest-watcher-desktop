@@ -193,7 +193,7 @@ const getAllNeighbours = (
   }
 
   function getNeighbours(point: TAlertsById) {
-    const data = geoKDBush.around(pointsIndex, point.data.longitude, point.data.latitude, 8, distance);
+    const data = geoKDBush.around(pointsIndex, Number(point.data.longitude), Number(point.data.latitude), 8, distance);
     checkSiblings(data);
   }
 

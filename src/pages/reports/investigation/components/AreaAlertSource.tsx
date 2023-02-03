@@ -57,8 +57,8 @@ const AreaAlertMapSource: FC<IProps> = props => {
 
     const pointsIndex = new KDBush(
       pointsById,
-      p => p.data.longitude,
-      p => p.data.latitude
+      p => Number(p.data.longitude),
+      p => Number(p.data.latitude)
     );
 
     return [pointData, pointsById, pointsIndex];

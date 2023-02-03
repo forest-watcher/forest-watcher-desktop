@@ -2,7 +2,7 @@ import Icon from "components/extensive/Icon";
 import OptionalWrapper from "components/extensive/OptionalWrapper";
 import Button from "components/ui/Button/Button";
 import MapCard from "components/ui/Map/components/cards/MapCard";
-import { EAlertTypes } from "constants/alerts";
+import { sortAlertsInAscendingOrder } from "helpers/alerts";
 import { useAppSelector } from "hooks/useRedux";
 import moment from "moment";
 import { FC } from "react";
@@ -16,33 +16,6 @@ export interface IProps {
   canSelectNeighboringAlert?: boolean;
 }
 
-const ALERT_API_KEY_MAP = {
-  date: (alertType: EAlertTypes) => {
-    switch (alertType) {
-      case EAlertTypes.GLAD:
-        return "umd_glad_landsat_alerts__date";
-      case EAlertTypes.GLADS2:
-        return "umd_glad_sentinel2_alerts__date";
-      case EAlertTypes.RADD:
-        return "wur_radd_alerts__date";
-      default:
-        return "";
-    }
-  },
-  confidence: (alertType: EAlertTypes) => {
-    switch (alertType) {
-      case EAlertTypes.GLAD:
-        return "umd_glad_landsat_alerts__confidence";
-      case EAlertTypes.GLADS2:
-        return "umd_glad_sentinel2_alerts__confidence";
-      case EAlertTypes.RADD:
-        return "wur_radd_alerts__confidence";
-      default:
-        return "";
-    }
-  }
-};
-
 const AlertsDetailCard: FC<IProps> = props => {
   const { selectedAlerts, handleSelectNeighboringPoints, canSelectNeighboringAlert = false } = props;
   const portal = useAppSelector(state => state.layers.portal);
@@ -52,31 +25,21 @@ const AlertsDetailCard: FC<IProps> = props => {
     return null;
   }
 
-  const alertsToShow = selectedAlerts.sort(
-    (a, b) =>
-      Number(moment(a.data[ALERT_API_KEY_MAP.date(a.data.alertType)]).format("X")) -
-      Number(moment(b.data[ALERT_API_KEY_MAP.date(b.data.alertType)]).format("X"))
-  );
+  const alertsToShow = sortAlertsInAscendingOrder(selectedAlerts.map(i => i.data));
 
-  const firstAlertDate = moment(alertsToShow[0].data[ALERT_API_KEY_MAP.date(alertsToShow[0].data.alertType)]);
-  const lastAlertDate = moment(
-    alertsToShow[alertsToShow.length - 1].data[
-      ALERT_API_KEY_MAP.date(alertsToShow[alertsToShow.length - 1].data.alertType)
-    ]
-  );
+  const firstAlertDate = moment(alertsToShow[0].date);
+  const lastAlertDate = moment(alertsToShow[alertsToShow.length - 1].date);
 
   const showLastDate = Number(firstAlertDate.format("X")) !== Number(lastAlertDate.format("X"));
   // @ts-ignore
-  const allAlertTypes = [...new Set(alertsToShow.map(alert => alert.data.alertType))];
-  const numOfHighConfidenceAlerts = alertsToShow.filter(
-    alert => alert.data[ALERT_API_KEY_MAP.confidence(alert.data.alertType)] === "high"
-  ).length;
+  const allAlertTypes = [...new Set(alertsToShow.map(alert => alert.alertType))];
+  const numOfHighConfidenceAlerts = alertsToShow.filter(alert => alert.confidence === "high").length;
 
   const content = (
     <MapCard
       title={
         alertsToShow && alertsToShow.length === 1
-          ? intl.formatMessage({ id: `alerts.${alertsToShow[0].data.alertType}` })
+          ? intl.formatMessage({ id: `alerts.${alertsToShow[0].alertType}` })
           : intl.formatMessage({ id: "alerts.deforestation.alerts" })
       }
       titleIconName="Deforestation"
