@@ -25,6 +25,7 @@ import { AreaActions, AreaLabel } from "types/analytics";
 import AreasOnboarding from "components/onboarding/monitoring/AreasOnboarding";
 import useGetAreas from "hooks/querys/areas/useGetAreas";
 import { AreaResponse } from "generated/core/coreResponses";
+import MapContext, { MapProvider } from "pages/reports/investigation/MapContext";
 
 interface IProps extends TPropsFromRedux {
   getTeamMembers: (teamId: string) => void;
@@ -142,37 +143,40 @@ const Areas: FC<IProps> = props => {
           <Loader isLoading />
         </div>
       ) : (
-        <UserAreasMap
-          className="c-map--within-hero"
-          selectedAreaId={selectedArea?.id}
-          onAreaSelect={handleAreaSelect}
-          onAreaDeselect={handleAreaDeselect}
-          onMapLoad={handleMapLoad}
-          showTeamAreas
-          alwaysHideKeyLegend
-        >
-          {selectedArea && (
-            <AreaDetailCard
-              area={selectedArea}
-              teamNames={selectedArea.id ? getTeamNamesByAreaId(selectedArea.id) : []}
-              numberOfReports={answersBySelectedArea?.length}
-              onStartInvestigation={() =>
-                fireGAEvent({
-                  category: "Areas",
-                  action: AreaActions.Investigation,
-                  label: AreaLabel.StartedInvestigation
-                })
-              }
-              onManageArea={() =>
-                fireGAEvent({
-                  category: "Areas",
-                  action: AreaActions.Managed,
-                  label: AreaLabel.StartedFromAreas
-                })
-              }
-            />
-          )}
-        </UserAreasMap>
+        <MapProvider>
+          <UserAreasMap
+            className="c-map--within-hero"
+            selectedAreaId={selectedArea?.id}
+            onAreaSelect={handleAreaSelect}
+            onAreaDeselect={handleAreaDeselect}
+            onMapLoad={handleMapLoad}
+            showTeamAreas
+            alwaysHideKeyLegend
+            context={MapContext}
+          >
+            {selectedArea && (
+              <AreaDetailCard
+                area={selectedArea}
+                teamNames={selectedArea.id ? getTeamNamesByAreaId(selectedArea.id) : []}
+                numberOfReports={answersBySelectedArea?.length}
+                onStartInvestigation={() =>
+                  fireGAEvent({
+                    category: "Areas",
+                    action: AreaActions.Investigation,
+                    label: AreaLabel.StartedInvestigation
+                  })
+                }
+                onManageArea={() =>
+                  fireGAEvent({
+                    category: "Areas",
+                    action: AreaActions.Managed,
+                    label: AreaLabel.StartedFromAreas
+                  })
+                }
+              />
+            )}
+          </UserAreasMap>
+        </MapProvider>
       )}
 
       <div className="l-content l-content--neutral-400">
