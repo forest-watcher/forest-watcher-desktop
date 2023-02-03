@@ -33,8 +33,10 @@ const SingleLocationLayer: FC<IProps> = props => {
       // Find all Layers the mouse clicked on
       const allMouseFeatures = map?.queryRenderedFeatures(e.point);
 
-      if (allMouseFeatures && withInFeatures && allMouseFeatures.length === withInFeatures.length) {
-        setSelectedLocationPoint(e.lngLat);
+      const hasClickedOnPoint = Boolean(allMouseFeatures?.find(item => item.layer.id === id));
+
+      if (allMouseFeatures && withInFeatures && !hasClickedOnPoint) {
+        setSelectedLocationPoint(existing => (existing ? existing : e.lngLat));
       } else {
         setSelectedLocationPoint(undefined);
       }
@@ -47,7 +49,7 @@ const SingleLocationLayer: FC<IProps> = props => {
     return () => {
       map?.off("click", withinLayerId, handlePreClick);
     };
-  }, [map, withinLayerId, locked]);
+  }, [map, withinLayerId, locked, id]);
 
   const featureData = selectedLocationPoint
     ? turf.point([selectedLocationPoint?.lng, selectedLocationPoint?.lat], {
