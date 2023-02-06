@@ -36,13 +36,16 @@ const RemoveTeamMemberModal: FC<IProps> = props => {
   /* Mutations */
   const { httpAuthHeader } = useAccessToken();
   // Removed the team member from the team
-  const { mutateAsync: deleteTeamMember } = useDeleteV3GfwTeamsTeamIdUsersTeamMemberRelationId();
+  const { mutateAsync: deleteTeamMember, isSuccess: hasMutated } = useDeleteV3GfwTeamsTeamIdUsersTeamMemberRelationId();
 
   const close = useCallback(() => {
     history.push(`/teams/${teamId}`);
   }, [history, teamId]);
 
   useEffect(() => {
+    // If a successful mutation has happened, don't see if an error occurred (because it couldn't have)
+    if (hasMutated) return;
+
     // Close the modal if the member id isn't present on team
     if (
       isOpen &&
@@ -53,7 +56,7 @@ const RemoveTeamMemberModal: FC<IProps> = props => {
       toastr.warning(intl.formatMessage({ id: "teams.member.invalid" }), "");
       close();
     }
-  }, [close, intl, isOpen, isTeamLoading, memberId, team]);
+  }, [close, intl, hasMutated, isOpen, isTeamLoading, memberId, team]);
 
   const removeTeamMember = async () => {
     setIsRemoving(true);
