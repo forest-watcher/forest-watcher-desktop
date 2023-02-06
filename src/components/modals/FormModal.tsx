@@ -1,4 +1,4 @@
-import { PropsWithChildren, ReactNode, useEffect, useState } from "react";
+import { MutableRefObject, PropsWithChildren, ReactNode, useEffect, useState } from "react";
 import Modal, { IProps as IModalProps } from "components/ui/Modal/Modal";
 import { Props as IInputProps } from "components/ui/Form/Input";
 import { Props as ISelectProps } from "components/ui/Form/Select";
@@ -30,6 +30,7 @@ export type TAvailableTypes<T> = TInput<T> | TSelect<T> | TToggleGroup<T> | TTog
 
 export interface IProps<T> extends PropsWithChildren {
   isOpen: boolean;
+  modalRef?: MutableRefObject<HTMLDivElement | null>;
   dismissible?: boolean;
   inputs: Array<TAvailableTypes<T>>;
   onClose?: () => void;
@@ -78,6 +79,7 @@ export interface IProps<T> extends PropsWithChildren {
 const FormModal = <T,>(props: IProps<T>) => {
   const {
     isOpen = false,
+    modalRef,
     dismissible,
     inputs,
     useFormProps,
@@ -147,6 +149,7 @@ const FormModal = <T,>(props: IProps<T>) => {
         title={modalTitle}
         dismissible={dismissible}
         actions={modalActions}
+        ref={modalRef}
       >
         <Loader isLoading={isLoading} />
         {modalSubtitle && (
