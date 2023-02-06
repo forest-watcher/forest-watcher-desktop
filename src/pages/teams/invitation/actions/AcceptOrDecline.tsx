@@ -4,7 +4,7 @@ import {
   usePatchV3GfwTeamsTeamIdUsersUserIdAccept,
   usePatchV3GfwTeamsTeamIdUsersUserIdDecline
 } from "generated/core/coreComponents";
-import useGetTeamInvites from "hooks/querys/teams/useGetTeamInvites";
+import useGetTeamInvites, { useInvalidateGetTeamInvites } from "hooks/querys/teams/useGetTeamInvites";
 import { useAccessToken } from "hooks/useAccessToken";
 import useGetUserId from "hooks/useGetUserId";
 import { FC, useCallback, useEffect, useState } from "react";
@@ -58,17 +58,22 @@ const RemoveTeamMemberModal: FC<IProps> = props => {
   const { httpAuthHeader } = useAccessToken();
   // Get all the User's Team Invites
   const { data: userTeamInvites, isLoading: isTeamInvitesLoading } = useGetTeamInvites();
+  const invalidateGetTeamInvites = useInvalidateGetTeamInvites();
 
   /* Mutations */
   // Accept Team Invitation
-  const { mutateAsync: acceptTeamInvite } = usePatchV3GfwTeamsTeamIdUsersUserIdAccept();
-  const { mutateAsync: declineTeamInvite } = usePatchV3GfwTeamsTeamIdUsersUserIdDecline();
+  const { mutateAsync: acceptTeamInvite, isSuccess: hasAcceptedMutated } = usePatchV3GfwTeamsTeamIdUsersUserIdAccept();
+  const { mutateAsync: declineTeamInvite, isSuccess: hasDeclinedMutated } =
+    usePatchV3GfwTeamsTeamIdUsersUserIdDecline();
 
   const close = useCallback(() => {
     history.push(`/teams/invitations`);
   }, [history]);
 
   useEffect(() => {
+    // If a successful mutation has happened, don't see if an error occurred (because it couldn't have)
+    if (hasAcceptedMutated || hasDeclinedMutated) return;
+
     // Close the modal if teamId isn't present in the team invites
     // Or the user has no invites when they're trying to "accept all"
     if (
@@ -80,7 +85,7 @@ const RemoveTeamMemberModal: FC<IProps> = props => {
       toastr.warning(intl.formatMessage({ id: "teams.invitation.invalid" }), "");
       close();
     }
-  }, [close, intl, isOpen, isTeamInvitesLoading, teamId, userTeamInvites]);
+  }, [close, hasAcceptedMutated, hasDeclinedMutated, intl, isOpen, isTeamInvitesLoading, teamId, userTeamInvites]);
 
   const config = teamId === "all" && actionType === "accept" ? CONFIG["acceptAll"] : CONFIG[actionType];
 
@@ -98,6 +103,8 @@ const RemoveTeamMemberModal: FC<IProps> = props => {
       } else if (actionType === "decline") {
         await declineTeamInvite({ headers: httpAuthHeader, pathParams: { teamId, userId } });
       }
+
+      await invalidateGetTeamInvites();
 
       close();
       toastr.success(intl.formatMessage({ id: config.successMessage }), "");

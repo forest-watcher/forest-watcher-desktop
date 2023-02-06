@@ -37,15 +37,20 @@ const EditMemberRoleModal: FC<IProps> = props => {
   /* Mutations */
   const { httpAuthHeader } = useAccessToken();
   // Update a Team Member's Role
-  const { mutateAsync: updateTeamMemberRole } = usePatchV3GfwTeamsTeamIdUsersTeamMemberRelationId();
+  const { mutateAsync: updateTeamMemberRole, isSuccess: hasUpdatedMutated } =
+    usePatchV3GfwTeamsTeamIdUsersTeamMemberRelationId();
   // Reassign Team Administrator
-  const { mutateAsync: reassignTeamAdmin } = usePatchV3GfwTeamsTeamIdUsersReassignAdminUserId();
+  const { mutateAsync: reassignTeamAdmin, isSuccess: hasReassignedMutated } =
+    usePatchV3GfwTeamsTeamIdUsersReassignAdminUserId();
 
   const close = useCallback(() => {
     history.push(`/teams/${teamId}`);
   }, [history, teamId]);
 
   useEffect(() => {
+    // If a successful mutation has happened, don't see if an error occurred (because it couldn't have)
+    if (hasUpdatedMutated || hasReassignedMutated) return;
+
     // In case the URL ends in anything else: /teams/:teamId/edit/:memberId/:memberRole
     if (isOpen && memberRole && memberRole !== "manager" && memberRole !== "monitor" && memberRole !== "admin") {
       close();
@@ -60,7 +65,7 @@ const EditMemberRoleModal: FC<IProps> = props => {
       toastr.warning(intl.formatMessage({ id: "teams.member.invalid" }), "");
       close();
     }
-  }, [close, intl, isOpen, isTeamLoading, memberId, memberRole, team]);
+  }, [close, intl, hasUpdatedMutated, hasReassignedMutated, isOpen, isTeamLoading, memberId, memberRole, team]);
 
   const editTeamMember = async () => {
     setIsSaving(true);

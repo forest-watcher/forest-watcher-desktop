@@ -24,7 +24,7 @@ interface IProps {}
 const Invitation: FC<IProps> = props => {
   const location = useLocation();
   const intl = useIntl();
-  const actionMatch = useRouteMatch<TParams>({ path: `${location.pathname}/:actionType/:teamId/`, exact: true });
+  const actionMatch = useRouteMatch<TParams>({ path: `/teams/invitations/:actionType/:teamId/`, exact: true });
 
   /* Queries */
   // Get all the User's Team Invites
