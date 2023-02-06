@@ -15,8 +15,8 @@ const useGetAlertsForArea = (
 
   const { area } = useFindArea(areaId);
 
-  // ToDo: remove `as` when docs match response
-  const { data, ...rest } = useGetV3AlertsGeostoreId<Alerts[]>(
+  // ToDo: src/generated/alerts/alertsResponses.ts Alerts Response is wrongly typed
+  const { data: { data } = {}, ...rest } = useGetV3AlertsGeostoreId<{ data: Alerts[] }>(
     {
       pathParams: {
         geostoreId: area?.attributes?.geostore?.id!
