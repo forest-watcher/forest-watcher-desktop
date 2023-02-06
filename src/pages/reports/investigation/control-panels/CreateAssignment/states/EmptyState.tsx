@@ -49,16 +49,20 @@ const OpenAssignmentEmptyState: FC<IProps> = props => {
         // @ts-ignore
         const isWithin = turf.booleanWithin(geojsonParsed, selectedAreaParsed);
 
-        if (isWithin) {
+        const isAPolygon = turf.getType(geojsonParsed) === "Polygon";
+
+        if (isWithin && isAPolygon) {
           setShapeFileGeoJSON(geojsonParsed);
           setValue("selectedAlerts", []);
           setValue("singleSelectedLocation", undefined);
           setShowCreateAssignmentForm(true);
-        } else {
+        } else if (!isWithin) {
           toastr.error(
             intl.formatMessage({ id: "areas.shapeFile.not.within" }),
             intl.formatMessage({ id: "areas.shapeFile.not.within.desc" })
           );
+        } else if (!isAPolygon) {
+          toastr.error(intl.formatMessage({ id: "areas.shapeFile.not.shapefile" }), "");
         }
       } else {
         toastr.error(intl.formatMessage({ id: "areas.fileInvalid" }), "");

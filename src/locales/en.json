@@ -191,6 +191,7 @@
   "areas.fileInvalid": "File Invalid",
   "areas.shapeFile.not.within": "Shapefile not within Area.",
   "areas.shapeFile.not.within.desc": "Please upload a shapefile that is within the selected Area.",
+  "areas.shapeFile.not.shapefile": "Shapefile must be a Polygon.",
   "areas.locateUserError": "Your location wasn't found",
   "areas.countryPlaceholder": "Search country...",
   "areas.layersPlaceholder": "Select layer...",
