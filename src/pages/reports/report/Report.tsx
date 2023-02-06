@@ -70,7 +70,7 @@ const Report = () => {
             <FormattedMessage id="common.export" />
           </Button>
         }
-        backLink={{ name: "reports.back", to: "/reporting/reports/" }}
+        backLink={{ name: "reports.back", to: "/reporting/reports" }}
       />
       <ReportMap answer={answer} />
       <ReportDetails answer={answer} />
