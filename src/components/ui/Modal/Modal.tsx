@@ -1,4 +1,4 @@
-import { FC, Fragment, PropsWithChildren } from "react";
+import { forwardRef, Fragment, PropsWithChildren } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { FormattedMessage } from "react-intl";
 import Button, { IButtonVariants } from "components/ui/Button/Button";
@@ -19,7 +19,7 @@ export interface IProps {
   hideBackdrop?: boolean;
 }
 
-const Modal: FC<PropsWithChildren<IProps>> = props => {
+const Modal = forwardRef<HTMLDivElement, PropsWithChildren<IProps>>((props, ref) => {
   const { isOpen, onClose, title, actions, dismissible = true, children, hideBackdrop = false } = props;
 
   return (
@@ -46,7 +46,9 @@ const Modal: FC<PropsWithChildren<IProps>> = props => {
             )}
           </Dialog.Title>
 
-          <div className="c-modal-dialog__body">{children}</div>
+          <div className="c-modal-dialog__body" ref={ref}>
+            {children}
+          </div>
 
           {actions && (
             <div className="c-modal-dialog__actions">
@@ -61,6 +63,6 @@ const Modal: FC<PropsWithChildren<IProps>> = props => {
       </Dialog>
     </Transition>
   );
-};
+});
 
 export default Modal;
