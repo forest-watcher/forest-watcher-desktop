@@ -1,6 +1,6 @@
 import { FC, useEffect, useMemo, useRef, useState } from "react";
 import { Layer, Source, useMap } from "react-map-gl";
-import { pointStyle as defaultPointStyle, clusterCountStyle } from "./styles";
+import { pointStyle as defaultPointStyle } from "./styles";
 import * as turf from "@turf/turf";
 import { Marker } from "mapbox-gl";
 import {
