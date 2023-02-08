@@ -3,28 +3,28 @@
  */
 
 import { useMutation, UseMutationOptions } from "@tanstack/react-query";
-import { TExportForm } from "components/modals/exports/ExportModal";
-import { ASSIGNMENT_FIELDS } from "constants/export";
-import { usePostV3ExportsAssignmentsExportSome } from "generated/exports/exportsComponents";
+import { usePostV3ExportsReportsId } from "generated/exports/exportsComponents";
 import { useAccessToken } from "hooks/useAccessToken";
+import { ReportExportImagesModalFormData } from "pages/reports/report/components/modal/ReportExportImagesModal";
 import { useCallback } from "react";
-import { UnpackNestedValue } from "react-hook-form";
 import { delay } from "services/exports";
 
 interface IPostVariariables {
-  values: UnpackNestedValue<TExportForm>;
-  assignmentIds: string[];
+  values: ReportExportImagesModalFormData;
+  params: {
+    id: string;
+  };
 }
 
 type IPostResponse = {
   data?: string | undefined;
 };
 
-const useAssignmentsExport = (
+const useReportImageExport = (
   options?: Omit<UseMutationOptions<IPostResponse, undefined, IPostVariariables>, "mutationFn">
 ) => {
   const { httpAuthHeader } = useAccessToken();
-  const { mutateAsync: exportAssignments } = usePostV3ExportsAssignmentsExportSome();
+  const { mutateAsync: exportReportImages } = usePostV3ExportsReportsId();
 
   const postExport = useCallback(
     async (variables: IPostVariariables) => {
@@ -34,7 +34,7 @@ const useAssignmentsExport = (
 
           try {
             do {
-              const resp = await fetch(`${process.env.REACT_APP_API_CUBE_URL}/v3/exports/assignments/${id}`, {
+              const resp = await fetch(`${process.env.REACT_APP_API_CUBE_URL}/v3/exports/reports/${id}`, {
                 method: "GET",
                 headers: {
                   "Content-Type": "application/json",
@@ -56,22 +56,22 @@ const useAssignmentsExport = (
       };
 
       // Do request
-      const { data } = await exportAssignments({
+      const { data } = await exportReportImages({
         body: {
-          ...variables.values,
-          fields: ASSIGNMENT_FIELDS,
-          // @ts-ignore incorrect typings in docs
-          ids: variables.assignmentIds || []
+          ...variables.values
+        },
+        pathParams: {
+          ...variables.params
         },
         headers: httpAuthHeader
       });
 
       return await checkStatus(data || "");
     },
-    [exportAssignments, httpAuthHeader]
+    [exportReportImages, httpAuthHeader]
   );
 
   return useMutation<IPostResponse, undefined, IPostVariariables>(postExport, options);
 };
 
-export default useAssignmentsExport;
+export default useReportImageExport;
