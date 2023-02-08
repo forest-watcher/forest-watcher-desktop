@@ -29,9 +29,6 @@ const ReportExportImagesModal = ({ onClose }: ReportExportImagesModalProps) => {
 
   const handleSave = async (data: ReportExportImagesModalFormData) => {
     const value = await exportImages({ values: data, params: { id: answerId } });
-
-    console.log(value);
-
     if (value.data) {
       window.open(value.data, "_blank");
       onClose();
