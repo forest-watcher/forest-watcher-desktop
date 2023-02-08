@@ -7,7 +7,7 @@ import { TPropsFromRedux } from "./ReportDetailContainer";
 import { TAreasInTeam } from "services/area";
 import OptionalWrapper from "components/extensive/OptionalWrapper";
 import Button from "components/ui/Button/Button";
-import { useHistory } from "react-router-dom";
+import { useHistory, useLocation } from "react-router-dom";
 import ReactDOM from "react-dom";
 import { useAppSelector } from "hooks/useRedux";
 
@@ -23,6 +23,7 @@ const ReportDetailCard: FC<IParams> = ({ answers, areasInUsersTeams, onClose }) 
   const [answer, setCurrentAnswer] = useState<TAnswer | undefined>(undefined);
   const history = useHistory();
   const portal = useAppSelector(state => state.layers.portal);
+  const { pathname } = useLocation();
 
   const alertTypesString = useAlertTypeString(answer);
 
@@ -59,7 +60,9 @@ const ReportDetailCard: FC<IParams> = ({ answers, areasInUsersTeams, onClose }) 
         answer?.id ? (
           <Button
             className="w-full"
-            onClick={() => history.push(`/reporting/reports/${answer?.attributes?.report}/answers/${answer?.id}`)}
+            onClick={() =>
+              history.push(`/reporting/reports/${answer?.attributes?.report}/answers/${answer?.id}?prev=${pathname}`)
+            }
           >
             <FormattedMessage id="reports.preview.view" />
           </Button>
