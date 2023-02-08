@@ -1,5 +1,5 @@
 import { FC, ReactNode, useEffect, useState } from "react";
-import { Route, Switch, Redirect, useLocation, useParams, useRouteMatch, useHistory } from "react-router-dom";
+import { Route, Switch, Redirect, useLocation, useParams, useRouteMatch } from "react-router-dom";
 
 import Areas from "pages/areas/Areas";
 import AreasManage from "pages/area-view/AreaViewContainer";
