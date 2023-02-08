@@ -25,6 +25,8 @@ import { useAccessToken } from "hooks/useAccessToken";
 import useGetAreas from "hooks/querys/areas/useGetAreas";
 import { useIsFetching } from "@tanstack/react-query";
 import useUrlQuery from "hooks/useUrlQuery";
+import useZoomToGeojson from "hooks/useZoomToArea";
+import { AllGeoJSON } from "@turf/turf";
 
 export enum LAYERS {
   reports = "reports"
@@ -47,6 +49,12 @@ const StartInvestigationControlPanel: FC<IProps> = props => {
   const isFetchingAlerts = useIsFetching(["areaAlerts"]);
   const urlQuery = useUrlQuery();
   const teamId = useMemo(() => urlQuery.get("teamId"), [urlQuery]);
+  const { area, resp: areaResp } = useFindArea(areaId);
+
+  const selectedAreaGeoData = useMemo(() => area?.attributes?.geostore?.geojson, [area]);
+
+  // @ts-ignore - Tech debt - need to figure out the correct type here
+  useZoomToGeojson(selectedAreaGeoData as AllGeoJSON);
 
   useEffect(() => {
     setFilteredRows(answers);
@@ -76,8 +84,6 @@ const StartInvestigationControlPanel: FC<IProps> = props => {
         })) || []
     );
   }, [layersData?.data, teamId]);
-
-  const { area, resp: areaResp } = useFindArea(areaId);
 
   const intl = useIntl();
 

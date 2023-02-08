@@ -98,6 +98,9 @@ const AssignmentForm: FC<IProps> = props => {
   const [openDialogName, setOpenDialogName] = useState<EDialogsNames>(EDialogsNames.None);
   const isEdit = !!assignmentToEdit;
 
+  // Back to link check
+  const isBackToInvestigation = prevLocationPathname?.includes("/reporting/investigation");
+
   // Scroll Position Values
   const controlPanelPreviousScrollTopRef = useRef<number>(0);
   const controlPanelContentRef = useRef<HTMLDivElement>();
@@ -339,14 +342,20 @@ const AssignmentForm: FC<IProps> = props => {
       title={intl.formatMessage({
         id:
           isEdit && openDialogName === EDialogsNames.None
-            ? `assignment.edit.back`
+            ? isBackToInvestigation
+              ? "investigation.back"
+              : "assignment.edit.back"
             : `assignment.create.dialog.title.${openDialogName}`
       })}
       onBack={() => {
         if (isEdit && openDialogName === EDialogsNames.None) {
-          history.push(
-            `/assignment/${assignmentToEdit.data?.id}${prevLocationPathname ? `?prev=${prevLocationPathname}` : ""}`
-          );
+          if (isBackToInvestigation && prevLocationPathname) {
+            history.push(prevLocationPathname);
+          } else {
+            history.push(
+              `/assignment/${assignmentToEdit.data?.id}${prevLocationPathname ? `?prev=${prevLocationPathname}` : ""}`
+            );
+          }
         } else if (openDialogName === EDialogsNames.None) {
           setShapeFileGeoJSON(undefined);
           setShowCreateAssignmentForm(false);

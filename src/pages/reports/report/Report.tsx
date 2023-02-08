@@ -5,7 +5,7 @@ import { useParams } from "react-router-dom";
 import ReportDetails from "./components/ReportDetails";
 import ReportResponses from "./components/ReportResponses";
 import ReportMap from "./components/ReportMap";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import OptionalWrapper from "components/extensive/OptionalWrapper";
 import ReportExportModal from "./components/modal/ReportExportModal";
 import { TExportForm } from "components/modals/exports/ExportModal";
@@ -17,11 +17,21 @@ import { AnswerResponse } from "generated/forms/formsSchemas";
 import Button from "components/ui/Button/Button";
 import Hero from "components/layouts/Hero/Hero";
 import { FormattedMessage } from "react-intl";
+import useUrlQuery from "hooks/useUrlQuery";
 
 const Report = () => {
   const { httpAuthHeader } = useAccessToken();
   const { reportId, answerId } = useParams<{ reportId: string; answerId: string }>();
   const [showExportModal, setShowExportModal] = useState<boolean>(false);
+  const urlQuery = useUrlQuery();
+  const prevLocationPathname = useMemo(() => urlQuery.get("prev"), [urlQuery]);
+  const prevLocationTranslationKey = useMemo(() => {
+    if (prevLocationPathname?.includes("/reporting/investigation")) {
+      return "investigation.back";
+    }
+
+    return "reports.back";
+  }, [prevLocationPathname]);
 
   // Queries - Get Report
   const { data: report, isLoading: reportLoading } = useGetReport({
@@ -70,7 +80,7 @@ const Report = () => {
             <FormattedMessage id="common.export" />
           </Button>
         }
-        backLink={{ name: "reports.back", to: "/reporting/reports" }}
+        backLink={{ name: prevLocationTranslationKey, to: prevLocationPathname ?? "/reporting/reports" }}
       />
       <ReportMap answer={answer} />
       <ReportDetails answer={answer} />
