@@ -1,6 +1,6 @@
 import { FC, useEffect, useMemo, useRef, useState } from "react";
 import { Layer, Source, useMap } from "react-map-gl";
-import { pointStyle as defaultPointStyle, clusterCountStyle } from "./styles";
+import { pointStyle as defaultPointStyle } from "./styles";
 import * as turf from "@turf/turf";
 import { Marker } from "mapbox-gl";
 import {
@@ -158,6 +158,10 @@ const SquareClusterMarkers: FC<IProps> = props => {
             }).setLngLat(coords);
           }
         }
+        // If the current Lng Lat values of the marker do not match the new coords
+        if (marker.getLngLat().lng !== coords[0] || marker.getLngLat().lat !== coords[1]) {
+          marker.setLngLat(coords);
+        }
         newMarkers[clusterId] = marker;
 
         if (!markersOnScreen.current[clusterId]) {
@@ -275,9 +279,6 @@ const SquareClusterMarkers: FC<IProps> = props => {
       >
         {/* @ts-ignore */}
         <Layer {...pointStyle} id={id} />
-
-        {/* @ts-ignore */}
-        <Layer {...clusterCountStyle} id={`clusters-count-${id}`} />
       </Source>
     </>
   );
