@@ -2,9 +2,7 @@ import LoadingWrapper from "components/extensive/LoadingWrapper";
 import Select from "components/ui/Form/Select";
 import Modal from "components/ui/Modal/Modal";
 import { REPORT_EXPORT_IMAGES_TYPES } from "constants/export";
-import { useGetV3ExportsReportsId, usePostV3ExportsReportsId } from "generated/exports/exportsComponents";
-import { useAccessToken } from "hooks/useAccessToken";
-import { useEffect } from "react";
+import useReportImageExport from "hooks/querys/exports/useReportImageExport";
 import { useForm } from "react-hook-form";
 import { useIntl } from "react-intl";
 import { useParams } from "react-router-dom";
@@ -19,7 +17,6 @@ type ReportExportImagesModalProps = {
 
 const ReportExportImagesModal = ({ onClose }: ReportExportImagesModalProps) => {
   const { formatMessage } = useIntl();
-  const { httpAuthHeader } = useAccessToken();
   const { answerId } = useParams<{ answerId: string }>();
   const formHook = useForm<ReportExportImagesModalFormData>();
   const {
@@ -28,26 +25,20 @@ const ReportExportImagesModal = ({ onClose }: ReportExportImagesModalProps) => {
     formState: { errors }
   } = formHook;
 
-  // Mutations - Generate ID for images to download.
-  const { mutateAsync: generateId, data: generateIdData, isLoading: generateIdLoading } = usePostV3ExportsReportsId();
-  // Queries - Get URL of generated images to download.
-  const { data: downloadImagesData, isFetching: downloadImagesLoading } = useGetV3ExportsReportsId(
-    { headers: httpAuthHeader, pathParams: { id: generateIdData?.data ?? "" } },
-    { enabled: !!generateIdData?.data }
-  );
+  const { mutateAsync: exportImages, isLoading } = useReportImageExport();
 
   const handleSave = async (data: ReportExportImagesModalFormData) => {
-    return generateId({
-      headers: httpAuthHeader,
-      pathParams: { id: answerId },
-      body: { fileType: data.fileType }
-    });
-  };
+    const value = await exportImages({ values: data, params: { id: answerId } });
 
-  useEffect(() => {
-    if (!downloadImagesData) return;
-    window.open(downloadImagesData.data, "_blank");
-  }, [downloadImagesData]);
+    console.log(value);
+
+    if (value.data) {
+      window.open(value.data, "_blank");
+      onClose();
+    }
+
+    return value.data;
+  };
 
   return (
     <Modal
@@ -60,7 +51,7 @@ const ReportExportImagesModal = ({ onClose }: ReportExportImagesModalProps) => {
         { name: "common.cancel", variant: "secondary", onClick: onClose }
       ]}
     >
-      <LoadingWrapper loading={downloadImagesLoading || generateIdLoading}>
+      <LoadingWrapper loading={isLoading}>
         <Select
           id="fileType"
           selectProps={{
