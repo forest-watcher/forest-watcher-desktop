@@ -46,7 +46,8 @@ const StartInvestigationControlPanel: FC<IProps> = props => {
   const { answers, onFilterUpdate, defaultBasemap, onComparison } = props;
   const [filteredRows, setFilteredRows] = useState<any>(answers);
   const { httpAuthHeader } = useAccessToken();
-  const isFetchingAlerts = useIsFetching(["areaAlerts"]);
+  const isFetchingAlerts = useIsFetching(["v3", "alerts"]);
+
   const urlQuery = useUrlQuery();
   const teamId = useMemo(() => urlQuery.get("teamId"), [urlQuery]);
   const { area, resp: areaResp } = useFindArea(areaId);
