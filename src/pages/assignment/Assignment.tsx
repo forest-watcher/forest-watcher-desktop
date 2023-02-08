@@ -38,6 +38,13 @@ const Assignment: FC = props => {
   const urlQuery = useUrlQuery();
   const shouldSaveImage = useMemo(() => urlQuery.get("saveMapImage") === "true", [urlQuery]);
   const prevLocationPathname = useMemo(() => urlQuery.get("prev"), [urlQuery]);
+  const prevLocationTranslationKey = useMemo(() => {
+    if (prevLocationPathname?.includes("/reporting/investigation")) {
+      return "investigation.back";
+    }
+
+    return "assignment.details.back";
+  }, [prevLocationPathname]);
   const history = useHistory();
 
   const [map, setMap] = useState<MapType | null>(null);
@@ -117,7 +124,7 @@ const Assignment: FC = props => {
         backLink={
           !isEdit
             ? {
-                name: "assignment.details.back",
+                name: prevLocationTranslationKey,
                 to: prevLocationPathname ?? "/reporting/assignments"
               }
             : undefined

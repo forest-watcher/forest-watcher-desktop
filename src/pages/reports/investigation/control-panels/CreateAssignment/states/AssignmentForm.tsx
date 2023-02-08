@@ -235,7 +235,7 @@ const AssignmentForm: FC<IProps> = props => {
           headers: { ...httpAuthHeader, "Content-Type": "multipart/form-data" }
         });
         onFinish?.();
-        history.push(`/assignment/${resp?.data?.id}?saveMapImage=true`);
+        history.push(`/assignment/${resp?.data?.id}?saveMapImage=true&prev=/reporting/investigation/${areaId}`);
       } else {
         // patch assignment
         resp = await patchAssignment({
@@ -245,7 +245,9 @@ const AssignmentForm: FC<IProps> = props => {
           headers: { ...httpAuthHeader, "Content-Type": "multipart/form-data" }
         });
         onFinish?.();
-        history.push(`/assignment/${assignmentToEdit.data?.id}?saveMapImage=true`);
+        history.push(
+          `/assignment/${assignmentToEdit.data?.id}?saveMapImage=true&prev=/reporting/investigation/${areaId}`
+        );
       }
 
       parentFormContext?.setValue("selectedAlerts", []);

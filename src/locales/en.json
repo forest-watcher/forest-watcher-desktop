@@ -670,6 +670,7 @@
   "export.error": "Failed to export, please try later",
   "export.emailTo": "Send email to",
   "investigation.start": "Start Investigation",
+  "investigation.back": "Back to Investigation",
   "assignment.create": "Create Assignment",
   "assignment.create.new": "Create New Assignment",
   "assignment.create.dialog.title.none": "Create New Assignment",
