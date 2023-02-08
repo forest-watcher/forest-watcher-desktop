@@ -155,9 +155,10 @@ const SquareClusterMarkers: FC<IProps> = props => {
             // Create a new marker
             marker = markers.current[clusterId] = new Marker({
               element: el
-            }).setLngLat(coords);
+            });
           }
         }
+        marker.setLngLat(coords);
         newMarkers[clusterId] = marker;
 
         if (!markersOnScreen.current[clusterId]) {
@@ -275,9 +276,6 @@ const SquareClusterMarkers: FC<IProps> = props => {
       >
         {/* @ts-ignore */}
         <Layer {...pointStyle} id={id} />
-
-        {/* @ts-ignore */}
-        <Layer {...clusterCountStyle} id={`clusters-count-${id}`} />
       </Source>
     </>
   );
