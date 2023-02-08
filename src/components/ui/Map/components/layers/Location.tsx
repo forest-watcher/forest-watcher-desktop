@@ -35,10 +35,14 @@ const SingleLocationLayer: FC<IProps> = props => {
 
       const hasClickedOnPoint = Boolean(allMouseFeatures?.find(item => item.layer.id === id));
 
-      if (allMouseFeatures && withInFeatures && !hasClickedOnPoint) {
-        setSelectedLocationPoint(existing => (existing ? existing : e.lngLat));
-      } else {
+      const hasSelectedAnAlert = Boolean(
+        allMouseFeatures?.find(item => item.source === "alerts" || item.layer.id === "clusters-count-alerts")
+      );
+
+      if (hasClickedOnPoint || hasSelectedAnAlert) {
         setSelectedLocationPoint(undefined);
+      } else if (withInFeatures) {
+        setSelectedLocationPoint(e.lngLat);
       }
     };
 
