@@ -155,10 +155,13 @@ const SquareClusterMarkers: FC<IProps> = props => {
             // Create a new marker
             marker = markers.current[clusterId] = new Marker({
               element: el
-            });
+            }).setLngLat(coords);
           }
         }
-        marker.setLngLat(coords);
+        // If the current Lng Lat values of the marker do not match the new coords
+        if (marker.getLngLat().lng !== coords[0] || marker.getLngLat().lat !== coords[1]) {
+          marker.setLngLat(coords);
+        }
         newMarkers[clusterId] = marker;
 
         if (!markersOnScreen.current[clusterId]) {
