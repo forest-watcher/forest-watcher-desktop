@@ -1,5 +1,5 @@
-import { FC, ReactNode, useEffect } from "react";
-import { Route, Switch, Redirect, useLocation, useParams, useRouteMatch } from "react-router-dom";
+import { FC, ReactNode, useEffect, useState } from "react";
+import { Route, Switch, Redirect, useLocation, useParams, useRouteMatch, useHistory } from "react-router-dom";
 
 import Areas from "pages/areas/Areas";
 import AreasManage from "pages/area-view/AreaViewContainer";
@@ -63,16 +63,28 @@ const Routes: FC<IProps> = props => {
   const queryParams = useParams<IParams>();
   const user = useSelector((state: RootState) => state.user);
 
+  const [route, setRoute] = useState({
+    to: location.pathname,
+    from: location.pathname //--> previous pathname
+  });
+
   useRouteHistoryStack();
 
   useEffect(() => {
-    // only on top level (main nav)
-    // stops deeper routes, that just contain modals, triggering a reset
-    const isTopLevel = location.pathname.split("/").length === 2;
-    if (isTopLevel) {
+    setRoute(prev => ({ to: location.pathname, from: prev.to }));
+  }, [location.pathname]);
+
+  useEffect(() => {
+    // If top level change - trigger a scroll to top.
+    const fromSplit = route.from.split("/");
+    const toSplit = route.to.split("/");
+
+    // To detect a top level change, split the from and to pathnames and
+    // compare if they are different
+    if (fromSplit[1] && toSplit[1] && fromSplit[1] !== toSplit[1]) {
       window.scrollTo(0, 0);
     }
-  }, [location.pathname]);
+  }, [route.from, route.to]);
 
   return (
     <Switch>
