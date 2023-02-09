@@ -18,6 +18,7 @@ import assignmentAssignedToMeHoverIcon from "assets/images/icons/alertIcons/Assi
 import assignmentCreateByMeHoverIcon from "assets/images/icons/alertIcons/AssignmentCreatedByMeHover.png";
 import assignmentSelectedIcon from "assets/images/icons/alertIcons/AssignmentSelected.png";
 import routePointIcon from "assets/images/icons/routeIcons/RoutePoint.png";
+import routePointIconSelected from "assets/images/icons/routeIcons/RoutePointSelected.png";
 import routePointIconUnselected from "assets/images/icons/routeIcons/RoutePointUnselected.png";
 import routePointIconMiddle from "assets/images/icons/routeIcons/RoutePointMiddle.png";
 import blankIcon from "assets/images/icons/routeIcons/Blank.png";
@@ -45,6 +46,7 @@ export enum MapImages {
   assignmentCreatedByMeHover = "assignment-created-by-me-hover",
   assignmentSelected = "assignment-selected",
   routePoint = "route-point",
+  routePointSelected = "route-point-selected",
   routePointIconUnselected = "route-point-unselected",
   routePointIconMiddle = "route-point-middle",
   blank = "blank"
@@ -124,6 +126,10 @@ export const mapImagesArr = [
   {
     type: MapImages.routePoint,
     image: routePointIcon
+  },
+  {
+    type: MapImages.routePointSelected,
+    image: routePointIconSelected
   },
   {
     type: MapImages.routePointIconUnselected,

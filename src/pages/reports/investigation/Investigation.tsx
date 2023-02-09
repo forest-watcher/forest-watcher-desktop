@@ -279,7 +279,11 @@ const InvestigationPage: FC<IProps> = props => {
                     </Route>
                   </Switch>
 
-                  <Layers contextualLayerUrls={contextualLayerUrls} lockAlertSelections={lockAlertSelections} />
+                  <Layers
+                    contextualLayerUrls={contextualLayerUrls}
+                    lockAlertSelections={lockAlertSelections}
+                    parentControl={!showComparison}
+                  />
                 </FormProvider>
               </UserAreasMap>
             );

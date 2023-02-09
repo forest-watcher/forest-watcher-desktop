@@ -6,7 +6,7 @@ const neutral300 = "#FFFFFF";
 const isSelectedEndpointCase = [
   "case",
   ["boolean", ["get", "isSelected"], false],
-  MapImages.routePoint,
+  MapImages.routePointSelected,
   MapImages.routePointIconUnselected
 ];
 
