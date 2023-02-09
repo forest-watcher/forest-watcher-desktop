@@ -5,9 +5,10 @@ import { AssignmentResponse } from "generated/core/coreResponses";
 import { goToGeojson } from "helpers/map";
 import { FC, useEffect, useMemo } from "react";
 import { LngLatBoundsLike, useMap } from "react-map-gl";
-import { IPoint } from "types/map";
+import { AssignmentLayerType, IPoint } from "types/map";
 import { pointStyle } from "components/ui/Map/components/layers/styles";
 import * as turf from "@turf/turf";
+import useGetUserId from "hooks/useGetUserId";
 
 interface IProps {
   assignment?: AssignmentResponse["data"];
@@ -15,6 +16,7 @@ interface IProps {
 
 const MapLayers: FC<IProps> = ({ assignment }) => {
   const { current: map } = useMap();
+  const userId = useGetUserId();
 
   const isAlerts = useMemo(() => {
     return Boolean(
@@ -31,12 +33,16 @@ const MapLayers: FC<IProps> = ({ assignment }) => {
         id: index.toString(),
         position: [alert.lon || 0, alert.lat || 0],
         // @ts-ignore - incorrect typing
-        type: alert.alertType as EAlertTypes
+        // type: alert.alertType as EAlertTypes
+        type:
+          assignment.attributes?.createdBy === userId && !assignment.attributes?.monitors.includes(userId)
+            ? AssignmentLayerType.creator
+            : AssignmentLayerType.default
       };
 
       return point;
     });
-  }, [assignment?.attributes?.location]);
+  }, [assignment?.attributes?.createdBy, assignment?.attributes?.location, assignment?.attributes?.monitors, userId]);
 
   useEffect(() => {
     if (assignment?.attributes?.geostore?.geojson && map) {

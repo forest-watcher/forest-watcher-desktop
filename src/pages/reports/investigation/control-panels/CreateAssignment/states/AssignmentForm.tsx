@@ -94,7 +94,9 @@ const AssignmentForm: FC<IProps> = props => {
   const { current: map } = useMap();
   const userId = useGetUserId();
   const { areaId } = useParams<{ areaId: string }>();
-  const { area: selectedAreaDetails } = useFindArea(areaId);
+  const { area: selectedAreaDetails } = useFindArea(
+    assignmentToEdit ? assignmentToEdit.data?.attributes?.areaId : areaId
+  );
   const [openDialogName, setOpenDialogName] = useState<EDialogsNames>(EDialogsNames.None);
   const isEdit = !!assignmentToEdit;
 
