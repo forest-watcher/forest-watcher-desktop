@@ -20,6 +20,7 @@ export type TemplateTableRowData = {
   templateName: string;
   version: string;
   area: string;
+  areaIds: string[];
   language: string;
   status: string;
   reports: number;
@@ -44,6 +45,7 @@ const Templates = () => {
       return {
         id: template.id,
         area: template.attributes?.public ? "-" : areasStr || "-",
+        areaIds: template.attributes?.areas?.map(area => area.id) || [],
         language: LOCALES_LIST.find(loc => loc.code === template.attributes?.defaultLanguage)?.name,
         reports: template?.attributes?.answersCount || "-",
         status: template.attributes?.status,
@@ -59,8 +61,17 @@ const Templates = () => {
     });
   }, [templates, intl]);
 
+  const uniqueAreas = useMemo(() => {
+    return templates
+      .map(template => {
+        return template.attributes?.areas;
+      })
+      .flat()
+      .filter((value, index, self) => self.findIndex(t => t?.id === value?.id) === index);
+  }, [templates]);
+
   // Filters
-  const { filters } = useTemplatesFilter(rows);
+  const { filters } = useTemplatesFilter({ templates: rows, areas: uniqueAreas });
   const [filteredRows, setFilteredRows] = useState<TemplateTableRowData[]>(rows);
 
   return (
