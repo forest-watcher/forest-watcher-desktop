@@ -46,7 +46,7 @@
   "assignment.details.templates": "Templates",
   "assignment.details.noTemplates": "No Templates Added",
   "assignment.details.monitor": "Monitor",
-  "assignment.details.noNonitor": "No Monitors Added",
+  "assignment.details.noMonitors": "No Monitors Added",
   "assignment.details.notes": "Notes to Monitor",
   "assignment.details.noNotes": "No Notes Added",
   "assignment.delete.delete": "Delete Assignment",
