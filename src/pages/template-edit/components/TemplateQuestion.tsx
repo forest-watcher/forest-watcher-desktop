@@ -171,7 +171,7 @@ const TemplateQuestion = ({ question, defaultLanguage = "", onDelete, index }: T
     // Check values (select etc..)
     const currentQuestionValues = getValues(`questions.${index}.values`);
 
-    if (currentQuestionValues[previousDefaultLang as keyof typeof currentQuestionValues]) {
+    if (currentQuestionValues?.[previousDefaultLang as keyof typeof currentQuestionValues]) {
       const newValues: any = {};
 
       newValues[defaultLanguage as keyof typeof currentQuestionValues] =
