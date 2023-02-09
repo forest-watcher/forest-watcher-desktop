@@ -1,7 +1,7 @@
 import Input from "components/ui/Form/Input";
-import { FormProvider, useForm } from "react-hook-form";
+import { FormProvider, useForm, useWatch } from "react-hook-form";
 import { FormattedMessage, useIntl } from "react-intl";
-import { FC } from "react";
+import { FC, useEffect, useState } from "react";
 import { TemplateModel } from "generated/core/coreSchemas";
 import { LOCALES_MAPPED_TO_SELECT } from "constants/locales";
 import Select from "components/ui/Form/Select";
@@ -15,6 +15,7 @@ import { QUESTION } from "constants/templates";
 import Icon from "components/extensive/Icon";
 import yup from "configureYup";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { unique } from "helpers/utils";
 
 export interface FormFields extends Omit<TemplateModel, "areas"> {
   areas: string[];
@@ -103,14 +104,40 @@ const TemplateForm: FC<IParams> = ({ template, backLink = "", onSubmit }) => {
   const formHook = useForm<FormFields>({ defaultValues: template, resolver: yupResolver(templateSchema) });
   const { httpAuthHeader } = useAccessToken();
   const { data: areasData } = useGetV3GfwAreasUser({ headers: httpAuthHeader });
+  const [previousDefaultLang, setPreviousDefaultLang] = useState(template?.defaultLanguage || "en");
 
   const {
     register,
     handleSubmit,
     setValue,
     getValues,
+    control,
     formState: { isDirty, isSubmitting, errors }
   } = formHook;
+
+  const defaultLanguage = useWatch({ control, name: "defaultLanguage" });
+  const name = useWatch({ control, name: "name" });
+
+  useEffect(() => {
+    if (defaultLanguage) {
+      const newLangs = [defaultLanguage];
+      setValue("languages", newLangs, { shouldDirty: true });
+
+      const newName: any = {};
+
+      newName[defaultLanguage as keyof typeof name] = name?.[previousDefaultLang as keyof typeof name];
+
+      if (!name?.[defaultLanguage as keyof typeof name]) {
+        //@ts-ignore
+        setValue(`name.${defaultLanguage}`, "", { shouldDirty: true });
+      }
+
+      setValue(`name`, newName, { shouldDirty: true });
+
+      setPreviousDefaultLang(defaultLanguage);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [defaultLanguage]);
 
   const handleAddQuestion = (e: React.MouseEvent<HTMLButtonElement>) => {
     const questions = getValues("questions") || [];
@@ -158,17 +185,17 @@ const TemplateForm: FC<IParams> = ({ template, backLink = "", onSubmit }) => {
             <Input
               id="name"
               // @ts-ignore - todo how to figure out variable register
-              registered={register(`name.${template?.defaultLanguage}`)}
+              registered={register(`name.${defaultLanguage}`)}
               htmlInputProps={{
                 type: "text",
                 label: intl.formatMessage({ id: "template.edit.name" }),
                 placeholder: intl.formatMessage({ id: "template.edit.name.placeholder" })
               }}
-              key={template?.defaultLanguage}
+              key={defaultLanguage}
               alternateLabelStyle
               largeLabel
               // @ts-ignore
-              error={errors.name && errors.name[`${template?.defaultLanguage}`]}
+              error={errors.name && errors.name[`${defaultLanguage}`]}
             />
             <Select
               id="areas"
