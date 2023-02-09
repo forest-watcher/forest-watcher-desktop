@@ -106,6 +106,7 @@
   "common.ok": "ok",
   "common.cancel": "Annuler",
   "common.confirm": "Confirmer",
+  "common.submit": "Submit",
   "common.delete": "Supprimer",
   "common.next": "Suivant",
   "common.previous": "Précédent",
@@ -759,7 +760,7 @@
   "maps.legend.key.VIIRS.alerts": "Alertes VIIRS",
   "maps.legend.key.VIIRS.reports": "Rapports VIIRS",
   "maps.legend.key.assignments.created": "Affectations (créées par moi)",
-  "maps.legend.key.assignments.assigned": "Affectations (créées pour moi)",
+  "maps.legend.key.assignments.assigned": "Assignments (Assigned to me/team)",
 
   "filters.all.alerts": "Toutes les alertes",
   "filters.all.templates": "Tous les modèles",
