@@ -32,8 +32,6 @@ const MapLayers: FC<IProps> = ({ assignment }) => {
       const point: IPoint = {
         id: index.toString(),
         position: [alert.lon || 0, alert.lat || 0],
-        // @ts-ignore - incorrect typing
-        // type: alert.alertType as EAlertTypes
         type:
           assignment.attributes?.createdBy === userId && !assignment.attributes?.monitors.includes(userId)
             ? AssignmentLayerType.creator
