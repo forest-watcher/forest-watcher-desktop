@@ -154,7 +154,12 @@ const Help = () => {
               />
             </HeaderCard.Content>
             <HeaderCard.Footer>
-              <input type="submit" className="c-button c-button--primary" disabled={isLoading} />
+              <input
+                type="submit"
+                className="c-button c-button--primary"
+                disabled={isLoading}
+                value={intl.formatMessage({ id: "common.submit" })}
+              />
             </HeaderCard.Footer>
           </form>
         </HeaderCard>

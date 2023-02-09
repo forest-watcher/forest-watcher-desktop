@@ -106,6 +106,7 @@
   "common.ok": "ok",
   "common.cancel": "Batal",
   "common.confirm": "Konfirmasi",
+  "common.submit": "Submit",
   "common.delete": "Hapus",
   "common.next": "Lanjut",
   "common.previous": "Sebelumnya",
@@ -759,7 +760,7 @@
   "maps.legend.key.VIIRS.alerts": "Peringatan VIIRS",
   "maps.legend.key.VIIRS.reports": "Laporan VIIRS",
   "maps.legend.key.assignments.created": "Tugas (Dibuat oleh saya)",
-  "maps.legend.key.assignments.assigned": "Tugas (Ditugaskan pada saya)",
+  "maps.legend.key.assignments.assigned": "Assignments (Assigned to me/team)",
 
   "filters.all.alerts": "Semua Peringatan",
   "filters.all.templates": "Semua Template",
