@@ -5,6 +5,7 @@ import {
   usePatchV3GfwTemplatesTemplateId,
   usePatchV3TemplatesTemplateIdStatus
 } from "generated/core/coreComponents";
+import { useInvalidateGetTemplates } from "hooks/querys/templates/useGetTemplates";
 import { useAccessToken } from "hooks/useAccessToken";
 import { useHistory, useParams } from "react-router-dom";
 import TemplateForm, { FormFields } from "./components/TemplateForm";
@@ -42,6 +43,7 @@ const TemplateEdit = () => {
   const { httpAuthHeader } = useAccessToken();
   const { templateId } = useParams<{ templateId: string }>();
   const history = useHistory();
+  const invalidateGetTemplates = useInvalidateGetTemplates();
 
   const { data: template, isLoading: templateLoading } = useGetV3GfwTemplatesTemplateId({
     headers: httpAuthHeader,
@@ -69,6 +71,8 @@ const TemplateEdit = () => {
         headers: httpAuthHeader
       });
     }
+
+    await invalidateGetTemplates();
 
     history.push(`/templates/${resp.data?.id}`);
   };
