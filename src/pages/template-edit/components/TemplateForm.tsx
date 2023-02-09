@@ -15,7 +15,6 @@ import { QUESTION } from "constants/templates";
 import Icon from "components/extensive/Icon";
 import yup from "configureYup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { unique } from "helpers/utils";
 
 export interface FormFields extends Omit<TemplateModel, "areas"> {
   areas: string[];
