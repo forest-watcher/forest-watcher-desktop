@@ -46,7 +46,7 @@
   "assignment.details.templates": "Modely",
   "assignment.details.noTemplates": "Tsy misy modely vaovao nampidirina",
   "assignment.details.monitor": "Mpanara-maso",
-  "assignment.details.noNonitor": "No Monitors Added",
+  "assignment.details.noMonitors": "No Monitors Added",
   "assignment.details.notes": "Fanamarihana ho arahana maso",
   "assignment.details.noNotes": "No Notes Added",
   "assignment.delete.delete": "Fafana ny asa notendrena atao",

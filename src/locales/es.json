@@ -46,7 +46,7 @@
   "assignment.details.templates": "Plantillas",
   "assignment.details.noTemplates": "No se han añadido plantillas",
   "assignment.details.monitor": "Monitor",
-  "assignment.details.noNonitor": "No Monitors Added",
+  "assignment.details.noMonitors": "No Monitors Added",
   "assignment.details.notes": "Notas para el monitor",
   "assignment.details.noNotes": "No Notes Added",
   "assignment.delete.delete": "Eliminar tarea",

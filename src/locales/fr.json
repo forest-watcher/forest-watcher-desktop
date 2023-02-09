@@ -46,7 +46,7 @@
   "assignment.details.templates": "Modèles",
   "assignment.details.noTemplates": "Aucun modèle ajouté",
   "assignment.details.monitor": "Moniteur",
-  "assignment.details.noNonitor": "No Monitors Added",
+  "assignment.details.noMonitors": "No Monitors Added",
   "assignment.details.notes": "Notes pour le suivi",
   "assignment.details.noNotes": "No Notes Added",
   "assignment.delete.delete": "Supprimer l'affectation",
