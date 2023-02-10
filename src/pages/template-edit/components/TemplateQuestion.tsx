@@ -9,7 +9,7 @@ import Select from "components/ui/Form/Select";
 import Toggle from "components/ui/Form/Toggle";
 import { CHILD_QUESTION, CONDITIONAL_QUESTION_TYPES, QUESTION_TYPES } from "constants/templates";
 import { QuestionModel } from "generated/core/coreSchemas";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useFormContext, useWatch } from "react-hook-form";
 import { FormattedMessage, useIntl } from "react-intl";
 import { FormFields } from "./TemplateForm";
@@ -25,6 +25,7 @@ type TemplateQuestionProps = {
 type valuesType = { [key: string]: { label: string; value: number }[] };
 
 const TemplateQuestion = ({ question, defaultLanguage = "", onDelete, index }: TemplateQuestionProps) => {
+  const [previousDefaultLang, setPreviousDefaultLang] = useState(defaultLanguage);
   const formattedQuestionName = `${question.name.replace(/-/g, " ")}:`;
   //@ts-ignore todo figure out key issue here.
   const responseOptions = question.values as valuesType;
@@ -155,6 +156,34 @@ const TemplateQuestion = ({ question, defaultLanguage = "", onDelete, index }: T
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isConditional]);
+
+  useEffect(() => {
+    // Remove old lang data
+    const currentQuestionTitle = getValues(`questions.${index}.label`);
+
+    const newTitle: any = {};
+
+    newTitle[defaultLanguage as keyof typeof currentQuestionTitle] =
+      currentQuestionTitle[previousDefaultLang as keyof typeof currentQuestionTitle];
+
+    setValue(`questions.${index}.label`, newTitle, { shouldDirty: true });
+
+    // Check values (select etc..)
+    const currentQuestionValues = getValues(`questions.${index}.values`);
+
+    if (currentQuestionValues?.[previousDefaultLang as keyof typeof currentQuestionValues]) {
+      const newValues: any = {};
+
+      newValues[defaultLanguage as keyof typeof currentQuestionValues] =
+        currentQuestionValues[previousDefaultLang as keyof typeof currentQuestionValues];
+
+      setValue(`questions.${index}.values`, newValues, { shouldDirty: true });
+    }
+
+    setPreviousDefaultLang(defaultLanguage);
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [defaultLanguage]);
 
   return (
     <>
