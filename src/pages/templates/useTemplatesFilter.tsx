@@ -6,19 +6,30 @@ import { ALL_VALUE } from "helpers/table";
 import { IFilter } from "components/ui/DataFilter/DataFilter";
 import { TAvailableTypes } from "components/modals/FormModal";
 
-const useTemplatesFilter = (templates: TemplateTableRowData[] = []) => {
+interface IAreas {
+  id?: string | undefined;
+  name?: string | undefined;
+}
+
+interface IProps {
+  templates?: TemplateTableRowData[];
+  areas?: (IAreas | undefined)[];
+}
+
+const useTemplatesFilter = ({ templates = [], areas = [] }: IProps) => {
   const intl = useIntl();
 
   const areaFilterOptions = useMemo<Option[]>(() => {
-    const uniqueAreas = templates
-      .map(template => ({
-        label: template.area ?? "",
-        value: template.area ?? ""
-      }))
-      .filter((value, index, self) => self.findIndex(t => t.value === value.value) === index)
-      .filter(area => area.value);
+    const uniqueAreas = areas.map(area => ({
+      label: area?.name ?? "",
+      value: area?.id ?? ""
+    }));
 
-    return [{ label: intl.formatMessage({ id: "common.all" }), value: ALL_VALUE }, ...uniqueAreas];
+    return [
+      { label: intl.formatMessage({ id: "common.all" }), value: ALL_VALUE },
+      { label: "-", value: "-" },
+      ...uniqueAreas
+    ];
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [templates, intl]);
 
@@ -43,7 +54,10 @@ const useTemplatesFilter = (templates: TemplateTableRowData[] = []) => {
           if (!value || value === ALL_VALUE) {
             return true;
           } else {
-            return item.area === value;
+            if (value === "-") {
+              return item.areaIds.length === 0;
+            }
+            return Boolean(item.areaIds.find((id: string) => id === value));
           }
         },
         getShouldShow: () => areaFilterOptions.length > 2
