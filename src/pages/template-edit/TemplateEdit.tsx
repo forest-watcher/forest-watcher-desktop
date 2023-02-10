@@ -76,7 +76,6 @@ const TemplateEdit = () => {
   const { mutateAsync } = usePatchV3GfwTemplatesTemplateId();
 
   const handleSubmit = async (data: FormFields) => {
-    console.log(data);
     const resp = await mutateAsync({
       // @ts-ignore
       body: { ...getFormBody(data), areaIds: data.areas },
