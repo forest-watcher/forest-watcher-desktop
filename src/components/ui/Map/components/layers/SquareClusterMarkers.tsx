@@ -31,6 +31,7 @@ export interface IProps {
   points: IPoint[];
   pointStyle?: Record<any, any>;
   onSquareSelect?: (ids: string[], point: mapboxgl.Point) => void;
+  forceHoveredSquareIds?: string[] | null;
   selectedSquareIds?: string[] | null;
   mapRef: MapInstance | null;
   goToPoints?: boolean;
@@ -48,6 +49,7 @@ const SquareClusterMarkers: FC<IProps> = props => {
     pointDataType = EPointDataTypes.Reports,
     points,
     onSquareSelect,
+    forceHoveredSquareIds,
     selectedSquareIds,
     mapRef,
     pointStyle = defaultPointStyle,
@@ -85,7 +87,7 @@ const SquareClusterMarkers: FC<IProps> = props => {
             id: point.id,
             icon: iconGenerator(
               point.type || "",
-              point.id === hoveredPoint,
+              point.id === hoveredPoint || forceHoveredSquareIds?.includes(point.id),
               selectedPoints?.length
                 ? canMultiSelect
                   ? selectedPoints.includes(point.id)
@@ -96,7 +98,7 @@ const SquareClusterMarkers: FC<IProps> = props => {
           })
         )
       ),
-    [hoveredPoint, iconGenerator, points, selectedPoints, canMultiSelect]
+    [hoveredPoint, iconGenerator, points, selectedPoints, forceHoveredSquareIds, canMultiSelect]
   );
 
   useEffect(() => {
