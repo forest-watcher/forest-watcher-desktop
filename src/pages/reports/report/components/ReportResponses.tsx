@@ -2,18 +2,21 @@ import List from "components/extensive/List";
 import OptionalWrapper from "components/extensive/OptionalWrapper";
 import Button from "components/ui/Button/Button";
 import { AnswerResponse, ReportsQuestion } from "generated/forms/formsSchemas";
+import { useAppSelector } from "hooks/useRedux";
 import { useMemo, useState } from "react";
 import { FormattedMessage } from "react-intl";
 import ReportExportImagesModal from "./modal/ReportExportImagesModal";
 import ReportResponse, { ReportResponseProps } from "./ReportResponse";
 
 type ReportResponsesProps = {
+  defaultLanguage: string;
   questions: ReportsQuestion[];
   responses: AnswerResponse[];
 };
 
-const ReportResponses = ({ questions, responses }: ReportResponsesProps) => {
+const ReportResponses = ({ defaultLanguage, questions, responses }: ReportResponsesProps) => {
   const [showImagesModal, setShowImagesModal] = useState<boolean>(false);
+  const { locale } = useAppSelector(state => state.app);
 
   const data = useMemo(() => {
     return questions?.reduce<ReportResponseProps[]>((combinedResponses, currentQuestionDetails) => {
@@ -38,8 +41,8 @@ const ReportResponses = ({ questions, responses }: ReportResponsesProps) => {
 
       const combineResponse = generateCombineResponse(
         currentQuestionDetails.name,
-        // @ts-ignore use browser's lang here, not "en"
-        currentQuestionDetails.label.en,
+        // @ts-ignore
+        currentQuestionDetails.label[locale] ?? currentQuestionDetails.label[defaultLanguage],
         currentQuestionDetails.type,
         response.value
       );
@@ -67,8 +70,8 @@ const ReportResponses = ({ questions, responses }: ReportResponsesProps) => {
           copyCombinedResponses.push(
             generateCombineResponse(
               childQuestionDetails.name,
-              // @ts-ignore use browser's lang here, not "en"
-              childQuestionDetails.label.en,
+              // @ts-ignore
+              childQuestionDetails.label[locale] ?? childQuestionDetails.label[defaultLanguage],
               childQuestionDetails.type,
               childQuestionResponse?.value
             )
@@ -78,7 +81,7 @@ const ReportResponses = ({ questions, responses }: ReportResponsesProps) => {
 
       return copyCombinedResponses;
     }, []);
-  }, [questions, responses]);
+  }, [questions, responses, locale, defaultLanguage]);
 
   const hasImages = useMemo(() => {
     const found = data.find(item => item.type === "blob");
