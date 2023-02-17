@@ -22,8 +22,6 @@ const ReportResponses = ({ questions, responses }: ReportResponsesProps) => {
       const response = responses.find(r => r.name === currentQuestionDetails.name);
       if (!response) return copyCombinedResponses;
 
-      console.log(currentQuestionDetails);
-
       const generateCombineResponse = (name: string, label: string, type: string, value?: string) => {
         const formattedQuestion = name
           .split("-")
