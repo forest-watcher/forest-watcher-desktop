@@ -16,27 +16,70 @@ const ReportResponses = ({ questions, responses }: ReportResponsesProps) => {
   const [showImagesModal, setShowImagesModal] = useState<boolean>(false);
 
   const data = useMemo(() => {
-    return questions
-      .map(q => {
-        const response = responses.find(r => r.name === q.name);
-        if (!response) return undefined;
-        const formattedQuestion = q.name
+    return questions?.reduce<ReportResponseProps[]>((combinedResponses, currentQuestionDetails) => {
+      const copyCombinedResponses = [...combinedResponses];
+
+      const response = responses.find(r => r.name === currentQuestionDetails.name);
+      if (!response) return copyCombinedResponses;
+
+      console.log(currentQuestionDetails);
+
+      const generateCombineResponse = (name: string, label: string, type: string, value?: string) => {
+        const formattedQuestion = name
           .split("-")
           .map(s => s[0].toUpperCase() + s.slice(1))
-          .join(",")
-          .replace(",", " ");
+          .join(" ");
 
         return {
-          // @ts-expect-error
-          question: `${formattedQuestion}: ${q.label.en}`,
-          response: response.value ?? null,
-          childQuestions: responses.filter(response =>
-            q.childQuestions?.find(question => question.name === response.name)
-          ),
-          type: q.type
+          question: `${formattedQuestion}: ${label}`,
+          response: value ?? null,
+          type,
+          childQuestions: [] as AnswerResponse[]
         };
-      })
-      .filter(x => x) as ReportResponseProps[];
+      };
+
+      const combineResponse = generateCombineResponse(
+        currentQuestionDetails.name,
+        // @ts-ignore use browser's lang here, not "en"
+        currentQuestionDetails.label.en,
+        currentQuestionDetails.type,
+        response.value
+      );
+
+      // When the question type is "audio"
+      // Each child question contains the audio file information
+      // Add this to the combineResponse object for later
+      // @see src/pages/reports/report/components/ReportResponse.tsx
+      if (currentQuestionDetails.type === "audio") {
+        combineResponse.childQuestions = responses.filter(response =>
+          currentQuestionDetails.childQuestions?.find(question => question.name === response.name)
+        );
+      }
+
+      copyCombinedResponses.push(combineResponse);
+
+      // When the question type isn't "audio"
+      // Each child question is considered a separate response
+      // Generate a Combined Response for each child
+      if (currentQuestionDetails.type !== "audio" && currentQuestionDetails.childQuestions?.length) {
+        for (let i = 0; i < currentQuestionDetails.childQuestions.length; i++) {
+          const childQuestionDetails = currentQuestionDetails.childQuestions[i];
+          const childQuestionResponse = responses.find(r => r.name === childQuestionDetails.name);
+
+          copyCombinedResponses.push(
+            generateCombineResponse(
+              childQuestionDetails.name,
+              // @ts-ignore use browser's lang here, not "en"
+              childQuestionDetails.label.en,
+              childQuestionDetails.type,
+              childQuestionResponse?.value
+            )
+          );
+        }
+      }
+
+      return copyCombinedResponses;
+    }, []);
   }, [questions, responses]);
 
   const hasImages = useMemo(() => {
