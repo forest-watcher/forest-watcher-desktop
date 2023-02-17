@@ -110,6 +110,7 @@ const AreaAlertMapSource: FC<IProps> = props => {
         id="alerts"
         pointDataType={EPointDataTypes.Alerts}
         points={alertPoints}
+        forceHoveredSquareIds={multipleAlertsToPick}
         selectedSquareIds={selectedAlertIds}
         pointStyle={{
           ...pointStyle,

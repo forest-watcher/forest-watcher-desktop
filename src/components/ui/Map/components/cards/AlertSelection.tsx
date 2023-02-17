@@ -45,7 +45,7 @@ const AlertSelectionCard: FC<IProps> = props => {
             setValue("overlappedSelect", undefined);
             handleSelectedPointsConfirm(overlappedSelect);
           }}
-          disabled={overlappedSelect?.length === 0}
+          disabled={!overlappedSelect || overlappedSelect.length === 0}
         >
           <FormattedMessage id="alerts.deforestation.multiple.continue" />
         </Button>
