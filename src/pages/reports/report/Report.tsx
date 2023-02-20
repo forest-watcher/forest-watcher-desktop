@@ -84,7 +84,11 @@ const Report = () => {
       />
       <ReportMap answer={answer} />
       <ReportDetails answer={answer} />
-      <ReportResponses questions={report?.data?.attributes.questions ?? []} responses={responses as AnswerResponse[]} />
+      <ReportResponses
+        defaultLanguage={report?.data?.attributes?.defaultLanguage!}
+        questions={report?.data?.attributes.questions ?? []}
+        responses={responses as AnswerResponse[]}
+      />
     </LoadingWrapper>
   );
 };

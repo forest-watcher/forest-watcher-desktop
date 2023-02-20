@@ -10,7 +10,7 @@ import { useIntl } from "react-intl";
 
 export interface IReportResponse {
   question: string;
-  response: string;
+  response: string | null;
   type: string;
 }
 
@@ -50,13 +50,13 @@ const Response = (props: ReportResponseProps) => {
             title="audio.play"
             onClose={() => setAudioModalOpen(false)}
             actions={[
-              { name: "common.download", onClick: () => download(response) },
+              { name: "common.download", onClick: () => download(response || "") },
               { name: "common.close", variant: "secondary", onClick: () => setAudioModalOpen(false) }
             ]}
           >
             <div className="w-full h-full flex justify-center align-middle">
               {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
-              <audio src={response} autoPlay controls />
+              <audio src={response || ""} autoPlay controls />
             </div>
           </Modal>
         </>
