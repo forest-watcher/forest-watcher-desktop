@@ -1,3 +1,4 @@
+import { fireGAEvent } from "helpers/analytics";
 import { FC } from "react";
 import Modal from "components/ui/Modal/Modal";
 import { useHistory, useParams } from "react-router-dom";
@@ -30,6 +31,13 @@ const DeleteAssignment: FC<IProps> = props => {
         pathParams: { assignmentId: id },
         headers: httpAuthHeader
       });
+
+      fireGAEvent({
+        category: "Assignment",
+        action: "detail_view",
+        label: "deleted"
+      });
+
       history.push("/reporting/assignments");
       toastr.success(intl.formatMessage({ id: "assignment.delete.success" }), "");
     } catch (e: any) {

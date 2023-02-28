@@ -33,7 +33,7 @@ export interface IProps {
   setShapeFileGeoJSON: Dispatch<SetStateAction<GeojsonModel | undefined>>;
   shapeFileGeoJSON?: GeojsonModel;
   assignmentToEdit?: AssignmentResponse;
-  onFinish?: () => void;
+  onFinish?: (data: { isEdit: boolean }) => void;
   prevLocationPathname?: string;
 }
 
@@ -239,7 +239,7 @@ const AssignmentForm: FC<IProps> = props => {
           body: formData,
           headers: { ...httpAuthHeader, "Content-Type": "multipart/form-data" }
         });
-        onFinish?.();
+        onFinish?.({ isEdit: false });
         history.push(`/assignment/${resp?.data?.id}?saveMapImage=true&prev=/reporting/investigation/${areaId}`);
       } else {
         // patch assignment
@@ -249,7 +249,7 @@ const AssignmentForm: FC<IProps> = props => {
           pathParams: { assignmentId: assignmentToEdit.data?.id || "" },
           headers: { ...httpAuthHeader, "Content-Type": "multipart/form-data" }
         });
-        onFinish?.();
+        onFinish?.({ isEdit: true });
         history.push(
           `/assignment/${assignmentToEdit.data?.id}?saveMapImage=true&prev=/reporting/investigation/${areaId}`
         );

@@ -1,3 +1,4 @@
+import { fireGAEvent } from "helpers/analytics";
 import { useMemo, useState } from "react";
 import { LOCALES_LIST } from "../../constants/locales";
 import LoadingWrapper from "components/extensive/LoadingWrapper";
@@ -79,7 +80,17 @@ const Templates = () => {
       <Hero
         title="templates.name"
         actions={
-          <Link className="c-button c-button--primary" to="/templates/create">
+          <Link
+            className="c-button c-button--primary"
+            to="/templates/create"
+            onClick={() => {
+              fireGAEvent({
+                category: "Templates",
+                action: "create_template",
+                label: "started_template"
+              });
+            }}
+          >
             <FormattedMessage id="templates.createTemplate" />
           </Link>
         }

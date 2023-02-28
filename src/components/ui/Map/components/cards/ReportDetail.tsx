@@ -1,15 +1,17 @@
-import { FC, useEffect, useMemo, useState } from "react";
-import { FormattedMessage, useIntl } from "react-intl";
-import MapCard from "./MapCard";
-import { components } from "interfaces/forms";
-import useAlertTypeString from "hooks/useAlertTypeString";
-import { TPropsFromRedux } from "./ReportDetailContainer";
-import { TAreasInTeam } from "services/area";
 import OptionalWrapper from "components/extensive/OptionalWrapper";
 import Button from "components/ui/Button/Button";
-import { useHistory, useLocation } from "react-router-dom";
-import ReactDOM from "react-dom";
+import { fireGAEvent } from "helpers/analytics";
+import useAlertTypeString from "hooks/useAlertTypeString";
 import { useAppSelector } from "hooks/useRedux";
+import { components } from "interfaces/forms";
+import { FC, useEffect, useMemo, useState } from "react";
+import ReactDOM from "react-dom";
+import { FormattedMessage, useIntl } from "react-intl";
+import { useHistory, useLocation } from "react-router-dom";
+import { TAreasInTeam } from "services/area";
+import { MonitoringActions, MonitoringLabel } from "types/analytics";
+import MapCard from "./MapCard";
+import { TPropsFromRedux } from "./ReportDetailContainer";
 
 export type TAnswer = components["responses"]["Answer"]["content"]["application/json"]["data"];
 
@@ -60,9 +62,14 @@ const ReportDetailCard: FC<IParams> = ({ answers, areasInUsersTeams, onClose }) 
         answer?.id ? (
           <Button
             className="w-full"
-            onClick={() =>
-              history.push(`/reporting/reports/${answer?.attributes?.report}/answers/${answer?.id}?prev=${pathname}`)
-            }
+            onClick={() => {
+              fireGAEvent({
+                category: "Monitoring",
+                action: MonitoringActions.Investigation,
+                label: MonitoringLabel.ViewReport
+              });
+              history.push(`/reporting/reports/${answer?.attributes?.report}/answers/${answer?.id}?prev=${pathname}`);
+            }}
           >
             <FormattedMessage id="reports.preview.view" />
           </Button>

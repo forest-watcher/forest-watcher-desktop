@@ -12,6 +12,7 @@ interface IProps extends HTMLAttributes<HTMLElement> {
   ctaIsExternal?: boolean;
   hasMargins?: boolean;
   textClassName?: string;
+  ctaOnClick?: () => void;
 }
 
 const EmptyState: FC<IProps> = props => {
@@ -26,6 +27,7 @@ const EmptyState: FC<IProps> = props => {
     ctaIsExternal = false,
     hasMargins = false,
     textClassName = "",
+    ctaOnClick = () => {},
     ...rest
   } = props;
   const classes = classnames("c-empty-state", hasMargins && "c-empty-state--has-margins", className);
@@ -42,7 +44,7 @@ const EmptyState: FC<IProps> = props => {
       {ctaTo &&
         ctaText &&
         (!ctaIsExternal ? (
-          <Link to={ctaTo} className="c-button c-button--primary c-empty-state__cta">
+          <Link to={ctaTo} className="c-button c-button--primary c-empty-state__cta" onClick={ctaOnClick}>
             {ctaText}
           </Link>
         ) : (
@@ -51,6 +53,7 @@ const EmptyState: FC<IProps> = props => {
             className="c-button c-button--primary c-empty-state__cta"
             rel="noreferrer nofollow"
             target="_blank"
+            onClick={ctaOnClick}
           >
             <Icon size={18} name="ExternalLink" className="pr-1 my-[-1px]" />
             {ctaText}

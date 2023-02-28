@@ -2,10 +2,12 @@ import * as turf from "@turf/turf";
 import { linePointStyle, lineStyle } from "components/ui/Map/components/layers/styles";
 import { useGetV3GfwRoutesTeams, useGetV3GfwRoutesUser } from "generated/core/coreComponents";
 import { RouteModel } from "generated/core/coreSchemas";
+import { fireGAEvent } from "helpers/analytics";
 import { useAccessToken } from "hooks/useAccessToken";
 import { EventData, MapMouseEvent } from "mapbox-gl";
 import { FC, useContext, useEffect, useMemo } from "react";
 import { Layer, Source, useMap } from "react-map-gl";
+import { MonitoringActions, MonitoringLabel } from "types/analytics";
 import MapContext from "../MapContext";
 import RouteCard from "./RouteCard";
 
@@ -106,6 +108,13 @@ const AreaRoutesSource: FC<IProps> = props => {
     const handleRouteClick = (e: MapMouseEvent & EventData) => {
       e.preventDefault();
       const route = JSON.parse(e.features[0].properties.route);
+
+      fireGAEvent({
+        category: "Monitoring",
+        action: MonitoringActions.Routes,
+        label: MonitoringLabel.SelectedRoute
+      });
+
       setSelectedRoute?.(route);
     };
 

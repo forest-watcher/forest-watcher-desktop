@@ -1,3 +1,4 @@
+import { fireGAEvent } from "helpers/analytics";
 import { FC } from "react";
 import Modal from "components/ui/Modal/Modal";
 import { useHistory } from "react-router-dom";
@@ -23,6 +24,13 @@ const DeleteTemplate: FC<IProps> = props => {
   const handleDelete = async () => {
     try {
       await deleteTemplate({ headers: httpAuthHeader, pathParams: { templateId } });
+
+      fireGAEvent({
+        category: "Templates",
+        action: "detail_view",
+        label: "deleted_template"
+      });
+
       history.push("/templates");
       toastr.success(intl.formatMessage({ id: "template.delete.success" }), "");
     } catch (e: any) {

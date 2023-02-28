@@ -1,7 +1,9 @@
-import Icon from "components/extensive/Icon";
-import { FC } from "react";
 import { Popover } from "@headlessui/react";
+import Icon from "components/extensive/Icon";
+import { fireGAEvent } from "helpers/analytics";
+import { FC } from "react";
 import { FormattedMessage } from "react-intl";
+import { MapActions, MapLabel } from "types/analytics";
 
 export interface IProps {}
 
@@ -39,9 +41,20 @@ const MAP_KEYS = [
 const MapLegendControl: FC<IProps> = () => {
   return (
     <Popover className="c-map__search-controls">
-      <Popover.Button className="rounded-md border-2 border-solid border-neutral-400 bg-neutral-300 inline-flex items-center text-neutral-700 text-lg h-[41px] font-fira hover:bg-neutral-400">
+      <Popover.Button
+        className="rounded-md border-2 border-solid border-neutral-400 bg-neutral-300 inline-flex items-center text-neutral-700 text-lg h-[41px] font-fira hover:bg-neutral-400"
+        onClick={() => {
+          fireGAEvent({
+            category: "Map",
+            action: MapActions.Legend,
+            label: MapLabel.ViewedLegend
+          });
+        }}
+      >
         <Icon className="mx-2" name="MapKey" />
-        <span className="mr-3.5">Map Legend</span>
+        <span className="mr-3.5">
+          <FormattedMessage id="maps.legend.title" />
+        </span>
       </Popover.Button>
 
       {/*Key Legend*/}
@@ -51,7 +64,9 @@ const MapLegendControl: FC<IProps> = () => {
             {/*Key Header*/}
             <div className="border-solid border-b-2 p-5 flex items-center border-neutral-400">
               <Icon className="mr-3" name="MapKey" size={32} />
-              <span className="text-neutral-700 text-lg font-fira">Map Legend</span>
+              <span className="text-neutral-700 text-lg font-fira">
+                <FormattedMessage id="maps.legend.title" />
+              </span>
               <button
                 aria-label="Close"
                 className="rounded-md border-solid border-2 border-neutral-400 w-10 h-10 inline-flex items-center justify-center ml-auto hover:bg-neutral-400"

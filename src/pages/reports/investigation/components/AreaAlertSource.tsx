@@ -1,15 +1,17 @@
 import AlertsDetailCard from "components/ui/Map/components/cards/AlertsDetail";
+import AlertSelectionCard from "components/ui/Map/components/cards/AlertSelection";
 import SquareClusterMarkers, { EPointDataTypes } from "components/ui/Map/components/layers/SquareClusterMarkers";
 import { pointStyle } from "components/ui/Map/components/layers/styles";
 import { EAlertTypes } from "constants/alerts";
+import { fireGAEvent } from "helpers/analytics";
 import { findNeighboringPoints } from "helpers/map";
 import useGetAlertsForArea from "hooks/querys/alerts/useGetAlertsForArea";
+import KDBush from "kdbush";
 import { FC, useCallback, useContext, useEffect, useMemo } from "react";
 import { useFormContext, useWatch } from "react-hook-form";
 import { useMap } from "react-map-gl";
-import KDBush from "kdbush";
+import { MonitoringActions, MonitoringLabel } from "types/analytics";
 import { IPoint, TAlertsById } from "types/map";
-import AlertSelectionCard from "components/ui/Map/components/cards/AlertSelection";
 import MapContext from "../MapContext";
 
 export interface IProps {
@@ -88,6 +90,12 @@ const AreaAlertMapSource: FC<IProps> = props => {
 
   const handleSelectNeighboringPoints = () => {
     if (!neighboringAlertIds || !selectedAlertIds) return;
+
+    fireGAEvent({
+      category: "Monitoring",
+      action: MonitoringActions.Investigation,
+      label: MonitoringLabel.SelectedConnectedAlerts
+    });
 
     handleAlertSelectionChange([...selectedAlertIds, ...neighboringAlertIds]);
   };
