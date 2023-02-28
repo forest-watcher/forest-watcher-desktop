@@ -30,7 +30,8 @@ export enum MonitoringActions {
   Assignments = "assignments",
   ExportedReport = "exported_report",
   ManagedArea = "managed_area",
-  ReportDetail = "report_detail"
+  ReportDetail = "report_detail",
+  Routes = "routes"
 }
 export enum MonitoringLabel {
   StartedInvestigation = "started_investigation",
@@ -39,7 +40,8 @@ export enum MonitoringLabel {
   StartedFromMonitoring = "started_from_monitoring",
   ExportedSingleReport = "exported_single_report",
   ReportDownloadedImages = "report_downloaded_images",
-  SelectedConnectedAlerts = "selected_connected_areas"
+  SelectedConnectedAlerts = "selected_connected_areas",
+  SelectedRoute = "selected_route"
 }
 
 interface ReportsEvent {
