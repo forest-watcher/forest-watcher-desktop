@@ -36,7 +36,8 @@ export enum MonitoringLabel {
   ViewReport = "view_report",
   StartedFromMonitoring = "started_from_monitoring",
   ExportedSingleReport = "exported_single_report",
-  ReportDownloadedImages = "report_downloaded_images"
+  ReportDownloadedImages = "report_downloaded_images",
+  SelectedConnectedAlerts = "selected_connected_areas"
 }
 
 interface ReportsEvent {
@@ -86,5 +87,11 @@ export enum MapLabel {
   Light = "light",
   PlanetImagery = "planet_imagery"
 }
+
+type GenerateEvent<C extends String, E extends string[], L extends string[] | undefined = undefined> = {
+  category: C;
+  action: E;
+  label?: L;
+};
 
 export type GAEvents = AreaEvent | MonitoringEvent | TeamsEvent | MapEvent | ReportsEvent;
