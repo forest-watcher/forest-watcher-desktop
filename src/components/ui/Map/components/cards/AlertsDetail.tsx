@@ -2,7 +2,7 @@ import Icon from "components/extensive/Icon";
 import OptionalWrapper from "components/extensive/OptionalWrapper";
 import Button from "components/ui/Button/Button";
 import MapCard from "components/ui/Map/components/cards/MapCard";
-import { sortAlertsOldestFirst, sortAlertsNewestFirst } from "helpers/alerts";
+import { sortAlertsOldestFirst } from "helpers/alerts";
 import { useAppSelector } from "hooks/useRedux";
 import moment from "moment";
 import { FC } from "react";
