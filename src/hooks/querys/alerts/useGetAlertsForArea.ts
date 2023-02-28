@@ -38,7 +38,7 @@ const useGetAlertsForArea = (
   const allAlerts = useMemo(() => {
     if (!data || !data.length) return [];
 
-    // Sort in ascending order
+    // Sort newest first
     const sortedAlerts = sortAlertsNewestFirst(data);
 
     // Limit the number of alerts displayed at any one time to 5000
