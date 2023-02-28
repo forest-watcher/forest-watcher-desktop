@@ -1,7 +1,9 @@
 import LoadingWrapper from "components/extensive/LoadingWrapper";
 import { useGetReport } from "generated/forms/formsComponents";
+import { fireGAEvent } from "helpers/analytics";
 import { useAccessToken } from "hooks/useAccessToken";
 import { useParams } from "react-router-dom";
+import { ReportsActions, ReportsLabel } from "types/analytics";
 import ReportDetails from "./components/ReportDetails";
 import ReportResponses from "./components/ReportResponses";
 import ReportMap from "./components/ReportMap";
@@ -62,6 +64,13 @@ const Report = () => {
       headers: httpAuthHeader
     });
     const report = await exportService.checkReportStatus(res.data ?? "", httpAuthHeader);
+
+    fireGAEvent({
+      category: "Reports",
+      action: ReportsActions.DetailView,
+      label: ReportsLabel.ExportSingleReport
+    });
+
     return report.data;
   };
 

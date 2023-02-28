@@ -39,6 +39,21 @@ export enum MonitoringLabel {
   ReportDownloadedImages = "report_downloaded_images"
 }
 
+interface ReportsEvent {
+  category: "Reports";
+  action: ReportsActions;
+  label?: ReportsLabel;
+}
+
+export enum ReportsActions {
+  DetailView = "detail_view"
+}
+
+export enum ReportsLabel {
+  ExportSingleReport = "exported_single_report",
+  ReportDownloadedImages = "report_downloaded_images"
+}
+
 interface TeamsEvent {
   category: "Teams";
   action: TeamActions;
@@ -72,4 +87,4 @@ export enum MapLabel {
   PlanetImagery = "planet_imagery"
 }
 
-export type GAEvents = AreaEvent | MonitoringEvent | TeamsEvent | MapEvent;
+export type GAEvents = AreaEvent | MonitoringEvent | TeamsEvent | MapEvent | ReportsEvent;
