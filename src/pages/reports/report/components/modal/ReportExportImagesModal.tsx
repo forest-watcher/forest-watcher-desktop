@@ -2,10 +2,12 @@ import LoadingWrapper from "components/extensive/LoadingWrapper";
 import Select from "components/ui/Form/Select";
 import Modal from "components/ui/Modal/Modal";
 import { REPORT_EXPORT_IMAGES_TYPES } from "constants/export";
+import { fireGAEvent } from "helpers/analytics";
 import useReportImageExport from "hooks/querys/exports/useReportImageExport";
 import { useForm } from "react-hook-form";
 import { useIntl } from "react-intl";
 import { useParams } from "react-router-dom";
+import { ReportsActions, ReportsLabel } from "types/analytics";
 
 export type ReportExportImagesModalFormData = {
   fileType?: string;
@@ -33,6 +35,12 @@ const ReportExportImagesModal = ({ onClose }: ReportExportImagesModalProps) => {
       window.open(value.data, "_blank");
       onClose();
     }
+
+    fireGAEvent({
+      category: "Reports",
+      action: ReportsActions.DetailView,
+      label: ReportsLabel.ReportDownloadedImages
+    });
 
     return value.data;
   };
