@@ -2,10 +2,12 @@ import * as turf from "@turf/turf";
 import AssignmentDetailCard from "components/ui/Map/components/cards/AssignmentDetail";
 import SquareClusterMarkers, { EPointDataTypes } from "components/ui/Map/components/layers/SquareClusterMarkers";
 import { useGetV3GfwAssignmentsAllOpenUserForAreaAreaId } from "generated/core/coreComponents";
+import { fireGAEvent } from "helpers/analytics";
 import { useAccessToken } from "hooks/useAccessToken";
 import useGetUserId from "hooks/useGetUserId";
 import { FC, useCallback, useContext, useMemo } from "react";
 import { useMap } from "react-map-gl";
+import { MonitoringActions, MonitoringLabel } from "types/analytics";
 import { AssignmentLayerType, IPoint } from "types/map";
 import MapContext from "../MapContext";
 
@@ -82,6 +84,12 @@ const AreaAssignmentMapSource: FC<IProps> = props => {
 
   const handleSquareSelect = useCallback(
     (ids: string[] | null) => {
+      fireGAEvent({
+        category: "Monitoring",
+        action: MonitoringActions.Assignments,
+        label: MonitoringLabel.SelectedAssignment
+      });
+
       setSelectedAssignmentId?.(ids && ids[0] ? ids[0] : null);
     },
     [setSelectedAssignmentId]

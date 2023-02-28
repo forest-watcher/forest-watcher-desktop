@@ -27,12 +27,14 @@ interface MonitoringEvent {
 
 export enum MonitoringActions {
   Investigation = "investigation",
+  Assignments = "assignments",
   ExportedReport = "exported_report",
   ManagedArea = "managed_area",
   ReportDetail = "report_detail"
 }
 export enum MonitoringLabel {
   StartedInvestigation = "started_investigation",
+  SelectedAssignment = "selected_assignment",
   ViewReport = "view_report",
   StartedFromMonitoring = "started_from_monitoring",
   ExportedSingleReport = "exported_single_report",
