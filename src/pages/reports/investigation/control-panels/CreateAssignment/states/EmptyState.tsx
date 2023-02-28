@@ -5,10 +5,11 @@ import Button from "components/ui/Button/Button";
 import IconBubble from "components/ui/Icon/IconBubble";
 import Loader from "components/ui/Loader";
 import { GeojsonModel } from "generated/core/coreSchemas";
+import { fireGAEvent } from "helpers/analytics";
 import useFindArea from "hooks/useFindArea";
 import { useAppDispatch } from "hooks/useRedux";
 import { getGeoFromShape } from "modules/geostores";
-import { ChangeEvent, Dispatch, FC, SetStateAction, useRef, useState } from "react";
+import { ChangeEvent, Dispatch, FC, SetStateAction, useEffect, useRef, useState } from "react";
 import { useFormContext } from "react-hook-form";
 import { FormattedMessage, useIntl } from "react-intl";
 import { toastr } from "react-redux-toastr";
@@ -28,9 +29,21 @@ const OpenAssignmentEmptyState: FC<IProps> = props => {
   const { areaId } = useParams<{ areaId: string }>();
   const { area: selectedAreaDetails } = useFindArea(areaId);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
-  const { getValues, setValue } = useFormContext();
+  const { getValues, setValue, watch } = useFormContext();
   const [isUploadingShapeFile, setIsUploadingShapeFile] = useState(false);
   const dispatch = useAppDispatch();
+
+  const selectedAlertsWatch = watch("selectedAlerts");
+
+  useEffect(() => {
+    if (selectedAlertsWatch.length) {
+      fireGAEvent({
+        category: "assignment",
+        action: "create_assigment",
+        label: "selected_alert"
+      });
+    }
+  }, [selectedAlertsWatch]);
 
   const handleShapeFileUpload = async (e: ChangeEvent<HTMLInputElement>) => {
     setIsUploadingShapeFile(true);
@@ -56,6 +69,12 @@ const OpenAssignmentEmptyState: FC<IProps> = props => {
           setValue("selectedAlerts", []);
           setValue("singleSelectedLocation", undefined);
           setShowCreateAssignmentForm(true);
+
+          fireGAEvent({
+            category: "assignment",
+            action: "create_assigment",
+            label: "uploaded_shapefile"
+          });
         } else if (!isWithin) {
           toastr.error(
             intl.formatMessage({ id: "areas.shapeFile.not.within" }),

@@ -90,10 +90,26 @@ export enum MapLabel {
   PlanetImagery = "planet_imagery"
 }
 
-type GenerateEvent<C extends String, E extends string[], L extends string[] | undefined = undefined> = {
+type GenerateEvent<C extends String, E extends string, L extends string | undefined = undefined> = {
   category: C;
   action: E;
   label?: L;
 };
 
-export type GAEvents = AreaEvent | MonitoringEvent | TeamsEvent | MapEvent | ReportsEvent;
+export type GAEvents =
+  | AreaEvent
+  | MonitoringEvent
+  | TeamsEvent
+  | MapEvent
+  | ReportsEvent
+  | GenerateEvent<
+      "assignment",
+      "create_assigment" | "detail_view",
+      | "started_assignment"
+      | "selected_point"
+      | "uploaded_shapefile"
+      | "selected_alert"
+      | "completed_assignment"
+      | "deleted"
+      | "exported_single_assignment"
+    >;

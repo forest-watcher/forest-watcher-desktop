@@ -1,6 +1,7 @@
 import SingleLocationLayer from "components/ui/Map/components/layers/Location";
 import Polygon from "components/ui/Map/components/layers/Polygon";
 import { GeojsonModel } from "generated/core/coreSchemas";
+import { fireGAEvent } from "helpers/analytics";
 import useZoomToGeojson from "hooks/useZoomToArea";
 import CreateAssignmentForm from "pages/reports/investigation/control-panels/CreateAssignment/states/AssignmentForm";
 import { Dispatch, FC, SetStateAction, useCallback, useEffect, useState } from "react";
@@ -37,7 +38,17 @@ const CreateAssignmentControlPanel: FC<IProps> = props => {
   }, [setLockAlertSelections, showCreateAssignmentForm]);
 
   const handleSingleLocationSelect = useCallback(
-    (location?: LngLat) => setValue("singleSelectedLocation", location),
+    (location?: LngLat) => {
+      if (location) {
+        fireGAEvent({
+          category: "assignment",
+          action: "create_assigment",
+          label: "selected_point"
+        });
+      }
+
+      setValue("singleSelectedLocation", location);
+    },
     [setValue]
   );
 
@@ -50,6 +61,15 @@ const CreateAssignmentControlPanel: FC<IProps> = props => {
         />
       ) : (
         <CreateAssignmentForm
+          onFinish={({ isEdit }) => {
+            if (!isEdit) {
+              fireGAEvent({
+                category: "assignment",
+                action: "create_assigment",
+                label: "completed_assignment"
+              });
+            }
+          }}
           setShowCreateAssignmentForm={setShowCreateAssignmentForm}
           setShapeFileGeoJSON={setShapeFileGeoJSON}
           shapeFileGeoJSON={shapeFileGeoJSON}

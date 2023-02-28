@@ -1,3 +1,4 @@
+import { fireGAEvent } from "helpers/analytics";
 import { FC, useEffect, useMemo, useState, useCallback } from "react";
 import Hero from "components/layouts/Hero/Hero";
 import { Link, Route, Switch, useHistory, useParams, useRouteMatch } from "react-router-dom";
@@ -109,6 +110,12 @@ const Assignment: FC = props => {
       try {
         const resp = await exportAssignment({ values, assignmentIds: [id] });
 
+        fireGAEvent({
+          category: "assignment",
+          action: "detail_view",
+          label: "exported_single_assignment"
+        });
+
         return resp.data;
       } catch (err) {
         toastr.error(intl.formatMessage({ id: "export.error" }), "");
@@ -161,7 +168,7 @@ const Assignment: FC = props => {
                   setShowCreateAssignmentForm={() => {}}
                   setShapeFileGeoJSON={() => {}}
                   assignmentToEdit={data}
-                  onFinish={refetch}
+                  onFinish={() => refetch}
                   prevLocationPathname={prevLocationPathname || undefined}
                 />
               </LoadingWrapper>
