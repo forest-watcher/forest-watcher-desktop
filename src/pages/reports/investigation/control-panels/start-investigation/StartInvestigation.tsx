@@ -124,7 +124,7 @@ const StartInvestigationControlPanel: FC<IProps> = props => {
           className="c-button c-button--primary"
           onClick={() =>
             fireGAEvent({
-              category: "assignment",
+              category: "Assignment",
               action: "create_assigment",
               label: "started_assignment"
             })

@@ -33,7 +33,7 @@ const DeleteAssignment: FC<IProps> = props => {
       });
 
       fireGAEvent({
-        category: "assignment",
+        category: "Assignment",
         action: "detail_view",
         label: "deleted"
       });

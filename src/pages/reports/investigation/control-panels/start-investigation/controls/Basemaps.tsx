@@ -1,21 +1,21 @@
+import classNames from "classnames";
+import OptionalWrapper from "components/extensive/OptionalWrapper";
+import Button from "components/ui/Button/Button";
 import RadioCardGroup from "components/ui/Form/RadioCardGroup";
-import { useFormContext, useWatch } from "react-hook-form";
-import { FormattedMessage, useIntl } from "react-intl";
-import { useMediaQuery } from "react-responsive";
-//@ts-ignore
-import breakpoints from "styles/utilities/_u-breakpoints.scss";
+import Select from "components/ui/Form/Select";
+import ToggleGroup from "components/ui/Form/ToggleGroup";
 import Timeframe from "components/ui/Timeframe";
-import { FC, useCallback, useEffect, useMemo, useState } from "react";
 import { BASEMAPS, PLANET_BASEMAP } from "constants/mapbox";
 import { fireGAEvent } from "helpers/analytics";
-import { MapActions } from "types/analytics";
-import ToggleGroup from "components/ui/Form/ToggleGroup";
-import OptionalWrapper from "components/extensive/OptionalWrapper";
-import Select from "components/ui/Form/Select";
+import { FC, useCallback, useEffect, useMemo, useState } from "react";
+import { useFormContext, useWatch } from "react-hook-form";
+import { FormattedMessage, useIntl } from "react-intl";
 import { useSelector } from "react-redux";
+import { useMediaQuery } from "react-responsive";
 import { RootState } from "store";
-import Button from "components/ui/Button/Button";
-import classNames from "classnames";
+//@ts-ignore
+import breakpoints from "styles/utilities/_u-breakpoints.scss";
+import { MapActions, MapLabel } from "types/analytics";
 
 interface IProps {
   defaultBasemap?: string;
@@ -208,6 +208,15 @@ const Basemaps: FC<IProps> = ({ defaultBasemap, onComparison }) => {
                 registered={methods.register("showPlanetImagery")}
                 formHook={methods}
                 hideLabel
+                onChange={(selectedOption, enabled) => {
+                  if (selectedOption.value === PLANET_BASEMAP.key && enabled) {
+                    fireGAEvent({
+                      category: "Map",
+                      action: MapActions.PlanetImagery,
+                      label: MapLabel.Enabled
+                    });
+                  }
+                }}
                 toggleGroupProps={{
                   options: [
                     {

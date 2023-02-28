@@ -2,6 +2,7 @@ import Hero from "components/layouts/Hero/Hero";
 import HeaderCard from "components/ui/Card/HeaderCard";
 import EmptyState from "components/ui/EmptyState/EmptyState";
 import Section from "components/ui/Section/Section";
+import { fireGAEvent } from "helpers/analytics";
 import { FormattedMessage, useIntl } from "react-intl";
 import HelpIcon from "assets/images/icons/Help.svg";
 import { SubmitHandler, useForm } from "react-hook-form";
@@ -52,6 +53,13 @@ const Help = () => {
         intl.formatMessage({ id: "help.form.success" }),
         intl.formatMessage({ id: "help.form.successBody" })
       );
+
+      fireGAEvent({
+        category: "Help",
+        action: "contact_form",
+        label: "submitted_form"
+      });
+
       reset({ query: "", platform: "", queryRelate: "" });
     }
   });
@@ -82,6 +90,13 @@ const Help = () => {
           ctaText={intl.formatMessage({ id: "help.helpCenter.cta.link" })}
           ctaTo="https://www.globalforestwatch.org/help/"
           ctaIsExternal
+          ctaOnClick={() =>
+            fireGAEvent({
+              category: "Help",
+              action: "help_centre",
+              label: "visited_GFW_Help"
+            })
+          }
           textClassName="max-w-[600px]"
         />
       </Section>

@@ -41,7 +41,7 @@ const CreateAssignmentControlPanel: FC<IProps> = props => {
     (location?: LngLat) => {
       if (location) {
         fireGAEvent({
-          category: "assignment",
+          category: "Assignment",
           action: "create_assigment",
           label: "selected_point"
         });
@@ -64,7 +64,7 @@ const CreateAssignmentControlPanel: FC<IProps> = props => {
           onFinish={({ isEdit }) => {
             if (!isEdit) {
               fireGAEvent({
-                category: "assignment",
+                category: "Assignment",
                 action: "create_assigment",
                 label: "completed_assignment"
               });

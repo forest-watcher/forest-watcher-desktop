@@ -81,13 +81,17 @@ interface MapEvent {
 }
 export enum MapActions {
   Basemaps = "basemaps",
-  Layers = "layers"
+  Layers = "layers",
+  Legend = "legend",
+  PlanetImagery = "planet_imagery"
 }
 export enum MapLabel {
   Dark = "dark",
   Satellite = "satellite",
   Light = "light",
-  PlanetImagery = "planet_imagery"
+  PlanetImagery = "planet_imagery",
+  ViewedLegend = "viewed_legend",
+  Enabled = "enabled"
 }
 
 type GenerateEvent<C extends String, E extends string, L extends string | undefined = undefined> = {
@@ -103,7 +107,7 @@ export type GAEvents =
   | MapEvent
   | ReportsEvent
   | GenerateEvent<
-      "assignment",
+      "Assignment",
       "create_assigment" | "detail_view",
       | "started_assignment"
       | "selected_point"
@@ -112,4 +116,10 @@ export type GAEvents =
       | "completed_assignment"
       | "deleted"
       | "exported_single_assignment"
-    >;
+    >
+  | GenerateEvent<
+      "Templates",
+      "create_template" | "detail_view",
+      "started_template" | "completed_template" | "deleted_template"
+    >
+  | GenerateEvent<"Help", "contact_form" | "help_centre", "submitted_form" | "visited_GFW_Help">;

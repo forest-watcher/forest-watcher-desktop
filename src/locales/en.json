@@ -756,6 +756,7 @@
   "maps.comparison.left": "Showing Left: {date}",
   "maps.comparison.right": "Showing Right: {date}",
 
+  "maps.legend.title": "Map Legend",
   "maps.legend.key.alerts": "Alerts",
   "maps.legend.key.my.reports": "My Reports",
   "maps.legend.key.imported.reports": "Imported Reports",

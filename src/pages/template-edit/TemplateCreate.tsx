@@ -1,4 +1,5 @@
 import Hero from "components/layouts/Hero/Hero";
+import { fireGAEvent } from "helpers/analytics";
 import { useAccessToken } from "hooks/useAccessToken";
 import { useMemo } from "react";
 import { useHistory } from "react-router-dom";
@@ -43,6 +44,13 @@ const TemplateCreate = () => {
   const handleSubmit = async (data: FormFields) => {
     // @ts-ignore  - incorrect typings
     const resp = await mutateAsync({ body: { ...getFormBody(data), areaIds: data.areas }, headers: httpAuthHeader });
+
+    fireGAEvent({
+      category: "Templates",
+      action: "create_template",
+      label: "completed_template"
+    });
+
     history.push(backTo ? backTo : `/templates/${resp.data?.id}`);
   };
 

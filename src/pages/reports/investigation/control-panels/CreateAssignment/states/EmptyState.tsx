@@ -38,7 +38,7 @@ const OpenAssignmentEmptyState: FC<IProps> = props => {
   useEffect(() => {
     if (selectedAlertsWatch.length) {
       fireGAEvent({
-        category: "assignment",
+        category: "Assignment",
         action: "create_assigment",
         label: "selected_alert"
       });
@@ -71,7 +71,7 @@ const OpenAssignmentEmptyState: FC<IProps> = props => {
           setShowCreateAssignmentForm(true);
 
           fireGAEvent({
-            category: "assignment",
+            category: "Assignment",
             action: "create_assigment",
             label: "uploaded_shapefile"
           });

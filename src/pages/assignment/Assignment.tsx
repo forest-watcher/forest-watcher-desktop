@@ -111,7 +111,7 @@ const Assignment: FC = props => {
         const resp = await exportAssignment({ values, assignmentIds: [id] });
 
         fireGAEvent({
-          category: "assignment",
+          category: "Assignment",
           action: "detail_view",
           label: "exported_single_assignment"
         });
