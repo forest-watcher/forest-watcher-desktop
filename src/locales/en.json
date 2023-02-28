@@ -804,5 +804,15 @@
   "help.form.query.label": "Please describe your query*",
   "help.form.query.placeholder": "Enter Message",
   "help.form.success": "Form submitted",
-  "help.form.successBody": "Thank you for contacting us"
+  "help.form.successBody": "Thank you for contacting us",
+
+  "what.new.1.heading": "New in this version",
+  "what.new.1.title": "Export and share your data",
+  "what.new.1.text": "Export your data as a Shapefile, GeoJSON, CSV, or PDF. Or share via email or shareable link. Exclude sensitive information when exporting and sharing data.",
+  "what.new.2.heading": "New in this version",
+  "what.new.2.title": "Introducing assignments",
+  "what.new.2.text": "Assign an alert for a monitor or team to investigate. Complete assignments in the field. Review the status of assignments on the web.",
+  "what.new.3.heading": "New in this version",
+  "what.new.3.title": "Improved Team Management",
+  "what.new.3.text": "Manage multiple teams of monitors. Transfer team administration to others which is great for trainings! Let monitors choose from multiple report templates for an area."
 }
