@@ -2,7 +2,7 @@ import Icon from "components/extensive/Icon";
 import OptionalWrapper from "components/extensive/OptionalWrapper";
 import Button from "components/ui/Button/Button";
 import MapCard from "components/ui/Map/components/cards/MapCard";
-import { sortAlertsInAscendingOrder } from "helpers/alerts";
+import { sortAlertsNewestFirst } from "helpers/alerts";
 import { useAppSelector } from "hooks/useRedux";
 import moment from "moment";
 import { FC } from "react";
@@ -25,7 +25,7 @@ const AlertsDetailCard: FC<IProps> = props => {
     return null;
   }
 
-  const alertsToShow = sortAlertsInAscendingOrder(selectedAlerts.map(i => i.data));
+  const alertsToShow = sortAlertsNewestFirst(selectedAlerts.map(i => i.data));
 
   const firstAlertDate = moment(alertsToShow[0].date);
   const lastAlertDate = moment(alertsToShow[alertsToShow.length - 1].date);
