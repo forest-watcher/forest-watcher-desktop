@@ -1,7 +1,7 @@
 import { allDeforestationAlerts, DefaultRequestThresholds } from "constants/alerts";
 import { useGetV3AlertsGeostoreId } from "generated/alerts/alertsComponents";
 import { Alerts } from "generated/alerts/alertsSchemas";
-import { sortAlertsInAscendingOrder } from "helpers/alerts";
+import { sortAlertsNewestFirst } from "helpers/alerts";
 import { useAccessToken } from "hooks/useAccessToken";
 import useFindArea from "hooks/useFindArea";
 import { useMemo } from "react";
@@ -38,8 +38,8 @@ const useGetAlertsForArea = (
   const allAlerts = useMemo(() => {
     if (!data || !data.length) return [];
 
-    // Sort in ascending order
-    const sortedAlerts = sortAlertsInAscendingOrder(data);
+    // Sort newest first
+    const sortedAlerts = sortAlertsNewestFirst(data);
 
     // Limit the number of alerts displayed at any one time to 5000
     // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/slice
