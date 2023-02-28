@@ -1,18 +1,20 @@
+import Loader from "components/ui/Loader";
+import Modal from "components/ui/Modal/Modal";
 import {
   PatchV3GfwTeamsTeamIdUsersTeamMemberRelationIdError,
   usePatchV3GfwTeamsTeamIdUsersReassignAdminUserId,
   usePatchV3GfwTeamsTeamIdUsersTeamMemberRelationId
 } from "generated/core/coreComponents";
+import { fireGAEvent } from "helpers/analytics";
 import useGetTeamDetails from "hooks/querys/teams/useGetTeamDetails";
 import { useInvalidateGetUserTeams } from "hooks/querys/teams/useGetUserTeams";
 import { useAccessToken } from "hooks/useAccessToken";
 import { FC, useCallback, useEffect, useState } from "react";
-import Modal from "components/ui/Modal/Modal";
-import Loader from "components/ui/Loader";
-import { TParams as TTeamDetailParams } from "../TeamDetail";
-import { useHistory, useParams } from "react-router-dom";
-import { toastr } from "react-redux-toastr";
 import { FormattedMessage, useIntl } from "react-intl";
+import { toastr } from "react-redux-toastr";
+import { useHistory, useParams } from "react-router-dom";
+import { TeamActions, TeamLabels } from "types/analytics";
+import { TParams as TTeamDetailParams } from "../TeamDetail";
 
 type TParams = TTeamDetailParams & {
   memberRole: "manager" | "monitor" | "admin";
@@ -76,6 +78,14 @@ const EditMemberRoleModal: FC<IProps> = props => {
           pathParams: { teamId, teamMemberRelationId: memberId },
           body: { role: memberRole }
         });
+
+        if (memberRole === "manager") {
+          fireGAEvent({
+            category: "Teams",
+            action: TeamActions.teamManagement,
+            label: TeamLabels.MakeManager
+          });
+        }
       } else {
         await reassignTeamAdmin({ headers: httpAuthHeader, pathParams: { teamId, userId: memberId } });
       }

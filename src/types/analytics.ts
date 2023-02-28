@@ -71,7 +71,7 @@ export enum TeamLabels {
   TeamCreationStart = "team_creation_start",
   TeamCreationComplete = "team_creation_complete",
   AddedMonitor = "added_monitor",
-  AddedManager = "added_manager",
+  MakeManager = "make_manager",
   DeletedTeam = "deleted_team"
 }
 interface MapEvent {
