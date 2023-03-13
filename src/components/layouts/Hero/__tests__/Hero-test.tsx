@@ -135,6 +135,7 @@ it("Hero should render properly with Page Tabs", () => {
               <div
                 aria-checked="true"
                 class="c-tab-group__item"
+                data-headlessui-state="checked"
                 id="headlessui-radiogroup-option-:r1:"
                 role="radio"
                 tabindex="0"
@@ -152,6 +153,7 @@ it("Hero should render properly with Page Tabs", () => {
               <div
                 aria-checked="false"
                 class="c-tab-group__item"
+                data-headlessui-state=""
                 id="headlessui-radiogroup-option-:r2:"
                 role="radio"
                 tabindex="-1"

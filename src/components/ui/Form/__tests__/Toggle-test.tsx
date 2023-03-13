@@ -25,13 +25,16 @@ it("Toggle Input should render correctly unspecified", () => {
       >
         <label
           class="c-input__label"
+          for="headlessui-switch-:r1:"
           id="headlessui-label-:r0:"
         >
           Hello
         </label>
         <button
+          aria-checked="false"
           aria-labelledby="headlessui-label-:r0:"
           class="c-input__toggle"
+          data-headlessui-state=""
           id="headlessui-switch-:r1:"
           role="switch"
           tabindex="0"
@@ -64,6 +67,7 @@ it("Toggle Input should render correctly as true", () => {
       >
         <label
           class="c-input__label"
+          for="headlessui-switch-:r3:"
           id="headlessui-label-:r2:"
         >
           Hello
@@ -72,6 +76,7 @@ it("Toggle Input should render correctly as true", () => {
           aria-checked="true"
           aria-labelledby="headlessui-label-:r2:"
           class="c-input__toggle c-input__toggle--on"
+          data-headlessui-state="checked"
           id="headlessui-switch-:r3:"
           role="switch"
           tabindex="0"
@@ -104,6 +109,7 @@ it("Toggle Input should render correctly as false", () => {
       >
         <label
           class="c-input__label"
+          for="headlessui-switch-:r5:"
           id="headlessui-label-:r4:"
         >
           Hello
@@ -112,6 +118,7 @@ it("Toggle Input should render correctly as false", () => {
           aria-checked="false"
           aria-labelledby="headlessui-label-:r4:"
           class="c-input__toggle"
+          data-headlessui-state=""
           id="headlessui-switch-:r5:"
           role="switch"
           tabindex="0"
