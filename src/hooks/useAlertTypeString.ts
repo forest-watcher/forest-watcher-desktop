@@ -11,7 +11,7 @@ const useAlertTypeString = (answer?: TAnswer) => {
       return "";
     }
 
-    const alerts = getReportAlertsByName(answer.reportName);
+    const alerts = getReportAlertsByName(answer.attributes?.reportName);
     if (alerts.length === 0) {
       return intl.formatMessage({ id: "layers.none" });
     }

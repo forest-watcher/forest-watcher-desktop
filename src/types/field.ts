@@ -14,8 +14,12 @@ export enum FieldType {
 export interface FieldPropsBase {
   id: string;
   className?: string;
+  labelClass?: string;
   error?: any;
   hideLabel?: boolean;
+  alternateLabelStyle?: Boolean;
+  largeLabel?: Boolean;
+  wrapperClassName?: string;
 }
 
 export interface FieldBase extends FieldPropsBase {

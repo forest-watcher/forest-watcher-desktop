@@ -30,6 +30,12 @@
     &--alt {
       margin-top: 0;
     }
+    &--large {
+      font-size: 1.5rem;
+      line-height: 2.25rem;
+      font-weight: 400;
+      text-transform: capitalize;
+    }
   }
 
   &__input {
@@ -47,6 +53,7 @@
     &::placeholder {
       color: $neutral-600;
       font-weight: 400;
+      opacity: 1;
     }
 
     &:focus, &:active {
@@ -68,8 +75,12 @@
     font-family: $base-font-family;
     width: 100%;
     position: relative;
+    &--error {
+      border-color: $secondary-500;
+    }
     &--open {
       border-radius: 4px 4px 0px 0px;
+      border-color: $neutral-500;
     }
     &--simple {
       border: none;
@@ -179,6 +190,10 @@
           fill: $primary-500;
         }
       }
+    }
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
     }
   }
 

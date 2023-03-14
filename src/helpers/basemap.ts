@@ -52,7 +52,10 @@ export const getPlanetBasemaps = (planetBasemaps: IMosaic[]) => {
         year,
         proc,
         imageType,
-        sortOrder: new Date(startDate)
+        sortOrder: new Date(startDate),
+        startDate,
+        endDate,
+        monthDiff
       };
     }),
     "sortOrder"

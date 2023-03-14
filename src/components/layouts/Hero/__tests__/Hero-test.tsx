@@ -18,13 +18,13 @@ it("Hero should render properly", () => {
   expect(container).toMatchInlineSnapshot(`
     <div>
       <aside
-        class="c-hero"
+        class="bg-neutral-700"
       >
         <div
-          class="row column"
+          class="max-w-row mx-auto px-2.5 2xl:py-5 py-4"
         >
           <div
-            class="c-hero__content"
+            class="flex justify-between items-center gap-3"
           >
             <a
               class="c-link c-link--hero"
@@ -39,18 +39,18 @@ it("Hero should render properly", () => {
             </a>
           </div>
           <div
-            class="c-hero__content"
+            class="flex justify-between items-center gap-3 py-2 flex-wrap md:flex-nowrap"
           >
             <h1
-              class="c-hero__title u-text-700 u-text-neutral-300 u-text-capitalize u-text-ellipsis"
+              class="text-4xl font-light text-neutral-300 capitalize text-ellipsis overflow-hidden basis-full"
             >
               Area
             </h1>
             <div
-              class="c-hero__spacer"
+              class="flex-grow-0 flex-shrink basis-full"
             >
               <div
-                class="c-hero__actions"
+                class="flex gap-3 justify-end"
               >
                 <a
                   class="c-button c-button--primary"
@@ -99,13 +99,13 @@ it("Hero should render properly with Page Tabs", () => {
   expect(container).toMatchInlineSnapshot(`
     <div>
       <aside
-        class="c-hero c-hero--with-tabs"
+        class="bg-neutral-700"
       >
         <div
-          class="row column"
+          class="max-w-row mx-auto px-2.5 2xl:py-5 py-4"
         >
           <div
-            class="c-hero__content"
+            class="flex justify-between items-center gap-3"
           >
             <a
               class="c-link c-link--hero"
@@ -120,21 +120,22 @@ it("Hero should render properly with Page Tabs", () => {
             </a>
           </div>
           <div
-            class="c-hero__content"
+            class="flex justify-between items-center gap-3 py-2 flex-wrap md:flex-nowrap"
           >
             <h1
-              class="c-hero__title u-text-700 u-text-neutral-300 u-text-capitalize u-text-ellipsis"
+              class="text-4xl font-light text-neutral-300 capitalize text-ellipsis overflow-hidden basis-full"
             >
               Area
             </h1>
             <div
-              class="c-hero__page-tabs c-tab-group"
+              class="c-tab-group"
               id="headlessui-radiogroup-:r0:"
               role="radiogroup"
             >
               <div
                 aria-checked="true"
                 class="c-tab-group__item"
+                data-headlessui-state="checked"
                 id="headlessui-radiogroup-option-:r1:"
                 role="radio"
                 tabindex="0"
@@ -152,6 +153,7 @@ it("Hero should render properly with Page Tabs", () => {
               <div
                 aria-checked="false"
                 class="c-tab-group__item"
+                data-headlessui-state=""
                 id="headlessui-radiogroup-option-:r2:"
                 role="radio"
                 tabindex="-1"
@@ -168,10 +170,10 @@ it("Hero should render properly with Page Tabs", () => {
               </div>
             </div>
             <div
-              class="c-hero__spacer"
+              class="flex-grow-0 flex-shrink basis-full"
             >
               <div
-                class="c-hero__actions"
+                class="flex gap-3 justify-end"
               >
                 <a
                   class="c-button c-button--primary"

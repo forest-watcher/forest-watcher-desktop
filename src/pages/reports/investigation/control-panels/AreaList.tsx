@@ -1,11 +1,12 @@
-import { FC, useMemo } from "react";
-import { useAppSelector } from "hooks/useRedux";
+import { FC, ReactEventHandler, useMemo } from "react";
 import { RouteComponentProps, useLocation } from "react-router-dom";
 import MapCard from "components/ui/Map/components/cards/MapCard";
 import Card from "components/ui/Card/Card";
 import { FormattedMessage, useIntl } from "react-intl";
 import Loader from "components/ui/Loader";
 import useUrlQuery from "hooks/useUrlQuery";
+import useGetAreas from "hooks/querys/areas/useGetAreas";
+import DefaultAreaThumbnail from "assets/images/DefaultAreaThumbnail.svg";
 
 interface IProps extends RouteComponentProps {}
 
@@ -33,6 +34,10 @@ const AreaListAreaCard: FC<{ area: any; teamId?: string }> = ({ area, teamId }) 
     }
   };
 
+  const handleThumbnailLoadError: ReactEventHandler<HTMLImageElement> = e => {
+    e.currentTarget.src = DefaultAreaThumbnail;
+  };
+
   return (
     <div className="c-map-control-panel__grid-item" ref={el => handleCardRef(area.id, el)}>
       <Card className="c-map-control-panel__area-card" size="small">
@@ -41,6 +46,7 @@ const AreaListAreaCard: FC<{ area: any; teamId?: string }> = ({ area, teamId }) 
           src={area.attributes.image}
           loading="lazy"
           className="c-area-card__image c-map-control-panel__area-card-image"
+          onError={handleThumbnailLoadError}
         />
         <div className="c-map-control-panel__area-card-content">
           <Card.Title className="u-margin-top-none">{area.attributes.name}</Card.Title>
@@ -58,59 +64,56 @@ const AreaListAreaCard: FC<{ area: any; teamId?: string }> = ({ area, teamId }) 
 
 const AreaListControlPanel: FC<IProps> = props => {
   const intl = useIntl();
+
   const {
-    data: areas,
-    areasInUsersTeams,
-    loading: isLoadingAreas,
-    loadingAreasInUsers: isLoadingAreasInUsers
-  } = useAppSelector(state => state.areas);
-
-  const teamAreas = useMemo(() => {
-    const teamAreasMapped = [];
-
-    for (const areasInUsersTeam of areasInUsersTeams) {
-      if (areasInUsersTeam.areas.length) {
-        teamAreasMapped.push({
-          team: areasInUsersTeam.team,
-          areas: [...areasInUsersTeam.areas]
-        });
-      }
-    }
-
-    return teamAreasMapped;
-  }, [areasInUsersTeams]);
+    data: { userAreas, areasByTeam },
+    isLoading: isLoadingAreas
+  } = useGetAreas();
 
   return (
     <MapCard
       className="c-map-control-panel"
       title={intl.formatMessage({ id: "reporting.control.panel.area.list.title" })}
     >
-      <Loader isLoading={isLoadingAreas || isLoadingAreasInUsers} />
+      <Loader isLoading={isLoadingAreas} />
       <h3 className="c-map-control-panel__sub-title">
         <FormattedMessage id="reporting.control.panel.area.list.your.areas" />
       </h3>
       <div className="c-map-control-panel__grid">
-        {Object.values<any>(areas)
-          .sort((a, b) => a.attributes.name.localeCompare(b.attributes.name.toString()))
+        {[...userAreas]
+          .sort((a, b) => {
+            const aStr = a.attributes?.name || "";
+            const bStr = b.attributes?.name || "";
+
+            return aStr.localeCompare(bStr.toString());
+          })
           .map(area => (
             <AreaListAreaCard key={area.id} area={area} />
           ))}
       </div>
 
-      {!isLoadingAreas && (isLoadingAreasInUsers || Boolean(teamAreas.length)) && (
+      {!isLoadingAreas && Boolean(areasByTeam.length) && (
         <div className="c-map-control-panel__team-areas">
           <h3 className="c-map-control-panel__sub-title">
             <FormattedMessage id="reporting.control.panel.area.list.team.areas" />
           </h3>
-          {teamAreas.map(
+          {areasByTeam.map(
             teamArea =>
               teamArea.team && (
+                // @ts-ignore incorrect typings
                 <div className="u-margin-bottom-24" key={teamArea.team?.id}>
-                  <h4 className="c-map-control-panel__team-name">{teamArea.team?.attributes?.name}</h4>
+                  {/* @ts-ignore incorrect typings */}
+                  <h4 className="c-map-control-panel__team-name">{teamArea.team?.name}</h4>
                   <div className="c-map-control-panel__grid">
-                    {[...teamArea.areas]
-                      .sort((a, b) => a.data.attributes.name.localeCompare(b.data.attributes.name.toString()))
+                    {[...(teamArea.areas || [])]
+                      .sort((a, b) => {
+                        const aStr = a.data?.attributes?.name || "";
+                        const bStr = b.data?.attributes?.name || "";
+
+                        return aStr.localeCompare(bStr.toString());
+                      })
                       .map(({ data: area }) => (
+                        // @ts-ignore incorrect typings
                         <AreaListAreaCard key={area.id} area={area} teamId={teamArea.team?.id} />
                       ))}
                   </div>

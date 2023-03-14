@@ -1,8 +1,9 @@
-import { FC, Fragment, PropsWithChildren } from "react";
+import { forwardRef, Fragment, PropsWithChildren } from "react";
 import { Dialog, Transition } from "@headlessui/react";
-import { FormattedMessage } from "react-intl";
+import { FormattedMessage, useIntl } from "react-intl";
 import Button, { IButtonVariants } from "components/ui/Button/Button";
 import CloseIcon from "assets/images/icons/CloseLg.svg";
+import classNames from "classnames";
 
 export interface IProps {
   isOpen: boolean;
@@ -15,10 +16,19 @@ export interface IProps {
     variant?: IButtonVariants;
     onClick: () => void;
   }[];
+  className?: string;
+  hideBackdrop?: boolean;
 }
 
-const Modal: FC<PropsWithChildren<IProps>> = props => {
-  const { isOpen, onClose, title, actions, dismissible = true, children } = props;
+const Modal = forwardRef<HTMLDivElement, PropsWithChildren<IProps>>((props, ref) => {
+  const intl = useIntl();
+  const { isOpen, onClose, title, actions, dismissible = true, children, hideBackdrop = false } = props;
+
+  const handleClose = () => {
+    if (dismissible) {
+      onClose?.();
+    }
+  };
 
   return (
     <Transition
@@ -28,20 +38,26 @@ const Modal: FC<PropsWithChildren<IProps>> = props => {
       enterFrom="c-modal-dialog--animate"
       leaveTo="c-modal-dialog--animate"
     >
-      <Dialog className="c-modal-dialog__container" onClose={dismissible && onClose ? onClose : () => {}}>
-        <div className="c-modal-dialog__backdrop" aria-hidden="true" />
+      <Dialog className={classNames("c-modal-dialog__container", props.className)} onClose={handleClose}>
+        {!hideBackdrop && <div className="c-modal-dialog__backdrop" aria-hidden="true" />}
 
         <Dialog.Panel className="c-modal-dialog">
           <Dialog.Title className="c-modal-dialog__title">
             <FormattedMessage id={title} />
             {onClose && (
-              <button className="c-button c-modal-dialog__close-btn" onClick={onClose}>
+              <button
+                className="c-button c-modal-dialog__close-btn"
+                onClick={onClose}
+                aria-label={intl.formatMessage({ id: "common.close" })}
+              >
                 <img alt="" src={CloseIcon} role="presentation" />
               </button>
             )}
           </Dialog.Title>
 
-          <div className="c-modal-dialog__body">{children}</div>
+          <div className="c-modal-dialog__body" ref={ref}>
+            {children}
+          </div>
 
           {actions && (
             <div className="c-modal-dialog__actions">
@@ -56,6 +72,6 @@ const Modal: FC<PropsWithChildren<IProps>> = props => {
       </Dialog>
     </Transition>
   );
-};
+});
 
 export default Modal;

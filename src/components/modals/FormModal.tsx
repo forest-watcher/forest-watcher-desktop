@@ -1,11 +1,11 @@
-import { PropsWithChildren, ReactNode, useEffect, useState } from "react";
+import { MutableRefObject, PropsWithChildren, ReactNode, useEffect, useState } from "react";
 import Modal, { IProps as IModalProps } from "components/ui/Modal/Modal";
 import { Props as IInputProps } from "components/ui/Form/Input";
 import { Props as ISelectProps } from "components/ui/Form/Select";
-import { Props as IToggleGroupProps } from "components/ui/Form/ToggleGroup";
+import { IProps as IToggleGroupProps } from "components/ui/Form/ToggleGroup";
 import { Props as IToggleProps } from "components/ui/Form/Toggle";
 import { Props as IRadioChipGroupProps } from "components/ui/Form/RadioChipGroup";
-import { useForm, SubmitHandler, RegisterOptions, UnpackNestedValue, FieldPath } from "react-hook-form";
+import { useForm, SubmitHandler, RegisterOptions, UnpackNestedValue, FieldPath, UseFormReturn } from "react-hook-form";
 import UnsavedChanges from "components/modals/UnsavedChanges";
 import Loader from "components/ui/Loader";
 import { UseFormProps } from "react-hook-form/dist/types";
@@ -30,6 +30,7 @@ export type TAvailableTypes<T> = TInput<T> | TSelect<T> | TToggleGroup<T> | TTog
 
 export interface IProps<T> extends PropsWithChildren {
   isOpen: boolean;
+  modalRef?: MutableRefObject<HTMLDivElement | null>;
   dismissible?: boolean;
   inputs: Array<TAvailableTypes<T>>;
   onClose?: () => void;
@@ -42,7 +43,7 @@ export interface IProps<T> extends PropsWithChildren {
   actions?: ReactNode;
   resetValues?: UnpackNestedValue<T>;
   watch?: string[];
-  onChange?: (changes: any, values: any) => void;
+  onChange?: (changes: any, formHook: UseFormReturn<T>) => void;
   hideUnsavedChangesModal?: boolean;
 }
 
@@ -78,6 +79,7 @@ export interface IProps<T> extends PropsWithChildren {
 const FormModal = <T,>(props: IProps<T>) => {
   const {
     isOpen = false,
+    modalRef,
     dismissible,
     inputs,
     useFormProps,
@@ -110,7 +112,7 @@ const FormModal = <T,>(props: IProps<T>) => {
   }, [isOpen, reset]);
 
   const handleCloseRequest = () => {
-    if (isDirty) {
+    if (isDirty && !hideUnsavedChangesModal) {
       setIsClosing(true);
     } else if (onClose) {
       onClose();
@@ -134,7 +136,7 @@ const FormModal = <T,>(props: IProps<T>) => {
 
   useEffect(() => {
     if (JSON.stringify(watchedValues) !== JSON.stringify(prevWatchedValues)) {
-      props.onChange?.(watchedValues, formHook.getValues());
+      props.onChange?.(watchedValues, formHook);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [watchedValues]);
@@ -142,11 +144,12 @@ const FormModal = <T,>(props: IProps<T>) => {
   return (
     <>
       <Modal
-        isOpen={isOpen && !isClosing}
+        isOpen={isOpen}
         onClose={onClose && handleCloseRequest}
         title={modalTitle}
         dismissible={dismissible}
         actions={modalActions}
+        ref={modalRef}
       >
         <Loader isLoading={isLoading} />
         {modalSubtitle && (
@@ -161,11 +164,15 @@ const FormModal = <T,>(props: IProps<T>) => {
           {props.children}
         </form>
         {actions && <div className="c-modal-dialog__extra-actions">{actions}</div>}
+        {onClose && !hideUnsavedChangesModal && (
+          <UnsavedChanges
+            isOpen={isOpen && isClosing}
+            leaveCallBack={onClose}
+            stayCallBack={() => setIsClosing(false)}
+            hideBackdrop
+          />
+        )}
       </Modal>
-
-      {onClose && !hideUnsavedChangesModal && (
-        <UnsavedChanges isOpen={isOpen && isClosing} leaveCallBack={onClose} stayCallBack={() => setIsClosing(false)} />
-      )}
     </>
   );
 };

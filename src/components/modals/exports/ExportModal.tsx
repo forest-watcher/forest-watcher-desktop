@@ -1,4 +1,5 @@
-import { FC, useMemo, useState } from "react";
+import LoadingWrapper from "components/extensive/LoadingWrapper";
+import { FC, useMemo, useRef, useState } from "react";
 import FormModal from "components/modals/FormModal";
 import yup from "configureYup";
 import { yupResolver } from "@hookform/resolvers/yup/dist/yup";
@@ -53,7 +54,9 @@ const exportSchemaWithEmail = yup
 const ExportModal: FC<IProps> = ({ onClose, onSave, isOpen, fileTypes, fields, defaultSelectedFields }) => {
   const intl = useIntl();
   const [downloadMethod, setDownloadMethod] = useState();
-  const [reportUrl, setReportUrl] = useState("");
+  const [isReportURLLoading, setIsReportURLLoading] = useState(false);
+  const [reportUrl, setReportUrl] = useState<string>();
+  const formModalRef = useRef<HTMLDivElement>(null);
   const inputs = useMemo<IModalProps<TExportForm>["inputs"]>(() => {
     const toReturn: IModalProps<TExportForm>["inputs"] = [
       {
@@ -146,17 +149,19 @@ const ExportModal: FC<IProps> = ({ onClose, onSave, isOpen, fileTypes, fields, d
   };
 
   const generateShortenedLink = async (resp: UnpackNestedValue<TExportForm>) => {
-    setReportUrl(intl.formatMessage({ id: "export.linkLoading" }));
+    setIsReportURLLoading(true);
     const saveResp = await onSave(resp);
     if (saveResp) {
       const shorten = await bitlyService.shorten(saveResp);
       setReportUrl(shorten.link);
+      setIsReportURLLoading(false);
     }
   };
 
   return (
     <FormModal<TExportForm>
       isOpen={isOpen}
+      modalRef={formModalRef}
       onClose={onClose}
       onSave={handleSave}
       modalTitle="export.title"
@@ -169,19 +174,32 @@ const ExportModal: FC<IProps> = ({ onClose, onSave, isOpen, fileTypes, fields, d
       }}
       inputs={inputs}
       watch={["downloadMethod", "fields", "fileType"]}
-      onChange={async (changes, values) => {
+      onChange={async (changes, formHook) => {
+        const values = formHook.getValues();
+
         setDownloadMethod(changes[0]);
 
-        if (changes[0] === "link" && (await exportSchema.isValid(values))) {
+        if (changes[0] === "link" && !values.fileType) {
+          formHook.setError("fileType", {
+            type: "custom",
+            message: intl.formatMessage({ id: "errors.mixed.required" })
+          });
+
+          formModalRef?.current?.scrollTo({ top: 0 });
+        }
+
+        if (changes[0] === "link" && !!values.fileType && (await exportSchema.isValid(values))) {
           generateShortenedLink(values);
         }
       }}
     >
-      {downloadMethod === "link" && (
-        <LinkPreview btnCaption={intl.formatMessage({ id: "export.copyLink" })} link={reportUrl} className="">
-          {reportUrl}
-        </LinkPreview>
-      )}
+      <LoadingWrapper loading={isReportURLLoading}>
+        {downloadMethod === "link" && reportUrl && (
+          <LinkPreview btnCaption={intl.formatMessage({ id: "export.copyLink" })} link={reportUrl} className="">
+            {reportUrl}
+          </LinkPreview>
+        )}
+      </LoadingWrapper>
     </FormModal>
   );
 };

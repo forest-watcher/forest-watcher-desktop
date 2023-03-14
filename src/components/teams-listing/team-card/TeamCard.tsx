@@ -1,48 +1,43 @@
-import { FC, useEffect, useMemo } from "react";
+import { TeamsResponse } from "generated/core/coreResponses";
+import { FC, useMemo } from "react";
 import Card from "../../ui/Card/Card";
 import EditIcon from "assets/images/icons/Edit.svg";
 import { FormattedMessage } from "react-intl";
-import { TGFWTeamsState } from "modules/gfwTeams";
-import { TPropsFromRedux } from "./TeamCardContainer";
+import { TAreasByTeam } from "hooks/querys/areas/useGetAreas";
 
-export interface IOwnProps {
-  team: TGFWTeamsState["data"][number];
+export interface IProps {
+  team: Required<TeamsResponse>["data"][number];
   canManage?: boolean;
+  areasByTeam: TAreasByTeam;
 }
 
-export type IProps = TPropsFromRedux & IOwnProps;
-
 const TeamCard: FC<IProps> = props => {
-  const { team, getTeamMembers, teamMembers, getTeamAreas, teamAreas, areasDetail, canManage = false } = props;
-  useEffect(() => {
-    getTeamMembers();
-    getTeamAreas();
-  }, [getTeamMembers, getTeamAreas]);
+  const { team, canManage = false, areasByTeam } = props;
 
-  const [manages, monitors] = useMemo(
+  const areasDetail = useMemo(
+    // @ts-ignore incorrect typings
+    () => areasByTeam.find(areasAndTeam => areasAndTeam.team?.id === team.id),
+    [areasByTeam, team.id]
+  );
+
+  // ToDo: these should really use the utils in: src/hooks/querys/teams/useGetTeamDetails.ts
+  const managers = useMemo(
     () =>
-      teamMembers.reduce<[typeof teamMembers, typeof teamMembers]>(
-        (acc, teamMember) => {
-          if (
-            (teamMember.attributes.role === "administrator" || teamMember.attributes.role === "manager") &&
-            teamMember.attributes.userId
-          ) {
-            acc[0].push(teamMember);
-          } else if (teamMember.attributes.userId) {
-            acc[1].push(teamMember);
-          }
-          return acc;
-        },
-        [[], []]
-      ),
-    [teamMembers]
+      team.attributes?.members?.filter(member => member.role === "administrator" || member.role === "manager") || [],
+    [team]
+  );
+
+  const monitors = useMemo(
+    () =>
+      team.attributes?.members?.filter(member => member.role !== "administrator" && member.role !== "manager") || [],
+    [team]
   );
 
   return (
     <Card size="large" className="c-teams__card">
       <div className="c-teams__title">
         <div className="c-teams__title-text">
-          <Card.Title className="u-margin-top-none">{team.attributes.name}</Card.Title>
+          <Card.Title className="u-margin-top-none">{team.attributes?.name}</Card.Title>
         </div>
 
         <Card.Cta to={`/teams/${team.id}`} iconSrc={canManage ? EditIcon : undefined}>
@@ -53,15 +48,15 @@ const TeamCard: FC<IProps> = props => {
       <Card size="large" className={"c-teams__card c-teams--nested-card c-teams--nested-card-people"}>
         <div>
           <h3 className="c-teams__sub-title">
-            <FormattedMessage id="teams.managers" values={{ num: manages.length }} />
+            <FormattedMessage id="teams.managers" values={{ num: managers.length }} />
           </h3>
-          <p>{manages.map(i => i.attributes.name || i.attributes.email).join(", ")}</p>
+          <p>{managers.map(i => i.name || i.email).join(", ")}</p>
         </div>
         <div>
           <h3 className="c-teams__sub-title">
             <FormattedMessage id="teams.monitors" values={{ num: monitors.length }} />
           </h3>
-          <p>{monitors.map(i => i.attributes.name || i.attributes.email).join(", ")}</p>
+          <p>{monitors.map(i => i.name || i.email).join(", ")}</p>
         </div>
       </Card>
 
@@ -71,9 +66,10 @@ const TeamCard: FC<IProps> = props => {
             <h3 className="c-teams__sub-title">
               <FormattedMessage id="teams.summary.areas" />
             </h3>
-            {/* ToDo: Change any to TGetAreasByTeamId["data"] when docs are upto date! */}
             <p>
-              {areasDetail ? areasDetail.areas.map(area => area.data.attributes.name).join(", ") : teamAreas.join(", ")}
+              {areasDetail
+                ? areasDetail?.areas?.map(area => area?.data?.attributes?.name).join(", ")
+                : team.attributes?.areas?.join(", ")}
             </p>
           </div>
         </div>

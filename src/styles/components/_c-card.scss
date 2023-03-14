@@ -1,5 +1,5 @@
-$c-card-border-width:   2px;
-$c-card-border-radius:  $global-spacing-1;
+$c-card-border-width: 2px;
+$c-card-border-radius: $global-spacing-1;
 
 .c-card {
   position: relative;
@@ -8,6 +8,7 @@ $c-card-border-radius:  $global-spacing-1;
   background: $neutral-300;
   border-radius: $c-card-border-radius;
   border: $c-card-border-width solid rgba(85, 85, 85, 0.1);
+  font-family: $base-font-family;
 
   &--large {
     padding: $global-spacing-5;
@@ -29,7 +30,15 @@ $c-card-border-radius:  $global-spacing-1;
     }
     .c-card__list {
       li:not(:last-child) {
-        margin-bottom: 6px;
+        margin-bottom: 4px;
+      }
+
+      li {
+        overflow: hidden;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+        white-space: normal;
       }
     }
   }
@@ -50,7 +59,8 @@ $c-card-border-radius:  $global-spacing-1;
     }
   }
 
-  &__title, &__text {
+  &__title,
+  &__text {
     color: $neutral-700;
     white-space: nowrap;
     overflow: hidden;
@@ -94,7 +104,8 @@ $c-card-border-radius:  $global-spacing-1;
       z-index: 1;
     }
 
-    &:hover:after, &:focus:after {
+    &:hover:after,
+    &:focus:after {
       border-color: $primary-400;
     }
 
@@ -160,14 +171,17 @@ $c-card-border-radius:  $global-spacing-1;
 }
 
 .c-map-card {
+  z-index: 12;
   padding: 0;
   position: absolute;
   display: flex;
   flex-direction: column;
+  max-width: 400px;
+  width: 100%;
   &__header {
     display: flex;
     align-items: center;
-    gap: $global-spacing-2;
+    gap: 10px;
   }
 
   &__back-button {
@@ -192,7 +206,12 @@ $c-card-border-radius:  $global-spacing-1;
     line-height: 24px;
   }
 
-  &__header, &__footer, &__content {
+  &__content {
+    padding: 24px $global-spacing-5;
+  }
+
+  &__header,
+  &__footer {
     padding: $global-spacing-5;
   }
 

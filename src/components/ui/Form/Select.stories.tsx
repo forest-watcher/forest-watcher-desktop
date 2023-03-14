@@ -87,10 +87,10 @@ SelectMultiple.args = {
     placeholder: "Select something",
     options: optionsWithSecondary,
     label: "Hello",
-    defaultValue: [optionsWithSecondary[0], optionsWithSecondary[1]],
-    alternateLabelStyle: true
+    defaultValue: [optionsWithSecondary[0], optionsWithSecondary[1]]
   },
-  isMultiple: true
+  isMultiple: true,
+  alternateLabelStyle: true
 };
 
 export const Error = InputTemplate.bind({});
@@ -112,7 +112,7 @@ AlternateLabel.args = {
   selectProps: {
     placeholder: "Select something",
     options,
-    label: "Hello",
-    alternateLabelStyle: true
-  }
+    label: "Hello"
+  },
+  alternateLabelStyle: true
 };

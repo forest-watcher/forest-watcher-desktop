@@ -21,7 +21,7 @@ export type TReportResponse =
 
 export type TAreaResponse = paths["/v3/exports/areas/{id}"]["get"]["responses"]["200"]["content"]["application/json"];
 
-function delay(timeInMs: number) {
+export function delay(timeInMs: number) {
   return new Promise(resolve => setTimeout(resolve, timeInMs));
 }
 
@@ -105,14 +105,15 @@ export class ExportSerive extends BaseService {
     throw Error("Failed to get export");
   }
 
-  async checkReportStatus(id: string): Promise<TReportResponse> {
+  async checkReportStatus(id: string, authHeader?: { Authorization: string }): Promise<TReportResponse> {
     let hasFinished = false;
 
     do {
       const resp: TReportResponse = await this.fetchJSON(`/reports/${id}`, {
         method: "GET",
         headers: {
-          "Content-Type": "application/json"
+          "Content-Type": "application/json",
+          ...authHeader
         }
       });
       if (resp.data) {

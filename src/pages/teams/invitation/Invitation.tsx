@@ -2,11 +2,11 @@ import Article from "components/layouts/Article";
 import Hero from "components/layouts/Hero/Hero";
 import DataTable, { IRowAction } from "components/ui/DataTable/DataTable";
 import { sortByString } from "helpers/table";
+import useGetTeamInvites from "hooks/querys/teams/useGetTeamInvites";
 import AcceptOrDecline from "pages/teams/invitation/actions/AcceptOrDecline";
-import { TPropsFromRedux } from "pages/teams/invitation/InvitationContainer";
-import { FC, useEffect, useMemo } from "react";
+import { FC, useMemo } from "react";
 import { FormattedMessage, useIntl } from "react-intl";
-import { Link, RouteComponentProps, useRouteMatch } from "react-router-dom";
+import { Link, useLocation, useRouteMatch } from "react-router-dom";
 
 type TParams = {
   actionType: "accept" | "decline";
@@ -19,37 +19,37 @@ type TTeamInvitationsDataTable = {
   userRole: string;
 };
 
-interface IProps extends TPropsFromRedux, RouteComponentProps {}
+interface IProps {}
 
 const Invitation: FC<IProps> = props => {
-  const { match, invitations, invitationsFetched, getMyTeamInvites } = props;
+  const location = useLocation();
   const intl = useIntl();
-  const actionMatch = useRouteMatch<TParams>({ path: `${match.url}/:actionType/:teamId/`, exact: true });
+  const actionMatch = useRouteMatch<TParams>({ path: `/teams/invitations/:actionType/:teamId/`, exact: true });
 
-  useEffect(() => {
-    if (!invitationsFetched) getMyTeamInvites();
-  }, [getMyTeamInvites, invitationsFetched]);
+  /* Queries */
+  // Get all the User's Team Invites
+  const { data: userTeamInvites } = useGetTeamInvites();
 
   const invitationRows = useMemo(
     () =>
-      invitations.map(invitation => ({
-        id: invitation.id,
-        name: invitation.attributes.name,
-        userRole: intl.formatMessage({ id: `teams.details.table.userRole.${invitation.attributes.userRole}` })
-      })),
-    [intl, invitations]
+      userTeamInvites?.map(invitation => ({
+        id: invitation.id!,
+        name: invitation.attributes?.name || "",
+        userRole: intl.formatMessage({ id: `teams.details.table.userRole.${invitation.attributes?.userRole}` })
+      })) || [],
+    [intl, userTeamInvites]
   );
 
   const acceptInvitation: IRowAction<TTeamInvitationsDataTable> = {
     name: "teams.invitation.accept",
     value: "acceptInvitation",
-    href: teamRow => `${match.url}/accept/${teamRow.id}`
+    href: teamRow => `${location.pathname}/accept/${teamRow.id}`
   };
 
   const declineInvitation: IRowAction<TTeamInvitationsDataTable> = {
     name: "teams.invitation.decline",
     value: "declineInvitation",
-    href: teamRow => `${match.url}/decline/${teamRow.id}`
+    href: teamRow => `${location.pathname}/decline/${teamRow.id}`
   };
 
   return (
@@ -60,7 +60,7 @@ const Invitation: FC<IProps> = props => {
         backLink={{ name: "teams.details.back", to: "/teams" }}
         actions={
           invitationRows.length ? (
-            <Link to={`${match.url}/accept/all`} className="c-button c-button--primary">
+            <Link to={`${location.pathname}/accept/all`} className="c-button c-button--primary">
               <FormattedMessage id="teams.invitation.acceptAll" />
             </Link>
           ) : (

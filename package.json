@@ -1,15 +1,16 @@
 {
   "name": "forest-watcher-web",
-  "version": "1.1.7",
+  "version": "3.1.0",
   "private": true,
   "dependencies": {
-    "@headlessui/react": "^1.6.4",
+    "@headlessui/react": "^1.7.13",
     "@hookform/resolvers": "^2.8.8",
     "@mapbox/geojson-area": "^0.2.2",
     "@mapbox/mapbox-gl-draw": "^1.3.0",
     "@mapbox/mapbox-gl-geocoder": "^5.0.0",
     "@sentry/browser": "^4.6.4",
     "@szhsin/react-menu": "^3.0.2",
+    "@tanstack/react-query": "^4.10.3",
     "@turf/turf": "^6.5.0",
     "@turf/union": "^6.0.3",
     "@types/jest": "^27.4.1",
@@ -21,11 +22,14 @@
     "classnames": "^2.2.6",
     "date-fns": "^2.28.0",
     "dom-to-image": "^2.6.0",
+    "embla-carousel-react": "^7.0.3",
     "fecha": "^3.0.2",
     "file-saver": "^2.0.1",
+    "geokdbush": "^1.1.0",
     "history": "^5.3.0",
     "is-valid-coordinates": "^1.0.0",
     "json-api-normalizer": "^1.0.4",
+    "kdbush": "^3.0.0",
     "leaflet": "1.4.0",
     "leaflet-draw": "^1.0.4",
     "leaflet-search": "^2.9.8",
@@ -34,7 +38,9 @@
     "lodash.isempty": "^4.4.0",
     "lodash.sortby": "^4.7.0",
     "mapbox-gl": "^2.10.0",
+    "mapbox-gl-compare": "^0.4.1",
     "moment": "^2.24.0",
+    "object-to-formdata": "^4.4.2",
     "prop-types": "^15.7.2",
     "query-string": "^6.4.0",
     "querystringify": "^2.1.0",
@@ -45,6 +51,7 @@
     "react-ga": "2.5.7",
     "react-google-places-autocomplete": "^1.3.1",
     "react-hook-form": "^7.30.0",
+    "react-inlinesvg": "3.0.1",
     "react-intl": "~5.25.1",
     "react-load-script": "0.0.6",
     "react-map-gl": "^7.0.19",
@@ -68,6 +75,8 @@
   },
   "devDependencies": {
     "@3sidedcube/prettier-config": "^1.0.0",
+    "@openapi-codegen/cli": "^2.0.0",
+    "@openapi-codegen/typescript": "^6.0.0",
     "@storybook/addon-actions": "^6.5.8",
     "@storybook/addon-essentials": "^6.5.8",
     "@storybook/addon-interactions": "^6.5.8",
@@ -78,9 +87,12 @@
     "@storybook/preset-create-react-app": "^4.1.2",
     "@storybook/react": "^6.5.8",
     "@storybook/testing-library": "^0.0.12",
+    "@tailwindcss/line-clamp": "^0.4.2",
     "@testing-library/react": "^13.1.1",
     "@types/dom-to-image": "^2.6.4",
+    "@types/geokdbush": "^1.1.2",
     "@types/history": "^5.0.0",
+    "@types/kdbush": "^3.0.2",
     "@types/leaflet": "^1.7.10",
     "@types/lodash.get": "^4.4.7",
     "@types/mapbox-gl": "^2.7.5",
@@ -88,6 +100,7 @@
     "@types/react-redux": "^7.1.24",
     "@types/react-redux-toastr": "^7.6.2",
     "@types/react-router-dom": "^5.3.3",
+    "autoprefixer": "^10.4.12",
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-import": "^2.16.0",
     "eslint-plugin-prettier": "^4.0.0",
@@ -98,9 +111,11 @@
     "lint-staged": "11.0.0",
     "node-fetch": "^3.2.4",
     "npm-run-all": "^4.1.5",
+    "postcss": "^8.4.18",
     "prettier": "^2.5.1",
     "react-scripts": "5.0.1",
     "sass": "^1.53.0",
+    "tailwindcss": "^3.1.8",
     "unzipper": "^0.10.11",
     "webpack": "5"
   },
@@ -120,7 +135,16 @@
     "generate-interface:exports": "npx openapi-typescript https://raw.githubusercontent.com/wri/fw_exports/dev/docs/fw_exports.yaml --output ./src/interfaces/exports.ts",
     "storybook": "start-storybook -p 6006 -s src/assets",
     "build-storybook": "build-storybook -s src/assets",
-    "transifex:prettier": "prettier --ignore-path .gitignore \"src/locales/*.+(json)\" --write"
+    "transifex:prettier": "prettier --ignore-path .gitignore \"src/locales/*.+(json)\" --write",
+    "generate:api": "npx openapi-codegen gen api",
+    "generate:alerts": "npx openapi-codegen gen alerts",
+    "generate:teams": "npx openapi-codegen gen teams",
+    "generate:exports": "npx openapi-codegen gen exports",
+    "generate:forms": "npx openapi-codegen gen forms",
+    "generate:core": "npx openapi-codegen gen core",
+    "generate:clayers": "npx openapi-codegen gen clayers",
+    "generate:users": "npx openapi-codegen gen users",
+    "generate:new": "npx openapi-codegen init"
   },
   "prettier": "@3sidedcube/prettier-config",
   "eslintConfig": {
@@ -132,6 +156,9 @@
     "plugins": [
       "jsx-a11y"
     ],
+    "rules": {
+      "no-throw-literal": "off"
+    },
     "overrides": [
       {
         "files": [

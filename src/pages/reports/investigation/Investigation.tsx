@@ -1,93 +1,103 @@
-import { FC, useCallback, useEffect, useMemo, useState } from "react";
-import { Route, RouteComponentProps, Switch, useHistory, useParams, useRouteMatch } from "react-router-dom";
-import UserAreasMap from "components/user-areas-map/UserAreasMap";
-import AreaDetailsControlPanel from "./control-panels/AreaDetailsContainer";
-import { FormValues, LAYERS } from "./control-panels/AreaDetails";
-import AreaListControlPanel from "./control-panels/AreaList";
+import { AnswersResponse } from "generated/core/coreResponses";
+import useGetAllReportAnswersForUser from "hooks/querys/reportAnwsers/useGetAllReportAnswersForUser";
+import { TAlertsById } from "types/map";
+import { DefaultRequestThresholds, EAlertTypes, ViirsRequestThresholds } from "constants/alerts";
+import { CSSProperties, FC, useCallback, useEffect, useMemo, useState } from "react";
+import { useForm, FormProvider } from "react-hook-form";
+import { Route, RouteComponentProps, Switch, useHistory, useRouteMatch } from "react-router-dom";
+import UserAreasMap, { IProps as UserAreasMapProps } from "components/user-areas-map/UserAreasMap";
+import StartInvestigationControlPanel, {
+  LAYERS
+} from "pages/reports/investigation/control-panels/start-investigation/StartInvestigation";
 import { TParams } from "./types";
 import { TPropsFromRedux } from "./InvestigationContainer";
-import { BASEMAPS } from "constants/mapbox";
-import AreaDetailCard from "components/ui/Map/components/cards/AreaDetail";
-import { getAreaTeams } from "helpers/areas";
-import { TAreasInTeam } from "services/area";
-import { AllGeoJSON } from "@turf/turf";
-import useZoomToGeojson from "hooks/useZoomToArea";
-import { TGetAllAnswers } from "services/reports";
-import { Layer, Source } from "react-map-gl";
-import useUrlQuery from "hooks/useUrlQuery";
-import useFindArea from "hooks/useFindArea";
+import { BASEMAPS, PLANET_BASEMAP } from "constants/mapbox";
+import { LngLat } from "react-map-gl";
 import { setupMapImages } from "helpers/map";
 import { Map as MapInstance, MapboxEvent } from "mapbox-gl";
-import { fireGAEvent } from "helpers/analytics";
-import { MonitoringActions, MonitoringLabel } from "types/analytics";
+import OptionalWrapper from "components/extensive/OptionalWrapper";
+import MapCard from "components/ui/Map/components/cards/MapCard";
+
+//@ts-ignore
+import breakpoints from "styles/utilities/_u-breakpoints.scss";
+import { useGetV3ContextualLayer } from "generated/clayers/clayersComponents";
+import { useAccessToken } from "hooks/useAccessToken";
+import { FormattedMessage, useIntl } from "react-intl";
+
+// Control Panel Views
+import AreaListControlPanel from "./control-panels/AreaList";
+import AreaDetailControlPanel from "pages/reports/investigation/control-panels/AreaDetail";
+import CreateAssignmentControlPanel from "pages/reports/investigation/control-panels/CreateAssignment/CreateAssignment";
+import Layers from "./components/Layers";
+import MapComparison from "components/map-comparison/MapComparison";
+import classNames from "classnames";
+import { useMediaQuery } from "react-responsive";
+import { getDateStringsForComparison } from "helpers/dates";
+import { useAppDispatch } from "hooks/useRedux";
+import { setPortalCard } from "modules/layers";
+import MapContext, { MapProvider } from "./MapContext";
 
 interface IProps extends RouteComponentProps, TPropsFromRedux {}
 
-interface IAreaCardProps {
-  areasInUsersTeams: TAreasInTeam[];
-  numberOfReports?: number;
-}
+const mapContainerStyle: CSSProperties = { position: "absolute", top: 0, bottom: 0, width: "100%" };
 
-const AreaCardWrapper: FC<IAreaCardProps> = ({ areasInUsersTeams, numberOfReports }) => {
-  const { areaId } = useParams<TParams>();
-  const urlQuery = useUrlQuery();
-  const scrollToTeamId = useMemo(() => urlQuery.get("scrollToTeamId"), [urlQuery]);
+export type ProcTypes = "nat" | "cir" | "";
 
-  const history = useHistory();
-
-  const area = useFindArea(areaId);
-
-  const selectedAreaGeoData = useMemo(() => area?.attributes.geostore.geojson, [area]);
-  //@ts-ignore
-  useZoomToGeojson(selectedAreaGeoData as AllGeoJSON);
-  return (
-    area && (
-      <AreaDetailCard
-        className="c-map-control-panel"
-        area={area}
-        teams={getAreaTeams(area.id, areasInUsersTeams)}
-        numberOfReports={numberOfReports}
-        position="top-left"
-        onBack={() =>
-          history.push(
-            `/reporting/investigation?scrollToAreaId=${areaId}${
-              scrollToTeamId ? `&scrollToTeamId=${scrollToTeamId}` : ""
-            }`
-          )
-        }
-        onStartInvestigation={() =>
-          fireGAEvent({
-            category: "Monitoring",
-            action: MonitoringActions.Investigation,
-            label: MonitoringLabel.StartedInvestigation
-          })
-        }
-        onManageArea={() =>
-          fireGAEvent({
-            category: "Monitoring",
-            action: MonitoringActions.ManagedArea,
-            label: MonitoringLabel.StartedFromMonitoring
-          })
-        }
-      />
-    )
-  );
+export type TFormValues = {
+  layers?: string[];
+  currentMap?: string;
+  showPlanetImagery?: string[];
+  currentPlanetPeriodBefore?: string;
+  currentPlanetImageTypeBefore?: ProcTypes;
+  currentPlanetPeriodAfter?: string;
+  currentPlanetImageTypeAfter?: ProcTypes;
+  contextualLayers?: string[];
+  showAlerts: ["true"] | ["false"];
+  showOpenAssignments: ["true"] | ["false"];
+  showRoutes: ["true"] | ["false"];
+  alertTypesShown: "all" | EAlertTypes;
+  alertTypesRequestThreshold: number;
+  alertTypesViirsRequestThreshold: number;
+  selectedAlerts: TAlertsById[];
+  singleSelectedLocation?: LngLat;
+  dateBefore?: Date[];
+  dateAfter?: Date[];
+  overlappedSelect?: string[];
 };
 
 const InvestigationPage: FC<IProps> = props => {
-  const { match, allAnswers, basemaps, areasInUsersTeams, selectedLayers } = props;
-  const [showReports, setShowReports] = useState(true);
+  const { match, basemaps } = props;
+  const dispatch = useAppDispatch();
   const [mapStyle, setMapStyle] = useState<string | undefined>(undefined);
   const [isPlanet, setIsPlanet] = useState(false);
   const [mapRef, setMapRef] = useState<MapInstance | null>(null);
   const [currentPlanetPeriod, setCurrentPlanetPeriod] = useState("");
-  const [currentProc, setCurrentProc] = useState<"" | "cir">("");
+  const [currentProc, setCurrentProc] = useState<ProcTypes>("");
+  const [currentPlanetPeriodAfter, setCurrentPlanetPeriodAfter] = useState("");
+  const [currentProcAfter, setCurrentProcAfter] = useState<ProcTypes>("");
   const [contextualLayerUrls, setContextualLayerUrls] = useState<string[]>([]);
   const [basemapKey, setBasemapKey] = useState<undefined | string>();
   const history = useHistory();
-  const [filteredAnswers, setFilteredAnswers] = useState<TGetAllAnswers["data"] | null>(null);
+  const [filteredAnswers, setFilteredAnswers] = useState<AnswersResponse["data"] | null>(null);
+  const [lockAlertSelections, setLockAlertSelections] = useState(false);
+  const [showComparison, setShowComparison] = useState(false);
   let selectedAreaMatch = useRouteMatch<TParams>({ path: "/reporting/investigation/:areaId", exact: false });
-  let investigationMatch = useRouteMatch<TParams>({ path: "/reporting/investigation/:areaId/start", exact: true });
+  let investigationMatch = useRouteMatch<TParams>({ path: "/reporting/investigation/:areaId/start", exact: false });
+  const isMobile = useMediaQuery({ maxWidth: breakpoints.mobile });
+  const [controlsPortal, setControlsPortal] = useState<HTMLElement | undefined>(undefined);
+  const [dateStrs, setDateStrs] = useState<{ beforeStr: string; afterStr: string }>();
+  const intl = useIntl();
+
+  /*
+   * Queries
+   */
+  const { httpAuthHeader } = useAccessToken();
+
+  // - Fetch Contextual Layers
+  const { data: layersData } = useGetV3ContextualLayer({ headers: httpAuthHeader });
+
+  // - Fetch all Report Answers
+  const { data: allAnswers } = useGetAllReportAnswersForUser();
 
   const handleMapLoad = (evt: MapboxEvent) => {
     setMapRef(evt.target);
@@ -95,7 +105,6 @@ const InvestigationPage: FC<IProps> = props => {
 
   useEffect(() => {
     if (mapRef) {
-      console.log("setting images");
       try {
         setupMapImages(mapRef);
       } catch (err) {
@@ -128,24 +137,71 @@ const InvestigationPage: FC<IProps> = props => {
     }
   }, [history, investigationMatch]);
 
-  const handleControlPanelChange = (resp: FormValues) => {
-    setShowReports(Boolean(resp.layers && resp.layers?.indexOf(LAYERS.reports) > -1));
-    const basemapKey = Object.keys(BASEMAPS).find(
-      key => BASEMAPS[key as keyof typeof BASEMAPS].key === resp.currentMap
-    );
-    const basemap = BASEMAPS[basemapKey as keyof typeof BASEMAPS];
-    if (basemap) {
-      setMapStyle(basemap.style);
-      setIsPlanet(resp.currentMap === BASEMAPS.planet.key);
+  const defaultValues = useMemo<TFormValues>(
+    () => ({
+      layers: [LAYERS.reports],
+      currentMap: basemapKey,
+      showPlanetImagery: [],
+      showAlerts: ["true"],
+      showRoutes: ["false"],
+      showOpenAssignments: ["true"],
+      alertTypesShown: "all",
+      alertTypesRequestThreshold: DefaultRequestThresholds[0].requestThreshold,
+      alertTypesViirsRequestThreshold: ViirsRequestThresholds[0].requestThreshold,
+      selectedAlerts: []
+    }),
+    [basemapKey]
+  );
+
+  // Investigation Panel Form
+  const formhook = useForm<TFormValues>({
+    defaultValues
+  });
+
+  const watcher = formhook.watch();
+
+  useEffect(() => {
+    const subscription = formhook.watch(values => {
+      const basemapKey = Object.keys(BASEMAPS).find(
+        key => BASEMAPS[key as keyof typeof BASEMAPS].key === values.currentMap
+      );
+      const basemap = BASEMAPS[basemapKey as keyof typeof BASEMAPS];
+
+      if (basemap) {
+        setMapStyle(basemap.style);
+      }
+
+      setCurrentPlanetPeriod(values.currentPlanetPeriodBefore || "");
+      setCurrentProc(values.currentPlanetImageTypeBefore === "nat" ? "" : values.currentPlanetImageTypeBefore || "");
+      setCurrentPlanetPeriodAfter(values.currentPlanetPeriodAfter || "");
+      setCurrentProcAfter(values.currentPlanetImageTypeAfter === "nat" ? "" : values.currentPlanetImageTypeAfter || "");
+      setContextualLayerUrls(
+        values.contextualLayers?.map(
+          layer => layersData?.data.find(item => item?.id === layer)?.attributes?.url || ""
+        ) || []
+      );
+      setBasemapKey(values.currentMap);
+      setIsPlanet(values.showPlanetImagery?.[0] === PLANET_BASEMAP.key);
+      setDateStrs(getDateStringsForComparison(intl, values.dateBefore, values.dateAfter));
+    });
+
+    return () => subscription.unsubscribe();
+  }, [formhook, intl, layersData?.data]);
+
+  useEffect(() => {
+    if (!investigationMatch) {
+      formhook.reset(defaultValues);
+      setShowComparison(false);
     }
+  }, [defaultValues, formhook, investigationMatch]);
 
-    setCurrentPlanetPeriod(resp.currentPlanetPeriod || "");
-    setCurrentProc(resp.currentPlanetImageType === "nat" ? "" : resp.currentPlanetImageType || "");
-    setContextualLayerUrls(resp.contextualLayers?.map(layer => selectedLayers[layer].attributes.url) || []);
-    setBasemapKey(resp.currentMap);
-  };
+  useEffect(() => {
+    if (!isPlanet) {
+      setShowComparison(false);
+    }
+  }, [isPlanet]);
 
-  const handleFiltersChange = (filters: TGetAllAnswers["data"]) => {
+  const handleFiltersChange = (filters: AnswersResponse["data"]) => {
     if (filters?.length === answersBySelectedArea?.length) {
       setFilteredAnswers(null);
     } else {
@@ -153,43 +209,135 @@ const InvestigationPage: FC<IProps> = props => {
     }
   };
 
+  const sharedMapProps = useMemo<UserAreasMapProps>(
+    () => ({
+      onAreaSelect: handleAreaSelect,
+      onAreaDeselect: handleAreaDeselect,
+      focusAllAreas: !selectedAreaMatch,
+      selectedAreaId: selectedAreaMatch?.params.areaId,
+      showReports: watcher.layers?.includes(LAYERS.reports) && !!selectedAreaMatch,
+      answers: filteredAnswers || answersBySelectedArea,
+      mapStyle: mapStyle,
+      showTeamAreas: true,
+      cooperativeGestures: false,
+      shouldWrapContainer: false,
+      style: mapContainerStyle,
+      uncontrolled: true,
+      context: MapContext
+    }),
+    [
+      answersBySelectedArea,
+      filteredAnswers,
+      handleAreaDeselect,
+      handleAreaSelect,
+      mapStyle,
+      selectedAreaMatch,
+      watcher.layers
+    ]
+  );
+
   return (
-    <UserAreasMap
-      onAreaSelect={handleAreaSelect}
-      onAreaDeselect={handleAreaDeselect}
-      onMapLoad={handleMapLoad}
-      focusAllAreas={!selectedAreaMatch}
-      selectedAreaId={selectedAreaMatch?.params.areaId}
-      showReports={showReports && !!selectedAreaMatch}
-      answers={filteredAnswers || answersBySelectedArea}
-      mapStyle={mapStyle}
-      currentPlanetBasemap={
-        basemaps.length && isPlanet ? basemaps.find(bm => bm.name === currentPlanetPeriod) || basemaps[0] : undefined
-      }
-      currentProc={currentProc}
-      showTeamAreas
-      cooperativeGestures={false}
-    >
-      <Switch>
-        <Route exact path={`${match.url}`} component={AreaListControlPanel} />
-        <Route exact path={`${match.url}/:areaId`}>
-          <AreaCardWrapper areasInUsersTeams={areasInUsersTeams} numberOfReports={answersBySelectedArea?.length} />
-        </Route>
-        <Route exact path={`${match.url}/:areaId/start`}>
-          <AreaDetailsControlPanel
-            onChange={handleControlPanelChange}
-            answers={answersBySelectedArea}
-            onFilterUpdate={handleFiltersChange}
-            defaultBasemap={basemapKey}
-          />
-          {contextualLayerUrls.map(url => (
-            <Source id={url} type="raster" tiles={[url]} key={url}>
-              <Layer id={`${url}-layer`} type="raster" />
-            </Source>
-          ))}
-        </Route>
-      </Switch>
-    </UserAreasMap>
+    <>
+      <div className="c-map z-auto h-auto" ref={e => setControlsPortal(e || undefined)}></div>
+      <MapProvider>
+        <MapComparison
+          className={classNames("h-full", showComparison && "select-none")}
+          minLeftSlide={isMobile ? 300 : 500}
+          renderBefore={cb => {
+            return (
+              <UserAreasMap
+                {...sharedMapProps}
+                onMapLoad={e => {
+                  handleMapLoad(e);
+                  cb(e.target);
+                }}
+                hideControls={showComparison}
+                currentPlanetBasemap={
+                  basemaps.length && isPlanet
+                    ? basemaps.find(bm => bm.name === currentPlanetPeriod) || basemaps[0]
+                    : undefined
+                }
+                currentProc={currentProc}
+              >
+                <FormProvider {...formhook}>
+                  <Switch>
+                    <Route exact path={`${match.url}`} component={AreaListControlPanel} />
+                    <Route exact path={`${match.url}/:areaId`}>
+                      <AreaDetailControlPanel numberOfReports={answersBySelectedArea?.length} />
+                    </Route>
+                    <Route exact path={`${match.url}/:areaId/start`}>
+                      <StartInvestigationControlPanel
+                        answers={answersBySelectedArea}
+                        onFilterUpdate={handleFiltersChange}
+                        defaultBasemap={basemapKey}
+                        onComparison={(value: boolean) => setShowComparison(value)}
+                      />
+                    </Route>
+
+                    <Route exact path={`${match.url}/:areaId/start/assignment`}>
+                      <CreateAssignmentControlPanel setLockAlertSelections={setLockAlertSelections} />
+                    </Route>
+                  </Switch>
+
+                  <Layers
+                    contextualLayerUrls={contextualLayerUrls}
+                    lockAlertSelections={lockAlertSelections}
+                    parentControl={!showComparison}
+                  />
+                </FormProvider>
+              </UserAreasMap>
+            );
+          }}
+          renderAfter={
+            showComparison
+              ? cb => {
+                  return (
+                    <UserAreasMap
+                      {...sharedMapProps}
+                      onMapLoad={e => {
+                        handleMapLoad(e);
+                        cb(e.target);
+                      }}
+                      controlsPortalDom={controlsPortal}
+                      currentPlanetBasemap={
+                        basemaps.length && isPlanet
+                          ? basemaps.find(bm => bm.name === currentPlanetPeriodAfter) || basemaps[0]
+                          : undefined
+                      }
+                      currentProc={currentProcAfter}
+                    >
+                      <FormProvider {...formhook}>
+                        <Layers
+                          contextualLayerUrls={contextualLayerUrls}
+                          lockAlertSelections={lockAlertSelections}
+                          parentControl
+                        />
+                      </FormProvider>
+                    </UserAreasMap>
+                  );
+                }
+              : undefined
+          }
+        >
+          <OptionalWrapper data={showComparison}>
+            {/* comparison card */}
+            <MapCard
+              position="bottom-right"
+              title={intl.formatMessage({ id: "maps.comparison.cardTitle" })}
+              titleIconName="Basemap"
+            >
+              <p className="text-base mb-1">
+                <FormattedMessage id="maps.comparison.left" values={{ date: dateStrs?.beforeStr }} />
+              </p>
+              <p className="text-base">
+                <FormattedMessage id="maps.comparison.right" values={{ date: dateStrs?.afterStr }} />
+              </p>
+            </MapCard>
+          </OptionalWrapper>
+          <div ref={e => dispatch(setPortalCard(e || undefined))}></div>
+        </MapComparison>
+      </MapProvider>
+    </>
   );
 };
 

@@ -12,22 +12,35 @@ export interface Props extends FieldPropsBase {
 }
 
 const Input = (props: Props) => {
-  const { id, registered, className, htmlInputProps, error, hideLabel = false } = props;
+  const {
+    id,
+    registered,
+    className,
+    htmlInputProps,
+    error,
+    hideLabel = false,
+    alternateLabelStyle = false,
+    largeLabel = false,
+    wrapperClassName
+  } = props;
+
   return (
-    <div className={classnames("c-input", className)}>
+    <div className={classnames("c-input", alternateLabelStyle && "c-input--alt-label", className)}>
       {htmlInputProps.label && (
         <label
           htmlFor={id}
           className={classnames(
             "c-input__label",
             `c-input__label--${htmlInputProps.type}`,
-            hideLabel && "u-visually-hidden"
+            hideLabel && "u-visually-hidden",
+            alternateLabelStyle && "c-input__label--alt",
+            largeLabel && "c-input__label--large"
           )}
         >
           {htmlInputProps.label}
         </label>
       )}
-      <div className="c-input__input-wrapper">
+      <div className={classnames("c-input__input-wrapper", wrapperClassName)}>
         <input
           {...htmlInputProps}
           {...registered}
@@ -35,7 +48,8 @@ const Input = (props: Props) => {
           className={classnames(
             "c-input__input",
             `c-input__input--${htmlInputProps.type}`,
-            error && "c-input__input--error"
+            error && "c-input__input--error",
+            htmlInputProps.className
           )}
           ref={registered.ref}
           title={htmlInputProps.title}

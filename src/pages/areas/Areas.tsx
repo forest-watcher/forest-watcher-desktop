@@ -1,3 +1,5 @@
+import useGetAllReportAnswersForUser from "hooks/querys/reportAnwsers/useGetAllReportAnswersForUser";
+import useGetTeamMembersForTeamIds from "hooks/querys/teams/useGetTeamMembersForTeamIds";
 import { FC, useMemo, useState, Fragment, useCallback, useEffect } from "react";
 import Hero from "components/layouts/Hero/Hero";
 import Article from "components/layouts/Article";
@@ -6,13 +8,10 @@ import { FormattedMessage, useIntl } from "react-intl";
 import ReactGA from "react-ga";
 import EmptyState from "components/ui/EmptyState/EmptyState";
 import PlusIcon from "assets/images/icons/PlusWhite.svg";
-import { TPropsFromRedux } from "./AreasContainer";
-import { TAreasResponse } from "services/area";
 import AreaCard from "components/area-card/AreaCard";
 import UserAreasMap from "components/user-areas-map/UserAreasMap";
 import AreaDetailCard from "components/ui/Map/components/cards/AreaDetail";
 import AreaIcon from "assets/images/icons/EmptyAreas.svg";
-import { getAreaTeams } from "helpers/areas";
 import { Link, Route, Switch, useHistory, useRouteMatch } from "react-router-dom";
 import ExportModal, { TExportForm } from "components/modals/exports/ExportModal";
 import { UnpackNestedValue } from "react-hook-form";
@@ -23,24 +22,54 @@ import { MapboxEvent, Map as MapInstance } from "mapbox-gl";
 import classNames from "classnames";
 import { fireGAEvent } from "helpers/analytics";
 import { AreaActions, AreaLabel } from "types/analytics";
+import AreasOnboarding from "components/onboarding/monitoring/AreasOnboarding";
+import useGetAreas from "hooks/querys/areas/useGetAreas";
+import { AreaResponse } from "generated/core/coreResponses";
+import MapContext, { MapProvider } from "pages/reports/investigation/MapContext";
 
-interface IProps extends TPropsFromRedux {
-  getTeamMembers: (teamId: string) => void;
-}
+interface IProps {}
 
 const Areas: FC<IProps> = props => {
-  const { areasList, loading, loadingTeamAreas, areasInUsersTeams, allAnswers, teamMembers, getTeamMembers } = props;
-  const areaMap = useMemo<TAreasResponse[]>(() => Object.values(areasList), [areasList]);
-  const [selectedArea, setSelectedArea] = useState<TAreasResponse | null>(null);
+  const {
+    data: { userAreas, areasByTeam, unfilteredAreas, getTeamNamesByAreaId },
+    isLoading
+  } = useGetAreas();
+
+  const areaCount = useMemo(() => [...userAreas, ...areasByTeam].length, [areasByTeam, userAreas]);
+  const hasTeamAreas = useMemo(() => {
+    return areasByTeam.length > 0;
+  }, [areasByTeam.length]);
+
+  const [selectedArea, setSelectedArea] = useState<AreaResponse["data"] | null>(null);
   const [mapRef, setMapRef] = useState<MapInstance | null>(null);
   const [currentBoundsStr, setCurrentBoundsStr] = useState("");
-  const hasTeamAreas = useMemo(() => {
-    const teamWithAreasIndex = areasInUsersTeams.findIndex(
-      teamArea => teamArea.areas.length > 0 && teamArea.team !== null
-    );
 
-    return teamWithAreasIndex > -1;
-  }, [areasInUsersTeams]);
+  /*
+   * Queries
+   */
+  // Fetch all Report Answers
+  const { data: allAnswers } = useGetAllReportAnswersForUser();
+  // Fetch all the Team members for each Team Area
+  const teamMembers = useGetTeamMembersForTeamIds(
+    areasByTeam?.map(area => {
+      // @ts-ignore `id` not typed
+      return area?.team?.id;
+    }) || []
+  );
+
+  // Find all the Team Admin Names
+  const teamAdminNames = useMemo(() => {
+    return teamMembers.reduce<Record<string, string>>((acc, { data: team, isLoading, isError }) => {
+      if (isLoading || isError || !team.teamId) {
+        return acc;
+      }
+
+      acc[team.teamId] =
+        team.members?.find(member => member.attributes?.role === "administrator")?.attributes?.name || "";
+
+      return acc;
+    }, {});
+  }, [teamMembers]);
 
   const answersBySelectedArea = useMemo(() => {
     return allAnswers?.filter(
@@ -59,9 +88,9 @@ const Areas: FC<IProps> = props => {
 
   const handleAreaSelect = useCallback(
     (areaId: string) => {
-      setSelectedArea(areasList[areaId]);
+      setSelectedArea(unfilteredAreas?.data?.find(area => area.id === areaId) || null);
     },
-    [areasList]
+    [unfilteredAreas?.data]
   );
 
   const handleExport = useCallback(
@@ -98,21 +127,16 @@ const Areas: FC<IProps> = props => {
     };
   }, [mapRef]);
 
-  useEffect(() => {
-    areasInUsersTeams.forEach(team => {
-      team.team?.id && getTeamMembers(team.team?.id);
-    });
-  }, [areasInUsersTeams, getTeamMembers]);
-
   return (
     <div className="c-areas">
+      <AreasOnboarding />
       <Hero
         title="areas.name"
         actions={
           <Link
             className={classNames(
               "c-button c-button--primary",
-              areaMap.length === 0 && !hasTeamAreas && "c-button--disabled"
+              areaCount === 0 && !hasTeamAreas && "c-button--disabled"
             )}
             to={`${url}/export`}
             onClick={() =>
@@ -126,44 +150,49 @@ const Areas: FC<IProps> = props => {
           </Link>
         }
       />
-      {loading ? (
+      {isLoading ? (
         <div className="c-map c-map--within-hero">
           <Loader isLoading />
         </div>
       ) : (
-        <UserAreasMap
-          className="c-map--within-hero"
-          selectedAreaId={selectedArea?.id}
-          onAreaSelect={handleAreaSelect}
-          onAreaDeselect={handleAreaDeselect}
-          onMapLoad={handleMapLoad}
-        >
-          {selectedArea && (
-            <AreaDetailCard
-              area={selectedArea}
-              teams={getAreaTeams(selectedArea.id, areasInUsersTeams)}
-              numberOfReports={answersBySelectedArea?.length}
-              onStartInvestigation={() =>
-                fireGAEvent({
-                  category: "Areas",
-                  action: AreaActions.Investigation,
-                  label: AreaLabel.StartedInvestigation
-                })
-              }
-              onManageArea={() =>
-                fireGAEvent({
-                  category: "Areas",
-                  action: AreaActions.Managed,
-                  label: AreaLabel.StartedFromAreas
-                })
-              }
-            />
-          )}
-        </UserAreasMap>
+        <MapProvider>
+          <UserAreasMap
+            className="c-map--within-hero"
+            selectedAreaId={selectedArea?.id}
+            onAreaSelect={handleAreaSelect}
+            onAreaDeselect={handleAreaDeselect}
+            onMapLoad={handleMapLoad}
+            showTeamAreas
+            alwaysHideKeyLegend
+            context={MapContext}
+          >
+            {selectedArea && (
+              <AreaDetailCard
+                area={selectedArea}
+                teamNames={selectedArea.id ? getTeamNamesByAreaId(selectedArea.id) : []}
+                numberOfReports={answersBySelectedArea?.length}
+                onStartInvestigation={() =>
+                  fireGAEvent({
+                    category: "Areas",
+                    action: AreaActions.Investigation,
+                    label: AreaLabel.StartedInvestigation
+                  })
+                }
+                onManageArea={() =>
+                  fireGAEvent({
+                    category: "Areas",
+                    action: AreaActions.Managed,
+                    label: AreaLabel.StartedFromAreas
+                  })
+                }
+              />
+            )}
+          </UserAreasMap>
+        </MapProvider>
       )}
 
       <div className="l-content l-content--neutral-400">
-        {(!areaMap || areaMap.length === 0) && !loading ? (
+        {areaCount === 0 && !isLoading ? (
           <div className="row column">
             <EmptyState
               iconUrl={AreaIcon}
@@ -188,32 +217,40 @@ const Areas: FC<IProps> = props => {
             }
           >
             <div className="c-areas__area-listing">
-              {[...areaMap]
-                .sort((a, b) => a.attributes.name.localeCompare(b.attributes.name.toString()))
-                .map((area: TAreasResponse) => (
+              {[...userAreas]
+                .sort((a, b) => {
+                  const aStr = a.attributes?.name || "";
+                  const bStr = b.attributes?.name || "";
+
+                  return aStr.localeCompare(bStr.toString());
+                })
+                .map(area => (
                   <AreaCard area={area} key={area.id} className="c-areas__item" />
                 ))}
             </div>
           </Article>
         )}
       </div>
-      {loadingTeamAreas && (
+      {isLoading && (
         <div className="l-content">
           <Loader isLoading />
         </div>
       )}
       {hasTeamAreas && (
         <div className="l-content">
-          {areasInUsersTeams && areasInUsersTeams.length > 0 && !loadingTeamAreas && (
+          {areasByTeam && !isLoading && (
             <Article title="areas.teamSubtitle">
-              {areasInUsersTeams.map(
+              {areasByTeam.map(
                 areasInTeam =>
                   areasInTeam.team &&
-                  areasInTeam.areas.length > 0 && (
+                  (areasInTeam?.areas?.length || 0) > 0 && (
+                    // @ts-ignore
                     <Fragment key={areasInTeam.team.id}>
-                      <h3 className="u-text-600 u-text-neutral-700">{areasInTeam.team.attributes?.name}</h3>
+                      {/* @ts-ignore */}
+                      <h3 className="u-text-600 u-text-neutral-700">{areasInTeam.team.name}</h3>
 
                       <div className="c-areas__area-listing">
+                        {/* @ts-ignore */}
                         {[...areasInTeam.areas]
                           .sort((a, b) => a.data.attributes.name.localeCompare(b.data.attributes.name.toString()))
                           .map(area => (
@@ -224,10 +261,8 @@ const Areas: FC<IProps> = props => {
                               subtitleKey="teams.managedBy"
                               subtitleValue={{
                                 name:
-                                  areasInTeam?.team?.id &&
-                                  teamMembers?.[areasInTeam?.team?.id]?.find(
-                                    member => member.attributes.role === "administrator"
-                                  )?.attributes?.name
+                                  // @ts-ignore
+                                  areasInTeam?.team?.id && teamAdminNames[areasInTeam?.team?.id]
                               }}
                             />
                           ))}
@@ -237,7 +272,7 @@ const Areas: FC<IProps> = props => {
               )}
             </Article>
           )}
-          <Loader isLoading={loadingTeamAreas} />
+          <Loader isLoading={isLoading} />
         </div>
       )}
       <Switch>

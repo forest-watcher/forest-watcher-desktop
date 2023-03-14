@@ -3,15 +3,10 @@ import { RootState } from "store";
 import { getAreaTeams, setLoading } from "modules/areas";
 import AreaView from "./AreaView";
 import { ThunkDispatch } from "redux-thunk";
-import { getTeamMembers, getUserTeams } from "modules/gfwTeams";
 
 const mapStateToProps = (state: RootState) => ({
-  loading: state.areas.loading || state.areas.loadingAreasInUsers,
-  areaTeams: state.areas.areaTeams,
-  templates: state.templates.templates,
-  teams: state.gfwTeams.data,
-  teamMembers: state.gfwTeams.members,
-  allAnswers: state.reports.allAnswers
+  loading: state.areas.loadingAreasInUsers,
+  areaTeams: state.areas.areaTeams
 });
 
 function mapDispatchToProps(dispatch: ThunkDispatch<RootState, null, any>) {
@@ -19,14 +14,8 @@ function mapDispatchToProps(dispatch: ThunkDispatch<RootState, null, any>) {
     setLoading: (bool: boolean) => {
       dispatch(setLoading(bool));
     },
-    getUserTeams: (userId: string) => {
-      dispatch(getUserTeams(userId));
-    },
     getAreaTeams: (areaId: string) => {
       dispatch(getAreaTeams(areaId));
-    },
-    getTeamMembers: (teamId: string) => {
-      dispatch(getTeamMembers(teamId));
     }
   };
 }

@@ -27,11 +27,10 @@ export const CHILD_QUESTION = {
   conditionalValue: 0,
   order: 0,
   required: false,
-  label: {},
-  values: {}
+  label: {}
 };
 
-export const QUESTION_TYPES = ["text", "blob", "radio", "select", "number"];
+export const QUESTION_TYPES = ["text", "blob", "radio", "select", "number", "audio"];
 
 export const CONDITIONAL_QUESTION_TYPES = ["radio", "select"];
 

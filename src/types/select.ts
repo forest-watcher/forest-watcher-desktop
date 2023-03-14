@@ -7,7 +7,6 @@ export interface SelectProps {
   options?: Option[];
   asyncFetchOptions?: () => Promise<Option[]>;
   defaultValue?: Option | Option[];
-  alternateLabelStyle?: Boolean;
   onFocus?: () => void;
   scrollOnOpen?: boolean;
 }

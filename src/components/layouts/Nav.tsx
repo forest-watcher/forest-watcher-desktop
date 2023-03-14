@@ -15,6 +15,8 @@ import { FC } from "react";
 import { useForm, UseFormReturn } from "react-hook-form";
 //@ts-ignore
 import breakpoints from "styles/utilities/_u-breakpoints.scss";
+import OptionalWrapper from "components/extensive/OptionalWrapper";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface IProps extends HTMLAttributes<HTMLDivElement> {
   translations: any;
@@ -44,22 +46,13 @@ interface INavLinks {
 const NavLinks: FC<INavLinks> = ({ loggedIn, formHook, languages, user, logout, onLinkSelect }) => {
   const { register } = formHook;
   const isMobile = useMediaQuery({ maxWidth: breakpoints.mobile });
+  const queryClient = useQueryClient();
 
   return (
     <>
       <div className={classnames("c-nav__section", !loggedIn && "c-nav__section--no-grow")}>
         {loggedIn && (
           <ul className="c-nav__subsection c-nav__subsection--links">
-            <li className="c-nav__link-wrapper">
-              <NavLink
-                to="/reporting"
-                className="c-nav__link"
-                activeClassName="c-nav__link--active"
-                onClick={() => onLinkSelect?.()}
-              >
-                <FormattedMessage id="reports.name" />
-              </NavLink>
-            </li>
             <li className="c-nav__link-wrapper">
               <NavLink
                 to="/areas"
@@ -72,12 +65,12 @@ const NavLinks: FC<INavLinks> = ({ loggedIn, formHook, languages, user, logout, 
             </li>
             <li className="c-nav__link-wrapper">
               <NavLink
-                to="/templates"
+                to="/reporting"
                 className="c-nav__link"
                 activeClassName="c-nav__link--active"
                 onClick={() => onLinkSelect?.()}
               >
-                <FormattedMessage id="templates.name" />
+                <FormattedMessage id="reports.name" />
               </NavLink>
             </li>
             <li className="c-nav__link-wrapper">
@@ -92,7 +85,17 @@ const NavLinks: FC<INavLinks> = ({ loggedIn, formHook, languages, user, logout, 
             </li>
             <li className="c-nav__link-wrapper">
               <NavLink
-                to="/settings"
+                to="/templates"
+                className="c-nav__link"
+                activeClassName="c-nav__link--active"
+                onClick={() => onLinkSelect?.()}
+              >
+                <FormattedMessage id="templates.name" />
+              </NavLink>
+            </li>
+            <li className="c-nav__link-wrapper">
+              <NavLink
+                to="/layers"
                 className="c-nav__link"
                 activeClassName="c-nav__link--active"
                 onClick={() => onLinkSelect?.()}
@@ -119,7 +122,22 @@ const NavLinks: FC<INavLinks> = ({ loggedIn, formHook, languages, user, logout, 
             )}
           </ul>
         )}
+
         <ul className="c-nav__subsection c-nav__subsection--settings">
+          <OptionalWrapper data={loggedIn}>
+            <li className="c-nav__link-wrapper">
+              <NavLink
+                to="/help"
+                onClick={() => {
+                  onLinkSelect?.();
+                }}
+                className="c-nav__link"
+                activeClassName="c-nav__link--active"
+              >
+                <FormattedMessage id="help.title" />
+              </NavLink>
+            </li>
+          </OptionalWrapper>
           <li className="c-nav__menu">
             <Select
               id="locale-select"
@@ -135,39 +153,38 @@ const NavLinks: FC<INavLinks> = ({ loggedIn, formHook, languages, user, logout, 
               }}
             />
           </li>
-
-          {loggedIn && (
-            <>
-              {!isMobile && (
-                <li className="c-nav__link-wrapper">
-                  <ReactGA.OutboundLink
-                    eventLabel="navigation - myGFW"
-                    to={MY_GFW_LINK}
-                    rel="noopener noreferrer"
-                    target="_blank"
-                    className="c-nav__link"
-                  >
-                    <img src={ProfileIcon} alt="" role="presentation" className="c-nav__link-profile-icon" />
-                    <span className="c-nav__link-text">
-                      {user?.data?.firstName} {user?.data?.lastName}
-                    </span>
-                  </ReactGA.OutboundLink>
-                </li>
-              )}
-              <li className="c-nav__link-wrapper">
-                <Link
-                  to="/login"
-                  onClick={() => {
-                    onLinkSelect?.();
-                    logout();
-                  }}
+          <OptionalWrapper data={loggedIn}>
+            {!isMobile && (
+              <li className="c-nav__link-wrapper max-w-[89px] lg:max-w-[150px]">
+                <ReactGA.OutboundLink
+                  eventLabel="navigation - myGFW"
+                  to={MY_GFW_LINK}
+                  rel="noopener noreferrer"
+                  target="_blank"
                   className="c-nav__link"
                 >
-                  <FormattedMessage id="app.logout" />
-                </Link>
+                  <img src={ProfileIcon} alt="" role="presentation" className="c-nav__link-profile-icon" />
+                  <span className="c-nav__link-text">
+                    {user?.data?.firstName} {user?.data?.lastName}
+                  </span>
+                </ReactGA.OutboundLink>
               </li>
-            </>
-          )}
+            )}
+            <li className="c-nav__link-wrapper">
+              <Link
+                to="/login"
+                onClick={() => {
+                  onLinkSelect?.();
+                  queryClient.invalidateQueries();
+                  queryClient.clear();
+                  logout();
+                }}
+                className="c-nav__link"
+              >
+                <FormattedMessage id="app.logout" />
+              </Link>
+            </li>
+          </OptionalWrapper>
         </ul>
       </div>
     </>

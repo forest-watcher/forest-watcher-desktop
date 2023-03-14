@@ -1,5 +1,5 @@
 import classnames from "classnames";
-import { Fragment, useCallback, useEffect, useState } from "react";
+import { Fragment, useCallback, useEffect, useMemo, useState } from "react";
 import { UseFormRegisterReturn, UseFormReturn } from "react-hook-form";
 import { FieldPropsBase } from "types/field";
 import { SelectProps, Option } from "types/select";
@@ -8,14 +8,17 @@ import { FieldError } from "./FieldError";
 import { Listbox } from "@headlessui/react";
 import RadioOff from "assets/images/icons/RadioOff.svg";
 import RadioOn from "assets/images/icons/RadioOn.svg";
+import { useIntl } from "react-intl";
 
 export interface Props extends FieldPropsBase {
   selectProps: SelectProps;
   registered: UseFormRegisterReturn;
   formHook: UseFormReturn<any>;
-  onChange?: () => void;
+  onChange?: (v: any) => void;
   variant?: "simple" | "simple-green";
   isMultiple?: boolean;
+  isMultipleDropdown?: boolean;
+  disabled?: boolean;
 }
 
 const getSelectedItems = (isMultiple: boolean, value: any, options: Option[]) => {
@@ -27,30 +30,64 @@ const getSelectedItems = (isMultiple: boolean, value: any, options: Option[]) =>
 };
 
 const Select = (props: Props) => {
-  const { selectProps, registered, error, id, formHook, variant, hideLabel, isMultiple = false, className } = props;
+  const {
+    selectProps,
+    registered,
+    error,
+    id,
+    formHook,
+    variant,
+    hideLabel,
+    isMultiple = false,
+    isMultipleDropdown = false,
+    alternateLabelStyle = false,
+    largeLabel = false,
+    labelClass,
+    wrapperClassName,
+    className,
+    disabled = false
+  } = props;
   const [options, setOptions] = useState<Option[]>(selectProps.options || []);
   const [selectHeight, setSelectHeight] = useState<number>(0);
+  const isGenericMultiple = useMemo(() => isMultiple || isMultipleDropdown, [isMultiple, isMultipleDropdown]);
+  const intl = useIntl();
 
   useEffect(() => {
     setOptions(selectProps.options || []);
   }, [selectProps.options]);
 
+  const watched = formHook.watch(props.registered.name);
   const value =
-    formHook.watch(props.registered.name) ||
-    (Array.isArray(selectProps.defaultValue)
+    watched !== undefined && watched !== null
+      ? watched
+      : Array.isArray(selectProps.defaultValue)
       ? selectProps.defaultValue.map(item => item.value)
-      : selectProps.defaultValue?.value);
+      : selectProps.defaultValue?.value;
 
-  const selectedItems = getSelectedItems(isMultiple, value, options);
+  const selectedItems = getSelectedItems(isGenericMultiple, value, options);
 
-  const label = isMultiple
-    ? options
+  const label = useMemo(() => {
+    if (isMultiple) {
+      return options
         .filter(opt => value.find((item: string) => item === opt.value))
         .map(item => item.label)
-        .join(", ")
-    : value
-    ? options.find(opt => opt.value === value)?.label
-    : null;
+        .join(", ");
+    }
+
+    if (isMultipleDropdown && value.length > 0) {
+      return intl.formatMessage({ id: "common.xSelected" }, { count: value.length });
+    }
+
+    if (value !== undefined && value !== null) {
+      const option = options.find(opt => opt.value === value);
+
+      if (option !== undefined) {
+        return option.label;
+      }
+    }
+
+    return null;
+  }, [intl, isMultiple, isMultipleDropdown, options, value]);
 
   const fetchOptions = useCallback(async () => {
     if (!!selectProps.asyncFetchOptions) {
@@ -60,17 +97,18 @@ const Select = (props: Props) => {
   }, [selectProps.asyncFetchOptions]);
 
   const onChange = (v: any) => {
-    if (isMultiple) {
+    if (isGenericMultiple) {
       props.formHook.setValue(
         registered.name,
-        v.map((item: Option) => item.value)
+        v.map((item: Option) => item.value),
+        { shouldDirty: true }
       );
-    } else if (v.value) {
-      props.formHook.setValue(registered.name, v?.value);
+    } else if (v.value !== null && v.value !== undefined) {
+      props.formHook.setValue(registered.name, v?.value, { shouldDirty: true });
     }
     props.formHook.clearErrors(registered.name);
     if (props.onChange) {
-      props.onChange();
+      props.onChange(v);
     }
   };
 
@@ -79,28 +117,31 @@ const Select = (props: Props) => {
   }, [fetchOptions]);
 
   return (
-    <div className={classnames("c-input", selectProps.alternateLabelStyle && "c-input--alt-label", className)}>
-      <Listbox value={selectedItems} onChange={onChange} multiple={isMultiple}>
+    <div className={classnames("c-input", alternateLabelStyle && "c-input--alt-label", className)}>
+      <Listbox value={selectedItems} onChange={onChange} multiple={isGenericMultiple} disabled={disabled}>
         {({ open }) => (
           <>
             {selectProps.label && (
               <Listbox.Label
                 className={classnames(
                   "c-input__label c-input__label--select",
-                  selectProps.alternateLabelStyle && "c-input__label--alt",
-                  hideLabel && "u-visually-hidden"
+                  alternateLabelStyle && "c-input__label--alt",
+                  largeLabel && "c-input__label--large",
+                  hideLabel && "u-visually-hidden",
+                  labelClass
                 )}
               >
                 {selectProps.label}
               </Listbox.Label>
             )}
-            <div className={classnames(isMultiple ? "u-w-100" : "c-input__input-wrapper")}>
+            <div className={classnames(isMultiple ? "u-w-100" : "c-input__input-wrapper", wrapperClassName)}>
               <div
                 className={classnames(
                   "c-input__select",
                   open && "c-input__select--open",
                   variant && `c-input__select--${variant}`,
-                  isMultiple && "c-input__select--multiple"
+                  isMultiple && "c-input__select--multiple",
+                  error && "c-input__select--error"
                 )}
               >
                 <Listbox.Button
@@ -173,7 +214,8 @@ const Select = (props: Props) => {
                             "c-input__select-list-item",
                             active && "c-input__select-list-item--is-active",
                             selected && "c-input__select-list-item--is-selected",
-                            variant && `c-input__select-list-item--${variant}`
+                            variant && `c-input__select-list-item--${variant}`,
+                            isMultipleDropdown && "flex flex-row-reverse justify-end align-middle gap-4"
                           )}
                         >
                           <span className="c-input__select-list-item-label">{option.label}</span>
@@ -182,7 +224,7 @@ const Select = (props: Props) => {
                               {option.secondaryLabel}
                             </span>
                           )}
-                          {isMultiple && (
+                          {isGenericMultiple && (
                             <img
                               src={selected ? RadioOn : RadioOff}
                               role="presentation"

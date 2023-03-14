@@ -23,10 +23,10 @@ const Hero: FC<PropsWithChildren<IProps>> = props => {
   const history = useHistory();
 
   return (
-    <aside className={classnames("c-hero", pageTabs && "c-hero--with-tabs")}>
-      <div className="row column">
+    <aside className="bg-neutral-700">
+      <div className="max-w-row mx-auto px-2.5 2xl:py-5 py-4">
         {backLink && (
-          <div className="c-hero__content">
+          <div className="flex justify-between items-center gap-3">
             {backLink.to ? (
               <Link to={backLink.to} className={classnames("c-link", "c-link--hero", backLink.className)}>
                 <img src={ChevronRight} alt="" role="presentation" />
@@ -43,22 +43,16 @@ const Hero: FC<PropsWithChildren<IProps>> = props => {
             )}
           </div>
         )}
-        <div className="c-hero__content">
-          <h1 className={"c-hero__title u-text-700 u-text-neutral-300 u-text-capitalize u-text-ellipsis"}>
+        <div className="flex justify-between items-center gap-3 py-2 flex-wrap md:flex-nowrap">
+          <h1 className={"text-4xl font-light text-neutral-300 capitalize text-ellipsis overflow-hidden basis-full"}>
             <FormattedMessage id={title} values={titleValues} />
           </h1>
 
-          {pageTabs && (
-            <TabGroup
-              className={classnames(pageTabs.className, "c-hero__page-tabs")}
-              value={pageTabs.value}
-              options={pageTabs.options}
-            />
-          )}
+          {pageTabs && <TabGroup value={pageTabs.value} options={pageTabs.options} />}
 
-          <div className="c-hero__spacer">
+          <div className="flex-grow-0 flex-shrink basis-full">
             <>{children}</>
-            {actions && <div className="c-hero__actions">{actions}</div>}
+            {actions && <div className="flex gap-3 justify-end">{actions}</div>}
           </div>
         </div>
       </div>

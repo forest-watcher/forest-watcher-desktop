@@ -1,23 +1,22 @@
-import { FC, PropsWithChildren, useCallback, useEffect, useMemo, useState } from "react";
-import { useAppSelector } from "hooks/useRedux";
+import { AnswersResponse } from "generated/core/coreResponses";
+import { Context, FC, PropsWithChildren, useCallback, useContext, useEffect, useMemo, useState } from "react";
 import Polygon, { IProps as IPolygonProps } from "../ui/Map/components/layers/Polygon";
 import Map, { IProps as IMapProps } from "../ui/Map/Map";
-import { TAreasResponse } from "services/area";
 import { Map as MapInstance, MapboxEvent } from "mapbox-gl";
 import * as turf from "@turf/turf";
 import { goToGeojson } from "helpers/map";
-import { TGetAllAnswers } from "services/reports";
-import SquareClusterMarkers from "components/ui/Map/components/layers/SquareClusterMarkers";
+import SquareClusterMarkers, { EPointDataTypes } from "components/ui/Map/components/layers/SquareClusterMarkers";
 import { Layer, Source } from "react-map-gl";
-import { BASEMAPS } from "constants/mapbox";
+import { PLANET_BASEMAP } from "constants/mapbox";
 import { IPlanetBasemap } from "helpers/basemap";
 import ReportDetailCard from "components/ui/Map/components/cards/ReportDetailContainer";
 import { getReportAlertsByName } from "helpers/reports";
 import { TAnswer } from "components/ui/Map/components/cards/ReportDetail";
+import { ProcTypes } from "pages/reports/investigation/Investigation";
+import useGetAreas from "hooks/querys/areas/useGetAreas";
+import { IContext } from "pages/reports/investigation/MapContext";
 
-const basemap = BASEMAPS["planet"];
-
-interface IProps extends IMapProps {
+export interface IProps extends IMapProps {
   // Should be a memorised function! useCallBack()
   onAreaSelect?: IPolygonProps["onClick"];
   // Should be a memorised function! useCallBack()
@@ -25,11 +24,13 @@ interface IProps extends IMapProps {
   focusAllAreas?: boolean;
   selectedAreaId?: string;
   showReports?: boolean;
-  answers?: TGetAllAnswers["data"];
+  answers?: AnswersResponse["data"];
   currentPlanetBasemap?: IPlanetBasemap;
-  currentProc?: "" | "cir";
+  currentProc?: ProcTypes;
   showTeamAreas?: boolean;
   cooperativeGestures?: boolean;
+  alwaysHideKeyLegend?: boolean;
+  context: Context<IContext>;
 }
 
 const UserAreasMap: FC<PropsWithChildren<IProps>> = props => {
@@ -46,34 +47,41 @@ const UserAreasMap: FC<PropsWithChildren<IProps>> = props => {
     currentProc = "",
     showTeamAreas = false,
     cooperativeGestures = true,
+    alwaysHideKeyLegend = false,
+    context,
     ...rest
   } = props;
+
+  const {
+    active: { reportIds: selectedReportIds },
+    setReportIds: setSelectedReportIds
+  } = useContext(context);
+
   const [mapRef, setMapRef] = useState<MapInstance | null>(null);
   const [clickState, setClickState] = useState<{ type: "deselect" } | { type: "select"; areaId: string } | undefined>(
     undefined
   );
 
-  const { data: areasList, areasInUsersTeams } = useAppSelector(state => state.areas);
+  const {
+    data: { userAreas, areasByTeam }
+  } = useGetAreas();
 
-  const areaMap = useMemo<TAreasResponse[]>(() => {
+  const areaMap = useMemo(() => {
     if (showTeamAreas) {
-      const mapped: TAreasResponse[] = areasInUsersTeams
-        .map(teamAreas => {
-          return teamAreas.areas.map(area => area.data as TAreasResponse);
-        })
-        .flat();
+      const mapped = areasByTeam.map(teamAreas => teamAreas.areas?.map(area => area.data)).flat();
 
-      return mapped.filter((value, index, self) => self.findIndex(t => t.id === value.id) === index);
+      return [...mapped, ...userAreas].filter(
+        (value, index, self) => self.findIndex(t => t?.id === value?.id) === index
+      );
     }
-    return Object.values(areasList);
-  }, [areasInUsersTeams, areasList, showTeamAreas]);
+    return userAreas;
+  }, [areasByTeam, showTeamAreas, userAreas]);
 
   const [hasLoaded, setHasLoaded] = useState(true);
-  const [selectedPoint, setSelectedPoint] = useState<mapboxgl.Point | null>(null);
-  const [selectedReportIds, setSelectedReportIds] = useState<string[] | null>(null);
   const features = useMemo(() => {
     if (areaMap.length > 0) {
-      const mapped = areaMap.map((area: any) => area.attributes.geostore.geojson.features).flat();
+      // @ts-ignore
+      const mapped = areaMap.map(area => area?.attributes?.geostore?.geojson?.features).flat();
       return turf.featureCollection(mapped);
     }
     return null;
@@ -81,7 +89,7 @@ const UserAreasMap: FC<PropsWithChildren<IProps>> = props => {
 
   const planetBasemapUrl = useMemo(() => {
     if (currentPlanetBasemap) {
-      return basemap.url.replace("{name}", currentPlanetBasemap.name).replace("{proc}", currentProc);
+      return PLANET_BASEMAP.url.replace("{name}", currentPlanetBasemap.name).replace("{proc}", currentProc);
     }
     return null;
   }, [currentPlanetBasemap, currentProc]);
@@ -111,25 +119,17 @@ const UserAreasMap: FC<PropsWithChildren<IProps>> = props => {
       } else {
         // If the same area was clicked, do nothing
         setClickState(undefined);
-        // If points within similar area, do not set reports to null
-        const boundary = 20;
-        const { x, y } = selectedPoint || { x: 0, y: 0 };
-
-        const xInRange = x > (point?.x || 0) - boundary && x < (point?.x || 0) + boundary;
-        const yInRange = y > (point?.y || 0) - boundary && y < (point?.y || 0) + boundary;
-
-        if (!(xInRange && yInRange) && selectedReportIds !== null) {
-          setSelectedReportIds(null);
-        }
       }
     },
-    [selectedAreaId, selectedPoint, selectedReportIds]
+    [selectedAreaId]
   );
 
-  const handleSquareSelect = useCallback((ids: string[], point: mapboxgl.Point) => {
-    setSelectedPoint(point);
-    setSelectedReportIds(ids);
-  }, []);
+  const handleSquareSelect = useCallback(
+    (ids: string[], point: mapboxgl.Point) => {
+      setSelectedReportIds?.(ids);
+    },
+    [setSelectedReportIds]
+  );
 
   useEffect(() => {
     if (clickState?.type === "deselect" && onAreaDeselect && selectedAreaId) {
@@ -143,9 +143,6 @@ const UserAreasMap: FC<PropsWithChildren<IProps>> = props => {
     if (clickState?.type === "deselect" || clickState?.type === "select") {
       setClickState(undefined);
     }
-
-    setSelectedReportIds(null);
-    setSelectedPoint(null);
   }, [clickState, onAreaSelect, onAreaDeselect, selectedAreaId]);
 
   useEffect(() => {
@@ -171,28 +168,38 @@ const UserAreasMap: FC<PropsWithChildren<IProps>> = props => {
   };
 
   return (
-    <Map onMapLoad={handleMapLoad} cooperativeGestures={cooperativeGestures} {...rest}>
-      {areaMap.map(area => (
-        <Polygon
-          key={area.id}
-          id={area.id}
-          label={area.attributes.name}
-          data={area.attributes.geostore.geojson}
-          isSelected={selectedAreaId === area.id}
-          onClick={handleAreaClick}
-        />
-      ))}
+    <Map
+      onMapLoad={handleMapLoad}
+      cooperativeGestures={cooperativeGestures}
+      showKeyLegend={!alwaysHideKeyLegend && !!selectedAreaId}
+      {...rest}
+    >
+      {areaMap.map(area =>
+        area ? (
+          <Polygon
+            key={area.id}
+            id={area.id || ""}
+            label={area.attributes?.name}
+            data={area.attributes?.geostore?.geojson}
+            isSelected={selectedAreaId === area.id}
+            onClick={handleAreaClick}
+          />
+        ) : null
+      )}
 
       {hasLoaded && (
         <SquareClusterMarkers
           id="answers"
+          pointDataType={EPointDataTypes.Reports}
           points={
             answers && showReports
               ? answers.map(answer => ({
                   // @ts-ignore
                   position: [answer.attributes.clickedPosition[0].lon, answer.attributes.clickedPosition[0].lat],
                   id: answer.id || "",
-                  alertTypes: getReportAlertsByName(answer.attributes?.reportName)
+                  type:
+                    getReportAlertsByName(answer.attributes?.reportName)[0] &&
+                    getReportAlertsByName(answer.attributes?.reportName)[0].id
                 }))
               : []
           }
@@ -212,8 +219,9 @@ const UserAreasMap: FC<PropsWithChildren<IProps>> = props => {
           answers={
             answers
               ?.filter(answer => selectedReportIds.findIndex(id => id === answer.id) > -1)
-              .map(answer => answer.attributes) as TAnswer[]
+              .map(answer => answer) as TAnswer[]
           }
+          onClose={() => !rest.hideControls && setSelectedReportIds?.(null)}
         />
       )}
 

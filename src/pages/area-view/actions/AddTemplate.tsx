@@ -1,3 +1,5 @@
+import { useInvalidateGetAreaById } from "hooks/querys/areas/useGetAreaById";
+import { useInvalidateGetTemplates } from "hooks/querys/templates/useGetTemplates";
 import { FC, useMemo } from "react";
 import FormModal from "components/modals/FormModal";
 import { Link, useHistory, useParams } from "react-router-dom";
@@ -5,7 +7,6 @@ import { TParams } from "../AreaView";
 import { FormattedMessage, useIntl } from "react-intl";
 import { toastr } from "react-redux-toastr";
 import { UnpackNestedValue } from "react-hook-form";
-import { TGetTemplates } from "services/reports";
 import { Option } from "types";
 import { areaService } from "services/area";
 import { useAppDispatch } from "hooks/useRedux";
@@ -13,9 +14,10 @@ import { getAreas, getAreasInUsersTeams } from "modules/areas";
 import yup from "configureYup";
 import { yupResolver } from "@hookform/resolvers/yup/dist/yup";
 import PlusIcon from "assets/images/icons/PlusForButton.svg";
+import { TemplatesResponse } from "generated/core/coreResponses";
 
 interface IProps {
-  templates: TGetTemplates["data"];
+  templates: TemplatesResponse["data"];
   onAdd?: () => void;
 }
 
@@ -35,13 +37,18 @@ const AddTemplateModal: FC<IProps> = ({ templates, onAdd }) => {
   const intl = useIntl();
   const history = useHistory();
   const dispatch = useAppDispatch();
+  const invalidateGetAreaById = useInvalidateGetAreaById();
+  const invalidateGetTemplates = useInvalidateGetTemplates();
+
   const templateOptions = useMemo<Option[] | undefined>(
     () =>
-      templates?.map(template => ({
-        // @ts-ignore template.attributes.name has incorrect type
-        label: template.attributes.name[template.attributes.defaultLanguage],
-        value: template.id as string
-      })),
+      templates
+        ?.filter(template => template.attributes?.status === "published")
+        .map(template => ({
+          // @ts-ignore template.attributes.name has incorrect type
+          label: template.attributes.name[template.attributes.defaultLanguage],
+          value: template.id as string
+        })),
     [templates]
   );
 
@@ -55,6 +62,8 @@ const AddTemplateModal: FC<IProps> = ({ templates, onAdd }) => {
       toastr.success(intl.formatMessage({ id: "areas.details.templates.add.success" }), "");
       dispatch(getAreas(true));
       dispatch(getAreasInUsersTeams(true));
+      await invalidateGetTemplates();
+      await invalidateGetAreaById(areaId);
       onClose();
     } catch (e: any) {
       toastr.error(intl.formatMessage({ id: "areas.details.templates.add.error" }), "");

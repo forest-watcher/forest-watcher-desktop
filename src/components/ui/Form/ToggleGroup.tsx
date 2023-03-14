@@ -4,7 +4,7 @@ import { FieldPropsBase } from "types/field";
 import { Switch } from "@headlessui/react";
 import { ToggleGroupProps } from "types/toggle";
 
-export interface Props extends FieldPropsBase {
+export interface IProps extends FieldPropsBase {
   toggleGroupProps: ToggleGroupProps;
   registered: UseFormRegisterReturn;
   formHook: UseFormReturn<any>;
@@ -15,7 +15,7 @@ interface Option {
   value: string;
 }
 
-const ToggleGroup = (props: Props) => {
+const ToggleGroup = (props: IProps) => {
   const { registered, className, toggleGroupProps, formHook, hideLabel } = props;
   const value =
     formHook.watch(props.registered.name) === undefined
