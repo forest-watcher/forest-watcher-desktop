@@ -6,10 +6,13 @@ import labelBackgroundIcon from "assets/images/icons/MapLabelFrame.png";
 import reportNotSelectedIcon from "assets/images/icons/alertIcons/ReportNotSelected.png";
 import reportHoverIcon from "assets/images/icons/alertIcons/ReportHover.png";
 import reportSelectedIcon from "assets/images/icons/alertIcons/ReportSelected.png";
+import reportLargerSelectedIcon from "assets/images/icons/alertIcons/ReportLargerSelected.png";
 import reportViirsNotSelectedIcon from "assets/images/icons/alertIcons/ReportViirsDefault.png";
 import reportViirsHoverIcon from "assets/images/icons/alertIcons/ReportViirsHover.png";
 import alertNotSelectedIcon from "assets/images/icons/alertIcons/AlertNotSelected.png";
 import alertHoverIcon from "assets/images/icons/alertIcons/AlertHover.png";
+import alertLargerNotSelectedIcon from "assets/images/icons/alertIcons/AlertLargerNotSelected.png";
+import alertLargerHoverIcon from "assets/images/icons/alertIcons/AlertLargerHover.png";
 import alertViirsNotSelectedIcon from "assets/images/icons/alertIcons/AlertViirsNotSelected.png";
 import alerViirsHoverIcon from "assets/images/icons/alertIcons/AlertViirsHover.png";
 import assignmentAssignedToMeIcon from "assets/images/icons/alertIcons/AssignmentAssignedToMe.png";
@@ -34,10 +37,13 @@ export enum MapImages {
   reportDefault = "report-default",
   reportHover = "report-hover",
   reportSelected = "report-selected",
+  reportLargerSelected = "report-larger-selected",
   reportViirsHover = "report-viirs-hover",
   reportViirsDefault = "report-viirs-default",
   alertDefault = "alert-default",
+  alertLargeDefault = "alert-large-default",
   alertHover = "alert-hover",
+  alertLargeHover = "alert-large-hover",
   alertViirsDefault = "alert-viirs-default",
   alertViirsHover = "alert-viirs-hover",
   assignmentAssignedToMe = "assignment-assigned-to-me",
@@ -80,6 +86,10 @@ export const mapImagesArr = [
     image: reportSelectedIcon
   },
   {
+    type: MapImages.reportLargerSelected,
+    image: reportLargerSelectedIcon
+  },
+  {
     type: MapImages.reportViirsHover,
     image: reportViirsHoverIcon
   },
@@ -94,6 +104,14 @@ export const mapImagesArr = [
   {
     type: MapImages.alertHover,
     image: alertHoverIcon
+  },
+  {
+    type: MapImages.alertLargeDefault,
+    image: alertLargerNotSelectedIcon
+  },
+  {
+    type: MapImages.alertLargeHover,
+    image: alertLargerHoverIcon
   },
   {
     type: MapImages.alertViirsDefault,
@@ -355,13 +373,20 @@ export const getReportImage: TMapIconGenerator = (alertType, isHovered, isSelect
 
 export const getAlertImage: TMapIconGenerator = (alertType, isHover, isSelected) => {
   if (isSelected) {
-    return MapImages.reportSelected;
+    switch (alertType) {
+      case EAlertTypes.GLAD:
+        return MapImages.reportLargerSelected;
+      default:
+        return MapImages.reportSelected;
+    }
   }
 
   if (isHover) {
     switch (alertType) {
       case EAlertTypes.VIIRS:
         return MapImages.alertViirsHover;
+      case EAlertTypes.GLAD:
+        return MapImages.alertLargeHover;
       default:
         return MapImages.alertHover;
     }
@@ -370,6 +395,8 @@ export const getAlertImage: TMapIconGenerator = (alertType, isHover, isSelected)
   switch (alertType) {
     case EAlertTypes.VIIRS:
       return MapImages.alertViirsDefault;
+    case EAlertTypes.GLAD:
+      return MapImages.alertLargeDefault;
     default:
       return MapImages.alertDefault;
   }
