@@ -44,14 +44,14 @@ export class UserService extends BaseService {
     return this.fetchJSON("/user");
   }
 
-  setUserProfile(body: TUserProfileBody) {
+  setUserProfile(body: TUserProfileBody, userId: string) {
     this.token = store.getState().user.token;
 
-    return this.fetchJSON(`/v2/user`, {
+    return this.fetchJSON(`/v2/user/${userId}`, {
       headers: {
         "Content-Type": "application/json"
       },
-      method: "POST",
+      method: "PATCH",
       body: JSON.stringify(body)
     });
   }
