@@ -122,21 +122,21 @@ export function getUser() {
     return userService
       .getUser()
       .then(({ data }) => {
-        if (data) {
-          dispatch({
-            type: SET_USER_DATA,
-            payload: { ...data.attributes, id: data.id }
-          });
-        } else {
+        dispatch({
+          type: SET_USER_DATA,
+          payload: { ...data.attributes, id: data.id }
+        });
+      })
+      .catch(error => {
+        if (userService.lastResponse?.status === 404) {
+          // Check status code. If 404 we have no user created yet.
           dispatch({
             type: SET_USER_HAS_NO_NAME,
             payload: true
           });
+        } else {
+          toastr.error("Error in user retrieval", "");
         }
-      })
-      .catch(error => {
-        toastr.error("Error in user retrieval", "");
-        console.warn(error);
       });
   };
 }

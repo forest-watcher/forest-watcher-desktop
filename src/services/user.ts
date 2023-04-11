@@ -41,17 +41,19 @@ export class UserService extends BaseService {
   }
 
   getUser() {
-    return this.fetchJSON("/user");
+    return this.fetchJSON("/v2/user");
   }
 
-  setUserProfile(body: TUserProfileBody, userId: string) {
+  setUserProfile(body: TUserProfileBody, userId: string, isCreate = false) {
     this.token = store.getState().user.token;
 
-    return this.fetchJSON(`/v2/user/${userId}`, {
+    const url = isCreate ? "/v2/user" : `/v2/user/${userId}`;
+
+    return this.fetchJSON(url, {
       headers: {
         "Content-Type": "application/json"
       },
-      method: "PATCH",
+      method: isCreate ? "POST" : "PATCH",
       body: JSON.stringify(body)
     });
   }

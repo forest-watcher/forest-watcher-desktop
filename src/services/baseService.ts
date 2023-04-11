@@ -1,6 +1,7 @@
 export class BaseService {
   _token = "";
   baseUrl = "";
+  _response: null | Response = null;
 
   constructor(baseUrl: string) {
     this.baseUrl = baseUrl;
@@ -21,12 +22,18 @@ export class BaseService {
   fetchJSON = async (url: string, config?: RequestInit | undefined) => {
     const response = await this.fetch(url, config);
 
-    if (!response.ok) throw Error(await response.text());
+    this._response = response;
+
+    if (!response.ok) {
+      throw Error(await response.text());
+    }
     return response.json();
   };
 
   fetchBlob = async (url: string, config?: RequestInit | undefined) => {
     const response = await this.fetch(url, config);
+
+    this._response = response;
 
     if (!response.ok) throw Error(await response.text());
     return response.blob();
@@ -38,5 +45,9 @@ export class BaseService {
 
   set token(value) {
     this._token = value;
+  }
+
+  get lastResponse() {
+    return this._response;
   }
 }
