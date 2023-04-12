@@ -8,6 +8,8 @@ import { toastr } from "react-redux-toastr";
 import { useIntl } from "react-intl";
 import yup from "configureYup";
 import { yupResolver } from "@hookform/resolvers/yup/dist/yup";
+import { useSelector } from "react-redux";
+import { RootState } from "store";
 
 type TUserNameForm = {
   firstName: string;
@@ -30,15 +32,18 @@ const UserNameForm: FC<IProps> = props => {
   const { isOpen } = props;
   const intl = useIntl();
   const dispatch = useAppDispatch();
+  const user = useSelector((state: RootState) => state.user);
 
   const onSave = async (data: UnpackNestedValue<TUserNameForm>) => {
-    try {
-      await userService.setUserProfile(data);
-      await dispatch(getUser());
-      toastr.success(intl.formatMessage({ id: "signUp.profile.form.success" }), "");
-    } catch (e) {
-      toastr.error(intl.formatMessage({ id: "signUp.profile.form.error" }), "");
-      console.error(e);
+    if (user?.data) {
+      try {
+        await userService.setUserProfile(data, user.data.id, user.userHasNoLastName);
+        await dispatch(getUser());
+        toastr.success(intl.formatMessage({ id: "signUp.profile.form.success" }), "");
+      } catch (e) {
+        toastr.error(intl.formatMessage({ id: "signUp.profile.form.error" }), "");
+        console.error(e);
+      }
     }
   };
 
