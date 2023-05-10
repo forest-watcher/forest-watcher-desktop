@@ -217,7 +217,14 @@ const getAllNeighbours = (
   }
 
   function getNeighbours(point: TAlertsById) {
-    const data = geoKDBush.around(pointsIndex, Number(point.data.longitude), Number(point.data.latitude), 8, distance);
+    const data = geoKDBush.around(
+      pointsIndex,
+      Number(point.data.longitude),
+      Number(point.data.latitude),
+      8,
+      // To take square size in account `GLAD` alert square size is larger than other's and to make it up we are adding 21 meter to search distance
+      point.data.alertType === "GLAD" ? distance + 0.021 : distance
+    );
     checkSiblings(data);
   }
 
