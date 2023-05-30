@@ -22,12 +22,11 @@ const fetchAllTeamsByAreaId = (variables: fetchVariables, signal?: AbortSignal) 
       // Get area team ids first
       // @ts-ignore incorrect docs
       teamIds = await fetchGetV3GfwAreaTeamsAreaId(variables, signal);
-
-      // @ts-ignore incorrect docs
     } catch (err) {
       reject(err);
     }
 
+    // Then get the team details for each
     for (const id of teamIds) {
       try {
         const team = await fetchGetV3GfwTeamsTeamId({ pathParams: { teamId: id }, headers: variables.headers });
