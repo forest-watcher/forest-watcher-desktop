@@ -41,7 +41,7 @@ const AddTeamModal: FC<IProps> = ({ teams }) => {
   const dispatch = useAppDispatch();
   const userId = useGetUserId();
   const invalidateGetAreaById = useInvalidateGetAreaById();
-  const invalidateGetAreaTeams = useInvalidateGetAreaById();
+  const invalidateGetAreaTeams = useInvalidateGetAreaTeams();
 
   const teamOptions = useMemo<Option[] | undefined>(
     () =>
