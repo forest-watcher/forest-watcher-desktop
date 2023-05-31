@@ -9,6 +9,7 @@ import { useHistory, useParams } from "react-router-dom";
 import { TParams as TAreaDetailParams } from "../AreaView";
 import { toastr } from "react-redux-toastr";
 import { FormattedMessage, useIntl } from "react-intl";
+import { useInvalidateGetAreas } from "hooks/querys/areas/useGetAreas";
 
 type TParams = TAreaDetailParams & {
   teamId: string;
@@ -25,6 +26,7 @@ const RemoveAreaFromTeam: FC<IProps> = props => {
   const [isRemoving, setIsRemoving] = useState(false);
   const invalidateGetUserTeams = useInvalidateGetUserTeams();
   const invalidateGetAreaById = useInvalidateGetAreaById();
+  const invalidateGetAreas = useInvalidateGetAreas();
 
   /* Mutations */
   const { httpAuthHeader } = useAccessToken();
@@ -43,6 +45,7 @@ const RemoveAreaFromTeam: FC<IProps> = props => {
       // ToDo: Invalidate Areas fetches?
       await invalidateGetUserTeams();
       await invalidateGetAreaById(areaId);
+      await invalidateGetAreas();
 
       onClose();
       toastr.success(intl.formatMessage({ id: "areas.details.teams.remove.success" }), "");

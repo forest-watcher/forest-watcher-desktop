@@ -6,7 +6,6 @@ import useGetUserTeams from "hooks/querys/teams/useGetUserTeams";
 import { FC, useCallback, useEffect, useMemo, useState } from "react";
 import { Map as MapInstance, MapboxEvent } from "mapbox-gl";
 import { FormattedMessage, useIntl } from "react-intl";
-import { TPropsFromRedux } from "./AreaViewContainer";
 import { goToGeojson } from "helpers/map";
 import Loader from "components/ui/Loader";
 import Polygon from "components/ui/Map/components/layers/Polygon";
@@ -30,14 +29,16 @@ import { useGetBackLink } from "hooks/useGetBackLink";
 import { fireGAEvent } from "helpers/analytics";
 import { AreaActions, AreaLabel } from "types/analytics";
 import useGetTemplates from "hooks/querys/templates/useGetTemplates";
+import useGetAreaTeams from "hooks/querys/areas/useGetAreaTeams";
 
-interface IProps extends TPropsFromRedux {}
+interface IProps {}
 export type TParams = {
   areaId: string;
 };
 
 const AreasView: FC<IProps & RouteComponentProps<TParams>> = props => {
-  const { match, getAreaTeams, areaTeams } = props;
+  const { match } = props;
+
   const [mapRef, setMapRef] = useState<MapInstance | null>(null);
   let { path, url } = useRouteMatch();
   const userId = useGetUserId();
@@ -61,6 +62,10 @@ const AreasView: FC<IProps & RouteComponentProps<TParams>> = props => {
   const { data: allAnswers } = useGetAllReportAnswersForUser();
   // - Fetch all Teams the User is a member of
   const { data: userTeams, managedTeams } = useGetUserTeams();
+  // - Fetch all the Teams that are part of this area
+  const { data: areaTeams } = useGetAreaTeams(areaId, {
+    refetchOnWindowFocus: false
+  });
 
   useEffect(() => {
     // Rare case, only other scroll tos are in routes.js for the top level nav
@@ -72,15 +77,15 @@ const AreasView: FC<IProps & RouteComponentProps<TParams>> = props => {
   const canManage = useMemo(() => {
     // For Each team in the area
     let hasPermissions = isMyArea;
-    areaTeams.forEach(team => {
+    areaTeams?.forEach(team => {
       // Is this team a team that is Managed by the current logged-in user?
-      if (managedTeams.find(managedTeam => managedTeam.id === team.data.id) && !hasPermissions) {
+      if (managedTeams.find(managedTeam => managedTeam.id === team?.data?.id) && !hasPermissions) {
         hasPermissions = true;
       }
     });
 
     return hasPermissions;
-  }, [areaTeams, isMyArea, managedTeams]);
+  }, [isMyArea, managedTeams, areaTeams]);
 
   const geojson = useMemo(() => area?.attributes?.geostore?.geojson, [area]);
 
@@ -94,7 +99,7 @@ const AreasView: FC<IProps & RouteComponentProps<TParams>> = props => {
   }, [area?.attributes?.reportTemplate, templates]);
 
   const teamsToAdd = useMemo(() => {
-    return userTeams?.filter(team => !areaTeams.find(areaTeam => areaTeam.data.id === team.id)) || [];
+    return userTeams?.filter(team => !areaTeams?.find(areaTeam => areaTeam?.data?.id === team.id)) || [];
   }, [areaTeams, userTeams]);
 
   const handleMapLoad = (e: MapboxEvent) => {
@@ -120,12 +125,6 @@ const AreasView: FC<IProps & RouteComponentProps<TParams>> = props => {
     href: template => `${match.url}/team/remove/${template.id}`,
     shouldShow: () => canManage
   };
-
-  useEffect(() => {
-    if (area?.id) {
-      getAreaTeams(area.id);
-    }
-  }, [area, getAreaTeams, userId]);
 
   const handleExport = useCallback(
     async (values: UnpackNestedValue<TExportForm>) => {
@@ -249,7 +248,7 @@ const AreasView: FC<IProps & RouteComponentProps<TParams>> = props => {
         <div className="l-content u-padding-top-none u-h-min-unset">
           <Article
             title="areas.details.teams"
-            titleValues={{ num: areaTeams.length ?? 0 }}
+            titleValues={{ num: areaTeams?.length ?? 0 }}
             size="small"
             actions={
               canManage && (
@@ -270,13 +269,13 @@ const AreasView: FC<IProps & RouteComponentProps<TParams>> = props => {
               )
             }
           >
-            {areaTeams.length > 0 && (
+            {(areaTeams?.length || 0) > 0 && (
               <DataTable<TTeamDataTable>
                 className="u-w-100"
                 rows={
-                  areaTeams.map(team => ({
+                  areaTeams?.map(team => ({
                     ...team.data,
-                    name: team.data.attributes.name || "",
+                    name: team?.data?.attributes?.name || "",
                     openAssignments: 0,
                     reports:
                       allAnswers?.reduce(
