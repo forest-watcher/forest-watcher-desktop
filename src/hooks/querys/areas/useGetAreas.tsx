@@ -5,6 +5,8 @@ import { useAccessToken } from "hooks/useAccessToken";
 import useGetUserId from "hooks/useGetUserId";
 import { useCallback, useMemo } from "react";
 import * as reactQuery from "@tanstack/react-query";
+import { useQueryClient } from "@tanstack/react-query";
+import { useCoreContext } from "generated/core/coreContext";
 
 export type TAreasByTeam = {
   team?: string;
@@ -76,6 +78,21 @@ const useGetAreas = (
   );
 
   return { data: { userAreas, areasByTeam, unfilteredAreas: areaList, getTeamNamesByAreaId }, ...rest };
+};
+
+export const useInvalidateGetAreas = () => {
+  const queryClient = useQueryClient();
+  const { queryKeyFn } = useCoreContext();
+
+  return async () => {
+    await queryClient.invalidateQueries(
+      queryKeyFn({
+        path: "/v3/gfw/areas/userAndTeam",
+        operationId: "getV3GfwAreasUserandteam",
+        variables: {}
+      })
+    );
+  };
 };
 
 export default useGetAreas;
