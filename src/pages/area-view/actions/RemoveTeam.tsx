@@ -10,6 +10,7 @@ import { useAppDispatch } from "hooks/useRedux";
 import { FormattedMessage, useIntl } from "react-intl";
 import { areaService } from "services/area";
 import { getAreas } from "modules/areas";
+import { useInvalidateGetAreaTeams } from "hooks/querys/areas/useGetAreaTeams";
 
 type TParams = TAreaDetailParams & {
   teamId: string;
@@ -24,6 +25,7 @@ const RemoveTeamModal: FC<IProps> = props => {
   const dispatch = useAppDispatch();
   const [isRemoving, setIsRemoving] = useState(false);
   const invalidateGetAreaById = useInvalidateGetAreaById();
+  const invalidateGetAreaTeams = useInvalidateGetAreaTeams();
 
   const onClose = useCallback(() => {
     history.goBack();
@@ -35,6 +37,8 @@ const RemoveTeamModal: FC<IProps> = props => {
       await areaService.unassignTeamFromArea(areaId, teamId);
       dispatch(getAreas());
       await invalidateGetAreaById(areaId);
+      await invalidateGetAreaTeams(areaId);
+
       onClose();
       toastr.success(intl.formatMessage({ id: "areas.details.teams.remove.success" }), "");
     } catch (e: any) {

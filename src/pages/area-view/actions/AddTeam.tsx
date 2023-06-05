@@ -17,6 +17,7 @@ import PlusIcon from "assets/images/icons/PlusForButton.svg";
 import useGetUserId from "hooks/useGetUserId";
 import { fireGAEvent } from "helpers/analytics";
 import { AreaActions, AreaLabel } from "types/analytics";
+import { useInvalidateGetAreaTeams } from "hooks/querys/areas/useGetAreaTeams";
 
 interface IProps {
   teams: Required<TeamsResponse>["data"];
@@ -40,6 +41,7 @@ const AddTeamModal: FC<IProps> = ({ teams }) => {
   const dispatch = useAppDispatch();
   const userId = useGetUserId();
   const invalidateGetAreaById = useInvalidateGetAreaById();
+  const invalidateGetAreaTeams = useInvalidateGetAreaTeams();
 
   const teamOptions = useMemo<Option[] | undefined>(
     () =>
@@ -68,6 +70,8 @@ const AddTeamModal: FC<IProps> = ({ teams }) => {
       toastr.success(intl.formatMessage({ id: "areas.details.teams.add.success" }), "");
       dispatch(getAreas());
       await invalidateGetAreaById(areaId);
+      await invalidateGetAreaTeams(areaId);
+
       onClose();
     } catch (e: any) {
       toastr.error(intl.formatMessage({ id: "areas.details.teams.add.error" }), "");

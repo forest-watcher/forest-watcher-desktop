@@ -2,7 +2,7 @@ import { FC, ReactNode, useEffect, useState } from "react";
 import { Route, Switch, Redirect, useLocation, useParams, useRouteMatch } from "react-router-dom";
 
 import Areas from "pages/areas/Areas";
-import AreasManage from "pages/area-view/AreaViewContainer";
+import AreasManage from "pages/area-view/AreaView";
 import AreaEdit from "pages/area-edit/AreaEditContainer";
 import Teams from "pages/teams/Teams";
 import TeamsInvitations from "pages/teams/invitation/Invitation";
