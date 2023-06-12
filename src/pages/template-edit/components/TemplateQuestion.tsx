@@ -14,6 +14,7 @@ import { useFormContext, useWatch } from "react-hook-form";
 import { FormattedMessage, useIntl } from "react-intl";
 import { FormFields } from "./TemplateForm";
 import useTemplateData from "../useTemplateData";
+import { disableEnterKey } from "helpers/form";
 
 type TemplateQuestionProps = {
   question: QuestionModel;
@@ -202,7 +203,8 @@ const TemplateQuestion = ({ question, defaultLanguage = "", onDelete, index }: T
               htmlInputProps={{
                 label: intl.formatMessage({ id: "question.question" }),
                 placeholder: intl.formatMessage({ id: "template.edit.title.placeholder" }),
-                type: "text"
+                type: "text",
+                onKeyPress: disableEnterKey
               }}
               registered={register(`questions.${index}.label.${defaultLanguage as keyof QuestionModel["label"]}`)}
               alternateLabelStyle
@@ -234,7 +236,8 @@ const TemplateQuestion = ({ question, defaultLanguage = "", onDelete, index }: T
                 htmlInputProps={{
                   label: intl.formatMessage({ id: "template.edit.maxNumber" }),
                   placeholder: intl.formatMessage({ id: "template.edit.maxNumberPlaceholder" }),
-                  type: "number"
+                  type: "number",
+                  onKeyPress: disableEnterKey
                 }}
                 registered={register(`questions.${index}.maxImageCount`, { valueAsNumber: true })}
                 alternateLabelStyle
@@ -257,7 +260,8 @@ const TemplateQuestion = ({ question, defaultLanguage = "", onDelete, index }: T
                       htmlInputProps={{
                         label: intl.formatMessage({ id: "template.edit.responseOption" }),
                         placeholder: intl.formatMessage({ id: "template.edit.responseOption.placeholder" }),
-                        type: "text"
+                        type: "text",
+                        onKeyPress: disableEnterKey
                       }}
                       registered={register(
                         // @ts-ignore - incorrect typing for values
@@ -343,7 +347,8 @@ const TemplateQuestion = ({ question, defaultLanguage = "", onDelete, index }: T
                 htmlInputProps={{
                   label: intl.formatMessage({ id: "template.edit.selectResponseText" }),
                   placeholder: intl.formatMessage({ id: "template.edit.selectResponseText.placeholder" }),
-                  type: "text"
+                  type: "text",
+                  onKeyPress: disableEnterKey
                 }}
                 registered={register(
                   // @ts-ignore
