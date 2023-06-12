@@ -31,6 +31,7 @@ import classNames from "classnames";
 import { useGetBackLink } from "hooks/useGetBackLink";
 import { useGetV3GfwAreasAreaId } from "generated/core/coreComponents";
 import { useAccessToken } from "hooks/useAccessToken";
+import { disableEnterKey } from "helpers/form";
 
 const areaTitleKeys = {
   manage: "areas.editArea",
@@ -376,7 +377,7 @@ const AreaEdit: FC<IProps> = ({ mode, getGeoFromShape, setSaving, saveAreaWithGe
                   placeholder: intl.formatMessage({ id: "areas.nameAreaPlaceholder" }),
                   label: intl.formatMessage({ id: "areas.nameArea" }),
                   maxLength: 40,
-                  onChange: () => {}
+                  onKeyPress: disableEnterKey
                 }}
               />
               <div className="c-area-edit__form-actions">
