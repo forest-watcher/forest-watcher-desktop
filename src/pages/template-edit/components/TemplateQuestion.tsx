@@ -14,7 +14,6 @@ import { useFormContext, useWatch } from "react-hook-form";
 import { FormattedMessage, useIntl } from "react-intl";
 import { FormFields } from "./TemplateForm";
 import useTemplateData from "../useTemplateData";
-import { disableEnterKey } from "helpers/form";
 
 type TemplateQuestionProps = {
   question: QuestionModel;
@@ -191,7 +190,7 @@ const TemplateQuestion = ({ question, defaultLanguage = "", onDelete, index }: T
       <HeaderCard className="my-10">
         <HeaderCard.Header className="flex justify-between align-middle">
           <HeaderCard.HeaderText className="capitalize">{formattedQuestionName}</HeaderCard.HeaderText>
-          <button onClick={handleDelete} aria-label={intl.formatMessage({ id: "common.delete" })}>
+          <button onClick={handleDelete} aria-label={intl.formatMessage({ id: "common.delete" })} type="button">
             <Icon name="delete-round" size={36} />
           </button>
         </HeaderCard.Header>
@@ -203,8 +202,7 @@ const TemplateQuestion = ({ question, defaultLanguage = "", onDelete, index }: T
               htmlInputProps={{
                 label: intl.formatMessage({ id: "question.question" }),
                 placeholder: intl.formatMessage({ id: "template.edit.title.placeholder" }),
-                type: "text",
-                onKeyPress: disableEnterKey
+                type: "text"
               }}
               registered={register(`questions.${index}.label.${defaultLanguage as keyof QuestionModel["label"]}`)}
               alternateLabelStyle
@@ -236,8 +234,7 @@ const TemplateQuestion = ({ question, defaultLanguage = "", onDelete, index }: T
                 htmlInputProps={{
                   label: intl.formatMessage({ id: "template.edit.maxNumber" }),
                   placeholder: intl.formatMessage({ id: "template.edit.maxNumberPlaceholder" }),
-                  type: "number",
-                  onKeyPress: disableEnterKey
+                  type: "number"
                 }}
                 registered={register(`questions.${index}.maxImageCount`, { valueAsNumber: true })}
                 alternateLabelStyle
@@ -260,8 +257,7 @@ const TemplateQuestion = ({ question, defaultLanguage = "", onDelete, index }: T
                       htmlInputProps={{
                         label: intl.formatMessage({ id: "template.edit.responseOption" }),
                         placeholder: intl.formatMessage({ id: "template.edit.responseOption.placeholder" }),
-                        type: "text",
-                        onKeyPress: disableEnterKey
+                        type: "text"
                       }}
                       registered={register(
                         // @ts-ignore - incorrect typing for values
@@ -281,6 +277,7 @@ const TemplateQuestion = ({ question, defaultLanguage = "", onDelete, index }: T
                         handleDeleteOption(index, optionIndex);
                       }}
                       aria-label={intl.formatMessage({ id: "common.delete" })}
+                      type="button"
                     >
                       <Icon name="delete-round" size={36} />
                     </button>
@@ -295,6 +292,7 @@ const TemplateQuestion = ({ question, defaultLanguage = "", onDelete, index }: T
                     handleAddOption(index);
                   }}
                   className="flex gap-[10px] items-center mt-3"
+                  type="button"
                 >
                   <Icon size={14} name="PlusForButton" className="relative top-[-1px]" />
                   <FormattedMessage id="templates.addOption" />
@@ -347,8 +345,7 @@ const TemplateQuestion = ({ question, defaultLanguage = "", onDelete, index }: T
                 htmlInputProps={{
                   label: intl.formatMessage({ id: "template.edit.selectResponseText" }),
                   placeholder: intl.formatMessage({ id: "template.edit.selectResponseText.placeholder" }),
-                  type: "text",
-                  onKeyPress: disableEnterKey
+                  type: "text"
                 }}
                 registered={register(
                   // @ts-ignore
