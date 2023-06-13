@@ -190,7 +190,7 @@ const TemplateQuestion = ({ question, defaultLanguage = "", onDelete, index }: T
       <HeaderCard className="my-10">
         <HeaderCard.Header className="flex justify-between align-middle">
           <HeaderCard.HeaderText className="capitalize">{formattedQuestionName}</HeaderCard.HeaderText>
-          <button onClick={handleDelete} aria-label={intl.formatMessage({ id: "common.delete" })}>
+          <button onClick={handleDelete} aria-label={intl.formatMessage({ id: "common.delete" })} type="button">
             <Icon name="delete-round" size={36} />
           </button>
         </HeaderCard.Header>
@@ -277,6 +277,7 @@ const TemplateQuestion = ({ question, defaultLanguage = "", onDelete, index }: T
                         handleDeleteOption(index, optionIndex);
                       }}
                       aria-label={intl.formatMessage({ id: "common.delete" })}
+                      type="button"
                     >
                       <Icon name="delete-round" size={36} />
                     </button>
@@ -291,6 +292,7 @@ const TemplateQuestion = ({ question, defaultLanguage = "", onDelete, index }: T
                     handleAddOption(index);
                   }}
                   className="flex gap-[10px] items-center mt-3"
+                  type="button"
                 >
                   <Icon size={14} name="PlusForButton" className="relative top-[-1px]" />
                   <FormattedMessage id="templates.addOption" />

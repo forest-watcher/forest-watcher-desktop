@@ -15,6 +15,7 @@ import { QUESTION } from "constants/templates";
 import Icon from "components/extensive/Icon";
 import yup from "configureYup";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { disableEnterKey } from "helpers/form";
 
 export interface FormFields extends Omit<TemplateModel, "areas"> {
   areas: string[];
@@ -177,7 +178,8 @@ const TemplateForm: FC<IParams> = ({ template, backLink = "", onSubmit }) => {
 
   return (
     <FormProvider {...formHook}>
-      <form onSubmit={handleSubmit(onSubmit)}>
+      {/* eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions */}
+      <form onSubmit={handleSubmit(onSubmit)} onKeyDown={disableEnterKey}>
         {/** Top level data */}
         <section className="bg-neutral-300 pt-15 pb-20 px-2.5">
           <div className="max-w-row mx-auto grid grid-cols-1 md:grid-cols-3 gap-10">
@@ -237,7 +239,12 @@ const TemplateForm: FC<IParams> = ({ template, backLink = "", onSubmit }) => {
         {/** Footer Section */}
         <section className="bg-neutral-300 py-5 px-2.5 fixed bottom-0 left-0 right-0">
           <div className="max-w-row mx-auto flex flex-wrap w-full justify-between align-middle gap-3">
-            <Button variant="secondary" onClick={handleAddQuestion} className="flex gap-[10px] items-center">
+            <Button
+              variant="secondary"
+              onClick={handleAddQuestion}
+              className="flex gap-[10px] items-center"
+              type="button"
+            >
               <Icon size={14} name="PlusForButton" className="relative top-[-1px]" />
               <FormattedMessage id="templates.addQuestion" />
             </Button>
