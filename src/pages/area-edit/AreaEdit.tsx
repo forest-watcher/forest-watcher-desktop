@@ -31,6 +31,7 @@ import classNames from "classnames";
 import { useGetBackLink } from "hooks/useGetBackLink";
 import { useGetV3GfwAreasAreaId } from "generated/core/coreComponents";
 import { useAccessToken } from "hooks/useAccessToken";
+import { disableEnterKey } from "helpers/form";
 
 const areaTitleKeys = {
   manage: "areas.editArea",
@@ -366,7 +367,8 @@ const AreaEdit: FC<IProps> = ({ mode, getGeoFromShape, setSaving, saveAreaWithGe
                 <img src={InfoIcon} alt="" role="presentation" />
               </Button>
             </div>
-            <form onSubmit={handleSubmit(onSubmit)} className="c-area-edit__form">
+            {/* eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions */}
+            <form onSubmit={handleSubmit(onSubmit)} className="c-area-edit__form" onKeyDown={disableEnterKey}>
               <Input
                 id="area-name"
                 registered={register("name", { required: true })}
@@ -375,12 +377,11 @@ const AreaEdit: FC<IProps> = ({ mode, getGeoFromShape, setSaving, saveAreaWithGe
                   type: "text",
                   placeholder: intl.formatMessage({ id: "areas.nameAreaPlaceholder" }),
                   label: intl.formatMessage({ id: "areas.nameArea" }),
-                  maxLength: 40,
-                  onChange: () => {}
+                  maxLength: 40
                 }}
               />
               <div className="c-area-edit__form-actions">
-                <Button disabled={!changesMade} variant="secondary" onClick={handleResetForm}>
+                <Button disabled={!changesMade} variant="secondary" onClick={handleResetForm} type="button">
                   <FormattedMessage id="common.cancel" />
                 </Button>
                 <input
