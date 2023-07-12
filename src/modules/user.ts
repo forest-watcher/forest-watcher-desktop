@@ -14,6 +14,7 @@ export const SET_USER_DATA = "user/SET_USER_DATA";
 const SET_FETCHING = "user/SET_FETCHING";
 const SET_USER_TOKEN = "user/SET_USER_TOKEN";
 const SET_USER_HAS_NO_NAME = "user/SET_USER_HAS_NO_NAME";
+const SET_FAILED_TO_GET_USER = "user/SET_FAILED_TO_GET_USER";
 
 // Reducer
 const initialState = {
@@ -23,7 +24,8 @@ const initialState = {
   fetching: false,
   loggedIn: false,
   token: null,
-  userHasNoLastName: false
+  userHasNoLastName: false,
+  failedToGetUser: false
 };
 
 export type TReducerActions =
@@ -32,7 +34,8 @@ export type TReducerActions =
   | { type: typeof SET_USER_DATA; payload: any }
   | { type: typeof SET_FETCHING; payload: any }
   | { type: typeof SET_USER_TOKEN; payload: { token: string } }
-  | { type: typeof SET_USER_HAS_NO_NAME; payload: boolean };
+  | { type: typeof SET_USER_HAS_NO_NAME; payload: boolean }
+  | { type: typeof SET_FAILED_TO_GET_USER; payload: boolean };
 
 export default function reducer(state = initialState, action: TReducerActions) {
   switch (action.type) {
@@ -54,6 +57,8 @@ export default function reducer(state = initialState, action: TReducerActions) {
       return { ...state, token: action.payload.token };
     case SET_USER_HAS_NO_NAME:
       return { ...state, userHasNoLastName: action.payload };
+    case SET_FAILED_TO_GET_USER:
+      return { ...state, failedToGetUser: action.payload };
     default:
       return state;
   }
@@ -126,12 +131,22 @@ export function getUser() {
           type: SET_USER_DATA,
           payload: { ...data.attributes, id: data.id }
         });
+
+        dispatch({
+          type: SET_FAILED_TO_GET_USER,
+          payload: false
+        });
       })
       .catch(error => {
         if (userService.lastResponse?.status === 404) {
           // Check status code. If 404 we have no user created yet.
           dispatch({
             type: SET_USER_HAS_NO_NAME,
+            payload: true
+          });
+
+          dispatch({
+            type: SET_FAILED_TO_GET_USER,
             payload: true
           });
         } else {
