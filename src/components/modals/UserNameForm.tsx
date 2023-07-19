@@ -37,7 +37,7 @@ const UserNameForm: FC<IProps> = props => {
   const onSave = async (data: UnpackNestedValue<TUserNameForm>) => {
     if (user?.data) {
       try {
-        await userService.setUserProfile(data, user.data.id, user.userHasNoLastName);
+        await userService.setUserProfile(data, user.data.id, user.failedToGetUser);
         await dispatch(getUser());
         toastr.success(intl.formatMessage({ id: "signUp.profile.form.success" }), "");
       } catch (e) {
