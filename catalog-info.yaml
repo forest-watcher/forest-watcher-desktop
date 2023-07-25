@@ -1,0 +1,20 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: forest-watcher-web-client
+  tags:
+    - react
+  links:
+    - url: https://gfw-web-staging.cube-cdn.com
+      type: Frontend
+      title: Frontend (Staging)
+      icon: dashboard
+    - url: https://forestwatcher.globalforestwatch.org
+      type: Frontend
+      title: Frontend (Production)
+      icon: dashboard
+spec:
+  type: website
+  lifecycle: production
+  system: gfw
+  owner: react
