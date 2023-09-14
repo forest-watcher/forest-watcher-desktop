@@ -337,7 +337,7 @@
   "teams.details.back": "Volver a equipos",
   "teams.details.managers": "Gestor{num, plural, one { (#)} other {s (#)}}",
   "teams.details.monitors": "Monitor{num, plural, one { (#)} other {s (#)}}",
-  "teams.details.areas": "Área{núm, plural, uno { (#)} otro {s (#)}}",
+  "teams.details.areas": "Área{núm, plural, uno { (#)} other {s (#)}}",
   "teams.details.add.managers": "Añadir gestor",
   "teams.details.add.monitors": "Añadir monitor",
   "teams.details.add.member.success": "Miembro invitado al equipo",
