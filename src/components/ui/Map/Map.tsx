@@ -9,6 +9,7 @@ import { goToGeojson, setupMapImages } from "helpers/map";
 import { editStyles } from "./components/layers/styles";
 import { FeatureCollection } from "geojson";
 import OptionalWrapper from "components/extensive/OptionalWrapper";
+import { BASEMAPS } from "constants/mapbox";
 
 export interface IMapViewState {
   longitude: number;
@@ -48,7 +49,7 @@ const Map: FC<IProps> = props => {
     onMapEdit,
     geojsonToEdit,
     onDrawLoad,
-    mapStyle = "mapbox://styles/3sidedcube/cl5axl8ha002c14o5exjzmdlb",
+    mapStyle = BASEMAPS.satellite.style,
     style,
     cooperativeGestures = true,
     shouldWrapContainer = true,
