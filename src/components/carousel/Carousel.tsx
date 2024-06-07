@@ -6,13 +6,21 @@ import OptionalWrapper from "components/extensive/OptionalWrapper";
 import CarouselImageDownloadModal from "./modal/CarouselImageDownloadModal";
 import { FormattedMessage, useIntl } from "react-intl";
 import Button from "components/ui/Button/Button";
+import CarouselItem from "components/carousel/CarouselItem";
 
-type CarouselProps = {
-  slides: string[];
-  downloadable?: boolean;
+export type ISlide = {
+  url: string;
+  originalUrl?: string;
+  isPublic?: boolean;
 };
 
-const Carousel = ({ slides, downloadable }: CarouselProps) => {
+type CarouselProps = {
+  slides: ISlide[];
+  downloadable?: boolean;
+  onVisibilityChange: (isPublic: boolean, src: string) => void;
+};
+
+const Carousel = ({ slides, downloadable, onVisibilityChange }: CarouselProps) => {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [prevBtnEnabled, setPrevBtnEnabled] = useState(false);
   const [nextBtnEnabled, setNextBtnEnabled] = useState(false);
@@ -84,27 +92,15 @@ const Carousel = ({ slides, downloadable }: CarouselProps) => {
         >
           <div className="c-carousel__container">
             {slides.map((src, index) => (
-              <div className="c-carousel__slide" key={index}>
-                <div className="relative h-[450px] overflow-hidden">
-                  <OptionalWrapper data={downloadable}>
-                    <Button
-                      className="absolute top-10 right-10 z-10"
-                      onClick={() => handleDownload(src)}
-                      aria-label={intl.formatMessage({ id: "common.download" })}
-                      isIcon
-                    >
-                      <Icon name="download" size={36} />
-                    </Button>
-                  </OptionalWrapper>
-                  <button
-                    className="w-full h-full"
-                    onClick={() => setImageToView(src)}
-                    aria-label={intl.formatMessage({ id: "common.view" })}
-                  >
-                    <img className="w-full h-full object-contain" src={src} alt="" />
-                  </button>
-                </div>
-              </div>
+              <CarouselItem
+                key={index}
+                index={index}
+                slide={src}
+                downloadable={downloadable}
+                handleDownload={handleDownload}
+                setImageToView={setImageToView}
+                onVisibilityChange={onVisibilityChange}
+              />
             ))}
           </div>
         </div>
@@ -125,7 +121,7 @@ const Carousel = ({ slides, downloadable }: CarouselProps) => {
                   <CarouselThumb
                     onClick={() => onThumbClick(index)}
                     selected={index === selectedIndex}
-                    imgSrc={src}
+                    imgSrc={src.url}
                     key={index}
                   />
                 ))}

@@ -1101,6 +1101,64 @@ export const useDeleteV3GfwTemplatesTemplateIdAnswersAnswerId = (
   );
 };
 
+export type PatchV3GfwTemplatesTemplateIdAnswersAnswerIdPathParams = {
+  templateId: string;
+  answerId: string;
+};
+
+export type PatchV3GfwTemplatesTemplateIdAnswersAnswerIdError = Fetcher.ErrorWrapper<undefined>;
+
+export type PatchV3GfwTemplatesTemplateIdAnswersAnswerIdRequestBody = {
+  privateFiles?: string[];
+  publicFiles?: string[];
+};
+
+export type PatchV3GfwTemplatesTemplateIdAnswersAnswerIdVariables = {
+  body?: PatchV3GfwTemplatesTemplateIdAnswersAnswerIdRequestBody;
+  pathParams: PatchV3GfwTemplatesTemplateIdAnswersAnswerIdPathParams;
+} & CoreContext["fetcherOptions"];
+
+/**
+ * Update file privacy for responses
+ */
+export const fetchPatchV3GfwTemplatesTemplateIdAnswersAnswerId = (
+  variables: PatchV3GfwTemplatesTemplateIdAnswersAnswerIdVariables,
+  signal?: AbortSignal
+) =>
+  coreFetch<
+    undefined,
+    PatchV3GfwTemplatesTemplateIdAnswersAnswerIdError,
+    PatchV3GfwTemplatesTemplateIdAnswersAnswerIdRequestBody,
+    {},
+    {},
+    PatchV3GfwTemplatesTemplateIdAnswersAnswerIdPathParams
+  >({ url: "/v3/gfw/templates/{templateId}/answers/{answerId}", method: "patch", ...variables, signal });
+
+/**
+ * Update file privacy for responses
+ */
+export const usePatchV3GfwTemplatesTemplateIdAnswersAnswerId = (
+  options?: Omit<
+    reactQuery.UseMutationOptions<
+      undefined,
+      PatchV3GfwTemplatesTemplateIdAnswersAnswerIdError,
+      PatchV3GfwTemplatesTemplateIdAnswersAnswerIdVariables
+    >,
+    "mutationFn"
+  >
+) => {
+  const { fetcherOptions } = useCoreContext();
+  return reactQuery.useMutation<
+    undefined,
+    PatchV3GfwTemplatesTemplateIdAnswersAnswerIdError,
+    PatchV3GfwTemplatesTemplateIdAnswersAnswerIdVariables
+  >(
+    (variables: PatchV3GfwTemplatesTemplateIdAnswersAnswerIdVariables) =>
+      fetchPatchV3GfwTemplatesTemplateIdAnswersAnswerId({ ...fetcherOptions, ...variables }),
+    options
+  );
+};
+
 export type GetV3GfwTemplatesAllAnswersError = Fetcher.ErrorWrapper<
   | {
       status: 401;
