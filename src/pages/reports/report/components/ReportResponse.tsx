@@ -63,7 +63,7 @@ const Response = (props: ReportResponseProps) => {
               {filename}
             </button>
           )}
-          <hr className="border-neutral-500-10 -mx-6 my-6" />
+          <hr className="border-neutral-600/10 -mx-6 my-6" />
           <div className="space-y-3">
             <Toggle
               label={intl.formatMessage({ id: "common.visibilityStatus.title" })}
