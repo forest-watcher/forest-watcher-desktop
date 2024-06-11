@@ -119,6 +119,8 @@
   "common.manage.team": "Manage Team",
   "common.manage.area": "Manage Area",
   "common.view.team": "View Team",
+  "common.visibilityStatus.title":"Make the link to this file public",
+  "common.visibilityStatus.description":"By default, the links to all files in this report are private and can only be accessed on this page. Toggle this option on to make these links public.",
   "common.open.menu": "Open Menu",
   "common.loading": "Loading",
   "common.export": "Export",

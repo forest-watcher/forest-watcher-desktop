@@ -45,10 +45,24 @@
   position: relative;
 }
 
+.c-carousel__slide hr {
+  border-width: 0px, 2px, 2px, 2px;
+  border-style: solid;
+  border-color: #5555551a;
+}
+
 .c-carousel__slide__inner {
   position: relative;
   overflow: hidden;
   height: 450px;
+}
+
+.c-carousel__slide__footer {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 28px 24px;
+  font-size: 16px;
 }
 
 .c-carousel__slide__img {

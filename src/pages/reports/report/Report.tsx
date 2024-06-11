@@ -40,7 +40,6 @@ const Report = () => {
     pathParams: { reportId },
     headers: httpAuthHeader
   });
-
   const { data: answers, isLoading: answersLoading } = useGetV3GfwTemplatesTemplateIdAnswersAnswerId({
     pathParams: { templateId: reportId, answerId },
     headers: httpAuthHeader
@@ -94,6 +93,8 @@ const Report = () => {
       <ReportMap answer={answer} />
       <ReportDetails answer={answer} />
       <ReportResponses
+        reportId={reportId}
+        answerId={answerId}
         defaultLanguage={report?.data?.attributes?.defaultLanguage!}
         questions={report?.data?.attributes.questions ?? []}
         responses={responses as AnswerResponse[]}
