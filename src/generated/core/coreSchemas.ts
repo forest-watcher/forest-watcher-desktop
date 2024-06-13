@@ -124,7 +124,10 @@ export type AnswerModel = {
   userPosition?: any[];
   clickedPosition?: any[];
   user: string;
-  responses: string;
+  responses: {
+    name?: void;
+    value?: void;
+  };
   createdAt: string;
   assignmentId?: string;
 };
