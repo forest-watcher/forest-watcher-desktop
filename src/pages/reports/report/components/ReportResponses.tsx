@@ -7,38 +7,18 @@ import { useMemo, useState } from "react";
 import { FormattedMessage, useIntl } from "react-intl";
 import ReportExportImagesModal from "./modal/ReportExportImagesModal";
 import ReportResponse, { ReportResponseProps } from "./ReportResponse";
-import { usePatchV3GfwTemplatesTemplateIdAnswersAnswerId } from "generated/core/coreComponents";
-import { useAccessToken } from "hooks/useAccessToken";
 
 type ReportResponsesProps = {
-  reportId: string;
-  answerId: string;
   defaultLanguage: string;
   questions: ReportsQuestion[];
   responses: AnswerResponse[];
+  handleVisibilityChange: (isPublic: boolean, url: string) => void;
 };
 
-const ReportResponses = ({ defaultLanguage, questions, responses, answerId, reportId }: ReportResponsesProps) => {
-  const { httpAuthHeader } = useAccessToken();
+const ReportResponses = ({ defaultLanguage, questions, responses, handleVisibilityChange }: ReportResponsesProps) => {
   const [showImagesModal, setShowImagesModal] = useState<boolean>(false);
   const { locale } = useAppSelector(state => state.app);
   const intl = useIntl();
-
-  const { mutate: updateAnswer } = usePatchV3GfwTemplatesTemplateIdAnswersAnswerId();
-
-  const handleVisibilityChange = (isPublic: boolean, url: string) => {
-    updateAnswer({
-      headers: httpAuthHeader,
-      pathParams: {
-        templateId: reportId,
-        answerId
-      },
-      body: {
-        publicFiles: isPublic ? [url] : [],
-        privateFiles: !isPublic ? [url] : []
-      }
-    });
-  };
 
   const data = useMemo(() => {
     return questions?.reduce<Omit<ReportResponseProps, "handleVisibilityChange">[]>(

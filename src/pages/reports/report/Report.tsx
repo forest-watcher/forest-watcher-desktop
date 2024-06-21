@@ -14,7 +14,10 @@ import { TExportForm } from "components/modals/exports/ExportModal";
 import { UnpackNestedValue } from "react-hook-form";
 import { usePostV3ReportsTemplateIdExportSome } from "generated/exports/exportsComponents";
 import { exportService } from "services/exports";
-import { useGetV3GfwTemplatesTemplateIdAnswersAnswerId } from "generated/core/coreComponents";
+import {
+  useGetV3GfwTemplatesTemplateIdAnswersAnswerId,
+  usePatchV3GfwTemplatesTemplateIdAnswersAnswerId
+} from "generated/core/coreComponents";
 import { AnswerResponse } from "generated/forms/formsSchemas";
 import Button from "components/ui/Button/Button";
 import Hero from "components/layouts/Hero/Hero";
@@ -40,7 +43,11 @@ const Report = () => {
     pathParams: { reportId },
     headers: httpAuthHeader
   });
-  const { data: answers, isLoading: answersLoading } = useGetV3GfwTemplatesTemplateIdAnswersAnswerId({
+  const {
+    data: answers,
+    isLoading: answersLoading,
+    refetch: refetchAnswers
+  } = useGetV3GfwTemplatesTemplateIdAnswersAnswerId({
     pathParams: { templateId: reportId, answerId },
     headers: httpAuthHeader
   });
@@ -73,6 +80,26 @@ const Report = () => {
     return report.data;
   };
 
+  const { mutate: updateAnswer } = usePatchV3GfwTemplatesTemplateIdAnswersAnswerId({
+    onSuccess() {
+      refetchAnswers();
+    }
+  });
+
+  const handleVisibilityChange = (isPublic: boolean, url: string) => {
+    updateAnswer({
+      headers: httpAuthHeader,
+      pathParams: {
+        templateId: reportId,
+        answerId
+      },
+      body: {
+        publicFiles: isPublic ? [url] : [],
+        privateFiles: !isPublic ? [url] : []
+      }
+    });
+  };
+
   const responses = answers?.data?.attributes?.responses || []; // Responses are coming back as the wrong type.
   const answer = answers?.data;
 
@@ -93,11 +120,10 @@ const Report = () => {
       <ReportMap answer={answer} />
       <ReportDetails answer={answer} />
       <ReportResponses
-        reportId={reportId}
-        answerId={answerId}
         defaultLanguage={report?.data?.attributes?.defaultLanguage!}
         questions={report?.data?.attributes.questions ?? []}
         responses={responses as AnswerResponse[]}
+        handleVisibilityChange={handleVisibilityChange}
       />
     </LoadingWrapper>
   );
