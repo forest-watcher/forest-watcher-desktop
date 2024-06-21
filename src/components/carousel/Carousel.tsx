@@ -76,7 +76,6 @@ const Carousel = ({ slides, downloadable, sharable, onVisibilityChange }: Carous
   };
 
   const handleShare = (slide: ISlide) => {
-    console.log(slide);
     if (slide.isPublic) {
       copyToClipboard(slide.originalUrl || slide.url)
         .then(() => {

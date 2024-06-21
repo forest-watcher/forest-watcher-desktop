@@ -1,14 +1,9 @@
-import classNames from "classnames";
 import Carousel from "components/carousel/Carousel";
 import OptionalWrapper from "components/extensive/OptionalWrapper";
 import HeaderCard from "components/ui/Card/HeaderCard";
-import Modal from "components/ui/Modal/Modal";
-import Toggle from "components/ui/Toggle/Toggle";
 import { AnswerResponse } from "generated/forms/formsSchemas";
-import { download } from "helpers/exports";
 import AudioResponse from "pages/reports/report/components/AudioResponse";
-import { useState } from "react";
-import { FormattedMessage, useIntl } from "react-intl";
+import { useIntl } from "react-intl";
 
 export interface IReportResponse {
   question: string;
