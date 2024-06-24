@@ -11,6 +11,8 @@ interface CarouselItemProps {
   slide: ISlide;
   downloadable?: boolean;
   handleDownload: (src: string) => void;
+  sharable?: boolean;
+  handleShare: (slide: ISlide) => void;
   setImageToView: (src: string) => void;
   onVisibilityChange: (isPublic: boolean, url: string) => void;
 }
@@ -20,6 +22,8 @@ const CarouselItem = ({
   slide,
   downloadable,
   handleDownload,
+  sharable,
+  handleShare,
   setImageToView,
   onVisibilityChange
 }: CarouselItemProps) => {
@@ -29,16 +33,22 @@ const CarouselItem = ({
   return (
     <div className="c-carousel__slide" key={index}>
       <div className="relative h-[450px] overflow-hidden">
-        <OptionalWrapper data={downloadable}>
-          <Button
-            className="absolute top-10 right-10 z-10"
-            onClick={() => handleDownload(slide.url)}
-            aria-label={intl.formatMessage({ id: "common.download" })}
-            isIcon
-          >
-            <Icon name="download" size={36} />
-          </Button>
-        </OptionalWrapper>
+        <div className="absolute top-10 right-10 z-10 flex gap-2.5">
+          <OptionalWrapper data={sharable}>
+            <Button onClick={() => handleShare(slide)} aria-label={intl.formatMessage({ id: "common.share" })} isIcon>
+              <Icon name="link" size={36} />
+            </Button>
+          </OptionalWrapper>
+          <OptionalWrapper data={downloadable}>
+            <Button
+              onClick={() => handleDownload(slide.url)}
+              aria-label={intl.formatMessage({ id: "common.download" })}
+              isIcon
+            >
+              <Icon name="download" size={36} />
+            </Button>
+          </OptionalWrapper>
+        </div>
         <button
           className="w-full h-full"
           onClick={() => setImageToView(slide.url)}

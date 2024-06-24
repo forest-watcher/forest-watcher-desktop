@@ -7,6 +7,8 @@ import CarouselImageDownloadModal from "./modal/CarouselImageDownloadModal";
 import { FormattedMessage, useIntl } from "react-intl";
 import Button from "components/ui/Button/Button";
 import CarouselItem from "components/carousel/CarouselItem";
+import { copyToClipboard } from "helpers/exports";
+import { toastr } from "react-redux-toastr";
 
 export type ISlide = {
   url: string;
@@ -17,10 +19,11 @@ export type ISlide = {
 type CarouselProps = {
   slides: ISlide[];
   downloadable?: boolean;
+  sharable?: boolean;
   onVisibilityChange: (isPublic: boolean, src: string) => void;
 };
 
-const Carousel = ({ slides, downloadable, onVisibilityChange }: CarouselProps) => {
+const Carousel = ({ slides, downloadable, sharable, onVisibilityChange }: CarouselProps) => {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [prevBtnEnabled, setPrevBtnEnabled] = useState(false);
   const [nextBtnEnabled, setNextBtnEnabled] = useState(false);
@@ -72,6 +75,20 @@ const Carousel = ({ slides, downloadable, onVisibilityChange }: CarouselProps) =
     window.open(url, "_blank");
   };
 
+  const handleShare = (slide: ISlide) => {
+    if (slide.isPublic) {
+      copyToClipboard(slide.originalUrl || slide.url)
+        .then(() => {
+          toastr.success(intl.formatMessage({ id: "common.share.toast.success" }), "");
+        })
+        .catch(() => {
+          toastr.error(intl.formatMessage({ id: "common.error" }), "");
+        });
+    } else {
+      toastr.error(intl.formatMessage({ id: "common.share.toast.error" }), "");
+    }
+  };
+
   if (!slides || slides.length === 0) {
     return (
       <p className="text-base">
@@ -98,6 +115,8 @@ const Carousel = ({ slides, downloadable, onVisibilityChange }: CarouselProps) =
                 slide={src}
                 downloadable={downloadable}
                 handleDownload={handleDownload}
+                sharable={sharable}
+                handleShare={handleShare}
                 setImageToView={setImageToView}
                 onVisibilityChange={onVisibilityChange}
               />
