@@ -26,9 +26,11 @@ const Response = (props: ReportResponseProps) => {
       return <AudioResponse {...props} />;
     case "blob":
       let slides = [];
-      if (Array.isArray(response)) {
+
+      if (!response) slides = [];
+      else if (Array.isArray(response)) {
         slides = response.map(item => {
-          if (typeof item === "string") return { url: item };
+          if (typeof item === "string") return { url: item, isPublic: true };
           else return item;
         });
       } else {
