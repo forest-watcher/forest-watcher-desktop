@@ -30,7 +30,7 @@ const Response = (props: ReportResponseProps) => {
       if (!response) slides = [];
       else if (Array.isArray(response)) {
         slides = response.map(item => {
-          if (typeof item === "string") return { url: item };
+          if (typeof item === "string") return { url: item, isPublic: true };
           else return item;
         });
       } else {

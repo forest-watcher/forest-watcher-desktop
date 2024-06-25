@@ -19,7 +19,6 @@ const AudioResponse = ({ response, childQuestions, handleVisibilityChange }: Rep
     alwaysPublic ? true : response?.isPublic || false
   );
   const intl = useIntl();
-
   //@ts-expect-error swagger schema is not accurate
   const originalUrl = response?.originalUrl;
   const publicUrl = typeof response === "object" ? originalUrl : response;
@@ -42,6 +41,13 @@ const AudioResponse = ({ response, childQuestions, handleVisibilityChange }: Rep
       toastr.error(intl.formatMessage({ id: "common.share.toast.error" }), "");
     }
   };
+
+  if (!response)
+    return (
+      <p className="text-base">
+        <FormattedMessage id="reports.reports.noResponse" />
+      </p>
+    );
 
   return (
     <>
