@@ -11,14 +11,18 @@ import { toastr } from "react-redux-toastr";
 
 const AudioResponse = ({ response, childQuestions, handleVisibilityChange }: ReportResponseProps) => {
   const [audioModalOpen, setAudioModalOpen] = useState(false);
+
+  const alwaysPublic = typeof response === "string";
+
   const [isAudioPublic, setIsAudioPublic] = useState(
     //@ts-ignore
-    response?.isPublic || false
+    alwaysPublic ? true : response?.isPublic || false
   );
   const intl = useIntl();
 
   //@ts-expect-error swagger schema is not accurate
   const originalUrl = response?.originalUrl;
+  const publicUrl = typeof response === "object" ? originalUrl : response;
   //@ts-expect-error swagger schema is not accurate
   const privateUrl = typeof response === "object" ? (response?.url as string) : response;
   //@ts-expect-error swagger schema is not accurate
@@ -27,7 +31,7 @@ const AudioResponse = ({ response, childQuestions, handleVisibilityChange }: Rep
 
   const handleShare = () => {
     if (isAudioPublic) {
-      copyToClipboard(originalUrl)
+      copyToClipboard(publicUrl)
         .then(() => {
           toastr.success(intl.formatMessage({ id: "common.share.toast.success" }), "");
         })
@@ -84,8 +88,8 @@ const AudioResponse = ({ response, childQuestions, handleVisibilityChange }: Rep
       <div className="space-y-3">
         <Toggle
           label={intl.formatMessage({ id: "common.visibilityStatus.title" })}
-          value={!originalUrl ? true : isAudioPublic} // If there is no originalUrl, the audio is always public
-          disabled={!originalUrl}
+          value={isAudioPublic}
+          disabled={alwaysPublic}
           onChange={e => {
             setIsAudioPublic(e);
             handleVisibilityChange(e, originalUrl);
