@@ -42,13 +42,6 @@ const AudioResponse = ({ response, childQuestions, handleVisibilityChange }: Rep
     }
   };
 
-  if (!response)
-    return (
-      <p className="text-base">
-        <FormattedMessage id="reports.reports.noResponse" />
-      </p>
-    );
-
   return (
     <>
       {childQuestions?.map(
@@ -63,48 +56,56 @@ const AudioResponse = ({ response, childQuestions, handleVisibilityChange }: Rep
             />
           )
       )}
-      <div className="flex justify-between items-center">
-        {filename && (
-          <button
-            onClick={() => {
-              setAudioModalOpen(true);
-            }}
-            className={classNames(
-              "bg-primary-400 px-4 py-[9px] rounded-md border border-solid border-primary-500 text-neutral-700 text-base",
-              Boolean(childQuestions?.find(item => item.value))
+      {!!response ? (
+        <>
+          <div className="flex justify-between items-center">
+            {filename && (
+              <button
+                onClick={() => {
+                  setAudioModalOpen(true);
+                }}
+                className={classNames(
+                  "bg-primary-400 px-4 py-[9px] rounded-md border border-solid border-primary-500 text-neutral-700 text-base",
+                  Boolean(childQuestions?.find(item => item.value))
+                )}
+              >
+                {filename}
+              </button>
             )}
-          >
-            {filename}
-          </button>
-        )}
-        <div className="flex gap-2.5">
-          <Button onClick={handleShare} aria-label={intl.formatMessage({ id: "common.share" })} isIcon>
-            <Icon name="link" size={36} />
-          </Button>
-          <Button
-            onClick={() => download(privateUrl)}
-            aria-label={intl.formatMessage({ id: "common.download" })}
-            isIcon
-          >
-            <Icon name="download" size={36} />
-          </Button>
-        </div>
-      </div>
-      <hr className="border-neutral-600/10 -mx-6 my-6" />
-      <div className="space-y-3">
-        <Toggle
-          label={intl.formatMessage({ id: "common.visibilityStatus.title" })}
-          value={isAudioPublic}
-          disabled={alwaysPublic}
-          onChange={e => {
-            setIsAudioPublic(e);
-            handleVisibilityChange(e, originalUrl);
-          }}
-        />
-        <p className="text">
-          <FormattedMessage id="common.visibilityStatus.description" />
+            <div className="flex gap-2.5">
+              <Button onClick={handleShare} aria-label={intl.formatMessage({ id: "common.share" })} isIcon>
+                <Icon name="link" size={36} />
+              </Button>
+              <Button
+                onClick={() => download(privateUrl)}
+                aria-label={intl.formatMessage({ id: "common.download" })}
+                isIcon
+              >
+                <Icon name="download" size={36} />
+              </Button>
+            </div>
+          </div>
+          <hr className="border-neutral-600/10 -mx-6 my-6" />
+          <div className="space-y-3">
+            <Toggle
+              label={intl.formatMessage({ id: "common.visibilityStatus.title" })}
+              value={isAudioPublic}
+              disabled={alwaysPublic}
+              onChange={e => {
+                setIsAudioPublic(e);
+                handleVisibilityChange(e, originalUrl);
+              }}
+            />
+            <p className="text">
+              <FormattedMessage id="common.visibilityStatus.description" />
+            </p>
+          </div>
+        </>
+      ) : (
+        <p className="text-base">
+          <FormattedMessage id="common.noAudio" />
         </p>
-      </div>
+      )}
       <Modal
         isOpen={audioModalOpen}
         title="audio.play"
