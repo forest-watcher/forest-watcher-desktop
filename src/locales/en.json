@@ -146,6 +146,7 @@
   "common.xSelected": "{count} Selected",
   "common.completedDate": "Completed Date",
   "common.noImages": "No Images",
+  "common.noAudio": "No Audio",
   "common.view": "View",
   "common.error": "Something went wrong",
   "common.errorBody": "Try again later",

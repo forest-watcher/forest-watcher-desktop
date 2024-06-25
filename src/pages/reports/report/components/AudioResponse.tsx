@@ -11,14 +11,17 @@ import { toastr } from "react-redux-toastr";
 
 const AudioResponse = ({ response, childQuestions, handleVisibilityChange }: ReportResponseProps) => {
   const [audioModalOpen, setAudioModalOpen] = useState(false);
+
+  const alwaysPublic = typeof response === "string";
+
   const [isAudioPublic, setIsAudioPublic] = useState(
     //@ts-ignore
-    response?.isPublic || false
+    alwaysPublic ? true : response?.isPublic || false
   );
   const intl = useIntl();
-
   //@ts-expect-error swagger schema is not accurate
   const originalUrl = response?.originalUrl;
+  const publicUrl = typeof response === "object" ? originalUrl : response;
   //@ts-expect-error swagger schema is not accurate
   const privateUrl = typeof response === "object" ? (response?.url as string) : response;
   //@ts-expect-error swagger schema is not accurate
@@ -27,7 +30,7 @@ const AudioResponse = ({ response, childQuestions, handleVisibilityChange }: Rep
 
   const handleShare = () => {
     if (isAudioPublic) {
-      copyToClipboard(originalUrl)
+      copyToClipboard(publicUrl)
         .then(() => {
           toastr.success(intl.formatMessage({ id: "common.share.toast.success" }), "");
         })
@@ -53,48 +56,56 @@ const AudioResponse = ({ response, childQuestions, handleVisibilityChange }: Rep
             />
           )
       )}
-      <div className="flex justify-between items-center">
-        {filename && (
-          <button
-            onClick={() => {
-              setAudioModalOpen(true);
-            }}
-            className={classNames(
-              "bg-primary-400 px-4 py-[9px] rounded-md border border-solid border-primary-500 text-neutral-700 text-base",
-              Boolean(childQuestions?.find(item => item.value))
+      {!!response ? (
+        <>
+          <div className="flex justify-between items-center">
+            {filename && (
+              <button
+                onClick={() => {
+                  setAudioModalOpen(true);
+                }}
+                className={classNames(
+                  "bg-primary-400 px-4 py-[9px] rounded-md border border-solid border-primary-500 text-neutral-700 text-base",
+                  Boolean(childQuestions?.find(item => item.value))
+                )}
+              >
+                {filename}
+              </button>
             )}
-          >
-            {filename}
-          </button>
-        )}
-        <div className="flex gap-2.5">
-          <Button onClick={handleShare} aria-label={intl.formatMessage({ id: "common.share" })} isIcon>
-            <Icon name="link" size={36} />
-          </Button>
-          <Button
-            onClick={() => download(privateUrl)}
-            aria-label={intl.formatMessage({ id: "common.download" })}
-            isIcon
-          >
-            <Icon name="download" size={36} />
-          </Button>
-        </div>
-      </div>
-      <hr className="border-neutral-600/10 -mx-6 my-6" />
-      <div className="space-y-3">
-        <Toggle
-          label={intl.formatMessage({ id: "common.visibilityStatus.title" })}
-          value={!originalUrl ? true : isAudioPublic} // If there is no originalUrl, the audio is always public
-          disabled={!originalUrl}
-          onChange={e => {
-            setIsAudioPublic(e);
-            handleVisibilityChange(e, originalUrl);
-          }}
-        />
-        <p className="text">
-          <FormattedMessage id="common.visibilityStatus.description" />
+            <div className="flex gap-2.5">
+              <Button onClick={handleShare} aria-label={intl.formatMessage({ id: "common.share" })} isIcon>
+                <Icon name="link" size={36} />
+              </Button>
+              <Button
+                onClick={() => download(privateUrl)}
+                aria-label={intl.formatMessage({ id: "common.download" })}
+                isIcon
+              >
+                <Icon name="download" size={36} />
+              </Button>
+            </div>
+          </div>
+          <hr className="border-neutral-600/10 -mx-6 my-6" />
+          <div className="space-y-3">
+            <Toggle
+              label={intl.formatMessage({ id: "common.visibilityStatus.title" })}
+              value={isAudioPublic}
+              disabled={alwaysPublic}
+              onChange={e => {
+                setIsAudioPublic(e);
+                handleVisibilityChange(e, originalUrl);
+              }}
+            />
+            <p className="text">
+              <FormattedMessage id="common.visibilityStatus.description" />
+            </p>
+          </div>
+        </>
+      ) : (
+        <p className="text-base">
+          <FormattedMessage id="common.noAudio" />
         </p>
-      </div>
+      )}
       <Modal
         isOpen={audioModalOpen}
         title="audio.play"
