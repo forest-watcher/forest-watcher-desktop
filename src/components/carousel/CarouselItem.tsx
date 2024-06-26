@@ -28,7 +28,8 @@ const CarouselItem = ({
   onVisibilityChange
 }: CarouselItemProps) => {
   const intl = useIntl();
-  const [isPublic, setIsPublic] = useState(!!slide.originalUrl ? slide.isPublic || false : true);
+  const canVisibilityChange = !!slide.originalUrl;
+  const [isPublic, setIsPublic] = useState(canVisibilityChange ? slide.isPublic || false : true);
 
   return (
     <div className="c-carousel__slide" key={index}>
@@ -57,21 +58,25 @@ const CarouselItem = ({
           <img className="w-full h-full object-contain" src={slide.url} alt="" />
         </button>
       </div>
-      <hr />
-      <div className="c-carousel__slide__footer">
-        <Toggle
-          label={intl.formatMessage({ id: "common.visibilityStatus.title" })}
-          value={isPublic}
-          disabled={!slide.originalUrl}
-          onChange={e => {
-            setIsPublic(e);
-            !!slide.originalUrl && onVisibilityChange(e, slide.originalUrl);
-          }}
-        />
-        <p className="text">
-          <FormattedMessage id="common.visibilityStatus.description" />
-        </p>
-      </div>
+      {canVisibilityChange && (
+        <>
+          <hr />
+          <div className="c-carousel__slide__footer">
+            <Toggle
+              label={intl.formatMessage({ id: "common.visibilityStatus.title" })}
+              value={isPublic}
+              disabled={!slide.originalUrl}
+              onChange={e => {
+                setIsPublic(e);
+                !!slide.originalUrl && onVisibilityChange(e, slide.originalUrl);
+              }}
+            />
+            <p className="text">
+              <FormattedMessage id="common.visibilityStatus.description" />
+            </p>
+          </div>
+        </>
+      )}
     </div>
   );
 };
