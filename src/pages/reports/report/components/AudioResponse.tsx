@@ -85,21 +85,25 @@ const AudioResponse = ({ response, childQuestions, handleVisibilityChange }: Rep
               </Button>
             </div>
           </div>
-          <hr className="border-neutral-600/10 -mx-6 my-6" />
-          <div className="space-y-3">
-            <Toggle
-              label={intl.formatMessage({ id: "common.visibilityStatus.title" })}
-              value={isAudioPublic}
-              disabled={alwaysPublic}
-              onChange={e => {
-                setIsAudioPublic(e);
-                handleVisibilityChange(e, originalUrl);
-              }}
-            />
-            <p className="text">
-              <FormattedMessage id="common.visibilityStatus.description" />
-            </p>
-          </div>
+          {!alwaysPublic && (
+            <>
+              <hr className="border-neutral-600/10 -mx-6 my-6" />
+              <div className="space-y-3">
+                <Toggle
+                  label={intl.formatMessage({ id: "common.visibilityStatus.title" })}
+                  value={isAudioPublic}
+                  disabled={alwaysPublic}
+                  onChange={e => {
+                    setIsAudioPublic(e);
+                    handleVisibilityChange(e, originalUrl);
+                  }}
+                />
+                <p className="text">
+                  <FormattedMessage id="common.visibilityStatus.description" />
+                </p>
+              </div>
+            </>
+          )}
         </>
       ) : (
         <p className="text-base">
