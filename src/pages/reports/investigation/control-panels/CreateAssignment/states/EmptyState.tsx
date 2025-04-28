@@ -47,50 +47,54 @@ const OpenAssignmentEmptyState: FC<IProps> = props => {
 
   const handleShapeFileUpload = async (e: ChangeEvent<HTMLInputElement>) => {
     setIsUploadingShapeFile(true);
-    const shapeFile = e.target.files && e.target.files[0];
-    const maxFileSize = 1000000; //1MB
+    try {
+      const shapeFile = e.target.files && e.target.files[0];
+      const maxFileSize = 1000000; //1MB
 
-    if (shapeFile && shapeFile.size <= maxFileSize) {
-      const geojson = (await dispatch(getGeoFromShape(shapeFile))) as any;
+      if (shapeFile && shapeFile.size <= maxFileSize) {
+        const geojson = (await dispatch(getGeoFromShape(shapeFile))) as any;
 
-      if (geojson && geojson.features && selectedAreaDetails) {
-        // https://turfjs.org/docs/#union
-        const geojsonParsed = geojson.features.reduce(turf.union);
-        // @ts-ignore
-        const selectedAreaParsed = selectedAreaDetails?.attributes?.geostore?.geojson.features.reduce(turf.union);
+        if (geojson && geojson.features && selectedAreaDetails) {
+          // https://turfjs.org/docs/#union
+          const geojsonParsed = geojson.features.reduce(turf.union);
+          // @ts-ignore
+          const selectedAreaParsed = selectedAreaDetails?.attributes?.geostore?.geojson.features.reduce(turf.union);
 
-        // @ts-ignore
-        const isWithin = turf.booleanWithin(geojsonParsed, selectedAreaParsed);
+          // @ts-ignore
+          const isWithin = turf.booleanWithin(geojsonParsed, selectedAreaParsed);
 
-        const isAPolygon = turf.getType(geojsonParsed) === "Polygon";
+          const isAPolygon = turf.getType(geojsonParsed) === "Polygon";
 
-        if (isWithin && isAPolygon) {
-          setShapeFileGeoJSON(geojsonParsed);
-          setValue("selectedAlerts", []);
-          setValue("singleSelectedLocation", undefined);
-          setShowCreateAssignmentForm(true);
+          if (isWithin && isAPolygon) {
+            setShapeFileGeoJSON(geojsonParsed);
+            setValue("selectedAlerts", []);
+            setValue("singleSelectedLocation", undefined);
+            setShowCreateAssignmentForm(true);
 
-          fireGAEvent({
-            category: "Assignment",
-            action: "create_assigment",
-            label: "uploaded_shapefile"
-          });
-        } else if (!isWithin) {
-          toastr.error(
-            intl.formatMessage({ id: "areas.shapeFile.not.within" }),
-            intl.formatMessage({ id: "areas.shapeFile.not.within.desc" })
-          );
-        } else if (!isAPolygon) {
-          toastr.error(intl.formatMessage({ id: "areas.shapeFile.not.shapefile" }), "");
+            fireGAEvent({
+              category: "Assignment",
+              action: "create_assigment",
+              label: "uploaded_shapefile"
+            });
+          } else if (!isWithin) {
+            toastr.error(
+              intl.formatMessage({ id: "areas.shapeFile.not.within" }),
+              intl.formatMessage({ id: "areas.shapeFile.not.within.desc" })
+            );
+          } else if (!isAPolygon) {
+            toastr.error(intl.formatMessage({ id: "areas.shapeFile.not.shapefile" }), "");
+          }
+        } else {
+          toastr.error(intl.formatMessage({ id: "areas.fileInvalid" }), "");
         }
       } else {
-        toastr.error(intl.formatMessage({ id: "areas.fileInvalid" }), "");
+        toastr.error(
+          intl.formatMessage({ id: "areas.fileTooLarge" }),
+          intl.formatMessage({ id: "areas.fileTooLargeDesc" })
+        );
       }
-    } else {
-      toastr.error(
-        intl.formatMessage({ id: "areas.fileTooLarge" }),
-        intl.formatMessage({ id: "areas.fileTooLargeDesc" })
-      );
+    } catch {
+      toastr.error(intl.formatMessage({ id: "areas.fileInvalid" }), "");
     }
 
     setIsUploadingShapeFile(false);
