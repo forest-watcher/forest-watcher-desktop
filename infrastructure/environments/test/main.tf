@@ -50,3 +50,15 @@ module "web" {
   repo_name               = "forest-watcher/forest-watcher-desktop"
   aws_acm_certificate_arn = module.domain.acm_certificate_arn
 }
+
+resource "aws_route53_record" "main" {
+  zone_id = module.domain.hosted_zone_id
+  name    = local.domain
+  type    = "A"
+
+  alias {
+    name                   = module.web.cloudfront_distribution_domain_name
+    zone_id                = module.web.cloudfront_distribution_hosted_zone_id
+    evaluate_target_health = false
+  }
+}
