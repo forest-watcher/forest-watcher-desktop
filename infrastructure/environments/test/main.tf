@@ -1,6 +1,6 @@
 terraform {
   backend "s3" {
-    bucket = "forest-watcher-test.terraform"
+    bucket = "forest-watcher-web-test.terraform"
     key    = "test/terraform.tfstate"
     region = "us-east-1"
   }
@@ -15,10 +15,10 @@ terraform {
 
 locals {
   client       = "wri"
-  project_name = "${local.client}-forest-watcher"
+  project_name = "${local.client}-forest-watcher-web"
   environment  = "test"
   name         = "${local.project_name}-${local.environment}"
-  domain       = ""
+  domain       = "${local.environment}.gfw-web.3sidedcube.com"
   tags = {
     client      = local.client
     product     = local.project_name
@@ -28,7 +28,6 @@ locals {
 
 
 provider "aws" {
-  alias  = "us_east_1"
   region = "us-east-1"
 
   default_tags {
@@ -37,20 +36,17 @@ provider "aws" {
 }
 
 module "domain" {
-  source   = "git@github.com:3sidedcube/terraform-aws-domain.git?ref=v0.3.0"
+  source   = "../../modules/domain"
   hostname = local.domain
-
-  providers = {
-    aws = aws.us_east_1
-  }
 }
 
 
 module "web" {
   source = "../../modules/web"
 
-  project_name = local.name
-  app_url      = local.domain
-  zone_id      = module.prod_domain.zone_id
-  repo_name    = "forest-watcher/forest-watcher-desktop"
+  project_name            = local.name
+  app_urls                = [local.domain]
+  zone_id                 = module.domain.hosted_zone_id
+  repo_name               = "forest-watcher/forest-watcher-desktop"
+  aws_acm_certificate_arn = module.domain.acm_certificate_arn
 }

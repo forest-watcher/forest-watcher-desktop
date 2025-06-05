@@ -100,13 +100,14 @@ resource "aws_cloudfront_distribution" "main" {
   }
 
   viewer_certificate {
-    acm_certificate_arn = aws_acm_certificate.main.arn
+    acm_certificate_arn = var.aws_acm_certificate_arn
     ssl_support_method  = "sni-only"
+    minimum_protocol_version = "TLSv1.2_2021"
   }
 
   default_root_object = "index.html"
 
-  aliases = [var.app_url]
+  aliases = var.app_urls
 
   default_cache_behavior {
     target_origin_id = local.name
