@@ -23,3 +23,7 @@ yarn-error.log*
 # compiled
 index.css
 
+# terraform initialization output (providers, state config and lock, modules). 
+.terraform
+.terraform*
+.terraform.lock.hcl
