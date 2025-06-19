@@ -67,7 +67,6 @@ jobs:
         with:
           name: build-artifacts
           path: build/
-
   deploy:
     name: Deploy to AWS
     runs-on: ubuntu-latest
@@ -86,14 +85,14 @@ jobs:
           name: build-artifacts
           path: build/
 
-    - name: Configure AWS Credentials
-      uses: aws-actions/configure-aws-credentials@v3
-      with:
-        role-to-assume: arn:aws:iam::${{ vars.AWS_ACCOUNT_ID }}:role/${{ vars.AWS_ROLE }}
-        aws-region: ${{ vars.AWS_REGION }}
-    - name: Deploy to S3
-      id: upload
-      shell: bash
-      run: |
-        aws s3 sync build/ s3://${{ vars.S3_BUCKET }}
-        aws cloudfront create-invalidation --distribution-id ${{ vars.CLOUDFRONT_ID }} --paths "/*"
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v3
+        with:
+          role-to-assume: arn:aws:iam::${{ vars.AWS_ACCOUNT_ID }}:role/${{ vars.AWS_ROLE }}
+          aws-region: ${{ vars.AWS_REGION }}
+      - name: Deploy to S3
+        id: upload
+        shell: bash
+        run: |
+          aws s3 sync build/ s3://${{ vars.S3_BUCKET }}
+          aws cloudfront create-invalidation --distribution-id ${{ vars.CLOUDFRONT_ID }} --paths "/*"
