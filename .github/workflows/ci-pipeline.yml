@@ -1,0 +1,99 @@
+name: Reusable CI/CD Pipeline Workflow
+
+on:
+  workflow_call:
+    inputs:
+      environment:
+        required: true
+        type: string
+
+env:
+  AWS_ACCOUNT_ID: ${{ vars.AWS_ACCOUNT_ID }}
+  AWS_ROLE: ${{ vars.AWS_ROLE }}
+  CLOUDFRONT_ID: ${{ vars.CLOUDFRONT_ID }}
+  S3_BUCKET: ${{ vars.S3_BUCKET }}
+  AWS_REGION: ${{ vars.AWS_REGION }}
+  REACT_APP_VERSION: ${{ vars.REACT_APP_VERSION }}
+  REACT_APP_API_VIZZUALITY_URL_V1: ${{ vars.REACT_APP_API_VIZZUALITY_URL_V1 }}
+  REACT_APP_API_CUBE_URL: ${{ vars.REACT_APP_API_CUBE_URL }}
+  REACT_APP_API_CUBE_URL_V1: ${{ vars.REACT_APP_API_CUBE_URL_V1 }}
+  REACT_APP_API_CUBE_URL_V3: ${{ vars.REACT_APP_API_CUBE_URL_V3 }}
+  REACT_APP_ALERTS_API_URL: ${{ vars.REACT_APP_ALERTS_API_URL }}
+  REACT_APP_ALERTS_API_TOKEN: ${{ vars.REACT_APP_ALERTS_API_TOKEN }}
+  REACT_APP_API_AUTH_URL: ${{ vars.REACT_APP_API_AUTH_URL }}
+  REACT_APP_API_AUTH_CALLBACK_URL: ${{ vars.REACT_APP_API_AUTH_CALLBACK_URL }}
+  REACT_APP_API_MAPBOX_TOKEN: ${{ vars.REACT_APP_API_MAPBOX_TOKEN }}
+  REACT_APP_CARTO: ${{ vars.REACT_APP_CARTO }}
+  REACT_APP_CARTO_COUNTRIES: ${{ vars.REACT_APP_CARTO_COUNTRIES }}
+  REACT_APP_CARTO_TABLE: ${{ vars.REACT_APP_CARTO_TABLE }}
+  REACT_APP_DOWNLOAD_APK_LINK: ${{ vars.REACT_APP_DOWNLOAD_APK_LINK }}
+  REACT_APP_DOWNLOAD_APK_VERSION: ${{ vars.REACT_APP_DOWNLOAD_APK_VERSION }}
+  REACT_APP_FACEBOOK_WIDGET_API: ${{ vars.REACT_APP_FACEBOOK_WIDGET_API }}
+  REACT_APP_GA_UA: ${{ vars.REACT_APP_GA_UA }}
+  REACT_APP_GFW_API_KEY: ${{ vars.REACT_APP_GFW_API_KEY }}
+  REACT_APP_GFW_ASSETS_PATH: ${{ vars.REACT_APP_GFW_ASSETS_PATH }}
+  REACT_APP_SENTRY_DSN: ${{ vars.REACT_APP_SENTRY_DSN }}
+  REACT_APP_TWITTER_WIDGET_API: ${{ vars.REACT_APP_TWITTER_WIDGET_API }}
+  REACT_APP_GOOGLE_PLUS_ONE_WIDGET_API: ${{ vars.REACT_APP_GOOGLE_PLUS_ONE_WIDGET_API }}
+  REACT_APP_GOOGLE_PLACES_API_KEY: ${{ vars.REACT_APP_GOOGLE_PLACES_API_KEY }}
+  REACT_APP_MAPBOX_ACCESS_TOKEN: ${{ vars.REACT_APP_MAPBOX_ACCESS_TOKEN }}
+  REACT_APP_PLANET_API_KEY: ${{ vars.REACT_APP_PLANET_API_KEY }}
+  REACT_APP_FLAGSHIP_URL: ${{ vars.REACT_APP_FLAGSHIP_URL }}
+  REACT_APP_DEFAULT_TEMPLATE_ID: ${{ vars.REACT_APP_DEFAULT_TEMPLATE_ID }}
+  REACT_APP_API_BITLY_TOKEN: ${{ vars.REACT_APP_API_BITLY_TOKEN }}
+
+jobs:
+  build:
+    name: Install and Build Project
+    runs-on: ubuntu-latest
+    environment: ${{ inputs.environment }}
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 22
+          cache: "yarn"
+      - name: Install Dependencies
+        run: |
+          yarn install
+      - name: Build and Test
+        run: |
+          yarn run test
+          yarn run build
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-artifacts
+          path: build/
+
+  deploy:
+    name: Deploy to AWS
+    runs-on: ubuntu-latest
+    needs: build
+    environment: ${{ inputs.environment }}
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Download Artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: build-artifacts
+          path: build/
+
+    - name: Configure AWS Credentials
+      uses: aws-actions/configure-aws-credentials@v3
+      with:
+        role-to-assume: arn:aws:iam::${{ vars.AWS_ACCOUNT_ID }}:role/${{ vars.AWS_ROLE }}
+        aws-region: ${{ vars.AWS_REGION }}
+    - name: Deploy to S3
+      id: upload
+      shell: bash
+      run: |
+        aws s3 sync build/ s3://${{ vars.S3_BUCKET }}
+        aws cloudfront create-invalidation --distribution-id ${{ vars.CLOUDFRONT_ID }} --paths "/*"

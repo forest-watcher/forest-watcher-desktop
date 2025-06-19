@@ -1,0 +1,19 @@
+infrastructure:
+  - changed-files:
+      - any-glob-to-any-file:
+          - terraform/**/*
+
+documentation:
+  - changed-files:
+      - any-glob-to-any-file:
+          - docs/**/*
+          - README.md
+ci:
+  - changed-files:
+      - any-glob-to-any-file:
+          - .github/**/*
+
+test:
+  - changed-files:
+      - any-glob-to-any-file:
+          - test/**/*
